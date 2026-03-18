@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import { constructMetadata, getSiteSchema } from "@/lib/seo";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -7,10 +7,7 @@ import { ScrollToTopButton } from "@/components/ScrollToTopButton";
 import { ChatWidget } from "@/components/ChatWidget";
 import { CookieBanner } from "@/components/CookieBanner";
 
-export const metadata: Metadata = {
-  title: "Hutech Solutions",
-  description: "Innovation through Technology",
-};
+export const metadata = constructMetadata();
 
 export default function RootLayout({
   children,
@@ -19,12 +16,14 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className="antialiased min-h-screen bg-white font-sans overflow-x-hidden selection:bg-[#0171c1]/30 selection:text-[#001A3D]">
+      <body className="min-h-screen overflow-x-hidden bg-white font-sans antialiased selection:bg-[#0171c1]/30 selection:text-[#001A3D]">
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(getSiteSchema()) }}
+        />
         <div className="pt-[80px] md:pt-[80px]">
           <Navbar />
-          <main>
-            {children}
-          </main>
+          <main>{children}</main>
           <Footer />
           <ScrollToTopButton />
           <ChatWidget />

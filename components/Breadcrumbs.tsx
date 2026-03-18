@@ -44,7 +44,7 @@ export function Breadcrumbs({ variant = "light" }: BreadcrumbsProps) {
     "healthcare-life-sciences": "Healthcare & Life Sciences",
     "utilities-energy": "Utilities & Energy",
     "logistics-supply-chain": "Logistics & Supply Chain",
-    "manufacturing": "Manufacturing",
+    manufacturing: "Manufacturing",
     "retail-consumer": "Retail & Consumer",
   };
 
@@ -57,14 +57,16 @@ export function Breadcrumbs({ variant = "light" }: BreadcrumbsProps) {
   const borderColorClass = isLight ? "border-gray-100" : "border-white/5";
 
   return (
-    <section className={`w-full h-[40px] flex items-center border-b ${bgColorClass} ${borderColorClass} relative z-30`}>
-      <div className="max-w-[1280px] w-full mx-auto px-6 lg:px-20">
+    <section
+      className={`flex h-[40px] w-full items-center border-b ${bgColorClass} ${borderColorClass} relative z-30`}
+    >
+      <div className="mx-auto w-full max-w-[1280px] px-6 lg:px-20">
         <nav aria-label="Breadcrumb">
           <ol className="flex items-center space-x-2 text-[10px] font-bold tracking-[0.05em] uppercase">
             <li className="flex items-center">
               <Link
                 href="/"
-                className={`${textColorClass} ${hoverColorClass} transition-colors flex items-center gap-1.5`}
+                className={`${textColorClass} ${hoverColorClass} flex items-center gap-1.5 transition-colors`}
               >
                 <span>HOME</span>
               </Link>
@@ -72,7 +74,9 @@ export function Breadcrumbs({ variant = "light" }: BreadcrumbsProps) {
             {pathnames.map((value, index) => {
               const last = index === pathnames.length - 1;
               const href = `/${pathnames.slice(0, index + 1).join("/")}`;
-              const displayName = breadcrumbMap[value] || value.charAt(0).toUpperCase() + value.slice(1).replace(/-/g, ' ');
+              const displayName =
+                breadcrumbMap[value] ||
+                value.charAt(0).toUpperCase() + value.slice(1).replace(/-/g, " ");
 
               return (
                 <li key={href} className="flex items-center space-x-2">

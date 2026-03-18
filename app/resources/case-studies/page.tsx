@@ -13,74 +13,82 @@ const CASE_STUDIES = [
     title: "Building a Scalable Shopify Fashion Storefront",
     client: "Global Fashion Brand Storefront on Shopify",
     impact: "Seamless Data Validation & Brand-Consistent Design",
-    image: "https://images.unsplash.com/photo-1441986300917-64674bd600d8?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=800",
+    image:
+      "https://images.unsplash.com/photo-1441986300917-64674bd600d8?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=800",
     tags: ["Shopify", "Ecommerce", "Fashion"],
     category: "Ecommerce",
-    slug: "shopify-fashion-storefront"
+    slug: "shopify-fashion-storefront",
   },
   {
     title: "Hutrac: Next-Gen GPS Fleet Solutions",
     client: "Smarter tracking for smarter decisions",
     impact: "Live GPS Tracking & Sensor-Driven Insights",
-    image: "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=800",
+    image:
+      "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=800",
     tags: ["Angular", "React JS", "AWS", "AI & Analytics"],
     category: "IoT & AI",
-    slug: "hutrac-gps-fleet"
+    slug: "hutrac-gps-fleet",
   },
   {
     title: "IOT - FLEET MANAGEMENT",
     client: "Cold Chain Supply Operations",
     impact: "Effective IoT solutions for Cold Chain Operations",
-    image: "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=800",
+    image:
+      "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=800",
     tags: ["React Js", "Flutter", "AWS", "Mongo DB"],
     category: "Logistics",
-    slug: "iot-fleet-management"
+    slug: "iot-fleet-management",
   },
   {
     title: "Truck Link",
     client: "Carrying & Forwarding (C&F) Application",
     impact: "SaaS-based delivery management with optimized routes",
-    image: "https://images.unsplash.com/photo-1590243677390-21377b28f3ad?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=800",
+    image:
+      "https://images.unsplash.com/photo-1590243677390-21377b28f3ad?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=800",
     tags: ["Node JS", "React JS", "Mongo DB", "AWS", "AntD"],
     category: "Logistics",
-    slug: "truck-link"
+    slug: "truck-link",
   },
   {
     title: "Engage Loop",
     client: "REWARDS AND RECOGNITION PLATFORM",
     impact: "Seamless, simplified and customizable engagement",
-    image: "https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=800",
+    image:
+      "https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=800",
     tags: ["Node JS", "React JS", "AWS", "Mongo DB"],
     category: "Product",
-    slug: "engage-loop"
+    slug: "engage-loop",
   },
   {
     title: "LOGISTICS, COURIER & SUPPLY CHAIN SOLUTION",
     client: "COURIER & LOGISTICS APPLICATION",
     impact: "Routing, dispatch, tracking, and proof of delivery",
-    image: "https://images.unsplash.com/photo-1566576721346-d4a3b4eaad5b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=800",
+    image:
+      "https://images.unsplash.com/photo-1566576721346-d4a3b4eaad5b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=800",
     tags: ["Python", "MySQL", "AWS", "Cognito", "GPT"],
     category: "Logistics",
-    slug: "logistics-courier-supply-chain"
+    slug: "logistics-courier-supply-chain",
   },
   {
     title: "Max Drive",
     client: "Driving Innovation with End-to-End Fleet Solutions",
     impact: "Real-time monitoring and vehicle traceability",
-    image: "https://images.unsplash.com/photo-1580674271209-40b48e153ff7?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=800",
+    image:
+      "https://images.unsplash.com/photo-1580674271209-40b48e153ff7?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=800",
     tags: ["Flutter", "Node JS", "AWS", "Mongo DB"],
     category: "IoT & AI",
-    slug: "max-drive"
+    slug: "max-drive",
   },
   {
     title: "D2C Platform",
     client: "D2C (Direct-to-Consumer) ecommerce platform",
     impact: "Streamlined operations from listing to fulfillment",
-    image: "https://images.unsplash.com/photo-1556742049-13ad733d024c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=800",
+    image:
+      "https://images.unsplash.com/photo-1556742049-13ad733d024c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=800",
     tags: ["Python", "NextJs", "PostgreSQL", "AWS"],
     category: "Ecommerce",
-    slug: "d2c-platform"
-  }
+    slug: "d2c-platform",
+  },
 ];
 
 const CATEGORIES = ["All", "Ecommerce", "Logistics", "IoT & AI", "Product"];
@@ -89,54 +97,62 @@ export default function CaseStudies() {
   const [activeTab, setActiveTab] = useState("All");
   const [searchQuery, setSearchQuery] = useState("");
 
-  const filteredStudies = CASE_STUDIES.filter(study => {
+  const filteredStudies = CASE_STUDIES.filter((study) => {
     const matchesTab = activeTab === "All" || study.category === activeTab;
-    const matchesSearch = study.title.toLowerCase().includes(searchQuery.toLowerCase()) || 
-                         study.client.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                         study.tags.some(tag => tag.toLowerCase().includes(searchQuery.toLowerCase()));
+    const matchesSearch =
+      study.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      study.client.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      study.tags.some((tag) => tag.toLowerCase().includes(searchQuery.toLowerCase()));
     return matchesTab && matchesSearch;
   });
 
   return (
-    <div className="flex flex-col bg-white min-h-screen overflow-hidden">
-      <Meta title="Case Studies | Hutech Solutions" description="Real-world examples of how Hutech Solutions drives digital transformation." />
+    <div className="flex min-h-screen flex-col overflow-hidden bg-white">
+      <Meta
+        title="Case Studies | Hutech Solutions"
+        description="Real-world examples of how Hutech Solutions drives digital transformation."
+      />
       <Breadcrumbs variant="light" />
-      
+
       {/* Hero Section */}
-      <section className="bg-[#001A3D] text-white py-32 relative overflow-hidden flex items-center">
-        <div className="max-w-[1280px] mx-auto px-6 lg:px-20 relative z-10 w-full">
+      <section className="relative flex items-center overflow-hidden bg-[#001A3D] py-32 text-white">
+        <div className="relative z-10 mx-auto w-full max-w-[1280px] px-6 lg:px-20">
           <Motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             className="space-y-6"
           >
             <div className="flex items-center gap-3">
-              <span className="block w-8 h-[2px] bg-[#FFAF2B]"></span>
-              <span className="text-[#FFAF2B] text-xs font-semibold tracking-widest uppercase">Global Impact</span>
+              <span className="block h-[2px] w-8 bg-[#FFAF2B]"></span>
+              <span className="text-xs font-semibold tracking-widest text-[#FFAF2B] uppercase">
+                Global Impact
+              </span>
             </div>
-            <h1 className="text-5xl md:text-7xl font-semibold mb-6 display-font leading-tight tracking-tight">
-              Digital <br /><span className="text-[#FFAF2B]">Success Stories.</span>
+            <h1 className="display-font mb-6 text-5xl leading-tight font-semibold tracking-tight md:text-7xl">
+              Digital <br />
+              <span className="text-[#FFAF2B]">Success Stories.</span>
             </h1>
-            <p className="text-xl text-gray-400 max-w-2xl leading-relaxed font-medium">
-              Discover how we've partnered with industry leaders to solve complex challenges and achieve measurable results through technological excellence.
+            <p className="max-w-2xl text-xl leading-relaxed font-medium text-gray-400">
+              Discover how we've partnered with industry leaders to solve complex challenges and
+              achieve measurable results through technological excellence.
             </p>
           </Motion.div>
         </div>
-        <div className="absolute right-0 top-0 w-1/2 h-full bg-linear-to-l from-[#0171c1]/10 to-transparent pointer-events-none"></div>
+        <div className="pointer-events-none absolute top-0 right-0 h-full w-1/2 bg-linear-to-l from-[#0171c1]/10 to-transparent"></div>
       </section>
 
       {/* Sticky Search & Filter Bar */}
-      <section className="sticky top-[72px] z-30 bg-white/80 backdrop-blur-xl border-b border-gray-100 shadow-sm">
-        <div className="max-w-[1280px] mx-auto px-6 lg:px-20 py-8 flex flex-col md:flex-row items-center justify-between gap-8">
-          <div className="flex items-center gap-2 overflow-x-auto pb-2 md:pb-0 no-scrollbar w-full md:w-auto">
-            {CATEGORIES.map(cat => (
+      <section className="sticky top-[72px] z-30 border-b border-gray-100 bg-white/80 shadow-sm backdrop-blur-xl">
+        <div className="mx-auto flex max-w-[1280px] flex-col items-center justify-between gap-8 px-6 py-8 md:flex-row lg:px-20">
+          <div className="no-scrollbar flex w-full items-center gap-2 overflow-x-auto pb-2 md:w-auto md:pb-0">
+            {CATEGORIES.map((cat) => (
               <button
                 key={cat}
                 onClick={() => setActiveTab(cat)}
-                className={`px-6 py-2.5 rounded-full text-[10px] font-black tracking-[0.2em] transition-all whitespace-nowrap uppercase ${
-                  activeTab === cat 
-                  ? "bg-[#0171c1] text-white shadow-xl" 
-                  : "bg-gray-50 text-gray-400 hover:bg-gray-100 hover:text-[#001A3D]"
+                className={`rounded-full px-6 py-2.5 text-[10px] font-black tracking-[0.2em] whitespace-nowrap uppercase transition-all ${
+                  activeTab === cat
+                    ? "bg-[#0171c1] text-white shadow-xl"
+                    : "bg-gray-50 text-gray-400 hover:bg-gray-100 hover:text-[#001A3D]"
                 }`}
               >
                 {cat}
@@ -144,19 +160,22 @@ export default function CaseStudies() {
             ))}
           </div>
 
-          <div className="relative w-full md:w-96 group">
-            <Search className="absolute left-5 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-[#0171c1] transition-colors" size={20} />
-            <input 
-              type="text" 
+          <div className="group relative w-full md:w-96">
+            <Search
+              className="absolute top-1/2 left-5 -translate-y-1/2 text-gray-400 transition-colors group-focus-within:text-[#0171c1]"
+              size={20}
+            />
+            <input
+              type="text"
               placeholder="Search case studies..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-14 pr-12 py-4 bg-gray-50 border border-gray-100 rounded-2xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-[#0171c1]/20 transition-all shadow-sm"
+              className="w-full rounded-2xl border border-gray-100 bg-gray-50 py-4 pr-12 pl-14 text-sm font-medium shadow-sm transition-all focus:ring-2 focus:ring-[#0171c1]/20 focus:outline-none"
             />
             {searchQuery && (
-              <button 
+              <button
                 onClick={() => setSearchQuery("")}
-                className="absolute right-5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                className="absolute top-1/2 right-5 -translate-y-1/2 text-gray-400 hover:text-gray-600"
               >
                 <X size={16} />
               </button>
@@ -166,44 +185,60 @@ export default function CaseStudies() {
       </section>
 
       {/* Case Studies Grid */}
-      <section className="py-24 bg-gray-50/30">
-        <div className="max-w-[1280px] mx-auto px-6 lg:px-20">
+      <section className="bg-gray-50/30 py-24">
+        <div className="mx-auto max-w-[1280px] px-6 lg:px-20">
           <AnimatePresence mode="popLayout">
             {filteredStudies.length > 0 ? (
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-12 lg:gap-20">
+              <div className="grid grid-cols-1 gap-12 md:grid-cols-2 lg:gap-20">
                 {filteredStudies.map((study, i) => (
-                  <Motion.div 
+                  <Motion.div
                     key={study.slug}
                     layout
                     initial={{ opacity: 0, y: 30 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
                     transition={{ delay: i * 0.1 }}
-                    className="group bg-gray-50 rounded-[2.5rem] overflow-hidden hover:bg-[#001A3D] transition-all duration-500 h-full flex flex-col"
+                    className="group flex h-full flex-col overflow-hidden rounded-[2.5rem] bg-gray-50 transition-all duration-500 hover:bg-[#001A3D]"
                   >
-                    <Link href={`/resources/case-studies/${study.slug}`} className="flex flex-col h-full">
+                    <Link
+                      href={`/resources/case-studies/${study.slug}`}
+                      className="flex h-full flex-col"
+                    >
                       <div className="relative h-96 overflow-hidden">
-                        <ImageWithFallback src={study.image} alt={study.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
-                        <div className="absolute inset-0 bg-gradient-to-t from-[#001A3D] via-[#001A3D]/20 to-transparent opacity-60 group-hover:opacity-80 transition-opacity duration-700"></div>
+                        <ImageWithFallback
+                          src={study.image}
+                          alt={study.title}
+                          className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-[#001A3D] via-[#001A3D]/20 to-transparent opacity-60 transition-opacity duration-700 group-hover:opacity-80"></div>
                         <div className="absolute bottom-10 left-10 flex flex-wrap gap-2 pr-6">
                           {study.tags.map((tag, j) => (
-                            <span key={j} className="px-4 py-1.5 bg-white/10 backdrop-blur-md text-white text-[10px] font-bold rounded-full uppercase tracking-widest border border-white/20">
+                            <span
+                              key={j}
+                              className="rounded-full border border-white/20 bg-white/10 px-4 py-1.5 text-[10px] font-bold tracking-widest text-white uppercase backdrop-blur-md"
+                            >
                               {tag}
                             </span>
                           ))}
                         </div>
                       </div>
-                      <div className="p-10 lg:p-12 flex-grow flex flex-col justify-between space-y-8">
+                      <div className="flex flex-grow flex-col justify-between space-y-8 p-10 lg:p-12">
                         <div className="space-y-4">
-                           <span className="text-[#FFAF2B] font-bold text-sm tracking-widest uppercase block">{study.client}</span>
-                           <h3 className="text-2xl md:text-3xl font-bold text-[#001A3D] group-hover:text-white display-font transition-colors leading-tight">{study.title}</h3>
+                          <span className="block text-sm font-bold tracking-widest text-[#FFAF2B] uppercase">
+                            {study.client}
+                          </span>
+                          <h3 className="display-font text-2xl leading-tight font-bold text-[#001A3D] transition-colors group-hover:text-white md:text-3xl">
+                            {study.title}
+                          </h3>
                         </div>
-                        <div className="flex items-center justify-between pt-8 border-t border-gray-200 group-hover:border-white/20 mt-auto">
+                        <div className="mt-auto flex items-center justify-between border-t border-gray-200 pt-8 group-hover:border-white/20">
                           <div className="flex items-center gap-3">
-                             <CheckCircle2 size={24} className="text-[#FFAF2B]" />
-                             <span className="text-[#001A3D] group-hover:text-white font-bold text-lg leading-snug">{study.impact}</span>
+                            <CheckCircle2 size={24} className="text-[#FFAF2B]" />
+                            <span className="text-lg leading-snug font-bold text-[#001A3D] group-hover:text-white">
+                              {study.impact}
+                            </span>
                           </div>
-                          <div className="w-14 h-14 bg-white rounded-full flex items-center justify-center text-[#001A3D] group-hover:bg-[#FFAF2B] group-hover:text-[#001A3D] transition-all transform group-hover:rotate-45 shadow-sm">
+                          <div className="flex h-14 w-14 transform items-center justify-center rounded-full bg-white text-[#001A3D] shadow-sm transition-all group-hover:rotate-45 group-hover:bg-[#FFAF2B] group-hover:text-[#001A3D]">
                             <ArrowUpRight size={28} />
                           </div>
                         </div>
@@ -213,15 +248,23 @@ export default function CaseStudies() {
                 ))}
               </div>
             ) : (
-              <div className="text-center py-40 bg-white rounded-[4rem] shadow-sm border border-gray-100">
-                <div className="w-24 h-24 bg-gray-50 rounded-full flex items-center justify-center mx-auto mb-8">
+              <div className="rounded-[4rem] border border-gray-100 bg-white py-40 text-center shadow-sm">
+                <div className="mx-auto mb-8 flex h-24 w-24 items-center justify-center rounded-full bg-gray-50">
                   <Search size={40} className="text-gray-200" />
                 </div>
-                <h3 className="text-3xl font-bold text-[#001A3D] mb-4 display-font">No case studies found</h3>
-                <p className="text-gray-500 max-w-sm mx-auto font-medium mb-10">We couldn't find any success stories matching your requirements. Try adjusting your search or filters.</p>
-                <button 
-                  onClick={() => {setActiveTab("All"); setSearchQuery("");}}
-                  className="text-[#0171c1] font-black text-xs uppercase tracking-widest hover:underline"
+                <h3 className="display-font mb-4 text-3xl font-bold text-[#001A3D]">
+                  No case studies found
+                </h3>
+                <p className="mx-auto mb-10 max-w-sm font-medium text-gray-500">
+                  We couldn't find any success stories matching your requirements. Try adjusting
+                  your search or filters.
+                </p>
+                <button
+                  onClick={() => {
+                    setActiveTab("All");
+                    setSearchQuery("");
+                  }}
+                  className="text-xs font-black tracking-widest text-[#0171c1] uppercase hover:underline"
                 >
                   Reset all filters
                 </button>

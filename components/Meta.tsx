@@ -13,7 +13,7 @@ export function Meta({
   title = "Hutech Solutions | Advanced Engineering & Digital Transformation",
   description = "Hutech Solutions delivers premium AI/ML, Cloud Transformation, SRE & DevOps, and Fintech solutions to help enterprises scale with agility and resilience.",
   keywords = "AI/ML Solutions, Digital Transformation, Cloud Services, DevOps, SRE, Fintech Development, Ecommerce Solutions, Hutech Solutions",
-  ogImage = "https://hutechsolutions.com/og-image.jpg" // Placeholder
+  ogImage = "https://hutechsolutions.com/og-image.jpg", // Placeholder
 }: MetaProps) {
   useEffect(() => {
     // Update Title

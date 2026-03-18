@@ -52,7 +52,10 @@ const NAV_ITEMS = [
           { name: "Cloud Transformation", path: "/services/cloud-transformation" },
           { name: "SRE & DevOps Services", path: "/services/devops" },
           { name: "Data Engineering", path: "/services/data-engineering" },
-          { name: "Data Visualization and Reporting", path: "/services/data-visualization-reporting" },
+          {
+            name: "Data Visualization and Reporting",
+            path: "/services/data-visualization-reporting",
+          },
         ],
       },
       {
@@ -61,7 +64,10 @@ const NAV_ITEMS = [
           { name: "Banking & Financial Services", path: "/services/fintech" },
           { name: "Ecommerce Development", path: "/services/ecommerce" },
           { name: "Enterprise Digital Solutions", path: "/services/erp" },
-          { name: "Development and Maintenance", path: "/services/application-development-maintenance" },
+          {
+            name: "Development and Maintenance",
+            path: "/services/application-development-maintenance",
+          },
         ],
       },
       {
@@ -86,7 +92,10 @@ const NAV_ITEMS = [
           { name: "AI productivity tools", path: "/products?category=AI productivity tools" },
           { name: "DevOps & SRE Automation", path: "/products?category=DevOps & SRE Automation" },
           { name: "LMS", path: "/products?category=LMS" },
-          { name: "ERP & Office Productivity", path: "/products?category=ERP & Office Productivity" },
+          {
+            name: "ERP & Office Productivity",
+            path: "/products?category=ERP & Office Productivity",
+          },
           { name: "Logistics and Delivery", path: "/products?category=Logistics and Delivery" },
         ],
       },
@@ -140,7 +149,7 @@ export default function Navbar() {
   const navigate = useRouter();
 
   const { scrollY } = useScroll();
-  
+
   // Fixed states for header
   const navBackground = "rgba(255, 255, 255, 1)";
   const navBlur = "blur(0px)";
@@ -197,17 +206,17 @@ export default function Navbar() {
           backdropFilter: navBlur,
           color: textColorValue,
         }}
-        className={`fixed top-0 left-0 w-full z-50 transition-shadow duration-300 bg-white ${
-          scrolled ? "shadow-md border-b border-gray-100" : "border-b border-gray-50"
+        className={`fixed top-0 left-0 z-50 w-full bg-white transition-shadow duration-300 ${
+          scrolled ? "border-b border-gray-100 shadow-md" : "border-b border-gray-50"
         }`}
         ref={dropdownRef}
       >
-        <div className="max-w-[1280px] mx-auto px-6 lg:px-20 h-full">
-          <div className="flex justify-between items-center h-full">
+        <div className="mx-auto h-full max-w-[1280px] px-6 lg:px-20">
+          <div className="flex h-full items-center justify-between">
             <div className="flex items-center">
               <Link href="/" className="flex items-center" onClick={() => setActiveDropdown(null)}>
                 <Motion.div style={{ scale: logoScale }}>
-                  <div className="h-16 md:h-20 py-2">
+                  <div className="h-16 py-2 md:h-20">
                     <ImageWithFallback
                       src={logoImg}
                       alt="Hutech Solutions Logo"
@@ -219,14 +228,17 @@ export default function Navbar() {
             </div>
 
             {/* Desktop Menu */}
-            <div className="hidden lg:flex items-center space-x-1">
+            <div className="hidden items-center space-x-1 lg:flex">
               {NAV_ITEMS.map((item, idx) => {
                 const isMega = item.label === "Company" || item.label === "Services";
-                const isSmall = item.label === "Industries" || item.label === "Resources" || item.label === "Products";
+                const isSmall =
+                  item.label === "Industries" ||
+                  item.label === "Resources" ||
+                  item.label === "Products";
 
                 return (
-                  <div 
-                    key={item.label} 
+                  <div
+                    key={item.label}
                     className={`group px-3 ${isSmall ? "relative" : ""}`}
                     onMouseEnter={() => setActiveDropdown(idx)}
                     onMouseLeave={() => setActiveDropdown(null)}
@@ -235,11 +247,13 @@ export default function Navbar() {
                       <>
                         <button
                           onClick={() => toggleDropdown(idx)}
-                          className="flex items-center py-2 text-[14px] font-semibold tracking-wide transition-colors duration-300 text-[#001A3D] hover:text-[#0171c1]"
+                          className="flex items-center py-2 text-[14px] font-semibold tracking-wide text-[#001A3D] transition-colors duration-300 hover:text-[#0171c1]"
                           style={{ color: activeDropdown === idx ? BRAND_BLUE : undefined }}
                         >
                           {item.label}
-                          <ChevronDown className={`ml-1.5 w-3.5 h-3.5 transition-transform duration-300 ${activeDropdown === idx ? "rotate-180" : ""}`} />
+                          <ChevronDown
+                            className={`ml-1.5 h-3.5 w-3.5 transition-transform duration-300 ${activeDropdown === idx ? "rotate-180" : ""}`}
+                          />
                         </button>
 
                         {/* Small Dropdown */}
@@ -250,7 +264,7 @@ export default function Navbar() {
                                 initial={{ opacity: 0, y: 10 }}
                                 animate={{ opacity: 1, y: 0 }}
                                 exit={{ opacity: 0, y: 10 }}
-                                className="absolute top-full left-0 w-64 bg-white border border-gray-100 shadow-2xl py-4 mt-0 rounded-sm"
+                                className="absolute top-full left-0 mt-0 w-64 rounded-sm border border-gray-100 bg-white py-4 shadow-2xl"
                               >
                                 {item.dropdown.map((section) => (
                                   <div key={section.title} className="space-y-1">
@@ -258,10 +272,10 @@ export default function Navbar() {
                                       <Link
                                         key={subItem.name}
                                         href={subItem.path}
-                                        className="block px-6 py-2.5 text-[13px] text-gray-500 hover:text-[#0171c1] hover:bg-gray-50 transition-all font-semibold flex items-center group/sub"
+                                        className="group/sub block flex items-center px-6 py-2.5 text-[13px] font-semibold text-gray-500 transition-all hover:bg-gray-50 hover:text-[#0171c1]"
                                         onClick={() => setActiveDropdown(null)}
                                       >
-                                        <span className="w-0 h-[1.5px] bg-[#0171c1] transition-all group-hover/sub:w-3 mr-0 group-hover/sub:mr-2"></span>
+                                        <span className="mr-0 h-[1.5px] w-0 bg-[#0171c1] transition-all group-hover/sub:mr-2 group-hover/sub:w-3"></span>
                                         {subItem.name}
                                       </Link>
                                     ))}
@@ -280,31 +294,36 @@ export default function Navbar() {
                                 initial={{ opacity: 0, y: -5 }}
                                 animate={{ opacity: 1, y: 0 }}
                                 exit={{ opacity: 0, y: -5 }}
-                                className="fixed top-[80px] left-0 w-full bg-white border-t border-gray-100 shadow-2xl overflow-hidden z-50"
+                                className="fixed top-[80px] left-0 z-50 w-full overflow-hidden border-t border-gray-100 bg-white shadow-2xl"
                                 style={{ top: scrolled ? "64px" : "80px" }}
                               >
-                                <div className="max-w-[1280px] mx-auto px-6 lg:px-20 py-12">
+                                <div className="mx-auto max-w-[1280px] px-6 py-12 lg:px-20">
                                   <div className="grid grid-cols-12 gap-12">
                                     <div className="col-span-3">
-                                          <div className="bg-[#001A3D] p-8 rounded-lg text-white relative overflow-hidden group">
-                                            <div className="absolute top-0 right-0 w-32 h-32 bg-[#0171c1]/10 rounded-full -mr-16 -mt-16 transition-transform group-hover:scale-150 duration-700"></div>
-                                            <h3 className="text-base font-normal mb-4 relative z-10 leading-tight">
-                                              Experience <span className="text-[#0171c1]">Digital</span> Excellence
-                                            </h3>
-                                            <p className="text-gray-400 text-sm mb-6 relative z-10">
-                                              Join 200+ global enterprises scaling with our engineering expertise.
-                                            </p>
-                                            <Link href="/contact" className="inline-flex items-center text-[#0171c1] font-semibold text-sm tracking-wide group relative z-10">
-                                              Work With Us
-                                              <MoveRight className="ml-2 w-4 h-4 transition-transform group-hover:translate-x-1" />
-                                            </Link>
-                                         </div>
+                                      <div className="group relative overflow-hidden rounded-lg bg-[#001A3D] p-8 text-white">
+                                        <div className="absolute top-0 right-0 -mt-16 -mr-16 h-32 w-32 rounded-full bg-[#0171c1]/10 transition-transform duration-700 group-hover:scale-150"></div>
+                                        <h3 className="relative z-10 mb-4 text-base leading-tight font-normal">
+                                          Experience <span className="text-[#0171c1]">Digital</span>{" "}
+                                          Excellence
+                                        </h3>
+                                        <p className="relative z-10 mb-6 text-sm text-gray-400">
+                                          Join 200+ global enterprises scaling with our engineering
+                                          expertise.
+                                        </p>
+                                        <Link
+                                          href="/contact"
+                                          className="group relative z-10 inline-flex items-center text-sm font-semibold tracking-wide text-[#0171c1]"
+                                        >
+                                          Work With Us
+                                          <MoveRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
+                                        </Link>
+                                      </div>
                                     </div>
 
                                     <div className="col-span-9 grid grid-cols-3 gap-8">
                                       {item.dropdown?.map((section) => (
                                         <div key={section.title} className="space-y-6">
-                                          <h4 className="text-[#001A3D] text-[13px] font-semibold pb-3 border-b border-gray-100">
+                                          <h4 className="border-b border-gray-100 pb-3 text-[13px] font-semibold text-[#001A3D]">
                                             {section.title}
                                           </h4>
                                           <div className="flex flex-col space-y-4">
@@ -312,10 +331,10 @@ export default function Navbar() {
                                               <Link
                                                 key={subItem.name}
                                                 href={subItem.path}
-                                                className="text-gray-500 hover:text-[#0171c1] font-medium transition-all text-sm flex items-center group/item"
+                                                className="group/item flex items-center text-sm font-medium text-gray-500 transition-all hover:text-[#0171c1]"
                                                 onClick={() => setActiveDropdown(null)}
                                               >
-                                                <span className="w-0 h-[1.5px] bg-[#0171c1] transition-all group-hover/item:w-3 mr-0 group-hover/item:mr-2"></span>
+                                                <span className="mr-0 h-[1.5px] w-0 bg-[#0171c1] transition-all group-hover/item:mr-2 group-hover/item:w-3"></span>
                                                 {subItem.name}
                                               </Link>
                                             ))}
@@ -326,15 +345,26 @@ export default function Navbar() {
                                   </div>
                                 </div>
                                 {/* Bottom bar of mega menu */}
-                                <div className="bg-gray-50 py-4 border-t border-gray-100">
-                                   <div className="max-w-[1280px] mx-auto px-6 lg:px-20 flex justify-between items-center text-xs text-gray-500 font-semibold tracking-wide">
-                                      <div className="flex space-x-8">
-                                        <Link href="/resources/case-studies" className="hover:text-[#001A3D]">Success Stories</Link>
-                                        <Link href="/resources" className="hover:text-[#001A3D]">Knowledge Hub</Link>
-                                        <Link href="/careers" className="hover:text-[#001A3D]">Life at Hutech</Link>
-                                      </div>
-                                      <div className="text-[#0171c1]">Accelerating Business Agility</div>
-                                   </div>
+                                <div className="border-t border-gray-100 bg-gray-50 py-4">
+                                  <div className="mx-auto flex max-w-[1280px] items-center justify-between px-6 text-xs font-semibold tracking-wide text-gray-500 lg:px-20">
+                                    <div className="flex space-x-8">
+                                      <Link
+                                        href="/resources/case-studies"
+                                        className="hover:text-[#001A3D]"
+                                      >
+                                        Success Stories
+                                      </Link>
+                                      <Link href="/resources" className="hover:text-[#001A3D]">
+                                        Knowledge Hub
+                                      </Link>
+                                      <Link href="/careers" className="hover:text-[#001A3D]">
+                                        Life at Hutech
+                                      </Link>
+                                    </div>
+                                    <div className="text-[#0171c1]">
+                                      Accelerating Business Agility
+                                    </div>
+                                  </div>
                                 </div>
                               </Motion.div>
                             )}
@@ -344,7 +374,7 @@ export default function Navbar() {
                     ) : (
                       <Link
                         href={item.path}
-                        className="block py-2 text-[14px] font-semibold tracking-wide transition-colors duration-300 text-[#001A3D] hover:text-[#0171c1]"
+                        className="block py-2 text-[14px] font-semibold tracking-wide text-[#001A3D] transition-colors duration-300 hover:text-[#0171c1]"
                       >
                         {item.label}
                       </Link>
@@ -355,10 +385,10 @@ export default function Navbar() {
             </div>
 
             {/* Mobile menu button */}
-            <div className="lg:hidden flex items-center">
+            <div className="flex items-center lg:hidden">
               <button
                 onClick={() => setMobileMenuOpen(true)}
-                className="text-[#001A3D] hover:text-[#0171c1] transition-colors p-2 focus:outline-none"
+                className="p-2 text-[#001A3D] transition-colors hover:text-[#0171c1] focus:outline-none"
                 aria-label="Open menu"
                 aria-expanded={false}
               >
@@ -367,7 +397,6 @@ export default function Navbar() {
             </div>
           </div>
         </div>
-
       </Motion.nav>
 
       {/* Mobile Menu Overlay */}
@@ -378,13 +407,17 @@ export default function Navbar() {
             animate={{ x: 0 }}
             exit={{ x: "100%" }}
             transition={{ type: "spring", damping: 25, stiffness: 200 }}
-            className="fixed inset-0 bg-[#001A3D] z-[100] flex flex-col h-[100vh]"
-            style={{ height: '100dvh' }}
+            className="fixed inset-0 z-[100] flex h-[100vh] flex-col bg-[#001A3D]"
+            style={{ height: "100dvh" }}
           >
-            <div className="flex justify-between items-center px-6 py-6 border-b border-white/10 h-[100px]">
+            <div className="flex h-[100px] items-center justify-between border-b border-white/10 px-6 py-6">
               <div className="flex items-center">
-                <Link href="/" className="flex items-center" onClick={() => setMobileMenuOpen(false)}>
-                  <div className="h-14 px-3 bg-white rounded-md py-1.5 shadow-md">
+                <Link
+                  href="/"
+                  className="flex items-center"
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  <div className="h-14 rounded-md bg-white px-3 py-1.5 shadow-md">
                     <ImageWithFallback
                       src={logoImg}
                       alt="Hutech Solutions Logo"
@@ -393,35 +426,39 @@ export default function Navbar() {
                   </div>
                 </Link>
               </div>
-              <button 
-                onClick={() => setMobileMenuOpen(false)} 
-                className="text-white bg-white/10 p-3 rounded-full hover:bg-[#0171c1] hover:text-white transition-all"
+              <button
+                onClick={() => setMobileMenuOpen(false)}
+                className="rounded-full bg-white/10 p-3 text-white transition-all hover:bg-[#0171c1] hover:text-white"
                 aria-label="Close menu"
               >
                 <X size={28} />
               </button>
             </div>
-            
-            <div className="flex-1 overflow-y-auto px-6 py-10 space-y-6">
+
+            <div className="flex-1 space-y-6 overflow-y-auto px-6 py-10">
               {NAV_ITEMS.map((item, idx) => (
-                <Motion.div 
+                <Motion.div
                   key={item.label}
                   initial={{ opacity: 0, x: 20 }}
                   animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: 0.05 + (idx * 0.05) }}
+                  transition={{ delay: 0.05 + idx * 0.05 }}
                   className="border-b border-white/5 pb-4 last:border-0"
                 >
                   {item.dropdown ? (
                     <div className="space-y-6">
                       <button
-                        onClick={() => setMobileExpandedItem(mobileExpandedItem === idx ? null : idx)}
-                        className="text-2xl font-semibold text-white flex justify-between items-center tracking-tight w-full group"
+                        onClick={() =>
+                          setMobileExpandedItem(mobileExpandedItem === idx ? null : idx)
+                        }
+                        className="group flex w-full items-center justify-between text-2xl font-semibold tracking-tight text-white"
                       >
-                        <span className={mobileExpandedItem === idx ? "text-[#0171c1]" : ""}>{item.label}</span>
-                        <ChevronDown 
-                          className={`w-6 h-6 text-[#0171c1] transition-transform duration-500 ${
+                        <span className={mobileExpandedItem === idx ? "text-[#0171c1]" : ""}>
+                          {item.label}
+                        </span>
+                        <ChevronDown
+                          className={`h-6 w-6 text-[#0171c1] transition-transform duration-500 ${
                             mobileExpandedItem === idx ? "rotate-180" : ""
-                          }`} 
+                          }`}
                         />
                       </button>
                       <AnimatePresence>
@@ -435,8 +472,11 @@ export default function Navbar() {
                           >
                             <div className="space-y-8 pt-4">
                               {item.dropdown.map((section) => (
-                                <div key={section.title} className="space-y-4 pl-4 border-l border-[#0171c1]/20">
-                                  <h4 className="text-[#0171c1] text-sm font-semibold opacity-80">
+                                <div
+                                  key={section.title}
+                                  className="space-y-4 border-l border-[#0171c1]/20 pl-4"
+                                >
+                                  <h4 className="text-sm font-semibold text-[#0171c1] opacity-80">
                                     {section.title}
                                   </h4>
                                   <div className="grid gap-4">
@@ -444,10 +484,10 @@ export default function Navbar() {
                                       <Link
                                         key={subItem.name}
                                         href={subItem.path}
-                                        className="text-gray-300 text-base font-semibold hover:text-white flex items-center group transition-colors"
+                                        className="group flex items-center text-base font-semibold text-gray-300 transition-colors hover:text-white"
                                         onClick={() => setMobileMenuOpen(false)}
                                       >
-                                        <div className="w-1.5 h-1.5 rounded-full bg-[#0171c1] mr-3 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                                        <div className="mr-3 h-1.5 w-1.5 rounded-full bg-[#0171c1] opacity-0 transition-opacity group-hover:opacity-100"></div>
                                         {subItem.name}
                                       </Link>
                                     ))}
@@ -462,7 +502,7 @@ export default function Navbar() {
                   ) : (
                     <Link
                       href={item.path}
-                      className="text-2xl font-semibold text-white block tracking-tight hover:text-[#0171c1] transition-colors"
+                      className="block text-2xl font-semibold tracking-tight text-white transition-colors hover:text-[#0171c1]"
                       onClick={() => setMobileMenuOpen(false)}
                     >
                       {item.label}
@@ -472,18 +512,18 @@ export default function Navbar() {
               ))}
             </div>
 
-            <div className="p-8 bg-[#00142D] space-y-4">
-               <Link 
-                 href="/contact" 
-                 onClick={() => setMobileMenuOpen(false)}
-                 className="w-full bg-[#0171c1] text-white font-bold py-4 tracking-wide text-center block rounded-sm hover:bg-white hover:text-[#001A3D] transition-all shadow-lg active:scale-[0.98]"
-               >
-                 Get In Touch
-               </Link>
-               <div className="flex justify-between items-center text-[11px] text-gray-500 font-semibold tracking-wide pt-4 border-t border-white/5">
-                  <div>Hutech Solutions © 2026</div>
-                  <div className="text-[#0171c1]">Global Engineering</div>
-               </div>
+            <div className="space-y-4 bg-[#00142D] p-8">
+              <Link
+                href="/contact"
+                onClick={() => setMobileMenuOpen(false)}
+                className="block w-full rounded-sm bg-[#0171c1] py-4 text-center font-bold tracking-wide text-white shadow-lg transition-all hover:bg-white hover:text-[#001A3D] active:scale-[0.98]"
+              >
+                Get In Touch
+              </Link>
+              <div className="flex items-center justify-between border-t border-white/5 pt-4 text-[11px] font-semibold tracking-wide text-gray-500">
+                <div>Hutech Solutions © 2026</div>
+                <div className="text-[#0171c1]">Global Engineering</div>
+              </div>
             </div>
           </Motion.div>
         )}

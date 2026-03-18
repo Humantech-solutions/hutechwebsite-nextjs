@@ -1,10 +1,11 @@
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@100..900&family=Inter:wght@100..900&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@100..900&family=Inter:wght@100..900&display=swap");
 @import "slick-carousel/slick/slick.css";
 @import "tailwindcss";
 
 /* Slick Carousel Theme Adjustments */
-.slick-prev:before, .slick-next:before {
-  color: #001A3D;
+.slick-prev:before,
+.slick-next:before {
+  color: #001a3d;
 }
 
 :root {
@@ -15,14 +16,14 @@
   --card-foreground: oklch(0.145 0 0);
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.145 0 0);
-  --primary: #001A3D;
+  --primary: #001a3d;
   --primary-foreground: oklch(1 0 0);
   --secondary: oklch(0.95 0.0058 264.53);
-  --secondary-foreground: #001A3D;
+  --secondary-foreground: #001a3d;
   --muted: #ececf0;
   --muted-foreground: #717182;
   --accent: #e9ebef;
-  --accent-foreground: #001A3D;
+  --accent-foreground: #001a3d;
   --destructive: #d4183d;
   --destructive-foreground: #ffffff;
   --border: rgba(0, 0, 0, 0.1);
@@ -125,11 +126,11 @@
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
 
-  --color-brand-blue: #001A3D;
+  --color-brand-blue: #001a3d;
   --color-brand-accent: #0171c1;
-  
-  --font-sans: 'Inter', sans-serif;
-  --font-display: 'Montserrat', sans-serif;
+
+  --font-sans: "Inter", sans-serif;
+  --font-display: "Montserrat", sans-serif;
 }
 
 @layer base {
@@ -143,7 +144,13 @@
     font-family: var(--font-sans);
   }
 
-  h1, h2, h3, h4, h5, h6, .display-font {
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6,
+  .display-font {
     font-family: var(--font-display);
   }
 

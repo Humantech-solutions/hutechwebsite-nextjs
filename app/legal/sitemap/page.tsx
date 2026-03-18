@@ -19,7 +19,7 @@ const SITEMAP_DATA = [
       { name: "Awards and Recognition", path: "/company/awards" },
       { name: "Open Positions", path: "/careers/open-positions" },
       { name: "Graduates", path: "/company/graduates" },
-    ]
+    ],
   },
   {
     title: "Services",
@@ -32,12 +32,15 @@ const SITEMAP_DATA = [
       { name: "Banking & Financial Services", path: "/services/fintech" },
       { name: "Ecommerce Development", path: "/services/ecommerce" },
       { name: "Enterprise Digital Solutions", path: "/services/erp" },
-      { name: "Development and Maintenance", path: "/services/application-development-maintenance" },
+      {
+        name: "Development and Maintenance",
+        path: "/services/application-development-maintenance",
+      },
       { name: "Consulting Service", path: "/services/consulting" },
       { name: "AI Consulting & Prompt Engineering", path: "/services/ai-consulting" },
       { name: "Cybersecurity", path: "/services/cybersecurity" },
       { name: "IOT (Internet of Things)", path: "/services/iot" },
-    ]
+    ],
   },
   {
     title: "Products",
@@ -49,7 +52,7 @@ const SITEMAP_DATA = [
       { name: "LMS", path: "/products?category=LMS" },
       { name: "ERP & Office Productivity", path: "/products?category=ERP & Office Productivity" },
       { name: "Logistics and Delivery", path: "/products?category=Logistics and Delivery" },
-    ]
+    ],
   },
   {
     title: "Industries",
@@ -60,7 +63,7 @@ const SITEMAP_DATA = [
       { name: "Logistics & Supply Chain", path: "/industries/logistics" },
       { name: "Manufacturing", path: "/industries/manufacturing" },
       { name: "Retail & Consumer", path: "/industries/retail" },
-    ]
+    ],
   },
   {
     title: "Legal & Policies",
@@ -70,46 +73,55 @@ const SITEMAP_DATA = [
       { name: "Cookie Policy", path: "/legal/cookie-policy" },
       { name: "Code of Conduct", path: "/legal/code-of-conduct" },
       { name: "Sitemap", path: "/legal/sitemap" },
-    ]
-  }
+    ],
+  },
 ];
 
 export default function Sitemap() {
   return (
     <div className="flex flex-col bg-white">
-      <Meta 
+      <Meta
         title="Sitemap | Hutech Solutions"
         description="Navigate through all pages on Hutech Solutions website."
       />
       <Breadcrumbs variant="light" />
 
-      <section className="bg-[#001A3D] text-white py-20 relative overflow-hidden">
+      <section className="relative overflow-hidden bg-[#001A3D] py-20 text-white">
         <div className="absolute inset-0 z-0">
           <div className="absolute inset-0 bg-gradient-to-r from-[#001A3D] via-[#001A3D]/80 to-transparent"></div>
         </div>
-        <div className="max-w-[1280px] mx-auto px-6 lg:px-20 relative z-10">
+        <div className="relative z-10 mx-auto max-w-[1280px] px-6 lg:px-20">
           <Motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             className="max-w-3xl"
           >
-            <h1 className="text-4xl md:text-5xl font-semibold mb-6 display-font tracking-tight"><span className="text-[#FFAF2B]">Site</span>map</h1>
-            <p className="text-lg text-gray-300">A comprehensive directory of our website content.</p>
+            <h1 className="display-font mb-6 text-4xl font-semibold tracking-tight md:text-5xl">
+              <span className="text-[#FFAF2B]">Site</span>map
+            </h1>
+            <p className="text-lg text-gray-300">
+              A comprehensive directory of our website content.
+            </p>
           </Motion.div>
         </div>
       </section>
 
       <section className="py-20">
-        <div className="max-w-[1280px] mx-auto px-6 lg:px-20">
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-12">
+        <div className="mx-auto max-w-[1280px] px-6 lg:px-20">
+          <div className="grid grid-cols-1 gap-12 sm:grid-cols-2 lg:grid-cols-3">
             {SITEMAP_DATA.map((section) => (
               <div key={section.title} className="space-y-6">
-                <h2 className="text-xl font-bold text-[#001A3D] border-b border-gray-100 pb-4">{section.title}</h2>
+                <h2 className="border-b border-gray-100 pb-4 text-xl font-bold text-[#001A3D]">
+                  {section.title}
+                </h2>
                 <ul className="space-y-3">
                   {section.links.map((link) => (
                     <li key={link.name}>
-                      <Link href={link.path} className="text-gray-500 hover:text-[#0171c1] transition-colors text-sm font-medium flex items-center group">
-                        <span className="w-0 h-[1px] bg-[#0171c1] transition-all group-hover:w-3 mr-0 group-hover:mr-2"></span>
+                      <Link
+                        href={link.path}
+                        className="group flex items-center text-sm font-medium text-gray-500 transition-colors hover:text-[#0171c1]"
+                      >
+                        <span className="mr-0 h-[1px] w-0 bg-[#0171c1] transition-all group-hover:mr-2 group-hover:w-3"></span>
                         {link.name}
                       </Link>
                     </li>
