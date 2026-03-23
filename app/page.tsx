@@ -359,6 +359,58 @@ export default function Home() {
             </div>
           ))}
         </Slider>
+        <style>{`
+          .custom-dots {
+            position: absolute !important;
+            bottom: 40px !important;
+            right: 40px !important;
+            list-style: none !important;
+            display: flex !important;
+            gap: 8px !important;
+            margin: 0 !important;
+            padding: 0 !important;
+            z-index: 20 !important;
+          }
+          .custom-dots li {
+            margin: 0 !important;
+            display: block !important;
+            width: 12px !important;
+            height: 12px !important;
+          }
+          .custom-dots li button {
+            font-size: 0 !important;
+            line-height: 0 !important;
+            display: block !important;
+            width: 100% !important;
+            height: 100% !important;
+            cursor: pointer !important;
+            color: transparent !important;
+            border: 0 !important;
+            outline: none !important;
+            background: transparent !important;
+            position: relative !important;
+            padding: 0 !important;
+          }
+          .custom-dots li button:before {
+            content: "" !important;
+            position: absolute !important;
+            top: 50% !important;
+            left: 50% !important;
+            transform: translate(-50%, -50%) !important;
+            width: 8px !important;
+            height: 8px !important;
+            border-radius: 50% !important;
+            background-color: white !important;
+            opacity: 0.5 !important;
+            transition: all 0.3s ease !important;
+          }
+          .custom-dots li.slick-active button:before {
+            opacity: 1 !important;
+            background-color: #FFAF2B !important;
+            width: 10px !important;
+            height: 10px !important;
+          }
+        `}</style>
       </section>
 
       {/* "with Hutech Solutions" section */}
