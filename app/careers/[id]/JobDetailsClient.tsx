@@ -118,6 +118,24 @@ export default function JobDetailsClient({ job }: { job: any }) {
                 <p className="text-lg leading-relaxed font-medium text-gray-500">{job.desc}</p>
               </div>
 
+              {job.whatYoullDo && job.whatYoullDo.length > 0 && (
+                <div className="space-y-8">
+                  <h2 className="display-font text-3xl font-semibold tracking-tight text-[#001A3D]">
+                    What You&apos;ll Be Doing
+                  </h2>
+                  <ul className="space-y-6">
+                    {job.whatYoullDo.map((item: string, i: number) => (
+                      <li key={i} className="flex gap-4">
+                        <div className="mt-1 shrink-0">
+                          <CheckCircle2 size={20} className="text-[#FFAF2B]" />
+                        </div>
+                        <span className="leading-relaxed font-medium text-gray-500">{item}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+
               <div className="space-y-8">
                 <h2 className="display-font text-3xl font-semibold tracking-tight text-[#001A3D]">
                   Key Requirements
@@ -133,6 +151,24 @@ export default function JobDetailsClient({ job }: { job: any }) {
                   ))}
                 </ul>
               </div>
+
+              {job.superpowers && job.superpowers.length > 0 && (
+                <div className="space-y-8">
+                  <h2 className="display-font text-3xl font-semibold tracking-tight text-[#001A3D]">
+                    Your Superpowers
+                  </h2>
+                  <ul className="space-y-6">
+                    {job.superpowers.map((power: string, i: number) => (
+                      <li key={i} className="flex gap-4">
+                        <div className="mt-1 shrink-0">
+                          <Zap size={20} className="text-[#FFAF2B]" />
+                        </div>
+                        <span className="leading-relaxed font-medium text-gray-500">{power}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
 
               <div className="space-y-8">
                 <h2 className="display-font text-3xl font-semibold tracking-tight text-[#001A3D]">

@@ -5,28 +5,56 @@ import { Breadcrumbs } from "@/components/Breadcrumbs";
 import {
   Heart,
   Users,
-  Coffee,
-  Globe,
   Star,
-  Smile,
-  Sparkles,
-  Camera,
   Award,
   ShieldCheck,
-  Zap,
   Trophy,
   MoveRight,
   ChevronLeft,
   ChevronRight,
+  X,
 } from "lucide-react";
 import { Meta } from "@/components/Meta";
 import { ImageWithFallback } from "@/components/figma/ImageWithFallback";
 import Slider from "react-slick";
 import Link from "next/link";
+import { useState, useCallback, useEffect } from "react";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 
 export default function LifeAtHutech() {
+  const [lightboxOpen, setLightboxOpen] = useState(false);
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+
+  const openLightbox = useCallback((index: number) => {
+    setCurrentImageIndex(index);
+    setLightboxOpen(true);
+    document.body.style.overflow = "hidden";
+  }, []);
+
+  const closeLightbox = useCallback(() => {
+    setLightboxOpen(false);
+    document.body.style.overflow = "unset";
+  }, []);
+
+  const nextImage = useCallback(() => {
+    setCurrentImageIndex((prev) => (prev + 1) % 8);
+  }, []);
+
+  const prevImage = useCallback(() => {
+    setCurrentImageIndex((prev) => (prev - 1 + 8) % 8);
+  }, []);
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (!lightboxOpen) return;
+      if (e.key === "Escape") closeLightbox();
+      if (e.key === "ArrowRight") nextImage();
+      if (e.key === "ArrowLeft") prevImage();
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [lightboxOpen, closeLightbox, nextImage, prevImage]);
   const cultureItems = [
     {
       icon: <Heart className="h-8 w-8 text-[#FFAF2B]" />,
@@ -199,6 +227,7 @@ export default function LifeAtHutech() {
                 whileInView={{ opacity: 1, scale: 1 }}
                 viewport={{ once: true }}
                 transition={{ delay: i * 0.05 }}
+                onClick={() => openLightbox(i)}
                 className="group relative aspect-square cursor-pointer overflow-hidden rounded-3xl shadow-lg"
               >
                 <ImageWithFallback
@@ -218,6 +247,50 @@ export default function LifeAtHutech() {
             ))}
           </div>
         </div>
+
+        {/* Lightbox Modal */}
+        {lightboxOpen && (
+          <div
+            className="fixed inset-0 z-[100] flex items-center justify-center bg-black/90 p-4 backdrop-blur-sm"
+            onClick={closeLightbox}
+          >
+            <button
+              onClick={closeLightbox}
+              className="absolute top-6 right-6 flex h-12 w-12 items-center justify-center rounded-full bg-white/10 text-white transition-all hover:bg-white/20"
+              aria-label="Close lightbox"
+            >
+              <X size={24} />
+            </button>
+            <button
+              onClick={(e) => { e.stopPropagation(); prevImage(); }}
+              className="absolute left-4 md:left-8 flex h-12 w-12 items-center justify-center rounded-full bg-white/10 text-white transition-all hover:bg-[#FFAF2B] hover:text-[#001A3D]"
+              aria-label="Previous image"
+            >
+              <ChevronLeft size={24} />
+            </button>
+            <div
+              className="relative max-h-[85vh] max-w-5xl w-full overflow-hidden rounded-2xl"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <ImageWithFallback
+                src={`${galleryImages[currentImageIndex].src}?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=90&w=1600`}
+                alt={galleryImages[currentImageIndex].tag}
+                className="h-full w-full object-contain"
+              />
+              <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-6">
+                <p className="text-center text-lg font-bold text-white">{galleryImages[currentImageIndex].tag}</p>
+                <p className="text-center text-xs text-gray-400">{currentImageIndex + 1} / {galleryImages.length}</p>
+              </div>
+            </div>
+            <button
+              onClick={(e) => { e.stopPropagation(); nextImage(); }}
+              className="absolute right-4 md:right-8 flex h-12 w-12 items-center justify-center rounded-full bg-white/10 text-white transition-all hover:bg-[#FFAF2B] hover:text-[#001A3D]"
+              aria-label="Next image"
+            >
+              <ChevronRight size={24} />
+            </button>
+          </div>
+        )}
       </section>
 
       {/* Achievements Section */}

@@ -848,74 +848,300 @@ export default function Home() {
         </div>
       </section>
 
-      {/* The Stack Behind Every Build */}
-      <section className="border-t border-gray-100 bg-[#FAF9F6] py-20">
+      {/* Tech Stack Section */}
+      <section className="bg-white py-20">
         <div className="mx-auto max-w-[1280px] px-6 lg:px-20">
-          <div className="mb-20 flex flex-col items-end justify-between gap-12 md:flex-row">
-            <div className="max-w-2xl space-y-6">
-              <h2 className="display-font text-4xl leading-tight font-semibold tracking-tight text-[#001A3D] md:text-5xl">
-                The Stack Behind <br />
-                <span className="text-gray-400">Every Build</span>
-              </h2>
-              <p className="max-w-lg text-sm leading-relaxed font-medium text-gray-500">
-                We leverage a modern, scalable, and high-performance technology stack to ensure your
-                enterprise applications are built for the future.
-              </p>
-            </div>
-            <Link
-              href="/contact"
-              className="group flex items-center gap-3 rounded-sm bg-[#001A3D] px-10 py-4 text-[11px] font-semibold tracking-wide text-white transition-all duration-300 hover:bg-[#FFAF2B] hover:text-[#001A3D]"
-            >
-              View Full Stack
-              <MoveRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-            </Link>
+          <div className="mb-16 space-y-3">
+            <h2 className="display-font text-4xl leading-tight font-semibold tracking-tight text-[#001A3D] md:text-5xl">
+              The <span className="text-[#FFAF2B]">Stack</span> Behind
+              <br />
+              Every Build
+            </h2>
+            <p className="max-w-xl text-sm leading-relaxed font-medium text-gray-500">
+              We leverage best-in-class technologies across every layer of the stack to engineer
+              robust, scalable, and future-ready solutions.
+            </p>
           </div>
 
-          <div className="grid grid-cols-1 gap-8 md:grid-cols-4">
-            {[
-              {
-                category: "Frontend",
-                techs: ["React", "Next.js", "Tailwind CSS", "TypeScript"],
-                icon: <Monitor className="h-6 w-6 text-[#FFAF2B]" />,
-              },
-              {
-                category: "Backend",
-                techs: ["Node.js", "Python", "Go", "Java"],
-                icon: <Settings className="h-6 w-6 text-[#FFAF2B]" />,
-              },
-              {
-                category: "Cloud",
-                techs: ["AWS", "Azure", "GCP", "Kubernetes"],
-                icon: <Cloud className="h-6 w-6 text-[#FFAF2B]" />,
-              },
-              {
-                category: "AI & ML",
-                techs: ["PyTorch", "TensorFlow", "OpenAI", "NVIDIA"],
-                icon: <Cpu className="h-6 w-6 text-[#FFAF2B]" />,
-              },
-            ].map((item, idx) => (
-              <div
-                key={idx}
-                className="group border border-gray-100 bg-white p-8 transition-all hover:border-[#FFAF2B]/30"
-              >
-                <div className="mb-8 flex items-center gap-4">
-                  <div className="rounded-lg bg-[#FAF9F6] p-3 transition-colors group-hover:bg-[#FFAF2B]/10">
-                    {item.icon}
+          <div className="overflow-hidden rounded-sm border border-gray-200 shadow-sm">
+            {/* Row: Data & AI */}
+            <div className="flex flex-col border-b border-gray-200 md:flex-row">
+              <div className="flex w-full shrink-0 items-center border-b border-gray-200 bg-gray-50 px-8 py-8 md:w-[200px] md:border-r md:border-b-0">
+                <span className="text-sm leading-snug font-semibold tracking-tight text-[#001A3D]">Data &amp; AI</span>
+              </div>
+              <div className="flex flex-1 flex-wrap items-center gap-x-10 gap-y-8 px-10 py-8">
+                <div className="group flex cursor-pointer flex-col items-center gap-2">
+                  <div className="flex h-14 w-14 items-center justify-center">
+                    <svg viewBox="0 0 48 48" className="h-12 w-12" fill="none">
+                      <path d="M24 4C13 4 13.5 9 13.5 9L13.51 14.2H24.2V15.8H9S4 15.2 4 26.1C4 37 8.3 36.6 8.3 36.6H11.2V31.1S11.1 26.8 15.4 26.8H25.9S30 26.9 30 23V10.5S30.6 4 24 4Z" fill="#3776AB"/>
+                      <path d="M24 44C35 44 34.5 39 34.5 39L34.49 33.8H23.8V32.2H39S44 32.8 44 21.9C44 11 39.7 11.4 39.7 11.4H36.8V16.9S36.9 21.2 32.6 21.2H22.1S18 21.1 18 25V37.5S17.4 44 24 44Z" fill="#FFD43B"/>
+                      <circle cx="19.5" cy="9" r="2" fill="white"/>
+                      <circle cx="28.5" cy="39" r="2" fill="white"/>
+                    </svg>
                   </div>
-                  <h3 className="text-lg font-bold text-[#001A3D]">{item.category}</h3>
+                  <span className="text-[11px] font-medium text-gray-500 transition-colors group-hover:text-[#001A3D]">Python</span>
                 </div>
-                <div className="flex flex-wrap gap-2">
-                  {item.techs.map((tech) => (
-                    <span
-                      key={tech}
-                      className="rounded-sm border border-gray-100 bg-gray-50 px-3 py-1 text-[10px] font-semibold tracking-wide text-gray-500 transition-colors group-hover:bg-white"
-                    >
-                      {tech}
-                    </span>
-                  ))}
+                <div className="group flex cursor-pointer flex-col items-center gap-2">
+                  <div className="flex h-14 w-14 items-center justify-center">
+                    <svg viewBox="0 0 48 48" className="h-12 w-12" fill="none">
+                      <ellipse cx="24" cy="22" rx="14" ry="6" fill="#FEC514"/>
+                      <ellipse cx="24" cy="15" rx="9" ry="4" fill="#00BFB3"/>
+                      <ellipse cx="24" cy="29" rx="9" ry="4" fill="#00BFB3"/>
+                      <ellipse cx="24" cy="22" rx="11" ry="4.5" fill="#343741"/>
+                    </svg>
+                  </div>
+                  <span className="text-[11px] font-medium text-gray-500 transition-colors group-hover:text-[#001A3D]">Elasticsearch</span>
+                </div>
+                <div className="group flex cursor-pointer flex-col items-center gap-2">
+                  <div className="flex h-14 w-14 items-center justify-center">
+                    <svg viewBox="0 0 48 48" className="h-12 w-12" fill="none">
+                      <path d="M24 4L4 15.5V32.5L24 44L44 32.5V15.5L24 4Z" fill="#FF6F00"/>
+                      <path d="M24 14V34M16 18V30L24 34M32 18V30L24 34" stroke="white" strokeWidth="2.5" strokeLinecap="round"/>
+                    </svg>
+                  </div>
+                  <span className="text-[11px] font-medium text-gray-500 transition-colors group-hover:text-[#001A3D]">TensorFlow</span>
+                </div>
+                <div className="group flex cursor-pointer flex-col items-center gap-2">
+                  <div className="flex h-14 w-14 items-center justify-center rounded-xl bg-black">
+                    <svg viewBox="0 0 24 24" className="h-8 w-8" fill="white">
+                      <path d="M22.28 9.94a5.76 5.76 0 0 0-.5-4.73 5.93 5.93 0 0 0-6.38-2.83 5.76 5.76 0 0 0-4.35-1.94 5.93 5.93 0 0 0-5.65 4.1 5.76 5.76 0 0 0-3.84 2.79 5.93 5.93 0 0 0 .73 6.95 5.76 5.76 0 0 0 .5 4.73 5.93 5.93 0 0 0 6.38 2.83 5.76 5.76 0 0 0 4.34 1.94 5.93 5.93 0 0 0 5.66-4.1 5.76 5.76 0 0 0 3.84-2.79 5.93 5.93 0 0 0-.73-6.95zM13.4 21.5a4.4 4.4 0 0 1-2.82-1.02l.14-.08 4.68-2.7a.78.78 0 0 0 .39-.67v-6.6l1.98 1.14a.07.07 0 0 1 .04.06v5.46a4.42 4.42 0 0 1-4.41 4.41zM3.67 17.77a4.4 4.4 0 0 1-.53-2.96l.14.09 4.68 2.7a.77.77 0 0 0 .78 0l5.71-3.3v2.28a.08.08 0 0 1-.03.07l-4.73 2.73a4.42 4.42 0 0 1-6.02-1.61zm-.9-9.67a4.4 4.4 0 0 1 2.3-1.94V11.5a.77.77 0 0 0 .39.67l5.71 3.3-1.98 1.14a.08.08 0 0 1-.07 0L4.4 13.88a4.42 4.42 0 0 1-1.63-5.78zm16.27 3.79-5.71-3.3 1.98-1.14a.08.08 0 0 1 .07 0l4.72 2.73a4.41 4.41 0 0 1-.68 7.96V12.78a.77.77 0 0 0-.38-.68zm1.97-3-.14-.09-4.67-2.73a.78.78 0 0 0-.78 0l-5.71 3.3V7.1a.08.08 0 0 1 .03-.07l4.72-2.72a4.41 4.41 0 0 1 6.55 4.58zM9.09 13.17l-1.98-1.14a.08.08 0 0 1-.04-.06V6.51a4.41 4.41 0 0 1 7.24-3.39l-.14.08-4.68 2.7a.77.77 0 0 0-.39.67l-.01 6.6zm1.07-2.32 2.54-1.47 2.54 1.47v2.93l-2.54 1.47-2.54-1.47v-2.93z"/>
+                    </svg>
+                  </div>
+                  <span className="text-[11px] font-medium text-gray-500 transition-colors group-hover:text-[#001A3D]">OpenAI</span>
+                </div>
+                <div className="group flex cursor-pointer flex-col items-center gap-2">
+                  <div className="flex h-14 w-14 items-center justify-center">
+                    <svg viewBox="0 0 48 48" className="h-12 w-12" fill="none">
+                      <rect width="48" height="48" rx="8" fill="#E8488A"/>
+                      <path d="M12 12H20V36L12 28V12Z" fill="white"/>
+                      <path d="M20 24L36 36H20V24Z" fill="white" opacity="0.6"/>
+                      <path d="M20 12L36 28L28 36L20 24V12Z" fill="white" opacity="0.85"/>
+                    </svg>
+                  </div>
+                  <span className="text-[11px] font-medium text-gray-500 transition-colors group-hover:text-[#001A3D]">Kibana</span>
                 </div>
               </div>
-            ))}
+            </div>
+
+            {/* Row: Cloud Technology */}
+            <div className="flex flex-col border-b border-gray-200 md:flex-row">
+              <div className="flex w-full shrink-0 items-center border-b border-gray-200 bg-gray-50 px-8 py-8 md:w-[200px] md:border-r md:border-b-0">
+                <span className="text-sm leading-snug font-semibold tracking-tight text-[#001A3D]">Cloud Technology</span>
+              </div>
+              <div className="flex flex-1 flex-wrap items-center gap-x-10 gap-y-8 px-10 py-8">
+                <div className="group flex cursor-pointer flex-col items-center gap-2">
+                  <div className="flex h-14 w-14 items-center justify-center">
+                    <svg viewBox="0 0 80 50" className="h-10 w-14" fill="none">
+                      <path d="M22.9 21.6c0 .8.1 1.5.3 2 .2.5.5.9.9 1.3.1.1.2.2.2.4 0 .2-.1.3-.3.5l-1 .7c-.1.1-.3.1-.4.1-.2 0-.3-.1-.5-.2-.2-.2-.4-.5-.6-.8-.2-.3-.3-.6-.5-1-1.2 1.4-2.7 2.1-4.6 2.1-1.3 0-2.4-.4-3.1-1.1-.8-.7-1.2-1.7-1.2-2.9 0-1.3.5-2.3 1.4-3.1.9-.8 2.2-1.2 3.7-1.2.5 0 1 0 1.5.1s1 .2 1.6.3v-1c0-1-.2-1.7-.7-2.2-.5-.5-1.2-.7-2.3-.7-.5 0-1 .1-1.5.2-.5.1-1 .3-1.5.5-.2.1-.4.2-.5.2-.1 0-.2-.1-.2-.3v-.8c0-.2 0-.3.1-.4.1-.1.2-.2.5-.3.5-.2 1.1-.4 1.7-.5.7-.1 1.4-.2 2.1-.2 1.6 0 2.8.4 3.6 1.1.8.7 1.2 1.8 1.2 3.2v4.3l.1.1zm-6.3 2.4c.5 0 1-.1 1.5-.3.5-.2.9-.5 1.3-1 .2-.3.4-.6.5-1 .1-.4.1-.8.1-1.3v-.6c-.4-.1-.9-.2-1.3-.2-.5-.1-.9-.1-1.4-.1-.9 0-1.6.2-2.1.6-.5.4-.7 1-.7 1.7 0 .7.2 1.2.5 1.6.4.4.9.6 1.6.6zm11.4 1.5c-.2 0-.4 0-.5-.1-.1-.1-.2-.3-.3-.6l-3.3-10.7c-.1-.3-.1-.5-.1-.6 0-.2.1-.3.3-.3h1.3c.2 0 .4 0 .5.1.1.1.2.3.3.6l2.4 9.3 2.2-9.3c.1-.3.2-.5.3-.6.1-.1.3-.1.5-.1h1.1c.2 0 .4 0 .5.1.1.1.2.3.3.6l2.2 9.4 2.5-9.4c.1-.3.2-.5.3-.6.1-.1.3-.1.5-.1h1.2c.2 0 .3.1.3.3 0 .1 0 .2-.1.4 0 .1-.1.2-.1.3L34.4 25c-.1.3-.2.5-.3.6-.1.1-.3.1-.5.1h-1.2c-.2 0-.4 0-.5-.1-.1-.1-.2-.3-.3-.6l-2.2-9.1-2.2 9.1c-.1.3-.2.5-.3.6-.1.1-.3.1-.5.1h-1.5zm14.8.3c-.8 0-1.5-.1-2.2-.4-.7-.2-1.3-.5-1.6-.9-.1-.1-.2-.3-.2-.4 0-.2.1-.3.3-.3h.8c.1 0 .3 0 .4.1.1.1.2.1.3.2.3.2.6.4 1 .5.4.2.8.2 1.2.2.6 0 1.1-.1 1.5-.4.4-.2.5-.6.5-1 0-.3-.1-.5-.3-.7-.2-.2-.6-.4-1.2-.6l-1.7-.5c-.9-.3-1.5-.7-2-1.2-.4-.5-.7-1-.7-1.7 0-.5.1-1 .4-1.4.3-.4.7-.7 1.2-1 .5-.2 1.1-.3 1.7-.3.3 0 .6 0 .9.1.3.1.6.1.9.2.3.1.5.2.7.4.2.1.4.3.5.4.1.1.1.3.1.4v.7c0 .2-.1.3-.3.3-.1 0-.3-.1-.5-.2-.5-.4-1.1-.6-1.8-.6-.6 0-1 .1-1.3.3-.3.2-.5.5-.5.9 0 .3.1.5.3.7.2.2.7.4 1.4.6l1.6.5c.9.3 1.5.7 1.9 1.2.4.5.6 1 .6 1.7 0 .5-.1 1-.4 1.5-.3.5-.7.8-1.2 1.1-.6.2-1.2.4-1.8.4z" fill="#252F3E"/>
+                      <path d="M48.5 30.2c-5.4 4-13.2 6.1-19.9 6.1-9.4 0-17.9-3.5-24.3-9.3-.5-.4-.1-1.1.6-.7 6.9 4 15.5 6.4 24.3 6.4 6 0 12.5-1.2 18.5-3.8.9-.4 1.7.6 1.8 1.3z" fill="#FF9900"/>
+                      <path d="M50.7 27.7c-.7-.9-4.5-.4-6.2-.2-.5.1-.6-.4-.1-.7 3-2.2 8-1.5 8.6-.8.6.7-.2 5.7-3 8.2-.4.4-.9.2-.7-.3.7-1.5 2.1-5.2 1.4-6.2z" fill="#FF9900"/>
+                    </svg>
+                  </div>
+                  <span className="text-[11px] font-medium text-gray-500 transition-colors group-hover:text-[#001A3D]">AWS</span>
+                </div>
+                <div className="group flex cursor-pointer flex-col items-center gap-2">
+                  <div className="flex h-14 w-14 items-center justify-center">
+                    <svg viewBox="0 0 48 48" className="h-11 w-11" fill="none">
+                      <path d="M17.5 4L6 38h10.5L27 14.5 17.5 4z" fill="#0078D4"/>
+                      <path d="M27 14.5L16.5 38H42L27 14.5z" fill="#0078D4" opacity="0.75"/>
+                    </svg>
+                  </div>
+                  <span className="text-[11px] font-medium text-gray-500 transition-colors group-hover:text-[#001A3D]">Microsoft Azure</span>
+                </div>
+                <div className="group flex cursor-pointer flex-col items-center gap-2">
+                  <div className="flex h-14 w-14 items-center justify-center">
+                    <svg viewBox="0 0 48 48" className="h-12 w-12" fill="none">
+                      <path d="M29.2 15.1l3.5-3.5.2-1.5C29.3 7.1 25 5.5 20.6 5.5c-8.3 0-15.3 5.6-17.5 13.2l1.3-.2 7.1-1.2 1.2-1.2c1.8-2 4.4-3.1 7.2-3.1 2.4 0 4.6.9 6.4 2.5l2.9-.4z" fill="#EA4335"/>
+                      <path d="M38.8 18.5c-.8-3-2.7-5.6-5.2-7.5l-5.4 5.4c2.1 1.7 3.5 4.3 3.5 7.1v.9c2.5 0 4.5 2 4.5 4.5s-2 4.5-4.5 4.5H22.6l-.9.9v5.4l.9.9h9.2c6.6 0 11.9-5.3 11.9-11.9a11.9 11.9 0 0 0-5-9.7l.1-.5z" fill="#4285F4"/>
+                      <path d="M13.4 41.6h9.2v-7.1h-9.2c-.7 0-1.3-.1-1.9-.4l-1.3.4-3.5 3.5-.3 1.3c1.9 1.4 4.3 2.2 6.9 2.2l.1.1z" fill="#34A853"/>
+                      <path d="M13.4 18.1C6.8 18.1 1.5 23.4 1.5 30s5.3 11.9 11.9 11.9c3.2 0 6.2-1.3 8.4-3.5l-4.5-4.5c-1 1-2.4 1.6-3.9 1.6-3 0-5.4-2.4-5.4-5.4s2.4-5.4 5.4-5.4c1.5 0 2.9.6 3.9 1.6l4.5-4.5a12 12 0 0 0-8.4-3.7z" fill="#FBBC05"/>
+                    </svg>
+                  </div>
+                  <span className="text-[11px] font-medium text-gray-500 transition-colors group-hover:text-[#001A3D]">Google Cloud</span>
+                </div>
+                <div className="group flex cursor-pointer flex-col items-center gap-2">
+                  <div className="flex h-14 w-14 items-center justify-center">
+                    <svg viewBox="0 0 48 48" className="h-12 w-12" fill="none">
+                      <rect width="48" height="48" rx="6" fill="#F80000" opacity="0.1"/>
+                      <rect x="8" y="17" width="32" height="14" rx="7" stroke="#F80000" strokeWidth="2.5" fill="none"/>
+                    </svg>
+                  </div>
+                  <span className="text-[11px] font-medium text-gray-500 transition-colors group-hover:text-[#001A3D]">Oracle Cloud</span>
+                </div>
+                <div className="group flex cursor-pointer flex-col items-center gap-2">
+                  <div className="flex h-14 w-14 items-center justify-center">
+                    <svg viewBox="0 0 48 48" className="h-12 w-12" fill="none">
+                      <rect x="4" y="13" width="40" height="4" rx="2" fill="#1F70C1"/>
+                      <rect x="4" y="21" width="40" height="4" rx="2" fill="#1F70C1"/>
+                      <rect x="4" y="29" width="40" height="4" rx="2" fill="#1F70C1"/>
+                      <rect x="12" y="13" width="4" height="4" fill="white"/>
+                      <rect x="32" y="13" width="4" height="4" fill="white"/>
+                      <rect x="12" y="29" width="4" height="4" fill="white"/>
+                      <rect x="32" y="29" width="4" height="4" fill="white"/>
+                    </svg>
+                  </div>
+                  <span className="text-[11px] font-medium text-gray-500 transition-colors group-hover:text-[#001A3D]">IBM Cloud</span>
+                </div>
+                <div className="group flex cursor-pointer flex-col items-center gap-2">
+                  <div className="flex h-14 w-14 items-center justify-center">
+                    <svg viewBox="0 0 48 48" className="h-11 w-11" fill="none">
+                      <circle cx="24" cy="20" r="14" fill="#0080FF" opacity="0.12"/>
+                      <circle cx="24" cy="20" r="14" stroke="#0080FF" strokeWidth="2" fill="none"/>
+                      <path d="M24 8C17.4 8 12 13.4 12 20s5.4 12 12 12v-6c-3.3 0-6-2.7-6-6s2.7-6 6-6 6 2.7 6 6h6c0-6.6-5.4-12-12-12z" fill="#0080FF"/>
+                      <rect x="18" y="32" width="6" height="4" rx="1" fill="#0080FF"/>
+                      <rect x="12" y="26" width="6" height="4" rx="1" fill="#0080FF"/>
+                    </svg>
+                  </div>
+                  <span className="text-[11px] font-medium text-gray-500 transition-colors group-hover:text-[#001A3D]">DigitalOcean</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Row: Platform Engineering */}
+            <div className="flex flex-col border-b border-gray-200 md:flex-row">
+              <div className="flex w-full shrink-0 items-center border-b border-gray-200 bg-gray-50 px-8 py-8 md:w-[200px] md:border-r md:border-b-0">
+                <span className="text-sm leading-snug font-semibold tracking-tight text-[#001A3D]">Platform Engineering</span>
+              </div>
+              <div className="flex flex-1 flex-wrap items-center gap-x-10 gap-y-8 px-10 py-8">
+                <div className="group flex cursor-pointer flex-col items-center gap-2">
+                  <div className="flex h-14 w-14 items-center justify-center">
+                    <svg viewBox="0 0 48 48" className="h-11 w-11" fill="none">
+                      <path d="M24 4L6 14.5v19L24 44l18-10.5v-19L24 4z" fill="#539E43"/>
+                      <path d="M21 17v14l3 1.7 3-1.7V17h-6z" fill="white" opacity="0.9"/>
+                    </svg>
+                  </div>
+                  <span className="text-[11px] font-medium text-gray-500 transition-colors group-hover:text-[#001A3D]">Node.js</span>
+                </div>
+                <div className="group flex cursor-pointer flex-col items-center gap-2">
+                  <div className="flex h-14 w-14 items-center justify-center">
+                    <svg viewBox="0 0 48 48" className="h-11 w-11" fill="none">
+                      <path d="M44 13L32 6 20 13 8 6 4 13v22l8 5 12-7 12 7 8-5V13z" fill="#FF2D20" opacity="0.12"/>
+                      <path d="M44 13L32 6 20 13v14l12 7 12-7V13z" fill="#FF2D20" opacity="0.7"/>
+                      <path d="M20 13L8 6 4 13v14l8 5 8-5V13z" fill="#FF2D20"/>
+                    </svg>
+                  </div>
+                  <span className="text-[11px] font-medium text-gray-500 transition-colors group-hover:text-[#001A3D]">Laravel</span>
+                </div>
+                <div className="group flex cursor-pointer flex-col items-center gap-2">
+                  <div className="flex h-14 w-14 items-center justify-center">
+                    <svg viewBox="0 0 48 48" className="h-11 w-11" fill="none">
+                      <path d="M18 34s-2 1.2 1.4 1.6c4.1.5 6.2.4 10.7-.5 0 0 1.2.7 2.8 1.3C22.5 40 10 36.6 18 34z" fill="#EA2D2E"/>
+                      <path d="M16.5 29.5s-2.2 1.6 1.2 2c4.4.5 7.8.5 13.8-.7 0 0 .8.8 2.1 1.3-12.2 3.6-25.8.2-17.1-2.6z" fill="#EA2D2E"/>
+                      <path d="M26.9 20.7c2.5 2.9-.7 5.5-.7 5.5s6.3-3.2 3.4-7.2c-2.7-3.7-4.8-5.5 6.5-11.8 0 0-17.8 4.4-9.2 13.5z" fill="#EA2D2E"/>
+                      <path d="M19 25.3s-9.9 2.4-3.5 3.2c2.7.4 8 .3 12.9-.1 4-.3 8.1-1 8.1-1s-1.4.6-2.4 1.3c-9.7 2.5-28.5 1.4-23.1-.8 4.7-1.7 8-2.6 8-2.6z" fill="#5382A1"/>
+                      <path d="M35 32.7c9.9-5.1 5.3-10.1 2.1-9.4-.8.2-1.1.4-1.1.4s.3-.4.9-.6c6.5-2.3 11.5 6.8-2 10.3 0-.1.1-.2.1-.7z" fill="#5382A1"/>
+                      <path d="M28 4s5.7 5.7-5.4 14.4c-8.8 7-2 11 0 15.6-5.2-4.7-9-8.8-6.4-12.7C20 16.3 30.3 13.7 28 4z" fill="#5382A1"/>
+                    </svg>
+                  </div>
+                  <span className="text-[11px] font-medium text-gray-500 transition-colors group-hover:text-[#001A3D]">Java</span>
+                </div>
+                <div className="group flex cursor-pointer flex-col items-center gap-2">
+                  <div className="flex h-14 w-14 items-center justify-center rounded-xl bg-[#512BD4]">
+                    <svg viewBox="0 0 40 30" className="h-8 w-10" fill="white">
+                      <text x="0" y="10" fontFamily="Arial" fontSize="7" fontWeight="bold">Microsoft</text>
+                      <text x="2" y="26" fontFamily="Arial" fontSize="16" fontWeight="bold">.NET</text>
+                    </svg>
+                  </div>
+                  <span className="text-[11px] font-medium text-gray-500 transition-colors group-hover:text-[#001A3D]">.Net</span>
+                </div>
+                <div className="group flex cursor-pointer flex-col items-center gap-2">
+                  <div className="flex h-14 w-14 items-center justify-center">
+                    <svg viewBox="0 0 48 48" className="h-11 w-11" fill="none">
+                      <path d="M24 3L4 10l3.1 26.9L24 45l16.9-8.1L44 10 24 3z" fill="#DD0031"/>
+                      <path d="M24 3v42l16.9-8.1L44 10 24 3z" fill="#C3002F"/>
+                      <path d="M24 8.5L11.5 36h4.5l2.5-6.3h11l2.5 6.3h4.5L24 8.5zm0 7.5l4 10h-8l4-10z" fill="white"/>
+                    </svg>
+                  </div>
+                  <span className="text-[11px] font-medium text-gray-500 transition-colors group-hover:text-[#001A3D]">Angular</span>
+                </div>
+                <div className="group flex cursor-pointer flex-col items-center gap-2">
+                  <div className="flex h-14 w-14 items-center justify-center">
+                    <svg viewBox="0 0 48 48" className="h-11 w-11" fill="none">
+                      <path d="M24 42L2 8h8.5l13.5 24 13.5-24H46L24 42z" fill="#41B883"/>
+                      <path d="M24 42L10.5 18H18L24 28l6-10h7.5L24 42z" fill="#35495E"/>
+                    </svg>
+                  </div>
+                  <span className="text-[11px] font-medium text-gray-500 transition-colors group-hover:text-[#001A3D]">Vue.js</span>
+                </div>
+                <div className="group flex cursor-pointer flex-col items-center gap-2">
+                  <div className="flex h-14 w-14 items-center justify-center">
+                    <svg viewBox="0 0 48 48" className="h-11 w-11" fill="none">
+                      <ellipse cx="24" cy="24" rx="5" ry="5" fill="#61DAFB"/>
+                      <ellipse cx="24" cy="24" rx="22" ry="9" stroke="#61DAFB" strokeWidth="2" fill="none"/>
+                      <ellipse cx="24" cy="24" rx="22" ry="9" stroke="#61DAFB" strokeWidth="2" fill="none" transform="rotate(60 24 24)"/>
+                      <ellipse cx="24" cy="24" rx="22" ry="9" stroke="#61DAFB" strokeWidth="2" fill="none" transform="rotate(120 24 24)"/>
+                    </svg>
+                  </div>
+                  <span className="text-[11px] font-medium text-gray-500 transition-colors group-hover:text-[#001A3D]">React.js</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Row: Mobile Development */}
+            <div className="flex flex-col md:flex-row">
+              <div className="flex w-full shrink-0 items-center border-b border-gray-200 bg-gray-50 px-8 py-8 md:w-[200px] md:border-r md:border-b-0">
+                <span className="text-sm leading-snug font-semibold tracking-tight text-[#001A3D]">Mobile Development</span>
+              </div>
+              <div className="flex flex-1 flex-wrap items-center gap-x-10 gap-y-8 px-10 py-8">
+                <div className="group flex cursor-pointer flex-col items-center gap-2">
+                  <div className="flex h-14 w-14 items-center justify-center rounded-xl bg-[#282C34]">
+                    <svg viewBox="0 0 48 48" className="h-9 w-9" fill="none">
+                      <ellipse cx="24" cy="24" rx="5" ry="5" fill="#61DAFB"/>
+                      <ellipse cx="24" cy="24" rx="20" ry="8" stroke="#61DAFB" strokeWidth="2" fill="none"/>
+                      <ellipse cx="24" cy="24" rx="20" ry="8" stroke="#61DAFB" strokeWidth="2" fill="none" transform="rotate(60 24 24)"/>
+                      <ellipse cx="24" cy="24" rx="20" ry="8" stroke="#61DAFB" strokeWidth="2" fill="none" transform="rotate(120 24 24)"/>
+                    </svg>
+                  </div>
+                  <span className="text-[11px] font-medium text-gray-500 transition-colors group-hover:text-[#001A3D]">React Native</span>
+                </div>
+                <div className="group flex cursor-pointer flex-col items-center gap-2">
+                  <div className="flex h-14 w-14 items-center justify-center">
+                    <svg viewBox="0 0 48 48" className="h-10 w-10" fill="none">
+                      <path d="M13 24L26 11h10L22 25l14 14H26L13 26l5-1-5-1z" fill="#54C5F8"/>
+                      <path d="M26 39L13 26l5-1 13 13-5 1z" fill="#01579B"/>
+                      <path d="M26 39l-8-8 5-5 10 10-7 3z" fill="#29B6F6"/>
+                    </svg>
+                  </div>
+                  <span className="text-[11px] font-medium text-gray-500 transition-colors group-hover:text-[#001A3D]">Flutter</span>
+                </div>
+                <div className="group flex cursor-pointer flex-col items-center gap-2">
+                  <div className="flex h-14 w-14 items-center justify-center">
+                    <svg viewBox="0 0 48 48" className="h-11 w-11" fill="none">
+                      <rect width="48" height="48" rx="10" fill="#FA7343"/>
+                      <path d="M37.6 28.7c.4-1.1.6-2.3.6-3.6 0-5.8-4.2-10.6-9.7-11.7C32 17 33.6 22 31 26.4c-.2.3-.4.7-.7 1L21 38h6.5l4.5-5.5c2.5-3 4.3-2.5 5.6-3.8z" fill="white"/>
+                      <path d="M10 30.5c1.8 4.3 6.2 7.5 11.4 7.5H31L21 27c-3.6-3.8-5.7-8.7-5.5-13.6C10.9 16.4 8 21 8 26.2c0 1.5.7 3 2 4.3z" fill="white"/>
+                    </svg>
+                  </div>
+                  <span className="text-[11px] font-medium text-gray-500 transition-colors group-hover:text-[#001A3D]">Swift</span>
+                </div>
+                <div className="group flex cursor-pointer flex-col items-center gap-2">
+                  <div className="flex h-14 w-14 items-center justify-center">
+                    <svg viewBox="0 0 48 48" className="h-11 w-11" fill="none">
+                      <defs>
+                        <linearGradient id="kotlinGrad" x1="0" y1="0" x2="48" y2="48">
+                          <stop offset="0%" stopColor="#7F52FF"/>
+                          <stop offset="50%" stopColor="#C811E1"/>
+                          <stop offset="100%" stopColor="#E44857"/>
+                        </linearGradient>
+                      </defs>
+                      <path d="M4 4h40L24 24 44 44H4V4z" fill="url(#kotlinGrad)"/>
+                    </svg>
+                  </div>
+                  <span className="text-[11px] font-medium text-gray-500 transition-colors group-hover:text-[#001A3D]">Kotlin</span>
+                </div>
+                <div className="group flex cursor-pointer flex-col items-center gap-2">
+                  <div className="flex h-14 w-14 items-center justify-center">
+                    <svg viewBox="0 0 48 48" className="h-11 w-11" fill="none">
+                      <circle cx="24" cy="22" r="14" stroke="#3880FF" strokeWidth="2" fill="none"/>
+                      <circle cx="24" cy="22" r="7" fill="#3880FF"/>
+                      <circle cx="24" cy="22" r="3.5" fill="white"/>
+                      <circle cx="36" cy="10" r="3.5" fill="#3880FF"/>
+                    </svg>
+                  </div>
+                  <span className="text-[11px] font-medium text-gray-500 transition-colors group-hover:text-[#001A3D]">Ionic</span>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </section>
@@ -1080,8 +1306,8 @@ export default function Home() {
               Limitless together
             </h2>
             <p className="mx-auto max-w-2xl text-lg leading-relaxed font-medium text-gray-300 md:text-xl">
-              At Hutech Solutions, you're not just joining a company — you're becoming part of a
-              community. Let's be limitless together.
+              At Hutech Solutions, you&apos;re not just joining a company — you&apos;re becoming part of a
+              community. Let&apos;s be limitless together.
             </p>
           </div>
           <Link
