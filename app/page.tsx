@@ -364,6 +364,9 @@ export default function Home() {
             position: absolute !important;
             bottom: 40px !important;
             right: 40px !important;
+            left: auto !important;
+            width: auto !important;
+            justify-content: flex-end !important;
             list-style: none !important;
             display: flex !important;
             gap: 8px !important;
