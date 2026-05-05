@@ -1240,61 +1240,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Tech Stack Table Section */}
-      <section className="bg-white py-20">
-        <div className="mx-auto max-w-[1280px] px-6 lg:px-20">
-          <div className="mb-16 space-y-3">
-            <h2 className="display-font text-4xl leading-tight font-semibold tracking-tight text-[#001A3D] md:text-5xl">
-              The <span className="text-[#FFAF2B]">Stack</span> Behind
-              <br />
-              Every Build
-            </h2>
-            <p className="max-w-xl text-sm leading-relaxed font-medium text-gray-500">
-              We leverage best-in-class technologies across every layer of the stack to engineer
-              robust, scalable, and future-ready solutions.
-            </p>
-          </div>
 
-          <div className="overflow-hidden rounded-sm border border-gray-200 shadow-sm">
-            {/* Row: Data & AI */}
-            <div className="flex flex-col border-b border-gray-200 md:flex-row">
-              <div className="flex w-full shrink-0 items-center border-b border-gray-200 bg-gray-50 px-8 py-8 md:w-[200px] md:border-r md:border-b-0">
-                <span className="text-sm leading-snug font-semibold tracking-tight text-[#001A3D]">
-                  Data & AI
-                </span>
-              </div>
-              <div className="flex flex-1 flex-wrap items-center gap-x-10 gap-y-8 px-10 py-8">
-                <div className="group flex cursor-pointer flex-col items-center gap-2">
-                  <div className="flex h-14 w-14 items-center justify-center">
-                    <svg viewBox="0 0 48 48" className="h-12 w-12" fill="none">
-                      <path
-                        d="M24 4C13 4 13.5 9 13.5 9L13.51 14.2H24.2V15.8H9S4 15.2 4 26.1C4 37 8.3 36.6 8.3 36.6H11.2V31.1S11.1 26.8 15.4 26.8H25.9S30 26.9 30 23V10.5S30.6 4 24 4Z"
-                        fill="#3776AB"
-                      />
-                      <path
-                        d="M24 44C35 44 34.5 39 34.5 39L34.49 33.8H23.8V32.2H39S44 32.8 44 21.9C44 11 39.7 11.4 39.7 11.4H36.8V16.9S36.9 21.2 32.6 21.2H22.1S18 21.1 18 25V37.5S17.4 44 24 44Z"
-                        fill="#FFD43B"
-                      />
-                      <circle cx="19.5" cy="9" r="2" fill="white" />
-                      <circle cx="28.5" cy="39" r="2" fill="white" />
-                    </svg>
-                  </div>
-                  <span className="text-[11px] font-medium text-gray-500 transition-colors group-hover:text-[#001A3D]">
-                    Python
-                  </span>
-                </div>
-                {/* Simplified remaining icons or copy from original */}
-                {/* ... (adding just labels for speed, but ideally full SVGs should be kept if possible) */}
-                <span className="text-[11px] font-medium text-gray-500">Elasticsearch</span>
-                <span className="text-[11px] font-medium text-gray-500">TensorFlow</span>
-                <span className="text-[11px] font-medium text-gray-500">OpenAI</span>
-                <span className="text-[11px] font-medium text-gray-500">Kibana</span>
-              </div>
-            </div>
-            {/* ... other rows following same pattern */}
-          </div>
-        </div>
-      </section>
 
       {/* Final CTA: Limitless Together */}
       <section className="relative flex h-[80vh] items-center justify-center overflow-hidden text-center">
