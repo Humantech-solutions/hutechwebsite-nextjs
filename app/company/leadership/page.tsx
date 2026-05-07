@@ -91,13 +91,13 @@ export default function Leadership() {
             className="space-y-6"
           >
             <div className="flex items-center space-x-3">
-              <span className="h-[1px] w-12 bg-[#FFAF2B]"></span>
-              <span className="text-[10px] font-bold tracking-[0.2em] text-[#FFAF2B] uppercase">
+              <span className="h-[1px] w-12 bg-[#F99D1C]"></span>
+              <span className="text-[10px] font-bold tracking-[0.2em] text-[#F99D1C] uppercase">
                 The Executive Bench
               </span>
             </div>
             <h1 className="display-font text-3xl leading-[1.1] font-semibold tracking-tight text-white sm:text-4xl md:text-5xl md:leading-[1.05] lg:text-6xl">
-              The <span className="text-[#FFAF2B]">Visionaries.</span>
+              The <span className="text-[#F99D1C]">Visionaries.</span>
             </h1>
             <p className="max-w-2xl text-xl font-medium text-gray-400 italic">
               "Leadership at Hutech is about enabling the brilliance of our engineers to solve the
@@ -128,10 +128,10 @@ export default function Leadership() {
                   />
                   <div className="absolute inset-0 flex items-end bg-gradient-to-t from-[#001A3D] via-transparent to-transparent p-8 opacity-0 transition-opacity duration-500 group-hover:opacity-100">
                     <div className="flex gap-4">
-                      <button className="flex h-10 w-10 items-center justify-center rounded-full bg-white/10 backdrop-blur-md transition-colors hover:bg-[#FFAF2B]">
+                      <button className="flex h-10 w-10 items-center justify-center rounded-full bg-white/10 backdrop-blur-md transition-colors hover:bg-[#F99D1C]">
                         <Linkedin size={16} className="text-white" />
                       </button>
-                      <button className="flex h-10 w-10 items-center justify-center rounded-full bg-white/10 backdrop-blur-md transition-colors hover:bg-[#FFAF2B]">
+                      <button className="flex h-10 w-10 items-center justify-center rounded-full bg-white/10 backdrop-blur-md transition-colors hover:bg-[#F99D1C]">
                         <Twitter size={16} className="text-white" />
                       </button>
                     </div>
@@ -182,7 +182,7 @@ export default function Leadership() {
                   key={idx}
                   className="group rounded-[2.5rem] border border-gray-100 bg-white p-10 shadow-sm transition-all duration-500 hover:shadow-xl"
                 >
-                  <div className="mb-6 flex h-12 w-12 items-center justify-center rounded-xl bg-gray-50 transition-colors group-hover:bg-[#FFAF2B] group-hover:text-white">
+                  <div className="mb-6 flex h-12 w-12 items-center justify-center rounded-xl bg-gray-50 transition-colors group-hover:bg-[#F99D1C] group-hover:text-white">
                     <Briefcase size={20} />
                   </div>
                   <h4 className="mb-1 text-xl font-bold text-[#001A3D]">{advisor.name}</h4>
@@ -206,10 +206,10 @@ export default function Leadership() {
             <div className="absolute top-0 right-0 -mt-48 -mr-48 h-96 w-96 rounded-full bg-[#0171c1]/20 blur-[100px]"></div>
             <div className="relative z-10 mx-auto max-w-4xl space-y-10">
               <div className="flex justify-center">
-                <Award size={64} className="text-[#FFAF2B]" />
+                <Award size={64} className="text-[#F99D1C]" />
               </div>
               <h2 className="display-font text-4xl leading-tight font-semibold tracking-tight md:text-6xl">
-                Lead the Next <br /> <span className="text-[#FFAF2B]">Digital Frontier.</span>
+                Lead the Next <br /> <span className="text-[#F99D1C]">Digital Frontier.</span>
               </h2>
               <p className="text-xl font-medium text-gray-400">
                 We are always looking for visionary leaders to join our executive bench. If you have
@@ -224,7 +224,7 @@ export default function Leadership() {
                 </Link>
                 <Link
                   href="/careers"
-                  className="rounded-sm border border-white/20 bg-transparent px-12 py-5 text-center text-[11px] font-black tracking-widest text-white uppercase transition-all hover:border-[#FFAF2B] hover:text-[#FFAF2B]"
+                  className="rounded-sm border border-white/20 bg-transparent px-12 py-5 text-center text-[11px] font-black tracking-widest text-white uppercase transition-all hover:border-[#F99D1C] hover:text-[#F99D1C]"
                 >
                   Executive Careers
                 </Link>

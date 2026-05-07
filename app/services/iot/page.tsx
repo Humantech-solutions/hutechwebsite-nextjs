@@ -34,22 +34,22 @@ import Link from "next/link";
 const IOT_SERVICES = [
   {
     title: "Industrial IoT (IIoT)",
-    icon: <Factory className="h-8 w-8 text-[#FFAF2B]" />,
+    icon: <Factory className="h-8 w-8 text-[#F99D1C]" />,
     desc: "Optimizing manufacturing with real-time asset tracking, predictive maintenance, and digital twins for smart factories.",
   },
   {
     title: "Smart Infrastructure",
-    icon: <Building2 className="h-8 w-8 text-[#FFAF2B]" />,
+    icon: <Building2 className="h-8 w-8 text-[#F99D1C]" />,
     desc: "Intelligent building management systems (IBMS), smart lighting, and energy optimization for sustainable urban environments.",
   },
   {
     title: "Connected Logistics",
-    icon: <Truck className="h-8 w-8 text-[#FFAF2B]" />,
+    icon: <Truck className="h-8 w-8 text-[#F99D1C]" />,
     desc: "Real-time cold chain monitoring, fleet telemetry, and automated warehouse inventory management via RFID and IoT sensors.",
   },
   {
     title: "Consumer IoT Products",
-    icon: <Smartphone className="h-8 w-8 text-[#FFAF2B]" />,
+    icon: <Smartphone className="h-8 w-8 text-[#F99D1C]" />,
     desc: "Development of smart home appliances, wearable health trackers, and intuitive mobile interfaces for the modern consumer.",
   },
 ];
@@ -132,14 +132,14 @@ export default function IotSolutions() {
             className="max-w-4xl"
           >
             <div className="mb-6 flex items-center gap-3">
-              <span className="h-[1px] w-12 bg-[#FFAF2B]"></span>
-              <span className="text-[10px] font-bold tracking-[0.3em] text-[#FFAF2B] uppercase">
+              <span className="h-[1px] w-12 bg-[#F99D1C]"></span>
+              <span className="text-[10px] font-bold tracking-[0.3em] text-[#F99D1C] uppercase">
                 Industry 4.0 Excellence
               </span>
             </div>
             <h1 className="display-font mb-8 text-3xl leading-[1.1] font-semibold tracking-tight text-white sm:text-4xl md:text-5xl md:leading-[1.05] lg:text-6xl">
               Connected <br />
-              <span className="text-[#FFAF2B]">Intelligence.</span>
+              <span className="text-[#F99D1C]">Intelligence.</span>
             </h1>
             <p className="max-w-2xl text-lg leading-relaxed font-bold text-gray-300 md:text-xl">
               Transform your physical infrastructure into a responsive digital ecosystem. We
@@ -159,7 +159,7 @@ export default function IotSolutions() {
                 Bridging the gap between <br />
                 <span className="text-[#0171c1]">Bits and Atoms.</span>
               </h2>
-              <div className="h-1 w-20 bg-[#FFAF2B]"></div>
+              <div className="h-1 w-20 bg-[#F99D1C]"></div>
               <p className="text-lg leading-relaxed font-bold text-gray-500">
                 Modern IoT is not just about connectivity; it's about business resilience. Hutech
                 Solutions provides the engineering depth to handle complex hardware prototyping,
@@ -285,7 +285,7 @@ export default function IotSolutions() {
                   {step.step}
                 </div>
                 <div className="space-y-4 text-white">
-                  <div className="flex items-center gap-3 text-[#FFAF2B]">
+                  <div className="flex items-center gap-3 text-[#F99D1C]">
                     {step.icon}
                     <h4 className="display-font text-lg font-bold text-white">{step.name}</h4>
                   </div>

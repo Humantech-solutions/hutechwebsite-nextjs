@@ -22,11 +22,11 @@ export default function Insights() {
             transition={{ duration: 0.8 }}
             className="space-y-6"
           >
-            <span className="text-xs font-semibold tracking-wide text-[#FFAF2B]">
+            <span className="text-xs font-semibold tracking-wide text-[#F99D1C]">
               Knowledge Hub
             </span>
             <h1 className="display-font text-5xl leading-tight font-semibold md:text-8xl">
-              Resources & <span className="text-[#FFAF2B]">Insights.</span>
+              Resources & <span className="text-[#F99D1C]">Insights.</span>
             </h1>
             <p className="max-w-2xl text-xl font-medium text-gray-400">
               Deep dives into the technologies and strategies shaping the future of digital
@@ -42,25 +42,25 @@ export default function Insights() {
             {[
               {
                 title: "Case Studies",
-                icon: <FileText className="text-[#FFAF2B]" />,
+                icon: <FileText className="text-[#F99D1C]" />,
                 desc: "Real-world success stories.",
                 href: "/resources/case-studies",
               },
               {
                 title: "Whitepapers",
-                icon: <BookOpen className="text-[#FFAF2B]" />,
+                icon: <BookOpen className="text-[#F99D1C]" />,
                 desc: "Technical deep-dives.",
                 href: "/resources/documents",
               },
               {
                 title: "Tech Blogs",
-                icon: <Newspaper className="text-[#FFAF2B]" />,
+                icon: <Newspaper className="text-[#F99D1C]" />,
                 desc: "Weekly innovation updates.",
                 href: "/blogs",
               },
               {
                 title: "Webinars",
-                icon: <PlayCircle className="text-[#FFAF2B]" />,
+                icon: <PlayCircle className="text-[#F99D1C]" />,
                 desc: "Expert-led video sessions.",
                 href: "/resources/media",
               },

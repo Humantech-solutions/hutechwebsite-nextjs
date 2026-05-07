@@ -80,14 +80,14 @@ export default function Awards() {
               className="max-w-4xl space-y-8"
             >
               <div className="flex items-center space-x-3">
-                <span className="h-[1px] w-12 bg-[#FFAF2B]"></span>
-                <span className="text-xs font-semibold tracking-wide text-[#FFAF2B] uppercase">
+                <span className="h-[1px] w-12 bg-[#F99D1C]"></span>
+                <span className="text-xs font-semibold tracking-wide text-[#F99D1C] uppercase">
                   Our Milestones
                 </span>
               </div>
               <h1 className="display-font text-3xl leading-[1.1] font-semibold tracking-tight text-white sm:text-4xl md:text-5xl md:leading-[1.05] lg:text-6xl">
                 Awards & <br />
-                <span className="text-[#FFAF2B]">Recognition.</span>
+                <span className="text-[#F99D1C]">Recognition.</span>
               </h1>
               <p className="max-w-2xl text-xl leading-relaxed font-medium text-gray-400">
                 Celebrating a legacy of excellence and the relentless pursuit of innovation that
@@ -111,12 +111,12 @@ export default function Awards() {
                 transition={{ delay: i * 0.05 }}
                 className="group space-y-8 rounded-[2.5rem] border border-gray-100 bg-gray-50 p-10 transition-all duration-500 hover:bg-white hover:shadow-2xl"
               >
-                <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-white text-[#FFAF2B] shadow-sm transition-all duration-500 group-hover:bg-[#FFAF2B] group-hover:text-white">
+                <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-white text-[#F99D1C] shadow-sm transition-all duration-500 group-hover:bg-[#F99D1C] group-hover:text-white">
                   {award.icon}
                 </div>
                 <div className="space-y-4">
                   <div className="flex items-center justify-between border-b border-gray-100 pb-4">
-                    <span className="text-xs font-bold tracking-widest text-[#FFAF2B] uppercase">
+                    <span className="text-xs font-bold tracking-widest text-[#F99D1C] uppercase">
                       {award.year}
                     </span>
                     <span className="text-xs font-semibold text-gray-400">{award.issuer}</span>
@@ -138,7 +138,7 @@ export default function Awards() {
           <div className="flex flex-col items-center gap-20 lg:flex-row">
             <div className="flex-1 space-y-10">
               <h2 className="display-font text-4xl leading-tight font-semibold tracking-tight md:text-6xl">
-                Recognized for <br /> <span className="text-[#FFAF2B]">Global Excellence.</span>
+                Recognized for <br /> <span className="text-[#F99D1C]">Global Excellence.</span>
               </h2>
               <p className="text-lg leading-relaxed font-medium text-gray-400">
                 Our journey is marked by certifications and recognitions that validate our
@@ -152,8 +152,8 @@ export default function Awards() {
                   { label: "Elite Partners", value: "AWS, Azure, GCP" },
                   { label: "Satisfaction", value: "98% Client Retention" },
                 ].map((stat, i) => (
-                  <div key={i} className="space-y-2 border-l border-[#FFAF2B]/30 pl-6">
-                    <p className="text-xs font-bold tracking-widest text-[#FFAF2B] uppercase">
+                  <div key={i} className="space-y-2 border-l border-[#F99D1C]/30 pl-6">
+                    <p className="text-xs font-bold tracking-widest text-[#F99D1C] uppercase">
                       {stat.label}
                     </p>
                     <p className="display-font text-2xl font-bold">{stat.value}</p>
@@ -163,7 +163,7 @@ export default function Awards() {
             </div>
             <div className="flex-1">
               <div className="relative">
-                <div className="absolute -inset-4 rounded-full bg-[#FFAF2B]/10 blur-3xl"></div>
+                <div className="absolute -inset-4 rounded-full bg-[#F99D1C]/10 blur-3xl"></div>
                 <ImageWithFallback
                   src="https://images.unsplash.com/photo-1578575437130-527eed3abbec?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080"
                   alt="Corporate Milestone"
@@ -179,18 +179,18 @@ export default function Awards() {
       <section className="bg-white py-24">
         <div className="mx-auto max-w-[1280px] space-y-12 px-6 text-center lg:px-20">
           <h2 className="display-font text-4xl font-semibold tracking-tight text-[#001A3D] md:text-5xl">
-            Join our award-winning <span className="text-[#FFAF2B]">journey.</span>
+            Join our award-winning <span className="text-[#F99D1C]">journey.</span>
           </h2>
           <div className="flex flex-col justify-center gap-6 sm:flex-row">
             <Link
               href="/resources/case-studies"
-              className="rounded-sm bg-[#FFAF2B] px-12 py-5 text-center text-xs font-bold tracking-wide text-[#001A3D] shadow-xl shadow-[#FFAF2B]/20 transition-all hover:bg-[#ff9d00]"
+              className="rounded-sm bg-[#F99D1C] px-12 py-5 text-center text-xs font-bold tracking-wide text-[#001A3D] shadow-xl shadow-[#F99D1C]/20 transition-all hover:bg-[#ff9d00]"
             >
               Explore Case Studies
             </Link>
             <Link
               href="/contact"
-              className="rounded-sm border border-[#001A3D]/20 bg-transparent px-12 py-5 text-center text-xs font-bold tracking-wide text-[#001A3D] transition-all hover:border-[#FFAF2B] hover:text-[#FFAF2B]"
+              className="rounded-sm border border-[#001A3D]/20 bg-transparent px-12 py-5 text-center text-xs font-bold tracking-wide text-[#001A3D] transition-all hover:border-[#F99D1C] hover:text-[#F99D1C]"
             >
               Partner With Us
             </Link>

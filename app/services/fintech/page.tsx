@@ -27,7 +27,7 @@ import { Breadcrumbs } from "@/components/Breadcrumbs";
 import { ImageWithFallback } from "@/components/figma/ImageWithFallback";
 import { Meta } from "@/components/Meta";
 
-const BRAND_ORANGE = "#FFAF2B";
+const BRAND_ORANGE = "#F99D1C";
 const BRAND_BLUE = "#001A3D";
 
 const SERVICES = [
@@ -406,7 +406,7 @@ function FAQItem({ faq, index }: { faq: { question: string; answer: string }; in
         className="group flex w-full items-center justify-between py-6 text-left"
       >
         <span
-          className={`text-lg font-bold transition-colors md:text-xl ${isOpen ? "text-[#FFAF2B]" : "text-[#001A3D] group-hover:text-[#FFAF2B]"}`}
+          className={`text-lg font-bold transition-colors md:text-xl ${isOpen ? "text-[#F99D1C]" : "text-[#001A3D] group-hover:text-[#F99D1C]"}`}
         >
           {faq.question}
         </span>
@@ -470,14 +470,14 @@ export default function FintechAppDevelopment() {
             className="max-w-4xl"
           >
             <div className="mb-6 flex items-center gap-3">
-              <span className="h-[1px] w-12 bg-[#FFAF2B]"></span>
-              <span className="text-[10px] font-bold tracking-[0.3em] text-[#FFAF2B] uppercase">
+              <span className="h-[1px] w-12 bg-[#F99D1C]"></span>
+              <span className="text-[10px] font-bold tracking-[0.3em] text-[#F99D1C] uppercase">
                 Banking & Finance IT Services
               </span>
             </div>
             <h1 className="display-font mb-8 text-3xl leading-[1.1] font-semibold tracking-tight text-white sm:text-4xl md:text-5xl md:leading-[1.05] lg:text-6xl">
               Banking & Financial <br />
-              <span className="text-[#FFAF2B]">Services.</span>
+              <span className="text-[#F99D1C]">Services.</span>
             </h1>
             <p className="max-w-2xl text-lg leading-relaxed font-medium text-gray-300 md:text-xl">
               In the fast-paced world of finance, staying ahead requires not only innovative ideas

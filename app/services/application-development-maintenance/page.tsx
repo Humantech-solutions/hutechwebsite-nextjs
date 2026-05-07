@@ -89,14 +89,14 @@ export default function AppDevMaintenance() {
             className="max-w-4xl"
           >
             <div className="mb-6 flex items-center gap-3">
-              <span className="h-[1px] w-12 bg-[#FFAF2B]"></span>
-              <span className="text-[10px] font-bold tracking-[0.3em] text-[#FFAF2B] uppercase">
+              <span className="h-[1px] w-12 bg-[#F99D1C]"></span>
+              <span className="text-[10px] font-bold tracking-[0.3em] text-[#F99D1C] uppercase">
                 App Lifecycle Management
               </span>
             </div>
             <h1 className="display-font mb-8 text-3xl leading-[1.1] font-semibold tracking-tight text-white sm:text-4xl md:text-5xl md:leading-[1.05] lg:text-6xl">
               Development <br />
-              <span className="text-[#FFAF2B]">and Maintenance.</span>
+              <span className="text-[#F99D1C]">and Maintenance.</span>
             </h1>
             <p className="max-w-2xl text-lg leading-relaxed font-medium text-gray-300 md:text-xl">
               From initial concept to long-term support, we manage the entire application lifecycle,

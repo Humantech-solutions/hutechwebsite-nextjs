@@ -24,7 +24,7 @@ const DOCUMENTS = [
     size: "2.4 MB",
     category: "Corporate",
     date: "Mar 14, 2026",
-    icon: <FileText className="text-[#FFAF2B]" />,
+    icon: <FileText className="text-[#F99D1C]" />,
   },
   {
     id: "supply-chain-26",
@@ -33,7 +33,7 @@ const DOCUMENTS = [
     size: "15.8 MB",
     category: "Report",
     date: "Feb 28, 2026",
-    icon: <FileText className="text-[#FFAF2B]" />,
+    icon: <FileText className="text-[#F99D1C]" />,
   },
   {
     id: "ai-framework",
@@ -42,7 +42,7 @@ const DOCUMENTS = [
     size: "8.1 MB",
     category: "Technical",
     date: "Jan 15, 2026",
-    icon: <FileCode className="text-[#FFAF2B]" />,
+    icon: <FileCode className="text-[#F99D1C]" />,
   },
   {
     id: "brand-guidelines",
@@ -51,7 +51,7 @@ const DOCUMENTS = [
     size: "12.4 MB",
     category: "Guidelines",
     date: "Dec 10, 2025",
-    icon: <FileJson className="text-[#FFAF2B]" />,
+    icon: <FileJson className="text-[#F99D1C]" />,
   },
   {
     id: "sustainability",
@@ -60,7 +60,7 @@ const DOCUMENTS = [
     size: "6.7 MB",
     category: "Report",
     date: "Nov 05, 2025",
-    icon: <FileText className="text-[#FFAF2B]" />,
+    icon: <FileText className="text-[#F99D1C]" />,
   },
   {
     id: "security-compliance",
@@ -69,7 +69,7 @@ const DOCUMENTS = [
     size: "3.2 MB",
     category: "Technical",
     date: "Oct 22, 2025",
-    icon: <FileCode className="text-[#FFAF2B]" />,
+    icon: <FileCode className="text-[#F99D1C]" />,
   },
 ];
 
@@ -92,20 +92,20 @@ export default function HutechDocuments() {
             className="space-y-4"
           >
             <div className="flex items-center gap-3">
-              <span className="block h-[2px] w-8 bg-[#FFAF2B]"></span>
-              <span className="text-xs font-semibold tracking-widest text-[#FFAF2B] uppercase">
+              <span className="block h-[2px] w-8 bg-[#F99D1C]"></span>
+              <span className="text-xs font-semibold tracking-widest text-[#F99D1C] uppercase">
                 Resource Library
               </span>
             </div>
             <h1 className="display-font text-4xl leading-tight font-semibold md:text-6xl">
-              Hutech <span className="text-[#FFAF2B]">Documents.</span>
+              Hutech <span className="text-[#F99D1C]">Documents.</span>
             </h1>
             <p className="max-w-2xl text-lg leading-relaxed font-medium text-gray-400">
               Access official publications, corporate reports, and technical whitepapers.
             </p>
           </Motion.div>
         </div>
-        <div className="absolute right-0 bottom-0 h-full w-1/3 translate-x-1/2 -skew-x-12 bg-[#FFAF2B]/5"></div>
+        <div className="absolute right-0 bottom-0 h-full w-1/3 translate-x-1/2 -skew-x-12 bg-[#F99D1C]/5"></div>
       </section>
 
       <section className="py-20">
@@ -121,10 +121,10 @@ export default function HutechDocuments() {
                 <input
                   type="text"
                   placeholder="Search documents..."
-                  className="w-full rounded-sm border border-gray-100 bg-gray-50 py-3 pr-4 pl-12 text-sm font-medium transition-colors focus:border-[#FFAF2B] focus:outline-none"
+                  className="w-full rounded-sm border border-gray-100 bg-gray-50 py-3 pr-4 pl-12 text-sm font-medium transition-colors focus:border-[#F99D1C] focus:outline-none"
                 />
               </div>
-              <button className="rounded-sm border border-gray-100 bg-gray-50 p-3 text-gray-500 transition-all hover:border-[#FFAF2B] hover:bg-white">
+              <button className="rounded-sm border border-gray-100 bg-gray-50 p-3 text-gray-500 transition-all hover:border-[#F99D1C] hover:bg-white">
                 <Filter size={18} />
               </button>
             </div>
@@ -158,14 +158,14 @@ export default function HutechDocuments() {
                 {DOCUMENTS.map((doc, i) => (
                   <div
                     key={doc.id}
-                    className="group flex flex-col items-start justify-between gap-6 rounded-xl border border-gray-100 bg-white p-6 transition-all duration-300 hover:border-[#FFAF2B] hover:shadow-xl md:flex-row md:items-center"
+                    className="group flex flex-col items-start justify-between gap-6 rounded-xl border border-gray-100 bg-white p-6 transition-all duration-300 hover:border-[#F99D1C] hover:shadow-xl md:flex-row md:items-center"
                   >
                     <div className="flex flex-1 items-center gap-6">
-                      <div className="rounded-xl bg-gray-50 p-4 transition-colors group-hover:bg-[#FFAF2B]/10">
+                      <div className="rounded-xl bg-gray-50 p-4 transition-colors group-hover:bg-[#F99D1C]/10">
                         {doc.icon}
                       </div>
                       <div className="space-y-1">
-                        <span className="text-[10px] font-bold tracking-widest text-[#FFAF2B] uppercase">
+                        <span className="text-[10px] font-bold tracking-widest text-[#F99D1C] uppercase">
                           {doc.category}
                         </span>
                         <h3 className="display-font text-xl font-bold text-[#001A3D]">
@@ -173,7 +173,7 @@ export default function HutechDocuments() {
                         </h3>
                         <div className="flex items-center gap-4 text-[11px] font-semibold tracking-wider text-gray-400 uppercase">
                           <span className="flex items-center gap-1.5">
-                            <Calendar size={12} className="text-[#FFAF2B]" /> {doc.date}
+                            <Calendar size={12} className="text-[#F99D1C]" /> {doc.date}
                           </span>
                           <span className="h-1 w-1 rounded-full bg-gray-200"></span>
                           <span>{doc.size}</span>
@@ -182,7 +182,7 @@ export default function HutechDocuments() {
                         </div>
                       </div>
                     </div>
-                    <button className="flex w-full items-center justify-center gap-3 rounded-lg bg-gray-50 px-8 py-4 text-[11px] font-bold tracking-widest text-[#001A3D] transition-all group-hover:bg-[#FFAF2B] md:w-auto">
+                    <button className="flex w-full items-center justify-center gap-3 rounded-lg bg-gray-50 px-8 py-4 text-[11px] font-bold tracking-widest text-[#001A3D] transition-all group-hover:bg-[#F99D1C] md:w-auto">
                       DOWNLOAD <Download size={16} />
                     </button>
                   </div>
@@ -200,19 +200,19 @@ export default function HutechDocuments() {
                 {DOCUMENTS.map((doc, i) => (
                   <div
                     key={doc.id}
-                    className="group flex flex-col justify-between rounded-[2.5rem] border border-gray-100 bg-white p-8 transition-all duration-500 hover:border-[#FFAF2B] hover:shadow-2xl"
+                    className="group flex flex-col justify-between rounded-[2.5rem] border border-gray-100 bg-white p-8 transition-all duration-500 hover:border-[#F99D1C] hover:shadow-2xl"
                   >
                     <div className="space-y-8">
                       <div className="flex items-start justify-between">
-                        <div className="rounded-2xl bg-gray-50 p-5 transition-colors group-hover:bg-[#FFAF2B]/10">
+                        <div className="rounded-2xl bg-gray-50 p-5 transition-colors group-hover:bg-[#F99D1C]/10">
                           {doc.icon}
                         </div>
-                        <span className="rounded-full bg-[#FFAF2B]/10 px-3 py-1 text-[10px] font-bold tracking-widest text-[#FFAF2B] uppercase">
+                        <span className="rounded-full bg-[#F99D1C]/10 px-3 py-1 text-[10px] font-bold tracking-widest text-[#F99D1C] uppercase">
                           {doc.category}
                         </span>
                       </div>
                       <div className="space-y-3">
-                        <h3 className="display-font text-2xl font-bold text-[#001A3D] transition-colors group-hover:text-[#FFAF2B]">
+                        <h3 className="display-font text-2xl font-bold text-[#001A3D] transition-colors group-hover:text-[#F99D1C]">
                           {doc.title}
                         </h3>
                         <div className="flex items-center gap-4 text-xs font-medium text-gray-400">
@@ -226,7 +226,7 @@ export default function HutechDocuments() {
                     </div>
 
                     <button className="mt-12 flex w-full items-center justify-between rounded-2xl bg-gray-50 p-5 text-xs font-bold tracking-widest transition-all group-hover:bg-[#001A3D] group-hover:text-white">
-                      GET DOCUMENT <Download size={18} className="text-[#FFAF2B]" />
+                      GET DOCUMENT <Download size={18} className="text-[#F99D1C]" />
                     </button>
                   </div>
                 ))}
@@ -250,7 +250,7 @@ export default function HutechDocuments() {
                   documentation for your enterprise needs.
                 </p>
               </div>
-              <button className="rounded-sm bg-[#FFAF2B] px-12 py-5 text-xs font-bold tracking-widest whitespace-nowrap text-[#001A3D] shadow-xl shadow-[#FFAF2B]/20 transition-all hover:bg-[#ff9d00]">
+              <button className="rounded-sm bg-[#F99D1C] px-12 py-5 text-xs font-bold tracking-widest whitespace-nowrap text-[#001A3D] shadow-xl shadow-[#F99D1C]/20 transition-all hover:bg-[#ff9d00]">
                 REQUEST ACCESS
               </button>
             </div>

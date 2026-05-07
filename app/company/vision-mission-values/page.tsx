@@ -50,8 +50,8 @@ export default function VisionMissionValues() {
       {/* Hero Section */}
       <section className="relative flex h-[450px] items-center overflow-hidden bg-[#001A3D] text-white">
         <div className="pointer-events-none absolute inset-0 opacity-10">
-          <div className="absolute top-0 right-0 -mt-96 -mr-96 h-[800px] w-[800px] rounded-full bg-[#FFAF2B]/20 blur-[120px]"></div>
-          <div className="absolute bottom-0 left-0 -mb-48 -ml-48 h-[600px] w-[600px] rounded-full bg-[#FFAF2B]/10 blur-[100px]"></div>
+          <div className="absolute top-0 right-0 -mt-96 -mr-96 h-[800px] w-[800px] rounded-full bg-[#F99D1C]/20 blur-[120px]"></div>
+          <div className="absolute bottom-0 left-0 -mb-48 -ml-48 h-[600px] w-[600px] rounded-full bg-[#F99D1C]/10 blur-[100px]"></div>
         </div>
 
         <div className="relative z-10 mx-auto w-full max-w-[1280px] px-6 lg:px-20">
@@ -61,14 +61,14 @@ export default function VisionMissionValues() {
             className="max-w-4xl space-y-8"
           >
             <div className="flex items-center space-x-3">
-              <span className="h-[1px] w-12 bg-[#FFAF2B]"></span>
-              <span className="text-xs font-semibold tracking-wide text-[#FFAF2B]">
+              <span className="h-[1px] w-12 bg-[#F99D1C]"></span>
+              <span className="text-xs font-semibold tracking-wide text-[#F99D1C]">
                 Our Purpose
               </span>
             </div>
             <h1 className="display-font text-3xl leading-[1.1] font-semibold tracking-tight text-white sm:text-4xl md:text-5xl md:leading-[1.05] lg:text-6xl">
               Our Vision, <br />
-              Mission & <span className="text-[#FFAF2B]">Values.</span>
+              Mission & <span className="text-[#F99D1C]">Values.</span>
             </h1>
             <p className="max-w-2xl text-xl leading-relaxed font-medium text-gray-400">
               At Hutech Solutions, we are driven by a singular purpose: to empower businesses
@@ -92,7 +92,7 @@ export default function VisionMissionValues() {
               <div className="pointer-events-none absolute top-0 right-0 p-8 text-[#001A3D] opacity-[0.03]">
                 <Eye size={120} />
               </div>
-              <div className="w-fit rounded-2xl bg-white p-6 text-[#FFAF2B] shadow-sm transition-colors duration-500 group-hover:bg-[#FFAF2B] group-hover:text-white">
+              <div className="w-fit rounded-2xl bg-white p-6 text-[#F99D1C] shadow-sm transition-colors duration-500 group-hover:bg-[#F99D1C] group-hover:text-white">
                 <Eye size={36} />
               </div>
               <div className="space-y-6">
@@ -117,11 +117,11 @@ export default function VisionMissionValues() {
               <div className="pointer-events-none absolute top-0 right-0 p-8 text-white opacity-[0.05]">
                 <Target size={120} />
               </div>
-              <div className="w-fit rounded-2xl bg-[#FFAF2B] p-6 text-[#001A3D] shadow-sm">
+              <div className="w-fit rounded-2xl bg-[#F99D1C] p-6 text-[#001A3D] shadow-sm">
                 <Target size={36} />
               </div>
               <div className="space-y-6">
-                <h2 className="display-font text-4xl font-semibold tracking-tight text-[#FFAF2B]">
+                <h2 className="display-font text-4xl font-semibold tracking-tight text-[#F99D1C]">
                   Our Mission
                 </h2>
                 <p className="text-xl leading-relaxed font-medium text-gray-300">
@@ -148,7 +148,7 @@ export default function VisionMissionValues() {
 
         <div className="relative z-10 mx-auto max-w-[1280px] px-6 lg:px-20">
           <div className="mx-auto mb-24 max-w-3xl space-y-6 text-center">
-            <span className="text-xs font-bold tracking-widest text-[#FFAF2B] uppercase">
+            <span className="text-xs font-bold tracking-widest text-[#F99D1C] uppercase">
               The Pillars of Hutech
             </span>
             <h2 className="display-font text-4xl font-semibold tracking-tight text-[#001A3D] md:text-6xl">
@@ -170,7 +170,7 @@ export default function VisionMissionValues() {
                 transition={{ delay: i * 0.1 }}
                 className="group space-y-8 rounded-[2.5rem] border border-gray-100 bg-white p-10 transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl md:p-12"
               >
-                <div className="w-fit rounded-2xl bg-gray-50 p-4 text-[#FFAF2B] transition-all duration-300 group-hover:bg-[#FFAF2B] group-hover:text-white">
+                <div className="w-fit rounded-2xl bg-gray-50 p-4 text-[#F99D1C] transition-all duration-300 group-hover:bg-[#F99D1C] group-hover:text-white">
                   {v.icon}
                 </div>
                 <div className="space-y-4">
@@ -187,20 +187,20 @@ export default function VisionMissionValues() {
       <section className="bg-white py-24">
         <div className="mx-auto max-w-[1280px] px-6 lg:px-20">
           <div className="group relative overflow-hidden rounded-[3rem] bg-[#001A3D] p-12 text-center text-white md:p-24">
-            <div className="absolute top-0 right-0 -mt-48 -mr-48 h-96 w-96 rounded-full bg-[#FFAF2B]/10 blur-[100px] transition-transform duration-700 group-hover:scale-150"></div>
+            <div className="absolute top-0 right-0 -mt-48 -mr-48 h-96 w-96 rounded-full bg-[#F99D1C]/10 blur-[100px] transition-transform duration-700 group-hover:scale-150"></div>
             <div className="relative z-10 space-y-10">
               <h2 className="display-font mx-auto max-w-4xl text-4xl leading-tight font-semibold tracking-tight md:text-6xl">
-                Join Us in Shaping the <span className="text-[#FFAF2B]">Future of Technology.</span>
+                Join Us in Shaping the <span className="text-[#F99D1C]">Future of Technology.</span>
               </h2>
               <p className="mx-auto max-w-2xl text-xl font-medium text-gray-400">
                 Experience the Hutech difference where values meet innovation to deliver exceptional
                 results.
               </p>
               <div className="flex flex-col justify-center gap-6 pt-4 sm:flex-row">
-                <button className="rounded-sm bg-[#FFAF2B] px-12 py-5 text-xs font-bold tracking-wide text-[#001A3D] shadow-xl shadow-[#FFAF2B]/20 transition-all hover:bg-white">
+                <button className="rounded-sm bg-[#F99D1C] px-12 py-5 text-xs font-bold tracking-wide text-[#001A3D] shadow-xl shadow-[#F99D1C]/20 transition-all hover:bg-white">
                   Partner With Us
                 </button>
-                <button className="rounded-sm border border-white/20 bg-transparent px-12 py-5 text-xs font-bold tracking-wide text-white transition-all hover:border-[#FFAF2B] hover:text-[#FFAF2B]">
+                <button className="rounded-sm border border-white/20 bg-transparent px-12 py-5 text-xs font-bold tracking-wide text-white transition-all hover:border-[#F99D1C] hover:text-[#F99D1C]">
                   View Careers
                 </button>
               </div>

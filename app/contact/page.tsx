@@ -74,7 +74,7 @@ export default function Contact() {
             className="h-full w-full scale-105 object-cover opacity-20 brightness-50"
           />
           <div className="absolute inset-0 bg-gradient-to-r from-[#001A3D]/95 via-[#001A3D]/70 to-transparent"></div>
-          <div className="absolute top-0 left-0 h-full w-1 bg-gradient-to-b from-transparent via-[#FFAF2B] to-transparent opacity-90"></div>
+          <div className="absolute top-0 left-0 h-full w-1 bg-gradient-to-b from-transparent via-[#F99D1C] to-transparent opacity-90"></div>
         </div>
 
         <div className="relative z-10 mx-auto w-full max-w-[1280px] px-6 lg:px-20">
@@ -85,13 +85,13 @@ export default function Contact() {
             className="max-w-4xl space-y-3 md:space-y-4"
           >
             <div className="flex items-center gap-3">
-              <span className="block h-[2px] w-6 shrink-0 bg-[#FFAF2B] md:w-8"></span>
-              <span className="text-[11px] font-semibold tracking-wide text-[#FFAF2B] uppercase md:text-[12px]">
+              <span className="block h-[2px] w-6 shrink-0 bg-[#F99D1C] md:w-8"></span>
+              <span className="text-[11px] font-semibold tracking-wide text-[#F99D1C] uppercase md:text-[12px]">
                 Get in Touch
               </span>
             </div>
             <h1 className="display-font text-3xl leading-tight font-semibold tracking-tight text-white md:text-5xl lg:text-6xl">
-              Let&apos;s Engineer Your <span className="text-[#FFAF2B]">Next Success.</span>
+              Let&apos;s Engineer Your <span className="text-[#F99D1C]">Next Success.</span>
             </h1>
             <p className="max-w-2xl text-sm leading-relaxed font-medium text-gray-200 opacity-90 md:text-lg">
               Consultants ready to discuss your next breakthrough project and digital engineering needs.
@@ -129,7 +129,7 @@ export default function Contact() {
                         required
                         type="text"
                         placeholder="e.g. John Doe"
-                        className="w-full rounded-sm border border-gray-100 bg-gray-50 px-6 py-4 font-medium text-[#001A3D] transition-all focus:border-[#FFAF2B] focus:ring-1 focus:ring-[#FFAF2B] focus:outline-none"
+                        className="w-full rounded-sm border border-gray-100 bg-gray-50 px-6 py-4 font-medium text-[#001A3D] transition-all focus:border-[#F99D1C] focus:ring-1 focus:ring-[#F99D1C] focus:outline-none"
                       />
                     </div>
                     <div className="space-y-2">
@@ -138,7 +138,7 @@ export default function Contact() {
                         required
                         type="email"
                         placeholder="john@company.com"
-                        className="w-full rounded-sm border border-gray-100 bg-gray-50 px-6 py-4 font-medium text-[#001A3D] transition-all focus:border-[#FFAF2B] focus:ring-1 focus:ring-[#FFAF2B] focus:outline-none"
+                        className="w-full rounded-sm border border-gray-100 bg-gray-50 px-6 py-4 font-medium text-[#001A3D] transition-all focus:border-[#F99D1C] focus:ring-1 focus:ring-[#F99D1C] focus:outline-none"
                       />
                     </div>
                   </div>
@@ -150,12 +150,12 @@ export default function Contact() {
                         required
                         type="tel"
                         placeholder="+1 (555) 000-0000"
-                        className="w-full rounded-sm border border-gray-100 bg-gray-50 px-6 py-4 font-medium text-[#001A3D] transition-all focus:border-[#FFAF2B] focus:ring-1 focus:ring-[#FFAF2B] focus:outline-none"
+                        className="w-full rounded-sm border border-gray-100 bg-gray-50 px-6 py-4 font-medium text-[#001A3D] transition-all focus:border-[#F99D1C] focus:ring-1 focus:ring-[#F99D1C] focus:outline-none"
                       />
                     </div>
                     <div className="space-y-2">
                       <label className="text-xs font-semibold tracking-wide text-[#001A3D]">Subject</label>
-                      <select className="w-full cursor-pointer appearance-none rounded-sm border border-gray-100 bg-gray-50 px-6 py-4 font-medium text-[#001A3D] transition-all focus:border-[#FFAF2B] focus:ring-1 focus:ring-[#FFAF2B] focus:outline-none">
+                      <select className="w-full cursor-pointer appearance-none rounded-sm border border-gray-100 bg-gray-50 px-6 py-4 font-medium text-[#001A3D] transition-all focus:border-[#F99D1C] focus:ring-1 focus:ring-[#F99D1C] focus:outline-none">
                         <option>New Project Inquiry</option>
                         <option>Partnership Opportunity</option>
                         <option>Career Inquiry</option>
@@ -170,15 +170,15 @@ export default function Contact() {
                       required
                       rows={6}
                       placeholder="How can we help you?"
-                      className="w-full resize-none rounded-sm border border-gray-100 bg-gray-50 px-6 py-4 font-medium text-[#001A3D] transition-all focus:border-[#FFAF2B] focus:ring-1 focus:ring-[#FFAF2B] focus:outline-none"
+                      className="w-full resize-none rounded-sm border border-gray-100 bg-gray-50 px-6 py-4 font-medium text-[#001A3D] transition-all focus:border-[#F99D1C] focus:ring-1 focus:ring-[#F99D1C] focus:outline-none"
                     ></textarea>
                   </div>
 
                   <Motion.button
-                    whileHover={{ scale: 1.02, backgroundColor: "#001A3D", color: "#FFAF2B" }}
+                    whileHover={{ scale: 1.02, backgroundColor: "#001A3D", color: "#F99D1C" }}
                     whileTap={{ scale: 0.98 }}
                     type="submit"
-                    className="flex w-full items-center justify-center gap-4 rounded-sm bg-[#FFAF2B] px-12 py-5 text-sm font-bold tracking-wide text-[#001A3D] shadow-xl shadow-[#FFAF2B]/10 transition-all md:w-fit"
+                    className="flex w-full items-center justify-center gap-4 rounded-sm bg-[#F99D1C] px-12 py-5 text-sm font-bold tracking-wide text-[#001A3D] shadow-xl shadow-[#F99D1C]/10 transition-all md:w-fit"
                   >
                     Send Inquiry <Send size={18} />
                   </Motion.button>
@@ -194,13 +194,13 @@ export default function Contact() {
                 viewport={{ once: true }}
                 className="relative space-y-12 overflow-hidden rounded-[2rem] bg-[#001A3D] p-10 text-white md:p-14"
               >
-                <div className="absolute top-0 right-0 -mt-16 -mr-16 h-32 w-32 rounded-full bg-[#FFAF2B]/10 blur-2xl"></div>
+                <div className="absolute top-0 right-0 -mt-16 -mr-16 h-32 w-32 rounded-full bg-[#F99D1C]/10 blur-2xl"></div>
 
                 <div className="space-y-6">
                   <h3 className="display-font text-xl font-semibold tracking-tight md:text-2xl">Direct Contact</h3>
                   <div className="space-y-6">
                     <a href="mailto:sales@hutechsolutions.com" className="group flex items-center gap-6">
-                      <div className="flex h-12 w-12 items-center justify-center rounded-full bg-white/5 transition-all duration-300 group-hover:bg-[#FFAF2B] group-hover:text-[#001A3D]">
+                      <div className="flex h-12 w-12 items-center justify-center rounded-full bg-white/5 transition-all duration-300 group-hover:bg-[#F99D1C] group-hover:text-[#001A3D]">
                         <Mail size={20} />
                       </div>
                       <div>
@@ -209,7 +209,7 @@ export default function Contact() {
                       </div>
                     </a>
                     <a href="tel:+919035180487" className="group flex items-center gap-6">
-                      <div className="flex h-12 w-12 items-center justify-center rounded-full bg-white/5 transition-all duration-300 group-hover:bg-[#FFAF2B] group-hover:text-[#001A3D]">
+                      <div className="flex h-12 w-12 items-center justify-center rounded-full bg-white/5 transition-all duration-300 group-hover:bg-[#F99D1C] group-hover:text-[#001A3D]">
                         <Phone size={20} />
                       </div>
                       <div>
@@ -233,7 +233,7 @@ export default function Contact() {
                         href={item.url}
                         target={item.url !== "#" ? "_blank" : undefined}
                         rel={item.url !== "#" ? "noopener noreferrer" : undefined}
-                        className="group flex h-14 w-14 items-center justify-center rounded-2xl bg-white/5 transition-all duration-300 hover:bg-[#FFAF2B] hover:text-[#001A3D]"
+                        className="group flex h-14 w-14 items-center justify-center rounded-2xl bg-white/5 transition-all duration-300 hover:bg-[#F99D1C] hover:text-[#001A3D]"
                         aria-label={item.label}
                       >
                         {item.icon}
@@ -242,7 +242,7 @@ export default function Contact() {
                   </div>
                 </div>
 
-                <div className="space-y-4 rounded-2xl bg-[#FFAF2B] p-8 text-[#001A3D]">
+                <div className="space-y-4 rounded-2xl bg-[#F99D1C] p-8 text-[#001A3D]">
                   <h4 className="text-xs font-semibold tracking-wide">Customer Support</h4>
                   <p className="text-lg leading-snug font-bold">
                     Need technical assistance? Our support desk is active 24/7 for managed service clients.
@@ -262,7 +262,7 @@ export default function Contact() {
         <div className="mx-auto max-w-[1280px] px-6 lg:px-20">
           <div className="mx-auto mb-20 max-w-2xl space-y-4 text-center">
             <h2 className="display-font text-3xl font-semibold tracking-tight text-[#001A3D] md:text-5xl">Our Offices</h2>
-            <div className="mx-auto h-1 w-16 bg-[#FFAF2B]"></div>
+            <div className="mx-auto h-1 w-16 bg-[#F99D1C]"></div>
             <p className="font-medium text-gray-500">
               Strategically located in the world&apos;s leading technology hubs to serve you better.
             </p>
@@ -287,17 +287,17 @@ export default function Contact() {
                   <div className="absolute inset-0 bg-[#001A3D]/20 transition-colors group-hover:bg-[#001A3D]/40"></div>
                   <div className="absolute bottom-6 left-8">
                     <h3 className="display-font text-2xl font-semibold tracking-tight text-white">{office.city}</h3>
-                    <p className="text-[11px] font-semibold tracking-wide text-[#FFAF2B]">{office.country}</p>
+                    <p className="text-[11px] font-semibold tracking-wide text-[#F99D1C]">{office.country}</p>
                   </div>
                 </div>
                 <div className="space-y-6 p-10">
                   <div className="flex items-start gap-4">
-                    <MapPin className="mt-1 shrink-0 text-[#FFAF2B]" size={18} />
+                    <MapPin className="mt-1 shrink-0 text-[#F99D1C]" size={18} />
                     <p className="text-sm leading-relaxed font-medium text-gray-600">{office.address}</p>
                   </div>
                   <div className="space-y-3 border-t border-gray-50 pt-4">
                     <div className="flex items-center gap-4">
-                      <Phone className="text-[#FFAF2B]" size={16} />
+                      <Phone className="text-[#F99D1C]" size={16} />
                       <span className="text-sm font-bold text-[#001A3D]">{office.phone}</span>
                     </div>
                   </div>
@@ -319,7 +319,7 @@ export default function Contact() {
             />
             <div className="absolute inset-0 flex flex-col items-center justify-center bg-gradient-to-t from-[#001A3D] to-transparent p-10 text-center">
               <div className="max-w-2xl space-y-6">
-                <Globe className="mx-auto h-16 w-16 animate-pulse text-[#FFAF2B]" />
+                <Globe className="mx-auto h-16 w-16 animate-pulse text-[#F99D1C]" />
                 <h2 className="display-font text-3xl font-semibold tracking-tight text-white md:text-5xl">Worldwide Delivery.</h2>
                 <p className="text-lg leading-relaxed font-medium text-gray-300">
                   Supporting clients across 4 continents with our seamless global delivery model and 24/7 engineering capability.
@@ -335,21 +335,21 @@ export default function Contact() {
         <div className="mx-auto max-w-[1280px] px-6 lg:px-20">
           <div className="flex flex-wrap items-center justify-between gap-10">
             <div className="flex items-center gap-4">
-              <CheckCircle2 className="text-[#FFAF2B]" size={24} />
+              <CheckCircle2 className="text-[#F99D1C]" size={24} />
               <div>
                 <p className="text-[11px] font-semibold tracking-wide text-[#001A3D]">Response Time</p>
                 <p className="text-sm font-bold text-gray-500">Under 24 Hours</p>
               </div>
             </div>
             <div className="flex items-center gap-4">
-              <Clock className="text-[#FFAF2B]" size={24} />
+              <Clock className="text-[#F99D1C]" size={24} />
               <div>
                 <p className="text-[11px] font-semibold tracking-wide text-[#001A3D]">Global Support</p>
                 <p className="text-sm font-bold text-gray-500">24/7 Availability</p>
               </div>
             </div>
             <div className="flex items-center gap-4">
-              <Building2 className="text-[#FFAF2B]" size={24} />
+              <Building2 className="text-[#F99D1C]" size={24} />
               <div>
                 <p className="text-[11px] font-semibold tracking-wide text-[#001A3D]">Enterprise Scale</p>
                 <p className="text-sm font-bold text-gray-500">Fortune 500 Trusted</p>

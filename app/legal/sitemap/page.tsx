@@ -57,19 +57,19 @@ const SITEMAP_DATA = [
   {
     title: "Industries",
     links: [
-      { name: "Banking & Finance", path: "/industries/banking" },
-      { name: "Healthcare & Life Sciences", path: "/industries/healthcare" },
-      { name: "Utilities and Energy", path: "/industries/utilities" },
-      { name: "Logistics & Supply Chain", path: "/industries/logistics" },
+      { name: "Banking & Finance", path: "/industries/banking-finance" },
+      { name: "Healthcare & Life Sciences", path: "/industries/healthcare-life-sciences" },
+      { name: "Utilities and Energy", path: "/industries/utilities-energy" },
+      { name: "Logistics & Supply Chain", path: "/industries/logistics-supply-chain" },
       { name: "Manufacturing", path: "/industries/manufacturing" },
-      { name: "Retail & Consumer", path: "/industries/retail" },
+      { name: "Retail & Consumer", path: "/industries/retail-consumer" },
     ],
   },
   {
     title: "Legal & Policies",
     links: [
-      { name: "Terms and Condition", path: "/legal/terms-and-conditions" },
-      { name: "Privacy Policy", path: "/legal/privacy-policy" },
+      { name: "Terms and Condition", path: "/legal/terms" },
+      { name: "Privacy Policy", path: "/legal/privacy" },
       { name: "Cookie Policy", path: "/legal/cookie-policy" },
       { name: "Code of Conduct", path: "/legal/code-of-conduct" },
       { name: "Sitemap", path: "/legal/sitemap" },
@@ -97,7 +97,7 @@ export default function Sitemap() {
             className="max-w-3xl"
           >
             <h1 className="display-font mb-6 text-4xl font-semibold tracking-tight md:text-5xl">
-              <span className="text-[#FFAF2B]">Site</span>map
+              <span className="text-[#F99D1C]">Site</span>map
             </h1>
             <p className="text-lg text-gray-300">
               A comprehensive directory of our website content.

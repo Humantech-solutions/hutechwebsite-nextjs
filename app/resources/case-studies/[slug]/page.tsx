@@ -1,15 +1,20 @@
-import CaseStudyClient from "./CaseStudyClient";
-import { CASE_STUDIES_DETAILS } from "./data";
+import CaseStudyDetailClient from "./CaseStudyDetailClient";
+import { CASE_STUDIES } from "@/lib/data/case-studies";
+import { notFound } from "next/navigation";
 
 export async function generateStaticParams() {
-  return Object.keys(CASE_STUDIES_DETAILS).map((slug) => ({
-    slug: slug,
+  return Object.keys(CASE_STUDIES).map((slug) => ({
+    slug,
   }));
 }
 
-export default async function CaseStudyDetailPage({ params }: { params: Promise<{ slug: string }> }) {
-  const resolvedParams = await params;
-  const slug = resolvedParams.slug;
+export default async function CaseStudyPage({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params;
+  const study = CASE_STUDIES[slug];
 
-  return <CaseStudyClient slug={slug} />;
+  if (!study) {
+    notFound();
+  }
+
+  return <CaseStudyDetailClient study={study} />;
 }

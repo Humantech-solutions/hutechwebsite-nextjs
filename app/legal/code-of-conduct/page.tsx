@@ -21,7 +21,7 @@ export default function CodeOfConduct() {
             className="max-w-3xl"
           >
             <h1 className="display-font mb-6 text-4xl font-semibold tracking-tight md:text-5xl">
-              Code of <span className="text-[#FFAF2B]">Conduct</span>
+              Code of <span className="text-[#F99D1C]">Conduct</span>
             </h1>
             <p className="text-lg text-gray-300">Effective Date: March 15, 2026</p>
           </Motion.div>

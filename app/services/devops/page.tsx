@@ -257,14 +257,14 @@ export default function SreDevopsServices() {
             className="max-w-4xl"
           >
             <div className="mb-6 flex items-center gap-3">
-              <span className="h-[1px] w-12 bg-[#FFAF2B]"></span>
-              <span className="text-[10px] font-bold tracking-[0.3em] text-[#FFAF2B] uppercase">
+              <span className="h-[1px] w-12 bg-[#F99D1C]"></span>
+              <span className="text-[10px] font-bold tracking-[0.3em] text-[#F99D1C] uppercase">
                 Reliability Engineering
               </span>
             </div>
             <h1 className="display-font mb-8 text-3xl leading-[1.1] font-semibold tracking-tight text-white sm:text-4xl md:text-5xl md:leading-[1.05] lg:text-6xl">
               Velocity Without Risk. <br />
-              <span className="text-[#FFAF2B]">Enterprise Reliability.</span>
+              <span className="text-[#F99D1C]">Enterprise Reliability.</span>
             </h1>
             <p className="max-w-2xl text-lg leading-relaxed font-medium text-gray-300 md:text-xl">
               We help businesses thrive with elite-tier SRE and DevOps solutions. Break the silos,
@@ -461,7 +461,7 @@ export default function SreDevopsServices() {
             </p>
             <Link
               href="/contact"
-              className="inline-flex items-center gap-3 rounded-sm bg-[#FFAF2B] px-10 py-5 text-[11px] font-bold tracking-wider text-[#001A3D] uppercase shadow-xl transition-all hover:bg-white"
+              className="inline-flex items-center gap-3 rounded-sm bg-[#F99D1C] px-10 py-5 text-[11px] font-bold tracking-wider text-[#001A3D] uppercase shadow-xl transition-all hover:bg-white"
             >
               Request A Free Audit <MoveRight size={16} />
             </Link>
@@ -581,7 +581,7 @@ export default function SreDevopsServices() {
                   className="w-full resize-none border border-gray-200 p-4 text-sm font-medium transition-all outline-none focus:border-[#0171c1] md:col-span-2"
                 ></textarea>
                 <div className="md:col-span-2">
-                  <button className="w-full rounded-sm bg-[#FFAF2B] px-12 py-5 text-[11px] font-bold tracking-wider text-[#001A3D] uppercase shadow-xl transition-all duration-500 hover:bg-[#001A3D] hover:text-white md:w-auto">
+                  <button className="w-full rounded-sm bg-[#F99D1C] px-12 py-5 text-[11px] font-bold tracking-wider text-[#001A3D] uppercase shadow-xl transition-all duration-500 hover:bg-[#001A3D] hover:text-white md:w-auto">
                     Submit Inquiry
                   </button>
                 </div>

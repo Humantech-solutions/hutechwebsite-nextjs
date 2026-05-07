@@ -81,7 +81,7 @@ export default function AboutHutech() {
       <section className="relative flex min-h-[600px] items-center overflow-hidden bg-[#001A3D] pt-20">
         <div className="absolute inset-0 z-0 opacity-20">
           <div className="absolute top-0 right-0 h-full w-full bg-[radial-gradient(circle_at_70%_30%,#0171c1_0%,transparent_50%)]"></div>
-          <div className="absolute bottom-0 left-0 h-full w-full bg-[radial-gradient(circle_at_20%_80%,#FFAF2B_0%,transparent_40%)]"></div>
+          <div className="absolute bottom-0 left-0 h-full w-full bg-[radial-gradient(circle_at_20%_80%,#F99D1C_0%,transparent_40%)]"></div>
           <ImageWithFallback
             src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1920"
             alt="Global IT Services"
@@ -98,14 +98,14 @@ export default function AboutHutech() {
                 className="space-y-6"
               >
                 <div className="inline-flex items-center gap-4 rounded-full border border-white/10 bg-white/5 px-6 py-2 backdrop-blur-md">
-                  <span className="h-2 w-2 animate-pulse rounded-full bg-[#FFAF2B]"></span>
+                  <span className="h-2 w-2 animate-pulse rounded-full bg-[#F99D1C]"></span>
                   <span className="text-[10px] font-bold tracking-widest text-white uppercase">
                     Corporate Profile
                   </span>
                 </div>
                 <h1 className="display-font text-3xl leading-[1.1] font-semibold tracking-tight text-white sm:text-4xl md:text-5xl md:leading-[1.05] lg:text-6xl">
                   Architecting <br />
-                  <span className="text-[#FFAF2B]">Business Value.</span>
+                  <span className="text-[#F99D1C]">Business Value.</span>
                 </h1>
                 <p className="max-w-2xl text-xl leading-relaxed font-medium text-white/60">
                   We are a remarkable group of creatives who transform traditional company concepts
@@ -129,7 +129,7 @@ export default function AboutHutech() {
                     <div className="display-font mb-1 text-3xl font-black text-white">
                       {stat.value}
                     </div>
-                    <div className="text-[10px] font-bold tracking-widest text-[#FFAF2B] uppercase">
+                    <div className="text-[10px] font-bold tracking-widest text-[#F99D1C] uppercase">
                       {stat.label}
                     </div>
                   </Motion.div>
@@ -252,7 +252,7 @@ export default function AboutHutech() {
                         key={i}
                         className="flex items-center gap-3 text-sm font-bold text-[#001A3D]"
                       >
-                        <div className="h-1.5 w-1.5 rounded-full bg-[#FFAF2B]"></div>
+                        <div className="h-1.5 w-1.5 rounded-full bg-[#F99D1C]"></div>
                         {item}
                       </li>
                     ))}
@@ -275,7 +275,7 @@ export default function AboutHutech() {
             <div className="flex items-center rounded-r-[3rem] bg-[#001A3D] p-12 lg:col-span-4 lg:p-24">
               <div className="space-y-8">
                 <h2 className="display-font text-4xl leading-tight font-bold text-white">
-                  Global <br /> <span className="text-[#FFAF2B]">Synergy.</span>
+                  Global <br /> <span className="text-[#F99D1C]">Synergy.</span>
                 </h2>
                 <p className="leading-relaxed font-medium text-white/60">
                   Our offices in India, US, and UK work in a unified ecosystem to provide
@@ -283,7 +283,7 @@ export default function AboutHutech() {
                 </p>
                 <div className="space-y-6 pt-6">
                   <div className="group flex items-center gap-4">
-                    <div className="flex h-10 w-10 items-center justify-center rounded-lg border border-white/10 bg-white/5 text-[#FFAF2B] transition-colors group-hover:bg-[#FFAF2B] group-hover:text-[#001A3D]">
+                    <div className="flex h-10 w-10 items-center justify-center rounded-lg border border-white/10 bg-white/5 text-[#F99D1C] transition-colors group-hover:bg-[#F99D1C] group-hover:text-[#001A3D]">
                       <Globe2 size={20} />
                     </div>
                     <span className="text-xs font-bold tracking-widest text-white uppercase">
@@ -291,7 +291,7 @@ export default function AboutHutech() {
                     </span>
                   </div>
                   <div className="group flex items-center gap-4">
-                    <div className="flex h-10 w-10 items-center justify-center rounded-lg border border-white/10 bg-white/5 text-[#FFAF2B] transition-colors group-hover:bg-[#FFAF2B] group-hover:text-[#001A3D]">
+                    <div className="flex h-10 w-10 items-center justify-center rounded-lg border border-white/10 bg-white/5 text-[#F99D1C] transition-colors group-hover:bg-[#F99D1C] group-hover:text-[#001A3D]">
                       <Users size={20} />
                     </div>
                     <span className="text-xs font-bold tracking-widest text-white uppercase">
@@ -339,7 +339,7 @@ export default function AboutHutech() {
                   <div className="display-font text-3xl font-black text-[#0171c1]">{item.year}</div>
                   <h4 className="text-xl font-bold text-[#001A3D]">{item.title}</h4>
                   <p className="text-sm leading-relaxed font-medium text-gray-500">{item.desc}</p>
-                  <div className="h-1 w-12 bg-[#FFAF2B] transition-all duration-700 group-hover:w-full"></div>
+                  <div className="h-1 w-12 bg-[#F99D1C] transition-all duration-700 group-hover:w-full"></div>
                 </div>
               </Motion.div>
             ))}
@@ -360,7 +360,7 @@ export default function AboutHutech() {
             </div>
             <div className="relative z-10 mx-auto max-w-4xl space-y-10">
               <h2 className="display-font text-4xl leading-tight font-bold text-white md:text-6xl">
-                Join the Next <br /> <span className="text-[#FFAF2B]">Digital Revolution.</span>
+                Join the Next <br /> <span className="text-[#F99D1C]">Digital Revolution.</span>
               </h2>
               <p className="text-xl leading-relaxed font-medium text-white/50">
                 Whether you're looking for a technology partner or your next career move, we're
@@ -369,7 +369,7 @@ export default function AboutHutech() {
               <div className="flex flex-col justify-center gap-6 sm:flex-row">
                 <Link
                   href="/contact"
-                  className="rounded-sm bg-[#0171c1] px-12 py-5 text-[11px] font-black tracking-widest text-white uppercase shadow-xl transition-all hover:bg-[#FFAF2B] hover:text-[#001A3D]"
+                  className="rounded-sm bg-[#0171c1] px-12 py-5 text-[11px] font-black tracking-widest text-white uppercase shadow-xl transition-all hover:bg-[#F99D1C] hover:text-[#001A3D]"
                 >
                   Start Your Project
                 </Link>
