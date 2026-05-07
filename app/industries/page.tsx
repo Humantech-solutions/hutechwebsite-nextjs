@@ -14,6 +14,7 @@ import {
   Globe2,
   Factory,
   ShoppingBag,
+  ChevronRight
 } from "lucide-react";
 import Link from "next/link";
 import { Meta } from "@/components/Meta";
@@ -22,7 +23,7 @@ const INDUSTRIES_DATA = [
   {
     name: "Banking & Financial Services",
     path: "/industries/banking-finance",
-    icon: <Landmark className="h-12 w-12 text-[#FFAF2B]" />,
+    icon: <Landmark className="h-12 w-12 text-[#F99D1C]" />,
     desc: "Next-gen fintech architectures, secure payment gateways, and AI-driven fraud detection for the world's leading banks.",
     image:
       "https://images.unsplash.com/photo-1590649681928-4b179f773bd5?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080",
@@ -31,7 +32,7 @@ const INDUSTRIES_DATA = [
   {
     name: "Healthcare & Life Sciences",
     path: "/industries/healthcare-life-sciences",
-    icon: <Activity className="h-12 w-12 text-[#FFAF2B]" />,
+    icon: <Activity className="h-12 w-12 text-[#F99D1C]" />,
     desc: "Patient-centric ecosystems, HIPAA-compliant cloud storage, and predictive analytics for personalized medicine.",
     image:
       "https://images.unsplash.com/photo-1655393001768-d946c97d6fd1?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080",
@@ -40,7 +41,7 @@ const INDUSTRIES_DATA = [
   {
     name: "Utilities & Energy",
     path: "/industries/utilities-energy",
-    icon: <Lightbulb className="h-12 w-12 text-[#FFAF2B]" />,
+    icon: <Lightbulb className="h-12 w-12 text-[#F99D1C]" />,
     desc: "Smart grid optimization, renewable energy management platforms, and real-time operational monitoring.",
     image:
       "https://images.unsplash.com/photo-1744868562210-fffb7fa882d9?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080",
@@ -49,7 +50,7 @@ const INDUSTRIES_DATA = [
   {
     name: "Logistics & Supply Chain",
     path: "/industries/logistics-supply-chain",
-    icon: <Truck className="h-12 w-12 text-[#FFAF2B]" />,
+    icon: <Truck className="h-12 w-12 text-[#F99D1C]" />,
     desc: "Automated warehouse management, AI routing optimization, and blockchain-based tracking for global shipping.",
     image:
       "https://images.unsplash.com/photo-1644134913822-1cd030b3d148?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080",
@@ -58,7 +59,7 @@ const INDUSTRIES_DATA = [
   {
     name: "Manufacturing",
     path: "/industries/manufacturing",
-    icon: <Factory className="h-12 w-12 text-[#FFAF2B]" />,
+    icon: <Factory className="h-12 w-12 text-[#F99D1C]" />,
     desc: "Industry 4.0 transformation, AI-driven quality control, and predictive maintenance for smart factory excellence.",
     image:
       "https://images.unsplash.com/photo-1647427060118-4911c9821b82?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080",
@@ -67,7 +68,7 @@ const INDUSTRIES_DATA = [
   {
     name: "Retail & Consumer",
     path: "/industries/retail-consumer",
-    icon: <ShoppingBag className="h-12 w-12 text-[#FFAF2B]" />,
+    icon: <ShoppingBag className="h-12 w-12 text-[#F99D1C]" />,
     desc: "Omnichannel commerce, hyper-personalization, and smart retail tech that builds lasting customer loyalty.",
     image:
       "https://images.unsplash.com/photo-1764795849878-59b546cfe9c7?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080",
@@ -87,7 +88,7 @@ export default function Industries() {
       {/* Page Header */}
       <section className="relative flex h-[450px] items-center overflow-hidden bg-[#001A3D] text-white">
         <div className="absolute inset-0 opacity-10">
-          <div className="absolute top-0 left-0 h-full w-full bg-[radial-gradient(circle_at_center,#FFAF2B_0%,transparent_70%)] opacity-20"></div>
+          <div className="absolute top-0 left-0 h-full w-full bg-[radial-gradient(circle_at_center,#F99D1C_0%,transparent_70%)] opacity-20"></div>
         </div>
 
         <div className="relative z-10 mx-auto w-full max-w-[1280px] px-6 text-left lg:px-20">
@@ -97,14 +98,14 @@ export default function Industries() {
             className="max-w-4xl space-y-8"
           >
             <div className="flex items-center space-x-3">
-              <span className="h-[1px] w-12 bg-[#FFAF2B]"></span>
-              <span className="text-xs font-semibold tracking-wide text-[#FFAF2B]">
+              <span className="h-[1px] w-12 bg-[#F99D1C]"></span>
+              <span className="text-xs font-semibold tracking-wide text-[#F99D1C]">
                 Industry Verticals
               </span>
             </div>
             <h1 className="display-font text-5xl leading-[1.05] font-semibold tracking-tight md:text-8xl">
               Domain Expertise. <br />
-              <span className="text-[#FFAF2B]">Universal Impact.</span>
+              <span className="text-[#F99D1C]">Universal Impact.</span>
             </h1>
             <p className="max-w-2xl text-xl leading-relaxed font-medium text-gray-400">
               We specialize in vertical-specific technology solutions that address the unique
@@ -144,7 +145,7 @@ export default function Industries() {
                       key={stat}
                       className="flex items-center space-x-2 rounded-lg border border-gray-100 bg-gray-50 px-4 py-3 text-[11px] font-semibold tracking-wide text-[#001A3D]"
                     >
-                      <ShieldCheck className="h-4 w-4 text-[#FFAF2B]" />
+                      <ShieldCheck className="h-4 w-4 text-[#F99D1C]" />
                       <span>{stat}</span>
                     </div>
                   ))}
@@ -157,7 +158,7 @@ export default function Industries() {
                         key={item}
                         className="group flex cursor-pointer items-center text-sm font-semibold tracking-wide text-gray-400"
                       >
-                        <span className="mr-4 h-[1.5px] w-8 bg-[#FFAF2B] transition-all duration-500 group-hover:w-14"></span>
+                        <span className="mr-4 h-[1.5px] w-8 bg-[#F99D1C] transition-all duration-500 group-hover:w-14"></span>
                         <span className="transition-colors group-hover:text-[#001A3D]">{item}</span>
                       </li>
                     )
@@ -190,7 +191,7 @@ export default function Industries() {
                   <div className="absolute inset-0 bg-[#001A3D]/10 mix-blend-overlay"></div>
                 </div>
                 <div
-                  className={`absolute -top-10 ${idx % 2 === 0 ? "-right-10" : "-left-10"} -z-10 h-48 w-48 rounded-full bg-[#FFAF2B]/10 blur-3xl`}
+                  className={`absolute -top-10 ${idx % 2 === 0 ? "-right-10" : "-left-10"} -z-10 h-48 w-48 rounded-full bg-[#F99D1C]/10 blur-3xl`}
                 ></div>
                 <div
                   className={`absolute -bottom-10 ${idx % 2 === 0 ? "-left-10" : "-right-10"} -z-10 h-64 w-64 rounded-full bg-[#001A3D]/5 blur-3xl`}
@@ -219,22 +220,37 @@ export default function Industries() {
             </div>
             <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:col-span-2">
               {[
-                { title: "Retail & Commerce", icon: <Zap className="h-8 w-8 text-[#FFAF2B]" /> },
-                { title: "Manufacturing 4.0", icon: <Globe2 className="h-8 w-8 text-[#FFAF2B]" /> },
-                {
-                  title: "EdTech Platforms",
-                  icon: <ShieldCheck className="h-8 w-8 text-[#FFAF2B]" />,
-                },
-                { title: "Public Sector", icon: <Landmark className="h-8 w-8 text-[#FFAF2B]" /> },
+                { title: "Retail & Commerce", icon: <Zap /> },
+                { title: "Manufacturing 4.0", icon: <Globe2 /> },
+                { title: "EdTech Platforms", icon: <ShieldCheck /> },
+                { title: "Public Sector", icon: <Landmark /> },
               ].map((item, i) => (
                 <div
                   key={i}
-                  className="group rounded-3xl border border-gray-100 bg-white p-10 shadow-sm transition-all duration-500 hover:shadow-xl"
+                  className="group relative bg-white border border-gray-100 rounded-sm p-8 flex flex-col min-h-[340px] transition-all duration-500 hover:shadow-2xl hover:border-[#F99D1C]/20 cursor-pointer"
                 >
-                  <div className="mb-6">{item.icon}</div>
-                  <h4 className="display-font text-xl font-semibold tracking-tight text-[#001A3D] transition-colors group-hover:text-[#FFAF2B]">
-                    {item.title}
-                  </h4>
+                  {/* Icon */}
+                  <div className="text-[#F99D1C] mb-8 transition-transform duration-500 group-hover:scale-110">
+                    {(() => {
+                      const IconComponent = item.icon.type;
+                      return <IconComponent size={40} strokeWidth={1.5} />;
+                    })()}
+                  </div>
+
+                  {/* Content */}
+                  <div className="flex-grow space-y-4">
+                    <h4 className="text-[#001A3D] text-2xl font-bold leading-tight display-font">
+                      {item.title}
+                    </h4>
+                    <div className="w-10 h-[1px] bg-gray-100 group-hover:w-16 group-hover:bg-[#F99D1C] transition-all duration-500"></div>
+                  </div>
+
+                  {/* Bottom Button */}
+                  <div className="mt-8">
+                    <div className="w-10 h-10 rounded-full border border-gray-100 flex items-center justify-center text-gray-200 group-hover:border-[#F99D1C] group-hover:text-[#F99D1C] transition-all duration-500">
+                      <ChevronRight size={18} />
+                    </div>
+                  </div>
                 </div>
               ))}
             </div>
@@ -249,7 +265,7 @@ export default function Industries() {
             Scale Your Industry <br /> Dominance Today.
           </h2>
           <div className="flex flex-wrap justify-center gap-6">
-            <button className="rounded-sm bg-[#FFAF2B] px-12 py-6 text-sm font-bold tracking-wide text-[#001A3D] shadow-2xl transition-all hover:bg-[#ff9d00]">
+            <button className="rounded-sm bg-[#F99D1C] px-12 py-6 text-sm font-bold tracking-wide text-[#001A3D] shadow-2xl transition-all hover:bg-[#ff9d00]">
               Request Consultation
             </button>
             <Link

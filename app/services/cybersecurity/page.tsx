@@ -26,17 +26,17 @@ import Link from "next/link";
 const CORE_SERVICES = [
   {
     title: "Managed Security Services (MSSP)",
-    icon: <Activity className="h-8 w-8 text-[#FFAF2B]" />,
+    icon: <Activity className="h-8 w-8 text-[#F99D1C]" />,
     desc: "24/7 Security Operations Center (SOC) monitoring, threat detection, and rapid incident response to keep your operations running smoothly.",
   },
   {
     title: "Identity & Access Management (IAM)",
-    icon: <Fingerprint className="h-8 w-8 text-[#FFAF2B]" />,
+    icon: <Fingerprint className="h-8 w-8 text-[#F99D1C]" />,
     desc: "Implementing robust authentication frameworks, zero-trust architectures, and privileged access management (PAM) solutions.",
   },
   {
     title: "Risk, Compliance & Governance",
-    icon: <ShieldCheck className="h-8 w-8 text-[#FFAF2B]" />,
+    icon: <ShieldCheck className="h-8 w-8 text-[#F99D1C]" />,
     desc: "Assessing organizational risks and ensuring adherence to global standards like ISO 27001, GDPR, HIPAA, and SOC2.",
   },
 ];
@@ -92,14 +92,14 @@ export default function Cybersecurity() {
             className="max-w-4xl"
           >
             <div className="mb-6 flex items-center gap-3">
-              <span className="h-[1px] w-12 bg-[#FFAF2B]"></span>
-              <span className="text-[10px] font-bold tracking-[0.3em] text-[#FFAF2B] uppercase">
+              <span className="h-[1px] w-12 bg-[#F99D1C]"></span>
+              <span className="text-[10px] font-bold tracking-[0.3em] text-[#F99D1C] uppercase">
                 Cyber Defense Center
               </span>
             </div>
             <h1 className="display-font mb-8 text-3xl leading-[1.1] font-semibold tracking-tight text-white sm:text-4xl md:text-5xl md:leading-[1.05] lg:text-6xl">
               Fortifying the <br />
-              <span className="text-[#FFAF2B]">Digital Enterprise.</span>
+              <span className="text-[#F99D1C]">Digital Enterprise.</span>
             </h1>
             <p className="max-w-2xl text-lg leading-relaxed font-medium text-gray-300 md:text-xl">
               In an era of relentless cyber threats, we provide proactive, intelligence-led security
@@ -190,7 +190,7 @@ export default function Cybersecurity() {
                 transition={{ delay: i * 0.1 }}
                 className="group h-full space-y-8 rounded-[2.5rem] border border-gray-100 bg-white p-12 shadow-sm transition-all hover:shadow-2xl"
               >
-                <div className="w-fit rounded-2xl bg-gray-50 p-4 shadow-sm transition-all duration-500 group-hover:bg-[#FFAF2B]/10">
+                <div className="w-fit rounded-2xl bg-gray-50 p-4 shadow-sm transition-all duration-500 group-hover:bg-[#F99D1C]/10">
                   {service.icon}
                 </div>
                 <h3 className="display-font text-2xl leading-tight font-bold text-[#001A3D]">

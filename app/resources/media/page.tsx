@@ -121,14 +121,14 @@ export default function MediaListing() {
             className="max-w-3xl space-y-6 text-center md:text-left"
           >
             <div className="flex items-center justify-center gap-3 md:justify-start">
-              <span className="block h-[2px] w-8 bg-[#FFAF2B]"></span>
-              <span className="text-xs font-semibold tracking-widest text-[#FFAF2B] uppercase">
+              <span className="block h-[2px] w-8 bg-[#F99D1C]"></span>
+              <span className="text-xs font-semibold tracking-widest text-[#F99D1C] uppercase">
                 Multimedia Archive
               </span>
             </div>
             <h1 className="display-font mb-6 text-5xl leading-tight font-semibold tracking-tight md:text-8xl">
               Code, Coffee & <br />
-              <span className="text-[#FFAF2B]">Conversations</span>
+              <span className="text-[#F99D1C]">Conversations</span>
             </h1>
             <p className="text-lg leading-relaxed font-medium text-gray-400 md:text-xl">
               Explore our collection of expert-led webinars, in-depth podcasts, and highlight reels
@@ -138,7 +138,7 @@ export default function MediaListing() {
         </div>
         {/* Abstract background element */}
         <div className="pointer-events-none absolute top-0 right-0 h-full w-1/3 bg-linear-to-l from-[#0171c1]/20 to-transparent"></div>
-        <div className="pointer-events-none absolute right-20 -bottom-24 h-80 w-80 rounded-full bg-[#FFAF2B]/10 blur-[100px]"></div>
+        <div className="pointer-events-none absolute right-20 -bottom-24 h-80 w-80 rounded-full bg-[#F99D1C]/10 blur-[100px]"></div>
       </section>
 
       {/* Filter & Search Bar */}
@@ -206,7 +206,7 @@ export default function MediaListing() {
 
                     {/* Play Button Icon */}
                     <div className="absolute inset-0 flex items-center justify-center opacity-0 transition-opacity group-hover:opacity-100">
-                      <div className="flex h-16 w-16 scale-75 items-center justify-center rounded-full bg-[#FFAF2B] text-[#001A3D] shadow-2xl transition-transform group-hover:scale-100">
+                      <div className="flex h-16 w-16 scale-75 items-center justify-center rounded-full bg-[#F99D1C] text-[#001A3D] shadow-2xl transition-transform group-hover:scale-100">
                         <Play size={28} fill="currentColor" className="ml-1" />
                       </div>
                     </div>
@@ -252,7 +252,7 @@ export default function MediaListing() {
                     <div className="mt-auto border-t border-gray-50 pt-8">
                       <button
                         onClick={() => setSelectedVideo(item)}
-                        className="group/btn flex items-center gap-3 text-[11px] font-black tracking-[0.2em] text-[#001A3D] transition-all hover:text-[#FFAF2B]"
+                        className="group/btn flex items-center gap-3 text-[11px] font-black tracking-[0.2em] text-[#001A3D] transition-all hover:text-[#F99D1C]"
                       >
                         VIEW RECORDING
                         <ArrowRight
@@ -296,7 +296,7 @@ export default function MediaListing() {
         <div className="relative z-10 mx-auto flex max-w-[1280px] flex-col items-center justify-between gap-16 px-6 lg:flex-row lg:px-20">
           <div className="max-w-2xl space-y-8 text-center lg:text-left">
             <h2 className="display-font text-5xl leading-tight font-bold tracking-tight md:text-7xl">
-              Never Miss an <span className="text-[#FFAF2B]">Episode.</span>
+              Never Miss an <span className="text-[#F99D1C]">Episode.</span>
             </h2>
             <p className="text-xl leading-relaxed font-medium text-gray-400">
               Join 10k+ engineers and technology leaders who receive our latest technical insights
@@ -307,16 +307,16 @@ export default function MediaListing() {
             <input
               type="email"
               placeholder="Your professional email"
-              className="flex-1 rounded-2xl border border-white/10 bg-white/5 px-8 py-6 font-medium transition-all focus:ring-2 focus:ring-[#FFAF2B] focus:outline-none"
+              className="flex-1 rounded-2xl border border-white/10 bg-white/5 px-8 py-6 font-medium transition-all focus:ring-2 focus:ring-[#F99D1C] focus:outline-none"
             />
-            <button className="rounded-2xl bg-[#FFAF2B] px-10 py-6 text-xs font-black tracking-[0.2em] text-[#001A3D] uppercase shadow-2xl shadow-[#FFAF2B]/10 transition-all hover:bg-white">
+            <button className="rounded-2xl bg-[#F99D1C] px-10 py-6 text-xs font-black tracking-[0.2em] text-[#001A3D] uppercase shadow-2xl shadow-[#F99D1C]/10 transition-all hover:bg-white">
               Subscribe
             </button>
           </form>
         </div>
         {/* Background blobs */}
         <div className="absolute top-0 right-0 h-80 w-80 rounded-full bg-[#0171c1]/10 blur-[100px]"></div>
-        <div className="absolute -bottom-40 -left-40 h-96 w-96 rounded-full bg-[#FFAF2B]/5 blur-[120px]"></div>
+        <div className="absolute -bottom-40 -left-40 h-96 w-96 rounded-full bg-[#F99D1C]/5 blur-[120px]"></div>
       </section>
 
       {/* Video Modal Player */}
@@ -351,7 +351,7 @@ export default function MediaListing() {
 
               <div className="pointer-events-none absolute right-0 bottom-0 left-0 bg-linear-to-t from-black via-black/80 to-transparent p-12">
                 <div className="mb-4 flex items-center gap-4">
-                  <span className="rounded-md bg-[#FFAF2B] px-3 py-1 text-[10px] font-black tracking-widest text-[#001A3D] uppercase">
+                  <span className="rounded-md bg-[#F99D1C] px-3 py-1 text-[10px] font-black tracking-widest text-[#001A3D] uppercase">
                     {selectedVideo.type}
                   </span>
                   <span className="text-xs font-bold tracking-widest text-gray-400 uppercase">

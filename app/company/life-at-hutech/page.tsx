@@ -57,17 +57,17 @@ export default function LifeAtHutech() {
   }, [lightboxOpen, closeLightbox, nextImage, prevImage]);
   const cultureItems = [
     {
-      icon: <Heart className="h-8 w-8 text-[#FFAF2B]" />,
+      icon: <Heart className="h-8 w-8 text-[#F99D1C]" />,
       title: "The Hutech Family",
       desc: "More than just a workplace, we are a global family that supports each other's personal and professional growth.",
     },
     {
-      icon: <Users className="h-8 w-8 text-[#FFAF2B]" />,
+      icon: <Users className="h-8 w-8 text-[#F99D1C]" />,
       title: "Inclusive Culture",
       desc: "We celebrate diversity and foster an environment where every voice is heard and every contribution is valued.",
     },
     {
-      icon: <Star className="h-8 w-8 text-[#FFAF2B]" />,
+      icon: <Star className="h-8 w-8 text-[#F99D1C]" />,
       title: "Continuous Learning",
       desc: "We invest in our people with regular workshops, certifications, and mentorship programs to keep us at the cutting edge.",
     },
@@ -185,14 +185,14 @@ export default function LifeAtHutech() {
               className="max-w-4xl"
             >
               <div className="mb-6 flex items-center gap-3">
-                <span className="h-[1px] w-12 bg-[#FFAF2B]"></span>
-                <span className="text-[10px] font-bold tracking-[0.3em] text-[#FFAF2B] uppercase">
+                <span className="h-[1px] w-12 bg-[#F99D1C]"></span>
+                <span className="text-[10px] font-bold tracking-[0.3em] text-[#F99D1C] uppercase">
                   People & Culture
                 </span>
               </div>
               <h1 className="display-font mb-8 text-3xl leading-[1.1] font-semibold tracking-tight text-white sm:text-4xl md:text-5xl md:leading-[1.05] lg:text-6xl">
                 The Hutech <br />
-                <span className="text-[#FFAF2B]">Family.</span>
+                <span className="text-[#F99D1C]">Family.</span>
               </h1>
               <p className="max-w-2xl text-xl leading-relaxed font-medium text-gray-400">
                 At Hutech Solutions, we don't just build software; we build careers and lifelong
@@ -206,11 +206,11 @@ export default function LifeAtHutech() {
       {/* Gallery Section */}
       <section className="overflow-hidden bg-white py-24">
         <div className="mx-auto mb-16 max-w-[1280px] space-y-4 px-6 lg:px-20">
-          <span className="text-xs font-bold tracking-widest text-[#FFAF2B] uppercase">
+          <span className="text-xs font-bold tracking-widest text-[#F99D1C] uppercase">
             Gallery
           </span>
           <h2 className="display-font text-4xl font-semibold tracking-tight text-[#001A3D] md:text-6xl">
-            Take a sneak peek at <br /> <span className="text-[#FFAF2B]">Life at Hutech</span>
+            Take a sneak peek at <br /> <span className="text-[#F99D1C]">Life at Hutech</span>
           </h2>
           <p className="max-w-xl text-lg font-medium text-gray-500">
             A visual journey through our celebrations, team building, and everyday excellence across
@@ -237,7 +237,7 @@ export default function LifeAtHutech() {
                 />
                 <div className="absolute inset-0 flex items-end bg-gradient-to-t from-[#001A3D]/90 via-[#001A3D]/20 to-transparent p-6">
                   <div className="text-white">
-                    <p className="mb-1 text-[10px] font-bold tracking-widest text-[#FFAF2B] uppercase">
+                    <p className="mb-1 text-[10px] font-bold tracking-widest text-[#F99D1C] uppercase">
                       Occasion
                     </p>
                     <h4 className="display-font text-lg font-bold">{img.tag}</h4>
@@ -263,7 +263,7 @@ export default function LifeAtHutech() {
             </button>
             <button
               onClick={(e) => { e.stopPropagation(); prevImage(); }}
-              className="absolute left-4 md:left-8 flex h-12 w-12 items-center justify-center rounded-full bg-white/10 text-white transition-all hover:bg-[#FFAF2B] hover:text-[#001A3D]"
+              className="absolute left-4 md:left-8 flex h-12 w-12 items-center justify-center rounded-full bg-white/10 text-white transition-all hover:bg-[#F99D1C] hover:text-[#001A3D]"
               aria-label="Previous image"
             >
               <ChevronLeft size={24} />
@@ -284,7 +284,7 @@ export default function LifeAtHutech() {
             </div>
             <button
               onClick={(e) => { e.stopPropagation(); nextImage(); }}
-              className="absolute right-4 md:right-8 flex h-12 w-12 items-center justify-center rounded-full bg-white/10 text-white transition-all hover:bg-[#FFAF2B] hover:text-[#001A3D]"
+              className="absolute right-4 md:right-8 flex h-12 w-12 items-center justify-center rounded-full bg-white/10 text-white transition-all hover:bg-[#F99D1C] hover:text-[#001A3D]"
               aria-label="Next image"
             >
               <ChevronRight size={24} />
@@ -303,11 +303,11 @@ export default function LifeAtHutech() {
           <div className="grid grid-cols-1 items-center gap-16 lg:grid-cols-12">
             <div className="space-y-8 lg:col-span-5">
               <div className="space-y-4">
-                <span className="text-xs font-bold tracking-widest text-[#FFAF2B] uppercase">
+                <span className="text-xs font-bold tracking-widest text-[#F99D1C] uppercase">
                   Achievements
                 </span>
                 <h2 className="display-font text-4xl leading-tight font-semibold tracking-tight text-[#001A3D] md:text-6xl">
-                  Awards And <br /> <span className="text-[#FFAF2B]">Recognition.</span>
+                  Awards And <br /> <span className="text-[#F99D1C]">Recognition.</span>
                 </h2>
               </div>
               <p className="text-lg leading-relaxed font-medium text-gray-500">
@@ -335,11 +335,11 @@ export default function LifeAtHutech() {
                   transition={{ delay: i * 0.1 }}
                   className="group flex flex-col items-start gap-8 rounded-[2.5rem] border border-gray-100 bg-white p-10 transition-all hover:shadow-2xl md:flex-row"
                 >
-                  <div className="rounded-2xl bg-gray-50 p-5 text-[#FFAF2B] transition-all duration-500 group-hover:bg-[#FFAF2B] group-hover:text-white">
+                  <div className="rounded-2xl bg-gray-50 p-5 text-[#F99D1C] transition-all duration-500 group-hover:bg-[#F99D1C] group-hover:text-white">
                     {award.icon}
                   </div>
                   <div className="space-y-3">
-                    <p className="text-[11px] font-bold tracking-widest text-[#FFAF2B] uppercase">
+                    <p className="text-[11px] font-bold tracking-widest text-[#F99D1C] uppercase">
                       {award.org}
                     </p>
                     <h3 className="display-font text-2xl font-bold text-[#001A3D]">
@@ -357,12 +357,12 @@ export default function LifeAtHutech() {
       {/* Workplace Exploration Section */}
       <section className="overflow-hidden bg-white py-24">
         <div className="mx-auto mb-16 max-w-[1280px] space-y-4 px-6 lg:px-20">
-          <span className="text-xs font-bold tracking-widest text-[#FFAF2B] uppercase">
+          <span className="text-xs font-bold tracking-widest text-[#F99D1C] uppercase">
             Our Ecosystem
           </span>
           <h2 className="display-font text-4xl font-semibold tracking-tight text-[#001A3D] md:text-5xl">
             While There's Still A Lot To <br />{" "}
-            <span className="text-[#FFAF2B]">Explore In Our Workplace</span>
+            <span className="text-[#F99D1C]">Explore In Our Workplace</span>
           </h2>
         </div>
 
@@ -404,7 +404,7 @@ export default function LifeAtHutech() {
                   />
                   <div className="absolute inset-0 flex flex-col justify-end bg-gradient-to-t from-[#001A3D] via-[#001A3D]/20 to-transparent p-10 opacity-90 transition-opacity duration-500">
                     <div className="translate-y-4 transform transition-transform duration-500 group-hover:translate-y-0">
-                      <span className="mb-4 inline-block rounded-full bg-[#FFAF2B] px-4 py-1.5 text-[10px] font-bold tracking-widest text-[#001A3D] uppercase">
+                      <span className="mb-4 inline-block rounded-full bg-[#F99D1C] px-4 py-1.5 text-[10px] font-bold tracking-widest text-[#001A3D] uppercase">
                         {slide.tag}
                       </span>
                       <h4 className="display-font text-2xl leading-tight font-bold text-white">
@@ -422,23 +422,23 @@ export default function LifeAtHutech() {
       {/* CTA Section */}
       <section className="relative overflow-hidden bg-[#001A3D] py-24 text-white">
         <div className="pointer-events-none absolute inset-0 opacity-10">
-          <div className="absolute top-0 right-0 -mt-48 -mr-48 h-96 w-96 rounded-full bg-[#FFAF2B]/20 blur-[100px]"></div>
+          <div className="absolute top-0 right-0 -mt-48 -mr-48 h-96 w-96 rounded-full bg-[#F99D1C]/20 blur-[100px]"></div>
         </div>
 
         <div className="relative z-10 mx-auto max-w-[1280px] space-y-12 px-6 text-center lg:px-20">
           <h2 className="display-font mx-auto max-w-4xl text-4xl leading-tight font-semibold tracking-tight md:text-6xl">
-            Ready to become a part of <br /> our <span className="text-[#FFAF2B]">Family?</span>
+            Ready to become a part of <br /> our <span className="text-[#F99D1C]">Family?</span>
           </h2>
           <div className="flex flex-col justify-center gap-6 sm:flex-row">
             <Link
               href="/careers"
-              className="rounded-sm bg-white px-12 py-5 text-center text-xs font-bold tracking-wide text-[#001A3D] transition-all hover:bg-[#FFAF2B]"
+              className="rounded-sm bg-white px-12 py-5 text-center text-xs font-bold tracking-wide text-[#001A3D] transition-all hover:bg-[#F99D1C]"
             >
               See Open Positions
             </Link>
             <Link
               href="/contact"
-              className="rounded-sm border border-white/20 bg-transparent px-12 py-5 text-center text-xs font-bold tracking-wide text-white transition-all hover:border-[#FFAF2B] hover:text-[#FFAF2B]"
+              className="rounded-sm border border-white/20 bg-transparent px-12 py-5 text-center text-xs font-bold tracking-wide text-white transition-all hover:border-[#F99D1C] hover:text-[#F99D1C]"
             >
               Contact HR Team
             </Link>
@@ -467,7 +467,7 @@ export default function LifeAtHutech() {
           transition: all 0.3s ease;
         }
         .workplace-carousel .slick-dots li.slick-active {
-          background: #ffaf2b;
+          background: #F99D1C;
         }
       `}</style>
     </div>

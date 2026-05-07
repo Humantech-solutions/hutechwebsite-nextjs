@@ -62,14 +62,14 @@ export default function OpenPositions() {
             className="max-w-3xl"
           >
             <div className="mb-6 flex items-center gap-3">
-              <span className="h-[1px] w-12 bg-[#FFAF2B]"></span>
-              <span className="text-[10px] font-bold tracking-[0.3em] text-[#FFAF2B] uppercase">
+              <span className="h-[1px] w-12 bg-[#F99D1C]"></span>
+              <span className="text-[10px] font-bold tracking-[0.3em] text-[#F99D1C] uppercase">
                 Career Opportunities
               </span>
             </div>
             <h1 className="display-font mb-8 text-3xl leading-[1.1] font-semibold tracking-tight text-white sm:text-4xl md:text-5xl md:leading-[1.05] lg:text-6xl">
               Join Our <br />
-              <span className="text-[#FFAF2B]">Excellence Hub.</span>
+              <span className="text-[#F99D1C]">Excellence Hub.</span>
             </h1>
             <p className="max-w-2xl text-lg leading-relaxed font-medium text-gray-300 md:text-xl">
               Explore high-impact roles in engineering, consulting, and global delivery. Shape the
@@ -90,13 +90,13 @@ export default function OpenPositions() {
                       {job.tags.map((tag) => (
                         <span
                           key={tag}
-                          className="rounded-sm bg-[#FFAF2B]/10 px-2 py-1 text-[10px] font-bold tracking-widest text-[#FFAF2B] uppercase"
+                          className="rounded-sm bg-[#F99D1C]/10 px-2 py-1 text-[10px] font-bold tracking-widest text-[#F99D1C] uppercase"
                         >
                           {tag}
                         </span>
                       ))}
                     </div>
-                    <h3 className="display-font text-xl font-bold text-[#001A3D] transition-colors group-hover:text-[#FFAF2B] md:text-2xl">
+                    <h3 className="display-font text-xl font-bold text-[#001A3D] transition-colors group-hover:text-[#F99D1C] md:text-2xl">
                       {job.title}
                     </h3>
                     <div className="flex items-center gap-6 text-xs font-semibold text-gray-400">
@@ -108,7 +108,7 @@ export default function OpenPositions() {
                       </span>
                     </div>
                   </div>
-                  <div className="mt-6 rounded-xl border border-gray-100 bg-white p-4 transition-all group-hover:bg-[#FFAF2B] md:mt-0">
+                  <div className="mt-6 rounded-xl border border-gray-100 bg-white p-4 transition-all group-hover:bg-[#F99D1C] md:mt-0">
                     <ArrowRight size={20} className="text-[#001A3D]" />
                   </div>
                 </div>

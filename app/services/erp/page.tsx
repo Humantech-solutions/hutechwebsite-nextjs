@@ -34,7 +34,7 @@ const ENTERPRISE_SOLUTIONS = [
   {
     title: "SAP Implementation",
     tagline: "The Intelligent Enterprise Core",
-    icon: <Database className="h-10 w-10 text-[#FFAF2B]" />,
+    icon: <Database className="h-10 w-10 text-[#F99D1C]" />,
     desc: "Hutech enables organizations to transition from legacy ECC environments to SAP S/4HANA, creating a digital-first foundation for global operations. Our methodology focuses on 'Clean Core' principles to ensure future-proof upgrades.",
     capabilities: [
       {
@@ -56,7 +56,7 @@ const ENTERPRISE_SOLUTIONS = [
   {
     title: "ServiceNow Implementation",
     tagline: "Digital Workflow Orchestration",
-    icon: <Workflow className="h-10 w-10 text-[#FFAF2B]" />,
+    icon: <Workflow className="h-10 w-10 text-[#F99D1C]" />,
     desc: "We transform fragmented internal processes into unified digital workflows. By leveraging the Now Platform, we help enterprises automate IT, HR, and Customer Service operations while maintaining a single system of record.",
     capabilities: [
       {
@@ -81,7 +81,7 @@ const ENTERPRISE_SOLUTIONS = [
   {
     title: "Oracle Implementation",
     tagline: "Agile Cloud Infrastructure & ERP",
-    icon: <Globe className="h-10 w-10 text-[#FFAF2B]" />,
+    icon: <Globe className="h-10 w-10 text-[#F99D1C]" />,
     desc: "Our Oracle practice specializes in Fusion Cloud applications and NetSuite implementations. We provide deep expertise in financial management, supply chain orchestration, and human capital management on a global scale.",
     capabilities: [
       { name: "Oracle Fusion Cloud ERP", detail: "Automated financials and real-time reporting." },
@@ -97,7 +97,7 @@ const ENTERPRISE_SOLUTIONS = [
   {
     title: "Salesforce Implementation",
     tagline: "Customer-Centric Growth Platforms",
-    icon: <Cloud className="h-10 w-10 text-[#FFAF2B]" />,
+    icon: <Cloud className="h-10 w-10 text-[#F99D1C]" />,
     desc: "Hutech helps you build a 360-degree view of your customer. We implement complex multi-cloud Salesforce solutions that bridge the gap between sales, service, marketing, and commerce through Einstein AI-driven insights.",
     capabilities: [
       { name: "Sales & Service Cloud", detail: "Lead-to-cash automation and omnichannel support." },
@@ -116,7 +116,7 @@ const ENTERPRISE_SOLUTIONS = [
   {
     title: "Pega Implementation",
     tagline: "Intelligent Automation & Case Management",
-    icon: <LayoutGrid className="h-10 w-10 text-[#FFAF2B]" />,
+    icon: <LayoutGrid className="h-10 w-10 text-[#F99D1C]" />,
     desc: "We leverage Pega’s low-code platform to solve complex business problems. Our Pega experts focus on Decision Hub and Customer Service modules to deliver hyper-personalized experiences and operational efficiency.",
     capabilities: [
       { name: "BPM & Case Management", detail: "Streamlining complex enterprise processes." },
@@ -129,7 +129,7 @@ const ENTERPRISE_SOLUTIONS = [
   {
     title: "Open Source Implementation",
     tagline: "Sovereign & Customizable ERP Solutions",
-    icon: <Rocket className="h-10 w-10 text-[#FFAF2B]" />,
+    icon: <Rocket className="h-10 w-10 text-[#F99D1C]" />,
     desc: "For enterprises seeking flexibility and lower TCO, we provide implementations of Odoo and ERPNext. We customize these platforms into high-performance systems that match your specific business DNA without vendor lock-in.",
     capabilities: [
       { name: "Odoo Enterprise", detail: "Modular apps for accounting, CRM, and manufacturing." },
@@ -175,14 +175,14 @@ export default function EnterpriseDigitalSolutions() {
             className="max-w-4xl"
           >
             <div className="mb-6 flex items-center gap-3">
-              <span className="h-[1px] w-12 bg-[#FFAF2B]"></span>
-              <span className="text-[10px] font-bold tracking-[0.3em] text-[#FFAF2B] uppercase">
+              <span className="h-[1px] w-12 bg-[#F99D1C]"></span>
+              <span className="text-[10px] font-bold tracking-[0.3em] text-[#F99D1C] uppercase">
                 Enterprise Architecture
               </span>
             </div>
             <h1 className="display-font mb-8 text-3xl leading-[1.1] font-semibold tracking-tight text-white sm:text-4xl md:text-5xl md:leading-[1.05] lg:text-6xl">
               Modernizing the <br />
-              <span className="text-[#FFAF2B]">Enterprise Core.</span>
+              <span className="text-[#F99D1C]">Enterprise Core.</span>
             </h1>
             <p className="max-w-2xl text-lg leading-relaxed font-medium text-gray-300 md:text-xl">
               We design and deploy integrated enterprise ecosystems that eliminate data silos,
@@ -359,7 +359,7 @@ export default function EnterpriseDigitalSolutions() {
             </div>
             <div className="relative z-10 mx-auto max-w-4xl space-y-8">
               <h2 className="display-font gap-2 text-4xl leading-tight font-bold text-white md:text-7xl">
-                Architect Your <span className="text-[#FFAF2B]">Digital Future.</span>
+                Architect Your <span className="text-[#F99D1C]">Digital Future.</span>
               </h2>
               <p className="mx-auto max-w-2xl text-xl leading-relaxed font-medium text-white/60">
                 Connect with our senior enterprise architects today to discuss your roadmap, from

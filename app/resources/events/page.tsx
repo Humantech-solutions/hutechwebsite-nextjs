@@ -54,7 +54,7 @@ export default function Events() {
             className="display-font mb-6 text-5xl font-semibold md:text-7xl"
           >
             Connect & <br />
-            <span className="text-[#FFAF2B]">Collaborate.</span>
+            <span className="text-[#F99D1C]">Collaborate.</span>
           </Motion.h1>
           <p className="max-w-2xl text-xl leading-relaxed font-medium text-gray-400">
             Join us at global conferences, summits, and workshops where we share our expertise and
@@ -85,24 +85,24 @@ export default function Events() {
                 <div className="flex flex-col justify-between space-y-8 p-10 md:w-2/3">
                   <div className="space-y-4">
                     <div className="flex flex-wrap items-center gap-6">
-                      <span className="rounded-full bg-[#FFAF2B]/10 px-3 py-1 text-[10px] font-bold tracking-widest text-[#FFAF2B] uppercase">
+                      <span className="rounded-full bg-[#F99D1C]/10 px-3 py-1 text-[10px] font-bold tracking-widest text-[#F99D1C] uppercase">
                         {event.category}
                       </span>
                       <span className="flex items-center gap-2 text-sm font-medium text-gray-500">
-                        <Calendar size={14} className="text-[#FFAF2B]" /> {event.date}
+                        <Calendar size={14} className="text-[#F99D1C]" /> {event.date}
                       </span>
                       <span className="flex items-center gap-2 text-sm font-medium text-gray-500">
-                        <MapPin size={14} className="text-[#FFAF2B]" /> {event.location}
+                        <MapPin size={14} className="text-[#F99D1C]" /> {event.location}
                       </span>
                     </div>
-                    <h3 className="display-font text-3xl font-bold text-[#001A3D] transition-colors group-hover:text-[#FFAF2B]">
+                    <h3 className="display-font text-3xl font-bold text-[#001A3D] transition-colors group-hover:text-[#F99D1C]">
                       {event.title}
                     </h3>
                   </div>
                   <div className="flex items-center justify-between">
                     <Link
                       href={`/resources/events/${event.id}`}
-                      className="inline-flex items-center gap-2 border-b-2 border-[#FFAF2B] pb-1 font-bold text-[#001A3D] transition-all hover:gap-4"
+                      className="inline-flex items-center gap-2 border-b-2 border-[#F99D1C] pb-1 font-bold text-[#001A3D] transition-all hover:gap-4"
                     >
                       Learn More <ArrowRight size={18} />
                     </Link>

@@ -21,7 +21,7 @@ export default function CookiePolicy() {
             className="max-w-3xl"
           >
             <h1 className="display-font mb-6 text-4xl font-semibold tracking-tight md:text-5xl">
-              Cookie <span className="text-[#FFAF2B]">Policy</span>
+              Cookie <span className="text-[#F99D1C]">Policy</span>
             </h1>
             <p className="text-lg text-gray-300">Effective Date: March 15, 2026</p>
           </Motion.div>

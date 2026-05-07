@@ -20,7 +20,7 @@ import { motion as Motion } from "framer-motion";
 import { Breadcrumbs } from "@/components/Breadcrumbs";
 import { Meta } from "@/components/Meta";
 
-const BRAND_ORANGE = "#FFAF2B";
+const BRAND_ORANGE = "#F99D1C";
 const BRAND_BLUE = "#001A3D";
 
 const SERVICE_CATEGORIES = [
@@ -30,31 +30,31 @@ const SERVICE_CATEGORIES = [
       {
         title: "AI/ML Solutions",
         href: "/services/ai-ml",
-        icon: <Cpu className="h-8 w-8 text-[#FFAF2B]" />,
+        icon: <Cpu className="h-8 w-8 text-[#F99D1C]" />,
         desc: "Autonomous systems and predictive analytics.",
       },
       {
         title: "Cloud Transformation",
         href: "/services/cloud-transformation",
-        icon: <Cloud className="h-8 w-8 text-[#FFAF2B]" />,
+        icon: <Cloud className="h-8 w-8 text-[#F99D1C]" />,
         desc: "Modernizing legacy apps for the cloud.",
       },
       {
         title: "SRE & DevOps Services",
         href: "/services/devops",
-        icon: <Settings className="h-8 w-8 text-[#FFAF2B]" />,
+        icon: <Settings className="h-8 w-8 text-[#F99D1C]" />,
         desc: "Ensuring site reliability and efficient deployment.",
       },
       {
         title: "Data Engineering",
         href: "/services/data-engineering",
-        icon: <Database className="h-8 w-8 text-[#FFAF2B]" />,
+        icon: <Database className="h-8 w-8 text-[#F99D1C]" />,
         desc: "Robust data pipelines and scalable warehouse architectures.",
       },
       {
         title: "Data Visualization and Reporting",
         href: "/services/data-visualization-reporting",
-        icon: <BarChart className="h-8 w-8 text-[#FFAF2B]" />,
+        icon: <BarChart className="h-8 w-8 text-[#F99D1C]" />,
         desc: "Interactive dashboards and real-time business intelligence reporting.",
       },
     ],
@@ -65,13 +65,13 @@ const SERVICE_CATEGORIES = [
       {
         title: "Enterprise Digital Solutions",
         href: "/services/enterprise-digital-solutions",
-        icon: <Database className="h-8 w-8 text-[#FFAF2B]" />,
+        icon: <Database className="h-8 w-8 text-[#F99D1C]" />,
         desc: "Optimizing enterprise resource management.",
       },
       {
         title: "Development and Maintenance",
         href: "/services/application-development-maintenance",
-        icon: <Settings className="h-8 w-8 text-[#FFAF2B]" />,
+        icon: <Settings className="h-8 w-8 text-[#F99D1C]" />,
         desc: "End-to-end application lifecycle management.",
       },
     ],
@@ -82,37 +82,37 @@ const SERVICE_CATEGORIES = [
       {
         title: "Banking & Financial Services",
         href: "/services/fintech",
-        icon: <TrendingUp className="h-8 w-8 text-[#FFAF2B]" />,
+        icon: <TrendingUp className="h-8 w-8 text-[#F99D1C]" />,
         desc: "Secure banking and payment platforms.",
       },
       {
         title: "Ecommerce Development",
         href: "/services/ecommerce",
-        icon: <ShoppingCart className="h-8 w-8 text-[#FFAF2B]" />,
+        icon: <ShoppingCart className="h-8 w-8 text-[#F99D1C]" />,
         desc: "Scalable retail and marketplace systems.",
       },
       {
         title: "Consulting Service",
         href: "/services/consulting",
-        icon: <Briefcase className="h-8 w-8 text-[#FFAF2B]" />,
+        icon: <Briefcase className="h-8 w-8 text-[#F99D1C]" />,
         desc: "Expert business and technology strategy consulting.",
       },
       {
         title: "AI Consulting & Prompt Engineering",
         href: "/services/ai-consulting",
-        icon: <Sparkles className="h-8 w-8 text-[#FFAF2B]" />,
+        icon: <Sparkles className="h-8 w-8 text-[#F99D1C]" />,
         desc: "Maximize LLM potential with expert AI strategy and advanced prompt design.",
       },
       {
         title: "IOT (Internet of Things)",
         href: "/services/iot",
-        icon: <Zap className="h-8 w-8 text-[#FFAF2B]" />,
+        icon: <Zap className="h-8 w-8 text-[#F99D1C]" />,
         desc: "Connected ecosystems and smart hardware solutions.",
       },
       {
         title: "Cybersecurity",
         href: "/services/cybersecurity",
-        icon: <ShieldCheck className="h-8 w-8 text-[#FFAF2B]" />,
+        icon: <ShieldCheck className="h-8 w-8 text-[#F99D1C]" />,
         desc: "Protecting your digital assets with advanced defense.",
       },
     ],
@@ -128,15 +128,15 @@ export default function Services() {
       />
       <Breadcrumbs variant="light" />
       <section className="relative flex h-[450px] items-center overflow-hidden border-b border-gray-200 bg-gray-50">
-        <div className="absolute top-0 right-0 h-full w-1/4 translate-x-1/2 -skew-x-12 bg-[#FFAF2B]/5"></div>
+        <div className="absolute top-0 right-0 h-full w-1/4 translate-x-1/2 -skew-x-12 bg-[#F99D1C]/5"></div>
         <div className="relative z-10 mx-auto w-full max-w-[1280px] px-6 text-left lg:px-20">
           <div className="max-w-5xl">
-            <span className="text-xs font-semibold tracking-wide text-[#FFAF2B]">
+            <span className="text-xs font-semibold tracking-wide text-[#F99D1C]">
               Our Expertise
             </span>
             <h1 className="display-font mt-8 text-5xl leading-[1.1] font-semibold tracking-tight text-[#001A3D] md:text-7xl">
               Comprehensive Technology Services for <br />
-              <span className="text-[#FFAF2B]">Complex Businesses.</span>
+              <span className="text-[#F99D1C]">Complex Businesses.</span>
             </h1>
             <p className="mt-10 max-w-2xl text-xl font-medium text-gray-500">
               From strategic consulting to full-cycle development, we provide the technical edge
@@ -151,7 +151,7 @@ export default function Services() {
           {SERVICE_CATEGORIES.map((cat, idx) => (
             <div key={cat.category} className={`mb-32 last:mb-0`}>
               <div className="mb-16 flex items-center space-x-4">
-                <div className="h-[2px] w-12 bg-[#FFAF2B]"></div>
+                <div className="h-[2px] w-12 bg-[#F99D1C]"></div>
                 <h2 className="display-font text-sm font-semibold tracking-wide text-[#001A3D]">
                   {cat.category}
                 </h2>
@@ -166,10 +166,10 @@ export default function Services() {
                       transition={{ delay: itemIdx * 0.1 }}
                       className="group h-full cursor-pointer rounded-[2.5rem] border border-gray-100 bg-gray-50 p-12 transition-all duration-500 hover:bg-white hover:shadow-2xl"
                     >
-                      <div className="mb-10 w-fit rounded-2xl bg-white p-4 shadow-sm transition-colors group-hover:bg-[#FFAF2B]/10">
+                      <div className="mb-10 w-fit rounded-2xl bg-white p-4 shadow-sm transition-colors group-hover:bg-[#F99D1C]/10">
                         {item.icon}
                       </div>
-                      <h3 className="display-font mb-6 text-2xl font-semibold tracking-tight text-[#001A3D] transition-colors group-hover:text-[#FFAF2B]">
+                      <h3 className="display-font mb-6 text-2xl font-semibold tracking-tight text-[#001A3D] transition-colors group-hover:text-[#F99D1C]">
                         {item.title}
                       </h3>
                       <p className="mb-10 text-base leading-relaxed font-medium text-gray-500">
@@ -197,11 +197,11 @@ export default function Services() {
         </div>
         <div className="relative z-10 mx-auto flex max-w-[1280px] flex-col items-center justify-between gap-12 px-6 md:flex-row lg:px-20">
           <div className="display-font max-w-2xl text-3xl leading-tight font-semibold tracking-tight">
-            Ready to engineer your next <span className="text-[#FFAF2B]">breakthrough?</span>
+            Ready to engineer your next <span className="text-[#F99D1C]">breakthrough?</span>
           </div>
           <Link
             href="/contact"
-            className="rounded-sm bg-[#FFAF2B] px-12 py-5 text-xs font-bold tracking-wide text-[#001A3D] shadow-xl shadow-[#FFAF2B]/20 transition-all hover:bg-[#ff9d00]"
+            className="rounded-sm bg-[#F99D1C] px-12 py-5 text-xs font-bold tracking-wide text-[#001A3D] shadow-xl shadow-[#F99D1C]/20 transition-all hover:bg-[#ff9d00]"
           >
             Start a Project
           </Link>

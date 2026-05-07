@@ -149,7 +149,7 @@ export default function Blogs() {
             className="display-font mb-6 text-5xl font-semibold tracking-tight md:text-7xl"
           >
             Insights &amp; <br />
-            <span className="text-[#FFAF2B]">Perspectives.</span>
+            <span className="text-[#F99D1C]">Perspectives.</span>
           </Motion.h1>
           <p className="text-xl text-gray-400 max-w-2xl leading-relaxed font-medium">
             Stay ahead of the curve with the latest trends, expert analyses, and technological innovations curated by our global team.
@@ -176,7 +176,7 @@ export default function Blogs() {
                     alt={blog.title}
                     className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110"
                   />
-                  <div className="absolute top-6 left-6 px-4 py-1 bg-[#FFAF2B] text-[#001A3D] font-bold text-xs rounded-full uppercase tracking-widest">
+                  <div className="absolute top-6 left-6 px-4 py-1 bg-[#F99D1C] text-[#001A3D] font-bold text-xs rounded-full uppercase tracking-widest">
                     {blog.category}
                   </div>
                 </div>
@@ -185,7 +185,7 @@ export default function Blogs() {
                     <span className="flex items-center gap-1"><Calendar size={14} /> {blog.date}</span>
                     <span className="flex items-center gap-1"><User size={14} /> {blog.author}</span>
                   </div>
-                  <h3 className="display-font text-2xl font-bold text-[#001A3D] transition-colors group-hover:text-[#FFAF2B]">
+                  <h3 className="display-font text-2xl font-bold text-[#001A3D] transition-colors group-hover:text-[#F99D1C]">
                     {blog.title}
                   </h3>
                   <p className="text-gray-500 leading-relaxed flex-grow">{blog.excerpt}</p>
@@ -193,7 +193,7 @@ export default function Blogs() {
                     href={`/resources/blogs/${blog.id}`}
                     className="inline-flex items-center gap-2 text-[#001A3D] font-bold group-hover:gap-4 transition-all"
                   >
-                    Read Article <ArrowRight size={18} className="text-[#FFAF2B]" />
+                    Read Article <ArrowRight size={18} className="text-[#F99D1C]" />
                   </Link>
                 </div>
               </Motion.article>

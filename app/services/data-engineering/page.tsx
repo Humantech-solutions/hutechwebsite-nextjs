@@ -111,14 +111,14 @@ export default function DataEngineering() {
             className="max-w-4xl"
           >
             <div className="mb-6 flex items-center gap-3">
-              <span className="h-[1px] w-12 bg-[#FFAF2B]"></span>
-              <span className="text-[10px] font-bold tracking-[0.3em] text-[#FFAF2B] uppercase">
+              <span className="h-[1px] w-12 bg-[#F99D1C]"></span>
+              <span className="text-[10px] font-bold tracking-[0.3em] text-[#F99D1C] uppercase">
                 Intelligence Architecture
               </span>
             </div>
             <h1 className="display-font mb-8 text-3xl leading-[1.1] font-semibold tracking-tight text-white sm:text-4xl md:text-5xl md:leading-[1.05] lg:text-6xl">
               From Raw Data <br />
-              <span className="text-[#FFAF2B]">To Predictive Power.</span>
+              <span className="text-[#F99D1C]">To Predictive Power.</span>
             </h1>
             <p className="max-w-2xl text-lg leading-relaxed font-medium text-gray-300 md:text-xl">
               We empower organizations with high-scale data engineering and cutting-edge machine
@@ -291,7 +291,7 @@ export default function DataEngineering() {
                   className="h-full w-full object-cover"
                 />
               </div>
-              <div className="display-font absolute -top-6 -left-6 rounded-sm bg-[#FFAF2B] p-6 text-sm font-bold text-[#001A3D] shadow-xl">
+              <div className="display-font absolute -top-6 -left-6 rounded-sm bg-[#F99D1C] p-6 text-sm font-bold text-[#001A3D] shadow-xl">
                 LLM OPS READY
               </div>
             </div>

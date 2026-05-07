@@ -58,14 +58,14 @@ export default function News() {
             className="max-w-3xl"
           >
             <div className="mb-6 flex items-center gap-3">
-              <span className="h-[1px] w-12 bg-[#FFAF2B]"></span>
-              <span className="text-[10px] font-bold tracking-[0.3em] text-[#FFAF2B] uppercase">
+              <span className="h-[1px] w-12 bg-[#F99D1C]"></span>
+              <span className="text-[10px] font-bold tracking-[0.3em] text-[#F99D1C] uppercase">
                 Corporate Insights
               </span>
             </div>
             <h1 className="display-font mb-8 text-3xl leading-[1.1] font-semibold tracking-tight text-white sm:text-4xl md:text-5xl md:leading-[1.05] lg:text-6xl">
               In The <br />
-              <span className="text-[#FFAF2B]">News.</span>
+              <span className="text-[#F99D1C]">News.</span>
             </h1>
             <p className="max-w-2xl text-lg leading-relaxed font-medium text-gray-300 md:text-xl">
               Keeping you updated with our latest milestones, global expansions, and
@@ -89,7 +89,7 @@ export default function News() {
               >
                 <div className="flex-1 space-y-6">
                   <div className="flex flex-wrap items-center gap-6">
-                    <span className="rounded-full border border-[#FFAF2B]/20 bg-[#FFAF2B]/10 px-4 py-1.5 text-[10px] font-black tracking-widest text-[#FFAF2B] uppercase">
+                    <span className="rounded-full border border-[#F99D1C]/20 bg-[#F99D1C]/10 px-4 py-1.5 text-[10px] font-black tracking-widest text-[#F99D1C] uppercase">
                       {item.category}
                     </span>
                     <span className="flex items-center gap-2 text-xs font-bold tracking-widest text-gray-400 uppercase">
@@ -112,7 +112,7 @@ export default function News() {
                   <div className="flex items-center gap-8 pt-4">
                     <Link
                       href={`/company/news/${item.id}`}
-                      className="inline-flex items-center gap-3 border-b-2 border-[#FFAF2B] pb-1 text-[11px] font-black tracking-widest text-[#001A3D] uppercase transition-all hover:gap-6"
+                      className="inline-flex items-center gap-3 border-b-2 border-[#F99D1C] pb-1 text-[11px] font-black tracking-widest text-[#001A3D] uppercase transition-all hover:gap-6"
                     >
                       Read Full Story <ArrowRight size={18} />
                     </Link>

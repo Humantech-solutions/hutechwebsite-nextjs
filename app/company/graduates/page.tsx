@@ -152,14 +152,14 @@ export default function Graduates() {
             className="max-w-3xl"
           >
             <div className="mb-6 flex items-center gap-3">
-              <span className="h-[1px] w-12 bg-[#FFAF2B]"></span>
-              <span className="text-[10px] font-bold tracking-[0.3em] text-[#FFAF2B] uppercase">
+              <span className="h-[1px] w-12 bg-[#F99D1C]"></span>
+              <span className="text-[10px] font-bold tracking-[0.3em] text-[#F99D1C] uppercase">
                 Early Careers
               </span>
             </div>
             <h1 className="display-font mb-8 text-3xl leading-[1.1] font-semibold tracking-tight text-white sm:text-4xl md:text-5xl md:leading-[1.05] lg:text-6xl">
               The Hutech <br />
-              <span className="text-[#FFAF2B]">Graduates Program.</span>
+              <span className="text-[#F99D1C]">Graduates Program.</span>
             </h1>
             <p className="mb-10 max-w-2xl text-lg leading-relaxed font-medium text-gray-300 md:text-xl">
               Nurturing the next generation of tech leaders. Start your professional journey with
@@ -169,7 +169,7 @@ export default function Graduates() {
               onClick={() =>
                 document.getElementById("apply-now")?.scrollIntoView({ behavior: "smooth" })
               }
-              className="rounded-sm bg-[#FFAF2B] px-12 py-5 text-[11px] font-black tracking-widest text-[#001A3D] uppercase transition-all duration-500 hover:bg-white"
+              className="rounded-sm bg-[#F99D1C] px-12 py-5 text-[11px] font-black tracking-widest text-[#001A3D] uppercase transition-all duration-500 hover:bg-white"
             >
               Apply for 2026 Cohort
             </button>
@@ -206,7 +206,7 @@ export default function Graduates() {
                   {item.icon}
                 </div>
                 <div className="space-y-4">
-                  <span className="block text-[10px] font-black tracking-widest text-[#FFAF2B] uppercase">
+                  <span className="block text-[10px] font-black tracking-widest text-[#F99D1C] uppercase">
                     {item.phase}
                   </span>
                   <h3 className="display-font text-xl leading-tight font-bold text-[#001A3D]">
@@ -227,14 +227,14 @@ export default function Graduates() {
         <div className="mx-auto max-w-[1280px] px-6 lg:px-20">
           <div className="mb-16 flex flex-col items-center justify-between gap-8 md:flex-row">
             <div className="space-y-4">
-              <span className="text-[11px] font-bold tracking-[0.2em] text-[#FFAF2B] uppercase">
+              <span className="text-[11px] font-bold tracking-[0.2em] text-[#F99D1C] uppercase">
                 Knowledge Transfer
               </span>
               <h2 className="display-font text-3xl leading-tight font-semibold md:text-5xl">
                 Workshop Highlights
               </h2>
             </div>
-            <button className="flex items-center gap-4 rounded-sm border border-white/10 bg-white/10 px-10 py-5 text-[11px] font-bold tracking-widest uppercase transition-all hover:bg-[#FFAF2B] hover:text-[#001A3D]">
+            <button className="flex items-center gap-4 rounded-sm border border-white/10 bg-white/10 px-10 py-5 text-[11px] font-bold tracking-widest uppercase transition-all hover:bg-[#F99D1C] hover:text-[#001A3D]">
               View All Sessions <ArrowUpRight size={16} />
             </button>
           </div>
@@ -262,14 +262,14 @@ export default function Graduates() {
                   </div>
 
                   <div className="absolute right-8 bottom-8 left-8">
-                    <span className="mb-3 inline-block rounded-full bg-[#FFAF2B] px-3 py-1 text-[10px] font-black tracking-widest text-[#001A3D] uppercase">
+                    <span className="mb-3 inline-block rounded-full bg-[#F99D1C] px-3 py-1 text-[10px] font-black tracking-widest text-[#001A3D] uppercase">
                       {ws.category}
                     </span>
                     <h3 className="display-font text-2xl font-bold text-white">{ws.title}</h3>
                   </div>
                 </div>
                 <div className="space-y-3 px-4">
-                  <div className="flex items-center gap-2 text-xs font-bold tracking-widest text-[#FFAF2B] uppercase">
+                  <div className="flex items-center gap-2 text-xs font-bold tracking-widest text-[#F99D1C] uppercase">
                     <CheckCircle2 size={14} /> {ws.duration}
                   </div>
                   <p className="text-sm leading-relaxed font-medium text-gray-400">
@@ -450,16 +450,16 @@ export default function Graduates() {
         <div className="mx-auto max-w-[1280px] px-6 lg:px-20">
           <div className="relative overflow-hidden rounded-[4rem] bg-[#001A3D] p-12 md:p-24">
             <div className="absolute top-0 right-0 -mt-48 -mr-48 h-96 w-96 rounded-full bg-[#0171c1]/20 blur-[100px]"></div>
-            <div className="absolute bottom-0 left-0 -mb-48 -ml-48 h-96 w-96 rounded-full bg-[#FFAF2B]/10 blur-[100px]"></div>
+            <div className="absolute bottom-0 left-0 -mb-48 -ml-48 h-96 w-96 rounded-full bg-[#F99D1C]/10 blur-[100px]"></div>
 
             <div className="relative z-10 grid grid-cols-1 items-center gap-20 lg:grid-cols-2">
               <div className="space-y-8 text-left">
-                <div className="inline-flex rounded-full bg-white/5 p-4 text-[#FFAF2B]">
+                <div className="inline-flex rounded-full bg-white/5 p-4 text-[#F99D1C]">
                   <Rocket size={32} />
                 </div>
                 <h2 className="display-font text-3xl leading-[1.1] font-semibold text-white md:text-5xl">
                   Launch Your Career <br /> with{" "}
-                  <span className="text-[#FFAF2B]">Global Reach.</span>
+                  <span className="text-[#F99D1C]">Global Reach.</span>
                 </h2>
                 <p className="max-w-lg text-lg leading-relaxed font-medium text-white/50">
                   Applications for the Summer 2026 cohort are now open. Join a culture of
@@ -477,7 +477,7 @@ export default function Graduates() {
                       key={idx}
                       className="flex items-center gap-3 text-sm font-medium text-white/80"
                     >
-                      <CheckCircle2 size={16} className="text-[#FFAF2B]" />
+                      <CheckCircle2 size={16} className="text-[#F99D1C]" />
                       {benefit}
                     </div>
                   ))}
@@ -491,7 +491,7 @@ export default function Graduates() {
                   </h3>
 
                   <div className="space-y-2">
-                    <label className="text-[10px] font-black tracking-widest text-[#FFAF2B] uppercase">
+                    <label className="text-[10px] font-black tracking-widest text-[#F99D1C] uppercase">
                       Full Name
                     </label>
                     <input
@@ -502,7 +502,7 @@ export default function Graduates() {
                   </div>
 
                   <div className="space-y-2">
-                    <label className="text-[10px] font-black tracking-widest text-[#FFAF2B] uppercase">
+                    <label className="text-[10px] font-black tracking-widest text-[#F99D1C] uppercase">
                       Email Address
                     </label>
                     <input
@@ -514,7 +514,7 @@ export default function Graduates() {
                   </div>
 
                   <div className="space-y-2">
-                    <label className="text-[10px] font-black tracking-widest text-[#FFAF2B] uppercase">
+                    <label className="text-[10px] font-black tracking-widest text-[#F99D1C] uppercase">
                       Graduation Year
                     </label>
                     <select
@@ -529,7 +529,7 @@ export default function Graduates() {
                   </div>
 
                   <div className="space-y-2">
-                    <label className="text-[10px] font-black tracking-widest text-[#FFAF2B] uppercase">
+                    <label className="text-[10px] font-black tracking-widest text-[#F99D1C] uppercase">
                       Core Interest
                     </label>
                     <select
@@ -547,7 +547,7 @@ export default function Graduates() {
                   <div className="pt-4">
                     <button
                       disabled={isSubmitting}
-                      className="flex w-full items-center justify-center gap-3 rounded-sm bg-[#FFAF2B] py-5 text-xs font-black tracking-widest text-[#001A3D] uppercase transition-all duration-500 hover:bg-white disabled:cursor-not-allowed disabled:opacity-50"
+                      className="flex w-full items-center justify-center gap-3 rounded-sm bg-[#F99D1C] py-5 text-xs font-black tracking-widest text-[#001A3D] uppercase transition-all duration-500 hover:bg-white disabled:cursor-not-allowed disabled:opacity-50"
                     >
                       {isSubmitting ? "Processing..." : "Submit Application"}
                       {!isSubmitting && <ArrowUpRight size={16} />}

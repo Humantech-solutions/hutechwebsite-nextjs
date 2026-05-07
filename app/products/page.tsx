@@ -58,7 +58,7 @@ const PRODUCTS_DATA = [
     icon: <Shield className="h-6 w-6" />,
     image:
       "https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&q=80&w=800",
-    color: "#FFAF2B",
+    color: "#F99D1C",
   },
   {
     id: "visionsense",
@@ -90,7 +90,7 @@ const PRODUCTS_DATA = [
     icon: <FileText className="h-6 w-6" />,
     image:
       "https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&q=80&w=800",
-    color: "#FFAF2B",
+    color: "#F99D1C",
   },
   {
     id: "cloudorbit",
@@ -100,7 +100,7 @@ const PRODUCTS_DATA = [
     icon: <Zap className="h-6 w-6" />,
     image:
       "https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&q=80&w=800",
-    color: "#FFAF2B",
+    color: "#F99D1C",
   },
   {
     id: "skynode-edge",
@@ -122,7 +122,7 @@ const PRODUCTS_DATA = [
     icon: <GraduationCap className="h-6 w-6" />,
     image:
       "https://images.unsplash.com/photo-1501504905252-473c47e087f8?auto=format&fit=crop&q=80&w=800",
-    color: "#FFAF2B",
+    color: "#F99D1C",
   },
   {
     id: "erp-nexus",
@@ -143,7 +143,7 @@ const PRODUCTS_DATA = [
     icon: <Briefcase className="h-6 w-6" />,
     image:
       "https://images.unsplash.com/photo-1497215728101-856f4ea42174?auto=format&fit=crop&q=80&w=800",
-    color: "#FFAF2B",
+    color: "#F99D1C",
   },
   {
     id: "supplychain-sentry",
@@ -163,7 +163,7 @@ const PRODUCTS_DATA = [
     icon: <Activity className="h-6 w-6" />,
     image:
       "https://images.unsplash.com/photo-1519003722824-194d4455a60c?auto=format&fit=crop&q=80&w=800",
-    color: "#FFAF2B",
+    color: "#F99D1C",
   },
 ];
 
@@ -221,13 +221,13 @@ function ProductsContent() {
             className="max-w-4xl"
           >
             <div className="mb-6 flex items-center gap-3">
-              <span className="h-[1px] w-12 bg-[#FFAF2B]"></span>
-              <span className="text-[10px] font-bold tracking-[0.3em] text-[#FFAF2B] uppercase">
+              <span className="h-[1px] w-12 bg-[#F99D1C]"></span>
+              <span className="text-[10px] font-bold tracking-[0.3em] text-[#F99D1C] uppercase">
                 Engineered for Resilience
               </span>
             </div>
             <h1 className="display-font mb-8 text-3xl leading-[1.1] font-semibold tracking-tight text-white sm:text-4xl md:text-5xl md:leading-[1.05] lg:text-6xl">
-              Our <span className="text-[#FFAF2B]">Solutions</span> Ecosystem
+              Our <span className="text-[#F99D1C]">Solutions</span> Ecosystem
             </h1>
             <p className="max-w-2xl text-lg leading-relaxed font-medium text-gray-300 md:text-xl">
               Proprietary IP and enterprise-ready platforms designed to solve high-complexity

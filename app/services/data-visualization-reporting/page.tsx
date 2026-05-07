@@ -26,17 +26,17 @@ import Link from "next/link";
 const SOLUTIONS = [
   {
     title: "Interactive Dashboards",
-    icon: <Layout className="h-8 w-8 text-[#FFAF2B]" />,
+    icon: <Layout className="h-8 w-8 text-[#F99D1C]" />,
     desc: "Building dynamic, drill-down capable dashboards using Power BI, Tableu, and custom React-based visualization frameworks.",
   },
   {
     title: "Real-time Reporting",
-    icon: <Clock className="h-8 w-8 text-[#FFAF2B]" />,
+    icon: <Clock className="h-8 w-8 text-[#F99D1C]" />,
     desc: "Implementing streaming data visualizations for live operations monitoring, ensuring zero-latency business awareness.",
   },
   {
     title: "Executive Insights",
-    icon: <Presentation className="h-8 w-8 text-[#FFAF2B]" />,
+    icon: <Presentation className="h-8 w-8 text-[#F99D1C]" />,
     desc: "C-suite level reporting that distills complex data into clear, strategic narratives for informed decision making.",
   },
 ];
@@ -92,14 +92,14 @@ export default function DataVisualizationReporting() {
             className="max-w-4xl"
           >
             <div className="mb-6 flex items-center gap-3">
-              <span className="h-[1px] w-12 bg-[#FFAF2B]"></span>
-              <span className="text-[10px] font-bold tracking-[0.3em] text-[#FFAF2B] uppercase">
+              <span className="h-[1px] w-12 bg-[#F99D1C]"></span>
+              <span className="text-[10px] font-bold tracking-[0.3em] text-[#F99D1C] uppercase">
                 Business Intelligence
               </span>
             </div>
             <h1 className="display-font mb-8 text-3xl leading-[1.1] font-semibold tracking-tight text-white sm:text-4xl md:text-5xl md:leading-[1.05] lg:text-6xl">
               Visualize Your <br />
-              <span className="text-[#FFAF2B]">Business Pulse.</span>
+              <span className="text-[#F99D1C]">Business Pulse.</span>
             </h1>
             <p className="max-w-2xl text-lg leading-relaxed font-medium text-gray-300 md:text-xl">
               We turn complex, fragmented data into clear, interactive visual stories. Gain the
