@@ -12,70 +12,112 @@ const CATEGORIES = ["All", "Technology", "Cybersecurity", "Logistics", "Cloud", 
 
 const BLOGS = [
   {
-    id: 1,
-    title: "The Future of AI in Enterprise",
-    excerpt:
-      "How generative AI is reshaping the landscape of corporate decision making and operational efficiency across global markets.",
-    category: "AI",
-    date: "March 10, 2026",
-    author: "Dr. Sarah Chen",
-    image:
-      "https://images.unsplash.com/photo-1677442136019-21780ecad995?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=800",
+    id: "ai-shopping-assistants-transforming-commerce",
+    title: "AI Shopping Assistants Transform Commerce",
+    excerpt: "Discover how intelligent conversational AI is revolutionizing the customer shopping experience and driving unprecedented conversion rates.",
+    category: "E-Commerce",
+    date: "April 18, 2026",
+    author: "Amanda Rodriguez",
+    image: "https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=800",
   },
   {
-    id: 2,
+    id: "blockchain-supply-chain-revolution",
+    title: "Blockchain: The Supply Chain Revolution",
+    excerpt: "Exploring how distributed ledger technology is creating unprecedented transparency and efficiency in global logistics networks.",
+    category: "Blockchain",
+    date: "April 12, 2026",
+    author: "David Nakamoto",
+    image: "https://images.unsplash.com/photo-1639762681485-074b7f938ba0?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=800",
+  },
+  {
+    id: "edge-computing-iot-future",
+    title: "Edge Computing: Powering the IoT Future",
+    excerpt: "How processing data at the edge is enabling real-time insights and transforming industrial operations worldwide.",
+    category: "IoT",
+    date: "April 05, 2026",
+    author: "Priya Kapoor",
+    image: "https://images.unsplash.com/photo-1558346490-a72e53ae2d4f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=800",
+  },
+  {
+    id: "fintech-regulatory-compliance",
+    title: "Navigating Fintech Regulatory Compliance",
+    excerpt: "Essential strategies for financial technology companies to maintain compliance in an evolving regulatory landscape.",
+    category: "Fintech",
+    date: "March 28, 2026",
+    author: "Robert Chen",
+    image: "https://images.unsplash.com/photo-1563986768609-322da13575f3?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=800",
+  },
+  {
+    id: "healthcare-data-analytics-transformation",
+    title: "Healthcare Data Analytics Transformation",
+    excerpt: "Leveraging advanced analytics to improve patient outcomes, reduce costs, and accelerate medical research.",
+    category: "Healthcare",
+    date: "March 20, 2026",
+    author: "Dr. Emily Zhang",
+    image: "https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=800",
+  },
+  {
+    id: "devops-culture-best-practices",
+    title: "Building a True DevOps Culture",
+    excerpt: "Beyond tools and automation: creating collaborative engineering teams that deliver software faster and more reliably.",
+    category: "DevOps",
+    date: "March 15, 2026",
+    author: "Marcus Flynn",
+    image: "https://images.unsplash.com/photo-1618761714954-0b8cd0026356?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=800",
+  },
+  {
+    id: "future-of-ai-in-enterprise",
+    title: "The Future of AI in Enterprise",
+    excerpt: "How generative AI is reshaping the landscape of corporate decision making and operational efficiency.",
+    category: "Technology",
+    date: "March 10, 2026",
+    author: "Dr. Sarah Chen",
+    image: "https://images.unsplash.com/photo-1677442136019-21780ecad995?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=800",
+  },
+  {
+    id: "securing-hybrid-cloud",
     title: "Securing the Hybrid Cloud",
-    excerpt:
-      "Best practices for maintaining a robust security posture in a distributed cloud environment using zero-trust principles.",
+    excerpt: "Best practices for maintaining a robust security posture in a distributed cloud environment.",
     category: "Cybersecurity",
     date: "March 05, 2026",
     author: "James Wilson",
-    image:
-      "https://images.unsplash.com/photo-1550751827-4bd374c3f58b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=800",
+    image: "https://images.unsplash.com/photo-1550751827-4bd374c3f58b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=800",
   },
   {
-    id: 3,
+    id: "data-driven-logistics",
     title: "Data-Driven Logistics",
-    excerpt:
-      "Real-time analytics and their impact on global supply chain resilience and cost optimization in the modern era.",
+    excerpt: "Real-time analytics and their impact on global supply chain resilience and cost optimization.",
     category: "Logistics",
     date: "February 28, 2026",
     author: "Michael Port",
-    image:
-      "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=800",
+    image: "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=800",
   },
   {
-    id: 4,
-    title: "Cloud Native Transformation",
-    excerpt:
-      "Moving beyond virtualization to true cloud-native architectures for unparalleled scalability and developer velocity.",
-    category: "Cloud",
-    date: "February 15, 2026",
-    author: "Elena Rodriguez",
-    image:
-      "https://images.unsplash.com/photo-1451187580459-43490279c0fa?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=800",
+    id: "quantum-computing-enterprise-reality",
+    title: "Quantum Computing: From Lab to Enterprise",
+    excerpt: "Understanding how quantum algorithms are solving previously intractable business problems in optimization and cryptography.",
+    category: "Quantum Tech",
+    date: "February 20, 2026",
+    author: "Dr. Kenji Yamamoto",
+    image: "https://images.unsplash.com/photo-1635070041078-e363dbe005cb?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=800",
   },
   {
-    id: 5,
-    title: "The Ethics of Autonomous Systems",
-    excerpt:
-      "Navigating the complex moral landscape of self-driving and self-deciding systems in industrial applications.",
-    category: "Technology",
-    date: "February 10, 2026",
-    author: "Dr. Sarah Chen",
-    image:
-      "https://images.unsplash.com/photo-1485827404703-89b55fcc595e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=800",
+    id: "sustainable-green-software-engineering",
+    title: "Sustainable Tech: Green Software Engineering",
+    excerpt: "Practical approaches to reducing the carbon footprint of software systems while maintaining performance and scalability.",
+    category: "Sustainability",
+    date: "February 12, 2026",
+    author: "Sofia Lindström",
+    image: "https://images.unsplash.com/photo-1473341304170-971dccb5ac1e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=800",
   },
   {
-    id: 6,
-    title: "Quantum Computing: A Decadal Outlook",
-    excerpt:
-      "Preparing for the post-quantum world and understanding the implications for cryptography and materials science.",
-    category: "Technology",
-    date: "January 25, 2026",
-    author: "James Wilson",
-    image:
-      "https://images.unsplash.com/photo-1635070041078-e363dbe005cb?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=800",
+    id: "5g-connected-enterprise-transformation",
+    title: "5G and the Connected Enterprise",
+    excerpt: "How next-generation wireless networks are enabling new business models and transforming industrial operations.",
+    category: "Connectivity",
+    date: "February 05, 2026",
+    author: "Carlos Mendoza",
+    image: "https://images.unsplash.com/photo-1451187580459-43490279c0fa?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=800",
   },
 ];
 
@@ -172,46 +214,35 @@ export default function Blogs() {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ delay: i * 0.05 }}
-                  className="group flex h-full flex-col overflow-hidden rounded-[2.5rem] border border-transparent bg-white transition-all duration-700 hover:border-gray-100 hover:shadow-[0_48px_100px_-20px_rgba(0,0,0,0.1)]"
+                  className="group flex h-full flex-col overflow-hidden rounded-3xl border border-gray-100 bg-white transition-all hover:shadow-2xl"
                 >
-                  <div className="relative h-72 overflow-hidden">
+                  <div className="relative h-64 overflow-hidden">
                     <ImageWithFallback
                       src={blog.image}
                       alt={blog.title}
-                      className="h-full w-full object-cover transition-transform duration-1000 group-hover:scale-110"
+                      className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110"
                     />
-                    <div className="absolute top-8 left-8">
-                      <span className="rounded-full border border-white/20 bg-white/90 px-5 py-2 text-[10px] font-black tracking-widest text-[#001A3D] uppercase shadow-xl backdrop-blur-md">
-                        {blog.category}
-                      </span>
+                    <div className="absolute top-6 left-6 bg-[#FFAF2B] text-[#001A3D] font-bold text-xs px-4 py-1 rounded-full uppercase tracking-widest">
+                      {blog.category}
                     </div>
                   </div>
-                  <div className="flex flex-grow flex-col space-y-6 p-10">
-                    <div className="flex items-center gap-6 text-[10px] font-black tracking-[0.2em] text-gray-400 uppercase">
-                      <span className="flex items-center gap-2">
-                        <Calendar size={14} className="text-[#0171c1]" /> {blog.date}
-                      </span>
-                      <span className="h-1.5 w-1.5 rounded-full bg-gray-200"></span>
-                      <span className="flex items-center gap-2">
-                        <User size={14} className="text-[#0171c1]" /> {blog.author}
-                      </span>
+                  <div className="flex flex-grow flex-col space-y-4 p-10">
+                    <div className="flex items-center gap-4 text-xs text-gray-500 font-medium">
+                      <span className="flex items-center gap-1"><Calendar size={14} /> {blog.date}</span>
+                      <span className="flex items-center gap-1"><User size={14} /> {blog.author}</span>
                     </div>
-                    <h3 className="display-font text-2xl leading-tight font-bold text-[#001A3D] transition-colors group-hover:text-[#0171c1] md:text-3xl">
+                    <h3 className="display-font text-2xl font-bold text-[#001A3D] transition-colors group-hover:text-[#FFAF2B]">
                       {blog.title}
                     </h3>
-                    <p className="line-clamp-3 text-lg leading-relaxed font-medium text-gray-500">
+                    <p className="text-gray-500 leading-relaxed flex-grow">
                       {blog.excerpt}
                     </p>
-                    <div className="mt-auto border-t border-gray-50 pt-8">
+                    <div className="mt-auto pt-4">
                       <Link
                         href={`/resources/blogs/${blog.id}`}
-                        className="group/link inline-flex items-center gap-3 text-xs font-black tracking-[0.2em] text-[#001A3D] uppercase transition-all hover:text-[#FFAF2B]"
+                        className="inline-flex items-center gap-2 text-[#001A3D] font-bold group-hover:gap-4 transition-all"
                       >
-                        READ ARTICLE{" "}
-                        <ArrowRight
-                          size={18}
-                          className="text-[#0171c1] transition-transform group-hover/link:translate-x-3"
-                        />
+                        Read Article <ArrowRight size={18} className="text-[#FFAF2B]" />
                       </Link>
                     </div>
                   </div>

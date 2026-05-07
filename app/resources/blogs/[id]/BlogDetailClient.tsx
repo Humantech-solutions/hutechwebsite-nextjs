@@ -19,9 +19,23 @@ import { ImageWithFallback } from "@/components/figma/ImageWithFallback";
 import Link from "next/link";
 
 export default function BlogDetailClient({ blog }: { blog: any }) {
+  if (!blog) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-white p-6">
+        <div className="text-center space-y-6">
+          <h2 className="display-font text-4xl font-bold text-[#001A3D]">Article Not Found</h2>
+          <p className="text-gray-500">The article you&apos;re looking for might have been moved or the link is incorrect.</p>
+          <Link href="/resources/blogs" className="inline-block bg-[#001A3D] text-white px-8 py-4 rounded-sm font-bold text-xs tracking-wide">
+            Back to Blogs
+          </Link>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="flex min-h-screen flex-col bg-white">
-      <Meta title={`${blog.title} | Blog | Hutech Solutions`} description={blog.content[0].text} />
+      <Meta title={`${blog?.title || 'Not Found'} | Blog | Hutech Solutions`} description={blog?.content?.[0]?.text || 'Article not found.'} />
       <Breadcrumbs variant="light" />
 
       {/* Hero Section */}
