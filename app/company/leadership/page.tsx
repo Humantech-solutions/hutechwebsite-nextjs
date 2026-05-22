@@ -45,18 +45,6 @@ export default function Leadership() {
       img: "https://images.unsplash.com/photo-1580489944761-15a19d654956?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=600",
       bio: "Scaling Hutech's global workforce while maintaining a culture of engineering integrity.",
     },
-    {
-      name: "Vikram Malhotra",
-      role: "VP of Sales - Americas",
-      img: "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=600",
-      bio: "Strategizing enterprise growth and key account management for Fortune 500 clients.",
-    },
-    {
-      name: "Li Wei",
-      role: "Head of Cybersecurity",
-      img: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=600",
-      bio: "Architecting zero-trust security frameworks for Hutech's global fintech implementations.",
-    },
   ];
 
   const advisors = [
@@ -110,7 +98,7 @@ export default function Leadership() {
       {/* Main Leadership Grid */}
       <section className="bg-white py-32">
         <div className="mx-auto max-w-[1280px] px-6 lg:px-20">
-          <div className="grid grid-cols-1 gap-x-10 gap-y-20 md:grid-cols-2 lg:grid-cols-4">
+          <div className="grid grid-cols-1 gap-x-10 gap-y-16 md:grid-cols-2 lg:grid-cols-3">
             {leaders.map((leader, i) => (
               <Motion.div
                 key={i}
@@ -120,7 +108,7 @@ export default function Leadership() {
                 transition={{ delay: i * 0.05 }}
                 className="group"
               >
-                <div className="relative mb-8 aspect-[4/5] overflow-hidden rounded-[2.5rem] border border-gray-50 shadow-lg transition-all duration-500 group-hover:shadow-2xl">
+                <div className="relative mb-8 aspect-[4/5] overflow-hidden rounded-[2.5rem] border border-gray-100 shadow-md transition-all duration-500 group-hover:-translate-y-2 group-hover:shadow-2xl group-hover:border-[#0171c1]/20">
                   <ImageWithFallback
                     src={leader.img}
                     alt={leader.name}
@@ -138,13 +126,13 @@ export default function Leadership() {
                   </div>
                 </div>
                 <div className="space-y-3 px-2">
-                  <h4 className="display-font text-2xl font-bold tracking-tight text-[#001A3D]">
+                  <h4 className="display-font text-2xl font-bold tracking-tight text-[#001A3D] group-hover:text-[#0171c1] transition-colors duration-300">
                     {leader.name}
                   </h4>
                   <p className="text-[10px] font-black tracking-widest text-[#0171c1] uppercase">
                     {leader.role}
                   </p>
-                  <p className="line-clamp-2 text-sm leading-relaxed font-medium text-gray-400 transition-all duration-500 group-hover:line-clamp-none">
+                  <p className="text-sm leading-relaxed font-medium text-gray-400">
                     {leader.bio}
                   </p>
                 </div>

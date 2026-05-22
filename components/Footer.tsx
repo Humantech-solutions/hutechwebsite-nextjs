@@ -21,7 +21,7 @@ export default function Footer() {
       <div className="max-w-[1280px] mx-auto px-6 lg:px-12">
         
         {/* Top Navigation Grid (Image 1) */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10 md:gap-12 pb-12 md:pb-20 border-b border-white/5 text-center sm:text-left">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10 md:gap-12 pb-12 md:pb-20 border-b border-white/5 text-left">
           {/* Services */}
           <div className="space-y-4 md:space-y-6">
             <h4 className="text-lg font-bold tracking-tight text-white/90">Services</h4>
@@ -106,7 +106,7 @@ export default function Footer() {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 md:gap-12 py-12 md:py-20 border-b border-white/5">
           
           {/* Office Locations */}
-          <div className="lg:col-span-4 space-y-8 text-center sm:text-left">
+          <div className="lg:col-span-4 space-y-8 text-left">
             <h4 className="text-lg font-bold tracking-tight mb-6 md:mb-8 text-white/90">Office Locations</h4>
             
             <div className="space-y-4">
@@ -116,7 +116,7 @@ export default function Footer() {
                 <p>163, 1st Floor, 9th Main Rd,</p>
                 <p>Sector 6, HSR Layout, Bengaluru,</p>
                 <p>Karnataka 560102</p>
-                <div className="pt-3 flex flex-col items-center sm:items-start gap-1.5">
+                <div className="pt-3 flex flex-col items-start gap-1.5">
                   <p className="flex items-center gap-2">
                     <span className="font-bold text-white/60 text-xs">Tel :</span> 
                     <a href="tel:+918867487771" className="hover:text-white transition-colors tracking-tight font-medium">(+91) 8867487771</a>
@@ -136,7 +136,7 @@ export default function Footer() {
             </div>
 
             {/* Language Selector */}
-            <div className="pt-4 flex justify-center sm:justify-start">
+            <div className="pt-4 flex justify-start">
               <div className="inline-flex items-center gap-3 bg-white text-black px-4 py-2 rounded-sm text-[12px] font-bold cursor-pointer hover:bg-gray-100 transition-colors">
                 <img src="https://flagcdn.com/us.svg" alt="USA Flag" className="w-5 h-3.5 object-cover" />
                 <span>ENGLISH</span>
@@ -146,10 +146,10 @@ export default function Footer() {
           </div>
 
           {/* About Hutech */}
-          <div className="lg:col-span-8 space-y-8 text-center sm:text-left">
+          <div className="lg:col-span-8 space-y-8 text-left">
             <h4 className="text-lg font-bold tracking-tight mb-6 md:mb-8 text-white/90">About Hutech</h4>
             <div className="space-y-6">
-              <p className="text-[14px] text-gray-400 leading-relaxed max-w-4xl mx-auto sm:mx-0">
+              <p className="text-[14px] text-gray-400 leading-relaxed max-w-4xl">
                 Hutech Solutions enables Digital Transformation for enterprises and technology providers by delivering seamless customer experience, business efficiency and actionable insights through an integrated set of disruptive technologies: digital transformation, AI, Gen AI, ML, data analytics, Internet of Things, mobility, Cloud, security, unified communications, etc...
               </p>
               <Link href="/about" className="text-sm font-bold text-white hover:text-[#F99D1C] transition-all inline-flex items-center gap-2 group">
@@ -158,7 +158,7 @@ export default function Footer() {
               </Link>
               
               {/* Trust Badges Asset */}
-              <div className="pt-8 flex flex-wrap items-center justify-center sm:justify-start gap-6 md:gap-8">
+              <div className="pt-8 flex flex-wrap items-center justify-start gap-6 md:gap-8">
                 <Image 
                   src={nasscomMember} 
                   alt="Nasscom Certified Member" 
@@ -192,7 +192,7 @@ export default function Footer() {
               </div>
 
               {/* Social Media Icons */}
-              <div className="pt-8 flex items-center justify-center sm:justify-start gap-8">
+              <div className="pt-8 flex items-center justify-start gap-8">
                 <a href="#" className="text-gray-500 hover:text-white transition-colors" aria-label="Facebook"><Facebook size={22} strokeWidth={1.5} /></a>
                 <a href="#" className="text-gray-500 hover:text-white transition-colors" aria-label="Instagram"><Instagram size={22} strokeWidth={1.5} /></a>
                 <a href="#" className="text-gray-500 hover:text-white transition-colors" aria-label="Youtube"><Youtube size={24} strokeWidth={1.5} /></a>

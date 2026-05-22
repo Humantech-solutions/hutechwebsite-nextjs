@@ -199,8 +199,8 @@ export default function Contact() {
                 <div className="space-y-6">
                   <h3 className="display-font text-xl font-semibold tracking-tight md:text-2xl">Direct Contact</h3>
                   <div className="space-y-6">
-                    <a href="mailto:sales@hutechsolutions.com" className="group flex items-center gap-6">
-                      <div className="flex h-12 w-12 items-center justify-center rounded-full bg-white/5 transition-all duration-300 group-hover:bg-[#F99D1C] group-hover:text-[#001A3D]">
+                    <a href="mailto:sales@hutechsolutions.com" className="group flex items-center gap-5 md:gap-6">
+                      <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-white/5 transition-all duration-300 group-hover:bg-[#F99D1C] group-hover:text-[#001A3D]">
                         <Mail size={20} />
                       </div>
                       <div>
@@ -208,8 +208,8 @@ export default function Contact() {
                         <p className="text-lg font-bold">sales@hutechsolutions.com</p>
                       </div>
                     </a>
-                    <a href="tel:+919035180487" className="group flex items-center gap-6">
-                      <div className="flex h-12 w-12 items-center justify-center rounded-full bg-white/5 transition-all duration-300 group-hover:bg-[#F99D1C] group-hover:text-[#001A3D]">
+                    <a href="tel:+919035180487" className="group flex items-center gap-5 md:gap-6">
+                      <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-white/5 transition-all duration-300 group-hover:bg-[#F99D1C] group-hover:text-[#001A3D]">
                         <Phone size={20} />
                       </div>
                       <div>
