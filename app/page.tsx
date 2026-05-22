@@ -612,46 +612,87 @@ export default function Home() {
         </div>
       </section>
 
-      
 
-      {/* What's New Section */}
-      <section className="py-20 bg-[#FAF9F6] relative overflow-hidden" aria-label="Updates and News">
-        {/* Pattern Background */}
-        <div 
-          className="absolute inset-0 opacity-[0.015] pointer-events-none"
-          style={{ 
-            backgroundImage: `url(${linePattern})`,
-            backgroundSize: '200px',
-            backgroundRepeat: 'repeat'
-          }}
-        ></div>
-        
-        <div className="max-w-[1280px] mx-auto px-6 lg:px-20 relative z-10">
-          <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-12 md:mb-16 gap-8">
-             <div className="space-y-3">
-              <h2 className="text-3xl sm:text-4xl md:text-5xl font-semibold text-[#001A3D] display-font tracking-tight">What's New</h2>
-                <p className="text-gray-500 font-medium text-sm md:text-base">Stay connected with our latest updates, press releases, and upcoming events.</p>
-             </div>
-             <div className="hidden md:flex gap-3">
-                <button className="carousel-arrow"><ArrowRight className="w-5 h-5 rotate-180" /></button>
-                <button className="carousel-arrow"><ArrowRight className="w-5 h-5" /></button>
-             </div>
+      {/* Expertise Across Industries */}
+      <section className="py-20 bg-white relative overflow-hidden">
+        <div className="max-w-[1280px] mx-auto px-6 lg:px-20">
+          <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-8 mb-12 md:mb-20">
+            <div className="max-w-2xl space-y-6">
+              <h2 className="text-4xl md:text-5xl font-semibold text-[#001A3D] display-font tracking-tight leading-tight">Expertise Across Industries</h2>
+              <p className="text-gray-500 font-medium text-sm leading-relaxed">
+                Our expertise spans 15 industries including Banking, Insurance, Healthcare, Life Sciences, Media, Entertainment, Distribution and more.
+              </p>
+            </div>
+            <div className="flex gap-3 md:mb-2">
+              <button 
+                onClick={() => industryScrollRef.current?.scrollBy({ left: -320, behavior: 'smooth' })}
+                className="carousel-arrow"
+              >
+                <ArrowRight className="w-4 h-4 md:w-5 md:h-5 rotate-180" />
+              </button>
+              <button 
+                onClick={() => industryScrollRef.current?.scrollBy({ left: 320, behavior: 'smooth' })}
+                className="carousel-arrow"
+              >
+                <ArrowRight className="w-4 h-4 md:w-5 md:h-5" />
+              </button>
+            </div>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
-            {WHATS_NEW.map((news, idx) => (
-              <div key={idx} className="bg-white rounded-sm overflow-hidden shadow-sm hover:shadow-xl transition-all group flex flex-col h-full">
-                <div className="h-48 md:h-56 overflow-hidden relative">
-                  <ImageWithFallback src={news.image} alt={news.title} className="w-full h-full object-cover grayscale-[0.5] group-hover:grayscale-0 group-hover:scale-105 transition-all duration-700" />
-                  <div className="absolute inset-0 bg-[#001A3D]/20 mix-blend-color group-hover:opacity-0 transition-opacity duration-700"></div>
+          <div 
+            ref={industryScrollRef}
+            className="flex overflow-x-auto snap-x snap-mandatory gap-4 md:gap-6 pb-10 hide-scrollbar -mx-6 px-6 lg:-mx-20 lg:px-20"
+            style={{ scrollBehavior: 'smooth' }}
+          >
+              {[
+                { name: "Education", icon: <GraduationCap className="w-10 h-10" /> },
+                { name: "Energy & Utilities", icon: <Zap className="w-10 h-10" /> },
+                { name: "Healthcare & Life Sciences", icon: <HeartPulse className="w-10 h-10" /> },
+                { name: "Hi-Tech", icon: <Monitor className="w-10 h-10" /> },
+                { name: "Insurance", icon: <ShieldAlert className="w-10 h-10" /> },
+                { name: "Banking & Finance", icon: <Globe className="w-10 h-10" /> },
+                { name: "Logistics", icon: <Activity className="w-10 h-10" /> },
+                { name: "Public Sector", icon: <Users className="w-10 h-10" /> }
+              ].map((industry, idx) => (
+                <div key={idx} className="w-[85vw] min-w-[280px] sm:w-[300px] sm:min-w-[300px] md:w-[320px] md:min-w-[320px] lg:w-[calc(25%-18px)] lg:min-w-[calc(25%-18px)] shrink-0 snap-start flex flex-col">
+                  <div 
+                    className="bg-white p-6 sm:p-8 md:p-10 border border-gray-100 shadow-sm hover:shadow-2xl transition-all cursor-pointer group flex flex-col justify-between min-h-[300px] md:min-h-[340px] hover:border-[#F99D1C]/30 flex-grow"
+                  >
+                    <div className="text-[#F99D1C] transition-all group-hover:scale-110">
+                      {industry.icon}
+                    </div>
+                    <div className="space-y-4 md:space-y-6">
+                      <h4 className="text-[#001A3D] text-xl md:text-2xl font-bold leading-tight tracking-tight display-font break-words">
+                        {industry.name}
+                      </h4>
+                      <div className="pt-4 md:pt-6 border-t border-gray-100">
+                        <Motion.button
+                          whileHover="expanded"
+                          initial="initial"
+                          className="flex items-center justify-center h-10 md:h-12 rounded-full border border-[#F99D1C]/40 hover:border-[#F99D1C] bg-transparent text-[#F99D1C] overflow-hidden cursor-pointer"
+                          variants={{
+                            initial: { width: 40 },
+                            expanded: { width: "auto", paddingLeft: 16, paddingRight: 16 }
+                          }}
+                          transition={{ duration: 0.3, ease: "easeInOut" }}
+                        >
+                          <Motion.span
+                            variants={{
+                              initial: { width: 0, opacity: 0, marginRight: 0 },
+                              expanded: { width: "auto", opacity: 1, marginRight: 8 }
+                            }}
+                            transition={{ duration: 0.3, ease: "easeInOut" }}
+                            className="text-[11px] font-semibold tracking-wide whitespace-nowrap overflow-hidden"
+                          >
+                            Know More
+                          </Motion.span>
+                          <ChevronRight className="w-4 h-4 shrink-0" />
+                        </Motion.button>
+                      </div>
+                    </div>
+                  </div>
                 </div>
-                <div className="p-6 md:p-8 flex flex-col flex-grow space-y-4">
-                  <span className="text-blue-600 text-[10px] md:text-[11px] font-semibold tracking-wide">{news.date}</span>
-                  <h4 className="text-[#001A3D] text-base md:text-lg font-semibold leading-snug flex-grow group-hover:text-blue-600 transition-colors">{news.title}</h4>
-                  <div className="h-0.5 w-10 bg-blue-600 group-hover:w-full transition-all duration-500"></div>
-                </div>
-              </div>
-            ))}
+              ))}
           </div>
         </div>
       </section>
@@ -746,100 +787,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Expertise Across Industries */}
-      <section className="py-20 bg-white relative overflow-hidden">
-        <div className="max-w-[1280px] mx-auto px-6 lg:px-20">
-          <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-8 mb-12 md:mb-20">
-            <div className="max-w-2xl space-y-6">
-              <h2 className="text-4xl md:text-5xl font-semibold text-[#001A3D] display-font tracking-tight leading-tight">Expertise Across Industries</h2>
-              <p className="text-gray-500 font-medium text-sm leading-relaxed">
-                Our expertise spans 15 industries including Banking, Insurance, Healthcare, Life Sciences, Media, Entertainment, Distribution and more.
-              </p>
-            </div>
-            <div className="flex gap-3 md:mb-2">
-              <button 
-                onClick={() => industryScrollRef.current?.scrollBy({ left: -320, behavior: 'smooth' })}
-                className="carousel-arrow"
-              >
-                <ArrowRight className="w-4 h-4 md:w-5 md:h-5 rotate-180" />
-              </button>
-              <button 
-                onClick={() => industryScrollRef.current?.scrollBy({ left: 320, behavior: 'smooth' })}
-                className="carousel-arrow"
-              >
-                <ArrowRight className="w-4 h-4 md:w-5 md:h-5" />
-              </button>
-            </div>
-          </div>
-
-          <div 
-            ref={industryScrollRef}
-            className="flex overflow-x-auto snap-x snap-mandatory gap-4 md:gap-6 pb-10 hide-scrollbar -mx-6 px-6 lg:-mx-20 lg:px-20"
-            style={{ scrollBehavior: 'smooth' }}
-          >
-              {[
-                { name: "Education", icon: <GraduationCap className="w-10 h-10" /> },
-                { name: "Energy & Utilities", icon: <Zap className="w-10 h-10" /> },
-                { name: "Healthcare & Life Sciences", icon: <HeartPulse className="w-10 h-10" /> },
-                { name: "Hi-Tech", icon: <Monitor className="w-10 h-10" /> },
-                { name: "Insurance", icon: <ShieldAlert className="w-10 h-10" /> },
-                { name: "Banking & Finance", icon: <Globe className="w-10 h-10" /> },
-                { name: "Logistics", icon: <Activity className="w-10 h-10" /> },
-                { name: "Public Sector", icon: <Users className="w-10 h-10" /> }
-              ].map((industry, idx) => (
-                <div key={idx} className="w-[85vw] min-w-[280px] sm:w-[300px] sm:min-w-[300px] md:w-[320px] md:min-w-[320px] lg:w-[calc(25%-18px)] lg:min-w-[calc(25%-18px)] shrink-0 snap-start flex flex-col">
-                  <div 
-                    className="bg-white p-6 sm:p-8 md:p-10 border border-gray-100 shadow-sm hover:shadow-2xl transition-all cursor-pointer group flex flex-col justify-between min-h-[300px] md:min-h-[340px] hover:border-[#F99D1C]/30 flex-grow"
-                  >
-                    <div className="text-[#F99D1C] transition-all group-hover:scale-110">
-                      {industry.icon}
-                    </div>
-                    <div className="space-y-4 md:space-y-6">
-                      <h4 className="text-[#001A3D] text-xl md:text-2xl font-bold leading-tight tracking-tight display-font break-words">
-                        {industry.name}
-                      </h4>
-                      <div className="pt-4 md:pt-6 border-t border-gray-100">
-                        <Motion.button
-                          whileHover="expanded"
-                          initial="initial"
-                          className="flex items-center justify-center h-10 md:h-12 rounded-full border border-[#F99D1C]/40 hover:border-[#F99D1C] bg-transparent text-[#F99D1C] overflow-hidden cursor-pointer"
-                          variants={{
-                            initial: { width: 40 },
-                            expanded: { width: "auto", paddingLeft: 16, paddingRight: 16 }
-                          }}
-                          transition={{ duration: 0.3, ease: "easeInOut" }}
-                        >
-                          <Motion.span
-                            variants={{
-                              initial: { width: 0, opacity: 0, marginRight: 0 },
-                              expanded: { width: "auto", opacity: 1, marginRight: 8 }
-                            }}
-                            transition={{ duration: 0.3, ease: "easeInOut" }}
-                            className="text-[11px] font-semibold tracking-wide whitespace-nowrap overflow-hidden"
-                          >
-                            Know More
-                          </Motion.span>
-                          <ChevronRight className="w-4 h-4 shrink-0" />
-                        </Motion.button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              ))}
-          </div>
-        </div>
-      </section>
-
-      {/* The Stack Behind Every Build */}
-      
-
-      {/* Success Stories */}
-      <section className="py-20 bg-white">
-        <div className="max-w-[1280px] mx-auto px-6 lg:px-20">
-          <SuccessStoriesCarousel />
-        </div>
-      </section>
-
       {/* Our Valued Partners Section */}
       <section className="py-24 bg-white border-y border-gray-100 overflow-hidden">
         <div className="max-w-[1280px] mx-auto px-6 lg:px-20">
@@ -857,6 +804,13 @@ export default function Home() {
           </div>
 
           <ValuedPartnersCarousel />
+        </div>
+      </section>
+
+      {/* Success Stories */}
+      <section className="py-20 bg-white">
+        <div className="max-w-[1280px] mx-auto px-6 lg:px-20">
+          <SuccessStoriesCarousel />
         </div>
       </section>
 
@@ -1176,6 +1130,49 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      {/* What's New Section */}
+      <section className="py-20 bg-[#FAF9F6] relative overflow-hidden" aria-label="Updates and News">
+        {/* Pattern Background */}
+        <div 
+          className="absolute inset-0 opacity-[0.015] pointer-events-none"
+          style={{ 
+            backgroundImage: `url(${linePattern})`,
+            backgroundSize: '200px',
+            backgroundRepeat: 'repeat'
+          }}
+        ></div>
+        
+        <div className="max-w-[1280px] mx-auto px-6 lg:px-20 relative z-10">
+          <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-12 md:mb-16 gap-8">
+             <div className="space-y-3">
+              <h2 className="text-3xl sm:text-4xl md:text-5xl font-semibold text-[#001A3D] display-font tracking-tight">What's New</h2>
+                <p className="text-gray-500 font-medium text-sm md:text-base">Stay connected with our latest updates, press releases, and upcoming events.</p>
+             </div>
+             <div className="hidden md:flex gap-3">
+                <button className="carousel-arrow"><ArrowRight className="w-5 h-5 rotate-180" /></button>
+                <button className="carousel-arrow"><ArrowRight className="w-5 h-5" /></button>
+             </div>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+            {WHATS_NEW.map((news, idx) => (
+              <div key={idx} className="bg-white rounded-sm overflow-hidden shadow-sm hover:shadow-xl transition-all group flex flex-col h-full">
+                <div className="h-48 md:h-56 overflow-hidden relative">
+                  <ImageWithFallback src={news.image} alt={news.title} className="w-full h-full object-cover grayscale-[0.5] group-hover:grayscale-0 group-hover:scale-105 transition-all duration-700" />
+                  <div className="absolute inset-0 bg-[#001A3D]/20 mix-blend-color group-hover:opacity-0 transition-opacity duration-700"></div>
+                </div>
+                <div className="p-6 md:p-8 flex flex-col flex-grow space-y-4">
+                  <span className="text-blue-600 text-[10px] md:text-[11px] font-semibold tracking-wide">{news.date}</span>
+                  <h4 className="text-[#001A3D] text-base md:text-lg font-semibold leading-snug flex-grow group-hover:text-blue-600 transition-colors">{news.title}</h4>
+                  <div className="h-0.5 w-10 bg-blue-600 group-hover:w-full transition-all duration-500"></div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
 
       {/* Why Hutech Section */}
       <section className="relative py-24 md:py-32 overflow-hidden">
