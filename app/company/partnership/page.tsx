@@ -91,6 +91,7 @@ const LOGO_PARTNERS = [
   { name: "SAP", logo: "https://upload.wikimedia.org/wikipedia/commons/5/59/SAP_2011_logo.svg" },
 ];
 
+
 export default function Partnership() {
   return (
     <div className="flex flex-col overflow-hidden bg-white">
@@ -192,6 +193,7 @@ export default function Partnership() {
         </div>
       </section>
 
+
       {/* Categories Grid */}
       <section className="bg-gray-50 py-24">
         <div className="mx-auto max-w-[1280px] px-6 lg:px-20">
@@ -236,6 +238,72 @@ export default function Partnership() {
                 </Motion.div>
               );
             })}
+          </div>
+        </div>
+      </section>
+
+      {/* Meet Our Partners Section */}
+      <section className="bg-white py-24 border-t border-gray-100">
+        <div className="mx-auto max-w-[1280px] px-6 lg:px-20">
+          <div className="mb-12 text-center space-y-4">
+            <Motion.h2
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              className="display-font text-3xl font-bold tracking-tight text-[#001A3D] sm:text-5xl"
+            >
+              Meet Our Partners
+            </Motion.h2>
+            <Motion.p
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.1 }}
+              className="mx-auto max-w-3xl font-medium text-gray-600 leading-relaxed text-sm md:text-base"
+            >
+              Our partners are industry leaders who share our commitment to innovation and excellence.
+              Together, we combine strengths and leverage cutting-edge solutions to achieve outstanding
+              results. Join us and experience the transformative power of a Hutech Solutions partnership.
+            </Motion.p>
+            <Motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.2 }}
+              className="pt-2"
+            >
+              <Link
+                href="/services"
+                className="inline-flex items-center gap-2 font-bold text-[#0171c1] hover:text-[#001A3D] transition-colors group text-sm"
+              >
+                Find What You Need <ArrowRight size={14} className="transition-transform group-hover:translate-x-1" />
+              </Link>
+            </Motion.div>
+          </div>
+
+          <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
+            {[
+              { src: "/images/partner-card-oots.png", alt: "Hutech and Oots Strategic Partnership" },
+              { src: "/images/partner-card-maconsus.png", alt: "Hutech and Maconsus Strategic Partnership" },
+              { src: "/images/partner-card-nasscom.png", alt: "Nasscom Membership Certificate" },
+            ].map((card, i) => (
+              <Motion.div
+                key={i}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.1, duration: 0.6 }}
+                className="group relative overflow-hidden rounded-[2rem] border border-gray-100 bg-white p-4 shadow-sm transition-all duration-300 hover:-translate-y-1.5 hover:shadow-2xl hover:border-gray-200 flex items-center justify-center"
+              >
+                <div className="aspect-[4/3] w-full overflow-hidden rounded-2xl bg-gray-50 flex items-center justify-center">
+                  <img
+                    src={card.src}
+                    alt={card.alt}
+                    className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                  />
+                </div>
+              </Motion.div>
+            ))}
           </div>
         </div>
       </section>

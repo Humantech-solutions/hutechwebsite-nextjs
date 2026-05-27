@@ -6,6 +6,7 @@ import {
   ArrowRight,
   MoveRight,
   ChevronRight,
+  ChevronLeft,
   Plus,
   Minus,
   Cpu,
@@ -27,7 +28,8 @@ import {
   Star
 } from "lucide-react";
 import Slider from "react-slick";
-import { MediaShowcase } from "@/components/MediaShowcase";
+import useEmblaCarousel from "embla-carousel-react";
+import AutoScroll from "embla-carousel-auto-scroll";
 import { ImageWithFallback } from "@/components/figma/ImageWithFallback";
 import Link from "next/link";
 import { Meta } from "@/components/Meta";
@@ -56,34 +58,6 @@ const BRAND_BLUE_ACCENT = "#0171c1";
 const BRAND_BLUE = "#001A3D";
 const MAROON = "#4A0416";
 
-const LATEST_THINKING = [
-  {
-    title: "Building an AI-Driven Bank of Tomorrow",
-    category: "Banking & Finance",
-    image: "https://images.unsplash.com/photo-1768270181430-3e3672a32283?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080"
-  },
-  {
-    title: "Adapting to the World of Adaptive Manufacturing",
-    category: "Manufacturing & Retail",
-    image: "https://images.unsplash.com/photo-1715059120691-d6b06c275d74?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080"
-  },
-  {
-    title: "De-mystifying 5G Telecom",
-    category: "Telecom",
-    image: "https://images.unsplash.com/photo-1761039232971-bb55a290762c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080"
-  },
-  {
-    title: "Enabling Vendor Excellence with Next-Gen SCCs",
-    category: "Auto",
-    image: "https://images.unsplash.com/photo-1762279388952-85187155e48d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080"
-  },
-  {
-    title: "Driving AI and Sustainability in Product Development",
-    category: "Hi-Tech | Semiconductors",
-    image: "https://images.unsplash.com/photo-1686130841435-2dc0312afa1e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080"
-  },
- 
-];
 
 const WHATS_NEW = [
   {
@@ -274,124 +248,61 @@ function WhyNabhiraAccordion() {
 }
 
 function ValuedPartnersCarousel() {
-  const sliderRef = useRef<any>(null);
   const allPartners = [...VALUED_PARTNERS, ...SPECIAL_PARTNERS];
-
-  const settings = {
-    dots: false,
-    infinite: true,
-    speed: 500,
-    slidesToShow: 5,
-    slidesToScroll: 1,
-    autoplay: true,
-    autoplaySpeed: 3000,
-    pauseOnHover: true,
-    arrows: false,
-    swipeToSlide: true,
-    responsive: [
-      {
-        breakpoint: 1024,
-        settings: {
-          slidesToShow: 4,
-          slidesToScroll: 1,
-        }
-      },
-      {
-        breakpoint: 768,
-        settings: {
-          slidesToShow: 3,
-          slidesToScroll: 1,
-        }
-      },
-      {
-        breakpoint: 640,
-        settings: {
-          slidesToShow: 1,
-          slidesToScroll: 1,
-        }
-      }
-    ]
-  };
+  const [emblaRef] = useEmblaCarousel(
+    { loop: true, dragFree: true },
+    [AutoScroll({ playOnInit: true, speed: 1.5, stopOnInteraction: false, stopOnMouseEnter: true, stopOnFocusIn: true })]
+  );
 
   return (
-    <div className="relative">
-      <Slider ref={sliderRef} {...settings}>
-        {allPartners.map((partner, idx) => (
-          <div key={idx}>
-            <div className="px-3">
-              <div className="bg-white border border-gray-100 h-48 sm:h-40 flex items-center justify-center p-12 sm:p-8">
+    <div className="relative pb-16">
+      {/* Carousel Container */}
+      <div className="overflow-hidden" ref={emblaRef}>
+        <div className="flex cursor-grab active:cursor-grabbing touch-pan-y -ml-4 md:-ml-6 py-4">
+          {allPartners.map((partner, idx) => (
+            <div 
+              key={idx} 
+              className="flex-[0_0_50%] min-w-[160px] sm:min-w-0 sm:flex-[0_0_33.333%] md:flex-[0_0_25%] lg:flex-[0_0_20%] pl-4 md:pl-6"
+            >
+              <div className="bg-white border border-gray-100 h-28 sm:h-32 md:h-40 flex items-center justify-center p-6 md:p-8 hover:shadow-lg transition-all duration-300 group rounded-sm select-none">
                 <ImageWithFallback
                   src={partner.logo}
                   alt={partner.name}
-                  className="w-full h-full object-contain"
+                  className="w-full h-full object-contain grayscale group-hover:grayscale-0 transition-all duration-500 opacity-60 group-hover:opacity-100 group-hover:scale-105 pointer-events-none"
+                  draggable={false}
                 />
               </div>
             </div>
-          </div>
-        ))}
-      </Slider>
+          ))}
+        </div>
+      </div>
     </div>
   );
 }
 
 function SuccessStoriesCarousel() {
-  const sliderRef = useRef<any>(null);
-
-  const settings = {
-    dots: false,
-    infinite: true,
-    speed: 500,
-    slidesToShow: 4,
-    slidesToScroll: 1,
-    autoplay: true,
-    autoplaySpeed: 4000,
-    pauseOnHover: true,
-    arrows: false,
-    responsive: [
-      {
-        breakpoint: 1024,
-        settings: {
-          slidesToShow: 3,
-          slidesToScroll: 1,
-        }
-      },
-      {
-        breakpoint: 768,
-        settings: {
-          slidesToShow: 2,
-          slidesToScroll: 1,
-        }
-      },
-      {
-        breakpoint: 640,
-        settings: {
-          slidesToShow: 1,
-          slidesToScroll: 1,
-        }
-      }
-    ]
-  };
+  const scrollRef = useRef<HTMLDivElement>(null);
 
   return (
     <div>
       {/* Header with Navigation */}
-      <div className="flex justify-between items-end mb-16">
-        <div className="space-y-4">
-          <h2 className="text-4xl md:text-5xl font-semibold text-[#001A3D] display-font tracking-tight">Success Stories</h2>
-          <p className="text-gray-500 font-medium text-sm max-w-xl">
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-8 mb-12 md:mb-16">
+        <div className="space-y-4 max-w-xl">
+          <h2 className="text-4xl md:text-5xl font-semibold text-[#001A3D] display-font tracking-tight leading-tight">Success Stories</h2>
+          <p className="text-gray-500 font-medium text-sm">
             We focus on partner with global enterprises solve challenges, accelerate transformation, and drive business outcomes.
           </p>
         </div>
         <div className="flex gap-3 mb-2">
           <button
-            onClick={() => sliderRef.current?.slickPrev()}
-            className="w-12 h-12 bg-white border-2 border-gray-200 rounded-full flex items-center justify-center hover:bg-[#F99D1C] hover:border-[#F99D1C] hover:text-white transition-all"
+            onClick={() => scrollRef.current?.scrollBy({ left: -320, behavior: 'smooth' })}
+            className="carousel-arrow"
           >
             <ChevronRight size={20} className="rotate-180" />
           </button>
           <button
-            onClick={() => sliderRef.current?.slickNext()}
-            className="w-12 h-12 bg-white border-2 border-gray-200 rounded-full flex items-center justify-center hover:bg-[#F99D1C] hover:border-[#F99D1C] hover:text-white transition-all"
+            onClick={() => scrollRef.current?.scrollBy({ left: 320, behavior: 'smooth' })}
+            className="carousel-arrow"
           >
             <ChevronRight size={20} />
           </button>
@@ -399,11 +310,15 @@ function SuccessStoriesCarousel() {
       </div>
 
       {/* Carousel */}
-      <div className="relative">
-        <Slider ref={sliderRef} {...settings}>
+      <div className="relative -mx-6 px-6 lg:-mx-0 lg:px-0">
+        <div 
+          ref={scrollRef}
+          className="flex overflow-x-auto snap-x snap-mandatory gap-4 md:gap-6 pb-8 hide-scrollbar"
+          style={{ scrollBehavior: 'smooth' }}
+        >
           {SUCCESS_STORIES.map((story, idx) => (
-            <div key={idx} className="px-3">
-              <div className="relative group h-[500px] overflow-hidden cursor-pointer">
+            <div key={idx} className="w-[85vw] min-w-[280px] sm:w-[300px] sm:min-w-[300px] md:w-[320px] md:min-w-[320px] lg:w-[calc(25%-18px)] lg:min-w-[calc(25%-18px)] shrink-0 snap-start">
+              <div className="relative group h-[500px] overflow-hidden cursor-pointer rounded-sm shadow-sm hover:shadow-xl transition-all">
                 <ImageWithFallback
                   src={story.image}
                   alt={story.name}
@@ -411,17 +326,17 @@ function SuccessStoriesCarousel() {
                 />
                 <div className="absolute inset-0 bg-[#001A3D]/40 mix-blend-color group-hover:opacity-0 transition-opacity duration-700"></div>
                 <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent"></div>
-                <div className="absolute bottom-0 left-0 p-8 space-y-4 transform group-hover:-translate-y-2 transition-transform duration-500 z-10">
-                  <p className="text-white text-sm font-medium leading-relaxed italic line-clamp-4">"{story.text}"</p>
+                <div className="absolute bottom-0 left-0 p-6 sm:p-8 space-y-4 transform group-hover:-translate-y-2 transition-transform duration-500 z-10 w-full">
+                  <p className="text-white text-sm sm:text-base font-medium leading-relaxed italic line-clamp-4">"{story.text}"</p>
                   <div className="pt-4 border-t border-white/20">
-                    <p className="text-white font-semibold text-sm">{story.name}</p>
-                    <p className="text-[#F99D1C] text-[10px] font-semibold tracking-widest">{story.title}</p>
+                    <p className="text-white font-semibold text-sm sm:text-base break-words">{story.name}</p>
+                    <p className="text-[#F99D1C] text-[10px] sm:text-xs font-semibold tracking-widest break-words mt-1">{story.title}</p>
                   </div>
                 </div>
               </div>
             </div>
           ))}
-        </Slider>
+        </div>
       </div>
     </div>
   );
@@ -429,7 +344,8 @@ function SuccessStoriesCarousel() {
 
 export default function Home() {
   const [activeCapIdx, setActiveCapIdx] = useState(0);
-  const industrySliderRef = useRef<Slider | null>(null);
+  const industryScrollRef = useRef<HTMLDivElement>(null);
+  const heroSliderRef = useRef<Slider>(null);
   const heroSettings = {
     dots: true,
     infinite: true,
@@ -502,7 +418,7 @@ export default function Home() {
       />
       {/* Hero Carousel Section */}
       <section className="relative w-full overflow-hidden" aria-label="Hero Section">
-        <Slider {...heroSettings}>
+        <Slider ref={heroSliderRef} {...heroSettings}>
           {HERO_SLIDES.map((slide, idx) => (
             <div key={idx} className="relative h-[600px] md:h-[620px]">
               <ImageWithFallback
@@ -562,36 +478,71 @@ export default function Home() {
             </div>
           ))}
         </Slider>
+
+        {/* Navigation Arrows */}
+        <div className="absolute right-6 md:right-12 lg:right-20 bottom-8 z-20 flex items-center bg-black/35 backdrop-blur-md border border-white/10 rounded-[4px] shadow-lg overflow-hidden">
+          <button 
+            onClick={() => heroSliderRef.current?.slickPrev()} 
+            className="group flex items-center justify-center w-14 h-14 text-white hover:bg-white/10 transition-all duration-300"
+            aria-label="Previous Slide"
+          >
+            <ChevronLeft className="w-6 h-6 transition-transform duration-300 group-hover:-translate-x-0.5" />
+          </button>
+          <div className="h-8 w-[1px] bg-white/20"></div>
+          <button 
+            onClick={() => heroSliderRef.current?.slickNext()} 
+            className="group flex items-center justify-center w-14 h-14 text-white hover:bg-white/10 transition-all duration-300"
+            aria-label="Next Slide"
+          >
+            <ChevronRight className="w-6 h-6 transition-transform duration-300 group-hover:translate-x-0.5" />
+          </button>
+        </div>
+
         <style>{`
           .custom-dots {
-            bottom: 40px !important;
-            right: 40px !important;
-            text-align: right !important;
+            bottom: 32px !important;
+            left: 50% !important;
+            transform: translateX(-50%) !important;
+            text-align: center !important;
             width: auto !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            margin: 0 !important;
+            padding: 0 !important;
+            list-style: none !important;
+            z-index: 20;
           }
           .custom-dots li {
-            margin: 0 4px !important;
+            margin: 0 6px !important;
             width: 10px !important;
             height: 10px !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
           }
           .custom-dots li button {
             padding: 0 !important;
             width: 10px !important;
             height: 10px !important;
+            display: block !important;
           }
           .custom-dots li button:before {
             display: none !important;
           }
           .custom-dots li div {
-            background-color: white !important;
-            opacity: 0.3 !important;
-            border: 1px solid rgba(255,255,255,0.1) !important;
+            background-color: rgba(255, 255, 255, 0.4) !important;
+            border: none !important;
+            width: 10px !important;
+            height: 10px !important;
+            border-radius: 50% !important;
+            transition: all 0.3s ease !important;
           }
           .custom-dots li.slick-active div {
             background-color: #F99D1C !important;
             opacity: 1 !important;
-            transform: scale(1.1);
-            box-shadow: 0 0 10px rgba(249, 157, 28, 0.3);
+            transform: scale(1.25) !important;
+            box-shadow: 0 0 10px rgba(249, 157, 28, 0.5) !important;
           }
         `}</style>
       </section>
@@ -630,7 +581,7 @@ export default function Home() {
       </section>
 
       {/* "The Big Thinkers" Section */}
-      <section className="py-20 bg-linear-to-br from-[#001A3D] via-[#002964] to-[#001A3D] text-white relative overflow-hidden" aria-label="Quotes">
+      <section className="py-20 bg-[#001A3D] text-white relative overflow-hidden" aria-label="Quotes">
         <div className="max-w-[1280px] mx-auto px-6 lg:px-20 flex flex-col md:flex-row items-center md:items-end gap-12 relative z-10">
           <div className="flex-1 space-y-8 md:space-y-10 relative z-10 pb-4 md:pb-8 w-full">
             <div className="flex items-center gap-3">
@@ -661,89 +612,90 @@ export default function Home() {
         </div>
       </section>
 
-      
 
-      {/* Latest Thinking Section */}
-      <section className="py-20 bg-white" aria-labelledby="latest-thinking-title">
+      {/* Expertise Across Industries */}
+      <section className="py-20 bg-white relative overflow-hidden">
         <div className="max-w-[1280px] mx-auto px-6 lg:px-20">
-          <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-12 md:mb-16 gap-6 md:gap-8">
-            <h2 id="latest-thinking-title" className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-semibold text-[#001A3D] display-font tracking-tight">
-              Latest Thinking
-            </h2>
-            <p className="text-gray-500 max-w-md font-medium text-sm md:text-base leading-relaxed">
-              Read what we're thinking, research into various domains which we help organizations challenge traditional domains.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            <div className="sm:col-span-2 lg:col-span-1 lg:row-span-2 relative group overflow-hidden rounded-sm cursor-pointer">
-              <ImageWithFallback src={LATEST_THINKING[0].image} alt={LATEST_THINKING[0].title} className="w-full h-full object-cover transition-all duration-700 grayscale-[0.6] group-hover:grayscale-0 group-hover:scale-105 min-h-[400px]" />
-              <div className="absolute inset-0 bg-[#001A3D]/30 mix-blend-color group-hover:opacity-0 transition-opacity duration-700"></div>
-              <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent"></div>
-              <div className="absolute bottom-0 left-0 p-6 md:p-8 space-y-2 md:space-y-3 z-10">
-                <span className="text-[#0171c1] text-[10px] md:text-[11px] font-semibold tracking-wide">{LATEST_THINKING[0].category}</span>
-                <h4 className="text-white text-lg md:text-xl font-semibold leading-tight group-hover:underline">{LATEST_THINKING[0].title}</h4>
-              </div>
+          <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-8 mb-12 md:mb-20">
+            <div className="max-w-2xl space-y-6">
+              <h2 className="text-4xl md:text-5xl font-semibold text-[#001A3D] display-font tracking-tight leading-tight">Expertise Across Industries</h2>
+              <p className="text-gray-500 font-medium text-sm leading-relaxed">
+                Our expertise spans 15 industries including Banking, Insurance, Healthcare, Life Sciences, Media, Entertainment, Distribution and more.
+              </p>
             </div>
-            {LATEST_THINKING.slice(1).map((item, idx) => (
-              <div key={idx} className="relative group overflow-hidden rounded-sm cursor-pointer h-[280px] md:h-[300px]">
-                <ImageWithFallback src={item.image} alt={item.title} className="w-full h-full object-cover transition-all duration-700 grayscale-[0.6] group-hover:grayscale-0 group-hover:scale-105" />
-                <div className="absolute inset-0 bg-[#001A3D]/30 mix-blend-color group-hover:opacity-0 transition-opacity duration-700"></div>
-                <div className="absolute inset-0 bg-gradient-to-t from-black via-black/10 to-transparent"></div>
-                <div className="absolute bottom-0 left-0 p-5 md:p-6 space-y-1 md:space-y-2 z-10">
-                  <span className="text-[#0171c1] text-[10px] md:text-[11px] font-semibold tracking-wide">{item.category}</span>
-                  <h4 className="text-white text-base md:text-lg font-semibold leading-tight group-hover:underline">{item.title}</h4>
+            <div className="flex gap-3 md:mb-2">
+              <button 
+                onClick={() => industryScrollRef.current?.scrollBy({ left: -320, behavior: 'smooth' })}
+                className="carousel-arrow"
+              >
+                <ArrowRight className="w-4 h-4 md:w-5 md:h-5 rotate-180" />
+              </button>
+              <button 
+                onClick={() => industryScrollRef.current?.scrollBy({ left: 320, behavior: 'smooth' })}
+                className="carousel-arrow"
+              >
+                <ArrowRight className="w-4 h-4 md:w-5 md:h-5" />
+              </button>
+            </div>
+          </div>
+
+          <div 
+            ref={industryScrollRef}
+            className="flex overflow-x-auto snap-x snap-mandatory gap-4 md:gap-6 pb-10 hide-scrollbar -mx-6 px-6 lg:-mx-20 lg:px-20"
+            style={{ scrollBehavior: 'smooth' }}
+          >
+              {[
+                { name: "Education", icon: <GraduationCap className="w-10 h-10" /> },
+                { name: "Energy & Utilities", icon: <Zap className="w-10 h-10" /> },
+                { name: "Healthcare & Life Sciences", icon: <HeartPulse className="w-10 h-10" /> },
+                { name: "Hi-Tech", icon: <Monitor className="w-10 h-10" /> },
+                { name: "Insurance", icon: <ShieldAlert className="w-10 h-10" /> },
+                { name: "Banking & Finance", icon: <Globe className="w-10 h-10" /> },
+                { name: "Logistics", icon: <Activity className="w-10 h-10" /> },
+                { name: "Public Sector", icon: <Users className="w-10 h-10" /> }
+              ].map((industry, idx) => (
+                <div key={idx} className="w-[85vw] min-w-[280px] sm:w-[300px] sm:min-w-[300px] md:w-[320px] md:min-w-[320px] lg:w-[calc(25%-18px)] lg:min-w-[calc(25%-18px)] shrink-0 snap-start flex flex-col">
+                  <div 
+                    className="bg-white p-6 sm:p-8 md:p-10 border border-gray-100 shadow-sm hover:shadow-2xl transition-all cursor-pointer group flex flex-col justify-between min-h-[300px] md:min-h-[340px] hover:border-[#F99D1C]/30 flex-grow"
+                  >
+                    <div className="text-[#F99D1C] transition-all group-hover:scale-110">
+                      {industry.icon}
+                    </div>
+                    <div className="space-y-4 md:space-y-6">
+                      <h4 className="text-[#001A3D] text-xl md:text-2xl font-bold leading-tight tracking-tight display-font break-words">
+                        {industry.name}
+                      </h4>
+                      <div className="pt-4 md:pt-6 border-t border-gray-100">
+                        <Motion.button
+                          whileHover="expanded"
+                          initial="initial"
+                          className="flex items-center justify-center h-10 md:h-12 rounded-full border border-[#F99D1C]/40 hover:border-[#F99D1C] bg-transparent text-[#F99D1C] overflow-hidden cursor-pointer"
+                          variants={{
+                            initial: { width: 40 },
+                            expanded: { width: "auto", paddingLeft: 16, paddingRight: 16 }
+                          }}
+                          transition={{ duration: 0.3, ease: "easeInOut" }}
+                        >
+                          <Motion.span
+                            variants={{
+                              initial: { width: 0, opacity: 0, marginRight: 0 },
+                              expanded: { width: "auto", opacity: 1, marginRight: 8 }
+                            }}
+                            transition={{ duration: 0.3, ease: "easeInOut" }}
+                            className="text-[11px] font-semibold tracking-wide whitespace-nowrap overflow-hidden"
+                          >
+                            Know More
+                          </Motion.span>
+                          <ChevronRight className="w-4 h-4 shrink-0" />
+                        </Motion.button>
+                      </div>
+                    </div>
+                  </div>
                 </div>
-              </div>
-            ))}
+              ))}
           </div>
         </div>
       </section>
-
-      {/* What's New Section */}
-      <section className="py-20 bg-[#FAF9F6] relative overflow-hidden" aria-label="Updates and News">
-        {/* Pattern Background */}
-        <div 
-          className="absolute inset-0 opacity-[0.015] pointer-events-none"
-          style={{ 
-            backgroundImage: `url(${linePattern})`,
-            backgroundSize: '200px',
-            backgroundRepeat: 'repeat'
-          }}
-        ></div>
-        
-        <div className="max-w-[1280px] mx-auto px-6 lg:px-20 relative z-10">
-          <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-12 md:mb-16 gap-8">
-             <div className="space-y-3">
-              <h2 className="text-3xl sm:text-4xl md:text-5xl font-semibold text-[#001A3D] display-font tracking-tight">What's New</h2>
-                <p className="text-gray-500 font-medium text-sm md:text-base">Stay connected with our latest updates, press releases, and upcoming events.</p>
-             </div>
-             <div className="hidden md:flex gap-3">
-                <button className="p-3 border border-gray-300 rounded-full hover:bg-white transition-all"><ArrowRight className="w-5 h-5 rotate-180" /></button>
-                <button className="p-3 border border-gray-300 rounded-full hover:bg-white transition-all"><ArrowRight className="w-5 h-5" /></button>
-             </div>
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
-            {WHATS_NEW.map((news, idx) => (
-              <div key={idx} className="bg-white rounded-sm overflow-hidden shadow-sm hover:shadow-xl transition-all group flex flex-col h-full">
-                <div className="h-48 md:h-56 overflow-hidden relative">
-                  <ImageWithFallback src={news.image} alt={news.title} className="w-full h-full object-cover grayscale-[0.5] group-hover:grayscale-0 group-hover:scale-105 transition-all duration-700" />
-                  <div className="absolute inset-0 bg-[#001A3D]/20 mix-blend-color group-hover:opacity-0 transition-opacity duration-700"></div>
-                </div>
-                <div className="p-6 md:p-8 flex flex-col flex-grow space-y-4">
-                  <span className="text-blue-600 text-[10px] md:text-[11px] font-semibold tracking-wide">{news.date}</span>
-                  <h4 className="text-[#001A3D] text-base md:text-lg font-semibold leading-snug flex-grow group-hover:text-blue-600 transition-colors">{news.title}</h4>
-                  <div className="h-0.5 w-10 bg-blue-600 group-hover:w-full transition-all duration-500"></div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Media Showcase Section */}
-      <MediaShowcase />
 
       {/* Capabilities Section */}
       <section 
@@ -835,133 +787,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Expertise Across Industries */}
-      <section className="py-20 bg-white relative overflow-hidden">
-        <div className="max-w-[1280px] mx-auto px-6 lg:px-20">
-          <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-8 mb-12 md:mb-20">
-            <div className="max-w-2xl space-y-6">
-              <h2 className="text-4xl md:text-5xl font-semibold text-[#001A3D] display-font tracking-tight leading-tight">Expertise Across Industries</h2>
-              <p className="text-gray-500 font-medium text-sm leading-relaxed">
-                Our expertise spans 15 industries including Banking, Insurance, Healthcare, Life Sciences, Media, Entertainment, Distribution and more.
-              </p>
-            </div>
-            <div className="flex gap-3 md:mb-2">
-              <button 
-                onClick={() => industrySliderRef.current?.slickPrev()}
-                className="p-3 md:p-4 border border-gray-200 rounded-full hover:bg-[#001A3D] hover:text-white transition-all cursor-pointer text-[#001A3D]"
-              >
-                <ArrowRight className="w-4 h-4 md:w-5 md:h-5 rotate-180" />
-              </button>
-              <button 
-                onClick={() => industrySliderRef.current?.slickNext()}
-                className="p-3 md:p-4 border border-gray-200 rounded-full hover:bg-[#001A3D] hover:text-white transition-all cursor-pointer text-[#001A3D]"
-              >
-                <ArrowRight className="w-4 h-4 md:w-5 md:h-5" />
-              </button>
-            </div>
-          </div>
-
-          <div className="industry-slider-container -mx-3">
-            <Slider
-              ref={industrySliderRef}
-              dots={false}
-              infinite={true}
-              speed={600}
-              slidesToShow={4}
-              slidesToScroll={1}
-              arrows={false}
-              responsive={[
-                {
-                  breakpoint: 1280,
-                  settings: {
-                    slidesToShow: 3,
-                  }
-                },
-                {
-                  breakpoint: 1024,
-                  settings: {
-                    slidesToShow: 2,
-                  }
-                },
-                {
-                  breakpoint: 640,
-                  settings: {
-                    slidesToShow: 1,
-                    centerMode: true,
-                    centerPadding: '20px',
-                  }
-                }
-              ]}
-            >
-              {[
-                { name: "Education", icon: <GraduationCap className="w-10 h-10" /> },
-                { name: "Energy & Utilities", icon: <Zap className="w-10 h-10" /> },
-                { name: "Healthcare & Life Sciences", icon: <HeartPulse className="w-10 h-10" /> },
-                { name: "Hi-Tech", icon: <Monitor className="w-10 h-10" /> },
-                { name: "Insurance", icon: <ShieldAlert className="w-10 h-10" /> },
-                { name: "Banking & Finance", icon: <Globe className="w-10 h-10" /> },
-                { name: "Logistics", icon: <Activity className="w-10 h-10" /> },
-                { name: "Public Sector", icon: <Users className="w-10 h-10" /> }
-              ].map((industry, idx) => (
-                <div key={idx} className="px-3 pb-6 md:pb-10">
-                  <div 
-                    className="bg-white p-8 md:p-10 border border-gray-100 shadow-sm hover:shadow-2xl transition-all cursor-pointer group flex flex-col justify-between min-h-[300px] md:min-h-[340px] hover:border-[#F99D1C]/30"
-                  >
-                    <div className="text-[#F99D1C] transition-all group-hover:scale-110">
-                      {industry.icon}
-                    </div>
-                    <div className="space-y-4 md:space-y-6">
-                      <h4 className="text-[#001A3D] text-xl md:text-2xl font-bold leading-tight tracking-tight display-font">
-                        {industry.name}
-                      </h4>
-                      <div className="pt-4 md:pt-6 border-t border-gray-100">
-                        <Motion.button
-                          whileHover="expanded"
-                          initial="initial"
-                          className="flex items-center justify-center h-10 md:h-12 rounded-full border border-[#F99D1C]/40 hover:border-[#F99D1C] bg-transparent text-[#F99D1C] overflow-hidden cursor-pointer"
-                          variants={{
-                            initial: { width: 40 },
-                            expanded: { width: "auto", paddingLeft: 16, paddingRight: 16 }
-                          }}
-                          transition={{ duration: 0.3, ease: "easeInOut" }}
-                        >
-                          <Motion.span
-                            variants={{
-                              initial: { width: 0, opacity: 0, marginRight: 0 },
-                              expanded: { width: "auto", opacity: 1, marginRight: 8 }
-                            }}
-                            transition={{ duration: 0.3, ease: "easeInOut" }}
-                            className="text-[11px] font-semibold tracking-wide whitespace-nowrap overflow-hidden"
-                          >
-                            Know More
-                          </Motion.span>
-                          <ChevronRight className="w-4 h-4 shrink-0" />
-                        </Motion.button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </Slider>
-          </div>
-        </div>
-        <style>{`
-          .industry-slider-container .slick-arrow {
-            display: none !important;
-          }
-        `}</style>
-      </section>
-
-      {/* The Stack Behind Every Build */}
-      
-
-      {/* Success Stories */}
-      <section className="py-20 bg-white">
-        <div className="max-w-[1280px] mx-auto px-6 lg:px-20">
-          <SuccessStoriesCarousel />
-        </div>
-      </section>
-
       {/* Our Valued Partners Section */}
       <section className="py-24 bg-white border-y border-gray-100 overflow-hidden">
         <div className="max-w-[1280px] mx-auto px-6 lg:px-20">
@@ -979,6 +804,13 @@ export default function Home() {
           </div>
 
           <ValuedPartnersCarousel />
+        </div>
+      </section>
+
+      {/* Success Stories */}
+      <section className="py-20 bg-white">
+        <div className="max-w-[1280px] mx-auto px-6 lg:px-20">
+          <SuccessStoriesCarousel />
         </div>
       </section>
 
@@ -1299,15 +1131,57 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Why Nabhira Section */}
+      {/* What's New Section */}
+      <section className="py-20 bg-[#FAF9F6] relative overflow-hidden" aria-label="Updates and News">
+        {/* Pattern Background */}
+        <div 
+          className="absolute inset-0 opacity-[0.015] pointer-events-none"
+          style={{ 
+            backgroundImage: `url(${linePattern})`,
+            backgroundSize: '200px',
+            backgroundRepeat: 'repeat'
+          }}
+        ></div>
+        
+        <div className="max-w-[1280px] mx-auto px-6 lg:px-20 relative z-10">
+          <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-12 md:mb-16 gap-8">
+             <div className="space-y-3">
+              <h2 className="text-3xl sm:text-4xl md:text-5xl font-semibold text-[#001A3D] display-font tracking-tight">What's New</h2>
+                <p className="text-gray-500 font-medium text-sm md:text-base">Stay connected with our latest updates, press releases, and upcoming events.</p>
+             </div>
+             <div className="hidden md:flex gap-3">
+                <button className="carousel-arrow"><ArrowRight className="w-5 h-5 rotate-180" /></button>
+                <button className="carousel-arrow"><ArrowRight className="w-5 h-5" /></button>
+             </div>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+            {WHATS_NEW.map((news, idx) => (
+              <div key={idx} className="bg-white rounded-sm overflow-hidden shadow-sm hover:shadow-xl transition-all group flex flex-col h-full">
+                <div className="h-48 md:h-56 overflow-hidden relative">
+                  <ImageWithFallback src={news.image} alt={news.title} className="w-full h-full object-cover grayscale-[0.5] group-hover:grayscale-0 group-hover:scale-105 transition-all duration-700" />
+                  <div className="absolute inset-0 bg-[#001A3D]/20 mix-blend-color group-hover:opacity-0 transition-opacity duration-700"></div>
+                </div>
+                <div className="p-6 md:p-8 flex flex-col flex-grow space-y-4">
+                  <span className="text-blue-600 text-[10px] md:text-[11px] font-semibold tracking-wide">{news.date}</span>
+                  <h4 className="text-[#001A3D] text-base md:text-lg font-semibold leading-snug flex-grow group-hover:text-blue-600 transition-colors">{news.title}</h4>
+                  <div className="h-0.5 w-10 bg-blue-600 group-hover:w-full transition-all duration-500"></div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+
+      {/* Why Hutech Section */}
       <section className="relative py-24 md:py-32 overflow-hidden">
         <ImageWithFallback
-          src="https://images.unsplash.com/photo-1758518727077-ffb66ffccced?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1920"
-          alt="Why Nabhira"
-          className="absolute inset-0 w-full h-full object-cover grayscale-[0.2]"
-          style={{ filter: 'brightness(0.15)' }}
+          src="/images/why-hutech-bg.png"
+          alt="Why Hutech"
+          className="absolute inset-0 w-full h-full object-cover object-center"
         />
-        <div className="absolute inset-0 bg-[#001A3D]/95 mix-blend-multiply"></div>
+        <div className="absolute inset-0 bg-[#001A3D]/80"></div>
         <div className="relative z-10 max-w-[1280px] mx-auto px-6 lg:px-20">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24">
             {/* Left Column */}

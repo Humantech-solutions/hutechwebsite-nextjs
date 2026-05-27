@@ -2,7 +2,7 @@
 
 import { motion as Motion } from "framer-motion";
 import { Breadcrumbs } from "@/components/Breadcrumbs";
-import { Newspaper, Calendar, ArrowRight, Clock, Tag } from "lucide-react";
+import { Newspaper, Calendar, ArrowRight, Clock, Tag, ExternalLink } from "lucide-react";
 import { Meta } from "@/components/Meta";
 import Link from "next/link";
 
@@ -75,51 +75,60 @@ export default function News() {
         </div>
       </section>
 
-      <section className="py-24">
+      <section className="bg-[#F7F7F7] py-24">
         <div className="mx-auto max-w-[1280px] px-6 lg:px-20">
-          <div className="grid grid-cols-1 gap-12">
-            {newsItems.map((item, i) => (
-              <Motion.div
-                key={i}
-                initial={{ opacity: 0, x: -20 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: i * 0.1 }}
-                className="group flex flex-col gap-12 rounded-[2.5rem] border border-gray-100 bg-gray-50 p-8 transition-all duration-500 hover:border-[#0171c1]/20 hover:bg-white hover:shadow-2xl md:flex-row"
-              >
-                <div className="flex-1 space-y-6">
-                  <div className="flex flex-wrap items-center gap-6">
-                    <span className="rounded-full border border-[#F99D1C]/20 bg-[#F99D1C]/10 px-4 py-1.5 text-[10px] font-black tracking-widest text-[#F99D1C] uppercase">
-                      {item.category}
+          <div className="flex flex-col">
+            {newsItems.map((item, i) => {
+              // Map categories to premium news publications for authentic editorial style
+              const sourceName = 
+                item.category === "Corporate" ? "BLOOMBERG TECHNOLOGY" :
+                item.category === "Growth" ? "FINANCIAL TIMES" :
+                "BUSINESS INSIDER";
+
+              return (
+                <Motion.div
+                  key={i}
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: i * 0.1, duration: 0.6 }}
+                  className="group relative flex flex-col md:flex-row md:items-center gap-6 md:gap-12 py-12 px-6 md:px-12 bg-transparent hover:bg-white hover:shadow-[0_20px_50px_rgba(0,0,0,0.03)] rounded-3xl transition-all duration-500 border-b border-gray-200/80 last:border-b-0 -mx-6 md:-mx-12"
+                >
+                  {/* Left Column: Fixed Width (~260px) */}
+                  <div className="w-full md:w-[260px] md:shrink-0 flex flex-col gap-1 md:gap-2">
+                    <span className="text-xs font-bold tracking-[0.15em] text-[#F99D1C] uppercase">
+                      {item.date}
                     </span>
-                    <span className="flex items-center gap-2 text-xs font-bold tracking-widest text-gray-400 uppercase">
-                      <Calendar size={14} className="text-[#0171c1]" /> {item.date}
-                    </span>
-                    <span className="flex items-center gap-2 text-xs font-bold tracking-widest text-gray-400 uppercase">
-                      <Clock size={14} className="text-[#0171c1]" /> {item.readTime}
+                    <span className="text-sm font-extrabold tracking-wider text-[#001A3D] uppercase">
+                      {sourceName}
                     </span>
                   </div>
 
-                  <div className="space-y-4">
-                    <h3 className="display-font text-2xl leading-tight font-bold text-[#001A3D] transition-colors group-hover:text-[#0171c1] md:text-4xl">
-                      {item.title}
-                    </h3>
-                    <p className="max-w-3xl text-lg leading-relaxed font-medium text-gray-500">
-                      {item.desc}
-                    </p>
-                  </div>
+                  {/* Right Column: Flexible */}
+                  <div className="flex-1 flex flex-col gap-4">
+                    <div className="space-y-3">
+                      <h3 className="display-font text-2xl md:text-3xl font-light leading-tight text-[#001A3D] transition-colors duration-300 group-hover:text-[#F99D1C]">
+                        {item.title}
+                      </h3>
+                      {item.desc && (
+                        <p className="max-w-4xl text-[15px] md:text-base leading-relaxed font-medium text-gray-500">
+                          {item.desc}
+                        </p>
+                      )}
+                    </div>
 
-                  <div className="flex items-center gap-8 pt-4">
-                    <Link
-                      href={`/company/news/${item.id}`}
-                      className="inline-flex items-center gap-3 border-b-2 border-[#F99D1C] pb-1 text-[11px] font-black tracking-widest text-[#001A3D] uppercase transition-all hover:gap-6"
-                    >
-                      Read Full Story <ArrowRight size={18} />
-                    </Link>
+                    <div className="pt-2">
+                      <Link
+                        href={`/company/news/${item.id}`}
+                        className="inline-flex items-center gap-2 text-xs font-bold tracking-widest text-[#001A3D] uppercase relative py-1 after:absolute after:bottom-0 after:left-0 after:w-full after:h-[1px] after:bg-[#001A3D] after:origin-right after:scale-x-0 group-hover:after:scale-x-100 group-hover:after:origin-left transition-all duration-300"
+                      >
+                        VIEW ARTICLE <ExternalLink size={13} className="text-[#001A3D] transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                      </Link>
+                    </div>
                   </div>
-                </div>
-              </Motion.div>
-            ))}
+                </Motion.div>
+              );
+            })}
           </div>
         </div>
       </section>

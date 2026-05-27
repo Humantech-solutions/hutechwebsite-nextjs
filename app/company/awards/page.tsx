@@ -99,32 +99,56 @@ export default function Awards() {
       </section>
 
       {/* Recognition Grid */}
-      <section className="bg-white py-24">
+      <section className="bg-[#f8f8f8] py-32">
         <div className="mx-auto max-w-[1280px] px-6 lg:px-20">
-          <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
+          
+          {/* Center-aligned Section Heading */}
+          <div className="mb-24 text-center space-y-4">
+            <h2 className="display-font text-3xl font-semibold tracking-tight text-[#001A3D] md:text-4xl">
+              A Journey of Distinction
+            </h2>
+            <div className="mx-auto h-[2px] w-16 bg-[#F99D1C]"></div>
+          </div>
+
+          {/* Timeline List */}
+          <div className="flex flex-col">
             {awardsList.map((award, i) => (
               <Motion.div
                 key={i}
-                initial={{ opacity: 0, y: 20 }}
+                initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                transition={{ delay: i * 0.05 }}
-                className="group space-y-8 rounded-[2.5rem] border border-gray-100 bg-gray-50 p-10 transition-all duration-500 hover:bg-white hover:shadow-2xl"
+                transition={{ delay: i * 0.05, duration: 0.6 }}
+                className="group relative flex flex-col md:grid md:grid-cols-[160px_1fr_80px] md:items-center gap-6 md:gap-12 py-12 px-6 md:px-12 bg-transparent hover:bg-white hover:shadow-[0_20px_50px_rgba(0,0,0,0.03)] rounded-3xl transition-all duration-500 border-b border-gray-200/80 last:border-b-0 -mx-6 md:-mx-12"
               >
-                <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-white text-[#F99D1C] shadow-sm transition-all duration-500 group-hover:bg-[#F99D1C] group-hover:text-white">
-                  {award.icon}
+                {/* Left Side: Large Year Text */}
+                <div className="w-full md:w-[160px] md:shrink-0">
+                  <span className="display-font text-5xl md:text-6xl font-light tracking-tight text-[#001A3D] transition-colors duration-300 group-hover:text-[#F99D1C]">
+                    {award.year}
+                  </span>
                 </div>
-                <div className="space-y-4">
-                  <div className="flex items-center justify-between border-b border-gray-100 pb-4">
-                    <span className="text-xs font-bold tracking-widest text-[#F99D1C] uppercase">
-                      {award.year}
+
+                {/* Middle Section: Category, Title, Description */}
+                <div className="flex-1 flex flex-col gap-3">
+                  <div className="flex items-center gap-3">
+                    <span className="h-[1px] w-6 bg-[#F99D1C]/60"></span>
+                    <span className="text-[10px] md:text-xs font-bold tracking-widest text-[#F99D1C] uppercase">
+                      {award.issuer}
                     </span>
-                    <span className="text-xs font-semibold text-gray-400">{award.issuer}</span>
                   </div>
-                  <h3 className="display-font text-2xl leading-tight font-bold text-[#001A3D]">
+                  <h3 className="display-font text-2xl font-bold leading-tight text-[#001A3D]">
                     {award.title}
                   </h3>
-                  <p className="text-sm leading-relaxed font-medium text-gray-500">{award.desc}</p>
+                  <p className="max-w-3xl text-sm md:text-base leading-relaxed font-medium text-gray-500">
+                    {award.desc}
+                  </p>
+                </div>
+
+                {/* Right Side: Subtle Circular Icon Container */}
+                <div className="w-full md:w-[80px] md:shrink-0 flex md:justify-end">
+                  <div className="flex h-16 w-16 items-center justify-center rounded-full border border-gray-100 bg-white/80 text-[#F99D1C] shadow-sm transition-all duration-500 group-hover:border-[#F99D1C] group-hover:bg-white group-hover:shadow-[0_0_25px_rgba(249,157,28,0.15)]">
+                    {award.icon}
+                  </div>
                 </div>
               </Motion.div>
             ))}
