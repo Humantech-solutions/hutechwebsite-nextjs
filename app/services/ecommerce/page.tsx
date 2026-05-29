@@ -357,6 +357,21 @@ function ServiceCard({ service, index }: { service: any; index: number }) {
   );
 }
 
+const ECOMMERCE_STACK = [
+  { primary: "SHOPIFY", secondary: "ECOMMERCE PLATFORM" },
+  { primary: "MAGENTO", secondary: "ONLINE STORES" },
+  { primary: "WOOCOMMERCE", secondary: "DIGITAL COMMERCE" },
+  { primary: "REACT", secondary: "FRONTEND" },
+  { primary: "NODE.JS", secondary: "BACKEND" },
+  { primary: "STRIPE", secondary: "PAYMENTS" },
+  { primary: "AWS", secondary: "CLOUD PLATFORM" },
+  { primary: "MONGODB", secondary: "DATA STORAGE" },
+  { primary: "FIREBASE", secondary: "AUTHENTICATION" },
+  { primary: "DOCKER", secondary: "CONTAINERS" },
+  { primary: "KUBERNETES", secondary: "ORCHESTRATION" },
+  { primary: "PYTHON", secondary: "AUTOMATION" },
+];
+
 export default function EcommerceDevelopment() {
   const heroRef = useRef(null);
   const { scrollYProgress } = useScroll({
@@ -567,6 +582,59 @@ export default function EcommerceDevelopment() {
             {PLATFORMS.map((platform, index) => (
               <ServiceCard key={index} service={platform} index={index} />
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Ecommerce Development Technology Stack Section */}
+      <section className="relative overflow-hidden bg-gradient-to-b from-[#001A3D] via-[#030E21] to-[#020B1E] py-24 md:py-32 text-white">
+        {/* Radial Light Glow behind heading */}
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[300px] bg-blue-500/10 rounded-full blur-3xl pointer-events-none" />
+        
+        {/* Glowing Grid Background Pattern */}
+        <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:60px_60px] pointer-events-none" />
+        
+        <div className="relative z-10 mx-auto max-w-[1280px] px-6 lg:px-20">
+          {/* Header */}
+          <div className="mb-16 text-center md:mb-20">
+            <div className="flex items-center justify-center gap-3 text-[10px] font-bold tracking-[0.3em] text-[#F99D1C] uppercase">
+              <span className="h-[1px] w-8 bg-gradient-to-r from-transparent to-[#F99D1C]" />
+              TECHNOLOGY STACK
+              <span className="h-[1px] w-8 bg-gradient-to-l from-transparent to-[#F99D1C]" />
+            </div>
+            
+            <h2 className="mt-4 display-font text-3xl font-bold tracking-wider text-white sm:text-4xl md:text-5xl uppercase">
+              MODERN ECOMMERCE DEVELOPMENT STACK
+            </h2>
+            
+            <div className="mx-auto mt-4 h-[3px] w-14 bg-[#F99D1C]" />
+            
+            <p className="mx-auto mt-6 max-w-2xl text-sm font-medium text-gray-400 md:text-base leading-relaxed">
+              Scalable ecommerce technologies powering seamless shopping experiences, secure payments, inventory management, and digital growth
+            </p>
+          </div>
+
+          {/* Cards Grid */}
+          <div className="border-l border-t border-white/10">
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6">
+              {ECOMMERCE_STACK.map((item, idx) => (
+                <Motion.div
+                  key={idx}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, margin: "-50px" }}
+                  transition={{ duration: 0.5, delay: idx * 0.05 }}
+                  className="group relative z-0 hover:z-10 border-r border-b border-white/10 bg-[#030d22]/50 backdrop-blur-sm py-12 px-4 flex flex-col justify-center items-center h-32 md:h-36 text-center transition-all duration-300 ease-out hover:-translate-y-1.5 hover:bg-[#0a2a60]/40 hover:shadow-[0_0_30px_rgba(56,189,248,0.15)] hover:border-white/20"
+                >
+                  <span className="text-white font-bold tracking-wider text-xs md:text-sm uppercase mb-2 group-hover:text-white transition-colors duration-300">
+                    {item.primary}
+                  </span>
+                  <span className="text-cyan-400 font-semibold tracking-wider text-[10px] md:text-xs uppercase transition-colors duration-300">
+                    {item.secondary}
+                  </span>
+                </Motion.div>
+              ))}
+            </div>
           </div>
         </div>
       </section>
