@@ -16,28 +16,19 @@ import {
   GraduationCap,
   CalendarCheck,
   MoveRight,
+  TrendingUp,
+  Users,
+  Heart,
+  Lightbulb,
+  BookOpen,
+  Cloud,
 } from "lucide-react";
 import Link from "next/link";
-import Slider from "react-slick";
-import "slick-carousel/slick/slick.css";
-import "slick-carousel/slick/slick-theme.css";
-import { Job, HIRING_PROCESS, TESTIMONIALS } from "@/lib/data/careers";
+import { Job, HIRING_PROCESS } from "@/lib/data/careers";
 
 const BRAND_ORANGE = "#F99D1C";
 
 export default function CareersClient({ jobs }: { jobs: Job[] }) {
-  const testimonialSettings = {
-    dots: true,
-    infinite: true,
-    speed: 800,
-    slidesToShow: 1,
-    slidesToScroll: 1,
-    autoplay: true,
-    autoplaySpeed: 5000,
-    arrows: false,
-    dotsClass: "slick-dots custom-dots-careers",
-  };
-
   return (
     <div className="flex flex-col overflow-hidden bg-white">
       <section className="bg-[#001A3D] text-white h-[300px] relative overflow-hidden flex items-center">
@@ -277,60 +268,210 @@ export default function CareersClient({ jobs }: { jobs: Job[] }) {
         </div>
       </section>
 
-      {/* Testimonials */}
-      <section className="py-24 bg-[#001A3D] text-white overflow-hidden">
-        <div className="max-w-[1280px] mx-auto px-6 lg:px-20">
-          <div className="flex flex-col lg:flex-row items-center gap-20">
-            <div className="lg:w-1/2">
-              <h2 className="text-3xl md:text-5xl font-semibold tracking-tight mb-8 display-font">Voices From <br /><span className="text-[#F99D1C]">Within the Lab.</span></h2>
-              <Slider {...testimonialSettings}>
-                {TESTIMONIALS.map((t, idx) => (
-                  <div key={idx} className="outline-none">
-                    <div className="space-y-8">
-                      <p className="text-xl md:text-2xl font-medium leading-relaxed italic text-gray-300">@{t.text}@</p>
-                      <div className="flex items-center gap-4">
-                        <div className="w-14 h-14 rounded-full overflow-hidden border-2 border-[#F99D1C]">
-                          <ImageWithFallback src={t.image} alt={t.name} className="w-full h-full object-cover" />
-                        </div>
-                        <div>
-                          <p className="font-semibold text-lg text-white display-font">{t.name}</p>
-                          <p className="text-[#F99D1C] font-semibold tracking-wide text-[11px]">{t.role}</p>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </Slider>
+      {/* Internship Programme */}
+      <section className="py-20 bg-white border-t border-gray-100">
+        <div className="max-w-[1280px] mx-auto px-6 lg:px-20 grid grid-cols-1 lg:grid-cols-12 gap-16 items-center">
+          {/* Left Column: Image with Badge */}
+          <div className="lg:col-span-5 relative">
+            <div className="aspect-[4/3] overflow-hidden rounded-[2rem] shadow-xl">
+              <ImageWithFallback
+                src="https://images.unsplash.com/photo-1541339907198-e08756dedf3f?q=80&w=1200&auto=format&fit=crop"
+                alt="Internship Programme Campus"
+                className="h-full w-full object-cover"
+              />
             </div>
-            <div className="lg:w-1/2 hidden lg:block">
-              <div className="relative aspect-square">
-                <ImageWithFallback
-                  src="https://images.unsplash.com/photo-1522071823991-b1ae5e6a3048?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080"
-                  alt="Company Culture"
-                  className="w-full h-full object-cover rounded-[3rem] opacity-50 grayscale"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-[#001A3D] to-transparent"></div>
+            <div className="absolute -bottom-6 right-6 bg-[#F99D1C] text-[#001A3D] px-8 py-4 rounded-2xl shadow-xl z-20 text-center font-bold">
+              <p className="text-[10px] tracking-widest uppercase mb-1 opacity-90">Applications Open</p>
+              <p className="text-xl font-extrabold whitespace-nowrap">2026 Cohort</p>
+            </div>
+          </div>
+
+          {/* Right Column: Content and Cards */}
+          <div className="lg:col-span-7 space-y-8">
+            <div className="space-y-4">
+              <div className="flex items-center gap-3">
+                <GraduationCap className="h-5 w-5 text-[#F99D1C]" />
+                <span className="text-xs font-bold tracking-widest text-[#F99D1C] uppercase">Internship Programme</span>
               </div>
+              <h2 className="text-3xl md:text-5xl font-semibold text-[#001A3D] leading-tight tracking-tight display-font">
+                Launch Your Career <span className="font-extrabold">at Nabhira</span>
+              </h2>
+              <div className="w-16 h-0.5 bg-[#F99D1C] my-6"></div>
+            </div>
+
+            <p className="text-gray-500 font-medium leading-relaxed">
+              The Nabhira Emerging Talent Programme is a structured 12-week immersion into enterprise technology, strategy consulting, and AI-driven innovation. Work alongside senior architects on real client engagements — not internal projects.
+            </p>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              {/* Program 1 */}
+              <div className="p-5 bg-gray-50 border border-gray-100 rounded-2xl hover:bg-white hover:border-[#F99D1C]/30 hover:shadow-lg transition-all flex items-center gap-4">
+                <div className="flex-shrink-0 p-3 bg-white rounded-xl text-[#F99D1C] shadow-sm">
+                  <Zap className="h-6 w-6" />
+                </div>
+                <div>
+                  <h4 className="font-semibold text-[#001A3D] text-sm">AI & Data Engineering</h4>
+                  <p className="text-xs text-gray-400">12 Weeks</p>
+                </div>
+              </div>
+
+              {/* Program 2 */}
+              <div className="p-5 bg-gray-50 border border-gray-100 rounded-2xl hover:bg-white hover:border-[#F99D1C]/30 hover:shadow-lg transition-all flex items-center gap-4">
+                <div className="flex-shrink-0 p-3 bg-white rounded-xl text-[#F99D1C] shadow-sm">
+                  <Cloud className="h-6 w-6" />
+                </div>
+                <div>
+                  <h4 className="font-semibold text-[#001A3D] text-sm">Cloud Architecture</h4>
+                  <p className="text-xs text-gray-400">12 Weeks</p>
+                </div>
+              </div>
+
+              {/* Program 3 */}
+              <div className="p-5 bg-gray-50 border border-gray-100 rounded-2xl hover:bg-white hover:border-[#F99D1C]/30 hover:shadow-lg transition-all flex items-center gap-4">
+                <div className="flex-shrink-0 p-3 bg-white rounded-xl text-[#F99D1C] shadow-sm">
+                  <Lightbulb className="h-6 w-6" />
+                </div>
+                <div>
+                  <h4 className="font-semibold text-[#001A3D] text-sm">Digital Strategy</h4>
+                  <p className="text-xs text-gray-400">10 Weeks</p>
+                </div>
+              </div>
+
+              {/* Program 4 */}
+              <div className="p-5 bg-gray-50 border border-gray-100 rounded-2xl hover:bg-white hover:border-[#F99D1C]/30 hover:shadow-lg transition-all flex items-center gap-4">
+                <div className="flex-shrink-0 p-3 bg-white rounded-xl text-[#F99D1C] shadow-sm">
+                  <BookOpen className="h-6 w-6" />
+                </div>
+                <div>
+                  <h4 className="font-semibold text-[#001A3D] text-sm">Product & UX Design</h4>
+                  <p className="text-xs text-gray-400">10 Weeks</p>
+                </div>
+              </div>
+            </div>
+
+            <div className="flex flex-wrap gap-4 pt-4">
+              <Link
+                href="/contact"
+                className="bg-[#001A3D] hover:bg-[#002B66] text-white font-semibold py-4 px-8 rounded-sm text-[11px] tracking-wide transition-all uppercase inline-flex items-center gap-2 shadow-lg active:scale-[0.98]"
+              >
+                Apply Now <ChevronRight size={14} />
+              </Link>
+              <Link
+                href="#"
+                className="border border-[#001A3D]/20 hover:border-[#001A3D] text-[#001A3D] font-semibold py-4 px-8 rounded-sm text-[11px] tracking-wide transition-all uppercase inline-flex items-center justify-center active:scale-[0.98]"
+              >
+                Download Brochure
+              </Link>
             </div>
           </div>
         </div>
-        <style>{`
-          .custom-dots-careers {
-            bottom: -60px;
-            left: 0;
-            text-align: left;
-            width: auto;
-          }
-          .custom-dots-careers li button:before {
-            color: white !important;
-            opacity: 0.3 !important;
-          }
-          .custom-dots-careers li.slick-active button:before {
-            color: #F99D1C !important;
-            opacity: 1 !important;
-          }
-        `}</style>
       </section>
+
+      {/* Why Nabhira is Different */}
+      <section className="py-20 bg-gray-50 border-t border-b border-gray-100">
+        <div className="max-w-[1280px] mx-auto px-6 lg:px-20">
+          <div className="space-y-4 mb-16">
+            <div className="flex items-center gap-3">
+              <span className="w-12 h-[1px] bg-[#F99D1C]"></span>
+              <span className="text-xs font-bold tracking-widest text-[#F99D1C] uppercase">Career Advantage</span>
+            </div>
+            <h2 className="text-3xl md:text-5xl font-semibold text-[#001A3D] leading-tight tracking-tight display-font">
+              Why Nabhira is <span className="font-extrabold">Different</span>
+            </h2>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-x-16 gap-y-0">
+            {/* Left Column benefits */}
+            <div className="divide-y divide-gray-100 border-t border-b border-gray-100">
+              {/* Item 1 */}
+              <div className="group flex items-center justify-between py-6 cursor-pointer hover:pl-2 transition-all">
+                <div className="flex items-center gap-6">
+                  <span className="text-xs font-bold text-[#F99D1C] tracking-wider">01</span>
+                  <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-[#001A3D] text-white shadow-md group-hover:bg-[#F99D1C] group-hover:text-[#001A3D] transition-colors">
+                    <Globe2 className="h-5 w-5" />
+                  </div>
+                  <span className="font-semibold text-lg text-[#001A3D] group-hover:text-[#F99D1C] transition-colors">Global Exposure</span>
+                </div>
+                <ChevronRight className="h-5 w-5 text-gray-300 group-hover:text-[#F99D1C] group-hover:translate-x-1 transition-all" />
+              </div>
+
+              {/* Item 3 */}
+              <div className="group flex items-center justify-between py-6 cursor-pointer hover:pl-2 transition-all">
+                <div className="flex items-center gap-6">
+                  <span className="text-xs font-bold text-[#F99D1C] tracking-wider">03</span>
+                  <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-[#001A3D] text-white shadow-md group-hover:bg-[#F99D1C] group-hover:text-[#001A3D] transition-colors">
+                    <Users className="h-5 w-5" />
+                  </div>
+                  <span className="font-semibold text-lg text-[#001A3D] group-hover:text-[#F99D1C] transition-colors">World-Class Mentorship</span>
+                </div>
+                <ChevronRight className="h-5 w-5 text-gray-300 group-hover:text-[#F99D1C] group-hover:translate-x-1 transition-all" />
+              </div>
+
+              {/* Item 5 */}
+              <div className="group flex items-center justify-between py-6 cursor-pointer hover:pl-2 transition-all">
+                <div className="flex items-center gap-6">
+                  <span className="text-xs font-bold text-[#F99D1C] tracking-wider">05</span>
+                  <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-[#001A3D] text-white shadow-md group-hover:bg-[#F99D1C] group-hover:text-[#001A3D] transition-colors">
+                    <Heart className="h-5 w-5" />
+                  </div>
+                  <span className="font-semibold text-lg text-[#001A3D] group-hover:text-[#F99D1C] transition-colors">Inclusive Culture</span>
+                </div>
+                <ChevronRight className="h-5 w-5 text-gray-300 group-hover:text-[#F99D1C] group-hover:translate-x-1 transition-all" />
+              </div>
+            </div>
+
+            {/* Right Column benefits */}
+            <div className="divide-y divide-gray-100 border-t border-b border-gray-100">
+              {/* Item 2 */}
+              <div className="group flex items-center justify-between py-6 cursor-pointer hover:pl-2 transition-all">
+                <div className="flex items-center gap-6">
+                  <span className="text-xs font-bold text-[#F99D1C] tracking-wider">02</span>
+                  <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-[#001A3D] text-white shadow-md group-hover:bg-[#F99D1C] group-hover:text-[#001A3D] transition-colors">
+                    <TrendingUp className="h-5 w-5" />
+                  </div>
+                  <span className="font-semibold text-lg text-[#001A3D] group-hover:text-[#F99D1C] transition-colors">Accelerated Growth</span>
+                </div>
+                <ChevronRight className="h-5 w-5 text-gray-300 group-hover:text-[#F99D1C] group-hover:translate-x-1 transition-all" />
+              </div>
+
+              {/* Item 4 */}
+              <div className="group flex items-center justify-between py-6 cursor-pointer hover:pl-2 transition-all">
+                <div className="flex items-center gap-6">
+                  <span className="text-xs font-bold text-[#F99D1C] tracking-wider">04</span>
+                  <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-[#001A3D] text-white shadow-md group-hover:bg-[#F99D1C] group-hover:text-[#001A3D] transition-colors">
+                    <Award className="h-5 w-5" />
+                  </div>
+                  <span className="font-semibold text-lg text-[#001A3D] group-hover:text-[#F99D1C] transition-colors">Certified Excellence</span>
+                </div>
+                <ChevronRight className="h-5 w-5 text-gray-300 group-hover:text-[#F99D1C] group-hover:translate-x-1 transition-all" />
+              </div>
+
+              {/* Item 6 */}
+              <div className="group flex items-center justify-between py-6 cursor-pointer hover:pl-2 transition-all">
+                <div className="flex items-center gap-6">
+                  <span className="text-xs font-bold text-[#F99D1C] tracking-wider">06</span>
+                  <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-[#001A3D] text-white shadow-md group-hover:bg-[#F99D1C] group-hover:text-[#001A3D] transition-colors">
+                    <Lightbulb className="h-5 w-5" />
+                  </div>
+                  <span className="font-semibold text-lg text-[#001A3D] group-hover:text-[#F99D1C] transition-colors">Innovation Time</span>
+                </div>
+                <ChevronRight className="h-5 w-5 text-gray-300 group-hover:text-[#F99D1C] group-hover:translate-x-1 transition-all" />
+              </div>
+            </div>
+          </div>
+
+          <div className="mt-16 text-left">
+            <Link
+              href="/contact"
+              className="bg-[#001A3D] hover:bg-[#002B66] text-white font-semibold py-4 px-8 rounded-sm text-[11px] tracking-wide transition-all uppercase inline-flex items-center gap-2 shadow-lg active:scale-[0.98]"
+            >
+              Talk to Our Talent Team <ChevronRight size={14} />
+            </Link>
+          </div>
+        </div>
+      </section>
+
+
 
       {/* CTA Section */}
       <section className="py-20 bg-gray-50 border-t border-gray-100">

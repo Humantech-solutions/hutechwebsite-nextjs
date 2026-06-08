@@ -17,7 +17,7 @@ const SITEMAP_DATA = [
       { name: "In The News", path: "/company/news" },
       { name: "Press Release", path: "/company/press-release" },
       { name: "Awards and Recognition", path: "/company/awards" },
-      { name: "Open Positions", path: "/careers/open-positions" },
+      { name: "Open Positions", path: "/careers" },
       { name: "Graduates", path: "/company/graduates" },
     ],
   },

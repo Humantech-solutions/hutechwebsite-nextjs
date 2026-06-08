@@ -14,6 +14,8 @@ import {
   Building2,
   CheckCircle2,
   Clock,
+  Instagram,
+  Facebook,
 } from "lucide-react";
 import { toast } from "sonner";
 import { ImageWithFallback } from "@/components/figma/ImageWithFallback";
@@ -192,7 +194,7 @@ export default function Contact() {
                 initial={{ opacity: 0, x: 20 }}
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true }}
-                className="relative space-y-12 overflow-hidden rounded-[2rem] bg-[#001A3D] p-10 text-white md:p-14"
+                className="relative space-y-12 overflow-hidden rounded-[2rem] bg-[#001A3D] p-6 sm:p-10 text-white md:p-14"
               >
                 <div className="absolute top-0 right-0 -mt-16 -mr-16 h-32 w-32 rounded-full bg-[#F99D1C]/10 blur-2xl"></div>
 
@@ -205,7 +207,7 @@ export default function Contact() {
                       </div>
                       <div>
                         <p className="text-[11px] font-semibold tracking-wide text-gray-400">Email Us</p>
-                        <p className="text-lg font-bold">sales@hutechsolutions.com</p>
+                        <p className="text-sm font-bold sm:text-base md:text-lg break-all">sales@hutechsolutions.com</p>
                       </div>
                     </a>
                     <a href="tel:+919035180487" className="group flex items-center gap-5 md:gap-6">
@@ -222,9 +224,11 @@ export default function Contact() {
 
                 <div className="space-y-6 border-t border-white/10 pt-10">
                   <h3 className="display-font text-xl font-semibold tracking-tight md:text-2xl">Social Connect</h3>
-                  <div className="flex gap-4">
+                  <div className="flex flex-wrap gap-3 sm:gap-4">
                     {[
                       { icon: <Linkedin size={22} />, label: "LinkedIn", url: "https://www.linkedin.com/company/hutechsolutions/" },
+                      { icon: <Instagram size={22} />, label: "Instagram", url: "#" },
+                      { icon: <Facebook size={22} />, label: "Facebook", url: "#" },
                       { icon: <Twitter size={22} />, label: "Twitter", url: "#" },
                       { icon: <Youtube size={22} />, label: "YouTube", url: "#" },
                     ].map((item, idx) => (

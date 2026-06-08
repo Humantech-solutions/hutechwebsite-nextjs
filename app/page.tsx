@@ -264,11 +264,11 @@ function ValuedPartnersCarousel() {
               key={idx} 
               className="flex-[0_0_50%] min-w-[160px] sm:min-w-0 sm:flex-[0_0_33.333%] md:flex-[0_0_25%] lg:flex-[0_0_20%] pl-4 md:pl-6"
             >
-              <div className="bg-white border border-gray-100 h-28 sm:h-32 md:h-40 flex items-center justify-center p-6 md:p-8 hover:shadow-lg transition-all duration-300 group rounded-sm select-none">
+              <div className="bg-white border border-gray-100 h-28 sm:h-32 md:h-40 flex items-center justify-center p-6 md:p-8 rounded-[18px] shadow-[0_4px_12px_rgba(0,0,0,0.02)] hover:shadow-none hover:border-[#0171c1]/50 hover:-translate-y-1 transition-all duration-300 ease-out group select-none">
                 <ImageWithFallback
                   src={partner.logo}
                   alt={partner.name}
-                  className="w-full h-full object-contain grayscale group-hover:grayscale-0 transition-all duration-500 opacity-60 group-hover:opacity-100 group-hover:scale-105 pointer-events-none"
+                  className="w-full h-full object-contain grayscale-0 opacity-100 transition-transform duration-300 ease-out group-hover:scale-105 pointer-events-none"
                   draggable={false}
                 />
               </div>
@@ -279,6 +279,7 @@ function ValuedPartnersCarousel() {
     </div>
   );
 }
+
 
 function SuccessStoriesCarousel() {
   const scrollRef = useRef<HTMLDivElement>(null);
@@ -346,6 +347,33 @@ export default function Home() {
   const [activeCapIdx, setActiveCapIdx] = useState(0);
   const industryScrollRef = useRef<HTMLDivElement>(null);
   const heroSliderRef = useRef<Slider>(null);
+
+  // What's New Carousel Hooks
+  const [whatsNewRef, whatsNewApi] = useEmblaCarousel({ loop: true, align: "start" });
+  const [whatsNewSelectedIndex, setWhatsNewSelectedIndex] = useState(0);
+  const [whatsNewHovered, setWhatsNewHovered] = useState(false);
+
+  useEffect(() => {
+    if (!whatsNewApi) return;
+    const onSelect = () => {
+      setWhatsNewSelectedIndex(whatsNewApi.selectedScrollSnap());
+    };
+    whatsNewApi.on("select", onSelect);
+    whatsNewApi.on("init", onSelect);
+    return () => {
+      whatsNewApi.off("select", onSelect);
+      whatsNewApi.off("init", onSelect);
+    };
+  }, [whatsNewApi]);
+
+  useEffect(() => {
+    if (!whatsNewApi || whatsNewHovered) return;
+    const intervalId = setInterval(() => {
+      whatsNewApi.scrollNext();
+    }, 4500);
+    return () => clearInterval(intervalId);
+  }, [whatsNewApi, whatsNewHovered]);
+
   const heroSettings = {
     dots: true,
     infinite: true,
@@ -699,8 +727,7 @@ export default function Home() {
 
       {/* Capabilities Section */}
       <section 
-        className="py-20 text-white overflow-hidden transition-colors duration-700 ease-in-out"
-        style={{ backgroundColor: CAPABILITIES_DATA[activeCapIdx].color }}
+        className="py-20 text-white overflow-hidden bg-[#0A2A60]"
         aria-labelledby="capabilities-title"
       >
         <div className="max-w-[1280px] mx-auto px-6 lg:px-20">
@@ -744,7 +771,7 @@ export default function Home() {
                       alt={CAPABILITIES_DATA[activeCapIdx].name}
                       className="w-full h-full object-cover rounded-sm shadow-2xl brightness-90"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-tr from-[#002964]/40 to-transparent"></div>
+                    <div className="absolute inset-0 bg-gradient-to-tr from-[#0A2A60]/40 to-transparent"></div>
                   </Motion.div>
                 </AnimatePresence>
                 
@@ -1132,7 +1159,7 @@ export default function Home() {
       </section>
 
       {/* What's New Section */}
-      <section className="py-20 bg-[#FAF9F6] relative overflow-hidden" aria-label="Updates and News">
+      <section className="py-24 bg-[#FAF9F6] relative overflow-hidden" aria-label="Updates and News">
         {/* Pattern Background */}
         <div 
           className="absolute inset-0 opacity-[0.015] pointer-events-none"
@@ -1149,29 +1176,89 @@ export default function Home() {
               <h2 className="text-3xl sm:text-4xl md:text-5xl font-semibold text-[#001A3D] display-font tracking-tight">What's New</h2>
                 <p className="text-gray-500 font-medium text-sm md:text-base">Stay connected with our latest updates, press releases, and upcoming events.</p>
              </div>
-             <div className="hidden md:flex gap-3">
-                <button className="carousel-arrow"><ArrowRight className="w-5 h-5 rotate-180" /></button>
-                <button className="carousel-arrow"><ArrowRight className="w-5 h-5" /></button>
+             {/* Navigation Arrows */}
+             <div className="flex gap-3">
+                <button 
+                  onClick={() => whatsNewApi?.scrollPrev()} 
+                  className="w-10 h-10 md:w-12 md:h-12 rounded-full border border-gray-200 bg-white flex items-center justify-center text-[#001A3D] hover:border-[#F99D1C] hover:text-[#F99D1C] hover:bg-white transition-all duration-300 cursor-pointer focus:outline-none focus:ring-2 focus:ring-[#F99D1C] focus:ring-offset-2 shrink-0"
+                >
+                  <ArrowRight className="w-5 h-5 rotate-180" />
+                </button>
+                <button 
+                  onClick={() => whatsNewApi?.scrollNext()} 
+                  className="w-10 h-10 md:w-12 md:h-12 rounded-full border-2 border-[#F99D1C] bg-white flex items-center justify-center text-[#001A3D] hover:bg-[#F99D1C]/5 transition-all duration-300 cursor-pointer focus:outline-none focus:ring-2 focus:ring-[#F99D1C] focus:ring-offset-2 shrink-0"
+                >
+                  <ArrowRight className="w-5 h-5" />
+                </button>
              </div>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
-            {WHATS_NEW.map((news, idx) => (
-              <div key={idx} className="bg-white rounded-sm overflow-hidden shadow-sm hover:shadow-xl transition-all group flex flex-col h-full">
-                <div className="h-48 md:h-56 overflow-hidden relative">
-                  <ImageWithFallback src={news.image} alt={news.title} className="w-full h-full object-cover grayscale-[0.5] group-hover:grayscale-0 group-hover:scale-105 transition-all duration-700" />
-                  <div className="absolute inset-0 bg-[#001A3D]/20 mix-blend-color group-hover:opacity-0 transition-opacity duration-700"></div>
-                </div>
-                <div className="p-6 md:p-8 flex flex-col flex-grow space-y-4">
-                  <span className="text-blue-600 text-[10px] md:text-[11px] font-semibold tracking-wide">{news.date}</span>
-                  <h4 className="text-[#001A3D] text-base md:text-lg font-semibold leading-snug flex-grow group-hover:text-blue-600 transition-colors">{news.title}</h4>
-                  <div className="h-0.5 w-10 bg-blue-600 group-hover:w-full transition-all duration-500"></div>
-                </div>
-              </div>
-            ))}
+          {/* Embla Carousel Viewport */}
+          <div 
+            className="overflow-hidden" 
+            ref={whatsNewRef}
+            onMouseEnter={() => setWhatsNewHovered(true)}
+            onMouseLeave={() => setWhatsNewHovered(false)}
+          >
+            <div className="flex -mx-3 md:-mx-4">
+              {[...WHATS_NEW, ...WHATS_NEW, ...WHATS_NEW].map((news, idx) => {
+                const isSelected = whatsNewSelectedIndex % WHATS_NEW.length === idx % WHATS_NEW.length;
+                return (
+                  <div 
+                    key={`${idx}-${news.title}`} 
+                    className="flex-[0_0_100%] min-w-0 md:flex-[0_0_50%] lg:flex-[0_0_33.333333%] px-3 md:px-4 shrink-0"
+                  >
+                    {/* Scale Wrapper to apply active card scale without interfering with Embla physics */}
+                    <div 
+                      className="h-full transition-transform duration-400 ease-[cubic-bezier(0.4,0,0.2,1)]"
+                      style={{
+                        transform: isSelected ? 'scale(1)' : 'scale(0.975)'
+                      }}
+                    >
+                      {/* Card Container for styling & hover translate animation */}
+                      <div className="bg-white rounded-[20px] overflow-hidden border border-gray-100 shadow-[0_4px_16px_rgba(0,0,0,0.015)] hover:shadow-[0_8px_32px_rgba(0,0,0,0.03)] hover:-translate-y-1.5 transition-all duration-400 ease-[cubic-bezier(0.4,0,0.2,1)] group flex flex-col h-full cursor-pointer relative">
+                        {/* Image container */}
+                        <div className="h-48 md:h-56 overflow-hidden relative">
+                          <ImageWithFallback 
+                            src={news.image} 
+                            alt={news.title} 
+                            className="w-full h-full object-cover grayscale-[0.3] group-hover:grayscale-0 group-hover:scale-105 transition-all duration-700 ease-[cubic-bezier(0.4,0,0.2,1)]" 
+                          />
+                          {/* Hover Overlay Gradient */}
+                          <div className="absolute inset-0 bg-gradient-to-t from-[#001A3D]/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
+                          <div className="absolute inset-0 bg-[#001A3D]/10 mix-blend-color group-hover:opacity-0 transition-opacity duration-700 pointer-events-none"></div>
+                        </div>
+                        
+                        {/* Content details */}
+                        <div className="p-6 md:p-8 flex flex-col flex-grow space-y-4">
+                          <span className="text-[#0171c1] text-[10px] md:text-[11px] font-semibold tracking-wide uppercase">{news.date}</span>
+                          <h4 className="text-[#001A3D] text-base md:text-lg font-semibold leading-snug flex-grow group-hover:text-[#0171c1] transition-colors duration-300">{news.title}</h4>
+                          {/* Bottom line indicator */}
+                          <div className="h-[2px] w-12 bg-[#0171c1] group-hover:w-full transition-all duration-500 ease-[cubic-bezier(0.4,0,0.2,1)]"></div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
           </div>
+
+          {/* Pagination progress bar */}
+          <div className="max-w-[180px] mx-auto mt-12 flex items-center gap-3">
+            <span className="text-[11px] text-gray-400 font-semibold font-mono">0{((whatsNewSelectedIndex) % WHATS_NEW.length) + 1}</span>
+            <div className="h-[2px] flex-1 bg-gray-200 relative overflow-hidden rounded-full">
+              <div 
+                className="absolute top-0 left-0 h-full bg-[#F99D1C] transition-all duration-500 ease-out"
+                style={{ width: `${(((whatsNewSelectedIndex) % WHATS_NEW.length) + 1) / WHATS_NEW.length * 100}%` }}
+              />
+            </div>
+            <span className="text-[11px] text-gray-400 font-semibold font-mono">0{WHATS_NEW.length}</span>
+          </div>
+
         </div>
       </section>
+
 
 
       {/* Why Hutech Section */}

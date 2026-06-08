@@ -7,11 +7,12 @@ import {
   Clock, ShieldCheck
 } from "lucide-react";
 import Image from "next/image";
-import nasscomMember from "../public/assets/d09f19950f17c8d179450f95cc1d4d9935e505f6.png";
-import nasscomSme from "../public/assets/746d50ef326d79a3733bce8b50a37642f65cac8c.png";
-import stpiLogo from "../public/assets/142b057b4dcb543e514a2801279658758494f508.png";
-import cmmiLogo from "../public/assets/80df4d3bd2c2c1467b186c739b96354bddc98418.png";
-import isoLogo from "../public/assets/abc397f38e710e93fbad0d0436afadef6f31331c.png";
+import nasscomMember from "../public/assets/nasscom_logo.png";
+import nasscomSme from "../public/assets/nasscom_sme_logo.png";
+import stpiLogo from "../public/assets/stpi_logo.png";
+import cmmiLogo from "../public/assets/cmmi_logo.png";
+import isoLogo from "../public/assets/iso_logo.png";
+import LanguageSelector from "./LanguageSelector";
 
 export default function Footer() {
   const currentYear = new Date().getFullYear();
@@ -136,12 +137,8 @@ export default function Footer() {
             </div>
 
             {/* Language Selector */}
-            <div className="pt-4 flex justify-start">
-              <div className="inline-flex items-center gap-3 bg-white text-black px-4 py-2 rounded-sm text-[12px] font-bold cursor-pointer hover:bg-gray-100 transition-colors">
-                <img src="https://flagcdn.com/us.svg" alt="USA Flag" className="w-5 h-3.5 object-cover" />
-                <span>ENGLISH</span>
-                <ChevronDown size={14} strokeWidth={3} />
-              </div>
+            <div className="pt-4">
+              <LanguageSelector />
             </div>
           </div>
 
@@ -168,7 +165,7 @@ export default function Footer() {
                 <Image 
                   src={nasscomSme} 
                   alt="Nasscom SME Inspire 2025 Award Winner" 
-                  className="h-12 md:h-16 w-auto object-contain opacity-70 hover:opacity-100 transition-opacity"
+                  className="h-8 md:h-10 w-auto object-contain opacity-70 hover:opacity-100 transition-opacity"
                   loading="lazy"
                 />
                 <Image 
@@ -180,7 +177,7 @@ export default function Footer() {
                 <Image 
                   src={cmmiLogo} 
                   alt="CMMI Level 3" 
-                  className="h-10 md:h-12 w-auto object-contain opacity-70 hover:opacity-100 transition-opacity"
+                  className="h-8 md:h-10 w-auto object-contain opacity-70 hover:opacity-100 transition-opacity"
                   loading="lazy"
                 />
                 <Image 
