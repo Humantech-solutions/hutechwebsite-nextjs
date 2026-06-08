@@ -34,8 +34,7 @@ const NAV_ITEMS = [
       {
         title: "Careers",
         items: [
-          { name: "Life At Hutech", path: "/company/life-at-hutech" },
-          { name: "Open Positions", path: "/company/open-positions" },
+          { name: "Open Positions", path: "/careers" },
           { name: "Graduates", path: "/company/graduates" },
         ],
       },
@@ -127,7 +126,6 @@ const NAV_ITEMS = [
         items: [
           { name: "Blogs", path: "/resources/blogs" },
           { name: "Case Studies", path: "/resources/case-studies" },
-          { name: "In the News", path: "/company/news" },
           { name: "Events", path: "/resources/events" },
           { name: "Hutech Documents", path: "/resources/hutech-documents" },
         ],
