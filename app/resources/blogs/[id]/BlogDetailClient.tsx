@@ -18,56 +18,11 @@ import { Meta } from "@/components/Meta";
 import { ImageWithFallback } from "@/components/figma/ImageWithFallback";
 import Link from "next/link";
 import { useState } from "react";
-import { Blog } from "./data";
+import { Blog } from "@/lib/data/blogs";
+import { renderTitle } from "@/lib/utils";
+import { FAQAccordion } from "@/components/FAQAccordion";
 
 const BRAND_ORANGE = "#F99D1C";
-
-function FAQAccordion({ faqs }: { faqs: Array<{ question: string; answer: string }> }) {
-  const [openIndex, setOpenIndex] = useState<number | null>(null);
-
-  return (
-    <div className="bg-white border border-gray-200 rounded-3xl overflow-hidden">
-      {faqs.map((faq, index) => (
-        <div
-          key={index}
-          className="border-b border-gray-100 last:border-b-0"
-        >
-          <button
-            onClick={() => setOpenIndex(openIndex === index ? null : index)}
-            className="w-full flex items-center justify-between px-8 py-6 text-left hover:bg-gray-50 transition-colors group"
-          >
-            <h3 className="font-bold text-[#001A3D] pr-8 leading-snug text-base">
-              {faq.question}
-            </h3>
-            <ChevronRight
-              size={20}
-              className={`flex-shrink-0 text-gray-400 transition-transform ${
-                openIndex === index ? 'rotate-90' : ''
-              }`}
-            />
-          </button>
-          <AnimatePresence>
-            {openIndex === index && (
-              <Motion.div
-                initial={{ opacity: 0, height: 0 }}
-                animate={{ opacity: 1, height: "auto" }}
-                exit={{ opacity: 0, height: 0 }}
-                transition={{ duration: 0.3 }}
-                className="overflow-hidden"
-              >
-                <div className="px-8 pb-6">
-                  <p className="text-gray-500 leading-relaxed font-medium text-base">
-                    {faq.answer}
-                  </p>
-                </div>
-              </Motion.div>
-            )}
-          </AnimatePresence>
-        </div>
-      ))}
-    </div>
-  );
-}
 
 export default function BlogDetailClient({ blog }: { blog: Blog }) {
   if (!blog) {
@@ -86,17 +41,19 @@ export default function BlogDetailClient({ blog }: { blog: Blog }) {
 
   return (
     <div className="flex flex-col bg-white min-h-screen">
-      <Meta title={`${blog.title} | Blogs | Hutech Solutions`} description={blog.content[0].text} />
+      <Meta title={`${blog.title} | Blogs | Hutech Solutions`} description={blog.excerpt ?? (blog.content?.[0]?.text ?? "")} />
       <Breadcrumbs variant="light" />
 
       {/* Hero Section */}
       <section className="bg-[#001A3D] text-white min-h-[500px] relative overflow-hidden flex items-center">
         <div className="absolute inset-0 z-0">
-          <ImageWithFallback
-            src={blog.image}
-            alt={blog.title}
-            className="w-full h-full object-cover opacity-20"
-          />
+          {blog.image && (
+            <ImageWithFallback
+              src={blog.image}
+              alt={blog.title}
+              className="w-full h-full object-cover opacity-20"
+            />
+          )}
           <div className="absolute inset-0 bg-gradient-to-t from-[#001A3D] via-transparent to-transparent"></div>
         </div>
 
@@ -123,7 +80,7 @@ export default function BlogDetailClient({ blog }: { blog: Blog }) {
             </div>
 
             <h1 className="text-4xl md:text-7xl font-semibold display-font leading-[1.1] max-w-5xl">
-              {blog.title}
+              {renderTitle(blog.title)}
             </h1>
 
             <div className="flex flex-wrap items-center gap-10 pt-4 border-t border-white/10 w-fit pr-12">
@@ -160,16 +117,31 @@ export default function BlogDetailClient({ blog }: { blog: Blog }) {
                     Share Article <span className="w-12 h-[1px] bg-gray-200"></span>
                  </div>
                  <div className="flex flex-col items-center gap-4">
-                    <button className="p-3 rounded-full bg-gray-50 text-gray-400 hover:bg-[#0171c1] hover:text-white transition-all">
+                    <button onClick={() => window.open(`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(window.location.href)}`, '_blank')} className="p-3 rounded-full bg-gray-50 text-gray-400 hover:bg-[#0171c1] hover:text-white transition-all">
                        <Linkedin size={18} />
                     </button>
-                    <button className="p-3 rounded-full bg-gray-50 text-gray-400 hover:bg-[#0171c1] hover:text-white transition-all">
+                    <button onClick={() => window.open(`https://twitter.com/intent/tweet?url=${encodeURIComponent(window.location.href)}&text=${encodeURIComponent(blog.title)}`, '_blank')} className="p-3 rounded-full bg-gray-50 text-gray-400 hover:bg-[#0171c1] hover:text-white transition-all">
                        <Twitter size={18} />
                     </button>
-                    <button className="p-3 rounded-full bg-gray-50 text-gray-400 hover:bg-[#0171c1] hover:text-white transition-all">
+                    <button onClick={() => window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(window.location.href)}`, '_blank')} className="p-3 rounded-full bg-gray-50 text-gray-400 hover:bg-[#0171c1] hover:text-white transition-all">
                        <Facebook size={18} />
                     </button>
-                    <button className="p-3 rounded-full bg-gray-50 text-gray-400 hover:bg-[#F99D1C] hover:text-white transition-all">
+                    <button onClick={async () => {
+                      if (navigator.share) {
+                        try {
+                          await navigator.share({
+                            title: blog.title,
+                            text: blog.excerpt || blog.title,
+                            url: window.location.href,
+                          });
+                        } catch (err) {
+                          console.log('Error sharing', err);
+                        }
+                      } else {
+                        navigator.clipboard.writeText(window.location.href);
+                        alert("Link copied to clipboard!");
+                      }
+                    }} className="p-3 rounded-full bg-gray-50 text-gray-400 hover:bg-[#F99D1C] hover:text-white transition-all">
                        <Share2 size={18} />
                     </button>
                  </div>
@@ -179,34 +151,43 @@ export default function BlogDetailClient({ blog }: { blog: Blog }) {
             {/* Content Area */}
             <div className="lg:col-span-7 space-y-12">
               <div className="prose prose-xl prose-slate max-w-none">
-                {blog.content.map((block, idx) => {
-                  if (block.type === "paragraph") {
-                    return <p key={idx} className="text-lg md:text-xl text-gray-500 font-medium leading-[1.8] mb-8">{block.text}</p>;
-                  }
-                  if (block.type === "heading") {
-                    return <h2 key={idx} className="text-3xl md:text-4xl font-bold text-[#001A3D] display-font mt-12 mb-8">{block.text}</h2>;
-                  }
-                  if (block.type === "quote") {
-                    return (
-                      <div key={idx} className="my-16 relative p-12 bg-gray-50 rounded-[2rem] border-l-8 border-[#F99D1C]">
-                        <Quote className="absolute top-8 right-8 w-12 h-12 text-[#F99D1C]/10" />
-                        <blockquote className="space-y-6">
-                           <p className="text-2xl font-bold text-[#001A3D] display-font italic leading-relaxed">
-                              "{block.text}"
-                           </p>
-                           <footer className="flex items-center gap-4">
-                              <div className="w-10 h-1 h-[2px] bg-[#F99D1C]"></div>
-                              <div>
-                                 <div className="font-bold text-[#001A3D]">{block.author}</div>
-                                 <div className="text-xs text-gray-400 font-bold uppercase tracking-widest">{block.designation}</div>
-                              </div>
-                           </footer>
-                        </blockquote>
-                      </div>
-                    );
-                  }
-                  return null;
-                })}
+                {(blog as any).contentHtml ? (
+                  // WordPress post: render HTML content
+                  <div
+                    className="wp-content text-lg text-gray-500 font-medium leading-[1.8] [&_h2]:text-3xl [&_h2]:md:text-4xl [&_h2]:font-bold [&_h2]:text-[#001A3D] [&_h2]:display-font [&_h2]:mt-12 [&_h2]:mb-8 [&_h3]:text-2xl [&_h3]:font-bold [&_h3]:text-[#001A3D] [&_h3]:mt-8 [&_h3]:mb-4 [&_p]:mb-8 [&_ul]:list-disc [&_ul]:pl-6 [&_ul]:mb-6 [&_ol]:list-decimal [&_ol]:pl-6 [&_ol]:mb-6 [&_li]:mb-2 [&_blockquote]:border-l-8 [&_blockquote]:border-[#F99D1C] [&_blockquote]:pl-8 [&_blockquote]:italic [&_blockquote]:text-[#001A3D] [&_blockquote]:font-bold [&_a]:text-[#0171c1] [&_a]:underline"
+                    dangerouslySetInnerHTML={{ __html: (blog as any).contentHtml }}
+                  />
+                ) : (
+                  // Static data: render content blocks
+                  blog.content.map((block, idx) => {
+                    if (block.type === "paragraph") {
+                      return <p key={idx} className="text-lg md:text-xl text-gray-500 font-medium leading-[1.8] mb-8">{block.text}</p>;
+                    }
+                    if (block.type === "heading") {
+                      return <h2 key={idx} className="text-3xl md:text-4xl font-bold text-[#001A3D] display-font mt-12 mb-8">{block.text}</h2>;
+                    }
+                    if (block.type === "quote") {
+                      return (
+                        <div key={idx} className="my-16 relative p-12 bg-gray-50 rounded-[2rem] border-l-8 border-[#F99D1C]">
+                          <Quote className="absolute top-8 right-8 w-12 h-12 text-[#F99D1C]/10" />
+                          <blockquote className="space-y-6">
+                             <p className="text-2xl font-bold text-[#001A3D] display-font italic leading-relaxed">
+                                "{block.text}"
+                             </p>
+                             <footer className="flex items-center gap-4">
+                                <div className="w-10 h-1 h-[2px] bg-[#F99D1C]"></div>
+                                <div>
+                                   <div className="font-bold text-[#001A3D]">{block.author}</div>
+                                   <div className="text-xs text-gray-400 font-bold uppercase tracking-widest">{block.designation}</div>
+                                </div>
+                             </footer>
+                          </blockquote>
+                        </div>
+                      );
+                    }
+                    return null;
+                  })
+                )}
               </div>
 
               {/* Tags */}
@@ -226,10 +207,10 @@ export default function BlogDetailClient({ blog }: { blog: Blog }) {
                 <div className="pt-20 space-y-12">
                   <div className="space-y-4">
                     <h2 className="text-4xl md:text-4xl font-bold text-[#001A3D] display-font">
-                      Frequently Asked Questions
+                      {blog.faqTitle ? renderTitle(blog.faqTitle) : "Frequently Asked Questions"}
                     </h2>
                     <p className="text-lg text-gray-500 font-medium max-w-3xl">
-                      Common questions about implementing {blog.category} solutions, answered by our experts.
+                      {blog.faqSubtitle ? renderTitle(blog.faqSubtitle) : `Common questions about implementing ${blog.category} solutions, answered by our experts.`}
                     </p>
                   </div>
                   <FAQAccordion faqs={blog.faqs} />
