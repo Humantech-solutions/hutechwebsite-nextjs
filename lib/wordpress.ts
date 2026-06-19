@@ -747,6 +747,237 @@ export async function getBlogPageData(): Promise<BlogPageData | null> {
   }
 }
 
+// ─── Events GraphQL Queries ───────────────────────────────────────────────────
+
+const EVENTS_LIST_QUERY = `
+  query GetAllEvents {
+    hutechEvents(first: 100, where: { orderby: { field: DATE, order: DESC } }) {
+      nodes {
+        id
+        slug
+        title
+        date
+        featuredImage { node { sourceUrl } }
+        eventCategories { nodes { name } }
+        eventPostFields {
+          eventDate
+          eventTimeStart
+          eventTimeEnd
+          timezone
+          location
+          eventType
+          eventCategoryLabel
+        }
+      }
+    }
+  }
+`;
+
+const EVENT_BY_SLUG_QUERY = `
+  query GetEventBySlug($slug: ID!) {
+    hutechEvent(id: $slug, idType: SLUG) {
+      id
+      slug
+      title
+      date
+      featuredImage { node { sourceUrl } }
+      eventCategories { nodes { name } }
+      eventPostFields {
+        tagline
+        eventType
+        eventCategoryLabel
+        eventDate
+        eventTimeStart
+        eventTimeEnd
+        timezone
+        location
+        description
+        highlight1
+        highlight2
+        highlight3
+        highlight4
+        highlight5
+        highlight6
+        agenda1Time
+        agenda1Title
+        agenda2Time
+        agenda2Title
+        agenda3Time
+        agenda3Title
+        agenda4Time
+        agenda4Title
+        agenda5Time
+        agenda5Title
+        agenda6Time
+        agenda6Title
+        agenda7Time
+        agenda7Title
+        agenda8Time
+        agenda8Title
+        speaker1Name
+        speaker1Role
+        speaker1Image { node { sourceUrl } }
+        speaker2Name
+        speaker2Role
+        speaker2Image { node { sourceUrl } }
+        speaker3Name
+        speaker3Role
+        speaker3Image { node { sourceUrl } }
+        speaker4Name
+        speaker4Role
+        speaker4Image { node { sourceUrl } }
+        speaker5Name
+        speaker5Role
+        speaker5Image { node { sourceUrl } }
+        ctaTitle
+        ctaDescription
+        ctaImage { node { sourceUrl } }
+        ctaVideoUrl
+      }
+    }
+  }
+`;
+
+const EVENT_PAGE_QUERY = `
+  query GetEventPageData {
+    pages(where: { title: "Events" }) {
+      nodes {
+        eventPageFields {
+          title
+          description
+          bgImage { node { sourceUrl } }
+        }
+      }
+    }
+  }
+`;
+
+function formatEventDateString(dateStr: string): string {
+  if (!dateStr) return "";
+  try {
+    // If it's already "April 20, 2026", it will parse or return as is.
+    // Handle ACF raw format or ISO string (e.g. "2026-06-25T00:00:00+00:00" or "20260625")
+    let d: Date;
+    if (/^\d{8}$/.test(dateStr)) {
+      const year = dateStr.substring(0, 4);
+      const month = dateStr.substring(4, 6);
+      const day = dateStr.substring(6, 8);
+      d = new Date(`${year}-${month}-${day}T00:00:00`);
+    } else {
+      d = new Date(dateStr);
+    }
+    
+    if (!isNaN(d.getTime())) {
+      return d.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+    }
+  } catch (e) {
+    // ignore
+  }
+  return dateStr;
+}
+
+function formatEventDateTime(pf: any, nodeDate: string): { date: string; time: string } {
+  const rawDate = pf.eventDate || nodeDate || "";
+  const date = formatEventDateString(rawDate);
+  const start = pf.eventTimeStart || "";
+  const end = pf.eventTimeEnd || "";
+  const tz = pf.timezone || "";
+  let time = "";
+  if (start && end) {
+    time = `${start} - ${end}${tz ? " " + tz : ""}`;
+  } else if (start) {
+    time = `${start}${tz ? " " + tz : ""}`;
+  }
+  return { date, time };
+}
+
+function transformEventNode(node: any) {
+  const pf = node.eventPostFields || {};
+  const { date, time } = formatEventDateTime(pf, node.date);
+  const imageUrl = node.featuredImage?.node?.sourceUrl ?? "";
+
+  const highlights: string[] = [1, 2, 3, 4, 5, 6]
+    .map((i) => pf[`highlight${i}`])
+    .filter(Boolean);
+
+  const agenda: { time: string; event: string }[] = [1, 2, 3, 4, 5, 6, 7, 8]
+    .map((i) => ({ time: pf[`agenda${i}Time`] || "", event: pf[`agenda${i}Title`] || "" }))
+    .filter((a) => a.time || a.event);
+
+  const speakers: { name: string; role: string; image: string }[] = [1, 2, 3, 4, 5]
+    .map((i) => ({
+      name: pf[`speaker${i}Name`] || "",
+      role: pf[`speaker${i}Role`] || "",
+      image: imgUrl(pf[`speaker${i}Image`]) || "",
+    }))
+    .filter((s) => s.name);
+
+  return {
+    id: node.slug,
+    slug: node.slug,
+    title: node.title ?? "",
+    tagline: pf.tagline ?? "",
+    date,
+    time,
+    location: pf.location ?? "",
+    type: Array.isArray(pf.eventType) ? (pf.eventType[0] || "In-Person") : (pf.eventType || "In-Person"),
+    category: Array.isArray(pf.eventCategoryLabel) ? (pf.eventCategoryLabel[0] || "Event") : (pf.eventCategoryLabel || node.eventCategories?.nodes?.[0]?.name || "Event"),
+    image: imageUrl,
+    description: pf.description ?? "",
+    highlights,
+    agenda,
+    speakers,
+    ctaTitle: pf.ctaTitle ?? "Missed this |Event?",
+    ctaDescription: pf.ctaDescription ?? "",
+    ctaImage: imgUrl(pf.ctaImage) ?? imageUrl,
+    ctaVideoUrl: pf.ctaVideoUrl ?? "",
+  };
+}
+
+export async function getEvents(): Promise<any[]> {
+  try {
+    const raw = await fetchGraphQL(EVENTS_LIST_QUERY);
+    if (raw?.errors || !raw?.data?.hutechEvents?.nodes) {
+      console.warn("[WP] Could not fetch events. Using static fallback.");
+      return [];
+    }
+    return (raw.data.hutechEvents.nodes as any[]).map(transformEventNode);
+  } catch (err) {
+    console.warn("[WP] getEvents() failed:", err);
+    return [];
+  }
+}
+
+export async function getEventBySlug(slug: string): Promise<any | null> {
+  try {
+    const raw = await fetchGraphQL(EVENT_BY_SLUG_QUERY, { slug });
+    if (raw?.errors || !raw?.data?.hutechEvent) {
+      console.warn("[WP] getEventBySlug() – no data for:", slug);
+      return null;
+    }
+    return transformEventNode(raw.data.hutechEvent);
+  } catch (err) {
+    console.warn("[WP] getEventBySlug() failed:", err);
+    return null;
+  }
+}
+
+export async function getEventPageData(): Promise<{ title: string; description: string; bgImageUrl?: string } | null> {
+  try {
+    const raw = await fetchGraphQL(EVENT_PAGE_QUERY);
+    const node = raw?.data?.pages?.nodes?.[0]?.eventPageFields;
+    if (!node) return null;
+    return {
+      title: node.title || "",
+      description: node.description || "",
+      bgImageUrl: imgUrl(node.bgImage),
+    };
+  } catch (err) {
+    console.warn("[WP] getEventPageData() failed:", err);
+    return null;
+  }
+}
+
 // ─── Case Studies GraphQL Queries ─────────────────────────────────────────────
 
 const CASE_STUDIES_QUERY = `
