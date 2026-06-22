@@ -829,6 +829,14 @@ const EVENT_BY_SLUG_QUERY = `
         speaker5Name
         speaker5Role
         speaker5Image { node { sourceUrl } }
+        titleAbout
+        titleAgenda
+        titleSpeakers
+        helpfulLinksTitle
+        linkShareLabel
+        linkCalendarLabel
+        linkContactLabel
+        linkContactUrl
         ctaTitle
         ctaDescription
         ctaImage { node { sourceUrl } }
@@ -927,8 +935,19 @@ function transformEventNode(node: any) {
     highlights,
     agenda,
     speakers,
-    ctaTitle: pf.ctaTitle ?? "Missed this |Event?",
-    ctaDescription: pf.ctaDescription ?? "",
+    
+    titleAbout: pf.titleAbout || "About the Event",
+    titleAgenda: pf.titleAgenda || "Event Agenda",
+    titleSpeakers: pf.titleSpeakers || "Featured Speakers",
+    
+    helpfulLinksTitle: pf.helpfulLinksTitle || "Helpful Links",
+    linkShareLabel: pf.linkShareLabel || "Share with colleagues",
+    linkCalendarLabel: pf.linkCalendarLabel || "Add to Calendar",
+    linkContactLabel: pf.linkContactLabel || "Contact Organizer",
+    linkContactUrl: pf.linkContactUrl || "/contact",
+
+    ctaTitle: pf.ctaTitle ?? "Can't make it to this |Event?",
+    ctaDescription: pf.ctaDescription ?? "Subscribe to our tech newsletter to receive event summaries, recording links, and early-bird notifications for our upcoming summits.",
     ctaImage: imgUrl(pf.ctaImage) ?? imageUrl,
     ctaVideoUrl: pf.ctaVideoUrl ?? "",
   };

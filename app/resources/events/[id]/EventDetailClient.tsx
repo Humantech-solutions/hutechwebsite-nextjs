@@ -36,6 +36,39 @@ export default function EventDetailClient({ event }: { event: any }) {
     "https://images.unsplash.com/photo-1511512578047-dfb367046420?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080";
   const ctaVideoUrl = event.ctaVideoUrl || "";
 
+  const handleShare = async () => {
+    try {
+      if (navigator.share) {
+        await navigator.share({
+          title: event.title,
+          text: event.tagline,
+          url: window.location.href,
+        });
+      } else {
+        await navigator.clipboard.writeText(window.location.href);
+        alert("Link copied to clipboard!");
+      }
+    } catch (err) {
+      console.log("Error sharing", err);
+    }
+  };
+
+  const handleAddToCalendar = () => {
+    const startDate = new Date(event.date);
+    if (isNaN(startDate.getTime())) return;
+
+    // Create a basic all-day event for the calendar
+    const startStr = startDate.toISOString().split("T")[0].replace(/-/g, "");
+
+    const googleCalendarUrl = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(
+      event.title
+    )}&dates=${startStr}/${startStr}&details=${encodeURIComponent(
+      event.tagline || ""
+    )}&location=${encodeURIComponent(event.location || "")}`;
+
+    window.open(googleCalendarUrl, "_blank", "noopener,noreferrer");
+  };
+
   return (
     <div className="flex min-h-screen flex-col bg-white">
       <Meta title={`${event.title} | Events | Hutech Solutions`} description={event.tagline} />
@@ -104,8 +137,8 @@ export default function EventDetailClient({ event }: { event: any }) {
               
               {/* Description */}
               <div>
-                <h2 className="mb-6 text-[48px] font-bold text-[#0F172A]">
-                  About the Event
+                <h2 className="mb-6 text-3xl font-bold text-[#001A3D] display-font">
+                  {renderTitle(event.titleAbout || "About the Event")}
                 </h2>
                 <p className="mb-10 max-w-[700px] text-[18px] leading-[1.8] text-[#64748B]">
                   {event.description}
@@ -130,8 +163,8 @@ export default function EventDetailClient({ event }: { event: any }) {
               {/* Agenda */}
               {event.agenda?.length > 0 && (
                 <div>
-                  <h2 className="mb-8 text-[48px] font-bold text-[#0F172A]">
-                    Event Agenda
+                  <h2 className="mb-8 text-3xl font-bold text-[#001A3D] display-font">
+                    {renderTitle(event.titleAgenda || "Event Agenda")}
                   </h2>
                   <div className="space-y-4">
                     {event.agenda.map((item: any, idx: number) => (
@@ -139,11 +172,11 @@ export default function EventDetailClient({ event }: { event: any }) {
                         key={idx}
                         className="flex flex-col md:flex-row items-start md:items-center rounded-2xl border border-[#E5E7EB] bg-white p-6 md:h-[88px] md:px-8 md:py-0"
                       >
-                        <div className="w-[160px] text-[24px] font-bold text-[#2563EB]">
+                        <div className="text-[#0171c1] font-black text-lg whitespace-nowrap w-24 tracking-tight">
                           {item.time}
                         </div>
                         <div className="hidden h-10 w-[1px] bg-[#E5E7EB] md:block mr-8"></div>
-                        <div className="text-[20px] font-semibold text-[#0F172A] mt-2 md:mt-0">
+                        <div className="font-bold text-[#001A3D] text-lg">
                           {renderTitle(item.event)}
                         </div>
                       </div>
@@ -155,8 +188,8 @@ export default function EventDetailClient({ event }: { event: any }) {
               {/* Speakers */}
               {event.speakers?.length > 0 && (
                 <div>
-                  <h2 className="mb-12 text-[48px] font-bold text-[#0F172A]">
-                    Featured Speakers
+                  <h2 className="mb-12 text-3xl font-bold text-[#001A3D] display-font">
+                    {renderTitle(event.titleSpeakers || "Featured Speakers")}
                   </h2>
                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12 text-center">
                     {event.speakers.map((speaker: any, idx: number) => (
@@ -172,7 +205,7 @@ export default function EventDetailClient({ event }: { event: any }) {
                           {renderTitle(speaker.name)}
                         </h4>
                         <div className="mt-1 flex flex-col items-center justify-center gap-3">
-                          <p className="text-[14px] uppercase tracking-wider text-[#2563EB]">
+                          <p className="text-sm text-[#0171c1] font-bold uppercase tracking-widest">
                             {speaker.role}
                           </p>
                           {speaker.linkedin && (
@@ -241,7 +274,7 @@ export default function EventDetailClient({ event }: { event: any }) {
 
                   <button
                     onClick={() => setIsModalOpen(true)}
-                    className="mt-[24px] flex h-[44px] w-full items-center justify-center rounded-[8px] bg-[#3D7BC3] text-[14px] font-bold uppercase tracking-[2px] text-white transition-all duration-300 hover:-translate-y-[2px] hover:bg-[#3164a3]"
+                    className="mt-[24px] w-full bg-[#0171c1] hover:bg-white hover:text-[#001A3D] text-white py-5 rounded-sm font-black uppercase tracking-[0.2em] text-[11px] transition-all duration-500 shadow-lg"
                   >
                     REGISTER NOW
                   </button>
@@ -253,23 +286,29 @@ export default function EventDetailClient({ event }: { event: any }) {
                 {/* Helpful Links Card */}
                 <div className="mt-6 rounded-[20px] border border-[#E5E7EB] bg-white p-6">
                   <h4 className="mb-4 text-[16px] font-bold text-[#0F172A]">
-                    Helpful Links
+                    {event.helpfulLinksTitle || "Helpful Links"}
                   </h4>
                   <div className="space-y-4">
-                    <button className="flex w-full items-center gap-3 text-[16px] font-medium text-[#64748B] transition-colors hover:text-[#2563EB]">
-                      <Share2 className="h-5 w-5 flex-shrink-0" />
-                      Share with colleagues
+                    <button 
+                      onClick={handleShare}
+                      className="flex items-center gap-3 text-sm font-bold text-gray-500 hover:text-[#0171c1] transition-colors"
+                    >
+                      <Share2 className="h-4 w-4 flex-shrink-0" />
+                      {event.linkShareLabel || "Share with colleagues"}
                     </button>
-                    <button className="flex w-full items-center gap-3 text-[16px] font-medium text-[#64748B] transition-colors hover:text-[#2563EB]">
-                      <Monitor className="h-5 w-5 flex-shrink-0" />
-                      Add to Calendar
+                    <button 
+                      onClick={handleAddToCalendar}
+                      className="flex items-center gap-3 text-sm font-bold text-gray-500 hover:text-[#0171c1] transition-colors"
+                    >
+                      <Monitor className="h-4 w-4 flex-shrink-0" />
+                      {event.linkCalendarLabel || "Add to Calendar"}
                     </button>
                     <Link
-                      href="/contact"
-                      className="flex w-full items-center gap-3 text-[16px] font-medium text-[#64748B] transition-colors hover:text-[#2563EB]"
+                      href={event.linkContactUrl || "/contact"}
+                      className="flex items-center gap-3 text-sm font-bold text-gray-500 hover:text-[#0171c1] transition-colors"
                     >
-                      <MessageSquare className="h-5 w-5 flex-shrink-0" />
-                      Contact Organizer
+                      <MessageSquare className="h-4 w-4 flex-shrink-0" />
+                      {event.linkContactLabel || "Contact Organizer"}
                     </Link>
                   </div>
                 </div>
@@ -286,20 +325,20 @@ export default function EventDetailClient({ event }: { event: any }) {
             {/* Left Content */}
             <div className="w-full lg:w-1/2">
               <h2 className="mb-[32px] max-w-[500px] text-[40px] font-bold leading-[1.1] text-[#041B4D] md:text-[48px]">
-                Can&apos;t make it to this event?
+                {renderTitle(ctaTitle, "text-inherit", "text-[#0171c1]", "text-[#0171c1]")}
               </h2>
               <p className="mb-[40px] max-w-[620px] text-[16px] font-normal leading-[1.8] text-[#64748B] md:text-[18px]">
-                Subscribe to our tech newsletter to receive event summaries, recording links, and early-bird notifications for our upcoming summits.
+                {ctaDesc}
               </p>
               <form className="flex w-full flex-col gap-[12px] md:flex-row md:gap-[16px]">
                 <input
                   type="email"
                   placeholder="Enter your corporate email"
-                  className="h-[56px] w-full rounded-[8px] border border-[#E5E7EB] bg-white px-[20px] text-[16px] placeholder:text-[16px] placeholder:text-[#94A3B8] focus:border-[#3B82F6] focus:outline-none md:w-[420px]"
+                  className="h-[56px] w-full rounded-[8px] border border-[#E5E7EB] bg-white px-[20px] text-[16px] placeholder:text-[16px] placeholder:text-[#94A3B8] focus:border-[#0171c1] focus:outline-none md:w-[420px]"
                 />
                 <button
                   type="submit"
-                  className="h-[56px] w-full rounded-[8px] bg-[#3B82F6] text-[14px] font-bold uppercase tracking-[2px] text-white transition-colors duration-300 hover:bg-blue-600 md:w-[180px]"
+                  className="h-[56px] w-full rounded-[8px] bg-[#0171c1] text-[14px] font-bold uppercase tracking-[2px] text-white transition-colors duration-300 hover:bg-blue-600 md:w-[180px]"
                 >
                   SUBSCRIBE
                 </button>
@@ -320,7 +359,7 @@ export default function EventDetailClient({ event }: { event: any }) {
                   onClick={() => ctaVideoUrl && setVideoOpen(true)}
                 >
                   <div className="flex h-[88px] w-[88px] items-center justify-center rounded-full bg-white shadow-lg transition-transform duration-300 hover:scale-105">
-                    <Video className="h-8 w-8 fill-current text-[#3B82F6]" />
+                    <Video className="h-8 w-8 fill-current text-[#0171c1]" />
                   </div>
                 </div>
               </div>
