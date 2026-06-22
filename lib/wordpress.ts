@@ -1298,3 +1298,214 @@ export async function getCaseStudyPageData(): Promise<BlogPageData | null> {
     return null;
   }
 }
+
+// ─── About Page GraphQL Query ─────────────────────────────────────────────────
+
+const ABOUT_PAGE_QUERY = `
+  query GetAboutPageData {
+    pages(where: { title: "About" }) {
+      nodes {
+        aboutPageFields {
+          heroTagline
+          heroTitle
+          heroDescription
+          heroBgImage { node { sourceUrl } }
+          heroStat1Value heroStat1Label
+          heroStat2Value heroStat2Label
+          overviewTitle
+          overviewDescription
+          overviewFeature1Title overviewFeature1Desc
+          overviewFeature2Title overviewFeature2Desc
+          overviewFeature3Title overviewFeature3Desc
+          overviewFeature4Title overviewFeature4Desc
+          whatWeDoTitle
+          whatWeDoDesc
+          whatWeDoBullet1 whatWeDoBullet2 whatWeDoBullet3 whatWeDoBullet4
+          whoWeHelpTitle whoWeHelpDesc
+          whoWeHelpBullet1 whoWeHelpBullet2 whoWeHelpBullet3 whoWeHelpBullet4
+          whyChooseUsTitle
+          whyChooseUsDesc
+          globalSynergyTitle globalSynergyDesc
+          synergyStat1Label synergyStat2Label
+          globalFootprintTitle globalFootprintDesc
+          globalStat1Value globalStat1Label globalStat2Value globalStat2Label
+          location1Name location1City location1Type location1Details location1Lat location1Lng
+          location2Name location2City location2Type location2Details location2Lat location2Lng
+          location3Name location3City location3Type location3Details location3Lat location3Lng
+          location4Name location4City location4Type location4Details location4Lat location4Lng
+          location5Name location5City location5Type location5Details location5Lat location5Lng
+          historySubtitle
+          historyTitle
+          milestone1Year milestone1Title milestone1Desc
+          milestone2Year milestone2Title milestone2Desc
+          milestone3Year milestone3Title milestone3Desc
+          milestone4Year milestone4Title milestone4Desc
+          milestone5Year milestone5Title milestone5Desc
+          milestone6Year milestone6Title milestone6Desc
+          ctaBgImage { node { sourceUrl } }
+          ctaTitle ctaDescription
+          ctaButton1Text ctaButton1Url
+          ctaButton2Text ctaButton2Url
+        }
+      }
+    }
+  }
+`;
+
+function transformAboutPageData(f: any) {
+  const stats = [1, 2, 3, 4, 5, 6].map(i => ({
+    value: f[`heroStat${i}Value`] || "",
+    label: f[`heroStat${i}Label`] || "",
+  })).filter(s => s.value);
+
+  const whatWeDoItems = [1, 2, 3, 4].map(i => f[`whatWeDoBullet${i}`] || "").filter(Boolean);
+  const whoWeHelpItems = [1, 2, 3, 4].map(i => f[`whoWeHelpBullet${i}`] || "").filter(Boolean);
+
+  const milestones = [1, 2, 3, 4, 5, 6].map(i => ({
+    year:  f[`milestone${i}Year`]  || "",
+    title: f[`milestone${i}Title`] || "",
+    desc:  f[`milestone${i}Desc`]  || "",
+  })).filter(m => m.year);
+
+  const features = [1, 2, 3, 4].map(i => ({
+    title: f[`overviewFeature${i}Title`] || "",
+    desc:  f[`overviewFeature${i}Desc`] || "",
+    icon:  "" // Icons are static in AboutClient
+  })).filter(feat => feat.title);
+
+  const offices = [1, 2, 3, 4, 5].map(i => ({
+    id: f[`location${i}Name`]?.toLowerCase().replace(/\s+/g, '-') || `office-${i}`,
+    name: f[`location${i}Name`] || "",
+    city: f[`location${i}City`] || "",
+    type: f[`location${i}Type`] || "",
+    details: f[`location${i}Details`] || "",
+    lat: f[`location${i}Lat`] || "",
+    lng: f[`location${i}Lng`] || ""
+  })).filter(loc => loc.name);
+
+  return {
+    heroTagline:    f.heroTagline    || "Corporate Profile",
+    heroTitle:      f.heroTitle      || "Architecting |Business Value.",
+    heroDescription:f.heroDescription|| "",
+    heroBgImage:    imgUrl(f.heroBgImage) || "",
+    stats,
+    overviewTitle:  f.overviewTitle  || "Providing The Finest |Digital Experiences.",
+    overviewQuote:  f.overviewDescription || "",
+    features,
+    whatWeDoTitle:  f.whatWeDoTitle  || "What We Do",
+    whatWeDoDesc:   f.whatWeDoDesc   || "",
+    whatWeDoItems,
+    whoWeHelpTitle: f.whoWeHelpTitle || "Who We Help?",
+    whoWeHelpDesc:  f.whoWeHelpDesc  || "",
+    whoWeHelpItems,
+    whyChooseTitle: f.whyChooseUsTitle || "Why Choose Us",
+    whyChooseDesc:  f.whyChooseUsDesc  || "",
+    synergyTitle:   f.globalSynergyTitle || "Global |Synergy.",
+    synergyDesc:    f.globalSynergyDesc || "",
+    synergyStat1:   f.synergyStat1Label || "4 Global Offices",
+    synergyStat2:   f.synergyStat2Label || "90+ Member Team",
+    // Map stats
+    mapTitle:       f.globalFootprintTitle || "Global Footprint, |Local Expertise.",
+    mapDescription: f.globalFootprintDesc || "",
+    mapStat1Value:  f.globalStat1Value  || "24/7",
+    mapStat1Label:  f.globalStat1Label  || "Operations",
+    mapStat2Value:  f.globalStat2Value  || "3",
+    mapStat2Label:  f.globalStat2Label  || "Continents",
+    offices,
+    historySubtitle:f.historySubtitle || "Corporate Evolution",
+    historyTitle:   f.historyTitle   || "Our |History.",
+    milestones,
+    ctaBgImage:     imgUrl(f.ctaBgImage) || "",
+    ctaTitle:       f.ctaTitle       || "Join the Next |Digital Revolution.",
+    ctaDescription: f.ctaDescription || "",
+    ctaBtn1Text:    f.ctaButton1Text || "Start Your Project",
+    ctaBtn1Url:     f.ctaButton1Url  || "/contact",
+    ctaBtn2Text:    f.ctaButton2Text || "Executive Careers",
+    ctaBtn2Url:     f.ctaButton2Url  || "/careers",
+  };
+}
+
+export async function getAboutPageData(): Promise<ReturnType<typeof transformAboutPageData> | null> {
+  try {
+    const raw = await fetchGraphQL(ABOUT_PAGE_QUERY);
+    const f = raw?.data?.pages?.nodes?.[0]?.aboutPageFields;
+    if (!f) return null;
+    return transformAboutPageData(f);
+  } catch (err) {
+    console.warn("[WP] getAboutPageData() failed:", err);
+    return null;
+  }
+}
+
+// ─── Vision Mission & Values Page ────────────────────────────────────────────
+
+const VMV_PAGE_QUERY = `
+  query GetVMVPageData {
+    pages(where: { title: "Vision Mission Values" }) {
+      nodes {
+        visionMissionValuesPageFields {
+          vmvHeroTagline
+          vmvHeroTitle
+          vmvHeroDescription
+          vmvVisionTitle
+          vmvVisionDescription
+          vmvMissionTitle
+          vmvMissionDescription
+          vmvValuesTagline
+          vmvValuesTitle
+          vmvValuesDescription
+          vmvValue1Title vmvValue1Desc
+          vmvValue2Title vmvValue2Desc
+          vmvValue3Title vmvValue3Desc
+          vmvValue4Title vmvValue4Desc
+          vmvValue5Title vmvValue5Desc
+          vmvValue6Title vmvValue6Desc
+          vmvCtaTitle
+          vmvCtaDescription
+          vmvCtaBtn1Text vmvCtaBtn1Url
+          vmvCtaBtn2Text vmvCtaBtn2Url
+        }
+      }
+    }
+  }
+`;
+
+function transformVMVPageData(f: any) {
+  const values = [1, 2, 3, 4, 5, 6].map(i => ({
+    title: f[`vmvValue${i}Title`] || "",
+    desc:  f[`vmvValue${i}Desc`]  || "",
+  })).filter(v => v.title);
+
+  return {
+    heroTagline:        f.vmvHeroTagline        || "Our Purpose",
+    heroTitle:          f.vmvHeroTitle          || "Our Vision, |Mission & ^Values.",
+    heroDescription:    f.vmvHeroDescription    || "",
+    visionTitle:        f.vmvVisionTitle        || "Our Vision",
+    visionDescription:  f.vmvVisionDescription  || "",
+    missionTitle:       f.vmvMissionTitle       || "Our Mission",
+    missionDescription: f.vmvMissionDescription || "",
+    valuesTagline:      f.vmvValuesTagline      || "The Pillars of Hutech",
+    valuesTitle:        f.vmvValuesTitle        || "Our Core Values",
+    valuesDescription:  f.vmvValuesDescription  || "",
+    values: values.length > 0 ? values : undefined,
+    ctaTitle:           f.vmvCtaTitle           || "Join Us in Shaping the Future of Technology.",
+    ctaDescription:     f.vmvCtaDescription     || "",
+    ctaBtn1Text:        f.vmvCtaBtn1Text        || "Partner With Us",
+    ctaBtn1Url:         f.vmvCtaBtn1Url         || "/contact",
+    ctaBtn2Text:        f.vmvCtaBtn2Text        || "View Careers",
+    ctaBtn2Url:         f.vmvCtaBtn2Url         || "/careers",
+  };
+}
+
+export async function getVMVPageData(): Promise<ReturnType<typeof transformVMVPageData> | null> {
+  try {
+    const raw = await fetchGraphQL(VMV_PAGE_QUERY);
+    const f = raw?.data?.pages?.nodes?.[0]?.visionMissionValuesPageFields;
+    if (!f) return null;
+    return transformVMVPageData(f);
+  } catch (err) {
+    console.warn("[WP] getVMVPageData() failed:", err);
+    return null;
+  }
+}
+
