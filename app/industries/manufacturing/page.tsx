@@ -39,6 +39,7 @@ import { Meta } from "@/components/Meta";
 import { ImageWithFallback } from "@/components/figma/ImageWithFallback";
 import Link from "next/link";
 
+
 const BRAND_BLUE = "#0171c1";
 const DARK_BLUE = "#001A3D";
 const BRAND_ORANGE = "#F99D1C";
@@ -316,6 +317,10 @@ export default function Manufacturing() {
               We craft intelligent manufacturing experiences through cutting-edge software solutions
               and expert consulting for global industrial leaders.
             </p>
+            <Link href="/contact" className="btn-banner-cta mt-6 group">
+              Consult Us
+              <MoveRight className="w-4 h-4 transition-transform group-hover:translate-x-1 shrink-0" />
+            </Link>
           </Motion.div>
         </div>
       </section>
@@ -761,6 +766,7 @@ export default function Manufacturing() {
           </div>
         </div>
       </section>
+
     </div>
   );
 }

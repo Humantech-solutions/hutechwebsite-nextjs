@@ -40,6 +40,8 @@ import { Breadcrumbs } from "@/components/Breadcrumbs";
 import { Meta } from "@/components/Meta";
 import { ImageWithFallback } from "@/components/figma/ImageWithFallback";
 
+import { ServiceDetailContactCTA } from "@/components/ServiceDetailContactCTA";
+
 const DEVOPS_SERVICES = [
   {
     icon: Cloud,
@@ -285,6 +287,10 @@ export default function SreDevopsServices() {
               We help businesses thrive with elite-tier SRE and DevOps solutions. Break the silos,
               automate the toil, and ship with absolute confidence.
             </p>
+            <Link href="/contact" className="btn-banner-cta mt-6 group">
+              Consult Us
+              <MoveRight className="w-4 h-4 transition-transform group-hover:translate-x-1 shrink-0" />
+            </Link>
           </Motion.div>
         </div>
       </section>
@@ -619,78 +625,7 @@ export default function SreDevopsServices() {
         </div>
       </section>
 
-      {/* Contact Form Section */}
-      <section className="bg-white py-24">
-        <div className="mx-auto max-w-[1280px] px-6 lg:px-20">
-          <div className="grid grid-cols-1 gap-20 lg:grid-cols-12">
-            <div className="rounded-sm border border-gray-100 bg-white p-10 shadow-2xl md:p-14 lg:col-span-7">
-              <h2 className="display-font mb-10 text-3xl font-bold text-[#001A3D]">
-                Scale Your Reliability Today
-              </h2>
-              <form className="grid grid-cols-1 gap-6 md:grid-cols-2">
-                <input
-                  type="text"
-                  placeholder="Name*"
-                  className="w-full border border-gray-200 p-4 text-sm font-medium transition-all outline-none focus:border-[#0171c1]"
-                />
-                <input
-                  type="email"
-                  placeholder="Email*"
-                  className="w-full border border-gray-200 p-4 text-sm font-medium transition-all outline-none focus:border-[#0171c1]"
-                />
-                <input
-                  type="tel"
-                  placeholder="Phone Number*"
-                  className="w-full border border-gray-200 p-4 text-sm font-medium transition-all outline-none focus:border-[#0171c1] md:col-span-2"
-                />
-                <textarea
-                  placeholder="Tell us about your infrastructure or reliability goals"
-                  rows={4}
-                  className="w-full resize-none border border-gray-200 p-4 text-sm font-medium transition-all outline-none focus:border-[#0171c1] md:col-span-2"
-                ></textarea>
-                <div className="md:col-span-2">
-                  <button className="w-full rounded-sm bg-[#F99D1C] px-12 py-5 text-[11px] font-bold tracking-wider text-[#001A3D] uppercase shadow-xl transition-all duration-500 hover:bg-[#001A3D] hover:text-white md:w-auto">
-                    Submit Inquiry
-                  </button>
-                </div>
-              </form>
-            </div>
-            <div className="space-y-12 py-8 lg:col-span-5">
-              <h2 className="display-font text-3xl font-bold text-[#001A3D]">
-                The Roadmap To Excellence
-              </h2>
-              <div className="space-y-10">
-                {[
-                  {
-                    icon: MessageSquare,
-                    text: "A senior DevOps architect reviews your infrastructure goals and contacts you within 4 hours.",
-                  },
-                  {
-                    icon: FileText,
-                    text: "We perform a preliminary audit of your CI/CD pipelines and cloud architecture.",
-                  },
-                  {
-                    icon: Sparkles,
-                    text: "You receive a custom shared-service proposal with immediate cost-saving recommendations.",
-                  },
-                ].map((step, i) => {
-                  const Icon = step.icon;
-                  return (
-                    <div key={i} className="group flex items-start gap-8">
-                      <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-full border border-gray-200 text-[#0171c1] transition-all duration-500 group-hover:border-[#0171c1] group-hover:bg-[#0171c1] group-hover:text-white">
-                        <Icon size={24} strokeWidth={1.5} />
-                      </div>
-                      <p className="pt-2 text-lg leading-relaxed font-medium text-gray-500">
-                        {step.text}
-                      </p>
-                    </div>
-                  );
-                })}
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
+
 
       {/* FAQ Section */}
       <section className="bg-gray-50 py-24">
@@ -709,32 +644,7 @@ export default function SreDevopsServices() {
         </div>
       </section>
 
-      {/* CTA Section */}
-      <section className="bg-[#0171c1] py-24 text-white">
-        <div className="mx-auto max-w-[1280px] space-y-10 px-6 text-center lg:px-20">
-          <h2 className="display-font text-4xl font-bold md:text-6xl">
-            Ready to Transform Your Operations?
-          </h2>
-          <p className="mx-auto max-w-3xl text-xl opacity-90">
-            Join the 100+ organizations that have optimized their reliability and costs with Hutech
-            Solutions.
-          </p>
-          <div className="flex flex-wrap justify-center gap-6">
-            <Link
-              href="/contact"
-              className="rounded-sm bg-white px-12 py-5 text-[11px] font-bold tracking-wider text-[#0171c1] uppercase shadow-2xl transition-all hover:bg-[#001A3D] hover:text-white"
-            >
-              Schedule A Discovery Call
-            </Link>
-            <Link
-              href="/services"
-              className="rounded-sm border-2 border-white/30 px-12 py-5 text-[11px] font-bold tracking-wider text-white uppercase transition-all hover:bg-white/10"
-            >
-              Explore All Services
-            </Link>
-          </div>
-        </div>
-      </section>
+            <ServiceDetailContactCTA />
     </div>
   );
 }

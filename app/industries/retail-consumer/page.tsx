@@ -37,6 +37,7 @@ import { Meta } from "@/components/Meta";
 import { ImageWithFallback } from "@/components/figma/ImageWithFallback";
 import Link from "next/link";
 
+
 const RETAIL_SERVICES = [
   {
     icon: ShoppingBag,
@@ -309,6 +310,10 @@ export default function RetailConsumer() {
               We craft intelligent retail experiences through cutting-edge software solutions and
               expert consulting for global consumer brands.
             </p>
+            <Link href="/contact" className="btn-banner-cta mt-6 group">
+              Consult Us
+              <MoveRight className="w-4 h-4 transition-transform group-hover:translate-x-1 shrink-0" />
+            </Link>
           </Motion.div>
         </div>
       </section>
@@ -748,6 +753,7 @@ export default function RetailConsumer() {
           </div>
         </div>
       </section>
+
     </div>
   );
 }

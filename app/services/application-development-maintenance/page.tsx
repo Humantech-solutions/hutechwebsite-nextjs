@@ -20,6 +20,8 @@ import { Meta } from "@/components/Meta";
 import { ImageWithFallback } from "@/components/figma/ImageWithFallback";
 import Link from "next/link";
 
+import { ServiceDetailContactCTA } from "@/components/ServiceDetailContactCTA";
+
 const ADM_SERVICES = [
   {
     title: "Custom Application Development",
@@ -102,6 +104,10 @@ export default function AppDevMaintenance() {
               From initial concept to long-term support, we manage the entire application lifecycle,
               ensuring your software remains competitive, secure, and resilient.
             </p>
+            <Link href="/contact" className="btn-banner-cta mt-6 group">
+              Consult Us
+              <MoveRight className="w-4 h-4 transition-transform group-hover:translate-x-1 shrink-0" />
+            </Link>
           </Motion.div>
         </div>
       </section>
@@ -236,31 +242,9 @@ export default function AppDevMaintenance() {
         </div>
       </section>
 
-      {/* Support Tiers Banner */}
-      <section className="relative overflow-hidden bg-[#001A3D] py-24 text-white">
-        <div className="absolute top-0 right-0 -mt-32 -mr-32 h-64 w-64 rounded-full bg-[#0171c1]/10 blur-3xl"></div>
-        <div className="relative z-10 mx-auto max-w-[1280px] px-6 lg:px-20">
-          <div className="flex flex-col items-center justify-between gap-12 lg:flex-row">
-            <div className="max-w-3xl space-y-6 text-center lg:text-left">
-              <h2 className="display-font text-3xl font-bold md:text-5xl">
-                Modernize your legacy <span className="text-[#0171c1]">Systems.</span>
-              </h2>
-              <p className="text-lg font-medium text-gray-400">
-                Our maintenance services include deep refactoring and cloud migration paths to
-                ensure your older apps run as efficiently as the newest ones.
-              </p>
-            </div>
-            <div className="shrink-0">
-              <Link
-                href="/contact"
-                className="inline-flex items-center gap-3 rounded-sm bg-[#0171c1] px-12 py-5 text-[11px] font-bold tracking-wider text-white uppercase shadow-xl transition-all duration-500 hover:bg-white hover:text-[#001A3D]"
-              >
-                Inquire About ADM <MoveRight className="h-4 w-4" />
-              </Link>
-            </div>
-          </div>
-        </div>
-      </section>
+
+      <ServiceDetailContactCTA />
+
     </div>
   );
 }

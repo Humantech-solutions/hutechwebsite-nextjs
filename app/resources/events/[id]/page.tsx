@@ -31,9 +31,9 @@ const STATIC_EVENTS: Record<string, any> = {
       { time: "04:30 PM", event: "Closing Panel: Ethics & Governance in the AI Age" },
     ],
     speakers: [
-      { name: "Dr. Sarah Chen", role: "CTO, Hutech Solutions", image: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=400" },
-      { name: "James Wilson", role: "VP of Engineering, CloudCore", image: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=400" },
-      { name: "Elena Rodriguez", role: "Head of AI Ethics, GlobalTech", image: "https://images.unsplash.com/photo-1580489944761-15a19d654956?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=400" },
+      { name: "Dr. Sarah Chen", role: "CTO, Hutech Solutions", image: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=400", linkedin: "https://linkedin.com" },
+      { name: "James Wilson", role: "VP of Engineering, CloudCore", image: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=400", linkedin: "https://linkedin.com" },
+      { name: "Elena Rodriguez", role: "Head of AI Ethics, GlobalTech", image: "https://images.unsplash.com/photo-1580489944761-15a19d654956?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=400", linkedin: "https://linkedin.com" },
     ],
     highlights: [
       "Hands-on AI workshops with real-world datasets",
@@ -65,8 +65,8 @@ const STATIC_EVENTS: Record<string, any> = {
       { time: "01:30 PM", event: "Q&A and Implementation Roadmap Session" },
     ],
     speakers: [
-      { name: "Michael Ross", role: "Fintech Lead, Hutech", image: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=400" },
-      { name: "Amara Okoro", role: "Chief Innovation Officer, NeoBank", image: "https://images.unsplash.com/photo-1531123897727-8f129e1688ce?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=400" },
+      { name: "Michael Ross", role: "Fintech Lead, Hutech", image: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=400", linkedin: "https://linkedin.com" },
+      { name: "Amara Okoro", role: "Chief Innovation Officer, NeoBank", image: "https://images.unsplash.com/photo-1531123897727-8f129e1688ce?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=400", linkedin: "https://linkedin.com" },
     ],
     highlights: [
       "Case studies of successful legacy migrations",
@@ -98,8 +98,8 @@ const STATIC_EVENTS: Record<string, any> = {
       { time: "03:00 PM", event: "Networking and Interactive Sustainability Workshop" },
     ],
     speakers: [
-      { name: "Anna Schmidt", role: "Sustainability Lead, Hutech", image: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=400" },
-      { name: "Dr. Klaus Mueller", role: "Founder, GreenCloud Labs", image: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=400" },
+      { name: "Anna Schmidt", role: "Sustainability Lead, Hutech", image: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=400", linkedin: "https://linkedin.com" },
+      { name: "Dr. Klaus Mueller", role: "Founder, GreenCloud Labs", image: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=400", linkedin: "https://linkedin.com" },
     ],
     highlights: [
       "Launch of Hutech's Open-Source Carbon Monitor",

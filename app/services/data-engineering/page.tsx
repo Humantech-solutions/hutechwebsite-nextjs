@@ -29,6 +29,8 @@ import { Meta } from "@/components/Meta";
 import { ImageWithFallback } from "@/components/figma/ImageWithFallback";
 import Link from "next/link";
 
+import { ServiceDetailContactCTA } from "@/components/ServiceDetailContactCTA";
+
 const SERVICES = [
   {
     category: "Data Strategy & Advisory",
@@ -139,6 +141,10 @@ export default function DataEngineering() {
               We empower organizations with high-scale data engineering and cutting-edge machine
               learning frameworks. Turn your data silos into strategic intelligence assets.
             </p>
+            <Link href="/contact" className="btn-banner-cta mt-6 group">
+              Consult Us
+              <MoveRight className="w-4 h-4 transition-transform group-hover:translate-x-1 shrink-0" />
+            </Link>
           </Motion.div>
         </div>
       </section>
@@ -449,32 +455,7 @@ export default function DataEngineering() {
         </div>
       </section>
 
-      {/* CTA Section */}
-      <section className="bg-[#0171c1] py-24 text-white">
-        <div className="mx-auto max-w-[1280px] space-y-10 px-6 text-center lg:px-20">
-          <h2 className="display-font text-4xl font-bold md:text-6xl">
-            Ready to Unlock Your Data's Potential?
-          </h2>
-          <p className="mx-auto max-w-3xl text-xl opacity-90">
-            Join the leading enterprises that have transformed their decision-making with Hutech
-            Solutions.
-          </p>
-          <div className="flex flex-wrap justify-center gap-6">
-            <Link
-              href="/contact"
-              className="rounded-sm bg-white px-12 py-5 text-[11px] font-bold tracking-wider text-[#0171c1] uppercase shadow-2xl transition-all hover:bg-[#001A3D] hover:text-white"
-            >
-              Talk To A Data Expert
-            </Link>
-            <Link
-              href="/resources/case-studies"
-              className="rounded-sm border-2 border-white/30 px-12 py-5 text-[11px] font-bold tracking-wider text-white uppercase transition-all hover:bg-white/10"
-            >
-              View Case Studies
-            </Link>
-          </div>
-        </div>
-      </section>
+            <ServiceDetailContactCTA />
     </div>
   );
 }

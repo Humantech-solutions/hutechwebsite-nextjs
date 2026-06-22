@@ -27,6 +27,8 @@ import { Breadcrumbs } from "@/components/Breadcrumbs";
 import { ImageWithFallback } from "@/components/figma/ImageWithFallback";
 import { Meta } from "@/components/Meta";
 
+import { ServiceDetailContactCTA } from "@/components/ServiceDetailContactCTA";
+
 const BRAND_ORANGE = "#F99D1C";
 const BRAND_BLUE = "#001A3D";
 
@@ -484,6 +486,10 @@ export default function FintechAppDevelopment() {
               but also robust and secure IT solutions. We specialize in delivering advanced Fintech
               IT services.
             </p>
+            <Link href="/contact" className="btn-banner-cta mt-6 group">
+              Consult Us
+              <MoveRight className="w-4 h-4 transition-transform group-hover:translate-x-1 shrink-0" />
+            </Link>
           </motion.div>
         </div>
       </section>
@@ -672,93 +678,6 @@ export default function FintechAppDevelopment() {
         </div>
       </section>
 
-      {/* Process Section */}
-      <section className="relative overflow-hidden py-20" style={{ backgroundColor: BRAND_BLUE }}>
-        {/* Animated background circles */}
-        <motion.div
-          className="absolute top-1/4 -left-32 h-96 w-96 rounded-full opacity-10"
-          style={{ backgroundColor: BRAND_ORANGE }}
-          animate={{
-            scale: [1, 1.2, 1],
-            x: [0, 50, 0],
-          }}
-          transition={{ duration: 15, repeat: Infinity }}
-        />
-        <motion.div
-          className="absolute -right-32 bottom-1/4 h-96 w-96 rounded-full opacity-10"
-          style={{ backgroundColor: BRAND_ORANGE }}
-          animate={{
-            scale: [1, 1.3, 1],
-            x: [0, -50, 0],
-          }}
-          transition={{ duration: 18, repeat: Infinity }}
-        />
-
-        <div className="relative z-10 mx-auto max-w-[1280px] px-8">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8 }}
-            className="mb-20 text-center"
-          >
-            <h2 className="mb-6 text-5xl font-bold md:text-6xl" style={{ color: "white" }}>
-              Our Fintech App Development Process
-            </h2>
-            <div
-              className="mx-auto h-1.5 w-32 rounded-full"
-              style={{ backgroundColor: BRAND_ORANGE }}
-            />
-            <p
-              className="mx-auto mt-8 max-w-3xl text-xl"
-              style={{ color: "rgba(255,255,255,0.85)" }}
-            >
-              Our development process follows industry best practices to deliver secure, scalable,
-              and efficient fintech solutions.
-            </p>
-          </motion.div>
-
-          <div className="grid gap-8 md:grid-cols-3">
-            {PROCESS_STEPS.map((step, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, y: 40 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.6, delay: index * 0.1 }}
-                className="group relative"
-              >
-                <div className="relative">
-                  {/* Number circle */}
-                  <motion.div
-                    className="relative z-10 mb-6 flex h-24 w-24 items-center justify-center rounded-full border-4 transition-transform duration-500 group-hover:scale-110"
-                    style={{
-                      backgroundColor: BRAND_BLUE,
-                      borderColor: BRAND_ORANGE,
-                    }}
-                    whileHover={{ rotate: 360 }}
-                    transition={{ duration: 0.8 }}
-                  >
-                    <span className="text-3xl font-bold" style={{ color: BRAND_ORANGE }}>
-                      {step.number}
-                    </span>
-                  </motion.div>
-
-                  <h3 className="mb-4 text-xl font-bold" style={{ color: "white" }}>
-                    {step.title}
-                  </h3>
-                  <p
-                    className="text-sm leading-relaxed"
-                    style={{ color: "rgba(255,255,255,0.75)" }}
-                  >
-                    {step.description}
-                  </p>
-                </div>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
 
       {/* Technologies Section */}
       <section className="bg-gradient-to-b from-gray-50 to-white py-20">
@@ -906,88 +825,7 @@ export default function FintechAppDevelopment() {
         </div>
       </section>
 
-      {/* CTA Section */}
-      <section className="relative overflow-hidden py-20" style={{ backgroundColor: BRAND_BLUE }}>
-        {/* Animated gradient mesh */}
-        <motion.div
-          className="absolute inset-0 opacity-20"
-          animate={{
-            backgroundPosition: ["0% 0%", "100% 100%"],
-          }}
-          transition={{ duration: 20, repeat: Infinity, repeatType: "reverse" }}
-          style={{
-            backgroundImage: `radial-gradient(circle at 30% 50%, ${BRAND_ORANGE} 0%, transparent 50%),
-                             radial-gradient(circle at 70% 50%, ${BRAND_ORANGE} 0%, transparent 50%)`,
-            backgroundSize: "200% 200%",
-          }}
-        />
-
-        <div className="relative z-10 mx-auto max-w-[1280px] px-8 text-center">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8 }}
-          >
-            <motion.div
-              initial={{ opacity: 0, scale: 0.9 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              viewport={{ once: true }}
-              className="mb-8 inline-flex items-center gap-2 rounded-full border-2 px-6 py-3"
-              style={{ borderColor: BRAND_ORANGE }}
-            >
-              <Sparkles size={20} style={{ color: BRAND_ORANGE }} />
-              <span className="text-sm font-bold" style={{ color: BRAND_ORANGE }}>
-                LET'S BUILD THE FUTURE OF FINANCE
-              </span>
-            </motion.div>
-
-            <h2
-              className="mx-auto mb-8 max-w-4xl text-5xl leading-tight font-bold md:text-6xl"
-              style={{ color: "white" }}
-            >
-              Ready to Transform Your Financial Services?
-            </h2>
-            <p
-              className="mx-auto mb-12 max-w-3xl text-xl leading-relaxed font-bold md:text-2xl"
-              style={{ color: "rgba(255,255,255,0.9)" }}
-            >
-              Get a free consultation and discover how our fintech solutions can drive innovation,
-              efficiency, and growth for your business.
-            </p>
-
-            <div className="flex flex-wrap items-center justify-center gap-6">
-              <motion.div whileHover={{ scale: 1.08, y: -4 }} whileTap={{ scale: 0.98 }}>
-                <Link
-                  href="/contact"
-                  className="inline-flex items-center gap-3 px-12 py-6 text-xl font-bold shadow-2xl transition-all duration-300 hover:shadow-orange-500/50"
-                  style={{
-                    backgroundColor: BRAND_ORANGE,
-                    color: BRAND_BLUE,
-                  }}
-                >
-                  Get a Free Consultation
-                  <MoveRight size={26} />
-                </Link>
-              </motion.div>
-
-              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.98 }}>
-                <Link
-                  href="/services"
-                  className="inline-flex items-center gap-3 border-2 px-12 py-6 text-xl font-semibold transition-all duration-300"
-                  style={{
-                    borderColor: "rgba(255,255,255,0.3)",
-                    color: "white",
-                  }}
-                >
-                  View All Services
-                  <ArrowRight size={24} />
-                </Link>
-              </motion.div>
-            </div>
-          </motion.div>
-        </div>
-      </section>
+            <ServiceDetailContactCTA />
     </div>
   );
 }
