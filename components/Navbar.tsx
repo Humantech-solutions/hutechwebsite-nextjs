@@ -80,26 +80,7 @@ const NAV_ITEMS = [
       },
     ],
   },
-  {
-    label: "Products",
-    path: "/products",
-    dropdown: [
-      {
-        title: "Product Categories",
-        items: [
-          { name: "Gen AI Products", path: "/products?category=Gen AI Products" },
-          { name: "AI productivity tools", path: "/products?category=AI productivity tools" },
-          { name: "DevOps & SRE Automation", path: "/products?category=DevOps & SRE Automation" },
-          { name: "LMS", path: "/products?category=LMS" },
-          {
-            name: "ERP & Office Productivity",
-            path: "/products?category=ERP & Office Productivity",
-          },
-          { name: "Logistics and Delivery", path: "/products?category=Logistics and Delivery" },
-        ],
-      },
-    ],
-  },
+  { label: "Products", path: "/products" },
   {
     label: "Industries",
     path: "/industries",
@@ -231,8 +212,7 @@ export default function Navbar() {
                 const isMega = item.label === "Company" || item.label === "Services";
                 const isSmall =
                   item.label === "Industries" ||
-                  item.label === "Resources" ||
-                  item.label === "Products";
+                  item.label === "Resources";
 
                 return (
                   <div

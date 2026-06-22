@@ -35,6 +35,8 @@ import { Breadcrumbs } from "@/components/Breadcrumbs";
 import { Meta } from "@/components/Meta";
 import { ImageWithFallback } from "@/components/figma/ImageWithFallback";
 
+import { ServiceDetailContactCTA } from "@/components/ServiceDetailContactCTA";
+
 const CLOUD_SERVICES = [
   {
     icon: Cloud,
@@ -325,6 +327,10 @@ export default function CloudTransformation() {
               We craft intelligent cloud experiences through cutting-edge migration strategies and
               expert consulting for global enterprise leaders.
             </p>
+            <Link href="/contact" className="btn-banner-cta mt-6 group">
+              Consult Us
+              <MoveRight className="w-4 h-4 transition-transform group-hover:translate-x-1 shrink-0" />
+            </Link>
           </Motion.div>
         </div>
       </section>
@@ -665,78 +671,7 @@ export default function CloudTransformation() {
         </div>
       </section>
 
-      {/* Contact Form Section */}
-      <section className="bg-gray-50 py-24">
-        <div className="mx-auto max-w-[1280px] px-6 lg:px-20">
-          <div className="grid grid-cols-1 gap-20 lg:grid-cols-12">
-            <div className="rounded-sm border border-gray-100 bg-white p-10 shadow-2xl md:p-14 lg:col-span-7">
-              <h2 className="display-font mb-10 text-3xl font-bold text-[#001A3D]">
-                Share Your Cloud Transformation Project With Us
-              </h2>
-              <form className="grid grid-cols-1 gap-6 md:grid-cols-2">
-                <input
-                  type="text"
-                  placeholder="Name*"
-                  className="w-full border border-gray-200 p-4 text-sm font-medium transition-all outline-none focus:border-[#0171c1]"
-                />
-                <input
-                  type="email"
-                  placeholder="Email*"
-                  className="w-full border border-gray-200 p-4 text-sm font-medium transition-all outline-none focus:border-[#0171c1]"
-                />
-                <input
-                  type="tel"
-                  placeholder="Phone Number*"
-                  className="w-full border border-gray-200 p-4 text-sm font-medium transition-all outline-none focus:border-[#0171c1] md:col-span-2"
-                />
-                <textarea
-                  placeholder="Tell us about your infrastructure needs"
-                  rows={4}
-                  className="w-full resize-none border border-gray-200 p-4 text-sm font-medium transition-all outline-none focus:border-[#0171c1] md:col-span-2"
-                ></textarea>
-                <div className="md:col-span-2">
-                  <button className="w-full rounded-sm bg-[#F99D1C] px-12 py-5 text-[11px] font-bold tracking-wider text-[#001A3D] uppercase shadow-xl transition-all duration-500 hover:bg-[#001A3D] hover:text-white md:w-auto">
-                    Submit Project Request
-                  </button>
-                </div>
-              </form>
-            </div>
-            <div className="space-y-12 py-8 lg:col-span-5">
-              <h2 className="display-font text-3xl font-bold text-[#001A3D]">
-                What Is The Next Step?
-              </h2>
-              <div className="space-y-10">
-                {[
-                  {
-                    icon: MessageSquare,
-                    text: "A cloud technology consultant will review your request and contact you within a few business hours.",
-                  },
-                  {
-                    icon: FileText,
-                    text: "We will schedule a deep-dive session to understand your current infrastructure and modernization goals.",
-                  },
-                  {
-                    icon: Sparkles,
-                    text: "You will receive a detailed proposal including technical architecture and cloud ROI analysis.",
-                  },
-                ].map((step, i) => {
-                  const Icon = step.icon;
-                  return (
-                    <div key={i} className="group flex items-start gap-8">
-                      <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-full border border-gray-200 text-[#0171c1] transition-all duration-500 group-hover:border-[#0171c1] group-hover:bg-[#0171c1] group-hover:text-white">
-                        <Icon size={24} strokeWidth={1.5} />
-                      </div>
-                      <p className="pt-2 text-lg leading-relaxed font-medium text-gray-500">
-                        {step.text}
-                      </p>
-                    </div>
-                  );
-                })}
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
+
 
       {/* FAQ Section */}
       <section className="bg-white py-24">
@@ -823,6 +758,8 @@ export default function CloudTransformation() {
           </div>
         </div>
       </section>
+      <ServiceDetailContactCTA />
+
     </div>
   );
 }

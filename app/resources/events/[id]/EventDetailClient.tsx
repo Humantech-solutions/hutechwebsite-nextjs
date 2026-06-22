@@ -15,6 +15,7 @@ import {
   Monitor,
   Video,
   X,
+  Linkedin,
 } from "lucide-react";
 import { Meta } from "@/components/Meta";
 import { ImageWithFallback } from "@/components/figma/ImageWithFallback";
@@ -41,7 +42,7 @@ export default function EventDetailClient({ event }: { event: any }) {
       <Breadcrumbs variant="light" />
 
       {/* Hero Section */}
-      <section className="relative flex min-h-[500px] items-center overflow-hidden bg-[#001A3D] pt-20 text-white">
+      <section className="relative overflow-hidden bg-[#001A3D] text-white">
         <div className="absolute inset-0 z-0">
           <ImageWithFallback
             src={event.image}
@@ -51,34 +52,42 @@ export default function EventDetailClient({ event }: { event: any }) {
           <div className="absolute inset-0 bg-gradient-to-b from-[#001A3D]/40 via-[#001A3D]/80 to-[#001A3D]"></div>
         </div>
 
-        <div className="relative z-10 mx-auto w-full max-w-[1280px] px-6 py-16 lg:px-20">
+        <div className="relative z-10 mx-auto w-full max-w-[1280px] px-6 pt-[70px] pb-16 lg:px-20">
           <Motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            className="space-y-10"
+            className="space-y-6"
           >
             <Link
               href="/resources/events"
-              className="group inline-flex items-center gap-3 text-[11px] font-black tracking-[0.3em] text-[#0171c1] uppercase transition-all hover:text-white"
+              className="group inline-flex items-center gap-3 text-[10px] font-bold tracking-widest text-[#0171c1] uppercase transition-all hover:text-white"
             >
-              <ArrowLeft size={16} className="transition-transform group-hover:-translate-x-2" />{" "}
+              <ArrowLeft size={16} className="transition-transform group-hover:-translate-x-1" />{" "}
               Back to All Events
             </Link>
 
-            <div className="flex flex-wrap gap-4">
-              <span className="rounded-full bg-[#FFAF2B] px-6 py-2 text-[10px] font-black tracking-[0.2em] text-[#001A3D] uppercase shadow-2xl">
+            <div className="flex flex-wrap gap-3">
+              <span className="rounded-full border border-white/10 bg-white/5 px-4 py-1.5 text-[10px] font-bold tracking-wider text-[#FFAF2B] uppercase">
                 {event.category?.toUpperCase()}
               </span>
-              <span className="rounded-full border border-white/20 bg-white/10 px-6 py-2 text-[10px] font-black tracking-[0.2em] text-white uppercase backdrop-blur-md">
+              <span className="rounded-full border border-white/10 bg-white/5 px-4 py-1.5 text-[10px] font-bold tracking-wider text-[#0171c1] uppercase">
                 {event.type?.toUpperCase()}
               </span>
             </div>
 
-            <div className="space-y-6">
-              <h1 className="display-font max-w-5xl text-5xl leading-tight font-semibold tracking-tight md:text-8xl">
-                {renderTitle(event.title, "text-inherit", "text-[#FFAF2B]", "text-[#0171c1]")}
+            <div className="space-y-4 pt-2">
+              <h1 className="max-w-5xl text-4xl leading-tight font-semibold tracking-tight text-white md:text-6xl lg:text-[64px]">
+                {event.title.endsWith(" 2026") ? (
+                  <>
+                    {event.title.replace(" 2026", "")}
+                    <br />
+                    2026
+                  </>
+                ) : (
+                  event.title
+                )}
               </h1>
-              <p className="max-w-3xl border-l-4 border-[#FFAF2B] pl-8 text-2xl leading-relaxed font-medium text-gray-300 italic">
+              <p className="max-w-3xl text-lg font-medium text-gray-300 md:text-xl">
                 &quot;{event.tagline}&quot;
               </p>
             </div>
@@ -87,33 +96,29 @@ export default function EventDetailClient({ event }: { event: any }) {
       </section>
 
       {/* Main Content & Sidebar */}
-      <section className="bg-white py-32">
-        <div className="mx-auto max-w-[1280px] px-6 lg:px-20">
-          <div className="grid grid-cols-1 gap-24 lg:grid-cols-12">
+      <section className="bg-[#F8FAFC] py-[96px]">
+        <div className="mx-auto max-w-[1200px] px-6">
+          <div className="flex flex-col lg:flex-row lg:gap-[64px]">
             {/* Left Column: Event Details */}
-            <div className="space-y-24 lg:col-span-8">
+            <div className="flex-1 space-y-[96px]">
+              
               {/* Description */}
-              <div className="space-y-10">
-                <div className="flex items-center gap-4">
-                  <span className="block h-[3px] w-12 bg-[#0171c1]"></span>
-                  <h2 className="display-font text-4xl font-bold tracking-tight text-[#001A3D] uppercase">
-                    About the Event
-                  </h2>
-                </div>
-                <p className="text-2xl leading-relaxed font-medium text-gray-500">
+              <div>
+                <h2 className="mb-6 text-[48px] font-bold text-[#0F172A]">
+                  About the Event
+                </h2>
+                <p className="mb-10 max-w-[700px] text-[18px] leading-[1.8] text-[#64748B]">
                   {event.description}
                 </p>
                 {event.highlights?.length > 0 && (
-                  <div className="grid grid-cols-1 gap-6 pt-6 md:grid-cols-2">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     {event.highlights.map((highlight: string, idx: number) => (
                       <div
                         key={idx}
-                        className="group flex items-start gap-5 rounded-[2rem] border border-gray-100/50 bg-gray-50 p-8 transition-all duration-500 hover:bg-white hover:shadow-2xl"
+                        className="flex items-center gap-4 rounded-xl border border-[#E5E7EB] bg-white p-5"
                       >
-                        <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-xl bg-[#0171c1]/10 transition-colors group-hover:bg-[#0171c1] group-hover:text-white">
-                          <CheckCircle2 className="h-6 w-6" />
-                        </div>
-                        <span className="text-lg leading-snug font-bold text-[#001A3D]">
+                        <CheckCircle2 className="h-5 w-5 text-[#2563EB] flex-shrink-0" />
+                        <span className="text-[16px] font-semibold text-[#0F172A]">
                           {renderTitle(highlight)}
                         </span>
                       </div>
@@ -124,24 +129,21 @@ export default function EventDetailClient({ event }: { event: any }) {
 
               {/* Agenda */}
               {event.agenda?.length > 0 && (
-                <div className="space-y-12">
-                  <div className="flex items-center gap-4">
-                    <span className="block h-[3px] w-12 bg-[#0171c1]"></span>
-                    <h2 className="display-font text-4xl font-bold tracking-tight text-[#001A3D] uppercase">
-                      Event Agenda
-                    </h2>
-                  </div>
-                  <div className="space-y-6">
+                <div>
+                  <h2 className="mb-8 text-[48px] font-bold text-[#0F172A]">
+                    Event Agenda
+                  </h2>
+                  <div className="space-y-4">
                     {event.agenda.map((item: any, idx: number) => (
                       <div
                         key={idx}
-                        className="group flex flex-col items-start gap-8 rounded-[2.5rem] border border-gray-100 bg-white p-10 transition-all duration-500 hover:border-[#0171c1]/30 hover:shadow-2xl md:flex-row md:items-center"
+                        className="flex flex-col md:flex-row items-start md:items-center rounded-2xl border border-[#E5E7EB] bg-white p-6 md:h-[88px] md:px-8 md:py-0"
                       >
-                        <div className="rounded-xl bg-gray-50 px-6 py-2 text-center text-2xl font-black tracking-tighter whitespace-nowrap text-[#0171c1] transition-all group-hover:bg-[#0171c1] group-hover:text-white md:w-40">
+                        <div className="w-[160px] text-[24px] font-bold text-[#2563EB]">
                           {item.time}
                         </div>
-                        <div className="hidden h-12 w-[2px] bg-gray-100 transition-all group-hover:bg-[#0171c1]/20 md:block"></div>
-                        <div className="display-font text-2xl leading-tight font-bold text-[#001A3D]">
+                        <div className="hidden h-10 w-[1px] bg-[#E5E7EB] md:block mr-8"></div>
+                        <div className="text-[20px] font-semibold text-[#0F172A] mt-2 md:mt-0">
                           {renderTitle(item.event)}
                         </div>
                       </div>
@@ -152,30 +154,37 @@ export default function EventDetailClient({ event }: { event: any }) {
 
               {/* Speakers */}
               {event.speakers?.length > 0 && (
-                <div className="space-y-16">
-                  <div className="flex items-center gap-4">
-                    <span className="block h-[3px] w-12 bg-[#0171c1]"></span>
-                    <h2 className="display-font text-4xl font-bold tracking-tight text-[#001A3D] uppercase">
-                      Featured Speakers
-                    </h2>
-                  </div>
-                  <div className="grid grid-cols-1 gap-12 md:grid-cols-3">
+                <div>
+                  <h2 className="mb-12 text-[48px] font-bold text-[#0F172A]">
+                    Featured Speakers
+                  </h2>
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12 text-center">
                     {event.speakers.map((speaker: any, idx: number) => (
-                      <div key={idx} className="group space-y-8 text-center">
-                        <div className="aspect-square overflow-hidden rounded-3xl border-[10px] border-white shadow-2xl transition-all duration-700 group-hover:border-[#0171c1]/10">
+                      <div key={idx} className="group transition-transform hover:-translate-y-1">
+                        <div className="mx-auto mb-5 h-[180px] w-[180px] overflow-hidden rounded-full border border-[#E5E7EB] shadow-md bg-white">
                           <ImageWithFallback
                             src={speaker.image}
                             alt={speaker.name}
-                            className="h-full w-full scale-110 object-cover grayscale transition-all duration-1000 group-hover:scale-100 group-hover:grayscale-0"
+                            className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
                           />
                         </div>
-                        <div className="space-y-2">
-                          <h4 className="display-font text-2xl font-bold tracking-tight text-[#001A3D]">
-                            {renderTitle(speaker.name)}
-                          </h4>
-                          <p className="text-xs font-black tracking-[0.25em] text-[#0171c1] uppercase">
+                        <h4 className="text-[24px] font-bold text-[#0F172A]">
+                          {renderTitle(speaker.name)}
+                        </h4>
+                        <div className="mt-1 flex flex-col items-center justify-center gap-3">
+                          <p className="text-[14px] uppercase tracking-wider text-[#2563EB]">
                             {speaker.role}
                           </p>
+                          {speaker.linkedin && (
+                            <a
+                              href={speaker.linkedin}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="text-[#2563EB] transition-opacity hover:opacity-70 cursor-pointer"
+                            >
+                              <Linkedin size={20} />
+                            </a>
+                          )}
                         </div>
                       </div>
                     ))}
@@ -185,105 +194,81 @@ export default function EventDetailClient({ event }: { event: any }) {
             </div>
 
             {/* Right Column: Sidebar Sticky */}
-            <div className="lg:col-span-4">
-              <div className="sticky top-32 space-y-12">
-                {/* Info Card */}
-                <div className="relative overflow-hidden rounded-[3.5rem] bg-[#001A3D] p-12 text-white shadow-[0_48px_100px_-20px_rgba(0,0,0,0.3)]">
-                  <div className="absolute top-0 right-0 -mt-24 -mr-24 h-48 w-48 rounded-full bg-[#0171c1]/20 blur-[100px]"></div>
-                  <div className="absolute bottom-0 left-0 -mb-16 -ml-16 h-32 w-32 rounded-full bg-[#FFAF2B]/10 blur-[80px]"></div>
+            <div className="w-full lg:w-[320px] flex-shrink-0 mt-12 lg:mt-0">
+              <div className="sticky top-24">
+                {/* Registration Card */}
+                <div className="rounded-[28px] bg-[#031B4E] p-[24px] shadow-[0_20px_60px_rgba(0,0,0,0.15)]">
+                  <h3 className="mb-[24px] text-[24px] font-bold leading-[1.1] text-white">
+                    Registration
+                  </h3>
 
-                  <div className="relative z-10 space-y-10">
-                    <div className="space-y-2">
-                      <span className="text-[10px] font-black tracking-[0.4em] text-[#FFAF2B] uppercase">
-                        Secure Your Spot
-                      </span>
-                      <h3 className="display-font text-3xl font-bold tracking-tight">
-                        Registration
-                      </h3>
-                    </div>
-
-                    <div className="space-y-8">
-                      <div className="flex items-center gap-6">
-                        <div className="flex h-14 w-14 items-center justify-center rounded-2xl border border-white/10 bg-white/5 backdrop-blur-md">
-                          <Calendar className="h-6 w-6 text-[#FFAF2B]" />
-                        </div>
-                        <div>
-                          <div className="mb-1 text-[10px] font-black tracking-[0.2em] text-white/30 uppercase">
-                            Date
-                          </div>
-                          <div className="text-lg font-bold">{event.date}</div>
-                        </div>
+                  <div className="space-y-[20px]">
+                    <div className="flex items-center gap-[12px]">
+                      <div className="flex h-[48px] w-[48px] flex-shrink-0 items-center justify-center rounded-[12px] border border-[rgba(255,255,255,0.08)] bg-[rgba(255,255,255,0.06)]">
+                        <Calendar className="h-5 w-5 text-[#F5A623]" />
                       </div>
-
-                      <div className="flex items-center gap-6">
-                        <div className="flex h-14 w-14 items-center justify-center rounded-2xl border border-white/10 bg-white/5 backdrop-blur-md">
-                          <Clock className="h-6 w-6 text-[#FFAF2B]" />
-                        </div>
-                        <div>
-                          <div className="mb-1 text-[10px] font-black tracking-[0.2em] text-white/30 uppercase">
-                            Time
-                          </div>
-                          <div className="text-lg font-bold">{event.time}</div>
-                        </div>
-                      </div>
-
-                      <div className="flex items-center gap-6">
-                        <div className="flex h-14 w-14 items-center justify-center rounded-2xl border border-white/10 bg-white/5 backdrop-blur-md">
-                          <MapPin className="h-6 w-6 text-[#FFAF2B]" />
-                        </div>
-                        <div>
-                          <div className="mb-1 text-[10px] font-black tracking-[0.2em] text-white/30 uppercase">
-                            Location
-                          </div>
-                          <div className="text-lg font-bold">{event.location}</div>
-                        </div>
+                      <div>
+                        <div className="mb-1 text-[10px] font-semibold uppercase tracking-[1px] text-[rgba(255,255,255,0.45)]">DATE</div>
+                        <div className="text-[16px] font-bold leading-[1.4] text-white">{event.date}</div>
                       </div>
                     </div>
 
-                    <div className="space-y-6 pt-4">
-                      <button
-                        onClick={() => setIsModalOpen(true)}
-                        className="group flex w-full items-center justify-center gap-4 rounded-2xl bg-[#0171c1] py-6 text-[11px] font-black tracking-[0.25em] text-white uppercase shadow-2xl transition-all duration-500 hover:bg-white hover:text-[#001A3D]"
-                      >
-                        REGISTER NOW{" "}
-                        <ArrowRight className="transition-transform group-hover:translate-x-2" />
-                      </button>
-
-                      <div className="flex items-center justify-center gap-2">
-                        <div className="h-2 w-2 animate-pulse rounded-full bg-[#FFAF2B]"></div>
-                        <p className="text-center text-[10px] font-black tracking-widest text-white/40 uppercase">
-                          Limited engineering slots remaining
-                        </p>
+                    <div className="flex items-center gap-[12px]">
+                      <div className="flex h-[48px] w-[48px] flex-shrink-0 items-center justify-center rounded-[12px] border border-[rgba(255,255,255,0.08)] bg-[rgba(255,255,255,0.06)]">
+                        <Clock className="h-5 w-5 text-[#F5A623]" />
+                      </div>
+                      <div>
+                        <div className="mb-1 text-[10px] font-semibold uppercase tracking-[1px] text-[rgba(255,255,255,0.45)]">TIME</div>
+                        <div className="text-[16px] font-bold leading-[1.4] text-white">{event.time}</div>
                       </div>
                     </div>
+
+                    <a
+                      href={`https://maps.google.com/?q=${encodeURIComponent(event.location)}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center gap-[12px] transition-opacity hover:opacity-80 cursor-pointer"
+                    >
+                      <div className="flex h-[48px] w-[48px] flex-shrink-0 items-center justify-center rounded-[12px] border border-[rgba(255,255,255,0.08)] bg-[rgba(255,255,255,0.06)]">
+                        <MapPin className="h-5 w-5 text-[#F5A623]" />
+                      </div>
+                      <div>
+                        <div className="mb-1 text-[10px] font-semibold uppercase tracking-[1px] text-[rgba(255,255,255,0.45)]">LOCATION</div>
+                        <div className="text-[16px] font-bold leading-[1.4] text-white">{event.location}</div>
+                      </div>
+                    </a>
                   </div>
+
+                  <button
+                    onClick={() => setIsModalOpen(true)}
+                    className="mt-[24px] flex h-[44px] w-full items-center justify-center rounded-[8px] bg-[#3D7BC3] text-[14px] font-bold uppercase tracking-[2px] text-white transition-all duration-300 hover:-translate-y-[2px] hover:bg-[#3164a3]"
+                  >
+                    REGISTER NOW
+                  </button>
+                  <p className="mt-[20px] text-center text-[10px] font-semibold uppercase tracking-[1px] text-[rgba(255,255,255,0.35)]">
+                    * LIMITED SLOTS AVAILABLE
+                  </p>
                 </div>
 
-                {/* Share & Support */}
-                <div className="space-y-10 rounded-[3rem] border border-gray-100 bg-gray-50/50 p-12">
-                  <h4 className="border-b border-gray-100 pb-6 text-[10px] font-black tracking-[0.3em] text-[#001A3D] uppercase">
-                    Helpful Resources
+                {/* Helpful Links Card */}
+                <div className="mt-6 rounded-[20px] border border-[#E5E7EB] bg-white p-6">
+                  <h4 className="mb-4 text-[16px] font-bold text-[#0F172A]">
+                    Helpful Links
                   </h4>
-                  <div className="space-y-6">
-                    <button className="group flex items-center gap-4 text-xs font-black tracking-widest text-gray-400 uppercase transition-all hover:text-[#0171c1]">
-                      <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-white shadow-sm transition-all group-hover:shadow-md">
-                        <Share2 size={16} />
-                      </div>{" "}
+                  <div className="space-y-4">
+                    <button className="flex w-full items-center gap-3 text-[16px] font-medium text-[#64748B] transition-colors hover:text-[#2563EB]">
+                      <Share2 className="h-5 w-5 flex-shrink-0" />
                       Share with colleagues
                     </button>
-                    <button className="group flex items-center gap-4 text-xs font-black tracking-widest text-gray-400 uppercase transition-all hover:text-[#0171c1]">
-                      <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-white shadow-sm transition-all group-hover:shadow-md">
-                        <Monitor size={16} />
-                      </div>{" "}
+                    <button className="flex w-full items-center gap-3 text-[16px] font-medium text-[#64748B] transition-colors hover:text-[#2563EB]">
+                      <Monitor className="h-5 w-5 flex-shrink-0" />
                       Add to Calendar
                     </button>
                     <Link
                       href="/contact"
-                      className="group flex items-center gap-4 text-xs font-black tracking-widest text-gray-400 uppercase transition-all hover:text-[#0171c1]"
+                      className="flex w-full items-center gap-3 text-[16px] font-medium text-[#64748B] transition-colors hover:text-[#2563EB]"
                     >
-                      <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-white shadow-sm transition-all group-hover:shadow-md">
-                        <MessageSquare size={16} />
-                      </div>{" "}
+                      <MessageSquare className="h-5 w-5 flex-shrink-0" />
                       Contact Organizer
                     </Link>
                   </div>
@@ -294,49 +279,54 @@ export default function EventDetailClient({ event }: { event: any }) {
         </div>
       </section>
 
-      {/* CTA Section — image with optional video play */}
-      <section className="relative overflow-hidden border-t border-gray-100 bg-gray-50 py-32">
-        <div className="relative z-10 mx-auto w-full max-w-[1280px] px-6 lg:px-20">
-          <div className="grid grid-cols-1 items-center gap-24 lg:grid-cols-2">
-            <div className="space-y-10">
-              <h2 className="display-font text-5xl leading-tight font-bold tracking-tight text-[#001A3D] md:text-7xl">
-                {renderTitle(ctaTitle, "text-inherit", "text-[#0171c1]", "text-[#F99D1C]")}
+      {/* Newsletter CTA Section */}
+      <section className="bg-white py-[80px]">
+        <div className="mx-auto max-w-[1200px] px-6">
+          <div className="flex flex-col items-center gap-[48px] lg:flex-row">
+            {/* Left Content */}
+            <div className="w-full lg:w-1/2">
+              <h2 className="mb-[32px] max-w-[500px] text-[40px] font-bold leading-[1.1] text-[#041B4D] md:text-[48px]">
+                Can&apos;t make it to this event?
               </h2>
-              <p className="max-w-lg text-xl leading-relaxed font-medium text-gray-500">{ctaDesc}</p>
-              <form className="flex max-w-xl flex-col gap-4 sm:flex-row">
+              <p className="mb-[40px] max-w-[620px] text-[16px] font-normal leading-[1.8] text-[#64748B] md:text-[18px]">
+                Subscribe to our tech newsletter to receive event summaries, recording links, and early-bird notifications for our upcoming summits.
+              </p>
+              <form className="flex w-full flex-col gap-[12px] md:flex-row md:gap-[16px]">
                 <input
                   type="email"
-                  placeholder="name@company.com"
-                  className="flex-1 rounded-2xl border border-gray-200 bg-white px-8 py-6 text-lg font-medium shadow-sm transition-all focus:border-[#0171c1] focus:outline-none"
+                  placeholder="Enter your corporate email"
+                  className="h-[56px] w-full rounded-[8px] border border-[#E5E7EB] bg-white px-[20px] text-[16px] placeholder:text-[16px] placeholder:text-[#94A3B8] focus:border-[#3B82F6] focus:outline-none md:w-[420px]"
                 />
-                <button className="rounded-2xl bg-[#001A3D] px-12 py-6 text-xs font-black tracking-[0.2em] text-white uppercase shadow-xl transition-all hover:bg-[#0171c1]">
-                  Subscribe
+                <button
+                  type="submit"
+                  className="h-[56px] w-full rounded-[8px] bg-[#3B82F6] text-[14px] font-bold uppercase tracking-[2px] text-white transition-colors duration-300 hover:bg-blue-600 md:w-[180px]"
+                >
+                  SUBSCRIBE
                 </button>
               </form>
             </div>
-            <div className="relative">
-              <div className="aspect-square rotate-3 overflow-hidden rounded-[4rem] shadow-[0_64px_128px_-32px_rgba(0,0,0,0.2)]">
+
+            {/* Right Side Image */}
+            <div className="w-full lg:w-1/2">
+              <div className="relative h-[350px] w-full overflow-hidden rounded-[20px] shadow-xl md:rounded-[24px]">
                 <ImageWithFallback
                   src={ctaImage}
                   alt="Event recording"
-                  className="h-full w-full object-cover grayscale transition-all duration-700 group-hover:grayscale-0"
+                  className="h-full w-full object-cover"
                 />
-                {/* Play button overlay — shown when video URL exists OR as decorative element */}
+                {/* Play Button Overlay */}
                 <div
-                  className={`group absolute inset-0 flex items-center justify-center bg-[#001A3D]/30 ${ctaVideoUrl ? "cursor-pointer" : "pointer-events-none"}`}
+                  className={`absolute inset-0 flex items-center justify-center bg-black/10 ${ctaVideoUrl ? "cursor-pointer" : "pointer-events-none"}`}
                   onClick={() => ctaVideoUrl && setVideoOpen(true)}
                 >
-                  <div className="flex h-24 w-24 items-center justify-center rounded-full bg-white/90 text-[#0171c1] shadow-[0_32px_64px_-16px_rgba(0,0,0,0.3)] backdrop-blur-xl transition-transform hover:scale-110">
-                    <Video className="h-10 w-10 fill-current" />
+                  <div className="flex h-[88px] w-[88px] items-center justify-center rounded-full bg-white shadow-lg transition-transform duration-300 hover:scale-105">
+                    <Video className="h-8 w-8 fill-current text-[#3B82F6]" />
                   </div>
                 </div>
               </div>
-              <div className="absolute -right-10 -bottom-10 -z-10 h-40 w-40 -rotate-6 rounded-3xl bg-[#FFAF2B] shadow-2xl"></div>
             </div>
           </div>
         </div>
-        {/* Decorative elements */}
-        <div className="absolute top-0 right-0 h-full w-1/3 translate-x-1/3 skew-x-12 bg-[#0171c1]/5"></div>
       </section>
 
       {/* Video Modal */}
