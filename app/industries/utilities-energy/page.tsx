@@ -38,6 +38,7 @@ import { Meta } from "@/components/Meta";
 import { ImageWithFallback } from "@/components/figma/ImageWithFallback";
 import Link from "next/link";
 
+
 const UTILITIES_SERVICES = [
   {
     icon: Lightbulb,
@@ -310,6 +311,10 @@ export default function UtilitiesEnergy() {
               We craft intelligent utility experiences through cutting-edge software solutions and
               expert consulting for global energy and water providers.
             </p>
+            <Link href="/contact" className="btn-banner-cta mt-6 group">
+              Consult Us
+              <MoveRight className="w-4 h-4 transition-transform group-hover:translate-x-1 shrink-0" />
+            </Link>
           </Motion.div>
         </div>
       </section>
@@ -749,6 +754,7 @@ export default function UtilitiesEnergy() {
           </div>
         </div>
       </section>
+
     </div>
   );
 }

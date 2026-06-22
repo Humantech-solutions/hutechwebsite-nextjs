@@ -21,6 +21,8 @@ export type Blog = {
     question: string;
     answer: string;
   }[];
+  faqTitle?: string;
+  faqSubtitle?: string;
 };
 
 export const BLOG_DATA: Record<string, Blog> = {

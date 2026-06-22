@@ -2,6 +2,8 @@ export type CaseStudy = {
   slug: string;
   title: string;
   client: string;
+  listClient?: string;
+  listDesc?: string;
   impact: string;
   image: string;
   tags: string[];
@@ -32,6 +34,9 @@ export type CaseStudy = {
     title: string;
     desc: string;
   }[];
+  faqs?: { question: string; answer: string }[];
+  faqTitle?: string;
+  faqSubtitle?: string;
 };
 
 export const CASE_STUDIES: Record<string, CaseStudy> = {

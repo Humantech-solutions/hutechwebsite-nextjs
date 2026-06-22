@@ -1,3 +1,4 @@
+import { CaseStudy } from "@/lib/data/case-studies";
 // WordPress GraphQL API integration for Hutech Solutions
 // Replace NEXT_PUBLIC_WORDPRESS_API_URL in .env.local with your WordPress site's GraphQL endpoint
 
@@ -488,6 +489,812 @@ export async function getHomePage(): Promise<HomepageData | null> {
     return transformHomePage(raw);
   } catch (err) {
     console.warn("[WP] getHomePage() failed:", err);
+    return null;
+  }
+}
+
+// ─── Blog Types ───────────────────────────────────────────────────────────────
+
+export type WpBlog = {
+  id: string;
+  slug: string;
+  title: string;
+  date: string;
+  excerpt: string;
+  content: string;
+  author: string;
+  category: string;
+  imageUrl?: string;
+  readTime: string;
+  tags: string[];
+  faqs?: {
+    question: string;
+    answer: string;
+  }[];
+  faqTitle?: string;
+  faqSubtitle?: string;
+};
+
+export type BlogPageData = {
+  title: string;
+  description: string;
+  bgImageUrl?: string;
+};
+
+// ─── Blog GraphQL Queries ─────────────────────────────────────────────────────
+
+const BLOGS_QUERY = `
+  query GetAllBlogs {
+    posts(first: 100, where: { orderby: { field: DATE, order: DESC } }) {
+      nodes {
+        id
+        slug
+        title
+        date
+        excerpt(format: RENDERED)
+        featuredImage {
+          node {
+            sourceUrl
+          }
+        }
+        categories {
+          nodes {
+            name
+          }
+        }
+        tags {
+          nodes {
+            name
+          }
+        }
+        author {
+          node {
+            name
+          }
+        }
+      }
+    }
+  }
+`;
+
+const BLOG_BY_SLUG_QUERY = `
+  query GetBlogBySlug($slug: ID!) {
+    post(id: $slug, idType: SLUG) {
+      id
+      slug
+      title
+      date
+      content(format: RENDERED)
+      excerpt(format: RENDERED)
+      featuredImage {
+        node {
+          sourceUrl
+        }
+      }
+      categories {
+        nodes {
+          name
+        }
+      }
+      tags {
+        nodes {
+          name
+        }
+      }
+      author {
+        node {
+          name
+        }
+      }
+    }
+  }
+`;
+
+const BLOG_FAQ_QUERY = `
+  query GetBlogFaq($slug: ID!) {
+    post(id: $slug, idType: SLUG) {
+      postFields {
+        faqTitle
+        faqSubtitle
+        faq1Question
+        faq1Answer
+        faq2Question
+        faq2Answer
+        faq3Question
+        faq3Answer
+        faq4Question
+        faq4Answer
+        faq5Question
+        faq5Answer
+      }
+    }
+  }
+`;
+
+const BLOG_PAGE_QUERY = `
+  query GetBlogPageData {
+    pages(where: { name: "blogs" }) {
+      nodes {
+        blogFields {
+          title
+          description
+          bgImage {
+            node {
+              sourceUrl
+            }
+          }
+        }
+      }
+    }
+  }
+`;
+
+// ─── Blog Transform Helpers ───────────────────────────────────────────────────
+
+function estimateReadTime(content: string): string {
+  const wordCount = content.replace(/<[^>]+>/g, "").split(/\s+/).length;
+  const mins = Math.max(1, Math.ceil(wordCount / 200));
+  return `${mins} min read`;
+}
+
+function stripHtml(html: string): string {
+  return html.replace(/<[^>]+>/g, "").trim();
+}
+
+function transformBlogNode(node: any): WpBlog {
+  const category = node.categories?.nodes?.[0]?.name ?? "General";
+  const tags = node.tags?.nodes?.map((t: any) => t.name) ?? [];
+  const author = node.author?.node?.name ?? "Hutech Team";
+  const imageUrl = node.featuredImage?.node?.sourceUrl ?? undefined;
+  const rawContent = node.content ?? node.excerpt ?? "";
+  const readTime = estimateReadTime(rawContent);
+  const excerpt = stripHtml(node.excerpt ?? "").slice(0, 200);
+  const dateFormatted = new Date(node.date).toLocaleDateString("en-US", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  });
+
+  const faqs: { question: string; answer: string }[] = [];
+  const pf = node.postFields;
+  if (pf) {
+    for (let i = 1; i <= 5; i++) {
+      const q = pf[`faq${i}Question`];
+      const a = pf[`faq${i}Answer`];
+      if (q && a) {
+        faqs.push({ question: q, answer: a });
+      }
+    }
+  }
+
+  return {
+    id: node.id,
+    slug: node.slug,
+    title: node.title ?? "",
+    date: dateFormatted,
+    excerpt,
+    content: rawContent,
+    author,
+    category,
+    imageUrl,
+    readTime,
+    tags,
+    faqs,
+    faqTitle: pf?.faqTitle,
+    faqSubtitle: pf?.faqSubtitle,
+  };
+}
+
+// ─── Public Blog API ──────────────────────────────────────────────────────────
+
+/** Fetch all WordPress posts for the blog listing page. Returns [] on failure. */
+export async function getBlogs(): Promise<WpBlog[]> {
+  try {
+    const raw = await fetchGraphQL(BLOGS_QUERY);
+    if (raw?.errors || !raw?.data?.posts?.nodes) {
+      console.warn("[WP] Could not fetch blogs. Using static fallback.");
+      return [];
+    }
+    return (raw.data.posts.nodes as any[]).map(transformBlogNode);
+  } catch (err) {
+    console.warn("[WP] getBlogs() failed:", err);
+    return [];
+  }
+}
+
+/** Fetch a single WordPress post by slug for the detail page. Returns null on failure. */
+export async function getBlogBySlug(slug: string): Promise<WpBlog | null> {
+  try {
+    const raw = await fetchGraphQL(BLOG_BY_SLUG_QUERY, { slug });
+    if (raw?.errors || !raw?.data?.post) {
+      console.error("[WP] getBlogBySlug error:", raw?.errors);
+      return null;
+    }
+
+    const postNode = raw.data.post;
+
+    // Try to fetch FAQs safely without crashing the main post
+    try {
+      const faqRaw = await fetchGraphQL(BLOG_FAQ_QUERY, { slug });
+      if (!faqRaw?.errors && faqRaw?.data?.post?.postFields) {
+        postNode.postFields = faqRaw.data.post.postFields;
+      }
+    } catch (err) {
+      console.warn("[WP] Could not fetch FAQs for blog:", slug);
+    }
+
+    return transformBlogNode(postNode);
+  } catch (err) {
+    console.error("[WP] getBlogBySlug() failed:", err);
+    return null;
+  }
+}
+
+/** Fetch custom ACF fields for the Blog landing page title/description. Returns null on failure. */
+export async function getBlogPageData(): Promise<BlogPageData | null> {
+  try {
+    const raw = await fetchGraphQL(BLOG_PAGE_QUERY);
+    const node = raw?.data?.pages?.nodes?.[0]?.blogFields;
+    if (!node) return null;
+    return {
+      title: node.title || "",
+      description: node.description || "",
+      bgImageUrl: imgUrl(node.bgImage),
+    };
+  } catch (err) {
+    console.warn("[WP] getBlogPageData() failed:", err);
+    return null;
+  }
+}
+
+// ─── Events GraphQL Queries ───────────────────────────────────────────────────
+
+const EVENTS_LIST_QUERY = `
+  query GetAllEvents {
+    hutechEvents(first: 100, where: { orderby: { field: DATE, order: DESC } }) {
+      nodes {
+        id
+        slug
+        title
+        date
+        featuredImage { node { sourceUrl } }
+        eventCategories { nodes { name } }
+        eventPostFields {
+          eventDate
+          eventTimeStart
+          eventTimeEnd
+          timezone
+          location
+          eventType
+          eventCategoryLabel
+        }
+      }
+    }
+  }
+`;
+
+const EVENT_BY_SLUG_QUERY = `
+  query GetEventBySlug($slug: ID!) {
+    hutechEvent(id: $slug, idType: SLUG) {
+      id
+      slug
+      title
+      date
+      featuredImage { node { sourceUrl } }
+      eventCategories { nodes { name } }
+      eventPostFields {
+        tagline
+        eventType
+        eventCategoryLabel
+        eventDate
+        eventTimeStart
+        eventTimeEnd
+        timezone
+        location
+        description
+        highlight1
+        highlight2
+        highlight3
+        highlight4
+        highlight5
+        highlight6
+        agenda1Time
+        agenda1Title
+        agenda2Time
+        agenda2Title
+        agenda3Time
+        agenda3Title
+        agenda4Time
+        agenda4Title
+        agenda5Time
+        agenda5Title
+        agenda6Time
+        agenda6Title
+        agenda7Time
+        agenda7Title
+        agenda8Time
+        agenda8Title
+        speaker1Name
+        speaker1Role
+        speaker1Image { node { sourceUrl } }
+        speaker2Name
+        speaker2Role
+        speaker2Image { node { sourceUrl } }
+        speaker3Name
+        speaker3Role
+        speaker3Image { node { sourceUrl } }
+        speaker4Name
+        speaker4Role
+        speaker4Image { node { sourceUrl } }
+        speaker5Name
+        speaker5Role
+        speaker5Image { node { sourceUrl } }
+        ctaTitle
+        ctaDescription
+        ctaImage { node { sourceUrl } }
+        ctaVideoUrl
+      }
+    }
+  }
+`;
+
+const EVENT_PAGE_QUERY = `
+  query GetEventPageData {
+    pages(where: { title: "Events" }) {
+      nodes {
+        eventPageFields {
+          title
+          description
+          bgImage { node { sourceUrl } }
+        }
+      }
+    }
+  }
+`;
+
+function formatEventDateString(dateStr: string): string {
+  if (!dateStr) return "";
+  try {
+    // If it's already "April 20, 2026", it will parse or return as is.
+    // Handle ACF raw format or ISO string (e.g. "2026-06-25T00:00:00+00:00" or "20260625")
+    let d: Date;
+    if (/^\d{8}$/.test(dateStr)) {
+      const year = dateStr.substring(0, 4);
+      const month = dateStr.substring(4, 6);
+      const day = dateStr.substring(6, 8);
+      d = new Date(`${year}-${month}-${day}T00:00:00`);
+    } else {
+      d = new Date(dateStr);
+    }
+    
+    if (!isNaN(d.getTime())) {
+      return d.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+    }
+  } catch (e) {
+    // ignore
+  }
+  return dateStr;
+}
+
+function formatEventDateTime(pf: any, nodeDate: string): { date: string; time: string } {
+  const rawDate = pf.eventDate || nodeDate || "";
+  const date = formatEventDateString(rawDate);
+  const start = pf.eventTimeStart || "";
+  const end = pf.eventTimeEnd || "";
+  const tz = pf.timezone || "";
+  let time = "";
+  if (start && end) {
+    time = `${start} - ${end}${tz ? " " + tz : ""}`;
+  } else if (start) {
+    time = `${start}${tz ? " " + tz : ""}`;
+  }
+  return { date, time };
+}
+
+function transformEventNode(node: any) {
+  const pf = node.eventPostFields || {};
+  const { date, time } = formatEventDateTime(pf, node.date);
+  const imageUrl = node.featuredImage?.node?.sourceUrl ?? "";
+
+  const highlights: string[] = [1, 2, 3, 4, 5, 6]
+    .map((i) => pf[`highlight${i}`])
+    .filter(Boolean);
+
+  const agenda: { time: string; event: string }[] = [1, 2, 3, 4, 5, 6, 7, 8]
+    .map((i) => ({ time: pf[`agenda${i}Time`] || "", event: pf[`agenda${i}Title`] || "" }))
+    .filter((a) => a.time || a.event);
+
+  const speakers: { name: string; role: string; image: string }[] = [1, 2, 3, 4, 5]
+    .map((i) => ({
+      name: pf[`speaker${i}Name`] || "",
+      role: pf[`speaker${i}Role`] || "",
+      image: imgUrl(pf[`speaker${i}Image`]) || "",
+    }))
+    .filter((s) => s.name);
+
+  return {
+    id: node.slug,
+    slug: node.slug,
+    title: node.title ?? "",
+    tagline: pf.tagline ?? "",
+    date,
+    time,
+    location: pf.location ?? "",
+    type: Array.isArray(pf.eventType) ? (pf.eventType[0] || "In-Person") : (pf.eventType || "In-Person"),
+    category: Array.isArray(pf.eventCategoryLabel) ? (pf.eventCategoryLabel[0] || "Event") : (pf.eventCategoryLabel || node.eventCategories?.nodes?.[0]?.name || "Event"),
+    image: imageUrl,
+    description: pf.description ?? "",
+    highlights,
+    agenda,
+    speakers,
+    ctaTitle: pf.ctaTitle ?? "Missed this |Event?",
+    ctaDescription: pf.ctaDescription ?? "",
+    ctaImage: imgUrl(pf.ctaImage) ?? imageUrl,
+    ctaVideoUrl: pf.ctaVideoUrl ?? "",
+  };
+}
+
+export async function getEvents(): Promise<any[]> {
+  try {
+    const raw = await fetchGraphQL(EVENTS_LIST_QUERY);
+    if (raw?.errors || !raw?.data?.hutechEvents?.nodes) {
+      console.warn("[WP] Could not fetch events. Using static fallback.");
+      return [];
+    }
+    return (raw.data.hutechEvents.nodes as any[]).map(transformEventNode);
+  } catch (err) {
+    console.warn("[WP] getEvents() failed:", err);
+    return [];
+  }
+}
+
+export async function getEventBySlug(slug: string): Promise<any | null> {
+  try {
+    const raw = await fetchGraphQL(EVENT_BY_SLUG_QUERY, { slug });
+    if (raw?.errors || !raw?.data?.hutechEvent) {
+      console.warn("[WP] getEventBySlug() – no data for:", slug);
+      return null;
+    }
+    return transformEventNode(raw.data.hutechEvent);
+  } catch (err) {
+    console.warn("[WP] getEventBySlug() failed:", err);
+    return null;
+  }
+}
+
+export async function getEventPageData(): Promise<{ title: string; description: string; bgImageUrl?: string } | null> {
+  try {
+    const raw = await fetchGraphQL(EVENT_PAGE_QUERY);
+    const node = raw?.data?.pages?.nodes?.[0]?.eventPageFields;
+    if (!node) return null;
+    return {
+      title: node.title || "",
+      description: node.description || "",
+      bgImageUrl: imgUrl(node.bgImage),
+    };
+  } catch (err) {
+    console.warn("[WP] getEventPageData() failed:", err);
+    return null;
+  }
+}
+
+// ─── Case Studies GraphQL Queries ─────────────────────────────────────────────
+
+const CASE_STUDIES_QUERY = `
+  query GetAllCaseStudies {
+    caseStudies(first: 100, where: { orderby: { field: DATE, order: DESC } }) {
+      nodes {
+        id
+        slug
+        title
+        date
+        excerpt(format: RENDERED)
+        featuredImage {
+          node {
+            sourceUrl
+          }
+        }
+        caseStudyCategories {
+          nodes {
+            name
+          }
+        }
+        tags {
+          nodes {
+            name
+          }
+        }
+        caseStudyPostFields {
+          client
+          shortDesc
+          listClient
+          listDesc
+          impact
+        }
+        author {
+          node {
+            name
+          }
+        }
+      }
+    }
+  }
+`;
+
+const CASE_STUDY_BY_SLUG_QUERY = `
+  query GetCaseStudyBySlug($slug: ID!) {
+    caseStudy(id: $slug, idType: SLUG) {
+      id
+      slug
+      title
+      date
+      content(format: RENDERED)
+      excerpt(format: RENDERED)
+      featuredImage {
+        node {
+          sourceUrl
+        }
+      }
+      caseStudyCategories {
+        nodes {
+          name
+        }
+      }
+      tags {
+        nodes {
+          name
+        }
+      }
+      author {
+        node {
+          name
+        }
+      }
+    }
+  }
+`;
+
+const CASE_STUDY_FAQ_QUERY = `
+  query GetCaseStudyFaq($slug: ID!) {
+    caseStudy(id: $slug, idType: SLUG) {
+      caseStudyPostFields {
+        client
+        impact
+        shortDesc
+        listClient
+        listDesc
+        clientDomain
+        platform
+        geography
+        overviewQuote
+        overviewText1
+        overviewText2
+        challenge1Title
+        challenge1Desc
+        challenge1Icon
+        challenge2Title
+        challenge2Desc
+        challenge2Icon
+        challenge3Title
+        challenge3Desc
+        challenge3Icon
+        solution1Title
+        solution1Desc
+        solution1Icon
+        solution2Title
+        solution2Desc
+        solution2Icon
+        solution3Title
+        solution3Desc
+        solution3Icon
+        solution4Title
+        solution4Desc
+        solution4Icon
+        process1Number
+        process1Title
+        process1Desc
+        process2Number
+        process2Title
+        process2Desc
+        process3Number
+        process3Title
+        process3Desc
+        process4Number
+        process4Title
+        process4Desc
+        process5Number
+        process5Title
+        process5Desc
+        result1Title
+        result1Desc
+        result2Title
+        result2Desc
+        result3Title
+        result3Desc
+        result4Title
+        result4Desc
+        faqTitle
+        faqSubtitle
+        faq1Question
+        faq1Answer
+        faq2Question
+        faq2Answer
+        faq3Question
+        faq3Answer
+        faq4Question
+        faq4Answer
+        faq5Question
+        faq5Answer
+      }
+    }
+  }
+`;
+
+const CASE_STUDY_PAGE_QUERY = `
+  query GetCaseStudyPageData {
+    pages(where: { name: "Case Studies" }) {
+      nodes {
+        caseStudyPageFields {
+          title
+          description
+          bgImage {
+            node {
+              sourceUrl
+            }
+          }
+        }
+      }
+    }
+  }
+`;
+
+// ─── Case Study Transform Helpers ─────────────────────────────────────────────
+
+function transformCaseStudyNode(node: any): CaseStudy {
+  const pf = node.caseStudyPostFields || {};
+  
+  const category = node.caseStudyCategories?.nodes?.[0]?.name ?? "Case Study";
+  const tags = node.tags?.nodes?.map((t: any) => t.name) ?? [];
+  const imageUrl = node.featuredImage?.node?.sourceUrl ?? "";
+
+  const overviewText = [];
+  if (pf.overviewText1) overviewText.push(pf.overviewText1);
+  if (pf.overviewText2) overviewText.push(pf.overviewText2);
+
+  const challenges = [];
+  for (let i = 1; i <= 3; i++) {
+    if (pf[`challenge${i}Title`]) {
+      challenges.push({
+        title: pf[`challenge${i}Title`],
+        desc: pf[`challenge${i}Desc`] || "",
+        icon: pf[`challenge${i}Icon`] || "Target",
+      });
+    }
+  }
+
+  const solutions = [];
+  for (let i = 1; i <= 4; i++) {
+    if (pf[`solution${i}Title`]) {
+      solutions.push({
+        title: pf[`solution${i}Title`],
+        desc: pf[`solution${i}Desc`] || "",
+        icon: pf[`solution${i}Icon`] || "Zap",
+      });
+    }
+  }
+
+  const process = [];
+  for (let i = 1; i <= 5; i++) {
+    if (pf[`process${i}Title`]) {
+      process.push({
+        number: pf[`process${i}Number`] || `0${i}`,
+        title: pf[`process${i}Title`],
+        desc: pf[`process${i}Desc`] || "",
+      });
+    }
+  }
+
+  const results = [];
+  for (let i = 1; i <= 4; i++) {
+    if (pf[`result${i}Title`]) {
+      results.push({
+        title: pf[`result${i}Title`],
+        desc: pf[`result${i}Desc`] || "",
+      });
+    }
+  }
+
+  const faqs = [];
+  for (let i = 1; i <= 5; i++) {
+    if (pf[`faq${i}Question`] && pf[`faq${i}Answer`]) {
+      faqs.push({
+        question: pf[`faq${i}Question`],
+        answer: pf[`faq${i}Answer`],
+      });
+    }
+  }
+
+  return {
+    slug: node.slug,
+    title: node.title ?? "",
+    client: pf.client ?? "Client Name",
+    listClient: pf.listClient || pf.client || "Client Name",
+    listDesc: pf.listDesc || pf.shortDesc || "",
+    impact: pf.impact ?? "",
+    image: imageUrl,
+    heroImage: imageUrl,
+    tags,
+    category,
+    shortDesc: pf.shortDesc ?? "",
+    clientDomain: pf.clientDomain ?? "",
+    platform: pf.platform ?? "",
+    geography: pf.geography ?? "",
+    overviewQuote: pf.overviewQuote ?? "",
+    overviewText,
+    challenges,
+    solutions,
+    process,
+    results,
+    faqs,
+    faqTitle: pf.faqTitle,
+    faqSubtitle: pf.faqSubtitle,
+  } as any;
+}
+
+// ─── Public Case Study API ────────────────────────────────────────────────────
+
+export async function getCaseStudies(): Promise<CaseStudy[]> {
+  try {
+    const raw = await fetchGraphQL(CASE_STUDIES_QUERY);
+    if (raw?.errors || !raw?.data?.caseStudies?.nodes) {
+      console.warn("[WP] Could not fetch case studies. Using static fallback.");
+      return [];
+    }
+    return (raw.data.caseStudies.nodes as any[]).map(transformCaseStudyNode);
+  } catch (err) {
+    console.warn("[WP] getCaseStudies() failed:", err);
+    return [];
+  }
+}
+
+export async function getCaseStudyBySlug(slug: string): Promise<CaseStudy | null> {
+  try {
+    const raw = await fetchGraphQL(CASE_STUDY_BY_SLUG_QUERY, { slug });
+    if (raw?.errors || !raw?.data?.caseStudy) {
+      console.error("[WP] getCaseStudyBySlug error:", raw?.errors);
+      return null;
+    }
+
+    const postNode = raw.data.caseStudy;
+
+    try {
+      const faqRaw = await fetchGraphQL(CASE_STUDY_FAQ_QUERY, { slug });
+      if (!faqRaw?.errors && faqRaw?.data?.caseStudy?.caseStudyPostFields) {
+        postNode.caseStudyPostFields = faqRaw.data.caseStudy.caseStudyPostFields;
+      }
+    } catch (err) {
+      console.warn("[WP] Could not fetch FAQs for case study:", slug);
+    }
+
+    return transformCaseStudyNode(postNode);
+  } catch (err) {
+    console.error("[WP] getCaseStudyBySlug() failed:", err);
+    return null;
+  }
+}
+
+export async function getCaseStudyPageData(): Promise<BlogPageData | null> {
+  try {
+    const raw = await fetchGraphQL(CASE_STUDY_PAGE_QUERY);
+    const node = raw?.data?.pages?.nodes?.[0]?.caseStudyPageFields;
+    if (!node) return null;
+    return {
+      title: node.title || "",
+      description: node.description || "",
+      bgImageUrl: imgUrl(node.bgImage),
+    };
+  } catch (err) {
+    console.warn("[WP] getCaseStudyPageData() failed:", err);
     return null;
   }
 }

@@ -13,6 +13,7 @@ import {
   MessageSquare,
   Monitor,
   Video,
+  Linkedin,
 } from "lucide-react";
 import { Meta } from "@/components/Meta";
 import { ImageWithFallback } from "@/components/figma/ImageWithFallback";
@@ -45,18 +46,21 @@ const EVENTS_DATA = {
         role: "CTO, Hutech Solutions",
         image:
           "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=400",
+        linkedin: "https://linkedin.com",
       },
       {
         name: "James Wilson",
         role: "VP of Engineering, CloudCore",
         image:
           "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=400",
+        linkedin: "https://linkedin.com",
       },
       {
         name: "Elena Rodriguez",
         role: "Head of AI Ethics, GlobalTech",
         image:
           "https://images.unsplash.com/photo-1580489944761-15a19d654956?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=400",
+        linkedin: "https://linkedin.com",
       },
     ],
     highlights: [
@@ -90,12 +94,14 @@ const EVENTS_DATA = {
         role: "Fintech Lead, Hutech",
         image:
           "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=400",
+        linkedin: "https://linkedin.com",
       },
       {
         name: "Amara Okoro",
         role: "Chief Innovation Officer, NeoBank",
         image:
           "https://images.unsplash.com/photo-1531123897727-8f129e1688ce?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=400",
+        linkedin: "https://linkedin.com",
       },
     ],
     highlights: [
@@ -129,12 +135,14 @@ const EVENTS_DATA = {
         role: "Head of Sustainability, Hutech",
         image:
           "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=400",
+        linkedin: "https://linkedin.com",
       },
       {
         name: "Dr. Anna Mueller",
         role: "Environmental Lead, GreenTech Institute",
         image:
           "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=400",
+        linkedin: "https://linkedin.com",
       },
     ],
     highlights: [
@@ -227,7 +235,7 @@ export default function EventDetailClient({ id }: { id: string }) {
                   {event.agenda.map((item, idx) => (
                     <div
                       key={idx}
-                      className="flex items-center gap-8 rounded-2xl border border-gray-100 p-6 transition-all hover:border-[#0171c1]/30 hover:shadow-lg"
+                      className="flex items-center gap-8 rounded-2xl border border-gray-100 p-6"
                     >
                       <div className="w-24 text-lg font-black tracking-tight whitespace-nowrap text-[#0171c1]">
                         {item.time}
@@ -256,9 +264,21 @@ export default function EventDetailClient({ id }: { id: string }) {
                       </div>
                       <div className="space-y-1">
                         <h4 className="text-xl font-bold text-[#001A3D]">{speaker.name}</h4>
-                        <p className="text-sm font-bold tracking-widest text-[#0171c1] uppercase">
-                          {speaker.role}
-                        </p>
+                        <div className="flex flex-col items-center justify-center gap-3">
+                          <p className="text-sm font-bold tracking-widest text-[#0171c1] uppercase">
+                            {speaker.role}
+                          </p>
+                          {speaker.linkedin && (
+                            <a
+                              href={speaker.linkedin}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="text-[#0171c1] transition-opacity hover:opacity-70 cursor-pointer"
+                            >
+                              <Linkedin size={20} />
+                            </a>
+                          )}
+                        </div>
                       </div>
                     </div>
                   ))}
@@ -296,7 +316,12 @@ export default function EventDetailClient({ id }: { id: string }) {
                           <div className="font-bold">{event.time}</div>
                         </div>
                       </div>
-                      <div className="flex gap-4">
+                      <a
+                        href={`https://maps.google.com/?q=${encodeURIComponent(event.location)}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex gap-4 transition-opacity hover:opacity-80 cursor-pointer"
+                      >
                         <div className="flex h-12 w-12 items-center justify-center rounded-xl border border-white/10 bg-white/5">
                           <MapPin className="h-5 w-5 text-[#FFAF2B]" />
                         </div>
@@ -306,7 +331,7 @@ export default function EventDetailClient({ id }: { id: string }) {
                           </div>
                           <div className="font-bold">{event.location}</div>
                         </div>
-                      </div>
+                      </a>
                     </div>
                     <button
                       onClick={() => setIsModalOpen(true)}

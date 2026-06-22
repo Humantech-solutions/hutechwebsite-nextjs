@@ -30,6 +30,8 @@ import { Meta } from "@/components/Meta";
 import { ImageWithFallback } from "@/components/figma/ImageWithFallback";
 import Link from "next/link";
 
+import { ServiceDetailContactCTA } from "@/components/ServiceDetailContactCTA";
+
 const ENTERPRISE_SOLUTIONS = [
   {
     title: "SAP Implementation",
@@ -189,6 +191,10 @@ export default function EnterpriseDigitalSolutions() {
               automate complex workflows, and provide real-time visibility across your global
               operations.
             </p>
+            <Link href="/contact" className="btn-banner-cta mt-6 group">
+              Consult Us
+              <MoveRight className="w-4 h-4 transition-transform group-hover:translate-x-1 shrink-0" />
+            </Link>
           </Motion.div>
         </div>
       </section>
@@ -346,43 +352,9 @@ export default function EnterpriseDigitalSolutions() {
         </div>
       </section>
 
-      {/* Featured Call to Action */}
-      <section className="bg-white py-24">
-        <div className="mx-auto max-w-[1280px] px-6 lg:px-20">
-          <div className="relative space-y-10 overflow-hidden rounded-[4rem] bg-[#001A3D] p-12 text-center shadow-2xl md:p-24">
-            <div className="absolute inset-0 z-0">
-              <ImageWithFallback
-                src="https://images.unsplash.com/photo-1551288049-bbbda546697c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1920"
-                alt="Enterprise Network"
-                className="h-full w-full object-cover opacity-10"
-              />
-            </div>
-            <div className="relative z-10 mx-auto max-w-4xl space-y-8">
-              <h2 className="display-font gap-2 text-4xl leading-tight font-bold text-white md:text-7xl">
-                Architect Your <span className="text-[#F99D1C]">Digital Future.</span>
-              </h2>
-              <p className="mx-auto max-w-2xl text-xl leading-relaxed font-medium text-white/60">
-                Connect with our senior enterprise architects today to discuss your roadmap, from
-                ERP selection and implementation to continuous evolution and support.
-              </p>
-              <div className="flex flex-col justify-center gap-6 pt-8 md:flex-row">
-                <Link
-                  href="/contact"
-                  className="inline-flex items-center justify-center gap-3 rounded-sm bg-[#0171c1] px-12 py-6 text-[12px] font-bold tracking-wider text-white uppercase transition-all duration-500 hover:bg-white hover:text-[#001A3D]"
-                >
-                  Initiate Transformation <MessageSquare className="ml-2 h-5 w-5" />
-                </Link>
-                <Link
-                  href="/company/leadership"
-                  className="inline-flex items-center justify-center gap-3 rounded-sm border border-white/20 px-12 py-6 text-[12px] font-bold tracking-wider text-white uppercase transition-all duration-500 hover:bg-white hover:text-[#001A3D]"
-                >
-                  Meet Our Strategists
-                </Link>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
+
+      <ServiceDetailContactCTA />
+
     </div>
   );
 }

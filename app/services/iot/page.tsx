@@ -31,6 +31,8 @@ import { Meta } from "@/components/Meta";
 import { ImageWithFallback } from "@/components/figma/ImageWithFallback";
 import Link from "next/link";
 
+import { ServiceDetailContactCTA } from "@/components/ServiceDetailContactCTA";
+
 const IOT_SERVICES = [
   {
     title: "Industrial IoT (IIoT)",
@@ -161,6 +163,10 @@ export default function IotSolutions() {
               engineer end-to-end IoT solutions that capture data, generate insights, and automate
               outcomes in real-time.
             </p>
+            <Link href="/contact" className="btn-banner-cta mt-6 group">
+              Consult Us
+              <MoveRight className="w-4 h-4 transition-transform group-hover:translate-x-1 shrink-0" />
+            </Link>
           </motion.div>
         </div>
       </section>
@@ -447,33 +453,7 @@ export default function IotSolutions() {
         </div>
       </section>
 
-      {/* CTA Section */}
-      <section className="relative overflow-hidden bg-[#0171c1] py-24 text-white">
-        <div className="absolute top-1/2 left-1/2 h-[150%] w-[150%] -translate-x-1/2 -translate-y-1/2 rounded-full bg-white/5 blur-[120px]"></div>
-        <div className="relative z-10 mx-auto max-w-[1280px] space-y-10 px-6 text-center lg:px-20">
-          <h2 className="display-font text-4xl leading-tight font-bold text-white md:text-7xl">
-            Engineer Your <br /> Connected Future.
-          </h2>
-          <p className="mx-auto max-w-3xl text-xl font-bold text-white opacity-90">
-            Whether you're building a smart product or digitizing a factory floor, Hutech provides
-            the IoT technical edge.
-          </p>
-          <div className="flex flex-wrap justify-center gap-6 pt-4">
-            <Link
-              href="/contact"
-              className="rounded-sm bg-white px-12 py-5 text-[11px] font-bold tracking-wider text-[#0171c1] uppercase shadow-2xl transition-all hover:bg-[#001A3D] hover:text-white"
-            >
-              Start IoT Discovery
-            </Link>
-            <Link
-              href="/services"
-              className="rounded-sm border-2 border-white/30 px-12 py-5 text-[11px] font-bold tracking-wider text-white uppercase transition-all hover:bg-white/10"
-            >
-              View All Services
-            </Link>
-          </div>
-        </div>
-      </section>
+            <ServiceDetailContactCTA />
     </div>
   );
 }

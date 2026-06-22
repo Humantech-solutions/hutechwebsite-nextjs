@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { motion as Motion } from "motion/react";
 import { ImageWithFallback } from "@/components/figma/ImageWithFallback";
 import {
@@ -25,10 +26,14 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { Job, HIRING_PROCESS } from "@/lib/data/careers";
+import { ApplicationModal } from "@/components/ApplicationModal";
 
 const BRAND_ORANGE = "#F99D1C";
 
 export default function CareersClient({ jobs }: { jobs: Job[] }) {
+  const [isApplicationModalOpen, setIsApplicationModalOpen] = useState(false);
+  const [selectedJobTitle, setSelectedJobTitle] = useState("General Application");
+
   return (
     <div className="flex flex-col overflow-hidden bg-white">
       <section className="bg-[#001A3D] text-white h-[300px] relative overflow-hidden flex items-center">
@@ -70,7 +75,7 @@ export default function CareersClient({ jobs }: { jobs: Job[] }) {
       {/* Open Positions */}
       <section id="openings" className="py-20 bg-white">
         <div className="max-w-[1280px] mx-auto px-6 lg:px-20">
-          <div className="flex flex-col md:flex-row justify-between items-end mb-20 gap-8">
+          <div className="mb-12">
             <div className="space-y-6">
               <div className="flex items-center space-x-3">
                 <span className="w-12 h-[1px] bg-[#F99D1C]"></span>
@@ -79,12 +84,6 @@ export default function CareersClient({ jobs }: { jobs: Job[] }) {
               <h2 className="text-3xl md:text-5xl lg:text-6xl font-semibold text-[#001A3D] tracking-tight leading-tight display-font">
                 Join the <br /> Excellence Hub.
               </h2>
-            </div>
-            <div className="flex flex-wrap gap-3">
-              <button className="px-6 py-3 bg-[#001A3D] text-white text-[11px] font-semibold tracking-wide rounded-sm shadow-lg">All Categories</button>
-              <button className="px-6 py-3 bg-gray-50 text-gray-400 text-[11px] font-semibold tracking-wide rounded-sm hover:bg-white border border-gray-100 transition-all">Engineering</button>
-              <button className="px-6 py-3 bg-gray-50 text-gray-400 text-[11px] font-semibold tracking-wide rounded-sm hover:bg-white border border-gray-100 transition-all">Design</button>
-              <button className="px-6 py-3 bg-gray-50 text-gray-400 text-[11px] font-semibold tracking-wide rounded-sm hover:bg-white border border-gray-100 transition-all">Sales</button>
             </div>
           </div>
 
@@ -129,12 +128,15 @@ export default function CareersClient({ jobs }: { jobs: Job[] }) {
               <p className="text-lg font-semibold text-[#001A3D] tracking-tight">No relevant opening for your skill set?</p>
               <p className="text-sm text-gray-500 font-medium">We&apos;re always looking for exceptional talent. Drop your resume in our talent pool.</p>
             </div>
-            <Link
-              href="/contact"
+            <button
+              onClick={() => {
+                setSelectedJobTitle("General Application");
+                setIsApplicationModalOpen(true);
+              }}
               className="bg-[#001A3D] hover:bg-[#002b66] text-white font-semibold py-4 px-10 rounded-sm text-[11px] tracking-wide transition-all shadow-xl active:scale-95"
             >
               General Application
-            </Link>
+            </button>
           </div>
         </div>
       </section>
@@ -350,12 +352,15 @@ export default function CareersClient({ jobs }: { jobs: Job[] }) {
             </div>
 
             <div className="flex flex-wrap gap-4 pt-4">
-              <Link
-                href="/contact"
+              <button
+                onClick={() => {
+                  setSelectedJobTitle("Emerging Talent / Internship Programme");
+                  setIsApplicationModalOpen(true);
+                }}
                 className="bg-[#001A3D] hover:bg-[#002B66] text-white font-semibold py-4 px-8 rounded-sm text-[11px] tracking-wide transition-all uppercase inline-flex items-center gap-2 shadow-lg active:scale-[0.98]"
               >
                 Apply Now <ChevronRight size={14} />
-              </Link>
+              </button>
               <Link
                 href="#"
                 className="border border-[#001A3D]/20 hover:border-[#001A3D] text-[#001A3D] font-semibold py-4 px-8 rounded-sm text-[11px] tracking-wide transition-all uppercase inline-flex items-center justify-center active:scale-[0.98]"
@@ -370,10 +375,11 @@ export default function CareersClient({ jobs }: { jobs: Job[] }) {
       {/* Why Nabhira is Different */}
       <section className="py-20 bg-gray-50 border-t border-b border-gray-100">
         <div className="max-w-[1280px] mx-auto px-6 lg:px-20">
-          <div className="space-y-4 mb-16">
-            <div className="flex items-center gap-3">
+          <div className="space-y-4 mb-16 text-center max-w-3xl mx-auto">
+            <div className="flex items-center justify-center gap-3">
               <span className="w-12 h-[1px] bg-[#F99D1C]"></span>
               <span className="text-xs font-bold tracking-widest text-[#F99D1C] uppercase">Career Advantage</span>
+              <span className="w-12 h-[1px] bg-[#F99D1C]"></span>
             </div>
             <h2 className="text-3xl md:text-5xl font-semibold text-[#001A3D] leading-tight tracking-tight display-font">
               Why Nabhira is <span className="font-extrabold">Different</span>
@@ -459,15 +465,6 @@ export default function CareersClient({ jobs }: { jobs: Job[] }) {
               </div>
             </div>
           </div>
-
-          <div className="mt-16 text-left">
-            <Link
-              href="/contact"
-              className="bg-[#001A3D] hover:bg-[#002B66] text-white font-semibold py-4 px-8 rounded-sm text-[11px] tracking-wide transition-all uppercase inline-flex items-center gap-2 shadow-lg active:scale-[0.98]"
-            >
-              Talk to Our Talent Team <ChevronRight size={14} />
-            </Link>
-          </div>
         </div>
       </section>
 
@@ -503,6 +500,12 @@ export default function CareersClient({ jobs }: { jobs: Job[] }) {
           </div>
         </div>
       </section>
+
+      <ApplicationModal
+        isOpen={isApplicationModalOpen}
+        onClose={() => setIsApplicationModalOpen(false)}
+        jobTitle={selectedJobTitle}
+      />
     </div>
   );
 }

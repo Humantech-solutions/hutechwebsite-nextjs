@@ -3,8 +3,7 @@
 import { useState, useRef } from "react";
 import { motion as Motion, useScroll, useTransform, AnimatePresence } from "framer-motion";
 import Link from "next/link";
-import {
-  Brain,
+import { Brain,
   TrendingUp,
   AlertTriangle,
   MessageSquare,
@@ -16,11 +15,12 @@ import {
   BarChart3,
   Check,
   Rocket,
-  ChevronDown,
-} from "lucide-react";
+  ChevronDown, MoveRight, } from "lucide-react";
 import { Breadcrumbs } from "@/components/Breadcrumbs";
 import { ImageWithFallback } from "@/components/figma/ImageWithFallback";
 import { Meta } from "@/components/Meta";
+
+import { ServiceDetailContactCTA } from "@/components/ServiceDetailContactCTA";
 
 const SERVICES = [
   {
@@ -309,6 +309,10 @@ export default function AiMlSolutions() {
                 Step into a realm of endless possibilities. We blend visionary thinking with
                 cutting-edge technology to create powerful solutions for businesses of all sizes.
               </p>
+              <Link href="/contact" className="btn-banner-cta mt-6 group">
+              Consult Us
+              <MoveRight className="w-4 h-4 transition-transform group-hover:translate-x-1 shrink-0" />
+            </Link>
             </Motion.div>
           </div>
         </Motion.div>
@@ -473,6 +477,8 @@ export default function AiMlSolutions() {
           </div>
         </div>
       </section>
+      <ServiceDetailContactCTA />
+
     </div>
   );
 }

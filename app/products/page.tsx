@@ -238,26 +238,42 @@ function ProductsContent() {
       </section>
 
       {/* Filter & Search Bar */}
-      <section className="sticky top-[64px] z-40 border-b border-gray-100 bg-white py-6">
+      <section className="sticky top-[64px] z-40 border-b border-gray-100 bg-white py-5">
         <div className="mx-auto max-w-[1280px] px-6 lg:px-20">
-          <div className="flex flex-col items-center justify-between gap-6 lg:flex-row">
-            <div className="no-scrollbar flex w-full items-center gap-2 overflow-x-auto pb-4 lg:w-auto lg:pb-0">
-              <Filter className="mr-2 h-4 w-4 shrink-0 text-gray-400" />
-              {CATEGORIES.map((cat) => (
-                <button
-                  key={cat}
-                  onClick={() => router.push(`/products?category=${encodeURIComponent(cat)}`)}
-                  className={`rounded-sm border px-5 py-2.5 text-[11px] font-black tracking-widest whitespace-nowrap uppercase transition-all duration-300 ${
-                    activeCategory === cat
-                      ? "border-[#001A3D] bg-[#001A3D] text-white shadow-lg shadow-[#001A3D]/10"
-                      : "border-gray-100 bg-white text-gray-500 hover:border-[#0171c1] hover:text-[#0171c1]"
-                  }`}
-                >
-                  {cat}
-                </button>
-              ))}
+          <div className="flex flex-col items-center justify-between gap-5 lg:flex-row">
+
+            {/* Category tabs + sticky filter icon */}
+            <div className="relative flex w-full min-w-0 items-center lg:w-auto">
+              {/* Scrollable category list */}
+              <div className="thin-scrollbar flex min-w-0 flex-1 items-center gap-2 overflow-x-auto pb-[3px] lg:pb-0">
+                {CATEGORIES.map((cat) => (
+                  <button
+                    key={cat}
+                    onClick={() => router.push(`/products?category=${encodeURIComponent(cat)}`)}
+                    className={`rounded-sm border px-5 py-2.5 text-[11px] font-black tracking-widest whitespace-nowrap uppercase transition-all duration-300 ${
+                      activeCategory === cat
+                        ? "border-[#001A3D] bg-[#001A3D] text-white shadow-lg shadow-[#001A3D]/10"
+                        : "border-gray-100 bg-white text-gray-500 hover:border-[#0171c1] hover:text-[#0171c1]"
+                    }`}
+                  >
+                    {cat}
+                  </button>
+                ))}
+                {/* Right spacer so last item isn't hidden behind filter button */}
+                <span className="block shrink-0 w-2" aria-hidden="true" />
+              </div>
+
+              {/* Sticky filter icon — never scrolls, always visible on the right */}
+              <div
+                className="pointer-events-none absolute top-0 right-0 bottom-0 w-16 bg-gradient-to-l from-white via-white/90 to-transparent"
+                aria-hidden="true"
+              />
+              <div className="relative z-10 ml-1 shrink-0 rounded-sm border border-gray-100 bg-white p-2.5 shadow-sm">
+                <Filter className="h-4 w-4 text-gray-400" aria-label="Filter categories" />
+              </div>
             </div>
 
+            {/* Search input */}
             <div className="relative w-full lg:w-80">
               <Search className="absolute top-1/2 left-4 h-4 w-4 -translate-y-1/2 text-gray-400" />
               <input
