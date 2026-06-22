@@ -1509,3 +1509,93 @@ export async function getVMVPageData(): Promise<ReturnType<typeof transformVMVPa
   }
 }
 
+// ─── Leadership Page ─────────────────────────────────────────────────────────
+
+const LEADERSHIP_PAGE_QUERY = `
+  query GetLeadershipPageData {
+    pages(where: { title: "Leadership" }) {
+      nodes {
+        leadershipPageFields {
+          leadHeroTagline
+          leadHeroTitle
+          leadHeroDescription
+          leadHeroBgImage { node { sourceUrl } }
+          leadLeader1Name leadLeader1Role leadLeader1Img { node { sourceUrl } } leadLeader1Bio leadLeader1Linkedin leadLeader1LinkedinIcon { node { sourceUrl } } leadLeader1Twitter leadLeader1TwitterIcon { node { sourceUrl } }
+          leadLeader2Name leadLeader2Role leadLeader2Img { node { sourceUrl } } leadLeader2Bio leadLeader2Linkedin leadLeader2LinkedinIcon { node { sourceUrl } } leadLeader2Twitter leadLeader2TwitterIcon { node { sourceUrl } }
+          leadLeader3Name leadLeader3Role leadLeader3Img { node { sourceUrl } } leadLeader3Bio leadLeader3Linkedin leadLeader3LinkedinIcon { node { sourceUrl } } leadLeader3Twitter leadLeader3TwitterIcon { node { sourceUrl } }
+          leadLeader4Name leadLeader4Role leadLeader4Img { node { sourceUrl } } leadLeader4Bio leadLeader4Linkedin leadLeader4LinkedinIcon { node { sourceUrl } } leadLeader4Twitter leadLeader4TwitterIcon { node { sourceUrl } }
+          leadLeader5Name leadLeader5Role leadLeader5Img { node { sourceUrl } } leadLeader5Bio leadLeader5Linkedin leadLeader5LinkedinIcon { node { sourceUrl } } leadLeader5Twitter leadLeader5TwitterIcon { node { sourceUrl } }
+          leadLeader6Name leadLeader6Role leadLeader6Img { node { sourceUrl } } leadLeader6Bio leadLeader6Linkedin leadLeader6LinkedinIcon { node { sourceUrl } } leadLeader6Twitter leadLeader6TwitterIcon { node { sourceUrl } }
+          leadLeader7Name leadLeader7Role leadLeader7Img { node { sourceUrl } } leadLeader7Bio leadLeader7Linkedin leadLeader7LinkedinIcon { node { sourceUrl } } leadLeader7Twitter leadLeader7TwitterIcon { node { sourceUrl } }
+          leadLeader8Name leadLeader8Role leadLeader8Img { node { sourceUrl } } leadLeader8Bio leadLeader8Linkedin leadLeader8LinkedinIcon { node { sourceUrl } } leadLeader8Twitter leadLeader8TwitterIcon { node { sourceUrl } }
+          leadLeader9Name leadLeader9Role leadLeader9Img { node { sourceUrl } } leadLeader9Bio leadLeader9Linkedin leadLeader9LinkedinIcon { node { sourceUrl } } leadLeader9Twitter leadLeader9TwitterIcon { node { sourceUrl } }
+          leadAdvisoryTitle
+          leadAdvisoryDescription
+          leadAdvisoryBtnText leadAdvisoryBtnUrl
+          leadAdvisor1Name leadAdvisor1Firm leadAdvisor1Region
+          leadAdvisor2Name leadAdvisor2Firm leadAdvisor2Region
+          leadAdvisor3Name leadAdvisor3Firm leadAdvisor3Region
+          leadAdvisor4Name leadAdvisor4Firm leadAdvisor4Region
+          leadAdvisor5Name leadAdvisor5Firm leadAdvisor5Region
+          leadAdvisor6Name leadAdvisor6Firm leadAdvisor6Region
+          leadCtaTitle
+          leadCtaDescription
+          leadCtaBtn1Text leadCtaBtn1Url
+          leadCtaBtn2Text leadCtaBtn2Url
+        }
+      }
+    }
+  }
+`;
+
+function transformLeadershipPageData(f: any) {
+  const leaders = [1, 2, 3, 4, 5, 6, 7, 8, 9].map(i => ({
+    name:         f[`leadLeader${i}Name`] || "",
+    role:         f[`leadLeader${i}Role`] || "",
+    img:          imgUrl(f[`leadLeader${i}Img`]) || "",
+    bio:          f[`leadLeader${i}Bio`]  || "",
+    linkedin:     f[`leadLeader${i}Linkedin`] || "",
+    linkedinIcon: imgUrl(f[`leadLeader${i}LinkedinIcon`]) || "",
+    twitter:      f[`leadLeader${i}Twitter`] || "",
+    twitterIcon:  imgUrl(f[`leadLeader${i}TwitterIcon`]) || "",
+  })).filter(l => l.name);
+
+  const advisors = [1, 2, 3, 4, 5, 6].map(i => ({
+    name:   f[`leadAdvisor${i}Name`]   || "",
+    firm:   f[`leadAdvisor${i}Firm`]   || "",
+    region: f[`leadAdvisor${i}Region`] || "",
+  })).filter(a => a.name);
+
+  return {
+    heroTagline:         f.leadHeroTagline         || "The Executive Bench",
+    heroTitle:           f.leadHeroTitle           || "The ^Visionaries.",
+    heroDescription:     f.leadHeroDescription     || "",
+    heroBgImage:         imgUrl(f.leadHeroBgImage) || "https://images.unsplash.com/photo-1497366216548-37526070297c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1920",
+    leaders:             leaders.length > 0 ? leaders : undefined,
+    advisoryTitle:       f.leadAdvisoryTitle       || "Board of |~Advisors.",
+    advisoryDescription: f.leadAdvisoryDescription || "",
+    advisoryBtnText:     f.leadAdvisoryBtnText     || "Engage with Us",
+    advisoryBtnUrl:      f.leadAdvisoryBtnUrl      || "/contact",
+    advisors:            advisors.length > 0 ? advisors : undefined,
+    ctaTitle:            f.leadCtaTitle            || "Lead the Next |^Digital Frontier.",
+    ctaDescription:      f.leadCtaDescription      || "",
+    ctaBtn1Text:         f.leadCtaBtn1Text         || "Partner With Us",
+    ctaBtn1Url:          f.leadCtaBtn1Url          || "/contact",
+    ctaBtn2Text:         f.leadCtaBtn2Text         || "Executive Careers",
+    ctaBtn2Url:          f.leadCtaBtn2Url          || "/careers",
+  };
+}
+
+export async function getLeadershipPageData(): Promise<ReturnType<typeof transformLeadershipPageData> | null> {
+  try {
+    const raw = await fetchGraphQL(LEADERSHIP_PAGE_QUERY);
+    const f = raw?.data?.pages?.nodes?.[0]?.leadershipPageFields;
+    if (!f) return null;
+    return transformLeadershipPageData(f);
+  } catch (err) {
+    console.warn("[WP] getLeadershipPageData() failed:", err);
+    return null;
+  }
+}
+
+
