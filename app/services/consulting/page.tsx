@@ -27,6 +27,8 @@ import { Meta } from "@/components/Meta";
 import { ImageWithFallback } from "@/components/figma/ImageWithFallback";
 import Link from "next/link";
 
+import { ServiceDetailContactCTA } from "@/components/ServiceDetailContactCTA";
+
 const INDUSTRIES = [
   {
     name: "BFSI & Fintech",
@@ -228,6 +230,10 @@ export default function Consulting() {
               In an era of relentless disruption, Hutech Solutions provides the strategic clarity
               and operational depth needed to navigate complexity and achieve sustainable growth.
             </p>
+            <Link href="/contact" className="btn-banner-cta mt-6 group">
+              Consult Us
+              <MoveRight className="w-4 h-4 transition-transform group-hover:translate-x-1 shrink-0" />
+            </Link>
           </Motion.div>
         </div>
       </section>
@@ -484,38 +490,9 @@ export default function Consulting() {
         </div>
       </section>
 
-      {/* CTA Section */}
-      <section className="relative bg-[#001A3D] py-24 text-white">
-        <div className="relative z-10 mx-auto max-w-[1280px] px-6 text-center lg:px-20">
-          <Motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="mx-auto max-w-4xl space-y-10"
-          >
-            <h2 className="display-font text-4xl leading-[1.1] font-bold md:text-7xl">
-              High-Tier Consultants <br />
-              Bringing <span className="text-[#0171c1]">Direct Solutions.</span>
-            </h2>
-            <p className="text-xl font-medium text-gray-400">
-              Don't settle for high-level concepts. Partner with Hutech's lead consultants for
-              actionable strategy that drives tangible business outcomes.
-            </p>
-            <div className="flex flex-col justify-center gap-6 pt-6 sm:flex-row">
-              <Link
-                href="/contact"
-                className="inline-flex items-center justify-center gap-3 rounded-sm bg-[#0171c1] px-12 py-6 text-[12px] font-bold tracking-wider text-white uppercase shadow-2xl transition-all duration-500 hover:bg-white hover:text-[#001A3D]"
-              >
-                Contact Our Lead Consultants <MessagesSquare className="h-5 w-5" />
-              </Link>
-            </div>
-          </Motion.div>
-        </div>
 
-        {/* Decorative elements */}
-        <div className="absolute top-0 left-0 -mt-32 -ml-32 h-64 w-64 rounded-full bg-[#0171c1]/5 blur-[100px]"></div>
-        <div className="absolute right-0 bottom-0 -mr-48 -mb-48 h-96 w-96 rounded-full bg-[#0171c1]/5 blur-[120px]"></div>
-      </section>
+      <ServiceDetailContactCTA />
+
     </div>
   );
 }

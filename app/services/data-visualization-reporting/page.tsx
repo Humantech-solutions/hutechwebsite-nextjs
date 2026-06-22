@@ -23,6 +23,8 @@ import { Meta } from "@/components/Meta";
 import { ImageWithFallback } from "@/components/figma/ImageWithFallback";
 import Link from "next/link";
 
+import { ServiceDetailContactCTA } from "@/components/ServiceDetailContactCTA";
+
 const SOLUTIONS = [
   {
     title: "Interactive Dashboards",
@@ -105,6 +107,10 @@ export default function DataVisualizationReporting() {
               We turn complex, fragmented data into clear, interactive visual stories. Gain the
               clarity you need to make rapid, evidence-based strategic decisions.
             </p>
+            <Link href="/contact" className="btn-banner-cta mt-6 group">
+              Consult Us
+              <MoveRight className="w-4 h-4 transition-transform group-hover:translate-x-1 shrink-0" />
+            </Link>
           </motion.div>
         </div>
       </section>
@@ -196,32 +202,7 @@ export default function DataVisualizationReporting() {
         </div>
       </section>
 
-      {/* CTA Section */}
-      <section className="bg-[#0171c1] py-24 text-white">
-        <div className="mx-auto max-w-[1280px] space-y-10 px-6 text-center lg:px-20">
-          <h2 className="display-font text-4xl font-bold text-white md:text-6xl">
-            See Your Data Differently
-          </h2>
-          <p className="mx-auto max-w-3xl text-xl font-medium text-white opacity-90">
-            From executive dashboards to customer-facing analytics, we build the visual interfaces
-            that power data-driven companies.
-          </p>
-          <div className="flex flex-wrap justify-center gap-6">
-            <Link
-              href="/contact"
-              className="rounded-sm bg-white px-12 py-5 text-[11px] font-bold tracking-wider text-[#0171c1] uppercase shadow-2xl transition-all hover:bg-[#001A3D] hover:text-white"
-            >
-              Schedule A Demo
-            </Link>
-            <Link
-              href="/services"
-              className="rounded-sm border-2 border-white/30 px-12 py-5 text-[11px] font-bold tracking-wider text-white uppercase transition-all hover:bg-white/10"
-            >
-              Explore All Services
-            </Link>
-          </div>
-        </div>
-      </section>
+            <ServiceDetailContactCTA />
     </div>
   );
 }

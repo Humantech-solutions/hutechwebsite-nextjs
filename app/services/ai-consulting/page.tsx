@@ -25,6 +25,8 @@ import { Meta } from "@/components/Meta";
 import { ImageWithFallback } from "@/components/figma/ImageWithFallback";
 import Link from "next/link";
 
+import { ServiceDetailContactCTA } from "@/components/ServiceDetailContactCTA";
+
 const AI_CONSULTING_SERVICES = [
   {
     title: "AI Strategy & Feasibility",
@@ -131,6 +133,10 @@ export default function AIConsulting() {
               strategic consulting to advanced prompt architecture, we build the intelligence that
               scales.
             </p>
+            <Link href="/contact" className="btn-banner-cta mt-6 group">
+              Consult Us
+              <MoveRight className="w-4 h-4 transition-transform group-hover:translate-x-1 shrink-0" />
+            </Link>
           </Motion.div>
         </div>
       </section>
@@ -299,35 +305,9 @@ export default function AIConsulting() {
         </div>
       </section>
 
-      {/* Final CTA */}
-      <section className="bg-white pb-24">
-        <div className="mx-auto max-w-[1280px] px-6 lg:px-20">
-          <div className="shadow-3xl space-y-10 rounded-2xl bg-[#0171c1] p-12 text-center text-white md:p-20">
-            <Sparkles className="mx-auto mb-4 h-16 w-16 opacity-50" />
-            <h2 className="display-font text-4xl leading-tight font-bold md:text-6xl">
-              Don't just use AI. <br /> Master it.
-            </h2>
-            <p className="mx-auto max-w-2xl text-xl font-medium opacity-90">
-              Join leading enterprises who trust Hutech Solutions to architect their AI-driven
-              future.
-            </p>
-            <div className="flex flex-wrap justify-center gap-6 pt-6">
-              <Link
-                href="/contact"
-                className="rounded-sm bg-white px-12 py-5 text-[11px] font-bold tracking-wider text-[#0171c1] uppercase shadow-xl transition-all hover:bg-[#001A3D] hover:text-white"
-              >
-                Start AI Discovery
-              </Link>
-              <Link
-                href="/services"
-                className="rounded-sm border-2 border-white/30 px-12 py-5 text-[11px] font-bold tracking-wider text-white uppercase transition-all hover:bg-white/10"
-              >
-                Explore All Services
-              </Link>
-            </div>
-          </div>
-        </div>
-      </section>
+
+      <ServiceDetailContactCTA />
+
     </div>
   );
 }
