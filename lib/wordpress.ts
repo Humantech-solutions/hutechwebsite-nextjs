@@ -1598,4 +1598,261 @@ export async function getLeadershipPageData(): Promise<ReturnType<typeof transfo
   }
 }
 
+// ─── Partnership Page ────────────────────────────────────────────────────────
+
+const PARTNERSHIP_PAGE_QUERY = `
+  query GetPartnershipPageData {
+    pages(where: { title: "Partnership" }) {
+      nodes {
+        partnershipPageFields {
+          partHeroTagline
+          partHeroTitle
+          partHeroDescription
+          partHeroBgImage { node { sourceUrl } }
+          
+          partIntroTitle
+          partIntroDescription
+          partIntroBullet1 partIntroBullet2 partIntroBullet3 partIntroBullet4
+          partIntroImg { node { sourceUrl } }
+          
+          partCategoriesTitle
+          partCategoriesDescription
+          partCat1Title partCat1Desc partCat1Partners
+          partCat2Title partCat2Desc partCat2Partners
+          partCat3Title partCat3Desc partCat3Partners
+          
+          partMeetTitle
+          partMeetDescription
+          partMeetBtnText partMeetBtnUrl
+          partMeetImg1 { node { sourceUrl } } partMeetAlt1
+          partMeetImg2 { node { sourceUrl } } partMeetAlt2
+          partMeetImg3 { node { sourceUrl } } partMeetAlt3
+          partMeetImg4 { node { sourceUrl } } partMeetAlt4
+          partMeetImg5 { node { sourceUrl } } partMeetAlt5
+          partMeetImg6 { node { sourceUrl } } partMeetAlt6
+          partMeetImg7 { node { sourceUrl } } partMeetAlt7
+          partMeetImg8 { node { sourceUrl } } partMeetAlt8
+          partMeetImg9 { node { sourceUrl } } partMeetAlt9
+          
+          partLogo1Name partLogo1Img { node { sourceUrl } }
+          partLogo2Name partLogo2Img { node { sourceUrl } }
+          partLogo3Name partLogo3Img { node { sourceUrl } }
+          partLogo4Name partLogo4Img { node { sourceUrl } }
+          partLogo5Name partLogo5Img { node { sourceUrl } }
+          partLogo6Name partLogo6Img { node { sourceUrl } }
+          partLogo7Name partLogo7Img { node { sourceUrl } }
+          partLogo8Name partLogo8Img { node { sourceUrl } }
+          partLogo9Name partLogo9Img { node { sourceUrl } }
+          partLogo10Name partLogo10Img { node { sourceUrl } }
+          partLogo11Name partLogo11Img { node { sourceUrl } }
+          partLogo12Name partLogo12Img { node { sourceUrl } }
+          partLogo13Name partLogo13Img { node { sourceUrl } }
+          partLogo14Name partLogo14Img { node { sourceUrl } }
+          partLogo15Name partLogo15Img { node { sourceUrl } }
+          partLogo16Name partLogo16Img { node { sourceUrl } }
+          
+          partBenTitle
+          partBenImg { node { sourceUrl } }
+          partBen1Title partBen1Desc
+          partBen2Title partBen2Desc
+          partBen3Title partBen3Desc
+          partBen4Title partBen4Desc
+          
+          partCtaTitle
+          partCtaDescription
+          partCtaEmail
+        }
+      }
+    }
+  }
+`;
+
+function transformPartnershipPageData(f: any) {
+  const introBullets = [1, 2, 3, 4].map(i => f[`partIntroBullet${i}`] || "").filter(Boolean);
+  
+  const categories = [1, 2, 3].map(i => ({
+    title:    f[`partCat${i}Title`] || "",
+    desc:     f[`partCat${i}Desc`] || "",
+    partners: f[`partCat${i}Partners`] || ""
+  })).filter(c => c.title);
+
+  const meetImages = [1, 2, 3, 4, 5, 6, 7, 8, 9].map(i => ({
+    src: imgUrl(f[`partMeetImg${i}`]) || "",
+    alt: f[`partMeetAlt${i}`] || ""
+  })).filter(m => m.src);
+
+  const logos = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16].map(i => ({
+    name: f[`partLogo${i}Name`] || "",
+    logo: imgUrl(f[`partLogo${i}Img`]) || ""
+  })).filter(l => l.logo);
+
+  const benefits = [1, 2, 3, 4].map(i => ({
+    title: f[`partBen${i}Title`] || "",
+    desc:  f[`partBen${i}Desc`] || ""
+  })).filter(b => b.title);
+
+  return {
+    heroTagline:    f.partHeroTagline || "Ecosystem of Excellence",
+    heroTitle:      f.partHeroTitle || "Strategic |Technology ^Alliances.",
+    heroDescription:f.partHeroDescription || "",
+    heroBgImage:    imgUrl(f.partHeroBgImage) || "https://images.unsplash.com/photo-1591453214154-c95db71dbd83?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1280",
+    
+    introTitle:       f.partIntroTitle || "Architecting |Shared ^Success.",
+    introDescription: f.partIntroDescription || "",
+    introBullets:     introBullets.length > 0 ? introBullets : undefined,
+    introImage:       imgUrl(f.partIntroImg) || "https://images.unsplash.com/photo-1610702876884-0f8473590287?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080",
+    
+    categoriesTitle:  f.partCategoriesTitle || "Partner Ecosystem",
+    categoriesDescription: f.partCategoriesDescription || "",
+    categories:       categories.length > 0 ? categories : undefined,
+    
+    meetTitle:        f.partMeetTitle || "Meet Our Partners",
+    meetDescription:  f.partMeetDescription || "",
+    meetBtnText:      f.partMeetBtnText || "Find What You Need",
+    meetBtnUrl:       f.partMeetBtnUrl || "/services",
+    meetImages:       meetImages.length > 0 ? meetImages : undefined,
+    
+    logos:            logos.length > 0 ? logos : undefined,
+    
+    benefitsTitle:    f.partBenTitle || "Value of |^Association.",
+    benefitsImage:    imgUrl(f.partBenImg) || "https://images.unsplash.com/photo-1744868562210-fffb7fa882d9?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080",
+    benefits:         benefits.length > 0 ? benefits : undefined,
+    
+    ctaTitle:         f.partCtaTitle || "Become a |^Strategic Partner.",
+    ctaDescription:   f.partCtaDescription || "",
+    ctaEmail:         f.partCtaEmail || "alliances@hutechsolutions.com",
+  };
+}
+
+export async function getPartnershipPageData(): Promise<ReturnType<typeof transformPartnershipPageData> | null> {
+  try {
+    const raw = await fetchGraphQL(PARTNERSHIP_PAGE_QUERY);
+    const f = raw?.data?.pages?.nodes?.[0]?.partnershipPageFields;
+    if (!f) return null;
+    return transformPartnershipPageData(f);
+  } catch (err) {
+    console.warn("[WP] getPartnershipPageData() failed:", err);
+    return null;
+  }
+}
+
+// ─── Contact Us Page ────────────────────────────────────────────────────────
+
+const CONTACT_PAGE_QUERY = `
+  query GetContactPageData {
+    pages(where: { title: "Contact" }) {
+      nodes {
+        contactPageFields {
+          contactHeroTagline
+          contactHeroTitle
+          contactHeroDescription
+          contactHeroBgImage { node { sourceUrl } }
+          
+          contactFormTitle
+          contactFormDescription
+          
+          contactDirectTitle
+          contactEmail
+          contactPhone
+          
+          contactSocialTitle
+          contactSocialLinkedin
+          contactSocialInstagram
+          contactSocialFacebook
+          contactSocialTwitter
+          contactSocialYoutube
+          
+          contactSupportLabel
+          contactSupportDescription
+          contactSupportBtnText
+          contactSupportBtnUrl
+          
+          contactOfficesTitle
+          contactOfficesDescription
+          
+          contactOffice1City contactOffice1Country contactOffice1Phone contactOffice1Address contactOffice1Img { node { sourceUrl } }
+          contactOffice2City contactOffice2Country contactOffice2Phone contactOffice2Address contactOffice2Img { node { sourceUrl } }
+          contactOffice3City contactOffice3Country contactOffice3Phone contactOffice3Address contactOffice3Img { node { sourceUrl } }
+          contactOffice4City contactOffice4Country contactOffice4Phone contactOffice4Address contactOffice4Img { node { sourceUrl } }
+          contactOffice5City contactOffice5Country contactOffice5Phone contactOffice5Address contactOffice5Img { node { sourceUrl } }
+          contactOffice6City contactOffice6Country contactOffice6Phone contactOffice6Address contactOffice6Img { node { sourceUrl } }
+          
+          contactMapTitle
+          contactMapDescription
+          contactMapBgImage { node { sourceUrl } }
+          
+          contactTrust1Title contactTrust1Sub
+          contactTrust2Title contactTrust2Sub
+          contactTrust3Title contactTrust3Sub
+        }
+      }
+    }
+  }
+`;
+
+function transformContactPageData(f: any) {
+  const offices = [1, 2, 3, 4, 5, 6].map(i => ({
+    city: f[`contactOffice${i}City`] || "",
+    country: f[`contactOffice${i}Country`] || "",
+    phone: f[`contactOffice${i}Phone`] || "",
+    address: f[`contactOffice${i}Address`] || "",
+    image: imgUrl(f[`contactOffice${i}Img`]) || ""
+  })).filter(o => o.city);
+
+  const trustBuilders = [1, 2, 3].map(i => ({
+    title: f[`contactTrust${i}Title`] || "",
+    sub: f[`contactTrust${i}Sub`] || ""
+  })).filter(t => t.title);
+
+  return {
+    heroTagline: f.contactHeroTagline || "Get in Touch",
+    heroTitle: f.contactHeroTitle || "Let's Engineer Your |Next ^Success.",
+    heroDescription: f.contactHeroDescription || "",
+    heroBgImage: imgUrl(f.contactHeroBgImage) || "https://images.unsplash.com/photo-1771964427867-1b734fc7f5a7?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1920",
+
+    formTitle: f.contactFormTitle || "Send a Message",
+    formDescription: f.contactFormDescription || "",
+
+    directTitle: f.contactDirectTitle || "Direct Contact",
+    email: f.contactEmail || "sales@hutechsolutions.com",
+    phone: f.contactPhone || "+91 90351 80487",
+
+    socialTitle: f.contactSocialTitle || "Social Connect",
+    socialLinkedin: f.contactSocialLinkedin || "",
+    socialInstagram: f.contactSocialInstagram || "",
+    socialFacebook: f.contactSocialFacebook || "",
+    socialTwitter: f.contactSocialTwitter || "",
+    socialYoutube: f.contactSocialYoutube || "",
+
+    supportLabel: f.contactSupportLabel || "Customer Support",
+    supportDescription: f.contactSupportDescription || "",
+    supportBtnText: f.contactSupportBtnText || "Support Portal",
+    supportBtnUrl: f.contactSupportBtnUrl || "#",
+
+    officesTitle: f.contactOfficesTitle || "Our Offices",
+    officesDescription: f.contactOfficesDescription || "",
+    offices: offices.length > 0 ? offices : undefined,
+
+    mapTitle: f.contactMapTitle || "Worldwide Delivery.",
+    mapDescription: f.contactMapDescription || "",
+    mapBgImage: imgUrl(f.contactMapBgImage) || "https://images.unsplash.com/photo-1731700128691-16fcc9043d11?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1920",
+
+    trustBuilders: trustBuilders.length > 0 ? trustBuilders : undefined,
+  };
+}
+
+export async function getContactPageData(): Promise<ReturnType<typeof transformContactPageData> | null> {
+  try {
+    const raw = await fetchGraphQL(CONTACT_PAGE_QUERY);
+    const f = raw?.data?.pages?.nodes?.[0]?.contactPageFields;
+    if (!f) return null;
+    return transformContactPageData(f);
+  } catch (err) {
+    console.warn("[WP] getContactPageData() failed:", err);
+    return null;
+  }
+}
+
+
+
 
