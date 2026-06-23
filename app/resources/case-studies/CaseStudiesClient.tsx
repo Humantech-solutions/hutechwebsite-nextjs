@@ -28,10 +28,26 @@ export default function CaseStudiesClient({
 
   const filteredStudies = caseStudies.filter((study) => {
     const matchesTab = activeTab === "All" || study.category === activeTab;
-    const matchesSearch =
-      study.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      study.client.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      study.tags.some((tag) => tag.toLowerCase().includes(searchQuery.toLowerCase()));
+    
+    if (!searchQuery.trim()) {
+      return matchesTab;
+    }
+
+    const keywords = searchQuery.toLowerCase().split(/\s+/).filter(Boolean);
+    
+    // Combine all searchable text into one string for easy keyword matching
+    const searchableText = [
+      study.title,
+      study.client,
+      study.listClient || "",
+      study.shortDesc || "",
+      study.listDesc || "",
+      ...(study.tags || [])
+    ].join(" ").toLowerCase();
+
+    // Ensure EVERY keyword entered by the user is found somewhere in the case study
+    const matchesSearch = keywords.every(keyword => searchableText.includes(keyword));
+    
     return matchesTab && matchesSearch;
   });
 
@@ -113,7 +129,7 @@ export default function CaseStudiesClient({
               placeholder="Search case studies..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full rounded-2xl border border-gray-100 bg-gray-50 py-4 pr-12 pl-14 text-sm font-medium shadow-sm transition-all focus:ring-2 focus:ring-[#0171c1]/20 focus:outline-none"
+              className="w-full text-[#001A3D] rounded-2xl border border-gray-100 bg-gray-50 py-4 pr-12 pl-14 text-sm font-medium shadow-sm transition-all focus:ring-2 focus:ring-[#0171c1]/20 focus:outline-none"
             />
             {searchQuery && (
               <button

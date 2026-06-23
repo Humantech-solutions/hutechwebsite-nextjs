@@ -32,8 +32,24 @@ function createImageField(label, name, extra = {}) {
   };
 }
 
+function createTab(label) {
+  return {
+    key: `field_event_post_tab_${label.replace(/\s+/g, "_").toLowerCase()}_${Math.random().toString(36).substr(2, 5)}`,
+    label,
+    name: "",
+    type: "tab",
+    instructions: "",
+    required: 0,
+    conditional_logic: 0,
+    wrapper: { width: "", class: "", id: "" },
+    placement: "top",
+    endpoint: 0
+  };
+}
+
 const fields = [
   // ─── Basic Info ────────────────────────────────────────────────────────────
+  createTab("Basic Info"),
   createField("Tagline", "tagline", "text", {
     instructions: "Short tagline shown below the event title in the hero. Use | for line break + accent, ^ for accent, ~ for secondary.",
     default_value: "Unleashing the Potential of Autonomous Intelligence",
@@ -70,6 +86,7 @@ const fields = [
   }),
 
   // ─── Date & Time ───────────────────────────────────────────────────────────
+  createTab("Date & Time"),
   createField("Event Date", "event_date", "date_picker", {
     instructions: "Date of the event. Will display as 'Month DD, YYYY' (e.g. April 20, 2026).",
     display_format: "F j, Y",
@@ -95,6 +112,11 @@ const fields = [
   }),
 
   // ─── Location & Description ────────────────────────────────────────────────
+  createTab("Location & Details"),
+  createField("About Section Title", "title_about", "text", {
+    instructions: "Title for the 'About the Event' section. Supports renderTitle syntax.",
+    default_value: "About the Event",
+  }),
   createField("Location", "location", "text", {
     instructions: "Venue or city (e.g. ExCeL London, UK / Online / New York, Hybrid).",
     default_value: "London, UK",
@@ -105,6 +127,7 @@ const fields = [
   }),
 
   // ─── Highlights (up to 6) ─────────────────────────────────────────────────
+  createTab("Highlights"),
   ...[1, 2, 3, 4, 5, 6].map((i) =>
     createField(`Highlight ${i}`, `highlight_${i}`, "text", {
       instructions: `Key highlight bullet point ${i}. Supports renderTitle syntax (|, ^, ~, quotes).`,
@@ -112,6 +135,11 @@ const fields = [
   ),
 
   // ─── Agenda (up to 8 sessions) ────────────────────────────────────────────
+  createTab("Agenda"),
+  createField("Agenda Section Title", "title_agenda", "text", {
+    instructions: "Title for the 'Event Agenda' section. Supports renderTitle syntax.",
+    default_value: "Event Agenda",
+  }),
   ...[1, 2, 3, 4, 5, 6, 7, 8].flatMap((i) => [
     createField(`Agenda ${i} Time`, `agenda_${i}_time`, "text", {
       instructions: `Time for agenda session ${i} (e.g. 09:00 AM).`,
@@ -123,6 +151,11 @@ const fields = [
   ]),
 
   // ─── Speakers (up to 5) ───────────────────────────────────────────────────
+  createTab("Speakers"),
+  createField("Speakers Section Title", "title_speakers", "text", {
+    instructions: "Title for the 'Featured Speakers' section. Supports renderTitle syntax.",
+    default_value: "Featured Speakers",
+  }),
   ...[1, 2, 3, 4, 5].flatMap((i) => [
     createField(`Speaker ${i} Name`, `speaker_${i}_name`, "text", {
       instructions: `Full name of speaker ${i}.`,
@@ -135,15 +168,39 @@ const fields = [
     }),
   ]),
 
+  // ─── Helpful Links ─────────────────────────────────────────────────────────
+  createTab("Helpful Links"),
+  createField("Helpful Links Title", "helpful_links_title", "text", {
+    instructions: "Title for the 'Helpful Links' box.",
+    default_value: "Helpful Links",
+  }),
+  createField("Share Link Label", "link_share_label", "text", {
+    instructions: "Label for the share button.",
+    default_value: "Share with colleagues",
+  }),
+  createField("Calendar Link Label", "link_calendar_label", "text", {
+    instructions: "Label for the 'Add to Calendar' button.",
+    default_value: "Add to Calendar",
+  }),
+  createField("Contact Link Label", "link_contact_label", "text", {
+    instructions: "Label for the 'Contact Organizer' button.",
+    default_value: "Contact Organizer",
+  }),
+  createField("Contact Link URL", "link_contact_url", "text", {
+    instructions: "URL for the 'Contact Organizer' button.",
+    default_value: "/contact",
+  }),
+
   // ─── Last Section (CTA / Video) ───────────────────────────────────────────
+  createTab("CTA Section"),
   createField("CTA Section Title", "cta_title", "text", {
     instructions: "Title for the bottom CTA section. Supports renderTitle syntax (| ^ ~ quotes).",
-    default_value: "Missed this |Event?",
+    default_value: "Can't make it to this |Event?",
   }),
   createField("CTA Section Description", "cta_description", "textarea", {
     instructions: "Description text below the CTA title.",
     default_value:
-      "Gain access to exclusive event transcripts, recording links, and early notification of upcoming engineering summits.",
+      "Subscribe to our tech newsletter to receive event summaries, recording links, and early-bird notifications for our upcoming summits.",
   }),
   createImageField("CTA Section Image", "cta_image", {
     instructions: "Image shown on the right side of the CTA section. If a video URL is set below, a play button will overlay this image.",
