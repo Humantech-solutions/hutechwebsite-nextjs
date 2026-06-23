@@ -1872,6 +1872,115 @@ export async function getContactPageData(): Promise<ReturnType<typeof transformC
   }
 }
 
+// ─── Hutech Documents ──────────────────────────────────────────────────────────
 
+const DOCUMENTS_PAGE_QUERY = `
+  query GetHutechDocumentsPage {
+    pages(where: {title: "Hutech Documents"}) {
+      nodes {
+        documentPageFields {
+          docPageHeroTagline
+          docPageHeroTitle
+          docPageHeroDesc
+          docPageCtaTitle
+          docPageCtaDesc
+          docPageCtaBtnText
+          docPageCtaBtnUrl
+        }
+      }
+    }
+  }
+`;
 
+const DOCUMENTS_LIST_QUERY = `
+  query GetHutechDocuments {
+    hutechDocuments(first: 100) {
+      nodes {
+        title
+        date
+        documentCategories {
+          nodes {
+            name
+          }
+        }
+        documentPostFields {
+          documentFile {
+            node {
+              mediaItemUrl
+              mimeType
+              fileSize
+            }
+          }
+          documentUrl
+        }
+      }
+    }
+  }
+`;
 
+export interface HutechDocument {
+  id: string;
+  title: string;
+  date: string;
+  category: string;
+  fileUrl?: string;
+  externalUrl?: string;
+  mimeType?: string;
+  sizeText?: string;
+}
+
+function formatBytes(bytes: number, decimals = 1) {
+  if (!+bytes) return '0 Bytes';
+  const k = 1024;
+  const dm = decimals < 0 ? 0 : decimals;
+  const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
+  const i = Math.floor(Math.log(bytes) / Math.log(k));
+  return `${parseFloat((bytes / Math.pow(k, i)).toFixed(dm))} ${sizes[i]}`;
+}
+
+export async function getDocumentPageData() {
+  try {
+    const raw = await fetchGraphQL(DOCUMENTS_PAGE_QUERY);
+    const f = raw?.data?.pages?.nodes?.[0]?.documentPageFields;
+    if (!f) return null;
+    return {
+      heroTagline: f.docPageHeroTagline || "Resource Library",
+      heroTitle: f.docPageHeroTitle || "Hutech Documents.",
+      heroDesc: f.docPageHeroDesc || "Access official publications, corporate reports, and technical whitepapers.",
+      ctaTitle: f.docPageCtaTitle || "Need custom documentation?",
+      ctaDesc: f.docPageCtaDesc || "Our specialized teams can provide tailored technical whitepapers and architecture documentation for your enterprise needs.",
+      ctaBtnText: f.docPageCtaBtnText || "REQUEST ACCESS",
+      ctaBtnUrl: f.docPageCtaBtnUrl || "/contact",
+    };
+  } catch (err) {
+    console.warn("[WP] getDocumentPageData failed:", err);
+    return null;
+  }
+}
+
+export async function getHutechDocuments(): Promise<HutechDocument[]> {
+  try {
+    const raw = await fetchGraphQL(DOCUMENTS_LIST_QUERY);
+    const nodes = raw?.data?.hutechDocuments?.nodes || [];
+    return nodes.map((node: any, idx: number) => {
+      const f = node.documentPostFields || {};
+      const fileNode = f.documentFile?.node;
+      
+      const computedSize = fileNode?.fileSize ? formatBytes(fileNode.fileSize) : undefined;
+      
+      return {
+        id: `doc-${idx}`,
+        title: node.title,
+        date: new Date(node.date).toLocaleDateString('en-US', { month: 'short', day: '2-digit', year: 'numeric' }),
+        category: node.documentCategories?.nodes?.[0]?.name || "Uncategorized",
+        fileUrl: fileNode?.mediaItemUrl || undefined,
+        mimeType: fileNode?.mimeType || undefined,
+        externalUrl: f.documentUrl || undefined,
+        sizeText: computedSize,
+      };
+    });
+  } catch (err) {
+    console.warn("[WP] getHutechDocuments failed:", err);
+    return [];
+  }
+}
