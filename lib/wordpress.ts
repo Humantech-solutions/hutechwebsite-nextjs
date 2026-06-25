@@ -4,6 +4,68 @@ import { CaseStudy } from "@/lib/data/case-studies";
 
 const WORDPRESS_API_URL = process.env.NEXT_PUBLIC_WORDPRESS_API_URL;
 
+const DEFAULT_BLOG_IMAGE =
+  "https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=800";
+const DEFAULT_EVENT_IMAGE =
+  "https://images.unsplash.com/photo-1540575467063-178a50c2df87?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1920";
+const DEFAULT_EVENT_CTA_IMAGE =
+  "https://images.unsplash.com/photo-1511512578047-dfb367046420?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080";
+const DEFAULT_SPEAKER_IMAGE =
+  "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=400";
+const DEFAULT_CASE_STUDY_IMAGE =
+  "https://images.unsplash.com/photo-1441986300917-64674bd600d8?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1920";
+const DEFAULT_CONTACT_OFFICE_IMAGES = [
+  "https://images.unsplash.com/photo-1596422846543-75c6fc197f07?q=80&w=800&auto=format&fit=crop",
+  "https://images.unsplash.com/photo-1549144511-f099e773c147?q=80&w=800&auto=format&fit=crop",
+  "https://images.unsplash.com/photo-1582650625119-3a31f8fa2699?q=80&w=800&auto=format&fit=crop",
+  "https://images.unsplash.com/photo-1525625293386-3f8f99389edd?q=80&w=800&auto=format&fit=crop",
+];
+const DEFAULT_LEADER_IMAGES = [
+  "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=600",
+  "https://images.unsplash.com/photo-1494790108377-be9c29b29330?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=600",
+  "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=600",
+  "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=600",
+  "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=600",
+  "https://images.unsplash.com/photo-1580489944761-15a19d654956?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=600",
+];
+const DEFAULT_PARTNER_MEET_IMAGES = [
+  "/images/partner-card-oots.png",
+  "/images/partner-card-maconsus.png",
+  "/images/partner-card-nasscom.png",
+];
+const DEFAULT_PARTNER_LOGOS = [
+  "https://upload.wikimedia.org/wikipedia/commons/9/93/Amazon_Web_Services_Logo.svg",
+  "https://upload.wikimedia.org/wikipedia/commons/5/51/Google_Cloud_logo.svg",
+  "https://upload.wikimedia.org/wikipedia/commons/a/a8/Microsoft_Azure_Logo.svg",
+  "https://upload.wikimedia.org/wikipedia/commons/5/51/IBM_logo.svg",
+  "https://upload.wikimedia.org/wikipedia/commons/d/d4/ServiceNow_logo.svg",
+  "https://upload.wikimedia.org/wikipedia/commons/5/50/Oracle_logo.svg",
+  "https://upload.wikimedia.org/wikipedia/commons/f/ff/Snowflake_Logo.svg",
+  "https://upload.wikimedia.org/wikipedia/commons/5/59/SAP_2011_logo.svg",
+];
+
+function isBlankString(value: unknown): value is string {
+  return typeof value === "string" && value.trim() === "";
+}
+
+function nonBlank(value: unknown): string | undefined {
+  return typeof value === "string" && value.trim() !== "" ? value : undefined;
+}
+
+function normalizeBlankStrings<T>(value: T): T {
+  if (isBlankString(value)) return undefined as T;
+  if (Array.isArray(value)) return value.map(normalizeBlankStrings) as T;
+  if (value && typeof value === "object") {
+    return Object.fromEntries(
+      Object.entries(value as Record<string, unknown>).map(([key, item]) => [
+        key,
+        normalizeBlankStrings(item),
+      ])
+    ) as T;
+  }
+  return value;
+}
+
 // ─── Fetch Utility ──────────────────────────────────────────────────────────
 
 export async function fetchGraphQL(query: string, variables = {}) {
@@ -39,7 +101,7 @@ export async function fetchGraphQL(query: string, variables = {}) {
     if (json.errors) {
       console.error("[WP] GraphQL errors:", JSON.stringify(json.errors));
     }
-    return json;
+    return normalizeBlankStrings(json);
   } catch (err: any) {
     if (err.name === "AbortError") {
       console.error("[WP] Request timed out after 10s");
@@ -53,14 +115,13 @@ export async function fetchGraphQL(query: string, variables = {}) {
 // ─── Helper to extract image URL from ACF image field ────────────────────────
 function imgUrl(field: any): string | undefined {
   if (!field) return undefined;
-  if (typeof field === "string") return field;
-  return (
+  if (typeof field === "string") return nonBlank(field);
+  const url =
     field?.node?.sourceUrl ||
     field?.node?.mediaItemUrl ||
     field?.sourceUrl ||
-    field?.mediaItemUrl ||
-    undefined
-  );
+    field?.mediaItemUrl;
+  return nonBlank(url);
 }
 
 // ─── Homepage Query ──────────────────────────────────────────────────────────
@@ -642,7 +703,7 @@ function transformBlogNode(node: any): WpBlog {
   const category = node.categories?.nodes?.[0]?.name ?? "General";
   const tags = node.tags?.nodes?.map((t: any) => t.name) ?? [];
   const author = node.author?.node?.name ?? "Hutech Team";
-  const imageUrl = node.featuredImage?.node?.sourceUrl ?? undefined;
+  const imageUrl = imgUrl(node.featuredImage) || DEFAULT_BLOG_IMAGE;
   const rawContent = node.content ?? node.excerpt ?? "";
   const readTime = estimateReadTime(rawContent);
   const excerpt = stripHtml(node.excerpt ?? "").slice(0, 200);
@@ -736,7 +797,7 @@ export async function getBlogPageData(): Promise<BlogPageData | null> {
     return {
       title: node.title || "",
       description: node.description || "",
-      bgImageUrl: imgUrl(node.bgImage),
+      bgImageUrl: imgUrl(node.bgImage) || DEFAULT_BLOG_IMAGE,
     };
   } catch (err) {
     console.warn("[WP] getBlogPageData() failed:", err);
@@ -899,7 +960,7 @@ function formatEventDateTime(pf: any, nodeDate: string): { date: string; time: s
 function transformEventNode(node: any) {
   const pf = node.eventPostFields || {};
   const { date, time } = formatEventDateTime(pf, node.date);
-  const imageUrl = node.featuredImage?.node?.sourceUrl ?? "";
+  const imageUrl = imgUrl(node.featuredImage) || DEFAULT_EVENT_IMAGE;
 
   const highlights: string[] = [1, 2, 3, 4, 5, 6]
     .map((i) => pf[`highlight${i}`])
@@ -913,7 +974,7 @@ function transformEventNode(node: any) {
     .map((i) => ({
       name: pf[`speaker${i}Name`] || "",
       role: pf[`speaker${i}Role`] || "",
-      image: imgUrl(pf[`speaker${i}Image`]) || "",
+      image: imgUrl(pf[`speaker${i}Image`]) || DEFAULT_SPEAKER_IMAGE,
     }))
     .filter((s) => s.name);
 
@@ -945,7 +1006,7 @@ function transformEventNode(node: any) {
 
     ctaTitle: pf.ctaTitle ?? "Can't make it to this |Event?",
     ctaDescription: pf.ctaDescription ?? "Subscribe to our tech newsletter to receive event summaries, recording links, and early-bird notifications for our upcoming summits.",
-    ctaImage: imgUrl(pf.ctaImage) ?? imageUrl,
+    ctaImage: imgUrl(pf.ctaImage) || DEFAULT_EVENT_CTA_IMAGE,
     ctaVideoUrl: pf.ctaVideoUrl ?? "",
   };
 }
@@ -986,7 +1047,7 @@ export async function getEventPageData(): Promise<{ title: string; description: 
     return {
       title: node.title || "",
       description: node.description || "",
-      bgImageUrl: imgUrl(node.bgImage),
+      bgImageUrl: imgUrl(node.bgImage) || DEFAULT_EVENT_IMAGE,
     };
   } catch (err) {
     console.warn("[WP] getEventPageData() failed:", err);
@@ -1171,7 +1232,7 @@ function transformCaseStudyNode(node: any): CaseStudy {
   
   const category = node.caseStudyCategories?.nodes?.[0]?.name ?? "Case Study";
   const tags = node.tags?.nodes?.map((t: any) => t.name) ?? [];
-  const imageUrl = node.featuredImage?.node?.sourceUrl ?? "";
+  const imageUrl = imgUrl(node.featuredImage) || DEFAULT_CASE_STUDY_IMAGE;
 
   const overviewText = [];
   if (pf.overviewText1) overviewText.push(pf.overviewText1);
@@ -1307,7 +1368,7 @@ export async function getCaseStudyPageData(): Promise<BlogPageData | null> {
     return {
       title: node.title || "",
       description: node.description || "",
-      bgImageUrl: imgUrl(node.bgImage),
+      bgImageUrl: imgUrl(node.bgImage) || DEFAULT_CASE_STUDY_IMAGE,
     };
   } catch (err) {
     console.warn("[WP] getCaseStudyPageData() failed:", err);
@@ -1403,7 +1464,7 @@ function transformAboutPageData(f: any) {
     heroTagline:    f.heroTagline    || "Corporate Profile",
     heroTitle:      f.heroTitle      || "Architecting |Business Value.",
     heroDescription:f.heroDescription|| "",
-    heroBgImage:    imgUrl(f.heroBgImage) || "",
+    heroBgImage:    imgUrl(f.heroBgImage) || undefined,
     stats,
     overviewTitle:  f.overviewTitle  || "Providing The Finest |Digital Experiences.",
     overviewQuote:  f.overviewDescription || "",
@@ -1431,7 +1492,7 @@ function transformAboutPageData(f: any) {
     historySubtitle:f.historySubtitle || "Corporate Evolution",
     historyTitle:   f.historyTitle   || "Our |History.",
     milestones,
-    ctaBgImage:     imgUrl(f.ctaBgImage) || "",
+    ctaBgImage:     imgUrl(f.ctaBgImage) || undefined,
     ctaTitle:       f.ctaTitle       || "Join the Next |Digital Revolution.",
     ctaDescription: f.ctaDescription || "",
     ctaBtn1Text:    f.ctaButton1Text || "Start Your Project",
@@ -1568,7 +1629,7 @@ function transformLeadershipPageData(f: any) {
   const leaders = [1, 2, 3, 4, 5, 6, 7, 8, 9].map(i => ({
     name:         f[`leadLeader${i}Name`] || "",
     role:         f[`leadLeader${i}Role`] || "",
-    img:          imgUrl(f[`leadLeader${i}Img`]) || "",
+    img:          imgUrl(f[`leadLeader${i}Img`]) || DEFAULT_LEADER_IMAGES[i - 1] || DEFAULT_LEADER_IMAGES[0],
     bio:          f[`leadLeader${i}Bio`]  || "",
     linkedin:     f[`leadLeader${i}Linkedin`] || "",
     linkedinIcon: imgUrl(f[`leadLeader${i}LinkedinIcon`]) || "",
@@ -1693,14 +1754,18 @@ function transformPartnershipPageData(f: any) {
   })).filter(c => c.title);
 
   const meetImages = [1, 2, 3, 4, 5, 6, 7, 8, 9].map(i => ({
-    src: imgUrl(f[`partMeetImg${i}`]) || "",
+    src: imgUrl(f[`partMeetImg${i}`]) || DEFAULT_PARTNER_MEET_IMAGES[i - 1] || "",
     alt: f[`partMeetAlt${i}`] || ""
   })).filter(m => m.src);
 
-  const logos = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16].map(i => ({
-    name: f[`partLogo${i}Name`] || "",
-    logo: imgUrl(f[`partLogo${i}Img`]) || ""
-  })).filter(l => l.logo);
+  const logos = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16].map(i => {
+    const name = f[`partLogo${i}Name`] || "";
+    const logo = imgUrl(f[`partLogo${i}Img`]);
+    return {
+      name,
+      logo: logo || (name ? DEFAULT_PARTNER_LOGOS[i - 1] || DEFAULT_PARTNER_LOGOS[0] : "")
+    };
+  }).filter(l => l.name || l.logo);
 
   const benefits = [1, 2, 3, 4].map(i => ({
     title: f[`partBen${i}Title`] || "",
@@ -1812,7 +1877,7 @@ function transformContactPageData(f: any) {
     country: f[`contactOffice${i}Country`] || "",
     phone: f[`contactOffice${i}Phone`] || "",
     address: f[`contactOffice${i}Address`] || "",
-    image: imgUrl(f[`contactOffice${i}Img`]) || ""
+    image: imgUrl(f[`contactOffice${i}Img`]) || DEFAULT_CONTACT_OFFICE_IMAGES[i - 1] || DEFAULT_CONTACT_OFFICE_IMAGES[0]
   })).filter(o => o.city);
 
   const trustBuilders = [1, 2, 3].map(i => ({
@@ -2185,7 +2250,7 @@ export async function getCareerPageData() {
     const raw = await fetchGraphQL(CAREERS_PAGE_QUERY);
     const node = raw?.data?.pages?.nodes?.[0];
     const f = node?.careerPageFields;
-    const heroBgImg = node?.featuredImage?.node?.mediaItemUrl || "https://images.unsplash.com/photo-1760611656615-db3fad24a314?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1920";
+    const heroBgImg = imgUrl(node?.featuredImage) || "https://images.unsplash.com/photo-1760611656615-db3fad24a314?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1920";
     if (!f) return null;
     return {
       heroBgImg,
