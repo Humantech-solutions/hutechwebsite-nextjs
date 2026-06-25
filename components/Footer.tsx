@@ -222,13 +222,7 @@ export default function Footer() {
               <Link href="/legal/cookie-policy" className="hover:text-white transition-colors border-b border-transparent hover:border-white/20 pb-0.5 whitespace-nowrap">Cookie Policy</Link>
               <Link href="/legal/code-of-conduct" className="hover:text-white transition-colors border-b border-transparent hover:border-white/20 pb-0.5 whitespace-nowrap">Code of Conduct</Link>
               <Link href="/legal/sitemap" className="hover:text-white transition-colors border-b border-transparent hover:border-white/20 pb-0.5 whitespace-nowrap">Sitemap</Link>
-              <button 
-                onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-                className="hover:text-[#F99D1C] transition-colors border-b border-transparent hover:border-[#F99D1C]/20 pb-0.5 whitespace-nowrap flex items-center gap-2 cursor-pointer group uppercase font-bold tracking-widest text-[10px]"
-              >
-                BACK TO TOP
-                <ArrowUp size={12} className="group-hover:-translate-y-1 transition-transform" />
-              </button>
+
             </div>
           </div>
           
@@ -238,18 +232,4 @@ export default function Footer() {
   );
 }
 
-const ArrowUp = ({ size, className }: { size: number, className: string }) => (
-  <svg 
-    width={size} 
-    height={size} 
-    viewBox="0 0 24 24" 
-    fill="none" 
-    stroke="currentColor" 
-    strokeWidth="2.5" 
-    strokeLinecap="round" 
-    strokeLinejoin="round" 
-    className={className}
-  >
-    <path d="m18 15-6-6-6 6"/>
-  </svg>
-);
+

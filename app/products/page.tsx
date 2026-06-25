@@ -368,18 +368,58 @@ function ProductsContent() {
         </div>
       </section>
 
-      {/* Trust Bar */}
-      <section className="border-y border-gray-100 bg-gray-50 py-20">
-        <div className="mx-auto max-w-[1280px] px-6 lg:px-20">
-          <div className="flex flex-wrap items-center justify-center gap-12 opacity-40 grayscale lg:gap-24">
-            <div className="font-black tracking-[0.2em] text-[#001A3D] uppercase">ISO 27001</div>
-            <div className="font-black tracking-[0.2em] text-[#001A3D] uppercase">SOC2 TYPE II</div>
-            <div className="font-black tracking-[0.2em] text-[#001A3D] uppercase">HIPAA READY</div>
-            <div className="font-black tracking-[0.2em] text-[#001A3D] uppercase">
-              GDPR COMPLIANT
+      {/* CTA Section */}
+      <section className="relative overflow-hidden bg-[#001A3D] py-16 text-white">
+        {/* Grid pattern overlay */}
+        <div
+          className="pointer-events-none absolute inset-0 opacity-[0.07]"
+          style={{
+            backgroundImage:
+              "linear-gradient(rgba(255,255,255,0.5) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.5) 1px, transparent 1px)",
+            backgroundSize: "48px 48px",
+          }}
+        />
+        {/* Ambient glow */}
+        <div className="pointer-events-none absolute inset-0">
+          <div className="absolute -top-40 left-1/2 -translate-x-1/2 h-80 w-[600px] rounded-full bg-[#0171c1]/20 blur-[100px]" />
+        </div>
+
+        <div className="relative z-10 mx-auto max-w-[1280px] px-6 text-center lg:px-20">
+          <Motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.7 }}
+            className="space-y-8"
+          >
+            {/* Eyebrow pill */}
+            <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-2 backdrop-blur-sm">
+              <span className="h-1.5 w-1.5 rounded-full bg-[#F99D1C]" />
+              <span className="text-[10px] font-bold tracking-[0.25em] text-white/70 uppercase">
+                Get Started Today
+              </span>
             </div>
-            <div className="font-black tracking-[0.2em] text-[#001A3D] uppercase">CLOUD NATIVE</div>
-          </div>
+
+            <h2 className="display-font mx-auto max-w-3xl text-4xl font-semibold leading-tight tracking-tight md:text-5xl lg:text-6xl">
+              Ready to Accelerate Your{" "}
+              <span className="text-[#F99D1C]">Digital Transformation?</span>
+            </h2>
+
+            <p className="mx-auto max-w-xl text-base leading-relaxed text-gray-400 md:text-lg">
+              Join the leading enterprises that have transformed their operations with Hutech
+              Solutions.
+            </p>
+
+            <div className="pt-2">
+              <Link
+                href="/contact"
+                className="inline-flex items-center gap-3 rounded-sm bg-[#0171c1] px-10 py-4 text-[11px] font-black tracking-[0.25em] text-white uppercase shadow-xl shadow-[#0171c1]/30 transition-all duration-300 hover:bg-[#0161a8] hover:shadow-[#0171c1]/50 hover:scale-105 active:scale-95"
+              >
+                Consult Us
+                <ArrowRight size={16} />
+              </Link>
+            </div>
+          </Motion.div>
         </div>
       </section>
     </div>
