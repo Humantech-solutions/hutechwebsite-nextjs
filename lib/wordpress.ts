@@ -2,10 +2,7 @@ import { CaseStudy } from "@/lib/data/case-studies";
 // WordPress GraphQL API integration for Hutech Solutions
 // Replace NEXT_PUBLIC_WORDPRESS_API_URL in .env.local with your WordPress site's GraphQL endpoint
 
-const WORDPRESS_API_URL = process.env.NEXT_PUBLIC_WORDPRESS_API_URL?.replace(
-  "localhost",
-  "127.0.0.1"
-);
+const WORDPRESS_API_URL = process.env.NEXT_PUBLIC_WORDPRESS_API_URL;
 
 // ─── Fetch Utility ──────────────────────────────────────────────────────────
 
