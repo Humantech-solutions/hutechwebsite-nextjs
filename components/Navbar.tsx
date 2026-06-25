@@ -31,13 +31,6 @@ const NAV_ITEMS = [
           { name: "Awards and Recognition", path: "/company/awards" },
         ],
       },
-      {
-        title: "Careers",
-        items: [
-          { name: "Open Positions", path: "/careers" },
-          { name: "Graduates", path: "/company/graduates" },
-        ],
-      },
     ],
   },
   {
@@ -298,7 +291,7 @@ export default function Navbar() {
                                       </div>
                                     </div>
 
-                                    <div className="col-span-9 grid grid-cols-3 gap-8">
+                                    <div className={`col-span-9 grid gap-8 ${item.dropdown?.length === 2 ? 'grid-cols-2' : 'grid-cols-3'}`}>
                                       {item.dropdown?.map((section) => (
                                         <div key={section.title} className="space-y-6">
                                           <h4 className="border-b border-gray-100 pb-3 text-[13px] font-semibold text-[#001A3D]">
@@ -330,10 +323,10 @@ export default function Navbar() {
                                         href="/resources/case-studies"
                                         className="hover:text-[#001A3D]"
                                       >
-                                        Success Stories
+                                        Case Studies
                                       </Link>
-                                      <Link href="/resources" className="hover:text-[#001A3D]">
-                                        Knowledge Hub
+                                      <Link href="/resources/hutech-documents" className="hover:text-[#001A3D]">
+                                        Hutech Documents
                                       </Link>
                                       <Link href="/careers" className="hover:text-[#001A3D]">
                                         Life at Hutech

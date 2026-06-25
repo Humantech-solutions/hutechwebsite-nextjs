@@ -448,8 +448,8 @@ export default function CareersClient({ jobs, pageData }: CareersClientProps) {
               )}
               
               <Link
-                href={pageData.internshipBtn2File}
-                target={pageData.internshipBtn2File !== "#" ? "_blank" : undefined}
+                href={pageData.internshipBtn2File || "#"}
+                target={(pageData.internshipBtn2File && pageData.internshipBtn2File !== "#") ? "_blank" : undefined}
                 rel="noopener noreferrer"
                 className="border border-[#001A3D]/20 hover:border-[#001A3D] text-[#001A3D] font-semibold py-4 px-8 rounded-sm text-[11px] tracking-wide transition-all uppercase inline-flex items-center justify-center active:scale-[0.98]"
               >
