@@ -6,10 +6,19 @@ export type Job = {
   type: string;
   tags: string[];
   desc: string;
+  roleOverviewTitle: string;
   whatYoullDo: string[];
+  whatYoullDoTitle: string;
   requirements: string[];
+  requirementsTitle: string;
   superpowers: string[];
+  superpowersTitle: string;
   benefits: string[];
+  benefitsTitle: string;
+  hiringTimelineTitle: string;
+  hiringTimelineText: string;
+  aboutTitle: string;
+  aboutText: string;
 };
 
 export const JOBS: Job[] = [
@@ -54,6 +63,15 @@ export const JOBS: Job[] = [
       "A chance to work on cutting-edge global tech with high-impact delivery",
       "A culture that celebrates code, creativity, and coffee",
     ],
+    roleOverviewTitle: "Role Overview",
+    whatYoullDoTitle: "What You'll Be ^Doing",
+    requirementsTitle: "Tech Stack Matchmaker – ^Is This You?",
+    superpowersTitle: "Your ^Superpowers:",
+    benefitsTitle: "What's In It ^For You?",
+    hiringTimelineTitle: "Hiring Timeline",
+    hiringTimelineText: "This is an active opening. Our team typically responds to qualified applicants within 48-72 business hours.",
+    aboutTitle: "About ^Hutech Solutions",
+    aboutText: "Hutech Solutions is a global software powerhouse at the forefront of the AI revolution. As a leading innovator in Artificial Intelligence, Agentic AI, and Deep Learning technologies, we design and deliver next-generation solutions that empower businesses to unlock transformative intelligence and automation.\n\nWe are actively partnering with large enterprises and business houses to reimagine and transform enterprise software applications. Our mission is to develop innovative software utilities that accelerate business performance by leveraging cutting-edge AI and Generative AI tools and techniques.\n\nFrom streamlining operations in logistics, enhancing customer experiences in eCommerce, to driving intelligent automation in the BFSI sector, Hutech Solutions is a trusted force in modern digital transformation.",
   },
   {
     id: "polyglot-full-stack-java-developer",
@@ -96,6 +114,15 @@ export const JOBS: Job[] = [
       "A chance to work on cutting-edge global tech with high-impact delivery",
       "A culture that celebrates code, creativity, and coffee",
     ],
+    roleOverviewTitle: "Role Overview",
+    whatYoullDoTitle: "What You'll Be ^Doing",
+    requirementsTitle: "Tech Stack Matchmaker – ^Is This You?",
+    superpowersTitle: "Your ^Superpowers:",
+    benefitsTitle: "What's In It ^For You?",
+    hiringTimelineTitle: "Hiring Timeline",
+    hiringTimelineText: "This is an active opening. Our team typically responds to qualified applicants within 48-72 business hours.",
+    aboutTitle: "About ^Hutech Solutions",
+    aboutText: "Hutech Solutions is a global software powerhouse at the forefront of the AI revolution.\n\nWe are actively partnering with large enterprises and business houses to reimagine and transform enterprise software applications.\n\nFrom streamlining operations in logistics, enhancing customer experiences in eCommerce, to driving intelligent automation in the BFSI sector, Hutech Solutions is a trusted force in modern digital transformation.",
   },
   {
     id: "database-administrator",
@@ -139,6 +166,15 @@ export const JOBS: Job[] = [
       "A chance to work on cutting-edge global tech with high-impact delivery",
       "A culture that celebrates code, creativity, and coffee",
     ],
+    roleOverviewTitle: "Role Overview",
+    whatYoullDoTitle: "What You'll Be ^Doing",
+    requirementsTitle: "Tech Stack Matchmaker – ^Is This You?",
+    superpowersTitle: "Your ^Superpowers:",
+    benefitsTitle: "What's In It ^For You?",
+    hiringTimelineTitle: "Hiring Timeline",
+    hiringTimelineText: "This is an active opening. Our team typically responds to qualified applicants within 48-72 business hours.",
+    aboutTitle: "About ^Hutech Solutions",
+    aboutText: "Hutech Solutions is a global software powerhouse at the forefront of the AI revolution.\n\nWe are actively partnering with large enterprises and business houses to reimagine and transform enterprise software applications.\n\nFrom streamlining operations in logistics, enhancing customer experiences in eCommerce, to driving intelligent automation in the BFSI sector, Hutech Solutions is a trusted force in modern digital transformation.",
   },
 ];
 
