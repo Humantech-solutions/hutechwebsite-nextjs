@@ -1,20 +1,25 @@
 import BlogDetailClient from "./BlogDetailClient";
 import { getBlogBySlug, getBlogs } from "@/lib/wordpress";
+import { BLOG_DATA } from "@/lib/data/blogs";
 import { notFound } from "next/navigation";
 
 export const revalidate = 60;
 
 export async function generateStaticParams() {
-  // Only pre-render WP slugs
   const wpBlogs = await getBlogs().catch(() => []);
-  return wpBlogs.map((b) => ({ id: b.slug }));
+  const ids = new Set([
+    ...Object.keys(BLOG_DATA),
+    ...wpBlogs.map((b) => b.slug).filter(Boolean),
+  ]);
+
+  return Array.from(ids).map((id) => ({ id }));
 }
 
 export default async function Page({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
 
   // 1. Try WordPress first
-  const wpBlog = await getBlogBySlug(id);
+  const wpBlog = await getBlogBySlug(id).catch(() => null);
 
   if (wpBlog) {
     // Convert WpBlog to the Blog shape BlogDetailClient expects
@@ -40,6 +45,10 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
     return <BlogDetailClient blog={blog as any} />;
   }
 
-  // If not found in WordPress, return 404
-  notFound();
+  const staticBlog = BLOG_DATA[id];
+  if (!staticBlog) {
+    notFound();
+  }
+
+  return <BlogDetailClient blog={staticBlog} />;
 }

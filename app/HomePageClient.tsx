@@ -464,19 +464,19 @@ export default function HomePageClient({ data }: HomePageClientProps) {
     : DEFAULT_SLIDES;
 
   const WHATS_NEW_DATA = (data?.whatsNew?.items && data.whatsNew.items.length > 0)
-    ? data.whatsNew.items.map((n: any) => ({
-        title: n.title?.trim() || "",
-        date:  n.date?.trim()  || "",
-        image: n.imageUrl?.trim() || n.image?.trim() || "",
+    ? data.whatsNew.items.map((n: any, i: number) => ({
+        title: n.title?.trim() || WHATS_NEW[i]?.title || "",
+        date:  n.date?.trim()  || WHATS_NEW[i]?.date || "",
+        image: n.imageUrl?.trim() || n.image?.trim() || WHATS_NEW[i]?.image || WHATS_NEW[0].image,
       }))
     : WHATS_NEW;
 
   const SUCCESS_STORIES_DATA = (data?.successStories?.stories && data.successStories.stories.length > 0)
-    ? data.successStories.stories.map((s: any) => ({
-        name:  s.name?.trim()  || "",
-        title: s.title?.trim() || "",
-        text:  s.text?.trim()  || "",
-        image: s.imageUrl?.trim() || s.image?.trim() || "",
+    ? data.successStories.stories.map((s: any, i: number) => ({
+        name:  s.name?.trim()  || SUCCESS_STORIES[i]?.name || "",
+        title: s.title?.trim() || SUCCESS_STORIES[i]?.title || "",
+        text:  s.text?.trim()  || SUCCESS_STORIES[i]?.text || "",
+        image: s.imageUrl?.trim() || s.image?.trim() || SUCCESS_STORIES[i]?.image || SUCCESS_STORIES[0].image,
       }))
     : SUCCESS_STORIES;
 
@@ -511,23 +511,26 @@ export default function HomePageClient({ data }: HomePageClientProps) {
       }));
 
   const CAPABILITIES_FINAL = (data?.capabilities?.list && data.capabilities.list.length > 0)
-    ? data.capabilities.list.map((c: any) => ({
-        name:  c.name?.trim()  || "",
-        image: c.imageUrl?.trim() || c.image?.trim() || "",
-        color: c.color?.trim() || "#001A3D",
+    ? data.capabilities.list.map((c: any, i: number) => ({
+        name:  c.name?.trim()  || CAPABILITIES_DATA[i]?.name || "",
+        image: c.imageUrl?.trim() || c.image?.trim() || CAPABILITIES_DATA[i]?.image || CAPABILITIES_DATA[0].image,
+        color: c.color?.trim() || CAPABILITIES_DATA[i]?.color || "#001A3D",
       }))
     : CAPABILITIES_DATA;
 
   const VALUED_PARTNERS_FINAL = (data?.partners?.valued && data.partners.valued.length > 0)
-    ? data.partners.valued.map((p: any) => ({ name: p.name?.trim() || "", logo: p.logoUrl?.trim() || p.logo?.trim() || "" }))
+    ? data.partners.valued.map((p: any, i: number) => ({ name: p.name?.trim() || VALUED_PARTNERS[i]?.name || "", logo: p.logoUrl?.trim() || p.logo?.trim() || VALUED_PARTNERS[i]?.logo || VALUED_PARTNERS[0].logo }))
     : VALUED_PARTNERS;
 
   const SPECIAL_PARTNERS_FINAL = (data?.partners?.special && data.partners.special.length > 0)
-    ? data.partners.special.map((p: any) => ({ name: p.name?.trim() || "", logo: p.logoUrl?.trim() || p.logo?.trim() || "" }))
+    ? data.partners.special.map((p: any, i: number) => ({ name: p.name?.trim() || SPECIAL_PARTNERS[i]?.name || "", logo: p.logoUrl?.trim() || p.logo?.trim() || SPECIAL_PARTNERS[i]?.logo || SPECIAL_PARTNERS[0].logo }))
     : SPECIAL_PARTNERS;
 
   const WHY_ACCORDION_ITEMS = (data?.whyHutech?.accordionItems && data.whyHutech.accordionItems.length > 0)
-    ? data.whyHutech.accordionItems
+    ? data.whyHutech.accordionItems.map((item, i) => ({
+        title: item.title?.trim() || DEFAULT_WHY_ITEMS[i]?.title || "",
+        content: item.content?.trim() || DEFAULT_WHY_ITEMS[i]?.content || "",
+      }))
     : DEFAULT_WHY_ITEMS;
 
   // Section text overrides — .trim() ensures an empty WP string falls back to static default
