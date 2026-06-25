@@ -1984,3 +1984,372 @@ export async function getHutechDocuments(): Promise<HutechDocument[]> {
     return [];
   }
 }
+
+// ==========================================
+// CAREERS (hutech_career)
+// ==========================================
+
+const CAREERS_PAGE_QUERY = `
+  query GetCareersPageData {
+    pages(where: {title: "Careers"}) {
+      nodes {
+        featuredImage {
+          node {
+            mediaItemUrl
+          }
+        }
+        careerPageFields {
+          careerPageHeroTagline
+          careerPageHeroTitle
+          careerPageHeroDesc
+          careerOpeningsTagline
+          careerOpeningsTitle
+          careerOpeningsNoJobsTitle
+          careerOpeningsNoJobsDesc
+          careerOpeningsGenBtn
+          careerCultureTagline
+          careerCultureTitle
+          careerCultureDesc
+          careerCultureImg {
+            node {
+              mediaItemUrl
+            }
+          }
+          careerCultureStat1Val
+          careerCultureStat1Label
+          careerCultureStat2Val
+          careerCultureStat2Label
+          careerCultureBadge1
+          careerCultureBadge2
+          careerHiringTagline
+          careerHiringDesc
+          careerHiringStep1Num
+          careerHiringStep1Title
+          careerHiringStep1Desc
+          careerHiringStep2Num
+          careerHiringStep2Title
+          careerHiringStep2Desc
+          careerHiringStep3Num
+          careerHiringStep3Title
+          careerHiringStep3Desc
+          careerHiringStep4Num
+          careerHiringStep4Title
+          careerHiringStep4Desc
+          careerHiringStep5Num
+          careerHiringStep5Title
+          careerHiringStep5Desc
+          careerBenefitsTagline
+          careerBenefitsTitle
+          careerBenefitsDesc
+          careerBenefitsMainTitle
+          careerBenefitsMainDesc
+          careerBenefit1Title
+          careerBenefit1Desc
+          careerBenefit2Title
+          careerBenefit2Desc
+          careerBenefit3Title
+          careerBenefit3Desc
+          careerBenefit4Title
+          careerBenefit4Desc
+          careerBenefit5Title
+          careerBenefit5Desc
+          careerBenefit6Title
+          careerBenefit6Desc
+          careerInternshipTagline
+          careerInternshipTitle
+          careerInternshipDesc
+          careerInternshipImg {
+            node {
+              mediaItemUrl
+            }
+          }
+          careerInternshipBadge1
+          careerInternshipBadge2
+          careerInternshipBtn1
+          careerInternshipBtn1Link
+          careerInternshipBtn2
+          careerInternshipBtn2File {
+            node {
+              mediaItemUrl
+            }
+          }
+          careerProgram1Title
+          careerProgram1Duration
+          careerProgram2Title
+          careerProgram2Duration
+          careerProgram3Title
+          careerProgram3Duration
+          careerProgram4Title
+          careerProgram4Duration
+          careerWhyTagline
+          careerWhyTitle
+          careerWhyPoint1Num
+          careerWhyPoint1Title
+          careerWhyPoint2Num
+          careerWhyPoint2Title
+          careerWhyPoint3Num
+          careerWhyPoint3Title
+          careerWhyPoint4Num
+          careerWhyPoint4Title
+          careerWhyPoint5Num
+          careerWhyPoint5Title
+          careerWhyPoint6Num
+          careerWhyPoint6Title
+          careerCtaTitle
+          careerCtaDesc
+          careerCtaCard1Title
+          careerCtaCard1Desc
+          careerCtaCard2Title
+          careerCtaCard2Desc
+        }
+      }
+    }
+  }
+`;
+
+const CAREERS_LIST_QUERY = `
+  query GetCareers {
+    hutechCareers(first: 100) {
+      nodes {
+        slug
+        title
+        careerDepartments {
+          nodes {
+            name
+          }
+        }
+        careerTags {
+          nodes {
+            name
+          }
+        }
+        careerDetails {
+          careerLocation
+          careerType
+        }
+      }
+    }
+  }
+`;
+
+const CAREER_DETAIL_QUERY = `
+  query GetCareerBySlug($id: ID!) {
+    hutechCareer(id: $id, idType: SLUG) {
+      slug
+      title
+      careerDepartments {
+        nodes {
+          name
+        }
+      }
+      careerTags {
+        nodes {
+          name
+        }
+      }
+      careerDetails {
+        careerLocation
+        careerType
+        careerDescription
+        careerWhatYoullDo
+        careerRequirements
+        careerSuperpowers
+        careerBenefits
+      }
+    }
+  }
+`;
+
+export interface Job {
+  id: string;
+  title: string;
+  department: string;
+  location: string;
+  type: string;
+  tags: string[];
+  desc: string;
+  roleOverviewTitle: string;
+  whatYoullDo: string[];
+  whatYoullDoTitle: string;
+  requirements: string[];
+  requirementsTitle: string;
+  superpowers: string[];
+  superpowersTitle: string;
+  benefits: string[];
+  benefitsTitle: string;
+  hiringTimelineTitle: string;
+  hiringTimelineText: string;
+  aboutTitle: string;
+  aboutText: string;
+}
+
+export async function getCareerPageData() {
+  try {
+    const raw = await fetchGraphQL(CAREERS_PAGE_QUERY);
+    const node = raw?.data?.pages?.nodes?.[0];
+    const f = node?.careerPageFields;
+    const heroBgImg = node?.featuredImage?.node?.mediaItemUrl || "https://images.unsplash.com/photo-1760611656615-db3fad24a314?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1920";
+    if (!f) return null;
+    return {
+      heroBgImg,
+      heroTagline: f.careerPageHeroTagline || "Join our Talent Ecosystem",
+      heroTitle: f.careerPageHeroTitle || "Build your ^Legacy. with us.",
+      heroDesc: f.careerPageHeroDesc || "Recruiting pioneers to solve complex engineering puzzles and architect the future.",
+      openingsTagline: f.careerOpeningsTagline || "Open Opportunities",
+      openingsTitle: f.careerOpeningsTitle || "Join the \n Excellence Hub.",
+      openingsNoJobsTitle: f.careerOpeningsNoJobsTitle || "No relevant opening for your skill set?",
+      openingsNoJobsDesc: f.careerOpeningsNoJobsDesc || "We're always looking for exceptional talent. Drop your resume in our talent pool.",
+      openingsGenBtn: f.careerOpeningsGenBtn || "General Application",
+      cultureTagline: f.careerCultureTagline || "The Hutech Spirit",
+      cultureTitle: f.careerCultureTitle || "Innovation is \n our ^North Star.",
+      cultureDesc: f.careerCultureDesc || "We foster a culture of radical transparency and extreme ownership. Here, your ideas aren't just heard—they are engineered into reality. We believe in high-performance agility balanced with empathy.",
+      cultureImg: imgUrl(f.careerCultureImg) || "https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&q=80",
+      cultureStat1Val: f.careerCultureStat1Val || "92%",
+      cultureStat1Label: f.careerCultureStat1Label || "Engineering Ratio",
+      cultureStat2Val: f.careerCultureStat2Val || "15+",
+      cultureStat2Label: f.careerCultureStat2Label || "Global Tech Hubs",
+      cultureBadge1: f.careerCultureBadge1 || "Great Place",
+      cultureBadge2: f.careerCultureBadge2 || "To Work Certified",
+      hiringTagline: f.careerHiringTagline || "Our Selection DNA",
+      hiringDesc: f.careerHiringDesc || "We look for clarity of thought, passion for problem-solving, and a commitment to excellence.",
+      hiringSteps: [
+        { stepNumber: f.careerHiringStep1Num || "01", stepTitle: f.careerHiringStep1Title || "Application", stepDesc: f.careerHiringStep1Desc || "Submit your profile." },
+        { stepNumber: f.careerHiringStep2Num || "02", stepTitle: f.careerHiringStep2Title || "Screening", stepDesc: f.careerHiringStep2Desc || "Initial HR screening." },
+        { stepNumber: f.careerHiringStep3Num || "03", stepTitle: f.careerHiringStep3Title || "Technical", stepDesc: f.careerHiringStep3Desc || "Technical interview." },
+        { stepNumber: f.careerHiringStep4Num || "04", stepTitle: f.careerHiringStep4Title || "Culture Fit", stepDesc: f.careerHiringStep4Desc || "Meeting the team." },
+        { stepNumber: f.careerHiringStep5Num || "05", stepTitle: f.careerHiringStep5Title || "Offer", stepDesc: f.careerHiringStep5Desc || "Welcome aboard!" },
+      ].filter(s => s.stepTitle),
+      benefitsTagline: f.careerBenefitsTagline || "Perks & Benefits",
+      benefitsTitle: f.careerBenefitsTitle || "Investing \n in your \n ^Success.",
+      benefitsDesc: f.careerBenefitsDesc || "We provide the resources, environment, and support you need to do the best work of your life.",
+      benefitsMainTitle: f.careerBenefitsMainTitle || "Learning Budget",
+      benefitsMainDesc: f.careerBenefitsMainDesc || "$5,000 annual allowance for certifications, conferences, and courses.",
+      benefitsGrid: [
+        { benefitTitle: f.careerBenefit1Title || "Premium Health", benefitDesc: f.careerBenefit1Desc || "Comprehensive insurance." },
+        { benefitTitle: f.careerBenefit2Title || "Performance Bonus", benefitDesc: f.careerBenefit2Desc || "Quarterly rewards." },
+        { benefitTitle: f.careerBenefit3Title || "Flexible Work", benefitDesc: f.careerBenefit3Desc || "Remote & Hybrid support." },
+        { benefitTitle: f.careerBenefit4Title || "Time to Recharge", benefitDesc: f.careerBenefit4Desc || "Generous PTO." },
+        { benefitTitle: f.careerBenefit5Title || "Modern Stack", benefitDesc: f.careerBenefit5Desc || "Access the latest tools." },
+        { benefitTitle: f.careerBenefit6Title || "Global Mobility", benefitDesc: f.careerBenefit6Desc || "Transfer opportunities." },
+      ].filter(b => b.benefitTitle),
+      internshipTagline: f.careerInternshipTagline || "Internship Programme",
+      internshipTitle: f.careerInternshipTitle || "Launch Your Career ^at Nabhira",
+      internshipDesc: f.careerInternshipDesc || "The Nabhira Emerging Talent Programme is a structured 12-week immersion into enterprise technology...",
+      internshipImg: imgUrl(f.careerInternshipImg) || "https://images.unsplash.com/photo-1541339907198-e08756dedf3f?q=80&w=1200&auto=format&fit=crop",
+      internshipBadge1: f.careerInternshipBadge1 || "Applications Open",
+      internshipBadge2: f.careerInternshipBadge2 || "2026 Cohort",
+      internshipBtn1: f.careerInternshipBtn1 || "Apply Now",
+      internshipBtn1Link: f.careerInternshipBtn1Link || "#",
+      internshipBtn2: f.careerInternshipBtn2 || "Download Brochure",
+      internshipBtn2File: imgUrl(f.careerInternshipBtn2File) || "#",
+      internshipPrograms: [
+        { programTitle: f.careerProgram1Title || "AI & Data Engineering", programDuration: f.careerProgram1Duration || "12 Weeks" },
+        { programTitle: f.careerProgram2Title || "Cloud Architecture", programDuration: f.careerProgram2Duration || "12 Weeks" },
+        { programTitle: f.careerProgram3Title || "Digital Strategy", programDuration: f.careerProgram3Duration || "10 Weeks" },
+        { programTitle: f.careerProgram4Title || "Product & UX Design", programDuration: f.careerProgram4Duration || "10 Weeks" },
+      ].filter(p => p.programTitle),
+      whyTagline: f.careerWhyTagline || "Career Advantage",
+      whyTitle: f.careerWhyTitle || "Why Nabhira is ^Different",
+      whyPoints: [
+        { pointNumber: f.careerWhyPoint1Num || "01", pointTitle: f.careerWhyPoint1Title || "Global Exposure" },
+        { pointNumber: f.careerWhyPoint2Num || "02", pointTitle: f.careerWhyPoint2Title || "Accelerated Growth" },
+        { pointNumber: f.careerWhyPoint3Num || "03", pointTitle: f.careerWhyPoint3Title || "World-Class Mentorship" },
+        { pointNumber: f.careerWhyPoint4Num || "04", pointTitle: f.careerWhyPoint4Title || "Certified Excellence" },
+        { pointNumber: f.careerWhyPoint5Num || "05", pointTitle: f.careerWhyPoint5Title || "Inclusive Culture" },
+        { pointNumber: f.careerWhyPoint6Num || "06", pointTitle: f.careerWhyPoint6Title || "Innovation Time" },
+      ].filter(p => p.pointTitle),
+      ctaTitle: f.careerCtaTitle || "Your Next Chapter \n starts ^now.",
+      ctaDesc: f.careerCtaDesc || "Join a global team of visionaries, engineers, and creatives working together to build a more agile and innovative future.",
+      ctaCard1Title: f.careerCtaCard1Title || "Interview Ready?",
+      ctaCard1Desc: f.careerCtaCard1Desc || "Get tips for success",
+      ctaCard2Title: f.careerCtaCard2Title || "Fast-Track",
+      ctaCard2Desc: f.careerCtaCard2Desc || "Hiring in 14 days",
+    };
+  } catch (err) {
+    console.warn("[WP] getCareerPageData failed:", err);
+    return null;
+  }
+}
+
+function parseTextareaList(text?: string): string[] {
+  if (!text) return [];
+  return text.split('\n').map(line => line.trim()).filter(Boolean);
+}
+
+export async function getCareers(): Promise<Job[]> {
+  try {
+    const raw = await fetchGraphQL(CAREERS_LIST_QUERY);
+    const nodes = raw?.data?.hutechCareers?.nodes || [];
+    return nodes.map((node: any) => {
+      const details = node.careerDetails || {};
+      const dept = node.careerDepartments?.nodes?.[0]?.name || "Engineering";
+      const tags = node.careerTags?.nodes?.map((t: any) => t.name) || [];
+
+      return {
+        id: node.slug,
+        title: node.title,
+        department: dept,
+        location: details.careerLocation || "Bangalore, India",
+        type: details.careerType || "Full-time",
+        tags: tags,
+        desc: "", // Not needed for the list
+        whatYoullDo: [],
+        requirements: [],
+        superpowers: [],
+        benefits: [],
+      };
+    });
+  } catch (err) {
+    console.warn("[WP] getCareers failed:", err);
+    return [];
+  }
+}
+
+export async function getCareerBySlug(slug: string): Promise<Job | null> {
+  try {
+    const raw = await fetchGraphQL(CAREER_DETAIL_QUERY, { id: slug });
+    const node = raw?.data?.hutechCareer;
+    if (!node) return null;
+
+    const details = node.careerDetails || {};
+    const dept = node.careerDepartments?.nodes?.[0]?.name || "Engineering";
+    const tags = node.careerTags?.nodes?.map((t: any) => t.name) || [];
+
+    const defaultBenefits = [
+      "Health Insurance",
+      "Provident Fund + Performance Bonus",
+      "2 Special Leave Days (Just Because!)",
+      "Maternity + Paternity Leave",
+      "A chance to work on cutting-edge global tech with high-impact delivery",
+      "A culture that celebrates code, creativity, and coffee",
+    ];
+
+    const benefitsParsed = parseTextareaList(details.careerBenefits);
+
+    return {
+      id: node.slug,
+      title: node.title,
+      department: dept,
+      location: details.careerLocation || "Bangalore, India",
+      type: details.careerType || "Full-time",
+      tags: tags,
+      desc: details.careerDescription || "",
+      roleOverviewTitle: details.careerRoleOverviewTitle || "Role Overview",
+      whatYoullDo: parseTextareaList(details.careerWhatYoullDo),
+      whatYoullDoTitle: details.careerWhatYoullDoTitle || "What You'll Be ^Doing",
+      requirements: parseTextareaList(details.careerRequirements),
+      requirementsTitle: details.careerRequirementsTitle || "Tech Stack Matchmaker – ^Is This You?",
+      superpowers: parseTextareaList(details.careerSuperpowers),
+      superpowersTitle: details.careerSuperpowersTitle || "Your ^Superpowers:",
+      benefits: benefitsParsed.length > 0 ? benefitsParsed : defaultBenefits,
+      benefitsTitle: details.careerBenefitsTitle || "What's In It ^For You?",
+      hiringTimelineTitle: details.careerHiringTimelineTitle || "Hiring Timeline",
+      hiringTimelineText: details.careerHiringTimelineText || "This is an active opening. Our team typically responds to qualified applicants within 48-72 business hours.",
+      aboutTitle: details.careerAboutTitle || "About ^Hutech Solutions",
+      aboutText: details.careerAboutText || "Hutech Solutions is a global software powerhouse at the forefront of the AI revolution. As a leading innovator in Artificial Intelligence, Agentic AI, and Deep Learning technologies, we design and deliver next-generation solutions that empower businesses to unlock transformative intelligence and automation.\n\nWe are actively partnering with large enterprises and business houses to reimagine and transform enterprise software applications. Our mission is to develop innovative software utilities that accelerate business performance by leveraging cutting-edge AI and Generative AI tools and techniques.\n\nFrom streamlining operations in logistics, enhancing customer experiences in eCommerce, to driving intelligent automation in the BFSI sector, Hutech Solutions is a trusted force in modern digital transformation.",
+    };
+  } catch (err) {
+    console.warn("[WP] getCareerBySlug failed:", err);
+    return null;
+  }
+}

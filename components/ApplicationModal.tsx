@@ -40,7 +40,7 @@ export function ApplicationModal({ isOpen, onClose, jobTitle }: ApplicationModal
           animate={{ opacity: 1, scale: 1 }}
           exit={{ opacity: 0, scale: 0.95 }}
           onClick={(e) => e.stopPropagation()}
-          className="relative w-full max-w-2xl bg-[#001A3D] rounded-2xl p-8 md:p-12 max-h-[90vh] overflow-y-auto"
+          className="relative w-full max-w-2xl bg-[#001A3D] rounded-2xl p-8 md:p-12 max-h-[90vh] overflow-y-auto hide-scrollbar"
         >
           <button
             onClick={onClose}
