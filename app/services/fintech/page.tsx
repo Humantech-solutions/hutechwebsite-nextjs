@@ -27,7 +27,8 @@ import {
 } from "lucide-react";
 import { Breadcrumbs } from "@/components/Breadcrumbs";
 import { Meta } from "@/components/Meta";
-import { ImageWithFallback } from "@/components/figma/ImageWithFallback";
+
+import { ServiceDetailContactCTA } from "@/components/ServiceDetailContactCTA";
 
 const FINTECH_SERVICES = [
   {
@@ -319,7 +320,11 @@ export default function FintechAppDevelopment() {
               We craft secure digital banking experiences and future-ready fintech solutions for
               global financial institutions and neobanks.
             </p>
-          </Motion.div>
+            <Link href="/contact" className="btn-banner-cta mt-6 group">
+              Consult Us
+              <MoveRight className="w-4 h-4 transition-transform group-hover:translate-x-1 shrink-0" />
+            </Link>
+          </motion.div>
         </div>
       </section>
 
@@ -528,94 +533,6 @@ export default function FintechAppDevelopment() {
         </div>
       </section>
 
-      {/* CTA Section */}
-      <section className="overflow-hidden bg-[#F2F2F2] py-24">
-        <div className="mx-auto max-w-[1280px] px-6 lg:px-20">
-          <div className="flex flex-col items-center gap-20 lg:flex-row">
-            <div className="flex-1 space-y-10">
-              <div className="space-y-6">
-                <h2 className="display-font text-3xl leading-[1.2] font-semibold text-[#001A3D] md:text-5xl">
-                  Discover Your FinTech Digital Transformation Strategy With Us
-                </h2>
-                <div className="h-1 w-20 bg-[#0171c1]"></div>
-                <p className="text-lg leading-relaxed font-medium text-gray-500">
-                  Schedule a consultation with our expert financial technology team and take the
-                  first step towards a secure, modern financial infrastructure.
-                </p>
-              </div>
-              <div>
-                <Link
-                  href="/contact"
-                  className="inline-flex items-center gap-3 rounded-sm bg-[#F99D1C] px-10 py-5 text-[11px] font-bold tracking-wider text-[#001A3D] uppercase shadow-xl transition-all duration-500 hover:bg-[#001A3D] hover:text-white"
-                >
-                  Consult Us Now <ArrowRight size={16} />
-                </Link>
-              </div>
-            </div>
-            <div className="relative flex-1">
-              <div className="relative z-10 aspect-video rounded-sm bg-white p-2 shadow-2xl">
-                <ImageWithFallback
-                  src="https://images.unsplash.com/photo-1686061593213-98dad7c599b9?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080"
-                  alt="Financial Security Analytics"
-                  className="h-full w-full object-cover"
-                />
-              </div>
-              <div className="absolute -top-10 -right-10 -z-10 h-64 w-64 rounded-full bg-[#0171c1]/5 blur-3xl"></div>
-              <div className="absolute -bottom-10 -left-10 -z-10 h-48 w-48 rounded-full bg-[#F99D1C]/10 blur-2xl"></div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Technology Stack Section */}
-      <section className="relative overflow-hidden bg-gradient-to-b from-[#001A3D] via-[#030E21] to-[#020B1E] py-24 md:py-32 text-white">
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[300px] bg-blue-500/10 rounded-full blur-3xl pointer-events-none" />
-        <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:60px_60px] pointer-events-none" />
-
-        <div className="relative z-10 mx-auto max-w-[1280px] px-6 lg:px-20">
-          {/* Header */}
-          <div className="mb-16 text-center md:mb-20">
-            <div className="flex items-center justify-center gap-3 text-[10px] font-bold tracking-[0.3em] text-[#F99D1C] uppercase">
-              <span className="h-[1px] w-8 bg-gradient-to-r from-transparent to-[#F99D1C]" />
-              TECHNOLOGY STACK
-              <span className="h-[1px] w-8 bg-gradient-to-l from-transparent to-[#F99D1C]" />
-            </div>
-
-            <h2 className="mt-4 display-font text-3xl font-bold tracking-wider text-white sm:text-4xl md:text-5xl uppercase">
-              MODERN BANKING & FINTECH STACK
-            </h2>
-
-            <div className="mx-auto mt-4 h-[3px] w-14 bg-[#F99D1C]" />
-
-            <p className="mx-auto mt-6 max-w-2xl text-sm font-medium text-gray-400 md:text-base leading-relaxed">
-              Enterprise-grade financial technologies powering scalable, secure, and compliance-ready digital transformation
-            </p>
-          </div>
-
-          {/* Cards Grid */}
-          <div className="border-l border-t border-white/10">
-            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6">
-              {FINTECH_STACK.map((item, idx) => (
-                <Motion.div
-                  key={idx}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true, margin: "-50px" }}
-                  transition={{ duration: 0.5, delay: idx * 0.05 }}
-                  className="group relative z-0 hover:z-10 border-r border-b border-white/10 bg-[#030d22]/50 backdrop-blur-sm py-12 px-4 flex flex-col justify-center items-center h-32 md:h-36 text-center transition-all duration-300 ease-out hover:-translate-y-1.5 hover:bg-[#0a2a60]/40 hover:shadow-[0_0_30px_rgba(56,189,248,0.15)] hover:border-white/20"
-                >
-                  <span className="text-white font-bold tracking-wider text-xs md:text-sm uppercase mb-2 group-hover:text-white transition-colors duration-300">
-                    {item.primary}
-                  </span>
-                  <span className="text-cyan-400 font-semibold tracking-wider text-[10px] md:text-xs uppercase transition-colors duration-300">
-                    {item.secondary}
-                  </span>
-                </Motion.div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
 
       {/* Why Choose Section */}
       <section className="bg-white py-24">
@@ -729,91 +646,7 @@ export default function FintechAppDevelopment() {
         </div>
       </section>
 
-      {/* FAQ Section */}
-      <section className="bg-white py-24">
-        <div className="mx-auto max-w-[1280px] px-6 lg:px-20">
-          <div className="mb-20 space-y-6 text-center">
-            <h2 className="display-font text-3xl font-semibold tracking-tight text-[#001A3D] md:text-5xl">
-              Frequently Asked Questions
-            </h2>
-            <div className="mx-auto h-1 w-20 bg-[#0171c1]"></div>
-          </div>
-          <div className="mx-auto max-w-4xl divide-y divide-gray-100">
-            {FAQS.map((faq, i) => (
-              <FAQItem key={i} question={faq.question} answer={faq.answer} />
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Blog Section */}
-      <section className="bg-gray-50 py-24">
-        <div className="mx-auto max-w-[1280px] px-6 lg:px-20">
-          <div className="mb-16 flex items-end justify-between gap-8">
-            <div className="max-w-2xl space-y-6">
-              <h2 className="display-font text-3xl font-semibold text-[#001A3D] md:text-5xl">
-                Fintech Insights & Articles
-              </h2>
-              <p className="text-lg font-medium text-gray-500">
-                Explore our latest thinking on banking technology and financial infrastructure trends.
-              </p>
-            </div>
-            <Link
-              href="/resources"
-              className="hidden items-center gap-2 pb-2 text-[11px] font-bold tracking-widest text-[#0171c1] uppercase transition-all hover:gap-4 md:flex"
-            >
-              View All Resources <MoveRight size={16} />
-            </Link>
-          </div>
-
-          <div className="mb-16 grid grid-cols-1 gap-8 md:grid-cols-3">
-            {BLOG_POSTS.map((post, i) => (
-              <div
-                key={i}
-                className="group overflow-hidden rounded-sm bg-white shadow-sm transition-all duration-500 hover:shadow-2xl"
-              >
-                <div className="relative aspect-[16/10] overflow-hidden">
-                  <ImageWithFallback
-                    src={post.image}
-                    alt={post.title}
-                    className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110"
-                  />
-                  <div className="absolute top-4 left-4">
-                    <span className="rounded-sm bg-[#0171c1] px-3 py-1 text-[9px] font-bold tracking-widest text-white uppercase">
-                      FinTech
-                    </span>
-                  </div>
-                </div>
-                <div className="space-y-4 p-8">
-                  <h3 className="display-font line-clamp-2 min-h-[3.5rem] text-xl leading-tight font-bold text-[#001A3D] transition-colors group-hover:text-[#0171c1]">
-                    {post.title}
-                  </h3>
-                  <p className="line-clamp-3 text-sm leading-relaxed font-medium text-gray-500">
-                    {post.description}
-                  </p>
-                  <div className="border-t border-gray-50 pt-4">
-                    <Link
-                      href={`/resources/blogs/${post.id}`}
-                      className="inline-flex items-center gap-2 text-[10px] font-bold tracking-widest text-[#001A3D] uppercase transition-colors hover:text-[#0171c1]"
-                    >
-                      Read Article <ChevronRight size={12} />
-                    </Link>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-
-          <div className="text-center md:hidden">
-            <Link
-              href="/resources"
-              className="inline-flex items-center gap-3 rounded-sm bg-[#0171c1] px-10 py-5 text-[11px] font-bold tracking-wider text-white uppercase shadow-xl"
-            >
-              Explore Resources <MoveRight size={16} />
-            </Link>
-          </div>
-        </div>
-      </section>
+            <ServiceDetailContactCTA />
     </div>
   );
 }

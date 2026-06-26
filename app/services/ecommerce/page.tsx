@@ -30,7 +30,8 @@ import {
 } from "lucide-react";
 import { Breadcrumbs } from "@/components/Breadcrumbs";
 import { Meta } from "@/components/Meta";
-import { ImageWithFallback } from "@/components/figma/ImageWithFallback";
+
+import { ServiceDetailContactCTA } from "@/components/ServiceDetailContactCTA";
 
 const ECOMMERCE_SERVICES = [
   {
@@ -322,6 +323,10 @@ export default function EcommerceDevelopment() {
               We craft intelligent customer experiences and future-ready ecommerce solutions for
               global enterprise brands.
             </p>
+            <Link href="/contact" className="btn-banner-cta mt-6 group">
+              Consult Us
+              <MoveRight className="w-4 h-4 transition-transform group-hover:translate-x-1 shrink-0" />
+            </Link>
           </Motion.div>
         </div>
       </section>
@@ -656,164 +661,74 @@ export default function EcommerceDevelopment() {
         </div>
       </section>
 
-      {/* Contact Form Section */}
-      <section className="bg-gray-50 py-24">
-        <div className="mx-auto max-w-[1280px] px-6 lg:px-20">
-          <div className="grid grid-cols-1 gap-20 lg:grid-cols-12">
-            <div className="rounded-sm border border-gray-100 bg-white p-10 shadow-2xl md:p-14 lg:col-span-7">
-              <h2 className="display-font mb-10 text-3xl font-bold text-[#001A3D]">
-                Start Your Ecommerce Project
-              </h2>
-              <form className="grid grid-cols-1 gap-6 md:grid-cols-2">
-                <input
-                  type="text"
-                  placeholder="Name*"
-                  className="w-full border border-gray-200 p-4 text-sm font-medium transition-all outline-none focus:border-[#0171c1]"
-                />
-                <input
-                  type="email"
-                  placeholder="Email*"
-                  className="w-full border border-gray-200 p-4 text-sm font-medium transition-all outline-none focus:border-[#0171c1]"
-                />
-                <input
-                  type="tel"
-                  placeholder="Phone Number*"
-                  className="w-full border border-gray-200 p-4 text-sm font-medium transition-all outline-none focus:border-[#0171c1] md:col-span-2"
-                />
-                <textarea
-                  placeholder="Tell us about your digital commerce needs"
-                  rows={4}
-                  className="w-full resize-none border border-gray-200 p-4 text-sm font-medium transition-all outline-none focus:border-[#0171c1] md:col-span-2"
-                ></textarea>
-                <div className="md:col-span-2">
-                  <button className="w-full rounded-sm bg-[#F99D1C] px-12 py-5 text-[11px] font-bold tracking-wider text-[#001A3D] uppercase shadow-xl transition-all duration-500 hover:bg-[#001A3D] hover:text-white md:w-auto">
-                    Submit Project Request
-                  </button>
-                </div>
-              </form>
-            </div>
-            <div className="space-y-12 py-8 lg:col-span-5">
-              <h2 className="display-font text-3xl font-bold text-[#001A3D]">
-                What Is The Next Step?
-              </h2>
-              <div className="space-y-10">
-                {[
-                  {
-                    icon: MessageSquare,
-                    text: "An ecommerce technology consultant will review your request and contact you within a few business hours.",
-                  },
-                  {
-                    icon: FileText,
-                    text: "We will schedule a deep-dive session to understand your current catalog and conversion goals.",
-                  },
-                  {
-                    icon: Sparkles,
-                    text: "You will receive a detailed proposal including platform recommendations and ecommerce ROI analysis.",
-                  },
-                ].map((step, i) => {
-                  const Icon = step.icon;
-                  return (
-                    <div key={i} className="group flex items-start gap-8">
-                      <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-full border border-gray-200 text-[#0171c1] transition-all duration-500 group-hover:border-[#0171c1] group-hover:bg-[#0171c1] group-hover:text-white">
-                        <Icon size={24} strokeWidth={1.5} />
-                      </div>
-                      <p className="pt-2 text-lg leading-relaxed font-medium text-gray-500">
-                        {step.text}
-                      </p>
-                    </div>
-                  );
-                })}
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
 
-      {/* FAQ Section */}
-      <section className="bg-white py-24">
-        <div className="mx-auto max-w-[1280px] px-6 lg:px-20">
-          <div className="mb-20 space-y-6 text-center">
-            <h2 className="display-font text-3xl font-semibold tracking-tight text-[#001A3D] md:text-5xl">
-              Frequently Asked Questions
+      {/* Features Grid */}
+      <section className="bg-gradient-to-b from-gray-50 to-white py-20">
+        <div className="mx-auto max-w-[1280px] px-8">
+          <Motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8 }}
+            className="mb-20 text-center"
+          >
+            <div
+              className="mb-6 inline-block rounded-full px-5 py-2"
+              style={{ backgroundColor: `${BRAND_ORANGE}15`, color: BRAND_ORANGE }}
+            >
+              <span className="text-sm font-bold tracking-wider">CORE FEATURES</span>
+            </div>
+            <h2 className="mb-6 text-5xl font-bold text-[#001A3D] md:text-6xl">
+              Essential Ecommerce Features
             </h2>
-            <div className="mx-auto h-1 w-20 bg-[#0171c1]"></div>
-          </div>
-          <div className="mx-auto max-w-4xl divide-y divide-gray-100">
-            {FAQS.map((faq, i) => (
-              <FAQItem key={i} question={faq.question} answer={faq.answer} />
-            ))}
-          </div>
-        </div>
-      </section>
+            <Motion.div
+              className="mx-auto h-1.5 w-32 rounded-full"
+              style={{ backgroundColor: BRAND_ORANGE }}
+              initial={{ scaleX: 0 }}
+              whileInView={{ scaleX: 1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.8 }}
+            />
+          </Motion.div>
 
-      {/* Blog Section */}
-      <section className="bg-gray-50 py-24">
-        <div className="mx-auto max-w-[1280px] px-6 lg:px-20">
-          <div className="mb-16 flex items-end justify-between gap-8">
-            <div className="max-w-2xl space-y-6">
-              <h2 className="display-font text-3xl font-semibold text-[#001A3D] md:text-5xl">
-                Commerce Insights & Articles
-              </h2>
-              <p className="text-lg font-medium text-gray-500">
-                Explore our latest thinking on commerce technology and digital infrastructure trends.
-              </p>
-            </div>
-            <Link
-              href="/resources"
-              className="hidden items-center gap-2 pb-2 text-[11px] font-bold tracking-widest text-[#0171c1] uppercase transition-all hover:gap-4 md:flex"
-            >
-              View All Resources <MoveRight size={16} />
-            </Link>
-          </div>
-
-          <div className="mb-16 grid grid-cols-1 gap-8 md:grid-cols-3">
-            {BLOG_POSTS.map((post, i) => (
-              <div
-                key={i}
-                className="group overflow-hidden rounded-sm bg-white shadow-sm transition-all duration-500 hover:shadow-2xl"
-              >
-                <div className="relative aspect-[16/10] overflow-hidden">
-                  <ImageWithFallback
-                    src={post.image}
-                    alt={post.title}
-                    className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110"
+          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+            {FEATURES.map((feature, index) => {
+              const Icon = feature.icon;
+              return (
+                <Motion.div
+                  key={index}
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.6, delay: index * 0.1 }}
+                  whileHover={{ y: -8 }}
+                  className="group relative overflow-hidden border border-gray-100 bg-white p-8 transition-all duration-500 hover:shadow-xl"
+                >
+                  <div
+                    className="absolute inset-0 opacity-0 transition-opacity duration-500 group-hover:opacity-100"
+                    style={{
+                      background: `linear-gradient(135deg, ${BRAND_BLUE}05 0%, ${BRAND_ORANGE}05 100%)`,
+                    }}
                   />
-                  <div className="absolute top-4 left-4">
-                    <span className="rounded-sm bg-[#0171c1] px-3 py-1 text-[9px] font-bold tracking-widest text-white uppercase">
-                      Commerce
-                    </span>
-                  </div>
-                </div>
-                <div className="space-y-4 p-8">
-                  <h3 className="display-font line-clamp-2 min-h-[3.5rem] text-xl leading-tight font-bold text-[#001A3D] transition-colors group-hover:text-[#0171c1]">
-                    {post.title}
-                  </h3>
-                  <p className="line-clamp-3 text-sm leading-relaxed font-medium text-gray-500">
-                    {post.description}
-                  </p>
-                  <div className="border-t border-gray-50 pt-4">
-                    <Link
-                      href={`/resources/blogs/${post.id}`}
-                      className="inline-flex items-center gap-2 text-[10px] font-bold tracking-widest text-[#001A3D] uppercase transition-colors hover:text-[#0171c1]"
-                    >
-                      Read Article <ChevronRight size={12} />
-                    </Link>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
 
-          <div className="text-center md:hidden">
-            <Link
-              href="/resources"
-              className="inline-flex items-center gap-3 rounded-sm bg-[#0171c1] px-10 py-5 text-[11px] font-bold tracking-wider text-white uppercase shadow-xl"
-            >
-              Explore Resources <MoveRight size={16} />
-            </Link>
+                  <div className="relative z-10">
+                    <div
+                      className="mb-6 flex h-14 w-14 items-center justify-center rounded-lg transition-all duration-500 group-hover:scale-110"
+                      style={{ backgroundColor: `${BRAND_ORANGE}15` }}
+                    >
+                      <Icon size={28} style={{ color: BRAND_ORANGE }} />
+                    </div>
+                    <h3 className="mb-3 text-xl font-bold text-[#001A3D]">{feature.title}</h3>
+                    <p className="leading-relaxed text-gray-600">{feature.description}</p>
+                  </div>
+                </Motion.div>
+              );
+            })}
           </div>
         </div>
       </section>
+
+            <ServiceDetailContactCTA />
     </div>
   );
 }

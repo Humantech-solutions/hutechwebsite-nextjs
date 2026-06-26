@@ -34,6 +34,7 @@ import { Breadcrumbs } from "@/components/Breadcrumbs";
 import { Meta } from "@/components/Meta";
 import { ImageWithFallback } from "@/components/figma/ImageWithFallback";
 
+
 const HEALTHCARE_SERVICES = [
   {
     icon: Smartphone,
@@ -306,6 +307,10 @@ export default function HealthcareLifeSciences() {
               We craft patient-centric digital health experiences through cutting-edge software
               solutions and expert consulting for providers and life science organizations.
             </p>
+            <Link href="/contact" className="btn-banner-cta mt-6 group">
+              Consult Us
+              <MoveRight className="w-4 h-4 transition-transform group-hover:translate-x-1 shrink-0" />
+            </Link>
           </Motion.div>
         </div>
       </section>
@@ -751,6 +756,7 @@ export default function HealthcareLifeSciences() {
           </div>
         </div>
       </section>
+
     </div>
   );
 }

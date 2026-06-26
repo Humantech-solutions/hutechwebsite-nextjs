@@ -7,18 +7,47 @@ import { ArrowUpRight, CheckCircle2, Search, X } from "lucide-react";
 import { Meta } from "@/components/Meta";
 import { ImageWithFallback } from "@/components/figma/ImageWithFallback";
 import Link from "next/link";
-import { CaseStudy, CATEGORIES } from "@/lib/data/case-studies";
+import { CaseStudy } from "@/lib/data/case-studies";
+import { renderTitle } from "@/lib/utils";
 
-export default function CaseStudiesClient({ caseStudies }: { caseStudies: CaseStudy[] }) {
+export default function CaseStudiesClient({ 
+  caseStudies,
+  pageTitle,
+  pageDescription,
+  bgImageUrl,
+}: { 
+  caseStudies: CaseStudy[];
+  pageTitle?: string;
+  pageDescription?: string;
+  bgImageUrl?: string;
+}) {
   const [activeTab, setActiveTab] = useState("All");
   const [searchQuery, setSearchQuery] = useState("");
 
+  const dynamicCategories = ["All", ...Array.from(new Set(caseStudies.map(s => s.category).filter(c => c && c !== "Case Study")))];
+
   const filteredStudies = caseStudies.filter((study) => {
     const matchesTab = activeTab === "All" || study.category === activeTab;
-    const matchesSearch =
-      study.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      study.client.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      study.tags.some((tag) => tag.toLowerCase().includes(searchQuery.toLowerCase()));
+    
+    if (!searchQuery.trim()) {
+      return matchesTab;
+    }
+
+    const keywords = searchQuery.toLowerCase().split(/\s+/).filter(Boolean);
+    
+    // Combine all searchable text into one string for easy keyword matching
+    const searchableText = [
+      study.title,
+      study.client,
+      study.listClient || "",
+      study.shortDesc || "",
+      study.listDesc || "",
+      ...(study.tags || [])
+    ].join(" ").toLowerCase();
+
+    // Ensure EVERY keyword entered by the user is found somewhere in the case study
+    const matchesSearch = keywords.every(keyword => searchableText.includes(keyword));
+    
     return matchesTab && matchesSearch;
   });
 
@@ -45,23 +74,37 @@ export default function CaseStudiesClient({ caseStudies }: { caseStudies: CaseSt
               </span>
             </div>
             <h1 className="display-font mb-6 text-5xl leading-tight font-semibold tracking-tight md:text-7xl">
-              Digital <br />
-              <span className="text-[#F99D1C]">Success Stories.</span>
+              {pageTitle ? (
+                renderTitle(pageTitle, "text-inherit", "text-[#F99D1C]", "text-[#0171c1]")
+              ) : (
+                <>
+                  Digital <br />
+                  <span className="text-[#F99D1C]">Success Stories.</span>
+                </>
+              )}
             </h1>
             <p className="max-w-2xl text-xl leading-relaxed font-medium text-gray-400">
-              Discover how we've partnered with industry leaders to solve complex challenges and
-              achieve measurable results through technological excellence.
+              {pageDescription || "Discover how we've partnered with industry leaders to solve complex challenges and achieve measurable results through technological excellence."}
             </p>
           </Motion.div>
         </div>
-        <div className="pointer-events-none absolute top-0 right-0 h-full w-1/2 bg-linear-to-l from-[#0171c1]/10 to-transparent"></div>
+        {bgImageUrl && (
+          <div className="absolute inset-0 z-0">
+            <ImageWithFallback
+              src={bgImageUrl}
+              alt="Case Studies Background"
+              className="h-full w-full object-cover opacity-20"
+            />
+          </div>
+        )}
+        <div className="pointer-events-none absolute top-0 right-0 h-full w-1/2 bg-linear-to-l from-[#0171c1]/10 to-transparent z-10"></div>
       </section>
 
       {/* Sticky Search & Filter Bar */}
       <section className="sticky top-[72px] z-30 border-b border-gray-100 bg-white/80 shadow-sm backdrop-blur-xl">
         <div className="mx-auto flex max-w-[1280px] flex-col items-center justify-between gap-8 px-6 py-8 md:flex-row lg:px-20">
           <div className="no-scrollbar flex w-full items-center gap-2 overflow-x-auto pb-2 md:w-auto md:pb-0">
-            {CATEGORIES.map((cat) => (
+            {dynamicCategories.map((cat) => (
               <button
                 key={cat}
                 onClick={() => setActiveTab(cat)}
@@ -86,7 +129,7 @@ export default function CaseStudiesClient({ caseStudies }: { caseStudies: CaseSt
               placeholder="Search case studies..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full rounded-2xl border border-gray-100 bg-gray-50 py-4 pr-12 pl-14 text-sm font-medium shadow-sm transition-all focus:ring-2 focus:ring-[#0171c1]/20 focus:outline-none"
+              className="w-full text-[#001A3D] rounded-2xl border border-gray-100 bg-gray-50 py-4 pr-12 pl-14 text-sm font-medium shadow-sm transition-all focus:ring-2 focus:ring-[#0171c1]/20 focus:outline-none"
             />
             {searchQuery && (
               <button
@@ -141,7 +184,7 @@ export default function CaseStudiesClient({ caseStudies }: { caseStudies: CaseSt
                       <div className="flex flex-grow flex-col justify-between space-y-8 p-10 lg:p-12">
                         <div className="space-y-4">
                           <span className="block text-sm font-bold tracking-widest text-[#F99D1C] uppercase">
-                            {study.client}
+                            {study.listClient || study.client}
                           </span>
                           <h3 className="display-font text-2xl leading-tight font-bold text-[#001A3D] transition-colors group-hover:text-white md:text-3xl">
                             {study.title}
@@ -149,9 +192,9 @@ export default function CaseStudiesClient({ caseStudies }: { caseStudies: CaseSt
                         </div>
                         <div className="mt-auto flex items-center justify-between border-t border-gray-200 pt-8 group-hover:border-white/20">
                           <div className="flex items-center gap-3">
-                            <CheckCircle2 size={24} className="text-[#F99D1C]" />
-                            <span className="text-lg leading-snug font-bold text-[#001A3D] group-hover:text-white">
-                              {study.impact}
+                            <CheckCircle2 size={24} className="text-[#F99D1C] min-w-[24px]" />
+                            <span className="text-lg leading-snug font-bold text-[#001A3D] group-hover:text-white line-clamp-2">
+                              {study.listDesc || study.shortDesc}
                             </span>
                           </div>
                           <div className="flex h-14 w-14 transform items-center justify-center rounded-full bg-white text-[#001A3D] shadow-sm transition-all group-hover:rotate-45 group-hover:bg-[#F99D1C] group-hover:text-[#001A3D]">

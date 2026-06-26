@@ -28,6 +28,9 @@ import {
 import { Breadcrumbs } from "@/components/Breadcrumbs";
 import { Meta } from "@/components/Meta";
 import { ImageWithFallback } from "@/components/figma/ImageWithFallback";
+import Link from "next/link";
+
+import { ServiceDetailContactCTA } from "@/components/ServiceDetailContactCTA";
 
 const ADM_SERVICES = [
   {
@@ -318,6 +321,10 @@ export default function AppDevMaintenance() {
             <p className="max-w-2xl text-lg leading-relaxed font-medium text-gray-300 md:text-xl">
               We craft customized web and mobile software applications, provide 24/7 proactive maintenance, and migrate legacy monolithic codebases.
             </p>
+            <Link href="/contact" className="btn-banner-cta mt-6 group">
+              Consult Us
+              <MoveRight className="w-4 h-4 transition-transform group-hover:translate-x-1 shrink-0" />
+            </Link>
           </Motion.div>
         </div>
       </section>
@@ -740,74 +747,9 @@ export default function AppDevMaintenance() {
         </div>
       </section>
 
-      {/* Blog Section */}
-      <section className="bg-gray-50 py-24">
-        <div className="mx-auto max-w-[1280px] px-6 lg:px-20">
-          <div className="mb-16 flex items-end justify-between gap-8">
-            <div className="max-w-2xl space-y-6">
-              <h2 className="display-font text-3xl font-semibold text-[#001A3D] md:text-5xl">
-                AppDev Insights & Articles
-              </h2>
-              <p className="text-lg font-medium text-gray-500">
-                Explore our latest thinking on application development and software maintenance trends.
-              </p>
-            </div>
-            <Link
-              href="/resources"
-              className="hidden items-center gap-2 pb-2 text-[11px] font-bold tracking-widest text-[#0171c1] uppercase transition-all hover:gap-4 md:flex"
-            >
-              View All Resources <MoveRight size={16} />
-            </Link>
-          </div>
 
-          <div className="mb-16 grid grid-cols-1 gap-8 md:grid-cols-3">
-            {BLOG_POSTS.map((post, i) => (
-              <div
-                key={i}
-                className="group overflow-hidden rounded-sm bg-white shadow-sm transition-all duration-500 hover:shadow-2xl"
-              >
-                <div className="relative aspect-[16/10] overflow-hidden">
-                  <ImageWithFallback
-                    src={post.image}
-                    alt={post.title}
-                    className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110"
-                  />
-                  <div className="absolute top-4 left-4">
-                    <span className="rounded-sm bg-[#0171c1] px-3 py-1 text-[9px] font-bold tracking-widest text-white uppercase">
-                      AppDev
-                    </span>
-                  </div>
-                </div>
-                <div className="space-y-4 p-8">
-                  <h3 className="display-font line-clamp-2 min-h-[3.5rem] text-xl leading-tight font-bold text-[#001A3D] transition-colors group-hover:text-[#0171c1]">
-                    {post.title}
-                  </h3>
-                  <p className="line-clamp-3 text-sm leading-relaxed font-medium text-gray-500">
-                    {post.description}
-                  </p>
-                  <div className="border-t border-gray-50 pt-4">
-                    <Link
-                      href={`/resources/blogs/${post.id}`}
-                      className="inline-flex items-center gap-2 text-[10px] font-bold tracking-widest text-[#001A3D] uppercase transition-colors hover:text-[#0171c1]"
-                    >
-                      Read Article <ChevronRight size={12} />
-                    </Link>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
+      <ServiceDetailContactCTA />
 
-          <div className="text-center md:hidden">
-            <Link
-              href="/resources"
-              className="inline-flex items-center gap-3 rounded-sm bg-[#0171c1] px-10 py-5 text-[11px] font-bold tracking-wider text-white uppercase shadow-xl"
-            >
-              Explore Resources <MoveRight size={16} />
-            </Link>
-          </div>
-        </div>
-      </section>
     </div>
   );
 }

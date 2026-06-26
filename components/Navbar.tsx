@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { Search, Globe, Menu, X, ChevronDown, MoveRight } from "lucide-react";
 import { motion as Motion, AnimatePresence, useScroll, useTransform } from "framer-motion";
 import { ImageWithFallback } from "./figma/ImageWithFallback";
+import type { HeaderChromeData } from "@/lib/wordpress";
 const logoImg = "/assets/c57ecabe59306129194824425137d2ccde6918ce.png";
 
 const NAV_ITEMS = [
@@ -29,13 +30,6 @@ const NAV_ITEMS = [
           { name: "In The News", path: "/company/news" },
           { name: "Press Release", path: "/company/press-release" },
           { name: "Awards and Recognition", path: "/company/awards" },
-        ],
-      },
-      {
-        title: "Careers",
-        items: [
-          { name: "Open Positions", path: "/careers" },
-          { name: "Graduates", path: "/company/graduates" },
         ],
       },
     ],
@@ -80,26 +74,7 @@ const NAV_ITEMS = [
       },
     ],
   },
-  {
-    label: "Products",
-    path: "/products",
-    dropdown: [
-      {
-        title: "Product Categories",
-        items: [
-          { name: "Gen AI Products", path: "/products?category=Gen AI Products" },
-          { name: "AI productivity tools", path: "/products?category=AI productivity tools" },
-          { name: "DevOps & SRE Automation", path: "/products?category=DevOps & SRE Automation" },
-          { name: "LMS", path: "/products?category=LMS" },
-          {
-            name: "ERP & Office Productivity",
-            path: "/products?category=ERP & Office Productivity",
-          },
-          { name: "Logistics and Delivery", path: "/products?category=Logistics and Delivery" },
-        ],
-      },
-    ],
-  },
+  { label: "Products", path: "/products" },
   {
     label: "Industries",
     path: "/industries",
@@ -138,7 +113,13 @@ const NAV_ITEMS = [
 
 const BRAND_BLUE = "#0171c1";
 
-export default function Navbar() {
+const DEFAULT_MEGA_BOTTOM_LINKS = [
+  { name: "Case Studies", path: "/resources/case-studies" },
+  { name: "Hutech Documents", path: "/resources/hutech-documents" },
+  { name: "Life at Hutech", path: "/careers" },
+];
+
+export default function Navbar({ data }: { data?: HeaderChromeData }) {
   const [activeDropdown, setActiveDropdown] = useState<number | null>(null);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [mobileExpandedItem, setMobileExpandedItem] = useState<number | null>(null);
@@ -152,6 +133,52 @@ export default function Navbar() {
   const navBackground = "rgba(255, 255, 255, 1)";
   const navBlur = "blur(0px)";
   const textColorValue = "rgba(0, 26, 61, 1)";
+  const navItems = data?.navItems?.length ? data.navItems : NAV_ITEMS;
+  const logoSrc = data?.logoUrl || logoImg;
+  const logoAlt = data?.logoAlt || "Hutech Solutions Logo";
+  const megaCard = {
+    title: data?.megaCard?.title || "Experience Digital Excellence",
+    text:
+      data?.megaCard?.text ||
+      "Join 200+ global enterprises scaling with our engineering expertise.",
+    buttonText: data?.megaCard?.buttonText || "Work With Us",
+    buttonUrl: data?.megaCard?.buttonUrl || "/contact",
+  };
+  const megaBottomLinks = data?.megaBottomLinks?.length
+    ? data.megaBottomLinks
+    : DEFAULT_MEGA_BOTTOM_LINKS;
+  const megaBottomTagline = data?.megaBottomTagline || "Accelerating Business Agility";
+  const mobileCta = {
+    label: data?.mobileCta?.label || "Get In Touch",
+    url: data?.mobileCta?.url || "/contact",
+  };
+  const mobileFooter = {
+    left: data?.mobileFooter?.left || "Hutech Solutions © 2026",
+    right: data?.mobileFooter?.right || "Global Engineering",
+  };
+  const renderMegaTitle = (title: string) => {
+    if (title.includes("|")) {
+      return title.split("|").map((part, index) =>
+        index % 2 === 1 ? (
+          <span key={`${part}-${index}`} className="text-[#0171c1]">
+            {part}
+          </span>
+        ) : (
+          part
+        )
+      );
+    }
+
+    return title.split(/(Digital)/).map((part, index) =>
+      part === "Digital" ? (
+        <span key={`${part}-${index}`} className="text-[#0171c1]">
+          {part}
+        </span>
+      ) : (
+        part
+      )
+    );
+  };
 
   // Disable height animation when mobile menu is open
   const navHeight = useTransform(scrollY, [0, 50], ["80px", "64px"]);
@@ -216,8 +243,8 @@ export default function Navbar() {
                 <Motion.div style={{ scale: logoScale }}>
                   <div className="h-16 py-2 md:h-20">
                     <ImageWithFallback
-                      src={logoImg}
-                      alt="Hutech Solutions Logo"
+                      src={logoSrc}
+                      alt={logoAlt}
                       className="h-full w-auto object-contain"
                     />
                   </div>
@@ -227,12 +254,11 @@ export default function Navbar() {
 
             {/* Desktop Menu */}
             <div className="hidden items-center space-x-1 lg:flex">
-              {NAV_ITEMS.map((item, idx) => {
+              {navItems.map((item, idx) => {
                 const isMega = item.label === "Company" || item.label === "Services";
                 const isSmall =
                   item.label === "Industries" ||
-                  item.label === "Resources" ||
-                  item.label === "Products";
+                  item.label === "Resources";
 
                 return (
                   <div
@@ -301,24 +327,22 @@ export default function Navbar() {
                                       <div className="group relative overflow-hidden rounded-lg bg-[#001A3D] p-8 text-white">
                                         <div className="absolute top-0 right-0 -mt-16 -mr-16 h-32 w-32 rounded-full bg-[#0171c1]/10 transition-transform duration-700 group-hover:scale-150"></div>
                                         <h3 className="relative z-10 mb-4 text-base leading-tight font-normal">
-                                          Experience <span className="text-[#0171c1]">Digital</span>{" "}
-                                          Excellence
+                                          {renderMegaTitle(megaCard.title)}
                                         </h3>
                                         <p className="relative z-10 mb-6 text-sm text-gray-400">
-                                          Join 200+ global enterprises scaling with our engineering
-                                          expertise.
+                                          {megaCard.text}
                                         </p>
                                         <Link
-                                          href="/contact"
+                                          href={megaCard.buttonUrl}
                                           className="group relative z-10 inline-flex items-center text-sm font-semibold tracking-wide text-[#0171c1]"
                                         >
-                                          Work With Us
+                                          {megaCard.buttonText}
                                           <MoveRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
                                         </Link>
                                       </div>
                                     </div>
 
-                                    <div className="col-span-9 grid grid-cols-3 gap-8">
+                                    <div className={`col-span-9 grid gap-8 ${item.dropdown?.length === 2 ? 'grid-cols-2' : 'grid-cols-3'}`}>
                                       {item.dropdown?.map((section) => (
                                         <div key={section.title} className="space-y-6">
                                           <h4 className="border-b border-gray-100 pb-3 text-[13px] font-semibold text-[#001A3D]">
@@ -346,22 +370,17 @@ export default function Navbar() {
                                 <div className="border-t border-gray-100 bg-gray-50 py-4">
                                   <div className="mx-auto flex max-w-[1280px] items-center justify-between px-6 text-xs font-semibold tracking-wide text-gray-500 lg:px-20">
                                     <div className="flex space-x-8">
-                                      <Link
-                                        href="/resources/case-studies"
-                                        className="hover:text-[#001A3D]"
-                                      >
-                                        Success Stories
-                                      </Link>
-                                      <Link href="/resources" className="hover:text-[#001A3D]">
-                                        Knowledge Hub
-                                      </Link>
-                                      <Link href="/careers" className="hover:text-[#001A3D]">
-                                        Life at Hutech
-                                      </Link>
+                                      {megaBottomLinks.map((link) => (
+                                        <Link
+                                          key={`${link.name}-${link.path}`}
+                                          href={link.path}
+                                          className="hover:text-[#001A3D]"
+                                        >
+                                          {link.name}
+                                        </Link>
+                                      ))}
                                     </div>
-                                    <div className="text-[#0171c1]">
-                                      Accelerating Business Agility
-                                    </div>
+                                    <div className="text-[#0171c1]">{megaBottomTagline}</div>
                                   </div>
                                 </div>
                               </Motion.div>
@@ -417,8 +436,8 @@ export default function Navbar() {
                 >
                   <div className="h-14 rounded-md bg-white px-3 py-1.5 shadow-md">
                     <ImageWithFallback
-                      src={logoImg}
-                      alt="Hutech Solutions Logo"
+                      src={logoSrc}
+                      alt={logoAlt}
                       className="h-full w-auto object-contain"
                     />
                   </div>
@@ -434,7 +453,7 @@ export default function Navbar() {
             </div>
 
             <div className="flex-1 space-y-6 overflow-y-auto px-6 py-10">
-              {NAV_ITEMS.map((item, idx) => (
+              {navItems.map((item, idx) => (
                 <Motion.div
                   key={item.label}
                   initial={{ opacity: 0, x: 20 }}
@@ -512,15 +531,15 @@ export default function Navbar() {
 
             <div className="space-y-4 bg-[#00142D] p-8">
               <Link
-                href="/contact"
+                href={mobileCta.url}
                 onClick={() => setMobileMenuOpen(false)}
                 className="block w-full rounded-sm bg-[#0171c1] py-4 text-center font-bold tracking-wide text-white shadow-lg transition-all hover:bg-white hover:text-[#001A3D] active:scale-[0.98]"
               >
-                Get In Touch
+                {mobileCta.label}
               </Link>
               <div className="flex items-center justify-between border-t border-white/5 pt-4 text-[11px] font-semibold tracking-wide text-gray-500">
-                <div>Hutech Solutions © 2026</div>
-                <div className="text-[#0171c1]">Global Engineering</div>
+                <div>{mobileFooter.left}</div>
+                <div className="text-[#0171c1]">{mobileFooter.right}</div>
               </div>
             </div>
           </Motion.div>

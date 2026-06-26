@@ -20,6 +20,8 @@ import { Breadcrumbs } from "@/components/Breadcrumbs";
 import { ImageWithFallback } from "@/components/figma/ImageWithFallback";
 import Link from "next/link";
 import { CaseStudy } from "@/lib/data/case-studies";
+import { FAQAccordion } from "@/components/FAQAccordion";
+import { renderTitle } from "@/lib/utils";
 
 const iconMap: Record<string, React.ReactNode> = {
   Target: <Target className="w-6 h-6 text-[#F99D1C]" />,
@@ -64,7 +66,7 @@ export default function CaseStudyDetailClient({ study }: { study: CaseStudy }) {
               <span className="text-[#F99D1C] font-bold uppercase tracking-[0.3em] text-[10px]">{study.category} Case Study</span>
             </div>
             <h1 className="text-4xl md:text-6xl lg:text-7xl font-semibold leading-tight display-font mb-8">
-              {study.title}
+              {renderTitle(study.impact || study.title, "text-inherit", "text-[#F99D1C]", "text-[#0171c1]")}
             </h1>
             <p className="text-xl md:text-2xl text-gray-300 max-w-2xl font-medium leading-relaxed mb-12">
               {study.shortDesc}
@@ -131,7 +133,7 @@ export default function CaseStudyDetailClient({ study }: { study: CaseStudy }) {
                 <div className="mb-8 p-4 bg-gray-50 rounded-2xl w-fit group-hover:bg-[#0171c1] group-hover:text-white transition-colors">
                   {iconMap[item.icon] || <Target className="w-6 h-6" />}
                 </div>
-                <h3 className="text-2xl font-bold text-[#001A3D] mb-4">{item.title}</h3>
+                <h3 className="text-2xl font-bold text-[#001A3D] mb-4">{renderTitle(item.title)}</h3>
                 <p className="text-gray-500 font-medium leading-relaxed text-sm">
                   {item.desc}
                 </p>
@@ -165,7 +167,7 @@ export default function CaseStudyDetailClient({ study }: { study: CaseStudy }) {
                       </div>
                       <div className="w-8 h-1 bg-[#F99D1C] group-hover:w-16 transition-all duration-500"></div>
                     </div>
-                    <h3 className="text-xl font-bold text-[#001A3D]">{sol.title}</h3>
+                    <h3 className="text-xl font-bold text-[#001A3D]">{renderTitle(sol.title)}</h3>
                     <p className="text-gray-500 leading-relaxed font-medium">
                       {sol.desc}
                     </p>
@@ -202,7 +204,7 @@ export default function CaseStudyDetailClient({ study }: { study: CaseStudy }) {
                     {step.number}
                   </div>
                   <div className="pt-2 space-y-4 border-b border-gray-100 pb-12 w-full">
-                    <h3 className="text-2xl font-bold text-[#001A3D]">{step.title}</h3>
+                    <h3 className="text-2xl font-bold text-[#001A3D]">{renderTitle(step.title)}</h3>
                     <p className="text-gray-500 font-medium leading-relaxed italic">{step.desc}</p>
                   </div>
                 </div>
@@ -227,7 +229,7 @@ export default function CaseStudyDetailClient({ study }: { study: CaseStudy }) {
                 <div key={i} className="space-y-4">
                   <div className="flex items-center gap-3">
                     <CheckCircle2 className="text-[#F99D1C]" />
-                    <h4 className="font-bold text-xl uppercase tracking-wider">{res.title}</h4>
+                    <h4 className="font-bold text-xl uppercase tracking-wider">{renderTitle(res.title)}</h4>
                   </div>
                   <p className="text-blue-100 font-medium leading-relaxed">
                     {res.desc}
@@ -238,6 +240,23 @@ export default function CaseStudyDetailClient({ study }: { study: CaseStudy }) {
           </div>
         </div>
       </section>
+
+      {/* FAQ Section */}
+      {study.faqs && study.faqs.length > 0 && (
+        <section className="py-24 bg-gray-50">
+          <div className="max-w-[1000px] mx-auto px-6 lg:px-20 space-y-12">
+            <div className="space-y-4 text-center">
+              <h2 className="text-4xl md:text-5xl font-bold text-[#001A3D] display-font">
+                {study.faqTitle ? renderTitle(study.faqTitle) : "Frequently Asked Questions"}
+              </h2>
+              <p className="text-lg text-gray-500 font-medium max-w-2xl mx-auto">
+                {study.faqSubtitle ? renderTitle(study.faqSubtitle) : `Common questions about our ${study.category} case study.`}
+              </p>
+            </div>
+            <FAQAccordion faqs={study.faqs} />
+          </div>
+        </section>
+      )}
 
       {/* CTA Section */}
       <section className="py-24 bg-white">

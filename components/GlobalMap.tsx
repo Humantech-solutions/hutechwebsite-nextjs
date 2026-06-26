@@ -1,172 +1,222 @@
 "use client";
 
 import { motion as Motion } from "motion/react";
-import { MapPin, Globe, Building2, Users, ArrowRight } from "lucide-react";
+import { MapPin } from "lucide-react";
 import { useState } from "react";
+import { renderTitle } from "@/lib/utils";
 
-const LOCATIONS = [
-  {
-    id: "india",
-    name: "India (HQ)",
-    city: "Pune & Chennai",
-    type: "Core Digital Engineering & R&D",
-    coords: { top: "62%", left: "70%" },
-    details: "90+ engineers delivering advanced AI, Cloud, and SRE solutions."
-  },
-  {
-    id: "usa",
-    name: "United States",
-    city: "New Jersey",
-    type: "Strategic Sales & Client Success",
-    coords: { top: "40%", left: "25%" },
-    details: "Hutech Inc. driving digital transformation for Fortune 500 clients."
-  },
-  {
-    id: "uk",
-    name: "United Kingdom",
-    city: "London",
-    type: "Strategic Collaboration",
-    coords: { top: "35%", left: "48%" },
-    details: "Partnering with Acend Solutions for EMEA market delivery."
-  }
+export interface OfficeLocation {
+  id: string;
+  name: string;
+  city: string;
+  type: string;
+  details: string;
+  lat?: string;
+  lng?: string;
+}
+
+interface GlobalMapProps {
+  label?: string;
+  title?: string;
+  description?: string;
+  stat1Value?: string;
+  stat1Label?: string;
+  stat2Value?: string;
+  stat2Label?: string;
+  locations?: OfficeLocation[];
+}
+
+// Map Calibration Offsets
+// Used to perfectly align the mathematical projection with your specific world-map.svg
+const MAP_OFFSET_X = -3.5; 
+const MAP_OFFSET_Y = -6.0; 
+
+function calculatePosition(latStr?: string, lngStr?: string): { left: number; top: number } {
+  if (!latStr || !lngStr) return { left: 50, top: 50 }; // Fallback to center
+  
+  let lat = parseFloat(latStr);
+  let lng = parseFloat(lngStr);
+  
+  if (isNaN(lat) || isNaN(lng)) return { left: 50, top: 50 };
+
+  // Adjust for South and West from string (if user typed "S" or "W")
+  if (latStr.toUpperCase().includes('S')) lat = -Math.abs(lat);
+  if (lngStr.toUpperCase().includes('W')) lng = -Math.abs(lng);
+
+  // Web Mercator Projection
+  const x = (lng + 180) / 360 * 100;
+  const latRad = (lat * Math.PI) / 180;
+  const yMercator = (1 - Math.log(Math.tan(latRad) + 1 / Math.cos(latRad)) / Math.PI) / 2 * 100;
+
+  return { 
+    left: Number((x + MAP_OFFSET_X).toFixed(4)), 
+    top: Number((yMercator + MAP_OFFSET_Y).toFixed(4))
+  };
+}
+
+const STATIC_LOCATIONS: OfficeLocation[] = [
+  { id: "india", name: "India (HQ)", city: "Pune & Chennai", type: "Core Digital Engineering & R&D", details: "90+ engineers delivering advanced AI, Cloud, and SRE solutions.", lat: "18.5204", lng: "73.8567" },
+  { id: "usa",   name: "United States", city: "New Jersey", type: "Strategic Sales & Client Success", details: "Hutech Inc. driving digital transformation for Fortune 500 clients.", lat: "40.0583", lng: "-74.4057" },
+  { id: "uk",    name: "United Kingdom", city: "London", type: "Strategic Collaboration", details: "Partnering with Acend Solutions for EMEA market delivery.", lat: "51.5072", lng: "-0.1276" },
 ];
 
-export function GlobalMap() {
-  const [activeId, setActiveId] = useState<string | null>("india");
+export function GlobalMap({
+  label        = "Global Delivery Model",
+  title        = "Global Footprint, |Local Expertise.",
+  description  = "Hutech Solutions operates through a unified global network, ensuring high-density engineering delivery and seamless client engagement across timezones.",
+  stat1Value   = "24/7",
+  stat1Label   = "Operations",
+  stat2Value   = "3",
+  stat2Label   = "Continents",
+  locations    = STATIC_LOCATIONS,
+}: GlobalMapProps) {
+  const [activeId, setActiveId] = useState<string>(locations[0]?.id ?? "india");
 
   return (
-    <section className="py-32 bg-[#001A3D] text-white relative overflow-hidden">
-      {/* Decorative Gradients */}
-      <div className="absolute top-0 right-0 w-full h-full bg-[radial-gradient(circle_at_50%_50%,#0171c1_0%,transparent_70%)] opacity-20"></div>
-      
-      <div className="max-w-[1280px] mx-auto px-6 lg:px-20 relative z-10">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-20 items-center">
-          
-          {/* Content Left */}
-          <div className="lg:col-span-5 space-y-12">
-            <div className="space-y-6">
-              <div className="flex items-center space-x-3">
-                <span className="w-12 h-[1px] bg-[#F99D1C]"></span>
-                <span className="text-[#F99D1C] font-bold tracking-[0.2em] text-[10px] uppercase">Global Delivery Model</span>
+    <section className="relative overflow-hidden bg-[#001A3D] py-32 text-white">
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_60%_50%,rgba(1,113,193,0.25)_0%,transparent_70%)]" />
+
+      <div className="relative z-10 mx-auto max-w-[1280px] px-6 lg:px-20">
+        <div className="grid grid-cols-1 items-center gap-16 lg:grid-cols-12">
+
+          {/* ── Left panel ───────────────────────────────────────────────── */}
+          <div className="space-y-10 lg:col-span-5">
+            <div className="space-y-5">
+              <div className="flex items-center gap-3">
+                <span className="h-[1px] w-10 bg-[#F99D1C]" />
+                <span className="text-[10px] font-bold tracking-[0.2em] text-[#F99D1C] uppercase">{label}</span>
               </div>
-              <h2 className="text-4xl md:text-6xl font-semibold display-font leading-tight tracking-tight">
-                Global Footprint, <br />
-                <span className="text-[#0171c1]">Local Expertise.</span>
+              <h2 className="display-font text-4xl font-semibold leading-tight tracking-tight md:text-5xl lg:text-6xl">
+                {renderTitle(title, "text-white", "text-[#0171c1]", "text-[#F99D1C]")}
               </h2>
-              <p className="text-gray-400 font-medium text-lg leading-relaxed">
-                Hutech Solutions operates through a unified global network, ensuring high-density engineering delivery and seamless client engagement across timezones.
-              </p>
+              <p className="text-base leading-relaxed text-gray-400">{description}</p>
             </div>
 
-            <div className="space-y-4">
-              {LOCATIONS.map((loc) => (
-                <button
-                  key={loc.id}
-                  onMouseEnter={() => setActiveId(loc.id)}
-                  className={`w-full text-left p-6 rounded-2xl border transition-all duration-300 group ${
-                    activeId === loc.id 
-                    ? "bg-white/10 border-[#F99D1C] shadow-[0_0_30px_-10px_rgba(255,175,43,0.3)]" 
-                    : "bg-transparent border-white/5 hover:border-white/20"
-                  }`}
-                >
-                  <div className="flex justify-between items-center">
-                    <div>
-                      <h4 className={`text-xl font-bold display-font transition-colors ${activeId === loc.id ? "text-[#F99D1C]" : "text-white"}`}>
-                        {loc.name}
-                      </h4>
-                      <p className="text-xs font-bold text-gray-500 uppercase tracking-widest mt-1">{loc.city}</p>
+            {/* Location cards */}
+            <div className="space-y-3">
+              {locations.map((loc) => {
+                const active = activeId === loc.id; 
+                return (
+                  <button
+                    key={loc.id}
+                    onMouseEnter={() => setActiveId(loc.id)}
+                    onClick={() => setActiveId(loc.id)}
+                    className={`w-full rounded-2xl border p-5 text-left transition-all duration-300 ${
+                      active
+                        ? "border-[#F99D1C] bg-white/10 shadow-[0_0_30px_-10px_rgba(255,175,43,0.25)]"
+                        : "border-white/5 bg-transparent hover:border-white/15"
+                    }`}
+                  >
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <h4 className={`display-font text-xl font-bold transition-colors ${active ? "text-[#F99D1C]" : "text-white"}`}>
+                          {loc.name} {loc.type && <span>({loc.type})</span>}
+                        </h4>
+                        <p className="mt-0.5 text-[11px] font-bold uppercase tracking-widest text-gray-500">{loc.city}</p>
+                      </div>
+                      <div className={`rounded-lg p-2.5 transition-all ${active ? "bg-[#F99D1C] text-[#001A3D]" : "bg-white/5 text-gray-500"}`}>
+                        <MapPin size={16} />
+                      </div>
                     </div>
-                    <div className={`p-3 rounded-lg transition-all ${activeId === loc.id ? "bg-[#F99D1C] text-[#001A3D]" : "bg-white/5 text-gray-500"}`}>
-                      <MapPin size={18} />
-                    </div>
-                  </div>
-                  
-                  {activeId === loc.id && (
-                    <Motion.div 
-                      initial={{ height: 0, opacity: 0 }}
-                      animate={{ height: "auto", opacity: 1 }}
-                      className="mt-4 pt-4 border-t border-white/10"
-                    >
-                      <p className="text-sm text-gray-400 font-medium leading-relaxed">
-                        {loc.details}
-                      </p>
-                    </Motion.div>
-                  )}
-                </button>
-              ))}
+                    {active && (
+                      <Motion.div
+                        initial={{ height: 0, opacity: 0 }}
+                        animate={{ height: "auto", opacity: 1 }}
+                        className="mt-3 border-t border-white/10 pt-3"
+                      >
+                        <p className="text-sm leading-relaxed text-gray-400">{loc.details}</p>
+                      </Motion.div>
+                    )}
+                  </button>
+                );
+              })}
             </div>
+
+
           </div>
 
-          {/* Interactive Map Right */}
-          <div className="lg:col-span-7 relative">
-            <div className="relative aspect-[16/10] w-full">
-              {/* Simplified World Map SVG Placeholder */}
-              <svg 
-                viewBox="0 0 1000 600" 
-                className="w-full h-full fill-white/5 stroke-white/10 stroke-[0.5]"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                {/* Abstract Continents (Simplified for Aesthetic) */}
-                <path d="M150,150 Q200,100 300,120 T450,150 T600,100 T800,130 T900,200 T850,350 T700,450 T500,400 T300,450 T150,350 Z" />
-                <circle cx="250" cy="250" r="100" className="opacity-10" />
-                <circle cx="700" cy="350" r="150" className="opacity-10" />
-              </svg>
+          {/* ── Right panel: World map ────────────────────────────────────── */}
+          <div className="lg:col-span-7">
+            <div className="relative w-full">
+              {/* The base world map provided by user */}
+              <img 
+                src="/world-map.svg" 
+                alt="Global Footprint Map" 
+                className="w-full h-auto object-contain opacity-40 select-none"
+              />
 
-              {/* Interactive Hotspots */}
-              {LOCATIONS.map((loc) => (
-                <div 
-                  key={loc.id}
-                  className="absolute cursor-pointer transition-transform duration-500 hover:scale-110"
-                  style={{ top: loc.coords.top, left: loc.coords.left }}
-                  onMouseEnter={() => setActiveId(loc.id)}
-                >
-                  {/* Pulse Animation */}
-                  <Motion.div
-                    animate={{ 
-                      scale: [1, 1.5, 1],
-                      opacity: [0.6, 0.2, 0.6]
-                    }}
-                    transition={{ 
-                      duration: 2, 
-                      repeat: Infinity,
-                      ease: "easeInOut"
-                    }}
-                    className={`absolute inset-0 w-8 h-8 -ml-4 -mt-4 rounded-full ${activeId === loc.id ? "bg-[#F99D1C]" : "bg-[#0171c1]"}`}
-                  />
-                  
-                  {/* Pin Core */}
-                  <div className={`relative w-4 h-4 rounded-full border-2 border-[#001A3D] shadow-2xl transition-colors duration-300 ${activeId === loc.id ? "bg-[#F99D1C]" : "bg-[#0171c1]"}`}></div>
-                  
-                  {/* Label (Visible on Active) */}
-                  {activeId === loc.id && (
-                    <Motion.div
-                      initial={{ opacity: 0, y: 10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      className="absolute bottom-full left-1/2 -translate-x-1/2 mb-4 bg-white text-[#001A3D] px-4 py-2 rounded-lg shadow-2xl whitespace-nowrap"
-                    >
-                      <p className="text-[10px] font-black uppercase tracking-widest">{loc.name}</p>
-                      <div className="absolute top-full left-1/2 -translate-x-1/2 border-8 border-transparent border-t-white"></div>
-                    </Motion.div>
-                  )}
+              {/* ── Highlighted countries and Office pins ── */}
+              {locations.map((loc) => {
+                const pin = calculatePosition(loc.lat, loc.lng);
+                const active = activeId === loc.id;
+                
+                return (
+                  <div
+                    key={`pin-group-${loc.id}`}
+                    className="absolute z-10 cursor-pointer"
+                    style={{ left: `${pin.left}%`, top: `${pin.top}%` }}
+                    onMouseEnter={() => setActiveId(loc.id)}
+                    onClick={() => setActiveId(loc.id)}
+                  >
+                    {/* Centered container so percentage represents center */}
+                    <div className="relative flex items-center justify-center -translate-x-1/2 -translate-y-1/2">
+                      
+                      {/* Inner glowing pulse */}
+                      <Motion.div
+                        className="absolute rounded-full border-2"
+                        style={{ 
+                          borderColor: active ? "#F99D1C" : "#0171c1",
+                        }}
+                        animate={{ 
+                          width: active ? [20, 44, 20] : 20, 
+                          height: active ? [20, 44, 20] : 20,
+                          opacity: active ? [0.7, 0, 0.7] : 0 
+                        }}
+                        transition={{ duration: 2.2, repeat: Infinity, ease: "easeOut", delay: 0.3 }}
+                      />
+
+                      {/* Pin dot */}
+                      <div 
+                        className="h-3 w-3 rounded-full border-[2px] border-[#001A3D] relative z-10"
+                        style={{ backgroundColor: active ? "#F99D1C" : "#0171c1" }}
+                      />
+
+                      {/* Tooltip on active */}
+                      {active && (
+                        <div className="absolute bottom-[100%] left-1/2 mb-3 w-[120px] -translate-x-1/2">
+                          <div className="relative rounded-lg bg-white p-2 shadow-xl shadow-black/20 text-center">
+                            <h5 className="text-[10px] font-black uppercase tracking-widest text-[#001A3D]">
+                              {loc.name}
+                            </h5>
+                            <p className="text-[9px] font-semibold text-gray-500 truncate">
+                              {loc.city}
+                            </p>
+                            {/* Triangle pointer */}
+                            <div className="absolute left-1/2 top-full -translate-x-1/2 border-l-[6px] border-r-[6px] border-t-[6px] border-l-transparent border-r-transparent border-t-white" />
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                );
+              })}
+              {/* Floating Stats */}
+              <div className="absolute -bottom-6 -right-6 z-20 rounded-[2rem] bg-[#0171c1] px-10 py-8 shadow-xl lg:-bottom-28 lg:right-0">
+                <div className="flex items-center gap-10">
+                  <div className="text-center">
+                    <p className="display-font text-4xl font-black text-white">{stat1Value}</p>
+                    <p className="mt-1 text-[10px] font-bold uppercase tracking-widest text-white/80">{stat1Label}</p>
+                  </div>
+                  <div className="h-12 w-px bg-white/20" />
+                  <div className="text-center">
+                    <p className="display-font text-4xl font-black text-white">{stat2Value}</p>
+                    <p className="mt-1 text-[10px] font-bold uppercase tracking-widest text-white/80">{stat2Label}</p>
+                  </div>
                 </div>
-              ))}
-            </div>
-
-            {/* Strategic Stats Overlay */}
-            <div className="absolute -bottom-10 -right-10 bg-[#0171c1] p-10 rounded-[2.5rem] shadow-2xl hidden md:block">
-               <div className="flex gap-12">
-                  <div className="text-center">
-                    <p className="text-4xl font-black display-font">24/7</p>
-                    <p className="text-[10px] font-bold uppercase tracking-widest opacity-60">Operations</p>
-                  </div>
-                  <div className="w-[1px] h-12 bg-white/20"></div>
-                  <div className="text-center">
-                    <p className="text-4xl font-black display-font">3</p>
-                    <p className="text-[10px] font-bold uppercase tracking-widest opacity-60">Continents</p>
-                  </div>
-               </div>
+              </div>
             </div>
           </div>
+
         </div>
       </div>
     </section>

@@ -1,6 +1,6 @@
 "use client";
 
-import { motion as Motion } from "framer-motion";
+import { motion as Motion, AnimatePresence } from "framer-motion";
 import { Breadcrumbs } from "@/components/Breadcrumbs";
 import {
   Heart,
@@ -16,24 +16,130 @@ import {
   ChevronLeft,
   ChevronRight,
   X,
+  GraduationCap,
+  Clock,
+  Coins,
+  Sparkles,
+  HeartHandshake,
 } from "lucide-react";
 import { Meta } from "@/components/Meta";
 import { ImageWithFallback } from "@/components/figma/ImageWithFallback";
-import Slider from "react-slick";
 import Link from "next/link";
 import { useState, useCallback, useEffect, useRef } from "react";
-import "slick-carousel/slick/slick.css";
-import "slick-carousel/slick/slick-theme.css";
 
 export default function LifeAtHutech() {
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
-  const [mounted, setMounted] = useState(false);
-  const workplaceSliderRef = useRef<Slider>(null);
 
-  useEffect(() => {
-    setMounted(true);
+  // Ecosystem state
+  const [ecoActiveIndex, setEcoActiveIndex] = useState(0);
+  const [ecoDirection, setEcoDirection] = useState(0);
+  const [isEcoHovered, setIsEcoHovered] = useState(false);
+  const ecoContainerRef = useRef<HTMLDivElement>(null);
+
+  const ecosystemSlides = [
+    {
+      src: "https://images.unsplash.com/photo-1761818645928-47e5dad8ec76",
+      title: "Modern Collaboration Hubs",
+      tag: "Innovation",
+    },
+    {
+      src: "https://images.unsplash.com/photo-1716703373041-bd135107d947",
+      title: "Inclusive Social Spaces",
+      tag: "Culture",
+    },
+    {
+      src: "https://images.unsplash.com/photo-1726365222176-425a1a1b9b98",
+      title: "Innovation Tech Labs",
+      tag: "R&D",
+    },
+    {
+      src: "https://images.unsplash.com/photo-1497366216548-37526070297c",
+      title: "Strategic Thinking Zones",
+      tag: "Strategy",
+    },
+    {
+      src: "https://images.unsplash.com/photo-1519389950473-47ba0277781c",
+      title: "Cross-Functional Pods",
+      tag: "Teams",
+    },
+  ];
+
+  const nextEcoSlide = useCallback(() => {
+    setEcoDirection(1);
+    setEcoActiveIndex((prev) => (prev + 1) % 5);
   }, []);
+
+  const prevEcoSlide = useCallback(() => {
+    setEcoDirection(-1);
+    setEcoActiveIndex((prev) => (prev - 1 + 5) % 5);
+  }, []);
+
+  // Keyboard navigation when mouse is hovered
+  useEffect(() => {
+    if (!isEcoHovered) return;
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "ArrowRight") {
+        nextEcoSlide();
+      } else if (e.key === "ArrowLeft") {
+        prevEcoSlide();
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [isEcoHovered, nextEcoSlide, prevEcoSlide]);
+
+  // Autoplay functionality
+  useEffect(() => {
+    const timer = setInterval(() => {
+      nextEcoSlide();
+    }, 6000);
+    return () => clearInterval(timer);
+  }, [nextEcoSlide]);
+
+  // Mouse wheel scroll navigation manually attached to support preventDefault
+  useEffect(() => {
+    const el = ecoContainerRef.current;
+    if (!el) return;
+
+    let throttleTimer = false;
+    const handleWheelRaw = (e: WheelEvent) => {
+      if (Math.abs(e.deltaY) > 15 || Math.abs(e.deltaX) > 15) {
+        e.preventDefault();
+        if (throttleTimer) return;
+        throttleTimer = true;
+        
+        if (e.deltaY > 0 || e.deltaX > 0) {
+          nextEcoSlide();
+        } else {
+          prevEcoSlide();
+        }
+
+        setTimeout(() => {
+          throttleTimer = false;
+        }, 800); // Throttling wheel transitions
+      }
+    };
+
+    el.addEventListener("wheel", handleWheelRaw, { passive: false });
+    return () => el.removeEventListener("wheel", handleWheelRaw);
+  }, [nextEcoSlide, prevEcoSlide]);
+
+  // Drag start/end state for swiping
+  const [dragStartX, setDragStartX] = useState(0);
+
+  const handleDragStart = (e: any, info: any) => {
+    setDragStartX(info.point.x);
+  };
+
+  const handleDragEnd = (e: any, info: any) => {
+    const dragDistance = info.point.x - dragStartX;
+    if (dragDistance < -60) {
+      nextEcoSlide();
+    } else if (dragDistance > 60) {
+      prevEcoSlide();
+    }
+  };
 
   const openLightbox = useCallback((index: number) => {
     setCurrentImageIndex(index);
@@ -94,67 +200,30 @@ export default function LifeAtHutech() {
   ];
 
   const benefits = [
+  const benefits = [
     {
-      icon: <HeartPulse className="h-10 w-10" />,
+      icon: <Heart className="h-8 w-8" />,
       title: "Health & Wellness",
-      desc: "Comprehensive health insurance, wellness initiatives, and employee assistance programs.",
+      desc: "Comprehensive healthcare and wellness support.",
     },
     {
-      icon: <BookOpen className="h-10 w-10" />,
+      icon: <GraduationCap className="h-8 w-8" />,
       title: "Learning & Growth",
-      desc: "Access to certifications, mentorship, training programs, and continuous learning opportunities.",
+      desc: "Continuous learning, certifications, and career development.",
     },
     {
-      icon: <Coffee className="h-10 w-10" />,
+      icon: <Clock className="h-8 w-8" />,
       title: "Work-Life Balance",
-      desc: "Flexible work arrangements, paid time off, and a supportive work environment.",
+      desc: "Flexible work environment and employee-friendly policies.",
     },
     {
-      icon: <Trophy className="h-10 w-10" />,
+      icon: <Award className="h-8 w-8" />,
       title: "Rewards & Recognition",
-      desc: "Performance-based rewards, employee appreciation programs, and career advancement opportunities.",
+      desc: "Performance incentives and recognition programs.",
     },
   ];
 
-  const PrevArrow = (props: any) => {
-    const { onClick } = props;
-    return (
-      <button
-        onClick={onClick}
-        className="group absolute top-1/2 -left-4 z-20 flex h-12 w-12 -translate-y-1/2 cursor-pointer items-center justify-center rounded-full border border-gray-200 bg-white text-[#001A3D] shadow-sm transition-all duration-300 hover:bg-[#001A3D] hover:text-white md:-left-12"
-        aria-label="Previous slide"
-      >
-        <ChevronLeft size={24} className="transition-transform group-hover:-translate-x-0.5" />
-      </button>
-    );
-  };
 
-  const NextArrow = (props: any) => {
-    const { onClick } = props;
-    return (
-      <button
-        onClick={onClick}
-        className="group absolute top-1/2 -right-4 z-20 flex h-12 w-12 -translate-y-1/2 cursor-pointer items-center justify-center rounded-full border border-gray-200 bg-white text-[#001A3D] shadow-sm transition-all duration-300 hover:bg-[#001A3D] hover:text-white md:-right-12"
-        aria-label="Next slide"
-      >
-        <ChevronRight size={24} className="transition-transform group-hover:translate-x-0.5" />
-      </button>
-    );
-  };
-
-const carouselSettings = {
-  dots: true,
-  infinite: true,
-  speed: 800,
-  slidesToShow: 1,
-  slidesToScroll: 1,
-  autoplay: true,
-  autoplaySpeed: 5000,
-  arrows: false,
-  swipe: true,
-  draggable: true,
-  adaptiveHeight: false,
-};
 
 
   return (
@@ -293,136 +362,178 @@ const carouselSettings = {
       </section>
 
       {/* Benefits Section */}
+      {/* Benefits Section */}
       <section className="relative overflow-hidden border-y border-gray-100 bg-gray-50 py-24">
-        <div className="pointer-events-none absolute top-0 right-0 p-20 text-[#001A3D] opacity-[0.03]">
-          <HeartPulse size={400} />
+        {/* Decorative subtle ambient glows to represent premium styling */}
+        <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
+          <div className="absolute -top-40 -left-40 w-96 h-96 rounded-full bg-[#F99D1C]/5 blur-[100px]"></div>
+          <div className="absolute -bottom-40 -right-40 w-96 h-96 rounded-full bg-[#001A3D]/5 blur-[100px]"></div>
         </div>
 
         <div className="relative z-10 mx-auto max-w-[1280px] px-6 lg:px-20">
-          <div className="mb-16 space-y-4 text-center">
-            <span className="text-xs font-bold tracking-widest text-[#F99D1C] uppercase">
-              Benefits
-            </span>
-            <h2 className="display-font text-4xl leading-tight font-semibold tracking-tight text-[#001A3D] md:text-6xl">
-              More Than a Workplace— <br /> <span className="text-[#F99D1C]">A Place to Thrive</span>
-            </h2>
-          </div>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 items-center">
+            {/* Left Side Content */}
+            <div className="space-y-6 text-left">
+              <div className="flex items-center gap-3">
+                <span className="w-8 h-[1.5px] bg-[#F99D1C]"></span>
+                <span className="text-xs font-bold tracking-widest text-[#F99D1C] uppercase">
+                  Benefits
+                </span>
+              </div>
+              <h2 className="display-font text-4xl leading-tight font-semibold tracking-tight text-[#001A3D] md:text-5xl lg:text-6xl">
+                Empowering People, <br />
+                <span className="text-[#F99D1C]">Enabling Success</span>
+              </h2>
+              <div className="w-16 h-1 bg-[#F99D1C] my-6"></div>
+              <p className="text-lg leading-relaxed font-medium text-gray-500 max-w-xl">
+                We care about our people and their well-being. Our benefits are designed to support employees professionally, personally, and financially throughout their journey at Hutech.
+              </p>
+            </div>
 
-          <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-            {benefits.map((benefit, i) => (
-              <Motion.div
-                key={i}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: i * 0.1 }}
-                className="group flex flex-col items-start gap-8 rounded-[2.5rem] border border-gray-100 bg-white p-10 transition-all hover:shadow-2xl md:flex-row"
-              >
-                <div className="shrink-0 rounded-2xl bg-gray-50 p-5 text-[#F99D1C] transition-all duration-500 group-hover:bg-[#F99D1C] group-hover:text-white">
-                  {benefit.icon}
-                </div>
-                <div className="space-y-3">
-                  <h3 className="display-font text-2xl font-bold text-[#001A3D]">
-                    {benefit.title}
-                  </h3>
-                  <p className="leading-relaxed font-medium text-gray-500">{benefit.desc}</p>
-                </div>
-              </Motion.div>
-            ))}
+            {/* Right Side Cards (2x2 Grid) */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+              {benefits.map((benefit, i) => (
+                <Motion.div
+                  key={i}
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: i * 0.05 }}
+                  className="group flex flex-col items-start gap-5 rounded-[1.5rem] border border-white/20 bg-white/60 backdrop-blur-md p-8 shadow-lg shadow-gray-100/50 transition-all duration-500 hover:-translate-y-1.5 hover:shadow-2xl hover:bg-white hover:border-[#F99D1C]/20"
+                >
+                  <div className="rounded-xl bg-gray-50 p-4 text-[#F99D1C] transition-all duration-300 group-hover:bg-[#F99D1C] group-hover:text-white">
+                    {benefit.icon}
+                  </div>
+                  <div className="space-y-2">
+                    <h3 className="display-font text-lg font-bold text-[#001A3D] group-hover:text-[#F99D1C] transition-colors duration-300">
+                      {benefit.title}
+                    </h3>
+                    <p className="text-sm leading-relaxed font-medium text-gray-500">{benefit.desc}</p>
+                  </div>
+                </Motion.div>
+              ))}
+            </div>
           </div>
         </div>
       </section>
 
-      {/* Workplace Exploration Section */}
-      <section className="overflow-hidden bg-white py-24">
-        <div className="mx-auto mb-12 max-w-[1280px] px-6 lg:px-20 flex flex-col md:flex-row md:items-end justify-between gap-6">
-          <div className="space-y-4">
-            <span className="text-xs font-bold tracking-widest text-[#F99D1C] uppercase">
-              Our Ecosystem
-            </span>
-            <h2 className="display-font text-4xl font-semibold tracking-tight text-[#001A3D] md:text-5xl">
-              While There's Still A Lot To <br />{" "}
+      {/* Workplace Exploration Section - Heading above, pure visual carousel below */}
+      <section className="bg-white pt-20 pb-16 md:pt-28 md:pb-20">
+        {/* Top Content Block */}
+        <div className="mx-auto max-w-[1280px] px-6 lg:px-20 mb-10 md:mb-14">
+          <Motion.div
+            initial={{ opacity: 0, y: 24 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+            className="space-y-4"
+          >
+            <div className="flex items-center gap-3">
+              <span className="w-8 h-[1.5px] bg-[#F99D1C]"></span>
+              <span className="text-[10px] font-bold tracking-widest text-[#F99D1C] uppercase">
+                Our Ecosystem
+              </span>
+            </div>
+            <h2 className="display-font text-3xl md:text-4xl lg:text-5xl font-semibold tracking-tight text-[#001A3D] leading-tight max-w-2xl">
+              While There's Still A Lot To{" "}
               <span className="text-[#F99D1C]">Explore In Our Workplace</span>
             </h2>
-          </div>
-          {/* Slider Navigation Buttons */}
-          <div className="flex items-center gap-3">
-            <button 
-              onClick={() => workplaceSliderRef.current?.slickPrev()}
-              className="flex h-12 w-12 items-center justify-center rounded-full border border-gray-200 bg-white text-[#001A3D] shadow-sm transition-all duration-300 hover:bg-[#f5a623] hover:text-white hover:border-[#f5a623]"
-              aria-label="Previous slide"
-            >
-              <ChevronLeft size={20} />
-            </button>
-            <button 
-              onClick={() => workplaceSliderRef.current?.slickNext()}
-              className="flex h-12 w-12 items-center justify-center rounded-full border border-gray-200 bg-white text-[#001A3D] shadow-sm transition-all duration-300 hover:bg-[#f5a623] hover:text-white hover:border-[#f5a623]"
-              aria-label="Next slide"
-            >
-              <ChevronRight size={20} />
-            </button>
-          </div>
+            <p className="text-base md:text-lg font-medium text-gray-500 max-w-xl leading-relaxed">
+              A glimpse into the spaces, labs, and collaborative environments that power Hutech's culture of innovation and excellence.
+            </p>
+          </Motion.div>
         </div>
 
-        <div className="workplace-carousel relative mx-auto w-full max-w-[1440px] overflow-hidden px-4 sm:px-6 lg:px-8">
-          {mounted && (
-            <Slider 
-              ref={workplaceSliderRef} 
-              {...carouselSettings}
+        {/* Carousel Area — pure visuals only */}
+        <div className="mx-auto max-w-[1280px] px-6 lg:px-20">
+          <div
+            ref={ecoContainerRef}
+            onMouseEnter={() => setIsEcoHovered(true)}
+            onMouseLeave={() => setIsEcoHovered(false)}
+            className="w-full h-[420px] md:h-[500px] bg-black flex items-center justify-center relative overflow-hidden select-none rounded-[2.5rem] shadow-[0_20px_50px_rgba(0,0,0,0.35)] border border-white/10"
+          >
+            {/* Slide Backdrop */}
+            <div className="absolute inset-0 w-full h-full overflow-hidden">
+              <AnimatePresence initial={false} custom={ecoDirection} mode="popLayout">
+                <Motion.div
+                  key={ecoActiveIndex}
+                  custom={ecoDirection}
+                  variants={{
+                    enter: (dir: number) => ({
+                      x: dir > 0 ? "100%" : "-100%",
+                      opacity: 0,
+                    }),
+                    center: {
+                      x: 0,
+                      opacity: 1,
+                    },
+                    exit: (dir: number) => ({
+                      x: dir < 0 ? "100%" : "-100%",
+                      opacity: 0,
+                    }),
+                  }}
+                  initial="enter"
+                  animate="center"
+                  exit="exit"
+                  transition={{
+                    x: { type: "spring", stiffness: 300, damping: 30 },
+                    opacity: { duration: 0.25 },
+                  }}
+                  className="absolute inset-0 w-full h-full"
+                >
+                  <ImageWithFallback
+                    src={`${ecosystemSlides[ecoActiveIndex].src}?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=85&w=1920`}
+                    alt={ecosystemSlides[ecoActiveIndex].title}
+                    className="w-full h-full object-cover pointer-events-none select-none"
+                  />
+                  {/* Subtle vignette for depth */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-black/10"></div>
+                </Motion.div>
+              </AnimatePresence>
+            </div>
+
+            {/* Touch Swipe Gesture Overlay */}
+            <Motion.div
+              drag="x"
+              dragConstraints={{ left: 0, right: 0 }}
+              dragElastic={0.2}
+              onDragStart={handleDragStart}
+              onDragEnd={handleDragEnd}
+              className="absolute inset-0 z-10 w-full h-full cursor-grab active:cursor-grabbing bg-transparent"
+            />
+
+            {/* Left Arrow Button */}
+            <button
+              onClick={prevEcoSlide}
+              className="absolute left-6 z-30 flex h-10 w-10 sm:h-12 sm:w-12 items-center justify-center rounded-full border border-white/10 bg-white/10 backdrop-blur-md text-white shadow-xl transition-all duration-300 hover:bg-[#F99D1C] hover:text-[#001025] hover:scale-110 active:scale-95 group"
+              aria-label="Previous slide"
             >
-              {[
-                {
-                  src: "https://images.unsplash.com/photo-1761818645928-47e5dad8ec76",
-                  title: "Modern Collaboration Hubs",
-                  tag: "Innovation",
-                },
-                {
-                  src: "https://images.unsplash.com/photo-1716703373041-bd135107d947",
-                  title: "Inclusive Social Spaces",
-                  tag: "Culture",
-                },
-                {
-                  src: "https://images.unsplash.com/photo-1726365222176-425a1a1b9b98",
-                  title: "Innovation Tech Labs",
-                  tag: "R&D",
-                },
-                {
-                  src: "https://images.unsplash.com/photo-1497366216548-37526070297c",
-                  title: "Strategic Thinking Zones",
-                  tag: "Strategy",
-                },
-                {
-                  src: "https://images.unsplash.com/photo-1519389950473-47ba0277781c",
-                  title: "Cross-Functional Pods",
-                  tag: "Teams",
-                },
-              ].map((slide, i) => (
-                <div key={i} className="w-full min-w-0 outline-none pb-8">
-                  <div className="group relative h-[400px] w-full overflow-hidden rounded-[2.5rem] shadow-2xl md:h-[500px]">
-                    <ImageWithFallback
-                      src={`${slide.src}?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1920`}
-                      alt={slide.title}
-                      className="h-full w-full object-cover transition-transform duration-[1.5s] ease-in-out group-hover:scale-105"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-r from-[#001A3D]/90 via-[#001A3D]/40 to-transparent mix-blend-multiply"></div>
-                    <div className="absolute inset-0 bg-gradient-to-t from-[#001A3D]/95 via-[#001A3D]/20 to-transparent"></div>
-                    
-                    <div className="absolute inset-0 flex flex-col justify-end p-8 md:p-12 lg:p-16">
-                      <div className="max-w-4xl transform transition-all duration-700 translate-y-2 group-hover:translate-y-0 opacity-90 group-hover:opacity-100">
-                        <span className="mb-4 inline-flex items-center rounded-full border border-[#F99D1C]/30 bg-[#F99D1C]/10 px-5 py-2 text-[11px] font-bold tracking-widest text-[#F99D1C] uppercase backdrop-blur-sm">
-                          <span className="mr-2 h-1.5 w-1.5 rounded-full bg-[#F99D1C]"></span>
-                          {slide.tag}
-                        </span>
-                        <h4 className="display-font text-4xl leading-[1.1] font-semibold tracking-tight text-white md:text-5xl lg:text-6xl">
-                          {slide.title}
-                        </h4>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+              <ChevronLeft size={24} className="transition-transform group-hover:-translate-x-0.5" />
+            </button>
+
+            {/* Right Arrow Button */}
+            <button
+              onClick={nextEcoSlide}
+              className="absolute right-6 z-30 flex h-10 w-10 sm:h-12 sm:w-12 items-center justify-center rounded-full border border-white/10 bg-white/10 backdrop-blur-md text-white shadow-xl transition-all duration-300 hover:bg-[#F99D1C] hover:text-[#001025] hover:scale-110 active:scale-95 group"
+              aria-label="Next slide"
+            >
+              <ChevronRight size={24} className="transition-transform group-hover:translate-x-0.5" />
+            </button>
+
+            {/* Minimalist Slide Indicator */}
+            <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-20 flex items-center gap-2">
+              {ecosystemSlides.map((_, idx) => (
+                <button
+                  key={idx}
+                  onClick={() => setEcoActiveIndex(idx)}
+                  className={`h-1.5 rounded-full transition-all duration-500 ${
+                    ecoActiveIndex === idx ? "w-8 bg-[#F99D1C]" : "w-2 bg-white/30 hover:bg-white/50"
+                  }`}
+                  aria-label={`Go to slide ${idx + 1}`}
+                />
               ))}
-            </Slider>
-          )}
+            </div>
+          </div>
         </div>
       </section>
 
