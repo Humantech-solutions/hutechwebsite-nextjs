@@ -90,24 +90,24 @@ export async function fetchGraphQL(query: string, variables = {}) {
     clearTimeout(timeout);
 
     if (!res.ok) {
-      console.error(`[WP] HTTP ${res.status}: ${res.statusText}`);
+      console.warn(`[WP] HTTP ${res.status}: ${res.statusText}`);
       try {
         const text = await res.text();
-        console.error(`[WP] Error Body: ${text}`);
+        console.warn(`[WP] Error Body: ${text}`);
       } catch (e) {}
       return { data: null, errors: [{ message: `HTTP ${res.status}` }] };
     }
 
     const json = await res.json();
     if (json.errors) {
-      console.error("[WP] GraphQL errors:", JSON.stringify(json.errors));
+      console.warn("[WP] GraphQL errors:", JSON.stringify(json.errors));
     }
     return normalizeBlankStrings(json);
   } catch (err: any) {
     if (err.name === "AbortError") {
-      console.error("[WP] Request timed out after 10s");
+      console.warn("[WP] Request timed out after 10s");
     } else {
-      console.error("[WP] Fetch error:", err.message);
+      console.warn("[WP] Fetch error:", err.message);
     }
     return { data: null, errors: [{ message: err.message }] };
   }
@@ -1228,7 +1228,7 @@ const CASE_STUDIES_QUERY = `
             name
           }
         }
-        tags {
+        caseStudyTags {
           nodes {
             name
           }
@@ -1269,7 +1269,7 @@ const CASE_STUDY_BY_SLUG_QUERY = `
           name
         }
       }
-      tags {
+      caseStudyTags {
         nodes {
           name
         }
@@ -1383,7 +1383,7 @@ function transformCaseStudyNode(node: any): CaseStudy {
   const pf = node.caseStudyPostFields || {};
   
   const category = node.caseStudyCategories?.nodes?.[0]?.name ?? "Case Study";
-  const tags = node.tags?.nodes?.map((t: any) => t.name) ?? [];
+  const tags = node.caseStudyTags?.nodes?.map((t: any) => t.name) ?? node.tags?.nodes?.map((t: any) => t.name) ?? [];
   const imageUrl = imgUrl(node.featuredImage) || DEFAULT_CASE_STUDY_IMAGE;
 
   const overviewText = [];
@@ -1662,6 +1662,110 @@ export async function getAboutPageData(): Promise<ReturnType<typeof transformAbo
     return transformAboutPageData(f);
   } catch (err) {
     console.warn("[WP] getAboutPageData() failed:", err);
+    return null;
+  }
+}
+
+// ─── Awards Page ─────────────────────────────────────────────────────────────
+
+const AWARDS_PAGE_QUERY = `
+  query GetAwardsPageData {
+    pages(where: { name: "awards" }) {
+      nodes {
+        awardsPageFields {
+          awardsHeroTagline
+          awardsHeroTitle
+          awardsHeroDescription
+          awardsHeroBgImage { node { sourceUrl } }
+          
+          awardsJourneyTagline
+          awardsJourneyTitle
+          awardsJourneyDescription
+          
+          awardsAward1Title awardsAward1Year awardsAward1Issuer awardsAward1Desc awardsAward1Icon awardsAward1Link
+          awardsAward2Title awardsAward2Year awardsAward2Issuer awardsAward2Desc awardsAward2Icon awardsAward2Link
+          awardsAward3Title awardsAward3Year awardsAward3Issuer awardsAward3Desc awardsAward3Icon awardsAward3Link
+          awardsAward4Title awardsAward4Year awardsAward4Issuer awardsAward4Desc awardsAward4Icon awardsAward4Link
+          awardsAward5Title awardsAward5Year awardsAward5Issuer awardsAward5Desc awardsAward5Icon awardsAward5Link
+          awardsAward6Title awardsAward6Year awardsAward6Issuer awardsAward6Desc awardsAward6Icon awardsAward6Link
+          awardsAward7Title awardsAward7Year awardsAward7Issuer awardsAward7Desc awardsAward7Icon awardsAward7Link
+          awardsAward8Title awardsAward8Year awardsAward8Issuer awardsAward8Desc awardsAward8Icon awardsAward8Link
+          awardsAward9Title awardsAward9Year awardsAward9Issuer awardsAward9Desc awardsAward9Icon awardsAward9Link
+          awardsAward10Title awardsAward10Year awardsAward10Issuer awardsAward10Desc awardsAward10Icon awardsAward10Link
+          awardsAward11Title awardsAward11Year awardsAward11Issuer awardsAward11Desc awardsAward11Icon awardsAward11Link
+          awardsAward12Title awardsAward12Year awardsAward12Issuer awardsAward12Desc awardsAward12Icon awardsAward12Link
+          
+          awardsFeaturedTitle
+          awardsFeaturedDescription
+          awardsFeaturedImage { node { sourceUrl } }
+          
+          awardsStat1Label awardsStat1Value
+          awardsStat2Label awardsStat2Value
+          awardsStat3Label awardsStat3Value
+          awardsStat4Label awardsStat4Value
+          
+          awardsCtaTitle
+          awardsCtaBtn1Text awardsCtaBtn1Url
+          awardsCtaBtn2Text awardsCtaBtn2Url
+        }
+      }
+    }
+  }
+`;
+
+function transformAwardsPageData(f: any) {
+  const awardsList = Array.from({ length: 12 }, (_, i) => {
+    const idx = i + 1;
+    return {
+      title: f[`awardsAward${idx}Title`] || "",
+      year: f[`awardsAward${idx}Year`] || "",
+      issuer: f[`awardsAward${idx}Issuer`] || "",
+      desc: f[`awardsAward${idx}Desc`] || "",
+      iconName: f[`awardsAward${idx}Icon`] || "Trophy",
+      link: f[`awardsAward${idx}Link`] || ""
+    };
+  }).filter(a => a.title);
+
+  const stats = Array.from({ length: 4 }, (_, i) => {
+    const idx = i + 1;
+    return {
+      label: f[`awardsStat${idx}Label`] || "",
+      value: f[`awardsStat${idx}Value`] || ""
+    };
+  }).filter(s => s.value);
+
+  return {
+    heroTagline: f.awardsHeroTagline || "Our Milestones",
+    heroTitle: f.awardsHeroTitle || "Awards & |Recognition.",
+    heroDescription: f.awardsHeroDescription || "",
+    heroBgImage: imgUrl(f.awardsHeroBgImage),
+    
+    journeyTagline: f.awardsJourneyTagline || "Milestones",
+    journeyTitle: f.awardsJourneyTitle || "A Journey of Distinction",
+    journeyDescription: f.awardsJourneyDescription || "",
+    awardsList: awardsList.length > 0 ? awardsList : undefined,
+    
+    featuredTitle: f.awardsFeaturedTitle || "Recognized for |Global Excellence.",
+    featuredDescription: f.awardsFeaturedDescription || "",
+    featuredImage: imgUrl(f.awardsFeaturedImage),
+    stats: stats.length > 0 ? stats : undefined,
+    
+    ctaTitle: f.awardsCtaTitle || "Join our award-winning |journey.",
+    ctaBtn1Text: f.awardsCtaBtn1Text || "Explore Case Studies",
+    ctaBtn1Url: f.awardsCtaBtn1Url || "/resources/case-studies",
+    ctaBtn2Text: f.awardsCtaBtn2Text || "Partner With Us",
+    ctaBtn2Url: f.awardsCtaBtn2Url || "/contact"
+  };
+}
+
+export async function getAwardsPageData(): Promise<ReturnType<typeof transformAwardsPageData> | null> {
+  try {
+    const raw = await fetchGraphQL(AWARDS_PAGE_QUERY);
+    const f = raw?.data?.pages?.nodes?.[0]?.awardsPageFields;
+    if (!f) return null;
+    return transformAwardsPageData(f);
+  } catch (err) {
+    console.warn("[WP] getAwardsPageData failed:", err);
     return null;
   }
 }
@@ -2564,6 +2668,293 @@ export async function getCareerBySlug(slug: string): Promise<Job | null> {
     };
   } catch (err) {
     console.warn("[WP] getCareerBySlug failed:", err);
+    return null;
+  }
+}
+
+// ==========================================
+// PRESS RELEASE PAGE & POST TYPE
+// ==========================================
+
+const PRESS_RELEASE_PAGE_QUERY = `
+  query GetPressReleasePageData {
+    pages(where: { name: "press-release" }) {
+      nodes {
+        pressReleasePageFields {
+          pressReleaseHeroTagline
+          pressReleaseHeroTitle
+          pressReleaseHeroDescription
+          pressReleaseHeroBgImage {
+            node {
+              mediaItemUrl
+            }
+          }
+        }
+      }
+    }
+  }
+`;
+
+const PRESS_RELEASES_LIST_QUERY = `
+  query GetPressReleases {
+    hutechPressReleases(first: 100) {
+      nodes {
+        title
+        date
+        pressReleaseFields {
+          pressReleaseDate
+          pressReleaseExternalUrl
+        }
+      }
+    }
+  }
+`;
+
+export interface PressReleaseItem {
+  title: string;
+  date: string;
+  externalUrl?: string;
+}
+
+export async function getPressReleasePageData() {
+  try {
+    const raw = await fetchGraphQL(PRESS_RELEASE_PAGE_QUERY);
+    const node = raw?.data?.pages?.nodes?.[0];
+    const f = node?.pressReleasePageFields;
+    if (!f) return null;
+    return {
+      heroTagline: f.pressReleaseHeroTagline || undefined,
+      heroTitle: f.pressReleaseHeroTitle || undefined,
+      heroDescription: f.pressReleaseHeroDescription || undefined,
+      heroBgImage: imgUrl(f.pressReleaseHeroBgImage) || undefined,
+    };
+  } catch (err) {
+    console.warn("[WP] getPressReleasePageData failed:", err);
+    return null;
+  }
+}
+
+export async function getPressReleases(): Promise<PressReleaseItem[]> {
+  try {
+    const raw = await fetchGraphQL(PRESS_RELEASES_LIST_QUERY);
+    const nodes = raw?.data?.hutechPressReleases?.nodes || [];
+    return nodes.map((node: any) => {
+      const f = node.pressReleaseFields || {};
+      
+      const dateVal = f.pressReleaseDate || node.date;
+      let formattedDate = "";
+      try {
+        if (dateVal) {
+          formattedDate = new Date(dateVal).toLocaleDateString('en-US', {
+            month: 'short',
+            day: '2-digit',
+            year: 'numeric'
+          });
+        }
+      } catch (e) {
+        formattedDate = dateVal || "";
+      }
+
+      return {
+        title: node.title,
+        date: formattedDate,
+        externalUrl: f.pressReleaseExternalUrl || undefined,
+      };
+    });
+  } catch (err) {
+    console.warn("[WP] getPressReleases failed:", err);
+    return [];
+  }
+}
+
+// ==========================================
+// NEWS PAGE & POST TYPE
+// ==========================================
+
+const NEWS_PAGE_QUERY = `
+  query GetNewsPageData {
+    pages(where: { name: "news" }) {
+      nodes {
+        newsPageFields {
+          newsHeroTagline
+          newsHeroTitle
+          newsHeroDescription
+          newsHeroBgImage {
+            node {
+              mediaItemUrl
+            }
+          }
+          newsCtaTitle
+          newsCtaDescription
+          newsCtaBtnText
+          newsCtaBtnUrl
+        }
+      }
+    }
+  }
+`;
+
+const NEWS_LIST_QUERY = `
+  query GetNewsItems {
+    hutechNewsItems(first: 100) {
+      nodes {
+        slug
+        title
+        date
+        content(format: RENDERED)
+        featuredImage {
+          node {
+            mediaItemUrl
+          }
+        }
+        newsCategories {
+          nodes {
+            name
+          }
+        }
+        newsTags {
+          nodes {
+            name
+          }
+        }
+        newsFields {
+          newsDate
+          newsAuthor
+          newsRole
+        }
+      }
+    }
+  }
+`;
+
+const NEWS_DETAIL_QUERY = `
+  query GetNewsBySlug($slug: ID!) {
+    hutechNews(id: $slug, idType: SLUG) {
+      slug
+      title
+      date
+      content(format: RENDERED)
+      featuredImage {
+        node {
+          mediaItemUrl
+        }
+      }
+      newsCategories {
+        nodes {
+          name
+        }
+      }
+      newsTags {
+        nodes {
+          name
+        }
+      }
+      newsFields {
+        newsDate
+        newsAuthor
+        newsRole
+      }
+    }
+  }
+`;
+
+export interface NewsItem {
+  id: string;
+  title: string;
+  date: string;
+  category: string;
+  readTime: string;
+  desc?: string;
+  author: string;
+  role: string;
+  image?: string;
+  contentHtml?: string;
+  tags: string[];
+}
+function transformNewsNode(node: any): NewsItem {
+  const f = node.newsFields || {};
+  
+  const dateVal = f.newsDate || node.date;
+  let formattedDate = "";
+  try {
+    if (dateVal) {
+      formattedDate = new Date(dateVal).toLocaleDateString('en-US', {
+        month: 'short',
+        day: '2-digit',
+        year: 'numeric'
+      });
+    }
+  } catch (e) {
+    formattedDate = dateVal || "";
+  }
+
+  const category = node.newsCategories?.nodes?.[0]?.name || node.categories?.nodes?.[0]?.name || "Corporate";
+  const tags = node.newsTags?.nodes?.map((t: any) => t.name) || node.tags?.nodes?.map((t: any) => t.name) || ["News"];
+
+  const rawContent = node.content || "";
+  let desc = "";
+  if (rawContent) {
+    desc = rawContent.replace(/<[^>]*>/g, '').trim().substring(0, 160) + "...";
+  }
+
+  const readTime = estimateReadTime(rawContent);
+
+  return {
+    id: node.slug,
+    title: node.title,
+    date: formattedDate,
+    category,
+    readTime,
+    desc: desc || undefined,
+    author: f.newsAuthor || "Elena Vance",
+    role: f.newsRole || "Corporate Communications",
+    image: imgUrl(node.featuredImage) || undefined,
+    contentHtml: rawContent || undefined,
+    tags: tags.length > 0 ? tags : ["News"],
+  };
+}
+
+export async function getNewsItems(): Promise<NewsItem[]> {
+  try {
+    const raw = await fetchGraphQL(NEWS_LIST_QUERY);
+    const nodes = raw?.data?.hutechNewsItems?.nodes || [];
+    return nodes.map(transformNewsNode);
+  } catch (err) {
+    console.warn("[WP] getNewsItems failed:", err);
+    return [];
+  }
+}
+
+export async function getNewsBySlug(slug: string): Promise<NewsItem | null> {
+  try {
+    const raw = await fetchGraphQL(NEWS_DETAIL_QUERY, { slug });
+    const node = raw?.data?.hutechNews;
+    if (!node) return null;
+    return transformNewsNode(node);
+  } catch (err) {
+    console.warn("[WP] getNewsBySlug failed:", err);
+    return null;
+  }
+}
+
+export async function getNewsPageData() {
+  try {
+    const raw = await fetchGraphQL(NEWS_PAGE_QUERY);
+    const node = raw?.data?.pages?.nodes?.[0];
+    const f = node?.newsPageFields;
+    if (!f) return null;
+    return {
+      heroTagline: f.newsHeroTagline || undefined,
+      heroTitle: f.newsHeroTitle || undefined,
+      heroDescription: f.newsHeroDescription || undefined,
+      heroBgImage: imgUrl(f.newsHeroBgImage) || undefined,
+      ctaTitle: f.newsCtaTitle || undefined,
+      ctaDescription: f.newsCtaDescription || undefined,
+      ctaBtnText: f.newsCtaBtnText || undefined,
+      ctaBtnUrl: f.newsCtaBtnUrl || undefined,
+    };
+  } catch (err) {
+    console.warn("[WP] getNewsPageData failed:", err);
     return null;
   }
 }

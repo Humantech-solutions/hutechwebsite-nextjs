@@ -1,3 +1,4 @@
+import { getNewsBySlug, getNewsItems, getPressReleases } from "@/lib/wordpress";
 import NewsDetailClient from "./NewsDetailClient";
 
 const NEWS_DATA = {
@@ -13,7 +14,12 @@ const NEWS_DATA = {
 };
 
 export async function generateStaticParams() {
-  return Object.keys(NEWS_DATA).map((id) => ({
+  const wpNews = await getNewsItems();
+  const wpSlugs = wpNews.map((item) => item.id);
+  const staticSlugs = Object.keys(NEWS_DATA);
+  const allSlugs = Array.from(new Set([...wpSlugs, ...staticSlugs]));
+
+  return allSlugs.map((id) => ({
     id: id,
   }));
 }
@@ -22,5 +28,10 @@ export default async function NewsDetailPage({ params }: { params: Promise<{ id:
   const resolvedParams = await params;
   const id = resolvedParams.id;
 
-  return <NewsDetailClient id={id} />;
+  const [wpNews, latestReleases] = await Promise.all([
+    getNewsBySlug(id),
+    getPressReleases()
+  ]);
+
+  return <NewsDetailClient news={wpNews || undefined} id={id} latestReleases={latestReleases} />;
 }
