@@ -4,6 +4,9 @@ import { motion as Motion, AnimatePresence } from "framer-motion";
 import { Breadcrumbs } from "@/components/Breadcrumbs";
 import {
   Heart,
+  HeartPulse,
+  BookOpen,
+  Coffee,
   Users,
   Star,
   Award,
@@ -197,6 +200,7 @@ export default function LifeAtHutech() {
   ];
 
   const benefits = [
+  const benefits = [
     {
       icon: <Heart className="h-8 w-8" />,
       title: "Health & Wellness",
@@ -357,6 +361,7 @@ export default function LifeAtHutech() {
         )}
       </section>
 
+      {/* Benefits Section */}
       {/* Benefits Section */}
       <section className="relative overflow-hidden border-y border-gray-100 bg-gray-50 py-24">
         {/* Decorative subtle ambient glows to represent premium styling */}

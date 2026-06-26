@@ -1,406 +1,302 @@
 "use client";
 
-import { useState, useRef } from "react";
-import { motion as Motion, useScroll, useTransform } from "framer-motion";
+import { useState } from "react";
+import { motion as Motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import {
   ShoppingCart,
-  Smartphone,
-  TrendingUp,
-  HeadphonesIcon,
-  Zap,
-  Shield,
-  BarChart3,
-  Sparkles,
-  ArrowRight,
-  MoveRight,
-  Check,
-  Rocket,
   Store,
   Package,
   CreditCard,
   Globe,
+  Lock,
+  Workflow,
+  BarChart3,
+  ShieldCheck,
+  Settings,
+  TrendingUp,
+  Sparkles,
+  Smartphone,
+  Network,
+  MessageSquare,
+  FileText,
+  Zap,
+  ChevronRight,
+  MoveRight,
+  ArrowRight,
+  RefreshCw,
+  Cpu,
+  Database,
 } from "lucide-react";
 import { Breadcrumbs } from "@/components/Breadcrumbs";
-import { ImageWithFallback } from "@/components/figma/ImageWithFallback";
 import { Meta } from "@/components/Meta";
 
 import { ServiceDetailContactCTA } from "@/components/ServiceDetailContactCTA";
 
-const BRAND_ORANGE = "#F99D1C";
-const BRAND_BLUE = "#001A3D";
-
-const SHOPIFY_SERVICES = [
+const ECOMMERCE_SERVICES = [
   {
-    icon: Package,
-    title: "Custom Theme Development",
+    icon: ShoppingCart,
+    title: "Headless Commerce Architecture",
     description:
-      "Bespoke Shopify themes built from scratch, optimized for performance and conversions.",
-    functions: [
-      "Mobile-first responsive design",
-      "Advanced product filtering",
-      "One-click checkout optimization",
-      "Custom animations and interactions",
-      "Brand-aligned visual design",
-    ],
+      "Navigate your journey to headless commerce with confidence. We decouple your frontend (Next.js) from your backend platform—including Shopify or commercetools—to deliver lightning-fast page speeds.",
   },
   {
     icon: Store,
     title: "Shopify Plus Solutions",
-    description: "Enterprise-grade implementations with advanced automation and integrations.",
-    functions: [
-      "Multi-store management",
-      "Advanced B2B features",
-      "Custom app development",
-      "Wholesale channel setup",
-      "Enterprise-level customization",
-    ],
+    description:
+      "Maximize flexibility and avoid vendor limitations. We design and manage complex enterprise setups, B2B wholesale channels, and custom app integrations, ensuring your workloads are optimized for high sales volumes.",
+  },
+  {
+    icon: Cpu,
+    title: "Custom Theme Development",
+    description:
+      "Build for the future of digital retail. We leverage responsive styling, conversion-optimized grids, and custom checkout components to create highly scalable, custom-coded ecommerce experiences.",
   },
   {
     icon: Zap,
-    title: "Performance Optimization",
+    title: "Magento & Adobe Commerce",
     description:
-      "Speed optimization and conversion rate improvements that drive measurable results.",
-    functions: [
-      "Core Web Vitals optimization",
-      "A/B testing implementation",
-      "Analytics & tracking setup",
-      "Page speed enhancement",
-      "Conversion funnel optimization",
-    ],
+      "Stop losing customers to slow load times. Our certified experts design, upgrade, and optimize complex multi-vendor Magento platforms, ensuring your catalog runs efficiently under heavy traffic.",
+  },
+  {
+    icon: RefreshCw,
+    title: "WooCommerce Implementation",
+    description:
+      "Don't let rigid systems limit your store design. We transform standard WooCommerce setups into highly customizable, content-rich commerce sites integrated with custom plugins.",
+  },
+  {
+    icon: Network,
+    title: "Omnichannel Integrations",
+    description:
+      "Focus on your sales while we handle the data pipelines. We provide automated integrations bridging your store with Amazon, eBay, social channels, and third-party logistics (3PL) providers.",
   },
 ];
 
-const PLATFORMS = [
+const ESSENTIAL_SOLUTIONS = [
   {
-    icon: ShoppingCart,
-    title: "Shopify",
+    icon: Lock,
+    title: "Conversion Rate Optimization",
     description:
-      "Leading platform for scalable ecommerce with an extensive app ecosystem and built-in features.",
-    functions: [
-      "Custom theme development",
-      "Shopify Plus enterprise solutions",
-      "App integrations & custom apps",
-      "Migration from other platforms",
-      "Multi-currency & multi-language support",
-    ],
+      "Protect your advertising spend. We implement robust layout modifications, conversion audits, and A/B tested checkout flows to ensure your website visitors convert into buyers.",
   },
   {
-    icon: Package,
-    title: "Magento Commerce",
+    icon: Workflow,
+    title: "Mobile-First Design Flow",
     description:
-      "Enterprise-grade platform for complex B2B and B2C requirements with advanced customization.",
-    functions: [
-      "Custom module development",
-      "Multi-store & multi-vendor setups",
-      "B2B commerce solutions",
-      "Performance optimization",
-      "Advanced catalog management",
-    ],
+      "Accelerate mobile purchase journeys. We optimize your cart buttons, mobile menus, and transaction inputs, allowing customers to buy items on any screen size in seconds.",
   },
   {
-    icon: Store,
-    title: "WooCommerce",
+    icon: BarChart3,
+    title: "Core Web Vitals Excellence",
     description:
-      "Flexible WordPress-based solution perfect for content-rich stores and custom functionality.",
-    functions: [
-      "Custom plugin development",
-      "WordPress theme integration",
-      "Payment gateway setup",
-      "SEO optimization",
-      "Content marketing integration",
-    ],
+      "Unlock the value of fast loading speeds. We optimize image weight, bundle sizes, and browser execution times, ensuring high organic search ranking and immediate response.",
   },
   {
-    icon: Globe,
-    title: "commercetools",
+    icon: ShieldCheck,
+    title: "ERP & Inventory Syncing",
     description:
-      "Headless commerce platform designed for omnichannel experiences and global scalability.",
-    functions: [
-      "Headless architecture setup",
-      "API-first development",
-      "Omnichannel commerce experiences",
-      "Global marketplace solutions",
-      "Microservices integration",
-    ],
+      "Ensure warehouse synchronization never stops. We design automated connections between your ecommerce orders and physical backend ERP systems like SAP or NetSuite.",
   },
-];
-
-const BENEFITS = [
   {
-    icon: Smartphone,
-    title: "Mobile-First Approach",
+    icon: Settings,
+    title: "Global Tax & Multi-Currency",
     description:
-      "Every store we build is optimized for mobile users, ensuring seamless shopping experiences across all devices and higher conversion rates.",
+      "Automate your international operations. We use localized pricing, automated tax engines, and multi-language setups to help you sell across global borders with zero friction.",
   },
   {
     icon: TrendingUp,
-    title: "Conversion Optimization",
+    title: "PCI-DSS Security Compliance",
     description:
-      "We implement proven strategies and A/B tested elements that maximize your sales potential — from product pages to checkout flows.",
-  },
-  {
-    icon: HeadphonesIcon,
-    title: "Ongoing Support",
-    description:
-      "Launch is just the beginning. We provide continuous maintenance, updates, and growth strategies to keep your store ahead of the competition.",
-  },
-  {
-    icon: Shield,
-    title: "Security & Compliance",
-    description:
-      "Bank-grade security protocols and PCI compliance to protect your customers' data and transactions.",
-  },
-  {
-    icon: BarChart3,
-    title: "Data-Driven Insights",
-    description:
-      "Advanced analytics and reporting tools to track performance, understand customer behavior, and make informed decisions.",
-  },
-  {
-    icon: Zap,
-    title: "Lightning-Fast Performance",
-    description:
-      "Optimized for speed with Core Web Vitals excellence, ensuring superior user experience and higher search rankings.",
+      "Deliver absolute transaction peace of mind. We secure checkout scripts, encrypt payment gateways, and configure user permissions to protect customer data under strict retail rules.",
   },
 ];
 
-const PROCESS_STEPS = [
+const INNOVATIONS = [
   {
-    number: "01",
-    title: "Discovery & Strategy",
+    icon: Sparkles,
+    title: "AI Product Recommendations",
     description:
-      "We begin with a comprehensive analysis of your business goals, target audience, and competitive landscape to create a tailored ecommerce strategy.",
+      "Leverage machine learning to suggest personalized upsells, relevant accessories, and bundle packages, ensuring your average order value increases automatically.",
   },
   {
-    number: "02",
-    title: "Platform Selection",
+    icon: Smartphone,
+    title: "One-Click Biometric Checkout",
     description:
-      "Based on your requirements, we recommend the optimal ecommerce platform that aligns with your budget, scalability needs, and technical capabilities.",
+      "Reduce checkout fields to a single action. We integrate Apple Pay and biometric validation into checkout flows to lower cart abandonment and secure data.",
   },
   {
-    number: "03",
-    title: "Design & UX",
+    icon: Globe,
+    title: "AR Product Demonstration",
     description:
-      "Our design team creates conversion-focused user experiences with mobile-first responsive designs that reflect your brand identity.",
+      "Bring products to life in the buyer's home. We build lightweight augmented reality viewers, allowing customers to inspect 3D models of items before purchase.",
   },
   {
-    number: "04",
-    title: "Development & Integration",
+    icon: Database,
+    title: "Predictive Stock Analytics",
     description:
-      "We build your store using best practices, integrating payment gateways, shipping providers, inventory systems, and marketing tools.",
+      "Eliminate inventory blockages. We use predictive analytics to calculate run-rates, automating replenishment purchase orders before catalog items run out.",
   },
   {
-    number: "05",
-    title: "Testing & QA",
+    icon: Network,
+    title: "Web3 Commerce Portals",
     description:
-      "Rigorous testing across devices, browsers, and scenarios ensures a flawless shopping experience before launch.",
+      "Support decentralized assets. We integrate non-custodial crypto wallet payments, token-gated product access, and digital receipt NFTs into standard checkouts.",
   },
   {
-    number: "06",
-    title: "Launch & Optimization",
+    icon: Lock,
+    title: "Voice-Activated Checkout",
     description:
-      "Post-launch, we monitor performance, gather user feedback, and continuously optimize for better conversions and user experience.",
+      "Enable purchases without screens. We sync digital product catalog schemas with household smart speakers, allowing customers to order items via verbal actions.",
   },
 ];
 
-const FEATURES = [
+const WHY_CHOOSE = [
   {
-    icon: CreditCard,
-    title: "Payment Integration",
+    title: "Platform-Agnostic Mastery",
     description:
-      "Seamless integration with major payment gateways and alternative payment methods.",
+      "Our developers are certified across Shopify Plus, Magento, and WooCommerce, ensuring you receive the absolute best technical fit for your business.",
   },
   {
-    icon: Package,
-    title: "Inventory Management",
-    description: "Real-time inventory tracking across multiple channels and warehouses.",
-  },
-  {
-    icon: ShoppingCart,
-    title: "Advanced Cart Features",
-    description: "Smart cart recovery, upselling, cross-selling, and personalized recommendations.",
-  },
-  {
-    icon: BarChart3,
-    title: "Analytics Dashboard",
+    title: "Conversion-Focused Styling",
     description:
-      "Comprehensive reporting on sales, traffic, conversion rates, and customer behavior.",
+      "We design store layouts with a deep focus on customer psychology, transaction speed, and clear checkout flows to maximize your bottom line.",
+  },
+  {
+    title: "Reliable System Integrations",
+    description:
+      "We possess extensive experience connecting digital stores with enterprise ERPs, warehouse managers (WMS), and marketing suites with zero downtime.",
+  },
+  {
+    title: "Ongoing Performance Auditing",
+    description:
+      "We don't just launch your store; we guarantee its optimization. We continuously audit pages, test elements, and enhance speed to keep your sales rising.",
   },
 ];
 
-function ServiceCard({ service, index }: { service: any; index: number }) {
-  const [isHovered, setIsHovered] = useState(false);
-  const Icon = service.icon;
+const FAQS = [
+  {
+    question: "Which ecommerce platform is best for my business?",
+    answer:
+      "The ideal platform depends on catalog complexity, transaction volume, and B2B requirements. Shopify Plus is excellent for fast growth and low maintenance, Magento suits complex custom catalogs, and headless architectures offer the fastest speeds.",
+  },
+  {
+    question: "How do you improve my ecommerce store's loading speed?",
+    answer:
+      "We audit Core Web Vitals, implement next-gen image compression, configure global Content Delivery Networks (CDNs), optimize script load orders, and clean up unused third-party application tags.",
+  },
+  {
+    question: "Can you migrate our store from Magento to Shopify without data loss?",
+    answer:
+      "Yes. We use custom database migration scripts to securely transfer product variants, customer history, order logs, and catalog redirects, ensuring zero impact on live sales.",
+  },
+  {
+    question: "Do you develop custom Shopify applications?",
+    answer:
+      "Yes, we build custom private or public Shopify applications using Node.js and React to handle unique shipping rules, product bundles, and custom inventory integrations.",
+  },
+  {
+    question: "What is headless commerce and is it worth the investment?",
+    answer:
+      "Headless separates your front-end interface (built with Next.js) from the back-end commerce database. It is worth it for high-volume enterprise stores that require extreme loading speed, custom front-end layouts, and global scaling.",
+  },
+];
 
+const BLOG_POSTS = [
+  {
+    id: "1",
+    title: "Headless Commerce: Why Enterprise Brands Are Making the Switch",
+    description:
+      "Decoupled storefront layouts deliver lightning-fast speed, improved SEO performance, and complete design freedom...",
+    image:
+      "https://images.unsplash.com/photo-1763872038252-e6c4e0a11067?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080",
+  },
+  {
+    id: "2",
+    title: "Maximizing Checkout Conversion: 5 A/B Testing Wins for 2026",
+    description:
+      "Discover how simple changes to shipping calculations and checkout input fields can lift sales conversion rates by 15%...",
+    image:
+      "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080",
+  },
+  {
+    id: "3",
+    title: "Automating Omnichannel Retail: Syncing Stock Across Platforms",
+    description:
+      "Unified cloud inventory databases are helping modern physical and digital retailers manage worldwide sales channels without lag...",
+    image:
+      "https://images.unsplash.com/photo-1686061593213-98dad7c599b9?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080",
+  },
+];
+
+const ECOMMERCE_STACK = [
+  { primary: "SHOPIFY", secondary: "COMMERCE ENGINE" },
+  { primary: "MAGENTO", secondary: "ENTERPRISE B2B" },
+  { primary: "WOOCOMMERCE", secondary: "DIGITAL STORES" },
+  { primary: "REACT", secondary: "FRONTEND SHELL" },
+  { primary: "NEXT.JS", secondary: "HEADLESS SHELL" },
+  { primary: "NODE.JS", secondary: "CUSTOM APIs" },
+  { primary: "STRIPE", secondary: "PAYMENT GATEWAY" },
+  { primary: "MONGODB", secondary: "PRODUCT STORAGE" },
+  { primary: "APACHE KAFKA", secondary: "STOCK UPDATES" },
+  { primary: "DOCKER", secondary: "VIRTUALIZATION" },
+  { primary: "KUBERNETES", secondary: "ORCHESTRATION" },
+  { primary: "PYTHON", secondary: "STOCK SCRIPTS" },
+];
+
+function FAQItem({ question, answer }: { question: string; answer: string }) {
+  const [isOpen, setIsOpen] = useState(false);
   return (
-    <Motion.div
-      initial={{ opacity: 0, y: 50 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-100px" }}
-      transition={{ duration: 0.7, delay: index * 0.15, ease: [0.22, 1, 0.36, 1] }}
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
-      className="group relative"
-    >
-      <div className="relative h-full overflow-hidden border border-gray-100 bg-white transition-all duration-700">
-        <Motion.div
-          className="absolute inset-0 opacity-0 transition-opacity duration-700 group-hover:opacity-100"
-          style={{
-            background: `linear-gradient(135deg, ${BRAND_BLUE} 0%, ${BRAND_BLUE}ee 100%)`,
-          }}
-        />
-
-        <Motion.div
-          className="absolute top-0 right-0 h-0 w-0 border-t-[80px] border-r-[80px] border-transparent transition-all duration-700"
-          style={{
-            borderTopColor: isHovered ? BRAND_ORANGE : "transparent",
-            borderRightColor: isHovered ? BRAND_ORANGE : "transparent",
-          }}
-        />
-
-        <div className="relative z-10 flex h-full flex-col p-10">
-          <Motion.div
-            className="relative mb-8 flex h-20 w-20 items-center justify-center"
-            animate={{
-              scale: isHovered ? 1.1 : 1,
-            }}
-            transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-          >
-            <Motion.div
-              className="absolute inset-0 rounded-full"
-              style={{
-                backgroundColor: isHovered ? BRAND_ORANGE : `${BRAND_ORANGE}15`,
-              }}
-              animate={{
-                rotate: isHovered ? 180 : 0,
-              }}
-              transition={{ duration: 0.7 }}
-            />
-            <Icon
-              size={36}
-              className="relative z-10"
-              style={{
-                color: isHovered ? BRAND_BLUE : BRAND_ORANGE,
-                transition: "color 0.5s ease",
-              }}
-            />
-          </Motion.div>
-
-          <h3
-            className="mb-4 text-2xl leading-tight font-bold transition-colors duration-500"
-            style={{ color: isHovered ? "white" : BRAND_BLUE }}
-          >
-            {service.title}
-          </h3>
-
-          <p
-            className="mb-8 text-base leading-relaxed transition-colors duration-500"
-            style={{ color: isHovered ? "rgba(255,255,255,0.92)" : "#555" }}
-          >
-            {service.description}
-          </p>
-
-          <div className="mt-auto">
-            <div className="mb-4 flex items-center gap-2">
-              <div
-                className="h-0.5 w-8 transition-colors duration-500"
-                style={{ backgroundColor: isHovered ? BRAND_ORANGE : BRAND_BLUE }}
-              />
-              <h4
-                className="text-xs font-bold tracking-wider transition-colors duration-500"
-                style={{ color: isHovered ? BRAND_ORANGE : BRAND_BLUE }}
-              >
-                KEY CAPABILITIES
-              </h4>
-            </div>
-            <ul className="space-y-3">
-              {service.functions &&
-                service.functions.map((func: string, idx: number) => (
-                  <Motion.li
-                    key={idx}
-                    initial={{ opacity: 0, x: -10 }}
-                    whileInView={{ opacity: 1, x: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ delay: isHovered ? idx * 0.05 : 0, duration: 0.3 }}
-                    className="flex items-start gap-3 text-sm"
-                    style={{ color: isHovered ? "rgba(255,255,255,0.88)" : "#666" }}
-                  >
-                    <Check
-                      size={18}
-                      className="mt-0.5 flex-shrink-0"
-                      style={{ color: isHovered ? BRAND_ORANGE : BRAND_BLUE }}
-                    />
-                    <span className="leading-relaxed">{func}</span>
-                  </Motion.li>
-                ))}
-            </ul>
-          </div>
-
-          <Motion.div
-            className="mt-6 border-t pt-6 transition-all duration-500"
-            style={{
-              borderColor: isHovered ? "rgba(255,255,255,0.2)" : "transparent",
-            }}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: isHovered ? 1 : 0 }}
-          >
-            <div
-              className="flex cursor-pointer items-center gap-2 text-sm font-semibold"
-              style={{ color: BRAND_ORANGE }}
-            >
-              Learn More
-              <ArrowRight size={16} className="transition-transform group-hover:translate-x-1" />
-            </div>
-          </Motion.div>
+    <div className="border-b border-gray-100 last:border-0">
+      <button
+        onClick={() => setIsOpen(!isOpen)}
+        className="group flex w-full items-center justify-between py-6 text-left"
+      >
+        <span
+          className={`text-lg font-bold transition-colors md:text-xl ${isOpen ? "text-[#0171c1]" : "text-[#001A3D] group-hover:text-[#0171c1]"}`}
+        >
+          {question}
+        </span>
+        <div
+          className={`flex h-8 w-8 items-center justify-center transition-all ${isOpen ? "text-[#0171c1]" : "text-gray-400"}`}
+        >
+          <ChevronRight
+            className={`transition-transform duration-300 ${isOpen ? "rotate-90" : ""}`}
+          />
         </div>
-      </div>
-    </Motion.div>
+      </button>
+      <AnimatePresence>
+        {isOpen && (
+          <Motion.div
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: "auto", opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: 0.3 }}
+            className="overflow-hidden"
+          >
+            <p className="pb-8 text-lg leading-relaxed text-gray-500">{answer}</p>
+          </Motion.div>
+        )}
+      </AnimatePresence>
+    </div>
   );
 }
 
-const ECOMMERCE_STACK = [
-  { primary: "SHOPIFY", secondary: "ECOMMERCE PLATFORM" },
-  { primary: "MAGENTO", secondary: "ONLINE STORES" },
-  { primary: "WOOCOMMERCE", secondary: "DIGITAL COMMERCE" },
-  { primary: "REACT", secondary: "FRONTEND" },
-  { primary: "NODE.JS", secondary: "BACKEND" },
-  { primary: "STRIPE", secondary: "PAYMENTS" },
-  { primary: "AWS", secondary: "CLOUD PLATFORM" },
-  { primary: "MONGODB", secondary: "DATA STORAGE" },
-  { primary: "FIREBASE", secondary: "AUTHENTICATION" },
-  { primary: "DOCKER", secondary: "CONTAINERS" },
-  { primary: "KUBERNETES", secondary: "ORCHESTRATION" },
-  { primary: "PYTHON", secondary: "AUTOMATION" },
-];
-
 export default function EcommerceDevelopment() {
-  const heroRef = useRef(null);
-  const { scrollYProgress } = useScroll({
-    target: heroRef,
-    offset: ["start start", "end start"],
-  });
-
-  const heroOpacity = useTransform(scrollYProgress, [0, 0.5], [1, 0]);
-  const heroScale = useTransform(scrollYProgress, [0, 0.5], [1, 0.95]);
-
   return (
-    <div className="min-h-screen bg-white">
+    <div className="flex flex-col overflow-hidden bg-white">
       <Meta
-        title="Ecommerce Development | Hutech Solutions"
-        description="Transform your business with cutting-edge ecommerce platforms. Expert Shopify development, custom themes, Magento solutions, and conversion optimization."
+        title="Ecommerce Development Services | Hutech Solutions"
+        description="Transform your business with Hutech's Ecommerce Development services. Specialized in Shopify Plus, Magento, WooCommerce, and headless commerce."
       />
+
       <Breadcrumbs variant="light" />
 
       {/* Hero Section */}
-      <section
-        ref={heroRef}
-        className="relative flex h-[450px] items-center overflow-hidden bg-[#001A3D] text-white"
-      >
+      <section className="relative flex h-[450px] items-center overflow-hidden bg-[#001A3D] text-white">
         <div className="absolute inset-0 z-0">
           <ImageWithFallback
             src="https://images.unsplash.com/photo-1763872038252-e6c4e0a11067?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1920"
-            alt="Ecommerce Development"
+            alt="Ecommerce Store Architecture"
             className="h-full w-full scale-105 object-cover opacity-20"
           />
           <div className="absolute inset-0 bg-gradient-to-r from-[#001A3D] via-[#001A3D]/80 to-transparent"></div>
@@ -416,16 +312,16 @@ export default function EcommerceDevelopment() {
             <div className="mb-6 flex items-center gap-3">
               <span className="h-[1px] w-12 bg-[#F99D1C]"></span>
               <span className="text-[10px] font-bold tracking-[0.3em] text-[#F99D1C] uppercase">
-                Ecommerce Excellence
+                Commerce Excellence
               </span>
             </div>
             <h1 className="display-font mb-8 text-3xl leading-[1.1] font-semibold tracking-tight text-white sm:text-4xl md:text-5xl md:leading-[1.05] lg:text-6xl">
-              Digital Commerce. <br />
-              <span className="text-[#F99D1C]">Conversion Optimized.</span>
+              Your Store Vision. <br />
+              <span className="text-[#F99D1C]">Commerce Revolution.</span>
             </h1>
             <p className="max-w-2xl text-lg leading-relaxed font-medium text-gray-300 md:text-xl">
-              Transform your business with cutting-edge ecommerce platforms. From Shopify to
-              enterprise solutions, we build scalable online stores that drive measurable results.
+              We craft intelligent customer experiences and future-ready ecommerce solutions for
+              global enterprise brands.
             </p>
             <Link href="/contact" className="btn-banner-cta mt-6 group">
               Consult Us
@@ -435,171 +331,252 @@ export default function EcommerceDevelopment() {
         </div>
       </section>
 
-      {/* Introduction Section */}
-      <section className="bg-gradient-to-b from-white to-gray-50 py-20">
-        <div className="mx-auto max-w-[1280px] px-8">
-          <Motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8 }}
-            className="mx-auto max-w-5xl text-center"
-          >
-            <div
-              className="mb-6 inline-block rounded-full px-4 py-2"
-              style={{ backgroundColor: `${BRAND_ORANGE}15`, color: BRAND_ORANGE }}
-            >
-              <span className="text-sm font-bold tracking-wide">
-                Leading Shopify Development Agency
-              </span>
+      {/* Intro Section */}
+      <section className="bg-white py-24">
+        <div className="mx-auto max-w-[1280px] px-6 lg:px-20">
+          <div className="grid grid-cols-1 items-center gap-20 lg:grid-cols-2">
+            <div className="space-y-10">
+              <div className="space-y-6">
+                <h2 className="display-font text-3xl leading-tight font-semibold text-[#001A3D] md:text-5xl">
+                  Empowering Brands with Smart, Scalable Ecommerce Solutions
+                </h2>
+                <div className="h-1 w-20 bg-[#0171c1]"></div>
+              </div>
+              <div className="space-y-6">
+                <p className="text-lg leading-relaxed font-medium text-gray-500">
+                  At Hutech Solutions, we bring deep expertise in implementing, supporting, and
+                  managing integrated ecommerce platforms. Our end-to-end solutions include headless
+                  architecture setup, custom theme design, payment integration, and seamless inventory management.
+                </p>
+                <p className="text-lg leading-relaxed font-medium text-gray-500">
+                  We ensure our clients can operate with agility, high speed, and reliability, enabling
+                  them to expand operations and integrate fresh retail features to meet specific commercial and market needs.
+                </p>
+              </div>
+              <div className="flex flex-wrap gap-8 pt-4">
+                <div className="space-y-1">
+                  <p className="display-font text-3xl font-bold text-[#001A3D]">400+</p>
+                  <p className="text-[10px] font-bold tracking-widest text-[#0171c1] uppercase">
+                    Stores Built
+                  </p>
+                </div>
+                <div className="hidden h-12 w-[1px] bg-gray-200 md:block"></div>
+                <div className="space-y-1">
+                  <p className="display-font text-3xl font-bold text-[#001A3D]">200%</p>
+                  <p className="text-[10px] font-bold tracking-widest text-[#0171c1] uppercase">
+                    Avg Revenue Lift
+                  </p>
+                </div>
+                <div className="hidden h-12 w-[1px] bg-gray-200 md:block"></div>
+                <div className="space-y-1">
+                  <p className="display-font text-3xl font-bold text-[#001A3D]">99.99%</p>
+                  <p className="text-[10px] font-bold tracking-widest text-[#0171c1] uppercase">
+                    Store Uptime
+                  </p>
+                </div>
+              </div>
             </div>
-            <h2 className="display-font mb-6 text-4xl leading-tight font-semibold tracking-tight text-[#001A3D]">
-              As Shopify Experts, We've Built High-Performance Ecommerce Stores
-            </h2>
-            <p className="text-lg leading-relaxed text-gray-700">
-              From startups to enterprise brands generating millions in revenue, we deliver
-              cutting-edge ecommerce solutions that combine beautiful design with powerful
-              functionality.
-            </p>
-          </Motion.div>
+            <div className="relative">
+              <div className="aspect-square overflow-hidden rounded-sm shadow-2xl">
+                <ImageWithFallback
+                  src="https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080"
+                  alt="Ecommerce Operations Center"
+                  className="h-full w-full object-cover"
+                />
+              </div>
+              <div className="absolute -bottom-10 -left-10 hidden max-w-xs space-y-4 bg-[#0171c1] p-10 text-white shadow-2xl md:block">
+                <ShoppingCart size={32} strokeWidth={1.5} />
+                <h3 className="display-font text-xl font-bold">Digital Commerce</h3>
+                <p className="text-sm leading-relaxed font-medium opacity-80">
+                  Integrating advanced AI search, customized checkout modules, and headless backend engines across enterprise platforms to enhance purchase rates.
+                </p>
+              </div>
+            </div>
+          </div>
         </div>
       </section>
 
-      {/* Shopify Services Section */}
-      <section id="shopify-section" className="relative overflow-hidden bg-white py-20">
-        <div className="pointer-events-none absolute top-0 right-0 h-full w-1/3 opacity-5">
-          <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
-            <defs>
-              <pattern
-                id="shopify-pattern"
-                x="0"
-                y="0"
-                width="100"
-                height="100"
-                patternUnits="userSpaceOnUse"
-              >
-                <circle cx="50" cy="50" r="30" fill="none" stroke={BRAND_BLUE} strokeWidth="1" />
-                <circle cx="50" cy="50" r="15" fill="none" stroke={BRAND_ORANGE} strokeWidth="1" />
-              </pattern>
-            </defs>
-            <rect width="100%" height="100%" fill="url(#shopify-pattern)" />
-          </svg>
-        </div>
-
-        <div className="relative z-10 mx-auto max-w-[1280px] px-8">
-          <Motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8 }}
-            className="mb-20 text-center"
-          >
-            <Motion.div
-              initial={{ opacity: 0, scale: 0.9 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              viewport={{ once: true }}
-              className="mb-6 inline-block"
-            >
-              <div
-                className="inline-flex items-center gap-2 rounded-full px-5 py-2"
-                style={{ backgroundColor: `${BRAND_BLUE}10` }}
-              >
-                <ShoppingCart size={18} style={{ color: BRAND_ORANGE }} />
-                <span className="text-sm font-bold tracking-wide text-[#001A3D]">
-                  Shopify Expertise
-                </span>
-              </div>
-            </Motion.div>
-
-            <h2 className="display-font mx-auto mb-6 max-w-4xl text-5xl leading-tight font-semibold tracking-tight text-[#001A3D] md:text-6xl">
-              Ready to Scale Your Shopify Store?
+      {/* Services Section */}
+      <section className="bg-gray-50 py-24">
+        <div className="mx-auto max-w-[1280px] px-6 lg:px-20">
+          <div className="mb-20 space-y-6 text-center">
+            <h2 className="display-font text-3xl font-semibold text-[#001A3D] md:text-5xl">
+              Our Ecommerce Development Services
             </h2>
-
-            <Motion.div
-              className="mx-auto h-1.5 w-32 rounded-full"
-              style={{ backgroundColor: BRAND_ORANGE }}
-              initial={{ scaleX: 0 }}
-              whileInView={{ scaleX: 1 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.8, delay: 0.3 }}
-            />
-
-            <p className="mx-auto mt-8 max-w-3xl text-xl leading-relaxed text-gray-600">
-              Trusted by leading brands and partners for expert Shopify development. Get a free
-              consultation and project estimate today.
+            <p className="mx-auto max-w-4xl text-lg leading-relaxed font-medium text-gray-500">
+              At Hutech Solutions, we specialize in delivering cutting-edge software technology
+              solutions tailored for the global ecommerce retail landscape.
             </p>
-          </Motion.div>
+          </div>
 
           <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
-            {SHOPIFY_SERVICES.map((service, index) => (
-              <ServiceCard key={index} service={service} index={index} />
-            ))}
+            {ECOMMERCE_SERVICES.map((service, i) => {
+              const Icon = service.icon;
+              return (
+                <Motion.div
+                  key={i}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: i * 0.1 }}
+                  className="group relative flex flex-col space-y-6 overflow-hidden border border-gray-100 bg-white p-12 shadow-sm transition-all duration-500 hover:shadow-2xl"
+                >
+                  <div className="absolute top-0 right-0 p-8 opacity-5 transition-opacity group-hover:opacity-10">
+                    <Icon size={80} strokeWidth={1} />
+                  </div>
+                  <div className="flex h-16 w-16 items-center justify-center rounded-sm bg-gray-50 text-[#0171c1] transition-all duration-500 group-hover:bg-[#0171c1] group-hover:text-white">
+                    <Icon size={32} strokeWidth={1.5} />
+                  </div>
+                  <h3 className="display-font text-xl leading-tight font-bold text-[#001A3D]">
+                    {service.title}
+                  </h3>
+                  <p className="text-sm leading-relaxed font-medium text-gray-500">
+                    {service.description}
+                  </p>
+                  <div className="mt-auto pt-4">
+                    <Link
+                      href="/contact"
+                      className="inline-flex items-center gap-2 text-[10px] font-bold tracking-widest text-[#0171c1] uppercase transition-all group-hover:gap-4"
+                    >
+                      Learn More <MoveRight size={14} />
+                    </Link>
+                  </div>
+                </Motion.div>
+              );
+            })}
           </div>
         </div>
       </section>
 
-      {/* Platform Expertise Section */}
-      <section className="relative overflow-hidden bg-gradient-to-b from-gray-50 to-white py-20">
-        <div className="relative z-10 mx-auto max-w-[1280px] px-8">
-          <Motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8 }}
-            className="mb-20 text-center"
-          >
-            <Motion.div
-              initial={{ opacity: 0, scale: 0.9 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              viewport={{ once: true }}
-              className="mb-6 inline-block"
-            >
-              <div
-                className="inline-flex items-center gap-2 rounded-full px-5 py-2"
-                style={{ backgroundColor: `${BRAND_BLUE}10` }}
-              >
-                <Rocket size={18} style={{ color: BRAND_ORANGE }} />
-                <span className="text-sm font-bold tracking-wide text-[#001A3D]">
-                  Multi-Platform Mastery
-                </span>
-              </div>
-            </Motion.div>
-
-            <h2 className="display-font mx-auto mb-6 max-w-4xl text-5xl leading-tight font-semibold tracking-tight text-[#001A3D] md:text-6xl">
-              Multi-Platform Ecommerce Expertise
+      {/* Essential Solutions Section */}
+      <section className="overflow-hidden bg-[#001A3D] py-24 text-white">
+        <div className="mx-auto max-w-[1280px] px-6 lg:px-20">
+          <div className="mb-20 space-y-6 text-center">
+            <h2 className="display-font mx-auto max-w-4xl text-3xl leading-tight font-semibold md:text-5xl">
+              What Makes Custom Ecommerce Solutions Essential for Your Business?
             </h2>
-
-            <Motion.div
-              className="mx-auto h-1.5 w-32 rounded-full"
-              style={{ backgroundColor: BRAND_ORANGE }}
-              initial={{ scaleX: 0 }}
-              whileInView={{ scaleX: 1 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.8, delay: 0.3 }}
-            />
-
-            <p className="mx-auto mt-8 max-w-3xl text-xl leading-relaxed text-gray-600">
-              We specialize in all major ecommerce platforms, delivering tailored solutions that
-              match your business needs and technical requirements.
+            <div className="mx-auto h-1 w-20 bg-[#0171c1]"></div>
+            <p className="mx-auto max-w-3xl text-lg leading-relaxed font-medium text-gray-400">
+              In the modern digital landscape, custom retail architectures are key to staying
+              competitive and ensuring transactional security.
             </p>
-          </Motion.div>
+          </div>
 
-          <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
-            {PLATFORMS.map((platform, index) => (
-              <ServiceCard key={index} service={platform} index={index} />
-            ))}
+          <div className="relative z-10 grid grid-cols-1 gap-12 md:grid-cols-2 lg:grid-cols-3">
+            {ESSENTIAL_SOLUTIONS.map((item, i) => {
+              const Icon = item.icon;
+              return (
+                <Motion.div
+                  key={i}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: i * 0.1 }}
+                  className="group space-y-6 rounded-sm border border-white/5 p-8 transition-colors hover:bg-white/5"
+                >
+                  <div className="flex h-14 w-14 items-center justify-center rounded-sm bg-white/10 text-[#0171c1] transition-transform group-hover:scale-110">
+                    <Icon size={28} strokeWidth={1.5} />
+                  </div>
+                  <div className="space-y-4">
+                    <h3 className="display-font text-xl font-bold tracking-tight">{item.title}</h3>
+                    <p className="text-sm leading-relaxed font-medium text-gray-400">
+                      {item.description}
+                    </p>
+                  </div>
+                </Motion.div>
+              );
+            })}
           </div>
         </div>
       </section>
 
-      {/* Ecommerce Development Technology Stack Section */}
+      {/* Innovations Section */}
+      <section className="bg-white py-24">
+        <div className="mx-auto max-w-[1280px] px-6 lg:px-20">
+          <div className="mb-20 space-y-6 text-center">
+            <h2 className="display-font text-3xl font-semibold text-[#001A3D] md:text-5xl">
+              Which Innovations Can Transform Your Retail Experience?
+            </h2>
+            <p className="mx-auto max-w-3xl text-lg leading-relaxed font-medium text-gray-500">
+              Incorporating advanced ecommerce technologies can significantly enhance your retail capabilities
+              for the digital-first era.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 gap-x-12 gap-y-16 md:grid-cols-2 lg:grid-cols-3">
+            {INNOVATIONS.map((item, i) => {
+              const Icon = item.icon;
+              return (
+                <Motion.div
+                  key={i}
+                  initial={{ opacity: 0, scale: 0.95 }}
+                  whileInView={{ opacity: 1, scale: 1 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: i * 0.1 }}
+                  className="group flex flex-col items-center space-y-6 text-center"
+                >
+                  <div className="text-[#0171c1] transition-transform duration-500 group-hover:scale-110">
+                    <Icon size={56} strokeWidth={1} />
+                  </div>
+                  <div className="space-y-4">
+                    <h3 className="display-font text-xl font-bold tracking-tight text-[#001A3D]">
+                      {item.title}
+                    </h3>
+                    <p className="max-w-sm text-sm leading-relaxed font-medium text-gray-500">
+                      {item.description}
+                    </p>
+                  </div>
+                </Motion.div>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
+      {/* CTA Section */}
+      <section className="overflow-hidden bg-[#F2F2F2] py-24">
+        <div className="mx-auto max-w-[1280px] px-6 lg:px-20">
+          <div className="flex flex-col items-center gap-20 lg:flex-row">
+            <div className="flex-1 space-y-10">
+              <div className="space-y-6">
+                <h2 className="display-font text-3xl leading-[1.2] font-semibold text-[#001A3D] md:text-5xl">
+                  Discover Your Ecommerce Digital Transformation Strategy With Us
+                </h2>
+                <div className="h-1 w-20 bg-[#0171c1]"></div>
+                <p className="text-lg leading-relaxed font-medium text-gray-500">
+                  Schedule a consultation with our expert digital commerce team and take the
+                  first step towards a fast, conversion-optimized retail experience.
+                </p>
+              </div>
+              <div>
+                <Link
+                  href="/contact"
+                  className="inline-flex items-center gap-3 rounded-sm bg-[#F99D1C] px-10 py-5 text-[11px] font-bold tracking-wider text-[#001A3D] uppercase shadow-xl transition-all duration-500 hover:bg-[#001A3D] hover:text-white"
+                >
+                  Consult Us Now <ArrowRight size={16} />
+                </Link>
+              </div>
+            </div>
+            <div className="relative flex-1">
+              <div className="relative z-10 aspect-video rounded-sm bg-white p-2 shadow-2xl">
+                <ImageWithFallback
+                  src="https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080"
+                  alt="Ecommerce Sales Analytics"
+                  className="h-full w-full object-cover"
+                />
+              </div>
+              <div className="absolute -top-10 -right-10 -z-10 h-64 w-64 rounded-full bg-[#0171c1]/5 blur-3xl"></div>
+              <div className="absolute -bottom-10 -left-10 -z-10 h-48 w-48 rounded-full bg-[#F99D1C]/10 blur-2xl"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Technology Stack Section */}
       <section className="relative overflow-hidden bg-gradient-to-b from-[#001A3D] via-[#030E21] to-[#020B1E] py-24 md:py-32 text-white">
-        {/* Radial Light Glow behind heading */}
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[300px] bg-blue-500/10 rounded-full blur-3xl pointer-events-none" />
-        
-        {/* Glowing Grid Background Pattern */}
         <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:60px_60px] pointer-events-none" />
-        
+
         <div className="relative z-10 mx-auto max-w-[1280px] px-6 lg:px-20">
           {/* Header */}
           <div className="mb-16 text-center md:mb-20">
@@ -608,13 +585,13 @@ export default function EcommerceDevelopment() {
               TECHNOLOGY STACK
               <span className="h-[1px] w-8 bg-gradient-to-l from-transparent to-[#F99D1C]" />
             </div>
-            
+
             <h2 className="mt-4 display-font text-3xl font-bold tracking-wider text-white sm:text-4xl md:text-5xl uppercase">
               MODERN ECOMMERCE DEVELOPMENT STACK
             </h2>
-            
+
             <div className="mx-auto mt-4 h-[3px] w-14 bg-[#F99D1C]" />
-            
+
             <p className="mx-auto mt-6 max-w-2xl text-sm font-medium text-gray-400 md:text-base leading-relaxed">
               Scalable ecommerce technologies powering seamless shopping experiences, secure payments, inventory management, and digital growth
             </p>
@@ -645,70 +622,41 @@ export default function EcommerceDevelopment() {
         </div>
       </section>
 
-      {/* Benefits Section */}
-      <section className="bg-white py-20">
-        <div className="mx-auto max-w-[1280px] px-8">
-          <Motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8 }}
-            className="mb-20 text-center"
-          >
-            <div
-              className="mb-6 inline-block rounded-full px-5 py-2"
-              style={{ backgroundColor: `${BRAND_BLUE}10`, color: BRAND_BLUE }}
-            >
-              <span className="text-sm font-bold tracking-wide">Why Choose Us</span>
-            </div>
-            <h2 className="display-font mb-6 text-5xl font-semibold tracking-tight text-[#001A3D] md:text-6xl">
-              Why Leading Brands Choose Us
+      {/* Why Choose Section */}
+      <section className="bg-white py-24">
+        <div className="mx-auto max-w-[1280px] px-6 lg:px-20">
+          <div className="mb-20 space-y-6 text-center">
+            <h2 className="display-font text-3xl font-semibold text-[#001A3D] md:text-5xl">
+              Why Choose Hutech Solutions for Your Ecommerce Project?
             </h2>
-            <Motion.div
-              className="mx-auto h-1.5 w-32 rounded-full"
-              style={{ backgroundColor: BRAND_ORANGE }}
-              initial={{ scaleX: 0 }}
-              whileInView={{ scaleX: 1 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.8 }}
-            />
-          </Motion.div>
+            <p className="mx-auto max-w-4xl text-lg leading-relaxed font-medium text-gray-500">
+              At Hutech Solutions, we specialize in delivering Ecommerce solutions tailored to your
+              unique organizational needs.
+            </p>
+          </div>
 
-          <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
-            {BENEFITS.map((benefit, index) => {
-              const Icon = benefit.icon;
-              return (
-                <Motion.div
-                  key={index}
-                  initial={{ opacity: 0, y: 30 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.6, delay: index * 0.1 }}
-                  whileHover={{ y: -8 }}
-                  className="group relative overflow-hidden border border-gray-100 bg-gradient-to-br from-gray-50 to-white p-8 transition-all duration-500 hover:shadow-xl"
-                >
-                  <Motion.div
-                    className="absolute top-0 right-0 left-0 h-1"
-                    style={{ backgroundColor: BRAND_ORANGE }}
-                    initial={{ scaleX: 0 }}
-                    whileInView={{ scaleX: 0 }}
-                    whileHover={{ scaleX: 1 }}
-                    transition={{ duration: 0.4 }}
-                  />
-
-                  <div className="relative z-10">
-                    <div
-                      className="mb-6 flex h-16 w-16 items-center justify-center rounded-xl transition-all duration-500 group-hover:scale-110"
-                      style={{ backgroundColor: `${BRAND_ORANGE}15` }}
-                    >
-                      <Icon size={32} style={{ color: BRAND_ORANGE }} />
-                    </div>
-                    <h3 className="mb-4 text-2xl font-bold text-[#001A3D]">{benefit.title}</h3>
-                    <p className="leading-relaxed text-gray-600">{benefit.description}</p>
-                  </div>
-                </Motion.div>
-              );
-            })}
+          <div className="grid grid-cols-1 gap-x-20 gap-y-16 md:grid-cols-2">
+            {WHY_CHOOSE.map((item, i) => (
+              <Motion.div
+                key={i}
+                initial={{ opacity: 0, x: i % 2 === 0 ? -20 : 20 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
+                className="group flex items-start gap-8"
+              >
+                <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-sm bg-[#0171c1]/5 text-[#0171c1] transition-all duration-500 group-hover:bg-[#0171c1] group-hover:text-white">
+                  <Zap size={24} strokeWidth={1.5} />
+                </div>
+                <div className="space-y-4">
+                  <h3 className="display-font text-xl font-bold tracking-tight text-[#001A3D]">
+                    {item.title}
+                  </h3>
+                  <p className="text-sm leading-relaxed font-medium text-gray-500">
+                    {item.description}
+                  </p>
+                </div>
+              </Motion.div>
+            ))}
           </div>
         </div>
       </section>

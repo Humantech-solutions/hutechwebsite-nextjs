@@ -1,406 +1,247 @@
 "use client";
 
-import { useState, useRef } from "react";
-import { motion, useScroll, useTransform, AnimatePresence } from "framer-motion";
+import { useState } from "react";
+import { motion as Motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import {
   Wallet,
   Building2,
-  Blocks,
-  FileCheck,
-  Users,
-  BrainCircuit,
-  PiggyBank,
-  Fingerprint,
-  Target,
-  Zap,
-  Shield,
+  Lock,
+  Workflow,
+  BarChart3,
+  ShieldCheck,
+  Settings,
   TrendingUp,
   Sparkles,
-  ArrowRight,
+  Smartphone,
+  Globe,
+  Database,
+  Network,
+  MessageSquare,
+  FileText,
+  Zap,
+  ChevronRight,
   MoveRight,
-  Check,
-  Rocket,
-  ChevronDown,
+  ArrowRight,
+  RefreshCw,
 } from "lucide-react";
 import { Breadcrumbs } from "@/components/Breadcrumbs";
-import { ImageWithFallback } from "@/components/figma/ImageWithFallback";
 import { Meta } from "@/components/Meta";
 
 import { ServiceDetailContactCTA } from "@/components/ServiceDetailContactCTA";
 
-const BRAND_ORANGE = "#F99D1C";
-const BRAND_BLUE = "#001A3D";
-
-const SERVICES = [
+const FINTECH_SERVICES = [
   {
     icon: Wallet,
-    title: "Digital Payments and Mobile Wallets",
+    title: "Digital Payments & Wallets",
     description:
-      "We develop secure and convenient digital payment systems that enable seamless financial transactions.",
-    functions: [
-      "Peer-to-peer payments",
-      "Mobile wallets",
-      "QR code payment systems",
-      "Contactless payment solutions",
-      "Multi-currency support",
-    ],
+      "Navigate your journey to digital commerce with confidence. We develop comprehensive payment architectures—including peer-to-peer and contactless systems—to ensure a seamless transition for your legacy ledgers.",
   },
   {
     icon: Building2,
-    title: "Digital Banking and Neobanks",
+    title: "Neobanking & Digital Core",
     description:
-      "We create fully digital banking platforms that allow financial institutions to offer services without physical branches.",
-    functions: [
-      "Online banking platforms",
-      "Digital banking apps",
-      "Neobank solutions",
-      "Account management systems",
-      "Real-time transaction processing",
-    ],
+      "Maximize flexibility and avoid physical infrastructure lock-in. We design and manage complex digital banking platforms across cloud layers, ensuring your banking workflows are optimized for scalability.",
   },
   {
-    icon: Blocks,
-    title: "Cryptocurrency and Blockchain Services",
+    icon: Database,
+    title: "Blockchain & Decentralized Ledger",
     description:
-      "Our blockchain-powered fintech solutions support secure and transparent digital financial operations.",
-    functions: [
-      "Cryptocurrency trading platforms",
-      "Digital wallets",
-      "Blockchain-based financial systems",
-      "Token issuance solutions",
-      "Smart contract development",
-    ],
-  },
-  {
-    icon: FileCheck,
-    title: "RegTech (Regulatory Technology)",
-    description:
-      "We develop technologies that help financial institutions stay compliant with regulatory standards.",
-    functions: [
-      "Compliance automation",
-      "Risk management solutions",
-      "Regulatory monitoring systems",
-      "KYC/AML verification",
-      "Audit trail management",
-    ],
-  },
-  {
-    icon: Users,
-    title: "Online Lending & Peer-to-Peer (P2P) Lending",
-    description: "We build lending platforms that connect borrowers and lenders efficiently.",
-    functions: [
-      "Digital loan platforms",
-      "P2P lending systems",
-      "Automated credit evaluation",
-      "Loan management systems",
-      "Risk assessment tools",
-    ],
-  },
-  {
-    icon: BrainCircuit,
-    title: "Artificial Intelligence & Machine Learning",
-    description:
-      "AI-powered fintech solutions help businesses analyze financial data and improve decision-making.",
-    functions: [
-      "Fraud detection systems",
-      "Predictive financial analytics",
-      "Automated financial insights",
-      "Pattern recognition",
-      "Customer behavior analysis",
-    ],
-  },
-  {
-    icon: PiggyBank,
-    title: "Personal Finance Management (PFM) Tools",
-    description:
-      "We build smart applications that help users manage their personal finances effectively.",
-    functions: [
-      "Expense tracking",
-      "Budget management",
-      "Financial goal monitoring",
-      "Investment tracking",
-      "Spending analytics",
-    ],
-  },
-  {
-    icon: Fingerprint,
-    title: "Biometric Authentication",
-    description: "We enhance security with advanced biometric technologies.",
-    functions: [
-      "Fingerprint authentication",
-      "Facial recognition",
-      "Secure identity verification",
-      "Multi-factor authentication",
-      "Voice recognition",
-    ],
-  },
-];
-
-const BENEFITS = [
-  {
-    icon: Target,
-    title: "Payment Optimization",
-    description:
-      "Streamline payment processes with secure, fast, and efficient digital transaction systems.",
+      "Build for the future of finance. We leverage smart contracts, secure token standards, and distributed ledgers to create highly transparent, resilient, and audit-ready financial systems.",
   },
   {
     icon: Zap,
-    title: "Operational Efficiency",
+    title: "RegTech & Compliance Systems",
     description:
-      "Automate workflows and back-office operations to reduce costs and improve performance.",
+      "Stop worrying about audit failures and regulatory penalties. Our compliance engines perform real-time verification of KYC, AML, and tax laws, automating risk management processes.",
   },
   {
-    icon: Shield,
-    title: "Financial Data Security",
+    icon: RefreshCw,
+    title: "P2P Lending & Credit Scoring",
     description:
-      "Bank-grade security protocols ensuring complete protection of sensitive financial information.",
+      "Don't let legacy credit scoring hold your growth back. We transform traditional lending practices into agile, AI-ready loan management systems that speed up approvals and assess risk accurately.",
   },
   {
-    icon: TrendingUp,
-    title: "Accounting Processes",
+    icon: Network,
+    title: "WealthTech & Financial Tools",
     description:
-      "Advanced accounting automation that improves accuracy and streamlines financial operations.",
+      "Focus on your customers while we handle the analytics. We provide AI-driven wealth management dashboards, automated budgeting integrations, and personalized investment tools.",
   },
 ];
 
-const PROCESS_STEPS = [
+const ESSENTIAL_SOLUTIONS = [
   {
-    number: "01",
-    title: "Discovery and Requirements Analysis",
+    icon: Lock,
+    title: "Zero-Trust Financial Security",
     description:
-      "We begin by understanding your business goals, challenges, and requirements. This helps us identify opportunities where fintech solutions can create maximum impact.",
+      "Protect your financial perimeter. We implement robust identity verification, end-to-end data encryption, and continuous transaction monitoring to ensure customer wealth remains secure.",
   },
   {
-    number: "02",
-    title: "Customized Solution Design",
+    icon: Workflow,
+    title: "Secure API Integrations",
     description:
-      "Based on insights gathered during discovery, we design tailored fintech solutions including software architecture, user experience design, and integration strategies.",
+      "Accelerate banking connectivity. We automate your payment integrations, open banking APIs, and financial service gateways, allowing your applications to connect securely and instantly.",
   },
   {
-    number: "03",
-    title: "Development and Testing",
+    icon: BarChart3,
+    title: "Real-Time Transaction Ledgers",
     description:
-      "Our development team builds secure and high-performance fintech applications while conducting rigorous testing to ensure reliability and quality.",
+      "Unlock the value of financial data. We build scalable real-time auditing databases and data lakes, enabling instant fraud analysis and transaction tracking for your organization.",
   },
   {
-    number: "04",
-    title: "Blockchain Integration",
+    icon: ShieldCheck,
+    title: "Fraud Prevention Systems",
     description:
-      "If required, we integrate blockchain technology to ensure secure, transparent, and tamper-proof financial transactions.",
+      "Ensure transaction safety never stops. We design automated machine learning models that detect anomalies, block malicious transfers, and verify accounts in milliseconds.",
   },
   {
-    number: "05",
-    title: "Data Security and Compliance",
+    icon: Settings,
+    title: "Automated Compliance Auditing",
     description:
-      "Security is critical in fintech. We implement advanced cybersecurity measures to protect financial data and ensure compliance with industry regulations.",
+      "Automate your financial report filings. We use customizable compliance scripts to define your reporting rules in code, ensuring accuracy, consistency, and filing speed.",
   },
   {
-    number: "06",
-    title: "Mobile & Web Application Development",
+    icon: TrendingUp,
+    title: "High-Throughput Processing",
     description:
-      "We build user-friendly mobile and web applications that allow customers to manage financial services seamlessly from anywhere.",
+      "Deliver lightning-fast settlements to your users. We optimize your transaction queues, message brokers, and ledger queries to ensure peak performance under massive volumes.",
+  },
+];
+
+const INNOVATIONS = [
+  {
+    icon: Sparkles,
+    title: "AI-Powered Risk Assessment",
+    description:
+      "Leverage machine learning to automate commercial credit underwriting and borrower risk analysis, ensuring your loan portfolio remains balanced and low-risk.",
+  },
+  {
+    icon: Smartphone,
+    title: "Biometric Checkout Flow",
+    description:
+      "Authorize payments at the point of sale. We integrate secure biometric APIs with mobile checkout screens to reduce cart abandonment and prevent transaction fraud.",
+  },
+  {
+    icon: Globe,
+    title: "Decentralized Finance (DeFi)",
+    description:
+      "Reduce settlement time and fees. We build decentralized custody systems and liquidity pool tools that enable peer-to-peer asset exchange without central intermediaries.",
+  },
+  {
+    icon: Database,
+    title: "Smart Contracts for Escrow",
+    description:
+      "Eliminate settlement risk entirely. We write self-executing business agreements that release funds automatically based on verifiable cargo delivery or milestones.",
+  },
+  {
+    icon: Network,
+    title: "Zero-Knowledge Identity Verification",
+    description:
+      "Verify client credentials with ease. We implement zero-knowledge protocols to confirm compliance attributes without exposing raw private banking data to the network.",
+  },
+  {
+    icon: Lock,
+    title: "Confidential Transaction Vaults",
+    description:
+      "Protect asset values even while processing trades. We leverage trusted execution environments to guarantee that transaction details remain private from external observers.",
   },
 ];
 
 const WHY_CHOOSE = [
   {
-    icon: Target,
-    title: "Industry Expertise",
+    title: "Regulatory Compliance Expertise",
     description:
-      "Our experienced team has deep knowledge of both fintech and modern IT technologies, enabling us to deliver highly effective financial solutions.",
+      "Our systems are built in alignment with PCI-DSS, GDPR, PSD2, and local banking rules, ensuring compliance is woven directly into the software architecture.",
   },
   {
-    icon: Sparkles,
-    title: "Innovation at the Core",
+    title: "Security-First Engineering",
     description:
-      "We leverage cutting-edge technologies to build innovative fintech applications that keep your business ahead of industry trends.",
+      "We build multi-layered fraud defenses and absolute data isolation into every database and API layer of your financial platform from day one.",
   },
   {
-    icon: Shield,
-    title: "Security Without Compromise",
+    title: "Seamless Core Banking Middleware",
     description:
-      "Security is critical in fintech systems. We implement strong cybersecurity practices to protect financial data and transactions.",
+      "We design custom API middleware that securely bridges aging, monolithic core banking legacy databases with modern, reactive web frontends.",
   },
   {
-    icon: TrendingUp,
-    title: "Scalable Solutions",
+    title: "High-Volume Performance Focus",
     description:
-      "Our fintech applications are designed to grow with your business while maintaining performance and user experience.",
-  },
-  {
-    icon: Users,
-    title: "Client-Centric Approach",
-    description:
-      "We prioritize understanding your business vision and requirements to deliver solutions that align perfectly with your goals.",
-  },
-  {
-    icon: Rocket,
-    title: "Proven Track Record",
-    description:
-      "Our diverse fintech project portfolio demonstrates our ability to deliver high-quality solutions that drive innovation, efficiency, and long-term growth.",
+      "We don't just build finance apps; we guarantee they scale. We focus on low-latency microservices that keep transaction pipelines fast during peak shopping days.",
   },
 ];
 
-const TECHNOLOGIES = [
+const FAQS = [
   {
-    category: "Backend & Development",
-    items: ["Java", "Python", "Spring Boot", "Django", "Node.js"],
+    question: "How do you ensure our fintech application remains compliant with regulatory standards?",
+    answer:
+      "We build compliance directly into the software layout. All data pipelines, storage, and API connections are developed in accordance with international frameworks such as PCI-DSS, GDPR, PSD2, and SOC 2, with automated validation checkpoints.",
   },
   {
-    category: "Database",
-    items: ["MySQL", "PostgreSQL", "MongoDB", "Redis"],
+    question: "Can you integrate your solutions with our existing legacy core banking systems?",
+    answer:
+      "Yes. We specialize in building secure, low-latency API wrappers and middleware that bridge monolithic databases and legacy mainframe networks with modern web frontends.",
   },
   {
-    category: "Frontend & Mobile",
-    items: ["JavaScript", "React.js", "Swift", "Kotlin", "Flutter"],
+    question: "What is your experience with blockchain in financial services?",
+    answer:
+      "We design custom distributed ledger solutions, create secure smart contracts for automated settlements, and construct decentralized escrow modules for cross-border banking.",
   },
   {
-    category: "AI & ML Technologies",
-    items: ["PyTorch", "TensorFlow", "OpenCV", "Dlib"],
+    question: "How long does a custom fintech platform development typically take?",
+    answer:
+      "A focused digital wallet or neobanking prototype takes 3-4 months to build and launch, while complex, enterprise-level core banking transformations take 9-12 months.",
+  },
+  {
+    question: "Do you offer post-launch maintenance and security monitoring?",
+    answer:
+      "Yes, we provide 24/7 managed security operations, vulnerability testing, performance tuning, and API updates to ensure your financial platform stays online and compliant.",
   },
 ];
 
-function ServiceCard({ service, index }: { service: (typeof SERVICES)[0]; index: number }) {
-  const [isHovered, setIsHovered] = useState(false);
-  const Icon = service.icon;
+const BLOG_POSTS = [
+  {
+    id: "1",
+    title: "The Future of Neobanking: Scaling Customer Experience in 2026",
+    description:
+      "Digital banks are shifting from simple interfaces to hyper-personalized financial actions that double engagement...",
+    image:
+      "https://images.unsplash.com/photo-1726138388546-30955e45aaec?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080",
+  },
+  {
+    id: "2",
+    title: "Securing Open Banking APIs: A Zero-Trust Architecture Guide",
+    description:
+      "Open banking APIs facilitate seamless asset transfers, but protecting them requires a multi-layered security model...",
+    image:
+      "https://images.unsplash.com/photo-1550751827-4bd374c3f58b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080",
+  },
+  {
+    id: "3",
+    title: "Decentralized Finance: Is Enterprise Adoption Finally Arriving?",
+    description:
+      "Explore how financial institutions use permissioned distributed ledgers for fast international trade settlement...",
+    image:
+      "https://images.unsplash.com/photo-1686061593213-98dad7c599b9?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080",
+  },
+];
 
-  return (
-    <motion.div
-      initial={{ opacity: 0, y: 50 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-100px" }}
-      transition={{ duration: 0.7, delay: index * 0.15, ease: [0.22, 1, 0.36, 1] }}
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
-      className="group relative"
-    >
-      <div className="relative h-full overflow-hidden border border-gray-100 bg-white transition-all duration-700">
-        {/* Gradient overlay on hover */}
-        <motion.div
-          className="absolute inset-0 opacity-0 transition-opacity duration-700 group-hover:opacity-100"
-          style={{
-            background: `linear-gradient(135deg, ${BRAND_BLUE} 0%, ${BRAND_BLUE}ee 100%)`,
-          }}
-        />
+const FINTECH_STACK = [
+  { primary: "TEMENOS", secondary: "CORE BANKING" },
+  { primary: "FINASTRA", secondary: "OPEN FINANCE" },
+  { primary: "MUREX", secondary: "TRADING SYSTEMS" },
+  { primary: "SPRING BOOT", secondary: "BACKEND API" },
+  { primary: "NEXT.JS", secondary: "SECURE PORTALS" },
+  { primary: "POSTGRESQL", secondary: "LEDGERS" },
+  { primary: "BLOCKCHAIN", secondary: "DECENTRALIZATION" },
+  { primary: "STRIPE", secondary: "PAYMENT GATEWAY" },
+  { primary: "PLAID", secondary: "BANK INTEGRATION" },
+  { primary: "APACHE KAFKA", secondary: "STREAMING DATA" },
+  { primary: "KUBERNETES", secondary: "CONTAINER CLOUD" },
+  { primary: "PYTHON", secondary: "RISK ANALYTICS" },
+];
 
-        {/* Animated corner accent */}
-        <motion.div
-          className="absolute top-0 right-0 h-0 w-0 border-t-[80px] border-r-[80px] border-transparent transition-all duration-700"
-          style={{
-            borderTopColor: isHovered ? BRAND_ORANGE : "transparent",
-            borderRightColor: isHovered ? BRAND_ORANGE : "transparent",
-          }}
-        />
-
-        <div className="relative z-10 flex h-full flex-col p-10">
-          {/* Icon with animated background */}
-          <motion.div
-            className="relative mb-8 flex h-20 w-20 items-center justify-center"
-            animate={{
-              scale: isHovered ? 1.1 : 1,
-            }}
-            transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-          >
-            {/* Icon background circle */}
-            <motion.div
-              className="absolute inset-0 rounded-full"
-              style={{
-                backgroundColor: isHovered ? BRAND_ORANGE : `${BRAND_ORANGE}15`,
-              }}
-              animate={{
-                rotate: isHovered ? 180 : 0,
-              }}
-              transition={{ duration: 0.7 }}
-            />
-            <Icon
-              size={36}
-              className="relative z-10"
-              style={{
-                color: isHovered ? BRAND_BLUE : BRAND_ORANGE,
-                transition: "color 0.5s ease",
-              }}
-            />
-          </motion.div>
-
-          {/* Title */}
-          <h3
-            className="mb-4 text-2xl leading-tight font-bold transition-colors duration-500"
-            style={{ color: isHovered ? "white" : BRAND_BLUE }}
-          >
-            {service.title}
-          </h3>
-
-          {/* Description */}
-          <p
-            className="mb-8 text-base leading-relaxed transition-colors duration-500"
-            style={{ color: isHovered ? "rgba(255,255,255,0.92)" : "#555" }}
-          >
-            {service.description}
-          </p>
-
-          {/* Functions */}
-          <div className="mt-auto">
-            <div className="mb-4 flex items-center gap-2">
-              <div
-                className="h-0.5 w-8 transition-colors duration-500"
-                style={{ backgroundColor: isHovered ? BRAND_ORANGE : BRAND_BLUE }}
-              />
-              <h4
-                className="text-xs font-bold tracking-wider transition-colors duration-500"
-                style={{ color: isHovered ? BRAND_ORANGE : BRAND_BLUE }}
-              >
-                KEY CAPABILITIES
-              </h4>
-            </div>
-            <ul className="space-y-3">
-              {service.functions.map((func, idx) => (
-                <motion.li
-                  key={idx}
-                  initial={{ opacity: 0, x: -10 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: isHovered ? idx * 0.05 : 0, duration: 0.3 }}
-                  className="flex items-start gap-3 text-sm"
-                  style={{ color: isHovered ? "rgba(255,255,255,0.88)" : "#666" }}
-                >
-                  <Check
-                    size={18}
-                    className="mt-0.5 flex-shrink-0"
-                    style={{ color: isHovered ? BRAND_ORANGE : BRAND_BLUE }}
-                  />
-                  <span className="leading-relaxed">{func}</span>
-                </motion.li>
-              ))}
-            </ul>
-          </div>
-
-          {/* Learn more link */}
-          <motion.div
-            className="mt-6 border-t pt-6 transition-all duration-500"
-            style={{
-              borderColor: isHovered ? "rgba(255,255,255,0.2)" : "transparent",
-            }}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: isHovered ? 1 : 0 }}
-          >
-            <div
-              className="flex cursor-pointer items-center gap-2 text-sm font-semibold"
-              style={{ color: BRAND_ORANGE }}
-            >
-              Learn More
-              <ArrowRight size={16} className="transition-transform group-hover:translate-x-1" />
-            </div>
-          </motion.div>
-        </div>
-      </div>
-    </motion.div>
-  );
-}
-
-function FAQItem({ faq, index }: { faq: { question: string; answer: string }; index: number }) {
+function FAQItem({ question, answer }: { question: string; answer: string }) {
   const [isOpen, setIsOpen] = useState(false);
-
   return (
     <div className="border-b border-gray-100 last:border-0">
       <button
@@ -408,25 +249,29 @@ function FAQItem({ faq, index }: { faq: { question: string; answer: string }; in
         className="group flex w-full items-center justify-between py-6 text-left"
       >
         <span
-          className={`text-lg font-bold transition-colors md:text-xl ${isOpen ? "text-[#F99D1C]" : "text-[#001A3D] group-hover:text-[#F99D1C]"}`}
+          className={`text-lg font-bold transition-colors md:text-xl ${isOpen ? "text-[#0171c1]" : "text-[#001A3D] group-hover:text-[#0171c1]"}`}
         >
-          {faq.question}
+          {question}
         </span>
-        <ChevronDown
-          size={24}
-          className={`transition-transform duration-300 ${isOpen ? "rotate-180" : ""}`}
-        />
+        <div
+          className={`flex h-8 w-8 items-center justify-center transition-all ${isOpen ? "text-[#0171c1]" : "text-gray-400"}`}
+        >
+          <ChevronRight
+            className={`transition-transform duration-300 ${isOpen ? "rotate-90" : ""}`}
+          />
+        </div>
       </button>
       <AnimatePresence>
         {isOpen && (
-          <motion.div
+          <Motion.div
             initial={{ height: 0, opacity: 0 }}
             animate={{ height: "auto", opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: 0.3 }}
             className="overflow-hidden"
           >
-            <p className="pb-6 text-base leading-relaxed text-gray-600 md:text-lg">{faq.answer}</p>
-          </motion.div>
+            <p className="pb-8 text-lg leading-relaxed text-gray-500">{answer}</p>
+          </Motion.div>
         )}
       </AnimatePresence>
     </div>
@@ -434,38 +279,28 @@ function FAQItem({ faq, index }: { faq: { question: string; answer: string }; in
 }
 
 export default function FintechAppDevelopment() {
-  const heroRef = useRef(null);
-  const { scrollYProgress } = useScroll({
-    target: heroRef,
-    offset: ["start start", "end start"],
-  });
-
-  const heroOpacity = useTransform(scrollYProgress, [0, 0.5], [1, 0]);
-  const heroScale = useTransform(scrollYProgress, [0, 0.5], [1, 0.95]);
-
   return (
-    <div className="min-h-screen bg-white">
+    <div className="flex flex-col overflow-hidden bg-white">
       <Meta
         title="Banking & Financial Services | Hutech Solutions"
-        description="Secure, scalable, and tailored banking and financial solutions. Expert software engineering, digital payments, blockchain integration, and financial data security."
+        description="Secure, scalable, and compliant neobanking and digital payment systems. Expert core banking integrations, blockchain development, and security."
       />
+
       <Breadcrumbs variant="light" />
+
       {/* Hero Section */}
-      <section
-        ref={heroRef}
-        className="relative flex h-[450px] items-center overflow-hidden bg-[#001A3D] text-white"
-      >
+      <section className="relative flex h-[450px] items-center overflow-hidden bg-[#001A3D] text-white">
         <div className="absolute inset-0 z-0">
           <ImageWithFallback
             src="https://images.unsplash.com/photo-1726138388546-30955e45aaec?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1920"
-            alt="Fintech Banking and Financial Services"
+            alt="Fintech Banking Architecture"
             className="h-full w-full scale-105 object-cover opacity-20"
           />
           <div className="absolute inset-0 bg-gradient-to-r from-[#001A3D] via-[#001A3D]/80 to-transparent"></div>
         </div>
 
         <div className="relative z-10 mx-auto w-full max-w-[1280px] px-6 lg:px-20">
-          <motion.div
+          <Motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
@@ -474,17 +309,16 @@ export default function FintechAppDevelopment() {
             <div className="mb-6 flex items-center gap-3">
               <span className="h-[1px] w-12 bg-[#F99D1C]"></span>
               <span className="text-[10px] font-bold tracking-[0.3em] text-[#F99D1C] uppercase">
-                Banking & Finance IT Services
+                FinTech Excellence
               </span>
             </div>
             <h1 className="display-font mb-8 text-3xl leading-[1.1] font-semibold tracking-tight text-white sm:text-4xl md:text-5xl md:leading-[1.05] lg:text-6xl">
-              Banking & Financial <br />
-              <span className="text-[#F99D1C]">Services.</span>
+              Your Financial Vision. <br />
+              <span className="text-[#F99D1C]">Digital Revolution.</span>
             </h1>
             <p className="max-w-2xl text-lg leading-relaxed font-medium text-gray-300 md:text-xl">
-              In the fast-paced world of finance, staying ahead requires not only innovative ideas
-              but also robust and secure IT solutions. We specialize in delivering advanced Fintech
-              IT services.
+              We craft secure digital banking experiences and future-ready fintech solutions for
+              global financial institutions and neobanks.
             </p>
             <Link href="/contact" className="btn-banner-cta mt-6 group">
               Consult Us
@@ -494,333 +328,320 @@ export default function FintechAppDevelopment() {
         </div>
       </section>
 
-      {/* Introduction Section */}
-      <section className="bg-gradient-to-b from-white to-gray-50 py-20">
-        <div className="mx-auto max-w-[1280px] px-8">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8 }}
-            className="mx-auto max-w-5xl"
-          >
-            <div className="grid gap-12 md:grid-cols-2">
-              <div>
-                <div
-                  className="mb-6 inline-block rounded-full px-4 py-2"
-                  style={{ backgroundColor: `${BRAND_ORANGE}15`, color: BRAND_ORANGE }}
-                >
-                  <span className="text-sm font-semibold tracking-wide">Why Choose Us</span>
-                </div>
-                <h2
-                  className="display-font mb-6 text-4xl leading-tight font-semibold tracking-tight"
-                  style={{ color: BRAND_BLUE }}
-                >
-                  Transforming Finance with Cutting-Edge IT Services
+      {/* Intro Section */}
+      <section className="bg-white py-24">
+        <div className="mx-auto max-w-[1280px] px-6 lg:px-20">
+          <div className="grid grid-cols-1 items-center gap-20 lg:grid-cols-2">
+            <div className="space-y-10">
+              <div className="space-y-6">
+                <h2 className="display-font text-3xl leading-tight font-semibold text-[#001A3D] md:text-5xl">
+                  Empowering Financial Institutions with Secure, Scalable FinTech Solutions
                 </h2>
-                <p className="mb-6 text-lg leading-relaxed" style={{ color: "#333" }}>
-                  Hutech Solutions is a leading provider of banking and financial software
-                  development services for clients across the globe. Our experienced in-house
-                  developers have a strong track record of delivering powerful financial solutions
-                  that automate and streamline financial operations.
+                <div className="h-1 w-20 bg-[#0171c1]"></div>
+              </div>
+              <div className="space-y-6">
+                <p className="text-lg leading-relaxed font-medium text-gray-500">
+                  At Hutech Solutions, we bring deep expertise in implementing, supporting, and
+                  managing integrated financial platforms. Our end-to-end solutions include digital
+                  payment architectures, neobanking systems, regulatory compliance automation, and
+                  blockchain integrations.
+                </p>
+                <p className="text-lg leading-relaxed font-medium text-gray-500">
+                  We ensure our clients can operate with agility, security, and efficiency, enabling
+                  them to expand operations and integrate fresh digital solutions to meet specific
+                  transaction and customer needs.
                 </p>
               </div>
-              <div className="flex items-center">
-                <div>
-                  <p className="mb-6 text-lg leading-relaxed" style={{ color: "#333" }}>
-                    By implementing effective FinTech solutions, organizations gain powerful tools
-                    that automate workflows and improve business performance. We follow agile
-                    development methodologies and use cutting-edge technologies to deliver
-                    world-class fintech solutions tailored to each client's needs.
+              <div className="flex flex-wrap gap-8 pt-4">
+                <div className="space-y-1">
+                  <p className="display-font text-3xl font-bold text-[#001A3D]">300+</p>
+                  <p className="text-[10px] font-bold tracking-widest text-[#0171c1] uppercase">
+                    Financial Integrations
                   </p>
-                  <p className="text-lg leading-relaxed" style={{ color: "#333" }}>
-                    Our expert fintech developers create scalable, secure, and customized financial
-                    software solutions that perfectly align with your business requirements.
+                </div>
+                <div className="hidden h-12 w-[1px] bg-gray-200 md:block"></div>
+                <div className="space-y-1">
+                  <p className="display-font text-3xl font-bold text-[#001A3D]">60%</p>
+                  <p className="text-[10px] font-bold tracking-widest text-[#0171c1] uppercase">
+                    Avg Cost Savings
+                  </p>
+                </div>
+                <div className="hidden h-12 w-[1px] bg-gray-200 md:block"></div>
+                <div className="space-y-1">
+                  <p className="display-font text-3xl font-bold text-[#001A3D]">99.99%</p>
+                  <p className="text-[10px] font-bold tracking-widest text-[#0171c1] uppercase">
+                    System Uptime
                   </p>
                 </div>
               </div>
             </div>
-          </motion.div>
-        </div>
-      </section>
-
-      {/* Benefits Grid */}
-      <section className="bg-gray-50 py-20">
-        <div className="mx-auto max-w-[1280px] px-8">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8 }}
-            className="mb-16 text-center"
-          >
-            <h3
-              className="display-font mb-4 text-3xl font-semibold tracking-tight"
-              style={{ color: BRAND_BLUE }}
-            >
-              Our Banking & Financial Solutions Help Businesses Improve:
-            </h3>
-          </motion.div>
-          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
-            {BENEFITS.map((benefit, index) => {
-              const Icon = benefit.icon;
-              return (
-                <motion.div
-                  key={index}
-                  initial={{ opacity: 0, y: 30 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.6, delay: index * 0.1 }}
-                  whileHover={{ y: -8 }}
-                  className="group relative overflow-hidden border border-gray-100 bg-white p-8 transition-all duration-500 hover:shadow-xl"
-                >
-                  {/* Hover gradient overlay */}
-                  <div
-                    className="absolute inset-0 opacity-0 transition-opacity duration-500 group-hover:opacity-100"
-                    style={{
-                      background: `linear-gradient(135deg, ${BRAND_BLUE}05 0%, ${BRAND_ORANGE}05 100%)`,
-                    }}
-                  />
-
-                  <div className="relative z-10">
-                    <div
-                      className="mb-6 flex h-14 w-14 items-center justify-center rounded-lg transition-all duration-500 group-hover:scale-110"
-                      style={{ backgroundColor: `${BRAND_ORANGE}15` }}
-                    >
-                      <Icon size={28} style={{ color: BRAND_ORANGE }} />
-                    </div>
-                    <h3 className="mb-3 text-xl font-bold" style={{ color: BRAND_BLUE }}>
-                      {benefit.title}
-                    </h3>
-                    <p className="leading-relaxed text-gray-600">{benefit.description}</p>
-                  </div>
-                </motion.div>
-              );
-            })}
+            <div className="relative">
+              <div className="aspect-square overflow-hidden rounded-sm shadow-2xl">
+                <ImageWithFallback
+                  src="https://images.unsplash.com/photo-1550751827-4bd374c3f58b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080"
+                  alt="Fintech Operations Center"
+                  className="h-full w-full object-cover"
+                />
+              </div>
+              <div className="absolute -bottom-10 -left-10 hidden max-w-xs space-y-4 bg-[#0171c1] p-10 text-white shadow-2xl md:block">
+                <Building2 size={32} strokeWidth={1.5} />
+                <h3 className="display-font text-xl font-bold">Digital Banking</h3>
+                <p className="text-sm leading-relaxed font-medium opacity-80">
+                  Integrating blockchain and secure digital banking APIs across enterprise platforms
+                  to streamline payments and enhance transaction security.
+                </p>
+              </div>
+            </div>
           </div>
         </div>
       </section>
 
       {/* Services Section */}
-      <section id="services-section" className="relative overflow-hidden bg-white py-20">
-        {/* Background decoration */}
-        <div className="absolute top-0 right-0 h-full w-1/3 opacity-5">
-          <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
-            <defs>
-              <pattern
-                id="service-pattern"
-                x="0"
-                y="0"
-                width="100"
-                height="100"
-                patternUnits="userSpaceOnUse"
-              >
-                <circle cx="50" cy="50" r="30" fill="none" stroke={BRAND_BLUE} strokeWidth="1" />
-                <circle cx="50" cy="50" r="15" fill="none" stroke={BRAND_ORANGE} strokeWidth="1" />
-              </pattern>
-            </defs>
-            <rect width="100%" height="100%" fill="url(#service-pattern)" />
-          </svg>
-        </div>
-
-        <div className="relative z-10 mx-auto max-w-[1280px] px-8">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8 }}
-            className="mb-20 text-center"
-          >
-            <motion.div
-              initial={{ opacity: 0, scale: 0.9 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              viewport={{ once: true }}
-              className="mb-6 inline-block"
-            >
-              <div
-                className="inline-flex items-center gap-2 rounded-full px-5 py-2"
-                style={{ backgroundColor: `${BRAND_BLUE}10` }}
-              >
-                <Rocket size={18} style={{ color: BRAND_ORANGE }} />
-                <span className="text-sm font-semibold tracking-wide" style={{ color: BRAND_BLUE }}>
-                  Our Expertise
-                </span>
-              </div>
-            </motion.div>
-
-            <h2
-              className="display-font mx-auto mb-6 max-w-4xl text-5xl leading-tight font-semibold tracking-tight md:text-6xl"
-              style={{ color: BRAND_BLUE }}
-            >
-              Our Key Fintech Services
+      <section className="bg-gray-50 py-24">
+        <div className="mx-auto max-w-[1280px] px-6 lg:px-20">
+          <div className="mb-20 space-y-6 text-center">
+            <h2 className="display-font text-3xl font-semibold text-[#001A3D] md:text-5xl">
+              Our Banking & Financial Services
             </h2>
-
-            <motion.div
-              className="mx-auto h-1.5 w-32 rounded-full"
-              style={{ backgroundColor: BRAND_ORANGE }}
-              initial={{ scaleX: 0 }}
-              whileInView={{ scaleX: 1 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.8, delay: 0.3 }}
-            />
-
-            <p className="mx-auto mt-8 max-w-3xl text-xl leading-relaxed text-gray-600">
-              Comprehensive fintech solutions designed to revolutionize financial services and drive
-              digital transformation.
+            <p className="mx-auto max-w-4xl text-lg leading-relaxed font-medium text-gray-500">
+              At Hutech Solutions, we specialize in delivering cutting-edge software technology
+              solutions tailored for the global financial services landscape.
             </p>
-          </motion.div>
+          </div>
 
           <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
-            {SERVICES.map((service, index) => (
-              <ServiceCard key={index} service={service} index={index} />
-            ))}
-          </div>
-        </div>
-      </section>
-
-
-      {/* Technologies Section */}
-      <section className="bg-gradient-to-b from-gray-50 to-white py-20">
-        <div className="mx-auto max-w-[1280px] px-8">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8 }}
-            className="mb-20 text-center"
-          >
-            <div
-              className="mb-6 inline-block rounded-full px-5 py-2"
-              style={{ backgroundColor: `${BRAND_ORANGE}15`, color: BRAND_ORANGE }}
-            >
-              <span className="text-sm font-bold tracking-wider">TECH STACK</span>
-            </div>
-            <h2 className="mb-6 text-5xl font-bold md:text-6xl" style={{ color: BRAND_BLUE }}>
-              Technologies We Use
-            </h2>
-            <motion.div
-              className="mx-auto h-1.5 w-32 rounded-full"
-              style={{ backgroundColor: BRAND_ORANGE }}
-              initial={{ scaleX: 0 }}
-              whileInView={{ scaleX: 1 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.8 }}
-            />
-            <p className="mx-auto mt-8 max-w-3xl text-xl leading-relaxed text-gray-600">
-              We leverage modern technologies and frameworks to build powerful fintech applications.
-            </p>
-          </motion.div>
-
-          <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-4">
-            {TECHNOLOGIES.map((tech, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.6, delay: index * 0.1 }}
-                className="border border-gray-100 bg-white p-8 transition-all duration-500 hover:shadow-xl"
-              >
-                <h3
-                  className="mb-6 border-b pb-4 text-lg font-bold"
-                  style={{
-                    color: BRAND_BLUE,
-                    borderColor: `${BRAND_ORANGE}30`,
-                  }}
-                >
-                  {tech.category}
-                </h3>
-                <ul className="space-y-3">
-                  {tech.items.map((item, idx) => (
-                    <motion.li
-                      key={idx}
-                      initial={{ opacity: 0, x: -10 }}
-                      whileInView={{ opacity: 1, x: 0 }}
-                      viewport={{ once: true }}
-                      transition={{ delay: idx * 0.05, duration: 0.3 }}
-                      className="flex items-center gap-3 text-gray-700"
-                    >
-                      <div
-                        className="h-2 w-2 rounded-full"
-                        style={{ backgroundColor: BRAND_ORANGE }}
-                      />
-                      <span>{item}</span>
-                    </motion.li>
-                  ))}
-                </ul>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Why Choose Us Section */}
-      <section className="bg-white py-20">
-        <div className="mx-auto max-w-[1280px] px-8">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8 }}
-            className="mb-20 text-center"
-          >
-            <div
-              className="mb-6 inline-block rounded-full px-5 py-2"
-              style={{ backgroundColor: `${BRAND_BLUE}10`, color: BRAND_BLUE }}
-            >
-              <span className="text-sm font-bold tracking-wider">WHY CHOOSE US</span>
-            </div>
-            <h2 className="mb-6 text-5xl font-bold md:text-6xl" style={{ color: BRAND_BLUE }}>
-              Why Choose Hutech Solutions for Fintech Development?
-            </h2>
-            <motion.div
-              className="mx-auto h-1.5 w-32 rounded-full"
-              style={{ backgroundColor: BRAND_ORANGE }}
-              initial={{ scaleX: 0 }}
-              whileInView={{ scaleX: 1 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.8 }}
-            />
-          </motion.div>
-
-          <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
-            {WHY_CHOOSE.map((item, index) => {
-              const Icon = item.icon;
+            {FINTECH_SERVICES.map((service, i) => {
+              const Icon = service.icon;
               return (
-                <motion.div
-                  key={index}
-                  initial={{ opacity: 0, y: 30 }}
+                <Motion.div
+                  key={i}
+                  initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
-                  transition={{ duration: 0.6, delay: index * 0.1 }}
-                  whileHover={{ y: -8 }}
-                  className="group relative overflow-hidden border border-gray-100 bg-gradient-to-br from-gray-50 to-white p-8 transition-all duration-500 hover:shadow-xl"
+                  transition={{ delay: i * 0.1 }}
+                  className="group relative flex flex-col space-y-6 overflow-hidden border border-gray-100 bg-white p-12 shadow-sm transition-all duration-500 hover:shadow-2xl"
                 >
-                  {/* Hover accent line */}
-                  <motion.div
-                    className="absolute top-0 right-0 left-0 h-1"
-                    style={{ backgroundColor: BRAND_ORANGE }}
-                    initial={{ scaleX: 0 }}
-                    whileInView={{ scaleX: 0 }}
-                    whileHover={{ scaleX: 1 }}
-                    transition={{ duration: 0.4 }}
-                  />
-
-                  <div className="relative z-10">
-                    <div
-                      className="mb-6 flex h-16 w-16 items-center justify-center rounded-xl transition-all duration-500 group-hover:scale-110"
-                      style={{ backgroundColor: `${BRAND_ORANGE}15` }}
-                    >
-                      <Icon size={32} style={{ color: BRAND_ORANGE }} />
-                    </div>
-                    <h3 className="mb-4 text-2xl font-bold" style={{ color: BRAND_BLUE }}>
-                      {item.title}
-                    </h3>
-                    <p className="leading-relaxed font-bold text-gray-600">{item.description}</p>
+                  <div className="absolute top-0 right-0 p-8 opacity-5 transition-opacity group-hover:opacity-10">
+                    <Icon size={80} strokeWidth={1} />
                   </div>
-                </motion.div>
+                  <div className="flex h-16 w-16 items-center justify-center rounded-sm bg-gray-50 text-[#0171c1] transition-all duration-500 group-hover:bg-[#0171c1] group-hover:text-white">
+                    <Icon size={32} strokeWidth={1.5} />
+                  </div>
+                  <h3 className="display-font text-xl leading-tight font-bold text-[#001A3D]">
+                    {service.title}
+                  </h3>
+                  <p className="text-sm leading-relaxed font-medium text-gray-500">
+                    {service.description}
+                  </p>
+                  <div className="mt-auto pt-4">
+                    <Link
+                      href="/contact"
+                      className="inline-flex items-center gap-2 text-[10px] font-bold tracking-widest text-[#0171c1] uppercase transition-all group-hover:gap-4"
+                    >
+                      Learn More <MoveRight size={14} />
+                    </Link>
+                  </div>
+                </Motion.div>
               );
             })}
+          </div>
+        </div>
+      </section>
+
+      {/* Essential Solutions Section */}
+      <section className="overflow-hidden bg-[#001A3D] py-24 text-white">
+        <div className="mx-auto max-w-[1280px] px-6 lg:px-20">
+          <div className="mb-20 space-y-6 text-center">
+            <h2 className="display-font mx-auto max-w-4xl text-3xl leading-tight font-semibold md:text-5xl">
+              What Makes Custom FinTech Solutions Essential for Your Business?
+            </h2>
+            <div className="mx-auto h-1 w-20 bg-[#0171c1]"></div>
+            <p className="mx-auto max-w-3xl text-lg leading-relaxed font-medium text-gray-400">
+              In the modern digital landscape, custom financial solutions are key to staying
+              competitive and ensuring transactional integrity.
+            </p>
+          </div>
+
+          <div className="relative z-10 grid grid-cols-1 gap-12 md:grid-cols-2 lg:grid-cols-3">
+            {ESSENTIAL_SOLUTIONS.map((item, i) => {
+              const Icon = item.icon;
+              return (
+                <Motion.div
+                  key={i}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: i * 0.1 }}
+                  className="group space-y-6 rounded-sm border border-white/5 p-8 transition-colors hover:bg-white/5"
+                >
+                  <div className="flex h-14 w-14 items-center justify-center rounded-sm bg-white/10 text-[#0171c1] transition-transform group-hover:scale-110">
+                    <Icon size={28} strokeWidth={1.5} />
+                  </div>
+                  <div className="space-y-4">
+                    <h3 className="display-font text-xl font-bold tracking-tight">{item.title}</h3>
+                    <p className="text-sm leading-relaxed font-medium text-gray-400">
+                      {item.description}
+                    </p>
+                  </div>
+                </Motion.div>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
+      {/* Innovations Section */}
+      <section className="bg-white py-24">
+        <div className="mx-auto max-w-[1280px] px-6 lg:px-20">
+          <div className="mb-20 space-y-6 text-center">
+            <h2 className="display-font text-3xl font-semibold text-[#001A3D] md:text-5xl">
+              Which Innovations Can Transform Your Financial Operations?
+            </h2>
+            <p className="mx-auto max-w-3xl text-lg leading-relaxed font-medium text-gray-500">
+              Incorporating advanced technologies can significantly enhance your financial capability
+              for the digital-first era.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 gap-x-12 gap-y-16 md:grid-cols-2 lg:grid-cols-3">
+            {INNOVATIONS.map((item, i) => {
+              const Icon = item.icon;
+              return (
+                <Motion.div
+                  key={i}
+                  initial={{ opacity: 0, scale: 0.95 }}
+                  whileInView={{ opacity: 1, scale: 1 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: i * 0.1 }}
+                  className="group flex flex-col items-center space-y-6 text-center"
+                >
+                  <div className="text-[#0171c1] transition-transform duration-500 group-hover:scale-110">
+                    <Icon size={56} strokeWidth={1} />
+                  </div>
+                  <div className="space-y-4">
+                    <h3 className="display-font text-xl font-bold tracking-tight text-[#001A3D]">
+                      {item.title}
+                    </h3>
+                    <p className="max-w-sm text-sm leading-relaxed font-medium text-gray-500">
+                      {item.description}
+                    </p>
+                  </div>
+                </Motion.div>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
+
+      {/* Why Choose Section */}
+      <section className="bg-white py-24">
+        <div className="mx-auto max-w-[1280px] px-6 lg:px-20">
+          <div className="mb-20 space-y-6 text-center">
+            <h2 className="display-font text-3xl font-semibold text-[#001A3D] md:text-5xl">
+              Why Choose Hutech Solutions for Your Fintech Project?
+            </h2>
+            <p className="mx-auto max-w-4xl text-lg leading-relaxed font-medium text-gray-500">
+              At Hutech Solutions, we specialize in delivering fintech solutions tailored to your
+              unique organizational needs.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 gap-x-20 gap-y-16 md:grid-cols-2">
+            {WHY_CHOOSE.map((item, i) => (
+              <Motion.div
+                key={i}
+                initial={{ opacity: 0, x: i % 2 === 0 ? -20 : 20 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
+                className="group flex items-start gap-8"
+              >
+                <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-sm bg-[#0171c1]/5 text-[#0171c1] transition-all duration-500 group-hover:bg-[#0171c1] group-hover:text-white">
+                  <Zap size={24} strokeWidth={1.5} />
+                </div>
+                <div className="space-y-4">
+                  <h3 className="display-font text-xl font-bold tracking-tight text-[#001A3D]">
+                    {item.title}
+                  </h3>
+                  <p className="text-sm leading-relaxed font-medium text-gray-500">
+                    {item.description}
+                  </p>
+                </div>
+              </Motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Contact Form Section */}
+      <section className="bg-gray-50 py-24">
+        <div className="mx-auto max-w-[1280px] px-6 lg:px-20">
+          <div className="grid grid-cols-1 gap-20 lg:grid-cols-12">
+            <div className="rounded-sm border border-gray-100 bg-white p-10 shadow-2xl md:p-14 lg:col-span-7">
+              <h2 className="display-font mb-10 text-3xl font-bold text-[#001A3D]">
+                Start Your Fintech Project
+              </h2>
+              <form className="grid grid-cols-1 gap-6 md:grid-cols-2">
+                <input
+                  type="text"
+                  placeholder="Name*"
+                  className="w-full border border-gray-200 p-4 text-sm font-medium transition-all outline-none focus:border-[#0171c1]"
+                />
+                <input
+                  type="email"
+                  placeholder="Email*"
+                  className="w-full border border-gray-200 p-4 text-sm font-medium transition-all outline-none focus:border-[#0171c1]"
+                />
+                <input
+                  type="tel"
+                  placeholder="Phone Number*"
+                  className="w-full border border-gray-200 p-4 text-sm font-medium transition-all outline-none focus:border-[#0171c1] md:col-span-2"
+                />
+                <textarea
+                  placeholder="Tell us about your financial technology needs"
+                  rows={4}
+                  className="w-full resize-none border border-gray-200 p-4 text-sm font-medium transition-all outline-none focus:border-[#0171c1] md:col-span-2"
+                ></textarea>
+                <div className="md:col-span-2">
+                  <button className="w-full rounded-sm bg-[#F99D1C] px-12 py-5 text-[11px] font-bold tracking-wider text-[#001A3D] uppercase shadow-xl transition-all duration-500 hover:bg-[#001A3D] hover:text-white md:w-auto">
+                    Submit Project Request
+                  </button>
+                </div>
+              </form>
+            </div>
+            <div className="space-y-12 py-8 lg:col-span-5">
+              <h2 className="display-font text-3xl font-bold text-[#001A3D]">
+                What Is The Next Step?
+              </h2>
+              <div className="space-y-10">
+                {[
+                  {
+                    icon: MessageSquare,
+                    text: "A financial technology consultant will review your request and contact you within a few business hours.",
+                  },
+                  {
+                    icon: FileText,
+                    text: "We will schedule a deep-dive session to understand your current banking systems and compliance goals.",
+                  },
+                  {
+                    icon: Sparkles,
+                    text: "You will receive a detailed proposal including system architecture and regulatory compliance analysis.",
+                  },
+                ].map((step, i) => {
+                  const Icon = step.icon;
+                  return (
+                    <div key={i} className="group flex items-start gap-8">
+                      <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-full border border-gray-200 text-[#0171c1] transition-all duration-500 group-hover:border-[#0171c1] group-hover:bg-[#0171c1] group-hover:text-white">
+                        <Icon size={24} strokeWidth={1.5} />
+                      </div>
+                      <p className="pt-2 text-lg leading-relaxed font-medium text-gray-500">
+                        {step.text}
+                      </p>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
           </div>
         </div>
       </section>
