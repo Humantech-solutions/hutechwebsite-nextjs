@@ -3,6 +3,7 @@ import { CaseStudy } from "@/lib/data/case-studies";
 // Replace NEXT_PUBLIC_WORDPRESS_API_URL in .env.local with your WordPress site's GraphQL endpoint
 
 const WORDPRESS_API_URL = process.env.NEXT_PUBLIC_WORDPRESS_API_URL;
+const WORDPRESS_BASE_URL = WORDPRESS_API_URL?.replace(/\/graphql\/?$/i, "");
 
 const DEFAULT_BLOG_IMAGE =
   "https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=800";
@@ -125,6 +126,157 @@ function imgUrl(field: any): string | undefined {
 }
 
 // ─── Homepage Query ──────────────────────────────────────────────────────────
+
+export type ChromeMenuItem = {
+  label: string;
+  path: string;
+  children?: ChromeMenuItem[];
+};
+
+export type HeaderNavItem = {
+  label: string;
+  path: string;
+  dropdown?: {
+    title: string;
+    items: { name: string; path: string }[];
+  }[];
+};
+
+export type HeaderChromeData = {
+  logoUrl?: string;
+  logoAlt?: string;
+  navItems?: HeaderNavItem[];
+  megaCard?: {
+    title?: string;
+    text?: string;
+    buttonText?: string;
+    buttonUrl?: string;
+  };
+  megaBottomLinks?: { name: string; path: string }[];
+  megaBottomTagline?: string;
+  mobileCta?: { label?: string; url?: string };
+  mobileFooter?: { left?: string; right?: string };
+};
+
+export type FooterChromeData = {
+  titles?: {
+    services?: string;
+    industries?: string;
+    resources?: string;
+    company?: string;
+    caseStudies?: string;
+    locations?: string;
+    about?: string;
+  };
+  menus?: {
+    services?: { name: string; path: string }[];
+    industries?: { name: string; path: string }[];
+    resources?: { name: string; path: string }[];
+    company?: { name: string; path: string }[];
+    caseStudies?: { name: string; path: string }[];
+    legal?: { name: string; path: string }[];
+  };
+  offices?: {
+    title?: string;
+    company?: string;
+    address?: string[];
+    phone?: string;
+    phoneUrl?: string;
+    email?: string;
+  }[];
+  about?: {
+    text?: string;
+    linkText?: string;
+    linkUrl?: string;
+  };
+  badges?: { src: string; alt: string; href?: string }[];
+  socials?: {
+    facebook?: string;
+    instagram?: string;
+    youtube?: string;
+    linkedin?: string;
+  };
+  socialIcons?: {
+    facebook?: string;
+    instagram?: string;
+    youtube?: string;
+    linkedin?: string;
+  };
+  copyright?: string;
+};
+
+export type SiteChromeData = {
+  header: HeaderChromeData;
+  footer: FooterChromeData;
+};
+
+function flattenMenuItems(items?: ChromeMenuItem[]): { name: string; path: string }[] {
+  return (items || []).map((item) => ({
+    name: item.label,
+    path: item.path || "#",
+  }));
+}
+
+function transformPrimaryMenu(items?: ChromeMenuItem[]): HeaderNavItem[] {
+  return (items || []).map((item) => {
+    const dropdown = item.children?.length
+      ? item.children.map((section) => ({
+          title: section.label,
+          items: section.children?.length
+            ? flattenMenuItems(section.children)
+            : [{ name: section.label, path: section.path || "#" }],
+        }))
+      : undefined;
+
+    return {
+      label: item.label,
+      path: item.path || "#",
+      dropdown,
+    };
+  });
+}
+
+export async function getSiteChrome(): Promise<SiteChromeData | null> {
+  if (!WORDPRESS_BASE_URL) {
+    return null;
+  }
+
+  try {
+    const res = await fetch(`${WORDPRESS_BASE_URL}/wp-json/hutech/v1/site-chrome`, {
+      next: { revalidate: 60 },
+    });
+
+    if (!res.ok) {
+      console.warn(`[WP] Could not fetch site chrome. HTTP ${res.status}`);
+      return null;
+    }
+
+    const raw = normalizeBlankStrings(await res.json()) as any;
+    const menus = raw?.menus || {};
+
+    return {
+      header: {
+        ...raw.header,
+        navItems: transformPrimaryMenu(menus.primary),
+        megaBottomLinks: flattenMenuItems(menus.megaBottom),
+      },
+      footer: {
+        ...raw.footer,
+        menus: {
+          services: flattenMenuItems(menus.footerServices),
+          industries: flattenMenuItems(menus.footerIndustries),
+          resources: flattenMenuItems(menus.footerResources),
+          company: flattenMenuItems(menus.footerCompany),
+          caseStudies: flattenMenuItems(menus.footerCaseStudies),
+          legal: flattenMenuItems(menus.footerLegal),
+        },
+      },
+    };
+  } catch (err: any) {
+    console.warn("[WP] getSiteChrome() failed:", err?.message || err);
+    return null;
+  }
+}
 
 const SLIDE_FIELDS = `
   eyebrow

@@ -4,6 +4,7 @@ import "slick-carousel/slick/slick.css";
 import "./slick-theme.css";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import { getSiteChrome } from "@/lib/wordpress";
 import { Toaster } from "sonner";
 import { ScrollToTopButton } from "@/components/ScrollToTopButton";
 import { ChatWidget } from "@/components/ChatWidget";
@@ -13,11 +14,13 @@ export const metadata = constructMetadata();
 
 import { ThemeProvider } from "next-themes";
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const siteChrome = await getSiteChrome();
+
   return (
     <html lang="en" suppressHydrationWarning>
       <body className="min-h-screen overflow-x-hidden bg-white font-sans antialiased selection:bg-[#0171c1]/30 selection:text-[#001A3D]">
@@ -27,9 +30,9 @@ export default function RootLayout({
             dangerouslySetInnerHTML={{ __html: JSON.stringify(getSiteSchema()) }}
           />
           <div className="pt-[80px] md:pt-[80px]">
-            <Navbar />
+            <Navbar data={siteChrome?.header} />
             <main>{children}</main>
-            <Footer />
+            <Footer data={siteChrome?.footer} />
             <ScrollToTopButton />
             <ChatWidget />
             <CookieBanner />
