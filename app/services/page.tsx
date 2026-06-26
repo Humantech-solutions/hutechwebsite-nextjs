@@ -64,7 +64,7 @@ const SERVICE_CATEGORIES = [
     items: [
       {
         title: "Enterprise Digital Solutions",
-        href: "/services/enterprise-digital-solutions",
+        href: "/services/erp",
         icon: <Database className="h-8 w-8 text-[#F99D1C]" />,
         desc: "Optimizing enterprise resource management.",
       },
