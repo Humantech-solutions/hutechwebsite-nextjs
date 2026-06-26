@@ -6,35 +6,24 @@ import Link from "next/link";
 import {
   Server,
   Cloud,
-  Activity,
-  Rocket,
-  Shield,
-  Zap,
-  BarChart3,
-  TrendingDown,
-  ArrowRight,
-  MoveRight,
-  Check,
-  Sparkles,
-  DollarSign,
-  Users,
-  Target,
-  Award,
-  CheckCircle2,
-  Settings,
-  GitBranch,
-  Eye,
-  AlertCircle,
-  ShieldCheck,
   Workflow,
-  Lock,
+  BarChart3,
+  ShieldCheck,
+  Settings,
+  TrendingUp,
+  Sparkles,
+  Smartphone,
+  Globe,
+  Database,
+  Network,
   MessageSquare,
   FileText,
+  Zap,
   ChevronRight,
+  MoveRight,
+  ArrowRight,
+  Lock,
   RefreshCw,
-  Network,
-  Terminal,
-  Cpu,
 } from "lucide-react";
 import { Breadcrumbs } from "@/components/Breadcrumbs";
 import { Meta } from "@/components/Meta";
@@ -45,164 +34,209 @@ const DEVOPS_SERVICES = [
     icon: Cloud,
     title: "DevOps & Cloud Support",
     description:
-      "End-to-end infrastructure management and cloud platform setup. We handle the heavy lifting of cloud provisioning, scaling, and 24/7 monitoring so your developers can focus on code.",
-    functions: [
-      "Multi-Cloud Platform Provisioning (AWS, Azure, GCP)",
-      "Continuous Monitoring & Real-time Alerting",
-      "Infrastructure Scaling & Auto-scaling Setup",
-      "Cost Optimization & Resource Utilization Audits",
-    ],
+      "Navigate your journey to the cloud with confidence. We develop comprehensive roadmaps—including Rehost, Refactor, and Replatform strategies—to ensure a seamless transition for your legacy systems.",
   },
   {
-    icon: GitBranch,
-    title: "Release Management",
+    icon: Workflow,
+    title: "Continuous Release Pipelines",
     description:
-      "Streamline your software delivery lifecycle. We implement robust CI/CD pipelines that automate testing, security scans, and deployments for zero-downtime releases.",
-    functions: [
-      "Automated CI/CD Pipeline Design",
-      "Blue-Green & Canary Deployment Strategies",
-      "Artifact Management & Version Control",
-      "Automated Rollback Mechanisms",
-    ],
+      "Maximize flexibility and avoid vendor lock-in. We design and manage complex architectures across AWS, Azure, and Google Cloud, ensuring your workloads are optimized for performance and cost.",
   },
   {
-    icon: Eye,
-    title: "Site Reliability & Observability",
+    icon: Server,
+    title: "Site Observability & Monitoring",
     description:
-      "Build resilient systems that learn from failure. Our SRE experts implement deep observability to predict issues before they impact your users.",
-    functions: [
-      "Distributed Tracing & Log Aggregation",
-      "Service Level Objective (SLO) Management",
-      "Incident Response & Post-Mortem Analysis",
-      "Disaster Recovery & High Availability Design",
-    ],
+      "Build for the future of the web. We leverage microservices, containers (Kubernetes), and serverless architectures to create highly scalable, resilient, and high-performance applications.",
+  },
+  {
+    icon: Zap,
+    title: "Kubernetes Orchestration",
+    description:
+      "Stop overspending on unused resources. Our experts perform deep audits of your cloud infrastructure to identify waste, right-size instances, and implement automated cost-saving measures.",
+  },
+  {
+    icon: RefreshCw,
+    title: "Infrastructure as Code (IaC)",
+    description:
+      "Don't let aging software hold you back. We transform monolithic legacy applications into agile, cloud-ready systems that can take full advantage of modern infrastructure capabilities.",
+  },
+  {
+    icon: Network,
+    title: "Service Mesh Architecture",
+    description:
+      "Focus on your business while we handle the infrastructure. We provide 24/7 monitoring, security patching, and proactive maintenance for your entire cloud environment.",
+  },
+];
+
+const ESSENTIAL_SOLUTIONS = [
+  {
+    icon: Lock,
+    title: "Blue-Green Release Stability",
+    description:
+      "Protect your cloud perimeter. We implement robust identity management, end-to-end encryption, and continuous security monitoring to ensure your data remains secure in the cloud.",
+  },
+  {
+    icon: Workflow,
+    title: "Automated Rollback Safeguards",
+    description:
+      "Accelerate your delivery cycles. We automate your development, testing, and deployment workflows, allowing your teams to ship features faster and with higher quality.",
+  },
+  {
+    icon: BarChart3,
+    title: "Continuous Security Integration",
+    description:
+      "Unlock the value of your data. We build scalable data lakes and warehouses in the cloud, enabling real-time analytics and AI-driven insights for your organization.",
+  },
+  {
+    icon: ShieldCheck,
+    title: "Distributed Log Aggregation",
+    description:
+      "Ensure your business never stops. We design automated backup and failover solutions that guarantee your systems are back online in minutes, not days.",
+  },
+  {
+    icon: Settings,
+    title: "Cost-Optimized Cloud Usage",
+    description:
+      "Automate your infrastructure management. We use Terraform and CloudFormation to define your environment in code, ensuring consistency, repeatability, and speed.",
+  },
+  {
+    icon: TrendingUp,
+    title: "Proactive Disaster Recovery",
+    description:
+      "Deliver lightning-fast experiences to your users. We optimize your cloud network, storage, and compute configurations to ensure peak performance under any load.",
   },
 ];
 
 const INNOVATIONS = [
   {
     icon: Sparkles,
-    title: "AIOps Integration",
+    title: "AI-Driven Log Anomaly Detection",
     description:
-      "Harness AI to analyze petabytes of log data, identifying anomalies and predicting potential system failures before they occur.",
+      "Leverage machine learning to automate resource scaling and anomaly detection, ensuring your cloud remains efficient and self-healing.",
   },
   {
-    icon: Terminal,
-    title: "Infrastructure as Code (IaC)",
+    icon: Smartphone,
+    title: "GitOps Workflow Orchestration",
     description:
-      "We define your entire data center in code using Terraform and Ansible, ensuring 100% environment consistency and rapid disaster recovery.",
+      "Process data closer to the source. We integrate cloud backends with edge devices to reduce latency and improve response times for real-time applications.",
   },
   {
-    icon: ShieldCheck,
-    title: "DevSecOps Transformation",
+    icon: Globe,
+    title: "Chaos Engineering Injection",
     description:
-      "Security is no longer an afterthought. We bake security scanning and compliance checks directly into your automated delivery pipelines.",
+      "Reduce your environmental impact. We design energy-efficient cloud solutions that align with your corporate sustainability goals and reduce your carbon footprint.",
   },
   {
-    icon: Activity,
-    title: "Chaos Engineering",
+    icon: Database,
+    title: "Serverless Edge Pipelines",
     description:
-      "We proactively inject controlled failures into your systems to uncover hidden weaknesses and build bulletproof resilience.",
-  },
-  {
-    icon: Cpu,
-    title: "Serverless & Containerization",
-    description:
-      "Modernize your workloads with Kubernetes and Serverless architectures to maximize efficiency and minimize operational overhead.",
+      "Eliminate server management entirely. We build applications that scale automatically from zero to millions of users, charging you only for what you use.",
   },
   {
     icon: Network,
-    title: "Service Mesh Orchestration",
+    title: "Zero-Trust Network Controls",
     description:
-      "Manage complex microservices communications with Istio or Linkerd, providing security, visibility, and traffic control at scale.",
-  },
-];
-
-const PRICING_COMPARISON = [
-  {
-    service: "DevOps & Cloud Support",
-    hutechCost: "$700",
-    resourceCost: "$2,500+",
-    savings: "Save 72%",
+      "Manage complex microservices communications with ease. We implement Istio and Linkerd to provide security, visibility, and control across your network.",
   },
   {
-    service: "Release Management",
-    hutechCost: "$800",
-    resourceCost: "$3,000+",
-    savings: "Save 67%",
-  },
-  {
-    service: "SRE & Observability",
-    hutechCost: "$1,200",
-    resourceCost: "$3,500+",
-    savings: "Save 66%",
+    icon: Lock,
+    title: "Self-Healing Pod Clusters",
+    description:
+      "Protect data even while it's being processed. We leverage TEE (Trusted Execution Environments) to ensure your most sensitive workloads remain private.",
   },
 ];
 
 const WHY_CHOOSE = [
   {
-    title: "Shared-Service Advantage",
+    title: "Elite Shared-Service Support",
     description:
-      "Access a world-class team of SREs and DevOps engineers for a fraction of the cost of a single full-time hire.",
+      "Our team is certified across AWS, Microsoft Azure, and Google Cloud Platform, ensuring you get the best tool for your specific business requirements.",
   },
   {
-    title: "24/7 Global Vigilance",
+    title: "Follow-the-Sun Monitoring",
     description:
-      "Our distributed team provides 'follow-the-sun' monitoring and incident response, ensuring your systems never sleep.",
+      "We don't treat security as an afterthought. We build multi-layered protection into every layer of your cloud architecture from day one.",
   },
   {
     title: "Vendor-Neutral Philosophy",
     description:
-      "We are experts in AWS, Azure, GCP, and On-Premise, recommending the best architecture for your unique needs.",
+      "We use a battle-tested methodology for cloud migration that minimizes risk, prevents data loss, and ensures zero disruption to your business operations.",
   },
   {
-    title: "Speed to Market focus",
+    title: "Accelerate Release Speed",
     description:
-      "Our automation frameworks typically reduce software release cycles by up to 60%, getting your features to users faster.",
+      "We don't just move you to the cloud; we ensure it's profitable. Our focus is on long-term cost efficiency and maximizing your return on investment.",
   },
 ];
 
 const FAQS = [
   {
-    question: "What is the Shared-Service Model?",
+    question: "What is DevOps as a Service?",
     answer:
-      "Our shared-service model allows multiple clients to share a pool of elite DevOps and SRE experts. This drastically reduces individual costs while ensuring you have access to senior-level talent whenever you need it.",
+      "Our service model allows organizations to access a dedicated team of DevOps architects and SREs on demand to manage deployment pipelines, optimize cloud spend, and configure automated system alerts.",
   },
   {
-    question: "How do you handle security in your DevOps pipelines?",
+    question: "How do you ensure security inside our CI/CD pipelines?",
     answer:
-      "We follow DevSecOps principles, integrating static and dynamic security analysis (SAST/DAST) into every build. We also implement secrets management and zero-trust networking as standard.",
+      "We integrate automated security audits (DevSecOps) directly into build runs, utilizing static scans, secrets vaulting, container security checks, and identity validation rules.",
   },
   {
-    question: "Can you help us migrate to Kubernetes?",
+    question: "Do you support migration to Google Cloud or Microsoft Azure?",
     answer:
-      "Yes, Kubernetes orchestration is one of our core specialties. We handle cluster setup, networking, storage, and the containerization of your applications.",
+      "Yes, we have certified experts cross-trained in AWS, Google Cloud, Azure, and private virtualization layers to manage complete cloud migration and database failovers.",
   },
   {
-    question: "What is your response time for critical incidents?",
+    question: "What is your response time for high-severity automated alerts?",
     answer:
-      "For our Enterprise-tier clients, we offer guaranteed response times as low as 15 minutes for P0 incidents, backed by strict SLAs.",
+      "We operate under strict Service Level Agreements (SLAs), offering follow-the-sun continuous monitoring that responds to critical P0 system outages in under 15 minutes.",
   },
   {
-    question: "Do we need to change our current cloud provider?",
+    question: "Can we use Terraform if we already have manual setups?",
     answer:
-      "Not at all. We adapt our DevOps frameworks to your existing infrastructure, whether it's public cloud, private cloud, or hybrid.",
+      "Absolutely. We perform a complete infrastructure audit of your existing resources, export configurations, and convert them into clean, repeatable Terraform code scripts.",
+  },
+];
+
+const BLOG_POSTS = [
+  {
+    id: "1",
+    title: "GitOps Best Practices: Scaling Kubernetes in 2026",
+    description:
+      "Syncing cluster configurations with repository files is standard, but scaling enterprise clusters requires unified GitOps architectures...",
+    image:
+      "https://images.unsplash.com/photo-1744868562210-fffb7fa882d9?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080",
+  },
+  {
+    id: "2",
+    title: "Chaos Engineering: Injecting Outages to Discover Weakness",
+    description:
+      "Why leading engineering teams deliberately shut down production nodes and inject latency to test recovery automated scripts...",
+    image:
+      "https://images.unsplash.com/photo-1581092580497-e0d23cbdf1dc?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080",
+  },
+  {
+    id: "3",
+    title: "DevSecOps: Embedding Vulnerability Auditing in Pull Requests",
+    description:
+      "Save weeks of bug-fixing. Learn how automated SAST scans inside merge workflows alert developers to security leaks before deployment...",
+    image:
+      "https://images.unsplash.com/photo-1686061593213-98dad7c599b9?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080",
   },
 ];
 
 const DEVOPS_STACK = [
   { primary: "KUBERNETES", secondary: "ORCHESTRATION" },
-  { primary: "DOCKER", secondary: "CONTAINERS" },
-  { primary: "JENKINS", secondary: "CI/CD" },
-  { primary: "TERRAFORM", secondary: "IaC" },
-  { primary: "ANSIBLE", secondary: "AUTOMATION" },
-  { primary: "GITHUB ACTIONS", secondary: "WORKFLOWS" },
-  { primary: "PROMETHEUS", secondary: "MONITORING" },
+  { primary: "TERRAFORM", secondary: "IaC TOOL" },
+  { primary: "JENKINS", secondary: "PIPELINE ENGINE" },
+  { primary: "GITHUB ACTIONS", secondary: "WORKFLOW RUNNER" },
+  { primary: "ARGOCD", secondary: "GITOPS ENGINE" },
+  { primary: "PROMETHEUS", secondary: "MONITORING TOOL" },
   { primary: "GRAFANA", secondary: "OBSERVABILITY" },
-  { primary: "ARGOCD", secondary: "GITOPS" },
-  { primary: "ELASTICSEARCH", secondary: "LOGGING" },
-  { primary: "NGINX", secondary: "LOAD BALANCING" },
+  { primary: "DATADOG", secondary: "LOG METRICS" },
+  { primary: "DOCKER", secondary: "VIRTUALIZATION" },
+  { primary: "HELM", secondary: "PACKAGE MANAGER" },
   { primary: "AWS", secondary: "CLOUD PLATFORM" },
+  { primary: "ANSIBLE", secondary: "CONFIGURATION" },
 ];
 
 function FAQItem({ question, answer }: { question: string; answer: string }) {
@@ -248,7 +282,7 @@ export default function SreDevopsServices() {
     <div className="flex flex-col overflow-hidden bg-white">
       <Meta
         title="SRE & DevOps Services | Hutech Solutions"
-        description="Enterprise-grade SRE and DevOps as a Service. Save up to 70% with our shared-service model. Accelerate your releases with elite reliability."
+        description="Transform your infrastructure with Hutech's SRE & DevOps services. Specialized in CI/CD automation, Kubernetes scaling, and cloud reliability."
       />
 
       <Breadcrumbs variant="light" />
@@ -258,7 +292,7 @@ export default function SreDevopsServices() {
         <div className="absolute inset-0 z-0">
           <ImageWithFallback
             src="https://images.unsplash.com/photo-1744868562210-fffb7fa882d9?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1920"
-            alt="DevOps and Infrastructure Monitoring"
+            alt="DevOps Automation Infrastructure"
             className="h-full w-full scale-105 object-cover opacity-20"
           />
           <div className="absolute inset-0 bg-gradient-to-r from-[#001A3D] via-[#001A3D]/80 to-transparent"></div>
@@ -274,63 +308,61 @@ export default function SreDevopsServices() {
             <div className="mb-6 flex items-center gap-3">
               <span className="h-[1px] w-12 bg-[#F99D1C]"></span>
               <span className="text-[10px] font-bold tracking-[0.3em] text-[#F99D1C] uppercase">
-                Reliability Engineering
+                DevOps Excellence
               </span>
             </div>
             <h1 className="display-font mb-8 text-3xl leading-[1.1] font-semibold tracking-tight text-white sm:text-4xl md:text-5xl md:leading-[1.05] lg:text-6xl">
-              Velocity Without Risk. <br />
-              <span className="text-[#F99D1C]">Enterprise Reliability.</span>
+              Your Deployment Vision. <br />
+              <span className="text-[#F99D1C]">DevOps Revolution.</span>
             </h1>
             <p className="max-w-2xl text-lg leading-relaxed font-medium text-gray-300 md:text-xl">
-              We help businesses thrive with elite-tier SRE and DevOps solutions. Break the silos,
-              automate the toil, and ship with absolute confidence.
+              We craft automated release pipelines, site reliability frameworks, and cloud orchestration systems for global enterprise software teams.
             </p>
           </Motion.div>
         </div>
       </section>
 
-      {/* Intro / Value Prop Section */}
+      {/* Intro Section */}
       <section className="bg-white py-24">
         <div className="mx-auto max-w-[1280px] px-6 lg:px-20">
           <div className="grid grid-cols-1 items-center gap-20 lg:grid-cols-2">
             <div className="space-y-10">
               <div className="space-y-6">
                 <h2 className="display-font text-3xl leading-tight font-semibold text-[#001A3D] md:text-5xl">
-                  Redefining Reliability with a Budget-First Approach
+                  Empowering Organizations with Smart, Scalable SRE & DevOps Services
                 </h2>
                 <div className="h-1 w-20 bg-[#0171c1]"></div>
               </div>
               <div className="space-y-6">
                 <p className="text-lg leading-relaxed font-medium text-gray-500">
-                  Our SRE and DevOps as a Service operates on a unique shared-service model that is
-                  simple, scalable, and budget-friendly. We eliminate the need for expensive
-                  full-time hires while providing enterprise-grade support.
+                  At Hutech Solutions, we bring deep expertise in implementing, supporting, and
+                  managing integrated cloud infrastructures. Our end-to-end solutions include cloud
+                  automation provisioning, site reliability engineering, release pipeline designs, and 24/7 incident response.
                 </p>
                 <p className="text-lg leading-relaxed font-medium text-gray-500">
-                  By leveraging automation, observability, and elite engineering talent, we help
-                  organizations reduce their operational costs by up to 70% without compromising on
-                  system stability or release speed.
+                  We ensure our clients can operate with agility, high availability, and efficiency, enabling
+                  them to expand operations and integrate modern deployment frameworks to meet specific software and market needs.
                 </p>
               </div>
               <div className="flex flex-wrap gap-8 pt-4">
                 <div className="space-y-1">
-                  <p className="display-font text-3xl font-bold text-[#001A3D]">70%</p>
+                  <p className="display-font text-3xl font-bold text-[#001A3D]">600+</p>
                   <p className="text-[10px] font-bold tracking-widest text-[#0171c1] uppercase">
-                    Avg Cost Reduction
+                    Pipelines Built
                   </p>
                 </div>
                 <div className="hidden h-12 w-[1px] bg-gray-200 md:block"></div>
                 <div className="space-y-1">
-                  <p className="display-font text-3xl font-bold text-[#001A3D]">60%</p>
+                  <p className="display-font text-3xl font-bold text-[#001A3D]">80%</p>
                   <p className="text-[10px] font-bold tracking-widest text-[#0171c1] uppercase">
-                    Faster Release Cycles
+                    Faster Deployments
                   </p>
                 </div>
                 <div className="hidden h-12 w-[1px] bg-gray-200 md:block"></div>
                 <div className="space-y-1">
-                  <p className="display-font text-3xl font-bold text-[#001A3D]">99.9%</p>
+                  <p className="display-font text-3xl font-bold text-[#001A3D]">99.99%</p>
                   <p className="text-[10px] font-bold tracking-widest text-[#0171c1] uppercase">
-                    System Reliability
+                    System Uptime
                   </p>
                 </div>
               </div>
@@ -339,16 +371,15 @@ export default function SreDevopsServices() {
               <div className="aspect-square overflow-hidden rounded-sm shadow-2xl">
                 <ImageWithFallback
                   src="https://images.unsplash.com/photo-1581092580497-e0d23cbdf1dc?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080"
-                  alt="DevOps Engineering Dashboard"
+                  alt="DevOps Operations Center"
                   className="h-full w-full object-cover"
                 />
               </div>
               <div className="absolute -bottom-10 -left-10 hidden max-w-xs space-y-4 bg-[#0171c1] p-10 text-white shadow-2xl md:block">
-                <Zap size={32} strokeWidth={1.5} />
-                <h3 className="display-font text-xl font-bold">Shared Expertise</h3>
+                <Server size={32} strokeWidth={1.5} />
+                <h3 className="display-font text-xl font-bold">Reliable Operations</h3>
                 <p className="text-sm leading-relaxed font-medium opacity-80">
-                  Access senior-level DevOps talent starting from $700/month through our innovative
-                  service model.
+                  Integrating advanced chaos engineering, containerized platforms, and automated logging networks to enhance operational uptime.
                 </p>
               </div>
             </div>
@@ -356,16 +387,16 @@ export default function SreDevopsServices() {
         </div>
       </section>
 
-      {/* Services Grid */}
+      {/* Services Section */}
       <section className="bg-gray-50 py-24">
         <div className="mx-auto max-w-[1280px] px-6 lg:px-20">
           <div className="mb-20 space-y-6 text-center">
             <h2 className="display-font text-3xl font-semibold text-[#001A3D] md:text-5xl">
-              Comprehensive DevOps Solutions
+              Our SRE & DevOps Services
             </h2>
             <p className="mx-auto max-w-4xl text-lg leading-relaxed font-medium text-gray-500">
-              We specialize in delivering robust automation and reliability frameworks tailored for
-              modern high-growth organizations.
+              At Hutech Solutions, we specialize in delivering cutting-edge software technology
+              solutions tailored for the global DevOps automation landscape.
             </p>
           </div>
 
@@ -379,7 +410,7 @@ export default function SreDevopsServices() {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ delay: i * 0.1 }}
-                  className="group relative flex h-full flex-col space-y-6 overflow-hidden border border-gray-100 bg-white p-12 shadow-sm transition-all duration-500 hover:shadow-2xl"
+                  className="group relative flex flex-col space-y-6 overflow-hidden border border-gray-100 bg-white p-12 shadow-sm transition-all duration-500 hover:shadow-2xl"
                 >
                   <div className="absolute top-0 right-0 p-8 opacity-5 transition-opacity group-hover:opacity-10">
                     <Icon size={80} strokeWidth={1} />
@@ -393,20 +424,7 @@ export default function SreDevopsServices() {
                   <p className="text-sm leading-relaxed font-medium text-gray-500">
                     {service.description}
                   </p>
-
-                  <ul className="space-y-3 pt-4">
-                    {service.functions.map((func, idx) => (
-                      <li
-                        key={idx}
-                        className="flex items-start gap-3 text-xs font-medium text-gray-600"
-                      >
-                        <Check size={14} className="mt-0.5 shrink-0 text-[#0171c1]" />
-                        <span>{func}</span>
-                      </li>
-                    ))}
-                  </ul>
-
-                  <div className="mt-auto pt-8">
+                  <div className="mt-auto pt-4">
                     <Link
                       href="/contact"
                       className="inline-flex items-center gap-2 text-[10px] font-bold tracking-widest text-[#0171c1] uppercase transition-all group-hover:gap-4"
@@ -421,65 +439,44 @@ export default function SreDevopsServices() {
         </div>
       </section>
 
-      {/* Pricing Comparison Section */}
+      {/* Essential Solutions Section */}
       <section className="overflow-hidden bg-[#001A3D] py-24 text-white">
         <div className="mx-auto max-w-[1280px] px-6 lg:px-20">
           <div className="mb-20 space-y-6 text-center">
             <h2 className="display-font mx-auto max-w-4xl text-3xl leading-tight font-semibold md:text-5xl">
-              Save Up to 70% on Operations
+              What Makes Custom DevOps Solutions Essential for Your Business?
             </h2>
             <div className="mx-auto h-1 w-20 bg-[#0171c1]"></div>
             <p className="mx-auto max-w-3xl text-lg leading-relaxed font-medium text-gray-400">
-              Compare our shared-service model with the cost of traditional hiring. Enterprise-grade
-              support at a fraction of the budget.
+              In the modern digital landscape, custom automation and site reliability are key to staying
+              competitive and ensuring operational excellence.
             </p>
           </div>
 
-          <div className="mb-20 overflow-hidden rounded-sm border border-white/10 bg-white/5">
-            <table className="w-full border-collapse text-left">
-              <thead>
-                <tr className="border-b border-white/10">
-                  <th className="p-8 text-xs font-bold tracking-widest text-gray-400 uppercase">
-                    Service Package
-                  </th>
-                  <th className="p-8 text-xs font-bold tracking-widest text-[#0171c1] uppercase">
-                    Hutech Cost (Monthly)
-                  </th>
-                  <th className="p-8 text-xs font-bold tracking-widest text-gray-400 uppercase">
-                    Traditional Hiring
-                  </th>
-                  <th className="p-8 text-xs font-bold tracking-widest text-emerald-400 uppercase">
-                    Total Savings
-                  </th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-white/10 font-medium">
-                {PRICING_COMPARISON.map((row, i) => (
-                  <tr key={i} className="transition-colors hover:bg-white/5">
-                    <td className="display-font p-8 text-lg font-bold">{row.service}</td>
-                    <td className="p-8 text-xl font-bold text-[#0171c1]">{row.hutechCost}</td>
-                    <td className="p-8 text-gray-500 line-through">{row.resourceCost}</td>
-                    <td className="p-8 font-bold tracking-tight text-emerald-400">{row.savings}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-
-          <div className="rounded-sm border border-white/10 bg-white/5 p-12 text-center">
-            <h3 className="display-font mb-4 text-2xl font-bold">
-              Ready to optimize your infrastructure costs?
-            </h3>
-            <p className="mx-auto mb-8 max-w-2xl text-gray-400">
-              Our consultants will perform a free audit of your current operations and show you
-              exactly where you can save.
-            </p>
-            <Link
-              href="/contact"
-              className="inline-flex items-center gap-3 rounded-sm bg-[#F99D1C] px-10 py-5 text-[11px] font-bold tracking-wider text-[#001A3D] uppercase shadow-xl transition-all hover:bg-white"
-            >
-              Request A Free Audit <MoveRight size={16} />
-            </Link>
+          <div className="relative z-10 grid grid-cols-1 gap-12 md:grid-cols-2 lg:grid-cols-3">
+            {ESSENTIAL_SOLUTIONS.map((item, i) => {
+              const Icon = item.icon;
+              return (
+                <Motion.div
+                  key={i}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: i * 0.1 }}
+                  className="group space-y-6 rounded-sm border border-white/5 p-8 transition-colors hover:bg-white/5"
+                >
+                  <div className="flex h-14 w-14 items-center justify-center rounded-sm bg-white/10 text-[#0171c1] transition-transform group-hover:scale-110">
+                    <Icon size={28} strokeWidth={1.5} />
+                  </div>
+                  <div className="space-y-4">
+                    <h3 className="display-font text-xl font-bold tracking-tight">{item.title}</h3>
+                    <p className="text-sm leading-relaxed font-medium text-gray-400">
+                      {item.description}
+                    </p>
+                  </div>
+                </Motion.div>
+              );
+            })}
           </div>
         </div>
       </section>
@@ -488,12 +485,12 @@ export default function SreDevopsServices() {
       <section className="bg-white py-24">
         <div className="mx-auto max-w-[1280px] px-6 lg:px-20">
           <div className="mb-20 space-y-6 text-center">
-            <h2 className="display-font text-3xl font-semibold tracking-tight text-[#001A3D] md:text-5xl">
-              Which Innovations Can Propel Your Reliability?
+            <h2 className="display-font text-3xl font-semibold text-[#001A3D] md:text-5xl">
+              Which Innovations Can Transform Your DevOps Infrastructure?
             </h2>
             <p className="mx-auto max-w-3xl text-lg leading-relaxed font-medium text-gray-500">
-              We integrate the latest advancements in reliability engineering to ensure your systems
-              remain future-proof.
+              Incorporating advanced tools can significantly enhance your deployment capabilities
+              for the digital-first era.
             </p>
           </div>
 
@@ -527,14 +524,50 @@ export default function SreDevopsServices() {
         </div>
       </section>
 
-      {/* SRE & DevOps Services Technology Stack Section */}
+      {/* CTA Section */}
+      <section className="overflow-hidden bg-[#F2F2F2] py-24">
+        <div className="mx-auto max-w-[1280px] px-6 lg:px-20">
+          <div className="flex flex-col items-center gap-20 lg:flex-row">
+            <div className="flex-1 space-y-10">
+              <div className="space-y-6">
+                <h2 className="display-font text-3xl leading-[1.2] font-semibold text-[#001A3D] md:text-5xl">
+                  Discover Your SRE & DevOps Strategy With Us
+                </h2>
+                <div className="h-1 w-20 bg-[#0171c1]"></div>
+                <p className="text-lg leading-relaxed font-medium text-gray-500">
+                  Schedule a consultation with our expert DevOps team and take the
+                  first step towards a digital-first automated infrastructure.
+                </p>
+              </div>
+              <div>
+                <Link
+                  href="/contact"
+                  className="inline-flex items-center gap-3 rounded-sm bg-[#F99D1C] px-10 py-5 text-[11px] font-bold tracking-wider text-[#001A3D] uppercase shadow-xl transition-all duration-500 hover:bg-[#001A3D] hover:text-white"
+                >
+                  Consult Us Now <ArrowRight size={16} />
+                </Link>
+              </div>
+            </div>
+            <div className="relative flex-1">
+              <div className="relative z-10 aspect-video rounded-sm bg-white p-2 shadow-2xl">
+                <ImageWithFallback
+                  src="https://images.unsplash.com/photo-1581092580497-e0d23cbdf1dc?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080"
+                  alt="Infrastructure Cost Analytics"
+                  className="h-full w-full object-cover"
+                />
+              </div>
+              <div className="absolute -top-10 -right-10 -z-10 h-64 w-64 rounded-full bg-[#0171c1]/5 blur-3xl"></div>
+              <div className="absolute -bottom-10 -left-10 -z-10 h-48 w-48 rounded-full bg-[#F99D1C]/10 blur-2xl"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Technology Stack Section */}
       <section className="relative overflow-hidden bg-gradient-to-b from-[#001A3D] via-[#030E21] to-[#020B1E] py-24 md:py-32 text-white">
-        {/* Radial Light Glow behind heading */}
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[300px] bg-blue-500/10 rounded-full blur-3xl pointer-events-none" />
-        
-        {/* Glowing Grid Background Pattern */}
         <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:60px_60px] pointer-events-none" />
-        
+
         <div className="relative z-10 mx-auto max-w-[1280px] px-6 lg:px-20">
           {/* Header */}
           <div className="mb-16 text-center md:mb-20">
@@ -543,13 +576,13 @@ export default function SreDevopsServices() {
               TECHNOLOGY STACK
               <span className="h-[1px] w-8 bg-gradient-to-l from-transparent to-[#F99D1C]" />
             </div>
-            
+
             <h2 className="mt-4 display-font text-3xl font-bold tracking-wider text-white sm:text-4xl md:text-5xl uppercase">
               MODERN SRE & DEVOPS STACK
             </h2>
-            
+
             <div className="mx-auto mt-4 h-[3px] w-14 bg-[#F99D1C]" />
-            
+
             <p className="mx-auto mt-6 max-w-2xl text-sm font-medium text-gray-400 md:text-base leading-relaxed">
               Reliable DevOps and SRE technologies enabling scalable infrastructure, automation, monitoring, and continuous delivery
             </p>
@@ -581,15 +614,15 @@ export default function SreDevopsServices() {
       </section>
 
       {/* Why Choose Section */}
-      <section className="bg-gray-50 py-24">
+      <section className="bg-white py-24">
         <div className="mx-auto max-w-[1280px] px-6 lg:px-20">
           <div className="mb-20 space-y-6 text-center">
             <h2 className="display-font text-3xl font-semibold text-[#001A3D] md:text-5xl">
-              Why Choose Hutech Solutions for DevOps?
+              Why Choose Hutech Solutions for Your DevOps Project?
             </h2>
             <p className="mx-auto max-w-4xl text-lg leading-relaxed font-medium text-gray-500">
-              We specialize in delivering high-impact DevOps and SRE solutions tailored for
-              rapid-growth enterprise environments.
+              At Hutech Solutions, we specialize in delivering SRE & DevOps solutions
+              tailored to your unique organizational needs.
             </p>
           </div>
 
@@ -620,12 +653,12 @@ export default function SreDevopsServices() {
       </section>
 
       {/* Contact Form Section */}
-      <section className="bg-white py-24">
+      <section className="bg-gray-50 py-24">
         <div className="mx-auto max-w-[1280px] px-6 lg:px-20">
           <div className="grid grid-cols-1 gap-20 lg:grid-cols-12">
             <div className="rounded-sm border border-gray-100 bg-white p-10 shadow-2xl md:p-14 lg:col-span-7">
               <h2 className="display-font mb-10 text-3xl font-bold text-[#001A3D]">
-                Scale Your Reliability Today
+                Start Your SRE & DevOps Project
               </h2>
               <form className="grid grid-cols-1 gap-6 md:grid-cols-2">
                 <input
@@ -644,26 +677,26 @@ export default function SreDevopsServices() {
                   className="w-full border border-gray-200 p-4 text-sm font-medium transition-all outline-none focus:border-[#0171c1] md:col-span-2"
                 />
                 <textarea
-                  placeholder="Tell us about your infrastructure or reliability goals"
+                  placeholder="Tell us about your deployment and infrastructure needs"
                   rows={4}
                   className="w-full resize-none border border-gray-200 p-4 text-sm font-medium transition-all outline-none focus:border-[#0171c1] md:col-span-2"
                 ></textarea>
                 <div className="md:col-span-2">
                   <button className="w-full rounded-sm bg-[#F99D1C] px-12 py-5 text-[11px] font-bold tracking-wider text-[#001A3D] uppercase shadow-xl transition-all duration-500 hover:bg-[#001A3D] hover:text-white md:w-auto">
-                    Submit Inquiry
+                    Submit Project Request
                   </button>
                 </div>
               </form>
             </div>
             <div className="space-y-12 py-8 lg:col-span-5">
               <h2 className="display-font text-3xl font-bold text-[#001A3D]">
-                The Roadmap To Excellence
+                What Is The Next Step?
               </h2>
               <div className="space-y-10">
                 {[
                   {
                     icon: MessageSquare,
-                    text: "A senior DevOps architect reviews your infrastructure goals and contacts you within 4 hours.",
+                    text: "A senior DevOps architect reviews your infrastructure goals and contacts you within 4 business hours.",
                   },
                   {
                     icon: FileText,
@@ -693,15 +726,15 @@ export default function SreDevopsServices() {
       </section>
 
       {/* FAQ Section */}
-      <section className="bg-gray-50 py-24">
+      <section className="bg-white py-24">
         <div className="mx-auto max-w-[1280px] px-6 lg:px-20">
           <div className="mb-20 space-y-6 text-center">
             <h2 className="display-font text-3xl font-semibold tracking-tight text-[#001A3D] md:text-5xl">
-              Expert SRE Insights (FAQ)
+              Frequently Asked Questions
             </h2>
             <div className="mx-auto h-1 w-20 bg-[#0171c1]"></div>
           </div>
-          <div className="mx-auto max-w-4xl divide-y divide-gray-100 rounded-sm bg-white p-8 shadow-sm md:p-12">
+          <div className="mx-auto max-w-4xl divide-y divide-gray-100">
             {FAQS.map((faq, i) => (
               <FAQItem key={i} question={faq.question} answer={faq.answer} />
             ))}
@@ -709,28 +742,70 @@ export default function SreDevopsServices() {
         </div>
       </section>
 
-      {/* CTA Section */}
-      <section className="bg-[#0171c1] py-24 text-white">
-        <div className="mx-auto max-w-[1280px] space-y-10 px-6 text-center lg:px-20">
-          <h2 className="display-font text-4xl font-bold md:text-6xl">
-            Ready to Transform Your Operations?
-          </h2>
-          <p className="mx-auto max-w-3xl text-xl opacity-90">
-            Join the 100+ organizations that have optimized their reliability and costs with Hutech
-            Solutions.
-          </p>
-          <div className="flex flex-wrap justify-center gap-6">
+      {/* Blog Section */}
+      <section className="bg-gray-50 py-24">
+        <div className="mx-auto max-w-[1280px] px-6 lg:px-20">
+          <div className="mb-16 flex items-end justify-between gap-8">
+            <div className="max-w-2xl space-y-6">
+              <h2 className="display-font text-3xl font-semibold text-[#001A3D] md:text-5xl">
+                DevOps Insights & Articles
+              </h2>
+              <p className="text-lg font-medium text-gray-500">
+                Explore our latest thinking on DevOps technology and digital infrastructure trends.
+              </p>
+            </div>
             <Link
-              href="/contact"
-              className="rounded-sm bg-white px-12 py-5 text-[11px] font-bold tracking-wider text-[#0171c1] uppercase shadow-2xl transition-all hover:bg-[#001A3D] hover:text-white"
+              href="/resources"
+              className="hidden items-center gap-2 pb-2 text-[11px] font-bold tracking-widest text-[#0171c1] uppercase transition-all hover:gap-4 md:flex"
             >
-              Schedule A Discovery Call
+              View All Resources <MoveRight size={16} />
             </Link>
+          </div>
+
+          <div className="mb-16 grid grid-cols-1 gap-8 md:grid-cols-3">
+            {BLOG_POSTS.map((post, i) => (
+              <div
+                key={i}
+                className="group overflow-hidden rounded-sm bg-white shadow-sm transition-all duration-500 hover:shadow-2xl"
+              >
+                <div className="relative aspect-[16/10] overflow-hidden">
+                  <ImageWithFallback
+                    src={post.image}
+                    alt={post.title}
+                    className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110"
+                  />
+                  <div className="absolute top-4 left-4">
+                    <span className="rounded-sm bg-[#0171c1] px-3 py-1 text-[9px] font-bold tracking-widest text-white uppercase">
+                      DevOps
+                    </span>
+                  </div>
+                </div>
+                <div className="space-y-4 p-8">
+                  <h3 className="display-font line-clamp-2 min-h-[3.5rem] text-xl leading-tight font-bold text-[#001A3D] transition-colors group-hover:text-[#0171c1]">
+                    {post.title}
+                  </h3>
+                  <p className="line-clamp-3 text-sm leading-relaxed font-medium text-gray-500">
+                    {post.description}
+                  </p>
+                  <div className="border-t border-gray-50 pt-4">
+                    <Link
+                      href={`/resources/blogs/${post.id}`}
+                      className="inline-flex items-center gap-2 text-[10px] font-bold tracking-widest text-[#001A3D] uppercase transition-colors hover:text-[#0171c1]"
+                    >
+                      Read Article <ChevronRight size={12} />
+                    </Link>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <div className="text-center md:hidden">
             <Link
-              href="/services"
-              className="rounded-sm border-2 border-white/30 px-12 py-5 text-[11px] font-bold tracking-wider text-white uppercase transition-all hover:bg-white/10"
+              href="/resources"
+              className="inline-flex items-center gap-3 rounded-sm bg-[#0171c1] px-10 py-5 text-[11px] font-bold tracking-wider text-white uppercase shadow-xl"
             >
-              Explore All Services
+              Explore Resources <MoveRight size={16} />
             </Link>
           </div>
         </div>

@@ -4,6 +4,9 @@ import { motion as Motion } from "framer-motion";
 import { Breadcrumbs } from "@/components/Breadcrumbs";
 import {
   Heart,
+  HeartPulse,
+  BookOpen,
+  Coffee,
   Users,
   Star,
   Award,
@@ -26,23 +29,10 @@ export default function LifeAtHutech() {
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [mounted, setMounted] = useState(false);
-  const [slidesToShow, setSlidesToShow] = useState(3);
   const workplaceSliderRef = useRef<Slider>(null);
 
   useEffect(() => {
     setMounted(true);
-    const updateSlidesToShow = () => {
-      if (window.innerWidth < 768) {
-        setSlidesToShow(1);
-      } else if (window.innerWidth < 1024) {
-        setSlidesToShow(2);
-      } else {
-        setSlidesToShow(3);
-      }
-    };
-    updateSlidesToShow();
-    window.addEventListener("resize", updateSlidesToShow);
-    return () => window.removeEventListener("resize", updateSlidesToShow);
   }, []);
 
   const openLightbox = useCallback((index: number) => {
@@ -103,24 +93,26 @@ export default function LifeAtHutech() {
     { src: "https://images.unsplash.com/photo-1600880212340-02d956ea3a92", tag: "Global Meet" },
   ];
 
-  const awards = [
+  const benefits = [
+    {
+      icon: <HeartPulse className="h-10 w-10" />,
+      title: "Health & Wellness",
+      desc: "Comprehensive health insurance, wellness initiatives, and employee assistance programs.",
+    },
+    {
+      icon: <BookOpen className="h-10 w-10" />,
+      title: "Learning & Growth",
+      desc: "Access to certifications, mentorship, training programs, and continuous learning opportunities.",
+    },
+    {
+      icon: <Coffee className="h-10 w-10" />,
+      title: "Work-Life Balance",
+      desc: "Flexible work arrangements, paid time off, and a supportive work environment.",
+    },
     {
       icon: <Trophy className="h-10 w-10" />,
-      title: "Excellence in Digital Innovation",
-      org: "Global Tech Awards 2025",
-      desc: "Recognized for pioneering AI-driven solutions that transformed regional banking ecosystems.",
-    },
-    {
-      icon: <Award className="h-10 w-10" />,
-      title: "Best Workplace Culture",
-      org: "Industry Excellence Forums",
-      desc: "Awarded for our 'Family First' philosophy and commitment to employee well-being and growth.",
-    },
-    {
-      icon: <ShieldCheck className="h-10 w-10" />,
-      title: "Cybersecurity Leadership",
-      org: "SecureWorld Summit",
-      desc: "Honored for outstanding contributions to enterprise security and zero-trust implementation.",
+      title: "Rewards & Recognition",
+      desc: "Performance-based rewards, employee appreciation programs, and career advancement opportunities.",
     },
   ];
 
@@ -154,37 +146,14 @@ const carouselSettings = {
   dots: true,
   infinite: true,
   speed: 800,
-  slidesToShow: 3,
+  slidesToShow: 1,
   slidesToScroll: 1,
   autoplay: true,
   autoplaySpeed: 5000,
   arrows: false,
   swipe: true,
   draggable: true,
-  swipeToSlide: true,
   adaptiveHeight: false,
-
-  responsive: [
-    {
-      breakpoint: 1024,
-      settings: {
-        slidesToShow: 2,
-        slidesToScroll: 1,
-      },
-    },
-
-    {
-      breakpoint: 768,
-      settings: {
-        slidesToShow: 1,
-        slidesToScroll: 1,
-        infinite: true,
-        centerMode: false,
-        variableWidth: false,
-        adaptiveHeight: false,
-      },
-    },
-  ],
 };
 
 
@@ -323,63 +292,43 @@ const carouselSettings = {
         )}
       </section>
 
-      {/* Achievements Section */}
+      {/* Benefits Section */}
       <section className="relative overflow-hidden border-y border-gray-100 bg-gray-50 py-24">
         <div className="pointer-events-none absolute top-0 right-0 p-20 text-[#001A3D] opacity-[0.03]">
-          <Trophy size={400} />
+          <HeartPulse size={400} />
         </div>
 
         <div className="relative z-10 mx-auto max-w-[1280px] px-6 lg:px-20">
-          <div className="grid grid-cols-1 items-center gap-16 lg:grid-cols-12">
-            <div className="space-y-8 lg:col-span-5">
-              <div className="space-y-4">
-                <span className="text-xs font-bold tracking-widest text-[#F99D1C] uppercase">
-                  Achievements
-                </span>
-                <h2 className="display-font text-4xl leading-tight font-semibold tracking-tight text-[#001A3D] md:text-6xl">
-                  Awards And <br /> <span className="text-[#F99D1C]">Recognition.</span>
-                </h2>
-              </div>
-              <p className="text-lg leading-relaxed font-medium text-gray-500">
-                Our commitment to engineering excellence and people-first culture has been
-                consistently recognized by global industry bodies. We take pride in the milestones
-                we've achieved together as a family.
-              </p>
-              <div className="pt-4">
-                <Link
-                  href="/company/awards"
-                  className="inline-flex items-center gap-3 rounded-sm bg-[#001A3D] px-8 py-4 text-xs font-bold tracking-wide text-white transition-all hover:bg-[#002A5D]"
-                >
-                  View All Awards <MoveRight className="h-4 w-4" />
-                </Link>
-              </div>
-            </div>
+          <div className="mb-16 space-y-4 text-center">
+            <span className="text-xs font-bold tracking-widest text-[#F99D1C] uppercase">
+              Benefits
+            </span>
+            <h2 className="display-font text-4xl leading-tight font-semibold tracking-tight text-[#001A3D] md:text-6xl">
+              More Than a Workplace— <br /> <span className="text-[#F99D1C]">A Place to Thrive</span>
+            </h2>
+          </div>
 
-            <div className="grid gap-6 lg:col-span-7">
-              {awards.map((award, i) => (
-                <Motion.div
-                  key={i}
-                  initial={{ opacity: 0, x: 30 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: i * 0.1 }}
-                  className="group flex flex-col items-start gap-8 rounded-[2.5rem] border border-gray-100 bg-white p-10 transition-all hover:shadow-2xl md:flex-row"
-                >
-                  <div className="rounded-2xl bg-gray-50 p-5 text-[#F99D1C] transition-all duration-500 group-hover:bg-[#F99D1C] group-hover:text-white">
-                    {award.icon}
-                  </div>
-                  <div className="space-y-3">
-                    <p className="text-[11px] font-bold tracking-widest text-[#F99D1C] uppercase">
-                      {award.org}
-                    </p>
-                    <h3 className="display-font text-2xl font-bold text-[#001A3D]">
-                      {award.title}
-                    </h3>
-                    <p className="leading-relaxed font-medium text-gray-500">{award.desc}</p>
-                  </div>
-                </Motion.div>
-              ))}
-            </div>
+          <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+            {benefits.map((benefit, i) => (
+              <Motion.div
+                key={i}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.1 }}
+                className="group flex flex-col items-start gap-8 rounded-[2.5rem] border border-gray-100 bg-white p-10 transition-all hover:shadow-2xl md:flex-row"
+              >
+                <div className="shrink-0 rounded-2xl bg-gray-50 p-5 text-[#F99D1C] transition-all duration-500 group-hover:bg-[#F99D1C] group-hover:text-white">
+                  {benefit.icon}
+                </div>
+                <div className="space-y-3">
+                  <h3 className="display-font text-2xl font-bold text-[#001A3D]">
+                    {benefit.title}
+                  </h3>
+                  <p className="leading-relaxed font-medium text-gray-500">{benefit.desc}</p>
+                </div>
+              </Motion.div>
+            ))}
           </div>
         </div>
       </section>
@@ -415,13 +364,11 @@ const carouselSettings = {
           </div>
         </div>
 
-        <div className="workplace-carousel relative mx-auto w-full max-w-[1280px] overflow-hidden px-4 md:px-8 lg:px-20">
+        <div className="workplace-carousel relative mx-auto w-full max-w-[1440px] overflow-hidden px-4 sm:px-6 lg:px-8">
           {mounted && (
             <Slider 
-              key={`slider-${slidesToShow}`} 
               ref={workplaceSliderRef} 
               {...carouselSettings}
-              slidesToShow={slidesToShow}
             >
               {[
                 {
@@ -450,25 +397,29 @@ const carouselSettings = {
                   tag: "Teams",
                 },
               ].map((slide, i) => (
-        <div className="w-full min-w-0">
-          <div className="group relative h-[420px] w-full overflow-hidden rounded-[32px] md:h-[540px]">
-            <ImageWithFallback
-              src={`${slide.src}?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=800`}
-              alt={slide.title}
-              className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110"
-            />
-            <div className="absolute bottom-0 left-0 w-full p-6 md:p-10">
-              <div className="max-w-[90%] mx-auto sm:mx-0">
-                <span className="mb-2 sm:mb-4 inline-block rounded-full bg-[#F99D1C] px-4 py-1.5 text-[10px] font-bold tracking-widest text-[#001A3D] uppercase transition-colors duration-300 group-hover:bg-[#f5a623]">
-                  {slide.tag}
-                </span>
-                <h4 className="display-font text-xl sm:text-2xl leading-tight font-bold text-white">
-                  {slide.title}
-                </h4>
-              </div>
-            </div>
-          </div>
-        </div>
+                <div key={i} className="w-full min-w-0 outline-none pb-8">
+                  <div className="group relative h-[400px] w-full overflow-hidden rounded-[2.5rem] shadow-2xl md:h-[500px]">
+                    <ImageWithFallback
+                      src={`${slide.src}?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1920`}
+                      alt={slide.title}
+                      className="h-full w-full object-cover transition-transform duration-[1.5s] ease-in-out group-hover:scale-105"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-r from-[#001A3D]/90 via-[#001A3D]/40 to-transparent mix-blend-multiply"></div>
+                    <div className="absolute inset-0 bg-gradient-to-t from-[#001A3D]/95 via-[#001A3D]/20 to-transparent"></div>
+                    
+                    <div className="absolute inset-0 flex flex-col justify-end p-8 md:p-12 lg:p-16">
+                      <div className="max-w-4xl transform transition-all duration-700 translate-y-2 group-hover:translate-y-0 opacity-90 group-hover:opacity-100">
+                        <span className="mb-4 inline-flex items-center rounded-full border border-[#F99D1C]/30 bg-[#F99D1C]/10 px-5 py-2 text-[11px] font-bold tracking-widest text-[#F99D1C] uppercase backdrop-blur-sm">
+                          <span className="mr-2 h-1.5 w-1.5 rounded-full bg-[#F99D1C]"></span>
+                          {slide.tag}
+                        </span>
+                        <h4 className="display-font text-4xl leading-[1.1] font-semibold tracking-tight text-white md:text-5xl lg:text-6xl">
+                          {slide.title}
+                        </h4>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               ))}
             </Slider>
           )}
