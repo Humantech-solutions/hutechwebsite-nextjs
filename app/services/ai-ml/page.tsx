@@ -3,22 +3,34 @@
 import { useState } from "react";
 import { motion as Motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
-import { Brain,
+import {
+  Brain,
   TrendingUp,
   MessageSquare,
   Eye,
   Cpu,
   Zap,
   BarChart3,
-  Check,
-  Rocket,
-  ChevronDown, MoveRight, } from "lucide-react";
+  MoveRight,
+  ArrowRight,
+  ChevronRight,
+  Workflow,
+  Smartphone,
+  Globe,
+  Database,
+  Network,
+  Lock,
+  Sparkles,
+  Settings,
+  ShieldCheck,
+  RefreshCw,
+  Users,
+  FileText,
+  Cloud,
+} from "lucide-react";
 import { Breadcrumbs } from "@/components/Breadcrumbs";
 import { Meta } from "@/components/Meta";
 import { ImageWithFallback } from "@/components/figma/ImageWithFallback";
-import { Meta } from "@/components/Meta";
-
-import { ServiceDetailContactCTA } from "@/components/ServiceDetailContactCTA";
 
 const AI_SERVICES = [
   {
@@ -289,38 +301,29 @@ export default function AiMlSolutions() {
           <div className="absolute inset-0 bg-gradient-to-r from-[#001A3D] via-[#001A3D]/80 to-transparent"></div>
         </div>
 
-        <Motion.div
-          className="relative z-10 mx-auto flex h-full w-full max-w-[1280px] items-center px-6 md:px-8 lg:px-20"
-          style={{ opacity: heroOpacity }}
-        >
-          <div className="max-w-4xl py-12">
-            <Motion.div
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8 }}
-              className="max-w-4xl"
-            >
-              <div className="mb-6 flex items-center gap-3">
-                <span className="h-[1px] w-12 bg-[#F99D1C]"></span>
-                <span className="text-[10px] font-bold tracking-[0.3em] text-[#F99D1C] uppercase">
-                  Intelligence Redefined
-                </span>
-              </div>
-              <h1 className="display-font mb-8 text-3xl leading-[1.1] font-semibold tracking-tight text-white sm:text-4xl md:text-5xl md:leading-[1.05] lg:text-6xl">
-                AI/ML Application <br />
-                <span className="text-[#F99D1C]">Development.</span>
-              </h1>
-              <p className="max-w-2xl text-lg leading-relaxed font-medium text-gray-300 md:text-xl">
-                Step into a realm of endless possibilities. We blend visionary thinking with
-                cutting-edge technology to create powerful solutions for businesses of all sizes.
-              </p>
-              <Link href="/contact" className="btn-banner-cta mt-6 group">
-              Consult Us
-              <MoveRight className="w-4 h-4 transition-transform group-hover:translate-x-1 shrink-0" />
-            </Link>
-            </Motion.div>
-          </div>
-        </Motion.div>
+        <div className="relative z-10 mx-auto w-full max-w-[1280px] px-6 lg:px-20">
+          <Motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            className="max-w-4xl"
+          >
+            <div className="mb-6 flex items-center gap-3">
+              <span className="h-[1px] w-12 bg-[#F99D1C]"></span>
+              <span className="text-[10px] font-bold tracking-[0.3em] text-[#F99D1C] uppercase">
+                Intelligence Redefined
+              </span>
+            </div>
+            <h1 className="display-font mb-8 text-3xl leading-[1.1] font-semibold tracking-tight text-white sm:text-4xl md:text-5xl md:leading-[1.05] lg:text-6xl">
+              Your Data. <br />
+              <span className="text-[#F99D1C]">Intelligent Decisions.</span>
+            </h1>
+            <p className="max-w-2xl text-lg leading-relaxed font-medium text-gray-300 md:text-xl">
+              We craft intelligent data-driven experiences through cutting-edge AI/ML models and
+              expert consulting for global enterprise leaders.
+            </p>
+          </Motion.div>
+        </div>
       </section>
 
       {/* Intro Section */}
@@ -813,8 +816,6 @@ export default function AiMlSolutions() {
           </div>
         </div>
       </section>
-      <ServiceDetailContactCTA />
-
     </div>
   );
 }
