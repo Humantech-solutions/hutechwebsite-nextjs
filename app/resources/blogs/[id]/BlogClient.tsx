@@ -229,6 +229,7 @@ export default function BlogClient() {
   const id = params?.id as string;
   const blog = BLOG_DATA[id];
   const [openFaq, setOpenFaq] = useState<number | null>(null);
+  const shareUrl = typeof window !== 'undefined' ? window.location.href.replace(window.location.origin, 'https://hutechsolutions.ai') : '';
 
   if (!blog) {
     return (
@@ -358,9 +359,27 @@ export default function BlogClient() {
               <div className="border border-gray-100 rounded-3xl p-8 space-y-6">
                 <h4 className="font-bold text-[#001A3D] flex items-center gap-2"><Share2 size={18} className="text-[#FFAF2B]" /> Share Article</h4>
                 <div className="flex gap-3">
-                  {[{ icon: <Linkedin size={18} />, label: "LinkedIn" }, { icon: <Twitter size={18} />, label: "Twitter" }, { icon: <Facebook size={18} />, label: "Facebook" }].map((s) => (
-                    <button key={s.label} aria-label={s.label} className="w-12 h-12 rounded-2xl bg-gray-50 flex items-center justify-center text-gray-400 hover:bg-[#001A3D] hover:text-white transition-all">{s.icon}</button>
-                  ))}
+                  <button
+                    onClick={() => window.open(`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(shareUrl)}`, '_blank')}
+                    aria-label="LinkedIn"
+                    className="w-12 h-12 rounded-2xl bg-gray-50 flex items-center justify-center text-gray-400 hover:bg-[#001A3D] hover:text-white transition-all"
+                  >
+                    <Linkedin size={18} />
+                  </button>
+                  <button
+                    onClick={() => window.open(`https://twitter.com/intent/tweet?url=${encodeURIComponent(shareUrl)}&text=${encodeURIComponent(blog.title)}`, '_blank')}
+                    aria-label="Twitter"
+                    className="w-12 h-12 rounded-2xl bg-gray-50 flex items-center justify-center text-gray-400 hover:bg-[#001A3D] hover:text-white transition-all"
+                  >
+                    <Twitter size={18} />
+                  </button>
+                  <button
+                    onClick={() => window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}`, '_blank')}
+                    aria-label="Facebook"
+                    className="w-12 h-12 rounded-2xl bg-gray-50 flex items-center justify-center text-gray-400 hover:bg-[#001A3D] hover:text-white transition-all"
+                  >
+                    <Facebook size={18} />
+                  </button>
                 </div>
               </div>
               <div className="bg-[#FFAF2B] p-8 rounded-3xl space-y-4">

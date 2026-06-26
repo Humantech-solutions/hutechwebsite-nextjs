@@ -43,7 +43,7 @@ export default function JobDetailsClient({ job }: { job: Job }) {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  const pageUrl = typeof window !== "undefined" ? window.location.href : "";
+  const pageUrl = typeof window !== "undefined" ? window.location.href.replace(window.location.origin, 'https://hutechsolutions.ai') : "";
   const pageTitle = job.title;
 
   function handleCopyLink() {
