@@ -23,6 +23,9 @@ import { Meta } from "@/components/Meta";
 import { Breadcrumbs } from "@/components/Breadcrumbs";
 import { renderTitle } from "@/lib/utils";
 
+import { useState } from "react";
+import { submitContactForm } from "@/lib/api";
+
 const STATIC_OFFICES = [
   {
     city: "Bangalore",
@@ -131,9 +134,35 @@ export default function ContactClient({
 
   trustBuilders = STATIC_TRUST_BUILDERS,
 }: ContactClientProps) {
-  const handleSubmit = (e: React.FormEvent) => {
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    toast.success("Thank you! Your inquiry has been received. Our team will contact you shortly.");
+    setIsSubmitting(true);
+
+    const formData = new FormData(e.currentTarget);
+    const name = formData.get("name") as string;
+    const emailVal = formData.get("email") as string;
+    const phoneVal = formData.get("phone") as string;
+    const subject = formData.get("subject") as string;
+    const message = formData.get("message") as string;
+
+    try {
+      await submitContactForm({
+        name,
+        email: emailVal,
+        phone: phoneVal,
+        subject,
+        message,
+        category: "Contact Us Form",
+      });
+      toast.success("Thank you! Your inquiry has been received. Our team will contact you shortly.");
+      e.currentTarget.reset();
+    } catch (error) {
+      toast.error("Failed to submit inquiry. Please try again later.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const socialLinks = [
@@ -215,6 +244,7 @@ export default function ContactClient({
                       <input
                         required
                         type="text"
+                        name="name"
                         placeholder="e.g. John Doe"
                         className="w-full rounded-sm border border-gray-100 bg-gray-50 px-6 py-4 font-medium text-[#001A3D] transition-all focus:border-[#F99D1C] focus:ring-1 focus:ring-[#F99D1C] focus:outline-none"
                       />
@@ -224,6 +254,7 @@ export default function ContactClient({
                       <input
                         required
                         type="email"
+                        name="email"
                         placeholder="john@company.com"
                         className="w-full rounded-sm border border-gray-100 bg-gray-50 px-6 py-4 font-medium text-[#001A3D] transition-all focus:border-[#F99D1C] focus:ring-1 focus:ring-[#F99D1C] focus:outline-none"
                       />
@@ -236,13 +267,14 @@ export default function ContactClient({
                       <input
                         required
                         type="tel"
+                        name="phone"
                         placeholder="+1 (555) 000-0000"
                         className="w-full rounded-sm border border-gray-100 bg-gray-50 px-6 py-4 font-medium text-[#001A3D] transition-all focus:border-[#F99D1C] focus:ring-1 focus:ring-[#F99D1C] focus:outline-none"
                       />
                     </div>
                     <div className="space-y-2">
                       <label className="text-xs font-semibold tracking-wide text-[#001A3D]">Subject</label>
-                      <select className="w-full cursor-pointer appearance-none rounded-sm border border-gray-100 bg-gray-50 px-6 py-4 font-medium text-[#001A3D] transition-all focus:border-[#F99D1C] focus:ring-1 focus:ring-[#F99D1C] focus:outline-none">
+                      <select name="subject" className="w-full cursor-pointer appearance-none rounded-sm border border-gray-100 bg-gray-50 px-6 py-4 font-medium text-[#001A3D] transition-all focus:border-[#F99D1C] focus:ring-1 focus:ring-[#F99D1C] focus:outline-none">
                         <option>New Project Inquiry</option>
                         <option>Partnership Opportunity</option>
                         <option>Career Inquiry</option>
@@ -255,6 +287,7 @@ export default function ContactClient({
                     <label className="text-xs font-semibold tracking-wide text-[#001A3D]">Message</label>
                     <textarea
                       required
+                      name="message"
                       rows={6}
                       placeholder="How can we help you?"
                       className="w-full resize-none rounded-sm border border-gray-100 bg-gray-50 px-6 py-4 font-medium text-[#001A3D] transition-all focus:border-[#F99D1C] focus:ring-1 focus:ring-[#F99D1C] focus:outline-none"
@@ -265,9 +298,10 @@ export default function ContactClient({
                     whileHover={{ scale: 1.02, backgroundColor: "#001A3D", color: "#F99D1C" }}
                     whileTap={{ scale: 0.98 }}
                     type="submit"
-                    className="flex w-full items-center justify-center gap-4 rounded-sm bg-[#F99D1C] px-12 py-5 text-sm font-bold tracking-wide text-[#001A3D] shadow-xl shadow-[#F99D1C]/10 transition-all md:w-fit"
+                    disabled={isSubmitting}
+                    className="flex w-full items-center justify-center gap-4 rounded-sm bg-[#F99D1C] px-12 py-5 text-sm font-bold tracking-wide text-[#001A3D] shadow-xl shadow-[#F99D1C]/10 transition-all md:w-fit disabled:opacity-50 disabled:cursor-not-allowed"
                   >
-                    Send Inquiry <Send size={18} />
+                    {isSubmitting ? "Sending..." : <>Send Inquiry <Send size={18} /></>}
                   </Motion.button>
                 </form>
               </Motion.div>
@@ -279,7 +313,7 @@ export default function ContactClient({
                 initial={{ opacity: 0, x: 20 }}
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true }}
-                className="relative space-y-12 overflow-hidden rounded-[2rem] bg-[#001A3D] p-6 sm:p-10 text-white md:p-14"
+                className="relative space-y-12 overflow-hidden rounded-[2rem] bg-[#001A3D] p-6 sm:p-10 text-white md:p-8"
               >
                 <div className="absolute top-0 right-0 -mt-16 -mr-16 h-32 w-32 rounded-full bg-[#F99D1C]/10 blur-2xl"></div>
 

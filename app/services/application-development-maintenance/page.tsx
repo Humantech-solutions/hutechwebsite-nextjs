@@ -28,6 +28,7 @@ import {
 import { Breadcrumbs } from "@/components/Breadcrumbs";
 import { Meta } from "@/components/Meta";
 import { ImageWithFallback } from "@/components/figma/ImageWithFallback";
+import { InlineContactForm } from "@/components/InlineContactForm";
 
 const ADM_SERVICES = [
   {
@@ -658,33 +659,10 @@ export default function AppDevMaintenance() {
               <h2 className="display-font mb-10 text-3xl font-bold text-[#001A3D]">
                 Start Your Development & Maintenance Project
               </h2>
-              <form className="grid grid-cols-1 gap-6 md:grid-cols-2">
-                <input
-                  type="text"
-                  placeholder="Name*"
-                  className="w-full border border-gray-200 p-4 text-sm font-medium transition-all outline-none focus:border-[#0171c1]"
-                />
-                <input
-                  type="email"
-                  placeholder="Email*"
-                  className="w-full border border-gray-200 p-4 text-sm font-medium transition-all outline-none focus:border-[#0171c1]"
-                />
-                <input
-                  type="tel"
-                  placeholder="Phone Number*"
-                  className="w-full border border-gray-200 p-4 text-sm font-medium transition-all outline-none focus:border-[#0171c1] md:col-span-2"
-                />
-                <textarea
-                  placeholder="Tell us about your software application and maintenance needs"
-                  rows={4}
-                  className="w-full resize-none border border-gray-200 p-4 text-sm font-medium transition-all outline-none focus:border-[#0171c1] md:col-span-2"
-                ></textarea>
-                <div className="md:col-span-2">
-                  <button className="w-full rounded-sm bg-[#F99D1C] px-12 py-5 text-[11px] font-bold tracking-wider text-[#001A3D] uppercase shadow-xl transition-all duration-500 hover:bg-[#001A3D] hover:text-white md:w-auto">
-                    Submit Project Request
-                  </button>
-                </div>
-              </form>
+              <InlineContactForm
+                category="Application Development & Maintenance"
+                textareaPlaceholder="Tell us about your software application and maintenance needs"
+              />
             </div>
             <div className="space-y-12 py-8 lg:col-span-5">
               <h2 className="display-font text-3xl font-bold text-[#001A3D]">

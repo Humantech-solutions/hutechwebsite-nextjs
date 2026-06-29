@@ -23,8 +23,12 @@ import { Meta } from "@/components/Meta";
 import { ImageWithFallback } from "@/components/figma/ImageWithFallback";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
+import { useState } from "react";
+import { submitContactForm } from "@/lib/api";
 
 export default function Graduates() {
+  const [isInitiating, setIsInitiating] = useState(false);
+
   const {
     register,
     handleSubmit,
@@ -33,11 +37,48 @@ export default function Graduates() {
   } = useForm();
 
   const onSubmit = async (data: any) => {
-    // Mock API call
-    await new Promise((resolve) => setTimeout(resolve, 1500));
-    console.log("Form Data:", data);
-    toast.success("Application submitted successfully! Our team will contact you soon.");
-    reset();
+    try {
+      await submitContactForm({
+        name: data.fullName,
+        email: data.email,
+        phone: "N/A",
+        subject: `Graduate Cohort Application: ${data.interest}`,
+        message: `Graduation Year: ${data.gradYear}\nSpecialization Interest: ${data.interest}`,
+        category: "Graduate Cohort Application",
+      });
+      toast.success("Application submitted successfully! Our team will contact you soon.");
+      reset();
+    } catch (error) {
+      toast.error("Failed to submit application. Please try again later.");
+    }
+  };
+
+  const handleInitiatePartnership = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setIsInitiating(true);
+    const formData = new FormData(e.currentTarget);
+    const instName = formData.get("institutionName") as string;
+    const contactPerson = formData.get("contactPerson") as string;
+    const emailVal = formData.get("email") as string;
+    const phoneVal = formData.get("phone") as string;
+    const collabType = formData.get("collabType") as string;
+
+    try {
+      await submitContactForm({
+        name: contactPerson,
+        email: emailVal,
+        phone: phoneVal,
+        subject: `Academic Partnership: ${collabType}`,
+        message: `Institution: ${instName}\nCollaboration Type: ${collabType}`,
+        category: "Academic Partnership",
+      });
+      toast.success("Partnership request sent. Our Academic Liaison will contact you.");
+      e.currentTarget.reset();
+    } catch (error) {
+      toast.error("Failed to send partnership request. Please try again later.");
+    } finally {
+      setIsInitiating(false);
+    }
   };
 
   const workshops = [
@@ -336,12 +377,14 @@ export default function Graduates() {
             </div>
 
             <div className="rounded-[3rem] border border-gray-100 bg-white p-10 shadow-xl md:p-14">
-              <form className="space-y-6">
+              <form onSubmit={handleInitiatePartnership} className="space-y-6">
                 <div className="space-y-2">
                   <label className="text-[10px] font-black tracking-widest text-gray-400 uppercase">
                     Institution Name
                   </label>
                   <input
+                    required
+                    name="institutionName"
                     placeholder="University of Technology"
                     className="w-full rounded-sm border border-gray-200 bg-gray-50 px-4 py-4 text-[#001A3D] placeholder-gray-300 transition-all focus:border-[#0171c1] focus:outline-none"
                   />
@@ -351,6 +394,8 @@ export default function Graduates() {
                     Contact Person / Designation
                   </label>
                   <input
+                    required
+                    name="contactPerson"
                     placeholder="Head of Placements / Dean"
                     className="w-full rounded-sm border border-gray-200 bg-gray-50 px-4 py-4 text-[#001A3D] placeholder-gray-300 transition-all focus:border-[#0171c1] focus:outline-none"
                   />
@@ -361,7 +406,9 @@ export default function Graduates() {
                       Email ID
                     </label>
                     <input
+                      required
                       type="email"
+                      name="email"
                       placeholder="dean@university.edu"
                       className="w-full rounded-sm border border-gray-200 bg-gray-50 px-4 py-4 text-[#001A3D] placeholder-gray-300 transition-all focus:border-[#0171c1] focus:outline-none"
                     />
@@ -371,7 +418,9 @@ export default function Graduates() {
                       Phone Number
                     </label>
                     <input
+                      required
                       type="tel"
+                      name="phone"
                       placeholder="+1 (555) 000-0000"
                       className="w-full rounded-sm border border-gray-200 bg-gray-50 px-4 py-4 text-[#001A3D] placeholder-gray-300 transition-all focus:border-[#0171c1] focus:outline-none"
                     />
@@ -381,24 +430,20 @@ export default function Graduates() {
                   <label className="text-[10px] font-black tracking-widest text-gray-400 uppercase">
                     Collaboration Type
                   </label>
-                  <select className="w-full appearance-none rounded-sm border border-gray-200 bg-gray-50 px-4 py-4 text-gray-400 transition-all focus:border-[#0171c1] focus:outline-none">
-                    <option>Select Purpose</option>
-                    <option>Technical Workshop</option>
-                    <option>Internship Program</option>
-                    <option>Campus Placement</option>
-                    <option>Strategic MOU</option>
+                  <select name="collabType" required className="w-full appearance-none rounded-sm border border-gray-200 bg-gray-50 px-4 py-4 text-gray-400 transition-all focus:border-[#0171c1] focus:outline-none">
+                    <option value="">Select Purpose</option>
+                    <option value="Technical Workshop">Technical Workshop</option>
+                    <option value="Internship Program">Internship Program</option>
+                    <option value="Campus Placement">Campus Placement</option>
+                    <option value="Strategic MOU">Strategic MOU</option>
                   </select>
                 </div>
                 <button
-                  type="button"
-                  onClick={() =>
-                    toast.success(
-                      "Partnership request sent. Our Academic Liaison will contact you."
-                    )
-                  }
-                  className="w-full rounded-sm bg-[#001A3D] py-5 text-xs font-black tracking-widest text-white uppercase transition-all duration-500 hover:bg-[#0171c1]"
+                  type="submit"
+                  disabled={isInitiating}
+                  className="w-full rounded-sm bg-[#001A3D] py-5 text-xs font-black tracking-widest text-white uppercase transition-all duration-500 hover:bg-[#0171c1] disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  Initiate Partnership
+                  {isInitiating ? "Processing..." : "Initiate Partnership"}
                 </button>
               </form>
             </div>

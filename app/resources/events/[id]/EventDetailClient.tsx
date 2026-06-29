@@ -2,6 +2,8 @@
 
 import { motion as Motion } from "framer-motion";
 import { useState } from "react";
+import { toast } from "sonner";
+import { submitContactForm } from "@/lib/api";
 import { Breadcrumbs } from "@/components/Breadcrumbs";
 import {
   Calendar,
@@ -26,6 +28,31 @@ import { renderTitle } from "@/lib/utils";
 export default function EventDetailClient({ event }: { event: any }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [videoOpen, setVideoOpen] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const handleSubscribe = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    const formData = new FormData(e.currentTarget);
+    const emailVal = formData.get("email") as string;
+
+    try {
+      await submitContactForm({
+        name: "Event Subscriber",
+        email: emailVal,
+        phone: "N/A",
+        subject: `Event Newsletter Subscription: ${event.title}`,
+        message: `User subscribed to event newsletter from event detail page: ${event.title}`,
+        category: "Event Newsletter Subscription",
+      });
+      toast.success("Subscribed successfully!");
+      e.currentTarget.reset();
+    } catch (error) {
+      toast.error("Failed to subscribe. Please try again.");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   const ctaTitle = event.ctaTitle || "Missed this |Event?";
   const ctaDesc =
@@ -330,17 +357,20 @@ export default function EventDetailClient({ event }: { event: any }) {
               <p className="mb-[40px] max-w-[620px] text-[16px] font-normal leading-[1.8] text-[#64748B] md:text-[18px]">
                 {ctaDesc}
               </p>
-              <form className="flex w-full flex-col gap-[12px] md:flex-row md:gap-[16px]">
+              <form onSubmit={handleSubscribe} className="flex w-full flex-col gap-[12px] md:flex-row md:gap-[16px]">
                 <input
+                  required
                   type="email"
+                  name="email"
                   placeholder="Enter your corporate email"
                   className="h-[56px] w-full rounded-[8px] border border-[#E5E7EB] bg-white px-[20px] text-[16px] placeholder:text-[16px] placeholder:text-[#94A3B8] focus:border-[#0171c1] focus:outline-none md:w-[420px]"
                 />
                 <button
                   type="submit"
-                  className="h-[56px] w-full rounded-[8px] bg-[#0171c1] text-[14px] font-bold uppercase tracking-[2px] text-white transition-colors duration-300 hover:bg-blue-600 md:w-[180px]"
+                  disabled={isSubmitting}
+                  className="h-[56px] w-full rounded-[8px] bg-[#0171c1] text-[14px] font-bold uppercase tracking-[2px] text-white transition-colors duration-300 hover:bg-blue-600 md:w-[180px] disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  SUBSCRIBE
+                  {isSubmitting ? "Subscribed" : "SUBSCRIBE"}
                 </button>
               </form>
             </div>
