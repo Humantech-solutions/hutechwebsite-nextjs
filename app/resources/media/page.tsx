@@ -7,6 +7,8 @@ import { Meta } from "@/components/Meta";
 import { Breadcrumbs } from "@/components/Breadcrumbs";
 import { ImageWithFallback } from "@/components/figma/ImageWithFallback";
 import Link from "next/link";
+import { toast } from "sonner";
+import { submitContactForm } from "@/lib/api";
 
 const MEDIA_DATA = [
   {
@@ -95,6 +97,31 @@ export default function MediaListing() {
   const [activeTab, setActiveTab] = useState("All");
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedVideo, setSelectedVideo] = useState<(typeof MEDIA_DATA)[0] | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const handleSubscribe = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    const formData = new FormData(e.currentTarget);
+    const emailVal = formData.get("email") as string;
+
+    try {
+      await submitContactForm({
+        name: "Media Subscriber",
+        email: emailVal,
+        phone: "N/A",
+        subject: "Media Newsletter Subscription",
+        message: "User subscribed to media / podcast newsletter",
+        category: "Media Newsletter Subscription",
+      });
+      toast.success("Subscribed successfully!");
+      e.currentTarget.reset();
+    } catch (error) {
+      toast.error("Failed to subscribe. Please try again.");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   const filteredMedia = MEDIA_DATA.filter((item) => {
     const matchesTab = activeTab === "All" || item.type === activeTab;
@@ -303,14 +330,16 @@ export default function MediaListing() {
               and webinar recordings weekly.
             </p>
           </div>
-          <form className="flex w-full max-w-lg flex-col gap-4 sm:flex-row">
+           <form onSubmit={handleSubscribe} className="flex w-full max-w-lg flex-col gap-4 sm:flex-row">
             <input
+              required
               type="email"
+              name="email"
               placeholder="Your professional email"
               className="flex-1 rounded-2xl border border-white/10 bg-white/5 px-8 py-6 font-medium transition-all focus:ring-2 focus:ring-[#F99D1C] focus:outline-none"
             />
-            <button className="rounded-2xl bg-[#F99D1C] px-10 py-6 text-xs font-black tracking-[0.2em] text-[#001A3D] uppercase shadow-2xl shadow-[#F99D1C]/10 transition-all hover:bg-white">
-              Subscribe
+            <button disabled={isSubmitting} className="rounded-2xl bg-[#F99D1C] px-10 py-6 text-xs font-black tracking-[0.2em] text-[#001A3D] uppercase shadow-2xl shadow-[#F99D1C]/10 transition-all hover:bg-white disabled:opacity-50 disabled:cursor-not-allowed">
+              {isSubmitting ? "Subscribing..." : "Subscribe"}
             </button>
           </form>
         </div>

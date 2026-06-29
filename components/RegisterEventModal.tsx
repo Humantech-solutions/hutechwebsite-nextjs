@@ -4,6 +4,9 @@ import { motion as Motion, AnimatePresence } from "motion/react";
 import { X, CheckCircle2, Loader2, Send } from "lucide-react";
 import { useState } from "react";
 
+import { toast } from "sonner";
+import { submitContactForm } from "@/lib/api";
+
 interface RegisterEventModalProps {
   isOpen: boolean;
   onClose: () => void;
@@ -14,15 +17,31 @@ export function RegisterEventModal({ isOpen, onClose, eventTitle }: RegisterEven
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsSubmitting(true);
     
-    // Simulate API call
-    setTimeout(() => {
-      setIsSubmitting(false);
+    const formData = new FormData(e.currentTarget);
+    const name = formData.get("name") as string;
+    const emailVal = formData.get("email") as string;
+    const organization = formData.get("organization") as string;
+    const jobTitleVal = formData.get("jobTitle") as string;
+
+    try {
+      await submitContactForm({
+        name,
+        email: emailVal,
+        phone: "N/A",
+        subject: `Event Registration: ${eventTitle}`,
+        message: `Registered for event. Company: ${organization}, Title: ${jobTitleVal}`,
+        category: "Event Registration",
+      });
       setIsSuccess(true);
-    }, 1500);
+    } catch (error) {
+      toast.error("Registration failed. Please try again.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -90,6 +109,7 @@ export function RegisterEventModal({ isOpen, onClose, eventTitle }: RegisterEven
                           <input 
                             required 
                             type="text" 
+                            name="name"
                             className="w-full px-5 py-3.5 bg-gray-50 border border-gray-100 rounded-lg focus:outline-none focus:border-[#0171c1] focus:bg-white transition-all text-[#001A3D] font-medium" 
                             placeholder="John Doe"
                           />
@@ -99,6 +119,7 @@ export function RegisterEventModal({ isOpen, onClose, eventTitle }: RegisterEven
                           <input 
                             required 
                             type="email" 
+                            name="email"
                             className="w-full px-5 py-3.5 bg-gray-50 border border-gray-100 rounded-lg focus:outline-none focus:border-[#0171c1] focus:bg-white transition-all text-[#001A3D] font-medium" 
                             placeholder="john@company.com"
                           />
@@ -110,6 +131,7 @@ export function RegisterEventModal({ isOpen, onClose, eventTitle }: RegisterEven
                         <input 
                           required 
                           type="text" 
+                          name="organization"
                           className="w-full px-5 py-3.5 bg-gray-50 border border-gray-100 rounded-lg focus:outline-none focus:border-[#0171c1] focus:bg-white transition-all text-[#001A3D] font-medium" 
                           placeholder="Acme Corp"
                         />
@@ -117,7 +139,7 @@ export function RegisterEventModal({ isOpen, onClose, eventTitle }: RegisterEven
 
                       <div className="space-y-2">
                         <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest ml-1">Job Title</label>
-                        <select className="w-full px-5 py-3.5 bg-gray-50 border border-gray-100 rounded-lg focus:outline-none focus:border-[#0171c1] focus:bg-white transition-all text-[#001A3D] font-medium appearance-none cursor-pointer">
+                        <select name="jobTitle" className="w-full px-5 py-3.5 bg-gray-50 border border-gray-100 rounded-lg focus:outline-none focus:border-[#0171c1] focus:bg-white transition-all text-[#001A3D] font-medium appearance-none cursor-pointer">
                           <option>Senior Executive</option>
                           <option>Engineering Manager</option>
                           <option>Lead Architect</option>

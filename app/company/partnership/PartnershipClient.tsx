@@ -16,6 +16,9 @@ import {
   MessageSquare,
   Briefcase,
 } from "lucide-react";
+import { useState } from "react";
+import { toast } from "sonner";
+import { submitContactForm } from "@/lib/api";
 import { Meta } from "@/components/Meta";
 import { ImageWithFallback } from "@/components/figma/ImageWithFallback";
 import Link from "next/link";
@@ -145,6 +148,37 @@ export default function PartnershipClient({
   ctaDescription = "Are you ready to redefine industry standards? Join our ecosystem and leverage our global reach and engineering excellence to scale your business.",
   ctaEmail = "alliances@hutechsolutions.com",
 }: PartnershipClientProps) {
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+
+    const formData = new FormData(e.currentTarget);
+    const name = formData.get("name") as string;
+    const company = formData.get("companyName") as string;
+    const emailVal = formData.get("email") as string;
+    const type = formData.get("partnershipType") as string;
+    const proposal = formData.get("proposal") as string;
+
+    try {
+      await submitContactForm({
+        name,
+        email: emailVal,
+        phone: "N/A",
+        subject: `Partnership Proposal: ${type}`,
+        message: `Partnership Type: ${type}\nCompany: ${company}\nProposal: ${proposal}`,
+        category: "Partnership Proposal",
+      });
+      toast.success("Thank you! Your partnership request has been submitted successfully.");
+      e.currentTarget.reset();
+    } catch (error) {
+      toast.error("Failed to submit request. Please try again later.");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   return (
     <div className="flex flex-col overflow-hidden bg-white">
       <Meta
@@ -433,37 +467,45 @@ export default function PartnershipClient({
                 <h3 className="display-font mb-8 text-2xl font-bold text-[#001A3D]">
                   Partner Registration
                 </h3>
-                <form className="space-y-6">
+                <form onSubmit={handleSubmit} className="space-y-6">
                   <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
                     <input
+                      required
                       type="text"
+                      name="name"
                       placeholder="Full Name"
                       className="w-full border-transparent bg-gray-50 p-4 text-sm font-medium transition-all outline-none focus:border-[#0171c1] focus:bg-white"
                     />
                     <input
+                      required
                       type="text"
+                      name="companyName"
                       placeholder="Company Name"
                       className="w-full border-transparent bg-gray-50 p-4 text-sm font-medium transition-all outline-none focus:border-[#0171c1] focus:bg-white"
                     />
                   </div>
                   <input
+                    required
                     type="email"
+                    name="email"
                     placeholder="Business Email"
                     className="w-full border-transparent bg-gray-50 p-4 text-sm font-medium transition-all outline-none focus:border-[#0171c1] focus:bg-white"
                   />
-                  <select className="w-full appearance-none border-transparent bg-gray-50 p-4 text-sm font-medium transition-all outline-none focus:border-[#0171c1] focus:bg-white">
+                  <select name="partnershipType" required className="w-full appearance-none border-transparent bg-gray-50 p-4 text-sm font-medium transition-all outline-none focus:border-[#0171c1] focus:bg-white">
                     <option value="">Select Partnership Type</option>
                     <option value="technology">Technology Partner</option>
                     <option value="solution">Solution Partner</option>
                     <option value="channel">Channel Partner</option>
                   </select>
                   <textarea
+                    required
+                    name="proposal"
                     placeholder="Tell us about your proposal"
                     rows={4}
                     className="w-full resize-none border-transparent bg-gray-50 p-4 text-sm font-medium transition-all outline-none focus:border-[#0171c1] focus:bg-white"
                   ></textarea>
-                  <button className="flex w-full items-center justify-center gap-3 bg-[#0171c1] py-5 text-xs font-bold tracking-[0.2em] text-white uppercase transition-all hover:bg-[#001A3D]">
-                    Submit Proposal <ArrowRight size={16} />
+                  <button disabled={isSubmitting} className="flex w-full items-center justify-center gap-3 bg-[#0171c1] py-5 text-xs font-bold tracking-[0.2em] text-white uppercase transition-all hover:bg-[#001A3D] disabled:opacity-50 disabled:cursor-not-allowed">
+                    {isSubmitting ? "Submitting..." : <>Submit Proposal <ArrowRight size={16} /></>}
                   </button>
                 </form>
               </div>
