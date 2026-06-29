@@ -83,7 +83,7 @@ export async function fetchGraphQL(query: string, variables = {}) {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ query, variables }),
-      next: { revalidate: 60 }, // Re-fetch from WP every 60 seconds (ISR)
+      cache: "no-store",
       signal: controller.signal,
     });
 
@@ -1864,7 +1864,7 @@ const LEADERSHIP_PAGE_QUERY = `
           leadLeader9Name leadLeader9Role leadLeader9Img { node { sourceUrl } } leadLeader9Bio leadLeader9Linkedin leadLeader9LinkedinIcon { node { sourceUrl } } leadLeader9Twitter leadLeader9TwitterIcon { node { sourceUrl } }
           leadAdvisoryTitle
           leadAdvisoryDescription
-          leadAdvisoryBtnText leadAdvisoryBtnUrl
+          leadAdvisoryBtnText leadAdvisoryBtnUrl { url title target }
           leadAdvisor1Name leadAdvisor1Firm leadAdvisor1Region
           leadAdvisor2Name leadAdvisor2Firm leadAdvisor2Region
           leadAdvisor3Name leadAdvisor3Firm leadAdvisor3Region
@@ -1908,7 +1908,7 @@ function transformLeadershipPageData(f: any) {
     advisoryTitle:       f.leadAdvisoryTitle       || "Board of |~Advisors.",
     advisoryDescription: f.leadAdvisoryDescription || "",
     advisoryBtnText:     f.leadAdvisoryBtnText     || "Engage with Us",
-    advisoryBtnUrl:      f.leadAdvisoryBtnUrl      || "/contact",
+    advisoryBtnUrl:      f.leadAdvisoryBtnUrl?.url      || "/contact",
     advisors:            advisors.length > 0 ? advisors : undefined,
     ctaTitle:            f.leadCtaTitle            || "Lead the Next |^Digital Frontier.",
     ctaDescription:      f.leadCtaDescription      || "",
@@ -1956,7 +1956,7 @@ const PARTNERSHIP_PAGE_QUERY = `
           
           partMeetTitle
           partMeetDescription
-          partMeetBtnText partMeetBtnUrl
+          partMeetBtnText partMeetBtnUrl { url title target }
           partMeetImg1 { node { sourceUrl } } partMeetAlt1
           partMeetImg2 { node { sourceUrl } } partMeetAlt2
           partMeetImg3 { node { sourceUrl } } partMeetAlt3
@@ -2046,7 +2046,7 @@ function transformPartnershipPageData(f: any) {
     meetTitle:        f.partMeetTitle || "Meet Our Partners",
     meetDescription:  f.partMeetDescription || "",
     meetBtnText:      f.partMeetBtnText || "Find What You Need",
-    meetBtnUrl:       f.partMeetBtnUrl || "/services",
+    meetBtnUrl:       f.partMeetBtnUrl?.url || "/services",
     meetImages:       meetImages.length > 0 ? meetImages : undefined,
     
     logos:            logos.length > 0 ? logos : undefined,
@@ -2102,7 +2102,7 @@ const CONTACT_PAGE_QUERY = `
           contactSupportLabel
           contactSupportDescription
           contactSupportBtnText
-          contactSupportBtnUrl
+          contactSupportBtnUrl { url title target }
           
           contactOfficesTitle
           contactOfficesDescription
@@ -2164,7 +2164,7 @@ function transformContactPageData(f: any) {
     supportLabel: f.contactSupportLabel || "Customer Support",
     supportDescription: f.contactSupportDescription || "",
     supportBtnText: f.contactSupportBtnText || "Support Portal",
-    supportBtnUrl: f.contactSupportBtnUrl || "#",
+    supportBtnUrl: f.contactSupportBtnUrl?.url || "#",
 
     officesTitle: f.contactOfficesTitle || "Our Offices",
     officesDescription: f.contactOfficesDescription || "",
@@ -2203,7 +2203,7 @@ const DOCUMENTS_PAGE_QUERY = `
           docPageCtaTitle
           docPageCtaDesc
           docPageCtaBtnText
-          docPageCtaBtnUrl
+          docPageCtaBtnUrl { url title target }
         }
       }
     }
@@ -2268,7 +2268,7 @@ export async function getDocumentPageData() {
       ctaTitle: f.docPageCtaTitle || "Need custom documentation?",
       ctaDesc: f.docPageCtaDesc || "Our specialized teams can provide tailored technical whitepapers and architecture documentation for your enterprise needs.",
       ctaBtnText: f.docPageCtaBtnText || "REQUEST ACCESS",
-      ctaBtnUrl: f.docPageCtaBtnUrl || "/contact",
+      ctaBtnUrl: f.docPageCtaBtnUrl?.url || "/contact",
     };
   } catch (err) {
     console.warn("[WP] getDocumentPageData failed:", err);
@@ -2787,7 +2787,7 @@ const NEWS_PAGE_QUERY = `
           newsCtaTitle
           newsCtaDescription
           newsCtaBtnText
-          newsCtaBtnUrl
+          newsCtaBtnUrl { url title target }
         }
       }
     }
@@ -2951,10 +2951,493 @@ export async function getNewsPageData() {
       ctaTitle: f.newsCtaTitle || undefined,
       ctaDescription: f.newsCtaDescription || undefined,
       ctaBtnText: f.newsCtaBtnText || undefined,
-      ctaBtnUrl: f.newsCtaBtnUrl || undefined,
+      ctaBtnUrl: f.newsCtaBtnUrl?.url || undefined,
     };
   } catch (err) {
     console.warn("[WP] getNewsPageData failed:", err);
     return null;
+  }
+}
+
+
+// ─── Service Custom Post Type GraphQL ──────────────────────────────────────────
+
+export interface HutechService {
+  id: string;
+  slug: string;
+  title: string;
+  heroTagline?: string;
+  heroTitle?: string;
+  heroDescription?: string;
+  heroBgImage?: string;
+  
+  introHeading?: string;
+  introText1?: string;
+  introText2?: string;
+  introImage?: string;
+  introImageTitle?: string;
+  introImageDesc?: string;
+  stats?: { label: string; value: string }[];
+  
+  servicesSectionTitle?: string;
+  servicesSectionDesc?: string;
+  services?: { title: string; description: string; btnname: string; btnurl: string }[];
+  
+  solutionsSectionTitle?: string;
+  solutionsSectionDesc?: string;
+  solutions?: { title: string; description: string; btnname: string; btnurl: string }[];
+  
+  innovationsSectionTitle?: string;
+  innovationsSectionDesc?: string;
+  innovations?: { title: string; description: string; btnname: string; btnurl: string }[];
+  
+  ctaTitle?: string;
+  ctaDescription?: string;
+  ctaBtnName?: string;
+  ctaBtnUrl?: string;
+  ctaImage?: string;
+  
+  techStackTagline?: string;
+  techStackTitle?: string;
+  techStackDesc?: string;
+  techStack?: { name: string; cat: string }[];
+  
+  whyChooseSectionTitle?: string;
+  whyChooseSectionDesc?: string;
+  whyChoose?: { title: string; description: string }[];
+  
+  contactFormTitle?: string;
+  contactFormBtnName?: string;
+  nextStepSectionTitle?: string;
+  nextSteps?: { title: string }[];
+  
+  faqSectionTitle?: string;
+  faqs?: { question: string; answer: string }[];
+  
+  blogSectionTitle?: string;
+  blogSectionDesc?: string;
+  blogLinkName?: string;
+  blogLinkUrl?: string;
+  blogCategory?: string;
+  blogCategorySlug?: string;
+}
+
+const SERVICES_LIST_QUERY = `
+  query GetAllServices {
+    hutechServices(first: 100) {
+      nodes {
+        slug
+      }
+    }
+  }
+`;
+
+const SERVICE_BY_SLUG_QUERY = `
+  query GetServiceBySlug($slug: ID!) {
+    hutechService(id: $slug, idType: SLUG) {
+      id
+      slug
+      title
+      serviceFields {
+        heroTagline
+        heroTitle
+        heroDescription
+        heroBgImage { node { sourceUrl } }
+        
+        introHeading
+        introText1
+        introText2
+        introImage { node { sourceUrl } }
+        introImageTitle
+        introImageDesc
+        
+        stat1Value
+        stat1Label
+        stat2Value
+        stat2Label
+        stat3Value
+        stat3Label
+        
+        servicesSectionTitle
+        servicesSectionDesc
+        service1Title
+        service1Description
+        service1BtnName
+        service1BtnUrl { url title target }
+        service2Title
+        service2Description
+        service2BtnName
+        service2BtnUrl { url title target }
+        service3Title
+        service3Description
+        service3BtnName
+        service3BtnUrl { url title target }
+        service4Title
+        service4Description
+        service4BtnName
+        service4BtnUrl { url title target }
+        service5Title
+        service5Description
+        service5BtnName
+        service5BtnUrl { url title target }
+        service6Title
+        service6Description
+        service6BtnName
+        service6BtnUrl { url title target }
+        service7Title
+        service7Description
+        service7BtnName
+        service7BtnUrl { url title target }
+        service8Title
+        service8Description
+        service8BtnName
+        service8BtnUrl { url title target }
+        service9Title
+        service9Description
+        service9BtnName
+        service9BtnUrl { url title target }
+        service10Title
+        service10Description
+        service10BtnName
+        service10BtnUrl { url title target }
+        
+        solutionsSectionTitle
+        solutionsSectionDesc
+        solution1Title
+        solution1Description
+        solution1BtnName
+        solution1BtnUrl { url title target }
+        solution2Title
+        solution2Description
+        solution2BtnName
+        solution2BtnUrl { url title target }
+        solution3Title
+        solution3Description
+        solution3BtnName
+        solution3BtnUrl { url title target }
+        solution4Title
+        solution4Description
+        solution4BtnName
+        solution4BtnUrl { url title target }
+        solution5Title
+        solution5Description
+        solution5BtnName
+        solution5BtnUrl { url title target }
+        solution6Title
+        solution6Description
+        solution6BtnName
+        solution6BtnUrl { url title target }
+        solution7Title
+        solution7Description
+        solution7BtnName
+        solution7BtnUrl { url title target }
+        solution8Title
+        solution8Description
+        solution8BtnName
+        solution8BtnUrl { url title target }
+        solution9Title
+        solution9Description
+        solution9BtnName
+        solution9BtnUrl { url title target }
+        solution10Title
+        solution10Description
+        solution10BtnName
+        solution10BtnUrl { url title target }
+        
+        innovationsSectionTitle
+        innovationsSectionDesc
+        innovation1Title
+        innovation1Description
+        innovation1BtnName
+        innovation1BtnUrl { url title target }
+        innovation2Title
+        innovation2Description
+        innovation2BtnName
+        innovation2BtnUrl { url title target }
+        innovation3Title
+        innovation3Description
+        innovation3BtnName
+        innovation3BtnUrl { url title target }
+        innovation4Title
+        innovation4Description
+        innovation4BtnName
+        innovation4BtnUrl { url title target }
+        innovation5Title
+        innovation5Description
+        innovation5BtnName
+        innovation5BtnUrl { url title target }
+        innovation6Title
+        innovation6Description
+        innovation6BtnName
+        innovation6BtnUrl { url title target }
+        innovation7Title
+        innovation7Description
+        innovation7BtnName
+        innovation7BtnUrl { url title target }
+        innovation8Title
+        innovation8Description
+        innovation8BtnName
+        innovation8BtnUrl { url title target }
+        innovation9Title
+        innovation9Description
+        innovation9BtnName
+        innovation9BtnUrl { url title target }
+        innovation10Title
+        innovation10Description
+        innovation10BtnName
+        innovation10BtnUrl { url title target }
+        
+        ctaTitle
+        ctaDescription
+        ctaBtnName
+        ctaBtnUrl { url title target }
+        ctaImage { node { sourceUrl } }
+        
+        techStackTagline
+        techStackTitle
+        techStackDesc
+        techStack1Name
+        techStack1Cat
+        techStack2Name
+        techStack2Cat
+        techStack3Name
+        techStack3Cat
+        techStack4Name
+        techStack4Cat
+        techStack5Name
+        techStack5Cat
+        techStack6Name
+        techStack6Cat
+        techStack7Name
+        techStack7Cat
+        techStack8Name
+        techStack8Cat
+        techStack9Name
+        techStack9Cat
+        techStack10Name
+        techStack10Cat
+        techStack11Name
+        techStack11Cat
+        techStack12Name
+        techStack12Cat
+        techStack13Name
+        techStack13Cat
+        techStack14Name
+        techStack14Cat
+        techStack15Name
+        techStack15Cat
+        
+        whyChooseSectionTitle
+        whyChooseSectionDesc
+        whyChoose1Title
+        whyChoose1Description
+        whyChoose2Title
+        whyChoose2Description
+        whyChoose3Title
+        whyChoose3Description
+        whyChoose4Title
+        whyChoose4Description
+        whyChoose5Title
+        whyChoose5Description
+        whyChoose6Title
+        whyChoose6Description
+        whyChoose7Title
+        whyChoose7Description
+        whyChoose8Title
+        whyChoose8Description
+        
+        contactFormTitle
+        contactFormBtnName
+        nextStepSectionTitle
+        nextStep1Title
+        nextStep2Title
+        nextStep3Title
+        nextStep4Title
+        nextStep5Title
+        
+        faqSectionTitle
+        faq1Question
+        faq1Answer
+        faq2Question
+        faq2Answer
+        faq3Question
+        faq3Answer
+        faq4Question
+        faq4Answer
+        faq5Question
+        faq5Answer
+        faq6Question
+        faq6Answer
+        faq7Question
+        faq7Answer
+        faq8Question
+        faq8Answer
+        faq9Question
+        faq9Answer
+        faq10Question
+        faq10Answer
+        
+        blogSectionTitle
+        blogSectionDesc
+        blogLinkName
+        blogLinkUrl { url title target }
+        blogCategory {
+          nodes {
+            ... on Category {
+              slug
+              name
+            }
+          }
+        }
+      }
+    }
+  }
+`;
+
+const BLOGS_BY_CATEGORY_QUERY = `
+  query GetBlogsByCategory($categoryName: String!) {
+    posts(first: 10, where: { orderby: { field: DATE, order: DESC }, categoryName: $categoryName }) {
+      nodes {
+        id
+        slug
+        title
+        date
+        excerpt(format: RENDERED)
+        featuredImage {
+          node {
+            sourceUrl
+          }
+        }
+        categories {
+          nodes {
+            name
+          }
+        }
+        tags {
+          nodes {
+            name
+          }
+        }
+        author {
+          node {
+            name
+          }
+        }
+      }
+    }
+  }
+`;
+
+
+function transformServiceNode(node: any): HutechService {
+  const f = node.serviceFields || {};
+
+  const parseRepeater = (prefix: string, max: number, fields: string[]) => {
+    const items = [];
+    for (let i = 1; i <= max; i++) {
+      let hasData = false;
+      const item: any = {};
+      for (const field of fields) {
+        const val = f[`${prefix}${i}${field}`];
+        if (val) hasData = true;
+        item[field.toLowerCase()] = typeof val === 'object' && val !== null && val.url ? val.url : (val || "");
+      }
+      if (hasData) items.push(item);
+    }
+    return items;
+  };
+
+  return {
+    id: node.id,
+    slug: node.slug,
+    title: node.title,
+    heroTagline: f.heroTagline,
+    heroTitle: f.heroTitle,
+    heroDescription: f.heroDescription,
+    heroBgImage: imgUrl(f.heroBgImage) || undefined,
+    
+    introHeading: f.introHeading,
+    introText1: f.introText1,
+    introText2: f.introText2,
+    introImage: imgUrl(f.introImage) || undefined,
+    introImageTitle: f.introImageTitle,
+    introImageDesc: f.introImageDesc,
+    stats: parseRepeater('stat', 3, ['Value', 'Label']),
+    
+    servicesSectionTitle: f.servicesSectionTitle,
+    servicesSectionDesc: f.servicesSectionDesc,
+    services: parseRepeater('service', 10, ['Title', 'Description', 'BtnName', 'BtnUrl']),
+    
+    solutionsSectionTitle: f.solutionsSectionTitle,
+    solutionsSectionDesc: f.solutionsSectionDesc,
+    solutions: parseRepeater('solution', 10, ['Title', 'Description', 'BtnName', 'BtnUrl']),
+    
+    innovationsSectionTitle: f.innovationsSectionTitle,
+    innovationsSectionDesc: f.innovationsSectionDesc,
+    innovations: parseRepeater('innovation', 10, ['Title', 'Description', 'BtnName', 'BtnUrl']),
+    
+    ctaTitle: f.ctaTitle,
+    ctaDescription: f.ctaDescription,
+    ctaBtnName: f.ctaBtnName,
+    ctaBtnUrl: f.ctaBtnUrl?.url || "",
+    ctaImage: imgUrl(f.ctaImage) || undefined,
+    
+    techStackTagline: f.techStackTagline,
+    techStackTitle: f.techStackTitle,
+    techStackDesc: f.techStackDesc,
+    techStack: parseRepeater('techStack', 15, ['Name', 'Cat']),
+    
+    whyChooseSectionTitle: f.whyChooseSectionTitle,
+    whyChooseSectionDesc: f.whyChooseSectionDesc,
+    whyChoose: parseRepeater('whyChoose', 8, ['Title', 'Description']),
+    
+    contactFormTitle: f.contactFormTitle,
+    contactFormBtnName: f.contactFormBtnName,
+    nextStepSectionTitle: f.nextStepSectionTitle,
+    nextSteps: parseRepeater('nextStep', 5, ['Title']),
+    
+    faqSectionTitle: f.faqSectionTitle,
+    faqs: parseRepeater('faq', 10, ['Question', 'Answer']),
+    
+    blogSectionTitle: f.blogSectionTitle,
+    blogSectionDesc: f.blogSectionDesc,
+    blogLinkName: f.blogLinkName,
+    blogLinkUrl: f.blogLinkUrl?.url || "",
+    blogCategory: f.blogCategory?.nodes?.[0]?.name || "AI/ML",
+    blogCategorySlug: f.blogCategory?.nodes?.[0]?.slug || "",
+  };
+}
+
+export async function getServicesList(): Promise<{ slug: string }[]> {
+  try {
+    const raw = await fetchGraphQL(SERVICES_LIST_QUERY);
+    const nodes = raw?.data?.hutechServices?.nodes || [];
+    return nodes.map((n: any) => ({ slug: n.slug }));
+  } catch (err) {
+    console.warn("[WP] getServicesList failed:", err);
+    return [];
+  }
+}
+
+export async function getServiceBySlug(slug: string): Promise<HutechService | null> {
+  try {
+    const raw = await fetchGraphQL(SERVICE_BY_SLUG_QUERY, { slug });
+    const node = raw?.data?.hutechService;
+    if (!node) return null;
+    return transformServiceNode(node);
+  } catch (err) {
+    console.warn("[WP] getServiceBySlug failed:", err);
+    return null;
+  }
+}
+
+export async function getBlogsByCategory(categoryName: string): Promise<WpBlog[]> {
+  try {
+    const raw = await fetchGraphQL(BLOGS_BY_CATEGORY_QUERY, { categoryName });
+    const nodes = raw?.data?.posts?.nodes || [];
+    return nodes.map(transformBlogNode);
+  } catch (err) {
+    console.warn("[WP] getBlogsByCategory failed:", err);
+    return [];
   }
 }

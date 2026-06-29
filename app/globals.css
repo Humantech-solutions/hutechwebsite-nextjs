@@ -386,4 +386,7 @@
   background-color: #F99D1C;
   flex-shrink: 0;
 }
+input, textarea{
+  background: none;
+}
 
