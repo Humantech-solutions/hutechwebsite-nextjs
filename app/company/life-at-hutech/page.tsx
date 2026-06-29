@@ -19,9 +19,8 @@ import {
 } from "lucide-react";
 import { Meta } from "@/components/Meta";
 import { ImageWithFallback } from "@/components/figma/ImageWithFallback";
-import Slider from "react-slick";
 import Link from "next/link";
-import { useState, useCallback, useEffect, useRef } from "react";
+import { useState, useCallback, useEffect } from "react";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 
@@ -29,7 +28,6 @@ export default function LifeAtHutech() {
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [mounted, setMounted] = useState(false);
-  const workplaceSliderRef = useRef<Slider>(null);
 
   useEffect(() => {
     setMounted(true);
@@ -116,45 +114,24 @@ export default function LifeAtHutech() {
     },
   ];
 
-  const PrevArrow = (props: any) => {
-    const { onClick } = props;
-    return (
-      <button
-        onClick={onClick}
-        className="group absolute top-1/2 -left-4 z-20 flex h-12 w-12 -translate-y-1/2 cursor-pointer items-center justify-center rounded-full border border-gray-200 bg-white text-[#001A3D] shadow-sm transition-all duration-300 hover:bg-[#001A3D] hover:text-white md:-left-12"
-        aria-label="Previous slide"
-      >
-        <ChevronLeft size={24} className="transition-transform group-hover:-translate-x-0.5" />
-      </button>
-    );
-  };
+  const workplaceSlides = [
+    { src: "https://images.unsplash.com/photo-1761818645928-47e5dad8ec76", title: "Modern Collaboration Hubs", tag: "Innovation" },
+    { src: "https://images.unsplash.com/photo-1716703373041-bd135107d947", title: "Inclusive Social Spaces", tag: "Culture" },
+    { src: "https://images.unsplash.com/photo-1726365222176-425a1a1b9b98", title: "Innovation Tech Labs", tag: "R&D" },
+    { src: "https://images.unsplash.com/photo-1497366216548-37526070297c", title: "Strategic Thinking Zones", tag: "Strategy" },
+    { src: "https://images.unsplash.com/photo-1519389950473-47ba0277781c", title: "Cross-Functional Pods", tag: "Teams" },
+  ];
 
-  const NextArrow = (props: any) => {
-    const { onClick } = props;
-    return (
-      <button
-        onClick={onClick}
-        className="group absolute top-1/2 -right-4 z-20 flex h-12 w-12 -translate-y-1/2 cursor-pointer items-center justify-center rounded-full border border-gray-200 bg-white text-[#001A3D] shadow-sm transition-all duration-300 hover:bg-[#001A3D] hover:text-white md:-right-12"
-        aria-label="Next slide"
-      >
-        <ChevronRight size={24} className="transition-transform group-hover:translate-x-0.5" />
-      </button>
-    );
-  };
+  const [workplaceIndex, setWorkplaceIndex] = useState(0);
+  const wpTotal = workplaceSlides.length;
+  const wpPrev = () => setWorkplaceIndex((i) => (i - 1 + wpTotal) % wpTotal);
+  const wpNext = () => setWorkplaceIndex((i) => (i + 1) % wpTotal);
 
-const carouselSettings = {
-  dots: true,
-  infinite: true,
-  speed: 800,
-  slidesToShow: 1,
-  slidesToScroll: 1,
-  autoplay: true,
-  autoplaySpeed: 5000,
-  arrows: false,
-  swipe: true,
-  draggable: true,
-  adaptiveHeight: false,
-};
+  useEffect(() => {
+    const timer = setInterval(wpNext, 4500);
+    return () => clearInterval(timer);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
 
   return (
@@ -334,29 +311,28 @@ const carouselSettings = {
       </section>
 
       {/* Workplace Exploration Section */}
-      <section className="overflow-hidden bg-white py-24">
+      <section className="overflow-hidden bg-[#f8f9fb] py-24">
         <div className="mx-auto mb-12 max-w-[1280px] px-6 lg:px-20 flex flex-col md:flex-row md:items-end justify-between gap-6">
           <div className="space-y-4">
             <span className="text-xs font-bold tracking-widest text-[#F99D1C] uppercase">
               Our Ecosystem
             </span>
             <h2 className="display-font text-4xl font-semibold tracking-tight text-[#001A3D] md:text-5xl">
-              While There's Still A Lot To <br />{" "}
+              While There&apos;s Still A Lot To <br />{" "}
               <span className="text-[#F99D1C]">Explore In Our Workplace</span>
             </h2>
           </div>
-          {/* Slider Navigation Buttons */}
           <div className="flex items-center gap-3">
-            <button 
-              onClick={() => workplaceSliderRef.current?.slickPrev()}
-              className="flex h-12 w-12 items-center justify-center rounded-full border border-gray-200 bg-white text-[#001A3D] shadow-sm transition-all duration-300 hover:bg-[#f5a623] hover:text-white hover:border-[#f5a623]"
+            <button
+              onClick={wpPrev}
+              className="flex h-12 w-12 items-center justify-center rounded-full border border-gray-200 bg-white text-[#001A3D] shadow-sm transition-all duration-300 hover:bg-[#F99D1C] hover:text-white hover:border-[#F99D1C]"
               aria-label="Previous slide"
             >
               <ChevronLeft size={20} />
             </button>
-            <button 
-              onClick={() => workplaceSliderRef.current?.slickNext()}
-              className="flex h-12 w-12 items-center justify-center rounded-full border border-gray-200 bg-white text-[#001A3D] shadow-sm transition-all duration-300 hover:bg-[#f5a623] hover:text-white hover:border-[#f5a623]"
+            <button
+              onClick={wpNext}
+              className="flex h-12 w-12 items-center justify-center rounded-full border border-gray-200 bg-white text-[#001A3D] shadow-sm transition-all duration-300 hover:bg-[#F99D1C] hover:text-white hover:border-[#F99D1C]"
               aria-label="Next slide"
             >
               <ChevronRight size={20} />
@@ -364,66 +340,107 @@ const carouselSettings = {
           </div>
         </div>
 
-        <div className="workplace-carousel relative mx-auto w-full max-w-[1440px] overflow-hidden px-4 sm:px-6 lg:px-8">
-          {mounted && (
-            <Slider 
-              ref={workplaceSliderRef} 
-              {...carouselSettings}
-            >
-              {[
-                {
-                  src: "https://images.unsplash.com/photo-1761818645928-47e5dad8ec76",
-                  title: "Modern Collaboration Hubs",
-                  tag: "Innovation",
-                },
-                {
-                  src: "https://images.unsplash.com/photo-1716703373041-bd135107d947",
-                  title: "Inclusive Social Spaces",
-                  tag: "Culture",
-                },
-                {
-                  src: "https://images.unsplash.com/photo-1726365222176-425a1a1b9b98",
-                  title: "Innovation Tech Labs",
-                  tag: "R&D",
-                },
-                {
-                  src: "https://images.unsplash.com/photo-1497366216548-37526070297c",
-                  title: "Strategic Thinking Zones",
-                  tag: "Strategy",
-                },
-                {
-                  src: "https://images.unsplash.com/photo-1519389950473-47ba0277781c",
-                  title: "Cross-Functional Pods",
-                  tag: "Teams",
-                },
-              ].map((slide, i) => (
-                <div key={i} className="w-full min-w-0 outline-none pb-8">
-                  <div className="group relative h-[400px] w-full overflow-hidden rounded-[2.5rem] shadow-2xl md:h-[500px]">
+        {/* 3D Depth Carousel — side images go behind the center */}
+        {mounted && (
+          <div
+            className="relative mx-auto select-none"
+            style={{ height: "380px", maxWidth: "100%" }}
+          >
+            {workplaceSlides.map((slide, i) => {
+              let offset = i - workplaceIndex;
+              if (offset > Math.floor(wpTotal / 2)) offset -= wpTotal;
+              if (offset < -Math.floor(wpTotal / 2)) offset += wpTotal;
+              const absOffset = Math.abs(offset);
+              if (absOffset > 2) return null;
+
+              // Center card: largest, front. ±1: behind center. ±2: further behind.
+              const centerW = 42;  // % of container width
+              const side1W  = 22;
+              const side2W  = 16;
+
+              // Left edge of each card (percentage from left of container)
+              // Center: starts at 50% - centerW/2
+              // ±1: positioned so they peek out from behind center
+              // ±2: further out, mostly hidden behind ±1
+              const posMap: Record<number, { left: string; width: string; zIndex: number; scale: number; brightness: number; opacity: number }> = {
+                0: { left: `${50 - centerW / 2}%`, width: `${centerW}%`, zIndex: 50, scale: 1,    brightness: 1,    opacity: 1 },
+              };
+              const sidePosMap: Record<number, { left: string; width: string; zIndex: number; scale: number; brightness: number; opacity: number }> = {
+                // right side
+                1:  { left: `${50 + centerW / 2 - side1W * 0.45}%`, width: `${side1W}%`, zIndex: 30, scale: 0.9,  brightness: 0.65, opacity: 1   },
+                2:  { left: `${50 + centerW / 2 + side1W * 0.35}%`, width: `${side2W}%`, zIndex: 10, scale: 0.78, brightness: 0.45, opacity: 0.85 },
+              };
+              const mirrorPosMap: Record<number, { left: string; width: string; zIndex: number; scale: number; brightness: number; opacity: number }> = {
+                // left side (mirrored)
+                1:  { left: `${50 - centerW / 2 - side1W * 0.55}%`, width: `${side1W}%`, zIndex: 30, scale: 0.9,  brightness: 0.65, opacity: 1   },
+                2:  { left: `${50 - centerW / 2 - side1W * 0.35 - side2W}%`, width: `${side2W}%`, zIndex: 10, scale: 0.78, brightness: 0.45, opacity: 0.85 },
+              };
+
+              const cfg =
+                offset === 0
+                  ? posMap[0]
+                  : offset > 0
+                  ? sidePosMap[absOffset]
+                  : mirrorPosMap[absOffset];
+
+              if (!cfg) return null;
+
+              return (
+                <div
+                  key={i}
+                  onClick={() => offset !== 0 && setWorkplaceIndex(i)}
+                  style={{
+                    position: "absolute",
+                    top: "50%",
+                    left: cfg.left,
+                    width: cfg.width,
+                    height: "100%",
+                    transform: `translateY(-50%) scale(${cfg.scale})`,
+                    transformOrigin: "center center",
+                    zIndex: cfg.zIndex,
+                    opacity: cfg.opacity,
+                    filter: `brightness(${cfg.brightness})`,
+                    transition: "all 0.6s cubic-bezier(0.45, 0, 0.55, 1)",
+                    cursor: offset !== 0 ? "pointer" : "default",
+                  }}
+                >
+                  <div
+                    style={{
+                      position: "relative",
+                      width: "100%",
+                      height: "100%",
+                      overflow: "hidden",
+                      boxShadow:
+                        offset === 0
+                          ? "0 32px 80px rgba(0,26,61,0.35)"
+                          : "0 8px 24px rgba(0,26,61,0.18)",
+                    }}
+                  >
                     <ImageWithFallback
-                      src={`${slide.src}?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1920`}
+                      src={`${slide.src}?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1200`}
                       alt={slide.title}
-                      className="h-full w-full object-cover transition-transform duration-[1.5s] ease-in-out group-hover:scale-105"
+                      className="h-full w-full object-cover"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-r from-[#001A3D]/90 via-[#001A3D]/40 to-transparent mix-blend-multiply"></div>
-                    <div className="absolute inset-0 bg-gradient-to-t from-[#001A3D]/95 via-[#001A3D]/20 to-transparent"></div>
-                    
-                    <div className="absolute inset-0 flex flex-col justify-end p-8 md:p-12 lg:p-16">
-                      <div className="max-w-4xl transform transition-all duration-700 translate-y-2 group-hover:translate-y-0 opacity-90 group-hover:opacity-100">
-                        <span className="mb-4 inline-flex items-center rounded-full border border-[#F99D1C]/30 bg-[#F99D1C]/10 px-5 py-2 text-[11px] font-bold tracking-widest text-[#F99D1C] uppercase backdrop-blur-sm">
-                          <span className="mr-2 h-1.5 w-1.5 rounded-full bg-[#F99D1C]"></span>
-                          {slide.tag}
-                        </span>
-                        <h4 className="display-font text-4xl leading-[1.1] font-semibold tracking-tight text-white md:text-5xl lg:text-6xl">
-                          {slide.title}
-                        </h4>
-                      </div>
-                    </div>
+                    {offset === 0 && (
+                      <>
+                        <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to top, rgba(0,26,61,0.82) 0%, transparent 55%)" }} />
+                        <div style={{ position: "absolute", bottom: 0, left: 0, right: 0, padding: "1.5rem" }}>
+                          <span style={{ display: "inline-flex", alignItems: "center", gap: 6, fontSize: 10, fontWeight: 700, letterSpacing: "0.2em", textTransform: "uppercase", color: "#F99D1C", marginBottom: 6 }}>
+                            <span style={{ width: 6, height: 6, borderRadius: "50%", background: "#F99D1C", display: "inline-block" }} />
+                            {slide.tag}
+                          </span>
+                          <h4 className="display-font" style={{ fontSize: "1.2rem", fontWeight: 600, color: "white", lineHeight: 1.3, margin: 0 }}>
+                            {slide.title}
+                          </h4>
+                        </div>
+                      </>
+                    )}
                   </div>
                 </div>
-              ))}
-            </Slider>
-          )}
-        </div>
+              );
+            })}
+          </div>
+        )}
       </section>
 
       {/* CTA Section */}
