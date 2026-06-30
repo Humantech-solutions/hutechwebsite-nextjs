@@ -365,7 +365,12 @@ const HOMEPAGE_QUERY = `
         expertise {
           title
           description
-          serviceCategorySlug
+          serviceCategory {
+            nodes {
+              slug
+            }
+          }
+          postsCount
         }
         capabilities {
           title
@@ -419,7 +424,11 @@ const HOMEPAGE_QUERY = `
         whatsNew {
           title
           description
-          blogCategorySlug
+          blogCategory {
+            nodes {
+              slug
+            }
+          }
           postsCount
         }
         techStackTitle
@@ -641,11 +650,12 @@ function transformHomePage(
     stories = dynamicTestimonials.map((t: any) => {
       const designation = t.testimonialFields?.designation || "";
       const company = t.testimonialFields?.company || "";
+      const description = t.testimonialFields?.description || "";
       const title = [designation, company].filter(Boolean).join(", ") || "Client Partner";
       return {
         name: t.title,
         title,
-        text: t.content ? t.content.replace(/<[^>]+>/g, "").trim() : "",
+        text: description,
         imageUrl: imgUrl(t.featuredImage)
       };
     });
@@ -733,10 +743,10 @@ function transformHomePage(
 // ─── Public API ──────────────────────────────────────────────────────────────
 
 const DYNAMIC_SERVICES_BY_CATEGORY_QUERY = `
-  query GetServicesByCategory($categorySlug: [String]!) {
+  query GetServicesByCategory($categorySlug: [String]!, $limit: Int!) {
     serviceCategories(where: { slug: $categorySlug }) {
       nodes {
-        hutechServices(first: 12) {
+        hutechServices(first: $limit) {
           nodes {
             title
             slug
@@ -753,8 +763,8 @@ const DYNAMIC_SERVICES_BY_CATEGORY_QUERY = `
 `;
 
 const DYNAMIC_ALL_SERVICES_QUERY = `
-  query GetAllServices {
-    hutechServices(first: 12) {
+  query GetAllServices($limit: Int!) {
+    hutechServices(first: $limit) {
       nodes {
         title
         slug
@@ -780,6 +790,7 @@ const DYNAMIC_TESTIMONIALS_QUERY = `
           }
         }
         testimonialFields {
+          description
           designation
           company
         }
@@ -851,22 +862,28 @@ export async function getHomePage(): Promise<HomepageData | null> {
     }
 
     const hFields = raw?.data?.page?.homepageFields || {};
-    const serviceCategorySlug = hFields.expertise?.serviceCategorySlug;
-    const blogCategorySlug = hFields.whatsNew?.blogCategorySlug;
-    const postsCount = hFields.whatsNew?.postsCount ? parseInt(hFields.whatsNew.postsCount, 10) : 6;
+    const serviceCategorySlug = hFields.expertise?.serviceCategory?.nodes?.[0]?.slug;
+    const servicePostsCount = hFields.expertise?.postsCount ? parseInt(hFields.expertise.postsCount, 10) : 12;
+    
+    const blogCategorySlug = hFields.whatsNew?.blogCategory?.nodes?.[0]?.slug;
+    
+    // Check if category and count are explicitly empty/unset
+    const isBlogSettingsEmpty = !hFields.whatsNew?.blogCategory && !hFields.whatsNew?.postsCount;
+    // If empty, fetch all (using a large limit like 100). Otherwise parse the limit.
+    const blogPostsCount = isBlogSettingsEmpty ? 100 : (hFields.whatsNew?.postsCount ? parseInt(hFields.whatsNew.postsCount, 10) : 6);
 
     // Fetch dynamic services, testimonials, and blogs in parallel
     const [servicesRes, testimonialsRes, blogsRes] = await Promise.all([
       // Services query
       serviceCategorySlug
-        ? fetchGraphQL(DYNAMIC_SERVICES_BY_CATEGORY_QUERY, { categorySlug: [serviceCategorySlug] })
-        : fetchGraphQL(DYNAMIC_ALL_SERVICES_QUERY),
+        ? fetchGraphQL(DYNAMIC_SERVICES_BY_CATEGORY_QUERY, { categorySlug: [serviceCategorySlug], limit: servicePostsCount })
+        : fetchGraphQL(DYNAMIC_ALL_SERVICES_QUERY, { limit: servicePostsCount }),
       // Testimonials query
       fetchGraphQL(DYNAMIC_TESTIMONIALS_QUERY),
       // Blogs query
       blogCategorySlug
-        ? fetchGraphQL(DYNAMIC_BLOGS_QUERY, { categorySlug: blogCategorySlug, limit: postsCount })
-        : fetchGraphQL(DYNAMIC_BLOGS_ALL_QUERY, { limit: postsCount })
+        ? fetchGraphQL(DYNAMIC_BLOGS_QUERY, { categorySlug: blogCategorySlug, limit: blogPostsCount })
+        : fetchGraphQL(DYNAMIC_BLOGS_ALL_QUERY, { limit: blogPostsCount })
     ]);
 
     // Parse services

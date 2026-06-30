@@ -1290,8 +1290,8 @@
                     {
                         "key": "field_home_serviceCategorySlug_7m3n",
                         "label": "Service Category Slug",
-                        "name": "serviceCategorySlug",
-                        "type": "text",
+                        "name": "serviceCategory",
+                        "type": "taxonomy",
                         "instructions": "Enter the slug of the Service Category to render services from.",
                         "required": 0,
                         "conditional_logic": 0,
@@ -1302,7 +1302,28 @@
                         },
                         "default_value": "",
                         "show_in_graphql": 1,
-                        "graphql_field_name": "serviceCategorySlug"
+                        "graphql_field_name": "serviceCategory",
+                        "taxonomy": "hutech_service_category",
+                        "field_type": "select",
+                        "allow_null": 1,
+                        "return_format": "object",
+                        "multiple": 0
+                    },
+                    {
+                        "key": "field_home_expertisePostsCount_123",
+                        "label": "Number of Posts to Display",
+                        "name": "postsCount",
+                        "type": "number",
+                        "instructions": "Enter the number of services to display (leave empty for default).",
+                        "required": 0,
+                        "wrapper": {
+                            "width": "",
+                            "class": "",
+                            "id": ""
+                        },
+                        "default_value": "",
+                        "show_in_graphql": 1,
+                        "graphql_field_name": "postsCount"
                     }
                 ]
             },
@@ -6217,8 +6238,8 @@
                     {
                         "key": "field_home_blogCategorySlug_8x2y",
                         "label": "Blog Category Slug",
-                        "name": "blogCategorySlug",
-                        "type": "text",
+                        "name": "blogCategory",
+                        "type": "taxonomy",
                         "instructions": "Enter the slug of the Blog Category to filter by (leave empty for all).",
                         "required": 0,
                         "conditional_logic": 0,
@@ -6229,7 +6250,12 @@
                         },
                         "default_value": "",
                         "show_in_graphql": 1,
-                        "graphql_field_name": "blogCategorySlug"
+                        "graphql_field_name": "blogCategory",
+                        "taxonomy": "category",
+                        "field_type": "select",
+                        "allow_null": 1,
+                        "return_format": "object",
+                        "multiple": 0
                     },
                     {
                         "key": "field_home_whatsNewPostsCount_9z1w",

@@ -1333,8 +1333,8 @@ export default function HomePageClient({ data }: HomePageClientProps) {
             onMouseLeave={() => setWhatsNewHovered(false)}
           >
             <div className="flex -mx-3 md:-mx-4">
-              {[...WHATS_NEW_DATA, ...WHATS_NEW_DATA, ...WHATS_NEW_DATA].map((news, idx) => {
-                const isSelected = whatsNewSelectedIndex % WHATS_NEW_DATA.length === idx % WHATS_NEW_DATA.length;
+              {WHATS_NEW_DATA.map((news, idx) => {
+                const isSelected = whatsNewSelectedIndex === idx;
                 return (
                   <div 
                     key={`${idx}-${news.title}`} 
@@ -1378,11 +1378,11 @@ export default function HomePageClient({ data }: HomePageClientProps) {
 
           {/* Pagination progress bar */}
           <div className="max-w-[180px] mx-auto mt-12 flex items-center gap-3">
-            <span className="text-[11px] text-gray-400 font-semibold font-mono">0{((whatsNewSelectedIndex) % WHATS_NEW_DATA.length) + 1}</span>
+            <span className="text-[11px] text-gray-400 font-semibold font-mono">0{(whatsNewSelectedIndex) + 1}</span>
             <div className="h-[2px] flex-1 bg-gray-200 relative overflow-hidden rounded-full">
               <div 
                 className="absolute top-0 left-0 h-full bg-[#F99D1C] transition-all duration-500 ease-out"
-                style={{ width: `${(((whatsNewSelectedIndex) % WHATS_NEW_DATA.length) + 1) / WHATS_NEW_DATA.length * 100}%` }}
+                style={{ width: `${((whatsNewSelectedIndex) + 1) / WHATS_NEW_DATA.length * 100}%` }}
               />
             </div>
             <span className="text-[11px] text-gray-400 font-semibold font-mono">0{WHATS_NEW_DATA.length}</span>

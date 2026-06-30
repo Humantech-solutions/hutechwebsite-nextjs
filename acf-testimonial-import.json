@@ -4,6 +4,23 @@
         "title": "Testimonial Details",
         "fields": [
             {
+                "key": "field_testimonial_description",
+                "label": "Description",
+                "name": "description",
+                "type": "text",
+                "instructions": "Client Testimonial",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "",
+                "show_in_graphql": 1,
+                "graphql_field_name": "description"
+            },
+            {
                 "key": "field_testimonial_designation",
                 "label": "Designation",
                 "name": "designation",
