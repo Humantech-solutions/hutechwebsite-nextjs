@@ -9,6 +9,7 @@ import { Toaster } from "sonner";
 import { ScrollToTopButton } from "@/components/ScrollToTopButton";
 import { ChatWidget } from "@/components/ChatWidget";
 import { CookieBanner } from "@/components/CookieBanner";
+import TemporaryPasswordGate from "@/components/TemporaryPasswordGate";
 
 export const metadata = constructMetadata();
 
@@ -29,15 +30,17 @@ export default async function RootLayout({
             type="application/ld+json"
             dangerouslySetInnerHTML={{ __html: JSON.stringify(getSiteSchema()) }}
           />
-          <div className="pt-[80px] md:pt-[80px]">
-            <Navbar data={siteChrome?.header} />
-            <main>{children}</main>
-            <Footer data={siteChrome?.footer} />
-            <ScrollToTopButton />
-            <ChatWidget />
-            <CookieBanner />
-            <Toaster position="top-right" />
-          </div>
+          <TemporaryPasswordGate>
+            <div className="pt-[80px] md:pt-[80px]">
+              <Navbar data={siteChrome?.header} />
+              <main>{children}</main>
+              <Footer data={siteChrome?.footer} />
+              <ScrollToTopButton />
+              <ChatWidget />
+              <CookieBanner />
+              <Toaster position="top-right" />
+            </div>
+          </TemporaryPasswordGate>
         </ThemeProvider>
       </body>
     </html>

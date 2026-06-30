@@ -1,5 +1,6 @@
 import { getNewsBySlug, getNewsItems, getPressReleases } from "@/lib/wordpress";
 import NewsDetailClient from "./NewsDetailClient";
+import { constructMetadata } from "@/lib/seo";
 
 const NEWS_DATA = {
   "top-global-tech-firms-2025": {
@@ -22,6 +23,21 @@ export async function generateStaticParams() {
   return allSlugs.map((id) => ({
     id: id,
   }));
+}
+
+export async function generateMetadata({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
+  const news: any = await getNewsBySlug(id).catch(() => null);
+  const fallback = NEWS_DATA[id as keyof typeof NEWS_DATA];
+
+  return constructMetadata({
+    title: news?.title || fallback?.title || "News",
+    description: news?.excerpt || news?.description || "",
+    image: news?.image || news?.imageUrl,
+    path: `/company/news/${id}/`,
+    type: "article",
+    publishedTime: news?.date,
+  });
 }
 
 export default async function NewsDetailPage({ params }: { params: Promise<{ id: string }> }) {

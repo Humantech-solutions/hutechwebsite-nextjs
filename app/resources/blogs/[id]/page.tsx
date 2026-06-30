@@ -2,6 +2,7 @@ import BlogDetailClient from "./BlogDetailClient";
 import { getBlogBySlug, getBlogs } from "@/lib/wordpress";
 import { BLOG_DATA } from "@/lib/data/blogs";
 import { notFound } from "next/navigation";
+import { constructMetadata } from "@/lib/seo";
 
 export const revalidate = 60;
 
@@ -13,6 +14,30 @@ export async function generateStaticParams() {
   ]);
 
   return Array.from(ids).map((id) => ({ id }));
+}
+
+export async function generateMetadata({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
+  const wpBlog = await getBlogBySlug(id).catch(() => null);
+  const staticBlog = BLOG_DATA[id];
+  const blog: any = wpBlog || staticBlog;
+
+  if (!blog) {
+    return constructMetadata({
+      title: "Blog",
+      path: `/resources/blogs/${id}/`,
+    });
+  }
+
+  return constructMetadata({
+    title: blog.title,
+    description: blog.excerpt || blog.content?.[0]?.text || blog.content || "",
+    image: blog.imageUrl || blog.image,
+    path: `/resources/blogs/${blog.slug || id}/`,
+    type: "article",
+    publishedTime: blog.date,
+    authors: [blog.author || "Hutech Team"],
+  });
 }
 
 export default async function Page({ params }: { params: Promise<{ id: string }> }) {
