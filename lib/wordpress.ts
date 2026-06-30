@@ -83,7 +83,7 @@ export async function fetchGraphQL(query: string, variables = {}) {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ query, variables }),
-      cache: "no-store",
+      next: { revalidate: 60 },
       signal: controller.signal,
     });
 
@@ -183,6 +183,7 @@ export type FooterChromeData = {
     phone?: string;
     phoneUrl?: string;
     email?: string;
+    mapUrl?: string;
   }[];
   about?: {
     text?: string;
@@ -210,21 +211,42 @@ export type SiteChromeData = {
   footer: FooterChromeData;
 };
 
-function flattenMenuItems(items?: ChromeMenuItem[]): { name: string; path: string }[] {
+function applyParentSlug(parentPath: string | undefined, childPath: string | undefined): string {
+  const p = parentPath || "#";
+  let c = childPath || "#";
+  if (c === "#" || c.startsWith("http") || p === "#" || p === "/") return c;
+  
+  // Remove the default CPT slugs if they exist so we can cleanly append to the parent
+  c = c.replace(/^\/(hutech_service|case_study|hutech_event|hutech_news|hutech_career|hutech_press_release|hutech_document)\//, "/");
+
+  const cleanP = p.replace(/\/$/, "");
+  if (!c.startsWith(cleanP + "/") && c !== cleanP) {
+    const cleanC = c.startsWith("/") ? c : `/${c}`;
+    c = `${cleanP}${cleanC}`;
+  }
+  return c;
+}
+
+function flattenMenuItems(items?: ChromeMenuItem[], parentPath?: string): { name: string; path: string }[] {
   return (items || []).map((item) => ({
     name: item.label,
-    path: item.path || "#",
+    path: parentPath ? applyParentSlug(parentPath, item.path) : (item.path || "#"),
   }));
 }
 
 function transformPrimaryMenu(items?: ChromeMenuItem[]): HeaderNavItem[] {
   return (items || []).map((item) => {
+    // Infer a parent path if the top-level item uses '#' or '/'
+    const parentPath = item.path && item.path !== "#" && item.path !== "/"
+      ? item.path
+      : `/${item.label.toLowerCase().replace(/[^a-z0-9]+/g, "-")}`;
+
     const dropdown = item.children?.length
       ? item.children.map((section) => ({
           title: section.label,
           items: section.children?.length
-            ? flattenMenuItems(section.children)
-            : [{ name: section.label, path: section.path || "#" }],
+            ? flattenMenuItems(section.children, parentPath)
+            : [{ name: section.label, path: applyParentSlug(parentPath, section.path) }],
         }))
       : undefined;
 
@@ -263,12 +285,12 @@ export async function getSiteChrome(): Promise<SiteChromeData | null> {
       footer: {
         ...raw.footer,
         menus: {
-          services: flattenMenuItems(menus.footerServices),
-          industries: flattenMenuItems(menus.footerIndustries),
-          resources: flattenMenuItems(menus.footerResources),
-          company: flattenMenuItems(menus.footerCompany),
-          caseStudies: flattenMenuItems(menus.footerCaseStudies),
-          legal: flattenMenuItems(menus.footerLegal),
+          services: flattenMenuItems(menus.footerServices, "/services"),
+          industries: flattenMenuItems(menus.footerIndustries, "/industries"),
+          resources: flattenMenuItems(menus.footerResources, "/resources"),
+          company: flattenMenuItems(menus.footerCompany, "/company"),
+          caseStudies: flattenMenuItems(menus.footerCaseStudies, "/resources/case-studies"),
+          legal: flattenMenuItems(menus.footerLegal, "/legal"),
         },
       },
     };

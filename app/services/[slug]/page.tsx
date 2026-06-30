@@ -1,5 +1,6 @@
 import { getServiceBySlug, getBlogsByCategory, getServicesList } from "@/lib/wordpress";
 import ServiceDetailClient from "./ServiceDetailClient";
+import { constructMetadata } from "@/lib/seo";
 
 export async function generateStaticParams() {
   const services = await getServicesList();
@@ -39,4 +40,19 @@ export default async function ServicePage({ params }: { params: Promise<{ slug: 
   const blogs = await getBlogsByCategory(categoryName);
 
   return <ServiceDetailClient service={service} blogs={blogs} />;
+}
+
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params;
+  const service = await getServiceBySlug(slug).catch(() => null);
+  const title = service?.heroTitle || service?.title || titleFromSlug(slug);
+
+  return constructMetadata({
+    title,
+    description:
+      service?.heroDescription ||
+      `Explore ${title} services from Hutech Solutions.`,
+    image: service?.heroBgImage,
+    path: `/services/${slug}/`,
+  });
 }

@@ -1,10 +1,13 @@
 import CaseStudiesClient from "./CaseStudiesClient";
 import { getCaseStudies, getCaseStudyPageData } from "@/lib/wordpress";
+import { constructMetadata } from "@/lib/seo";
 
-export const metadata = {
+export const metadata = constructMetadata({
   title: "Case Studies | Hutech Solutions",
-  description: "Real-world examples of how Hutech Solutions drives digital transformation.",
-};
+  description: "Explore real-world case studies showcasing how Hutech Solutions drives digital transformation across banking, healthcare, retail, and more.",
+  path: "/resources/case-studies/",
+});
+
 
 export default async function CaseStudiesPage() {
   const [wpCaseStudies, wpPageData] = await Promise.all([

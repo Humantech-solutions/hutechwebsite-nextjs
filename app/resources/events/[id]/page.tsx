@@ -1,6 +1,7 @@
 import EventDetailClient from "./EventDetailClient";
 import { getEvents, getEventBySlug } from "@/lib/wordpress";
 import { notFound } from "next/navigation";
+import { constructMetadata } from "@/lib/seo";
 
 // Static fallback for generateStaticParams when WP is unavailable
 const STATIC_SLUGS = [
@@ -122,6 +123,20 @@ export async function generateStaticParams() {
     }
   } catch {}
   return STATIC_SLUGS.map((id) => ({ id }));
+}
+
+export async function generateMetadata({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
+  const event: any = (await getEventBySlug(id).catch(() => null)) || STATIC_EVENTS[id];
+
+  return constructMetadata({
+    title: event?.title ? `${event.title} | Events` : "Events",
+    description: event?.tagline || event?.description || "",
+    image: event?.image,
+    path: `/resources/events/${id}/`,
+    type: "article",
+    publishedTime: event?.date,
+  });
 }
 
 export default async function EventDetailPage({ params }: { params: Promise<{ id: string }> }) {
