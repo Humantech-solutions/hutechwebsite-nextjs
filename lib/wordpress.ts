@@ -77,7 +77,7 @@ export async function fetchGraphQL(query: string, variables = {}) {
 
   try {
     const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), 35000); // 3.5s timeout
+    const timeout = setTimeout(() => controller.abort(), 10000); // 10s timeout
 
     const res = await fetch(WORDPRESS_API_URL, {
       method: "POST",
@@ -183,6 +183,7 @@ export type FooterChromeData = {
     phone?: string;
     phoneUrl?: string;
     email?: string;
+    mapUrl?: string;
   }[];
   about?: {
     text?: string;
