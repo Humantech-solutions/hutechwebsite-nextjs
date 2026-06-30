@@ -1,0 +1,527 @@
+[
+    {
+        "key": "group_vmv_page_fields",
+        "title": "Vision Mission Values Page Fields",
+        "fields": [
+            {
+                "key": "field_tab_hero_section_wvcfz",
+                "label": "Hero Section",
+                "name": "",
+                "type": "tab",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "placement": "top",
+                "endpoint": 0
+            },
+            {
+                "key": "field_vmv_hero_tagline_okqr4",
+                "label": "Hero Tagline",
+                "name": "vmv_hero_tagline",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "Our Purpose"
+            },
+            {
+                "key": "field_vmv_hero_title_d016c",
+                "label": "Hero Title",
+                "name": "vmv_hero_title",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "Our Vision, |Mission & ^Values."
+            },
+            {
+                "key": "field_vmv_hero_description_q7x2t",
+                "label": "Hero Description",
+                "name": "vmv_hero_description",
+                "type": "textarea",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "At Hutech Solutions, we are driven by a singular purpose: to empower businesses through transformative technology and unwavering commitment to excellence."
+            },
+            {
+                "key": "field_tab_vision_iagay",
+                "label": "Vision",
+                "name": "",
+                "type": "tab",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "placement": "top",
+                "endpoint": 0
+            },
+            {
+                "key": "field_vmv_vision_title_g1g7j",
+                "label": "Vision Title",
+                "name": "vmv_vision_title",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "Our Vision"
+            },
+            {
+                "key": "field_vmv_vision_description_7nesj",
+                "label": "Vision Description",
+                "name": "vmv_vision_description",
+                "type": "textarea",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "To be a globally recognized leader in providing innovative technology solutions that empower businesses and individuals to achieve their full potential and transcend traditional boundaries."
+            },
+            {
+                "key": "field_tab_mission_qyycv",
+                "label": "Mission",
+                "name": "",
+                "type": "tab",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "placement": "top",
+                "endpoint": 0
+            },
+            {
+                "key": "field_vmv_mission_title_xmgln",
+                "label": "Mission Title",
+                "name": "vmv_mission_title",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "Our Mission"
+            },
+            {
+                "key": "field_vmv_mission_description_6c55d",
+                "label": "Mission Description",
+                "name": "vmv_mission_description",
+                "type": "textarea",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "To deliver high-quality, cost-effective, and customized technology solutions that meet the unique needs of our clients while fostering a culture of continuous improvement, innovation, and employee growth."
+            },
+            {
+                "key": "field_tab_core_values_r2ybx",
+                "label": "Core Values",
+                "name": "",
+                "type": "tab",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "placement": "top",
+                "endpoint": 0
+            },
+            {
+                "key": "field_vmv_values_tagline_yo6xx",
+                "label": "Values Section Tagline",
+                "name": "vmv_values_tagline",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "The Pillars of Hutech"
+            },
+            {
+                "key": "field_vmv_values_title_pkjpa",
+                "label": "Values Section Title",
+                "name": "vmv_values_title",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "Our ^Core Values"
+            },
+            {
+                "key": "field_vmv_values_description_ara8x",
+                "label": "Values Section Description",
+                "name": "vmv_values_description",
+                "type": "textarea",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "The fundamental beliefs that shape our culture and define how we work together to serve our clients."
+            },
+            {
+                "key": "field_vmv_value_1_title_qbywb",
+                "label": "Value 1 Title",
+                "name": "vmv_value_1_title",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_vmv_value_1_desc_2fxc3",
+                "label": "Value 1 Description",
+                "name": "vmv_value_1_desc",
+                "type": "textarea",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_vmv_value_2_title_o160u",
+                "label": "Value 2 Title",
+                "name": "vmv_value_2_title",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_vmv_value_2_desc_lg489",
+                "label": "Value 2 Description",
+                "name": "vmv_value_2_desc",
+                "type": "textarea",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_vmv_value_3_title_f62qv",
+                "label": "Value 3 Title",
+                "name": "vmv_value_3_title",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_vmv_value_3_desc_2x08o",
+                "label": "Value 3 Description",
+                "name": "vmv_value_3_desc",
+                "type": "textarea",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_vmv_value_4_title_vqgka",
+                "label": "Value 4 Title",
+                "name": "vmv_value_4_title",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_vmv_value_4_desc_pyuhj",
+                "label": "Value 4 Description",
+                "name": "vmv_value_4_desc",
+                "type": "textarea",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_vmv_value_5_title_l7y99",
+                "label": "Value 5 Title",
+                "name": "vmv_value_5_title",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_vmv_value_5_desc_3akk5",
+                "label": "Value 5 Description",
+                "name": "vmv_value_5_desc",
+                "type": "textarea",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_vmv_value_6_title_wjygy",
+                "label": "Value 6 Title",
+                "name": "vmv_value_6_title",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_vmv_value_6_desc_2ac7x",
+                "label": "Value 6 Description",
+                "name": "vmv_value_6_desc",
+                "type": "textarea",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_tab_cta_section_pp6rt",
+                "label": "CTA Section",
+                "name": "",
+                "type": "tab",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "placement": "top",
+                "endpoint": 0
+            },
+            {
+                "key": "field_vmv_cta_title_uox1d",
+                "label": "CTA Title",
+                "name": "vmv_cta_title",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "Join Us in Shaping the ^Future of Technology."
+            },
+            {
+                "key": "field_vmv_cta_description_dsy90",
+                "label": "CTA Description",
+                "name": "vmv_cta_description",
+                "type": "textarea",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "Experience the Hutech difference where values meet innovation to deliver exceptional results."
+            },
+            {
+                "key": "field_vmv_cta_btn1_text_3jcsh",
+                "label": "CTA Button 1 Text",
+                "name": "vmv_cta_btn1_text",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "Partner With Us"
+            },
+            {
+                "key": "field_vmv_cta_btn1_url_ifnna",
+                "label": "CTA Button 1 URL",
+                "name": "vmv_cta_btn1_url",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "/contact"
+            },
+            {
+                "key": "field_vmv_cta_btn2_text_05a7u",
+                "label": "CTA Button 2 Text",
+                "name": "vmv_cta_btn2_text",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "View Careers"
+            },
+            {
+                "key": "field_vmv_cta_btn2_url_osqck",
+                "label": "CTA Button 2 URL",
+                "name": "vmv_cta_btn2_url",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "/careers"
+            }
+        ],
+        "location": [
+            [
+                {
+                    "param": "page_title",
+                    "operator": "==",
+                    "value": "Vision Mission Values"
+                }
+            ]
+        ],
+        "menu_order": 0,
+        "position": "normal",
+        "style": "default",
+        "label_placement": "top",
+        "instruction_placement": "label",
+        "hide_on_screen": "",
+        "active": true,
+        "description": "All editable fields for the Vision, Mission & Values page (ACF Free compatible).",
+        "show_in_graphql": 1,
+        "graphql_field_name": "visionMissionValuesPageFields"
+    }
+]

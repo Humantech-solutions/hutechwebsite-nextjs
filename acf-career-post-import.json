@@ -1,0 +1,202 @@
+[
+  {
+    "key": "group_career_post_fields",
+    "title": "Career Details",
+    "fields": [
+      {
+        "key": "field_career_location_0ipjc",
+        "label": "Location",
+        "name": "career_location",
+        "type": "text",
+        "instructions": "E.g., Bangalore, India",
+        "required": 0,
+        "conditional_logic": 0,
+        "wrapper": { "width": "50", "class": "", "id": "" },
+        "default_value": ""
+      },
+      {
+        "key": "field_career_type_9jnz3",
+        "label": "Employment Type",
+        "name": "career_type",
+        "type": "text",
+        "instructions": "E.g., Full-time, Contract",
+        "required": 0,
+        "conditional_logic": 0,
+        "wrapper": { "width": "50", "class": "", "id": "" },
+        "default_value": ""
+      },
+      {
+        "key": "field_career_description_2e0q0",
+        "label": "Job Description",
+        "name": "career_description",
+        "type": "textarea",
+        "instructions": "Main paragraph describing the role.",
+        "required": 0,
+        "conditional_logic": 0,
+        "wrapper": { "width": "100", "class": "", "id": "" },
+        "default_value": ""
+      },
+      {
+        "key": "field_career_role_overview_title",
+        "label": "Role Overview Section Title",
+        "name": "career_role_overview_title",
+        "type": "text",
+        "instructions": "Heading for the role description section. E.g., 'Role Overview'. Use ^ before a word to highlight it in orange.",
+        "required": 0,
+        "conditional_logic": 0,
+        "wrapper": { "width": "100", "class": "", "id": "" },
+        "default_value": "Role Overview"
+      },
+      {
+        "key": "field_career_what_youll_do_z08cu",
+        "label": "What You'll Do",
+        "name": "career_what_youll_do",
+        "type": "textarea",
+        "instructions": "Enter each point on a new line.",
+        "required": 0,
+        "conditional_logic": 0,
+        "wrapper": { "width": "100", "class": "", "id": "" },
+        "default_value": ""
+      },
+      {
+        "key": "field_career_what_youll_do_title",
+        "label": "What You'll Do Section Title",
+        "name": "career_what_youll_do_title",
+        "type": "text",
+        "instructions": "Heading for the 'What You'll Do' section. Use ^ before a word to highlight it in orange.",
+        "required": 0,
+        "conditional_logic": 0,
+        "wrapper": { "width": "100", "class": "", "id": "" },
+        "default_value": "What You'll Be ^Doing"
+      },
+      {
+        "key": "field_career_requirements_yobi4",
+        "label": "Requirements",
+        "name": "career_requirements",
+        "type": "textarea",
+        "instructions": "Enter each point on a new line.",
+        "required": 0,
+        "conditional_logic": 0,
+        "wrapper": { "width": "100", "class": "", "id": "" },
+        "default_value": ""
+      },
+      {
+        "key": "field_career_requirements_title",
+        "label": "Requirements Section Title",
+        "name": "career_requirements_title",
+        "type": "text",
+        "instructions": "Heading for the Requirements section. Use ^ before a word to highlight it in orange.",
+        "required": 0,
+        "conditional_logic": 0,
+        "wrapper": { "width": "100", "class": "", "id": "" },
+        "default_value": "Tech Stack Matchmaker – ^Is This You?"
+      },
+      {
+        "key": "field_career_superpowers_hdin8",
+        "label": "Superpowers",
+        "name": "career_superpowers",
+        "type": "textarea",
+        "instructions": "Enter each point on a new line.",
+        "required": 0,
+        "conditional_logic": 0,
+        "wrapper": { "width": "100", "class": "", "id": "" },
+        "default_value": ""
+      },
+      {
+        "key": "field_career_superpowers_title",
+        "label": "Superpowers Section Title",
+        "name": "career_superpowers_title",
+        "type": "text",
+        "instructions": "Heading for the Superpowers section. Use ^ before a word to highlight it in orange.",
+        "required": 0,
+        "conditional_logic": 0,
+        "wrapper": { "width": "100", "class": "", "id": "" },
+        "default_value": "Your ^Superpowers:"
+      },
+      {
+        "key": "field_career_benefits_nj9y4",
+        "label": "Benefits",
+        "name": "career_benefits",
+        "type": "textarea",
+        "instructions": "Enter each point on a new line. Defaults to standard benefits if left blank.",
+        "required": 0,
+        "conditional_logic": 0,
+        "wrapper": { "width": "100", "class": "", "id": "" },
+        "default_value": ""
+      },
+      {
+        "key": "field_career_benefits_title",
+        "label": "Benefits Section Title",
+        "name": "career_benefits_title",
+        "type": "text",
+        "instructions": "Heading for the Benefits section. Use ^ before a word to highlight it in orange.",
+        "required": 0,
+        "conditional_logic": 0,
+        "wrapper": { "width": "100", "class": "", "id": "" },
+        "default_value": "What's In It ^For You?"
+      },
+      {
+        "key": "field_career_hiring_timeline_title",
+        "label": "Hiring Timeline Title",
+        "name": "career_hiring_timeline_title",
+        "type": "text",
+        "instructions": "Title shown in the Hiring Timeline sidebar card.",
+        "required": 0,
+        "conditional_logic": 0,
+        "wrapper": { "width": "100", "class": "", "id": "" },
+        "default_value": "Hiring Timeline"
+      },
+      {
+        "key": "field_career_hiring_timeline_text",
+        "label": "Hiring Timeline Text",
+        "name": "career_hiring_timeline_text",
+        "type": "textarea",
+        "instructions": "Description text for the Hiring Timeline sidebar card.",
+        "required": 0,
+        "conditional_logic": 0,
+        "wrapper": { "width": "100", "class": "", "id": "" },
+        "default_value": "This is an active opening. Our team typically responds to qualified applicants within 48-72 business hours."
+      },
+      {
+        "key": "field_career_about_title",
+        "label": "About Section Title",
+        "name": "career_about_title",
+        "type": "text",
+        "instructions": "Title for the 'About Hutech Solutions' section. Use ^ before a word to highlight it in orange.",
+        "required": 0,
+        "conditional_logic": 0,
+        "wrapper": { "width": "100", "class": "", "id": "" },
+        "default_value": "About ^Hutech Solutions"
+      },
+      {
+        "key": "field_career_about_text",
+        "label": "About Section Text",
+        "name": "career_about_text",
+        "type": "textarea",
+        "instructions": "Content for the 'About Hutech Solutions' section. Separate paragraphs with a blank line.",
+        "required": 0,
+        "conditional_logic": 0,
+        "wrapper": { "width": "100", "class": "", "id": "" },
+        "default_value": "Hutech Solutions is a global software powerhouse at the forefront of the AI revolution. As a leading innovator in Artificial Intelligence, Agentic AI, and Deep Learning technologies, we design and deliver next-generation solutions that empower businesses to unlock transformative intelligence and automation.\n\nWe are actively partnering with large enterprises and business houses to reimagine and transform enterprise software applications. Our mission is to develop innovative software utilities that accelerate business performance by leveraging cutting-edge AI and Generative AI tools and techniques.\n\nFrom streamlining operations in logistics, enhancing customer experiences in eCommerce, to driving intelligent automation in the BFSI sector, Hutech Solutions is a trusted force in modern digital transformation."
+      }
+    ],
+    "location": [
+      [
+        {
+          "param": "post_type",
+          "operator": "==",
+          "value": "hutech_career"
+        }
+      ]
+    ],
+    "menu_order": 0,
+    "position": "normal",
+    "style": "default",
+    "label_placement": "top",
+    "instruction_placement": "label",
+    "hide_on_screen": "",
+    "active": true,
+    "description": "",
+    "show_in_rest": 1
+  }
+]

@@ -1,0 +1,1699 @@
+[
+    {
+        "key": "group_awards_page_fields",
+        "title": "Awards Page Fields",
+        "fields": [
+            {
+                "key": "field_tab_hero_section_zm",
+                "label": "Hero Section",
+                "name": "",
+                "type": "tab",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "placement": "top",
+                "endpoint": 0
+            },
+            {
+                "key": "field_awards_hero_tagline_1jm",
+                "label": "Hero Tagline",
+                "name": "awards_hero_tagline",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "Our Milestones"
+            },
+            {
+                "key": "field_awards_hero_title_1e8",
+                "label": "Hero Title",
+                "name": "awards_hero_title",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "Awards & |Recognition."
+            },
+            {
+                "key": "field_awards_hero_description_1w2",
+                "label": "Hero Description",
+                "name": "awards_hero_description",
+                "type": "textarea",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "Celebrating a legacy of excellence and the relentless pursuit of innovation that defines Hutech Solutions."
+            },
+            {
+                "key": "field_awards_hero_bg_image_1ll",
+                "label": "Hero Background Image",
+                "name": "awards_hero_bg_image",
+                "type": "image",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "",
+                "return_format": "array",
+                "preview_size": "medium",
+                "library": "all"
+            },
+            {
+                "key": "field_tab_journey_section_19c",
+                "label": "Journey Section",
+                "name": "",
+                "type": "tab",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "placement": "top",
+                "endpoint": 0
+            },
+            {
+                "key": "field_awards_journey_tagline_1tc",
+                "label": "Journey Tagline",
+                "name": "awards_journey_tagline",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "Milestones"
+            },
+            {
+                "key": "field_awards_journey_title_1ny",
+                "label": "Journey Title",
+                "name": "awards_journey_title",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "A Journey of Distinction"
+            },
+            {
+                "key": "field_awards_journey_description_25s",
+                "label": "Journey Description",
+                "name": "awards_journey_description",
+                "type": "textarea",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_awards_award_1_title_1kx",
+                "label": "Award 1 Title",
+                "name": "awards_award_1_title",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "33",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_awards_award_1_year_1hs",
+                "label": "Award 1 Year",
+                "name": "awards_award_1_year",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "33",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_awards_award_1_issuer_1oa",
+                "label": "Award 1 Issuer",
+                "name": "awards_award_1_issuer",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "33",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_awards_award_1_desc_1ha",
+                "label": "Award 1 Description",
+                "name": "awards_award_1_desc",
+                "type": "textarea",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_awards_award_1_icon_1hk",
+                "label": "Award 1 Icon",
+                "name": "awards_award_1_icon",
+                "type": "select",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "Trophy",
+                "choices": {
+                    "Trophy": "Trophy Icon",
+                    "Zap": "Zap Icon",
+                    "Star": "Star Icon",
+                    "Globe": "Globe Icon",
+                    "ShieldCheck": "Shield Check Icon",
+                    "Medal": "Medal Icon",
+                    "Award": "Award Icon"
+                },
+                "allow_null": 0,
+                "multiple": 0,
+                "ui": 0,
+                "return_format": "value"
+            },
+            {
+                "key": "field_awards_award_1_link_1hp",
+                "label": "Award 1 External Link",
+                "name": "awards_award_1_link",
+                "type": "text",
+                "instructions": "Optional external link for the award",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "100",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_awards_award_2_title_1ky",
+                "label": "Award 2 Title",
+                "name": "awards_award_2_title",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "33",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_awards_award_2_year_1ht",
+                "label": "Award 2 Year",
+                "name": "awards_award_2_year",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "33",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_awards_award_2_issuer_1ob",
+                "label": "Award 2 Issuer",
+                "name": "awards_award_2_issuer",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "33",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_awards_award_2_desc_1hb",
+                "label": "Award 2 Description",
+                "name": "awards_award_2_desc",
+                "type": "textarea",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_awards_award_2_icon_1hl",
+                "label": "Award 2 Icon",
+                "name": "awards_award_2_icon",
+                "type": "select",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "Zap",
+                "choices": {
+                    "Trophy": "Trophy Icon",
+                    "Zap": "Zap Icon",
+                    "Star": "Star Icon",
+                    "Globe": "Globe Icon",
+                    "ShieldCheck": "Shield Check Icon",
+                    "Medal": "Medal Icon",
+                    "Award": "Award Icon"
+                },
+                "allow_null": 0,
+                "multiple": 0,
+                "ui": 0,
+                "return_format": "value"
+            },
+            {
+                "key": "field_awards_award_2_link_1hq",
+                "label": "Award 2 External Link",
+                "name": "awards_award_2_link",
+                "type": "text",
+                "instructions": "Optional external link for the award",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "100",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_awards_award_3_title_1kz",
+                "label": "Award 3 Title",
+                "name": "awards_award_3_title",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "33",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_awards_award_3_year_1hu",
+                "label": "Award 3 Year",
+                "name": "awards_award_3_year",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "33",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_awards_award_3_issuer_1oc",
+                "label": "Award 3 Issuer",
+                "name": "awards_award_3_issuer",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "33",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_awards_award_3_desc_1hc",
+                "label": "Award 3 Description",
+                "name": "awards_award_3_desc",
+                "type": "textarea",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_awards_award_3_icon_1hm",
+                "label": "Award 3 Icon",
+                "name": "awards_award_3_icon",
+                "type": "select",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "Star",
+                "choices": {
+                    "Trophy": "Trophy Icon",
+                    "Zap": "Zap Icon",
+                    "Star": "Star Icon",
+                    "Globe": "Globe Icon",
+                    "ShieldCheck": "Shield Check Icon",
+                    "Medal": "Medal Icon",
+                    "Award": "Award Icon"
+                },
+                "allow_null": 0,
+                "multiple": 0,
+                "ui": 0,
+                "return_format": "value"
+            },
+            {
+                "key": "field_awards_award_3_link_1hr",
+                "label": "Award 3 External Link",
+                "name": "awards_award_3_link",
+                "type": "text",
+                "instructions": "Optional external link for the award",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "100",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_awards_award_4_title_1l0",
+                "label": "Award 4 Title",
+                "name": "awards_award_4_title",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "33",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_awards_award_4_year_1hv",
+                "label": "Award 4 Year",
+                "name": "awards_award_4_year",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "33",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_awards_award_4_issuer_1od",
+                "label": "Award 4 Issuer",
+                "name": "awards_award_4_issuer",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "33",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_awards_award_4_desc_1hd",
+                "label": "Award 4 Description",
+                "name": "awards_award_4_desc",
+                "type": "textarea",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_awards_award_4_icon_1hn",
+                "label": "Award 4 Icon",
+                "name": "awards_award_4_icon",
+                "type": "select",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "Globe",
+                "choices": {
+                    "Trophy": "Trophy Icon",
+                    "Zap": "Zap Icon",
+                    "Star": "Star Icon",
+                    "Globe": "Globe Icon",
+                    "ShieldCheck": "Shield Check Icon",
+                    "Medal": "Medal Icon",
+                    "Award": "Award Icon"
+                },
+                "allow_null": 0,
+                "multiple": 0,
+                "ui": 0,
+                "return_format": "value"
+            },
+            {
+                "key": "field_awards_award_4_link_1hs",
+                "label": "Award 4 External Link",
+                "name": "awards_award_4_link",
+                "type": "text",
+                "instructions": "Optional external link for the award",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "100",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_awards_award_5_title_1l1",
+                "label": "Award 5 Title",
+                "name": "awards_award_5_title",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "33",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_awards_award_5_year_1hw",
+                "label": "Award 5 Year",
+                "name": "awards_award_5_year",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "33",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_awards_award_5_issuer_1oe",
+                "label": "Award 5 Issuer",
+                "name": "awards_award_5_issuer",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "33",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_awards_award_5_desc_1he",
+                "label": "Award 5 Description",
+                "name": "awards_award_5_desc",
+                "type": "textarea",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_awards_award_5_icon_1ho",
+                "label": "Award 5 Icon",
+                "name": "awards_award_5_icon",
+                "type": "select",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "ShieldCheck",
+                "choices": {
+                    "Trophy": "Trophy Icon",
+                    "Zap": "Zap Icon",
+                    "Star": "Star Icon",
+                    "Globe": "Globe Icon",
+                    "ShieldCheck": "Shield Check Icon",
+                    "Medal": "Medal Icon",
+                    "Award": "Award Icon"
+                },
+                "allow_null": 0,
+                "multiple": 0,
+                "ui": 0,
+                "return_format": "value"
+            },
+            {
+                "key": "field_awards_award_5_link_1ht",
+                "label": "Award 5 External Link",
+                "name": "awards_award_5_link",
+                "type": "text",
+                "instructions": "Optional external link for the award",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "100",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_awards_award_6_title_1l2",
+                "label": "Award 6 Title",
+                "name": "awards_award_6_title",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "33",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_awards_award_6_year_1hx",
+                "label": "Award 6 Year",
+                "name": "awards_award_6_year",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "33",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_awards_award_6_issuer_1of",
+                "label": "Award 6 Issuer",
+                "name": "awards_award_6_issuer",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "33",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_awards_award_6_desc_1hf",
+                "label": "Award 6 Description",
+                "name": "awards_award_6_desc",
+                "type": "textarea",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_awards_award_6_icon_1hp",
+                "label": "Award 6 Icon",
+                "name": "awards_award_6_icon",
+                "type": "select",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "Medal",
+                "choices": {
+                    "Trophy": "Trophy Icon",
+                    "Zap": "Zap Icon",
+                    "Star": "Star Icon",
+                    "Globe": "Globe Icon",
+                    "ShieldCheck": "Shield Check Icon",
+                    "Medal": "Medal Icon",
+                    "Award": "Award Icon"
+                },
+                "allow_null": 0,
+                "multiple": 0,
+                "ui": 0,
+                "return_format": "value"
+            },
+            {
+                "key": "field_awards_award_6_link_1hu",
+                "label": "Award 6 External Link",
+                "name": "awards_award_6_link",
+                "type": "text",
+                "instructions": "Optional external link for the award",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "100",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_awards_award_7_title_1l3",
+                "label": "Award 7 Title",
+                "name": "awards_award_7_title",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "33",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_awards_award_7_year_1hy",
+                "label": "Award 7 Year",
+                "name": "awards_award_7_year",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "33",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_awards_award_7_issuer_1og",
+                "label": "Award 7 Issuer",
+                "name": "awards_award_7_issuer",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "33",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_awards_award_7_desc_1hg",
+                "label": "Award 7 Description",
+                "name": "awards_award_7_desc",
+                "type": "textarea",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_awards_award_7_icon_1hq",
+                "label": "Award 7 Icon",
+                "name": "awards_award_7_icon",
+                "type": "select",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "Trophy",
+                "choices": {
+                    "Trophy": "Trophy Icon",
+                    "Zap": "Zap Icon",
+                    "Star": "Star Icon",
+                    "Globe": "Globe Icon",
+                    "ShieldCheck": "Shield Check Icon",
+                    "Medal": "Medal Icon",
+                    "Award": "Award Icon"
+                },
+                "allow_null": 0,
+                "multiple": 0,
+                "ui": 0,
+                "return_format": "value"
+            },
+            {
+                "key": "field_awards_award_7_link_1hv",
+                "label": "Award 7 External Link",
+                "name": "awards_award_7_link",
+                "type": "text",
+                "instructions": "Optional external link for the award",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "100",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_awards_award_8_title_1l4",
+                "label": "Award 8 Title",
+                "name": "awards_award_8_title",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "33",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_awards_award_8_year_1hz",
+                "label": "Award 8 Year",
+                "name": "awards_award_8_year",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "33",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_awards_award_8_issuer_1oh",
+                "label": "Award 8 Issuer",
+                "name": "awards_award_8_issuer",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "33",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_awards_award_8_desc_1hh",
+                "label": "Award 8 Description",
+                "name": "awards_award_8_desc",
+                "type": "textarea",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_awards_award_8_icon_1hr",
+                "label": "Award 8 Icon",
+                "name": "awards_award_8_icon",
+                "type": "select",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "Zap",
+                "choices": {
+                    "Trophy": "Trophy Icon",
+                    "Zap": "Zap Icon",
+                    "Star": "Star Icon",
+                    "Globe": "Globe Icon",
+                    "ShieldCheck": "Shield Check Icon",
+                    "Medal": "Medal Icon",
+                    "Award": "Award Icon"
+                },
+                "allow_null": 0,
+                "multiple": 0,
+                "ui": 0,
+                "return_format": "value"
+            },
+            {
+                "key": "field_awards_award_8_link_1hw",
+                "label": "Award 8 External Link",
+                "name": "awards_award_8_link",
+                "type": "text",
+                "instructions": "Optional external link for the award",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "100",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_awards_award_9_title_1l5",
+                "label": "Award 9 Title",
+                "name": "awards_award_9_title",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "33",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_awards_award_9_year_1i0",
+                "label": "Award 9 Year",
+                "name": "awards_award_9_year",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "33",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_awards_award_9_issuer_1oi",
+                "label": "Award 9 Issuer",
+                "name": "awards_award_9_issuer",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "33",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_awards_award_9_desc_1hi",
+                "label": "Award 9 Description",
+                "name": "awards_award_9_desc",
+                "type": "textarea",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_awards_award_9_icon_1hs",
+                "label": "Award 9 Icon",
+                "name": "awards_award_9_icon",
+                "type": "select",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "Star",
+                "choices": {
+                    "Trophy": "Trophy Icon",
+                    "Zap": "Zap Icon",
+                    "Star": "Star Icon",
+                    "Globe": "Globe Icon",
+                    "ShieldCheck": "Shield Check Icon",
+                    "Medal": "Medal Icon",
+                    "Award": "Award Icon"
+                },
+                "allow_null": 0,
+                "multiple": 0,
+                "ui": 0,
+                "return_format": "value"
+            },
+            {
+                "key": "field_awards_award_9_link_1hx",
+                "label": "Award 9 External Link",
+                "name": "awards_award_9_link",
+                "type": "text",
+                "instructions": "Optional external link for the award",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "100",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_awards_award_10_title_1m9",
+                "label": "Award 10 Title",
+                "name": "awards_award_10_title",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "33",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_awards_award_10_year_1j4",
+                "label": "Award 10 Year",
+                "name": "awards_award_10_year",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "33",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_awards_award_10_issuer_1pm",
+                "label": "Award 10 Issuer",
+                "name": "awards_award_10_issuer",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "33",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_awards_award_10_desc_1im",
+                "label": "Award 10 Description",
+                "name": "awards_award_10_desc",
+                "type": "textarea",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_awards_award_10_icon_1iw",
+                "label": "Award 10 Icon",
+                "name": "awards_award_10_icon",
+                "type": "select",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "Globe",
+                "choices": {
+                    "Trophy": "Trophy Icon",
+                    "Zap": "Zap Icon",
+                    "Star": "Star Icon",
+                    "Globe": "Globe Icon",
+                    "ShieldCheck": "Shield Check Icon",
+                    "Medal": "Medal Icon",
+                    "Award": "Award Icon"
+                },
+                "allow_null": 0,
+                "multiple": 0,
+                "ui": 0,
+                "return_format": "value"
+            },
+            {
+                "key": "field_awards_award_10_link_1j1",
+                "label": "Award 10 External Link",
+                "name": "awards_award_10_link",
+                "type": "text",
+                "instructions": "Optional external link for the award",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "100",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_awards_award_11_title_1ma",
+                "label": "Award 11 Title",
+                "name": "awards_award_11_title",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "33",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_awards_award_11_year_1j5",
+                "label": "Award 11 Year",
+                "name": "awards_award_11_year",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "33",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_awards_award_11_issuer_1pn",
+                "label": "Award 11 Issuer",
+                "name": "awards_award_11_issuer",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "33",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_awards_award_11_desc_1in",
+                "label": "Award 11 Description",
+                "name": "awards_award_11_desc",
+                "type": "textarea",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_awards_award_11_icon_1ix",
+                "label": "Award 11 Icon",
+                "name": "awards_award_11_icon",
+                "type": "select",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "ShieldCheck",
+                "choices": {
+                    "Trophy": "Trophy Icon",
+                    "Zap": "Zap Icon",
+                    "Star": "Star Icon",
+                    "Globe": "Globe Icon",
+                    "ShieldCheck": "Shield Check Icon",
+                    "Medal": "Medal Icon",
+                    "Award": "Award Icon"
+                },
+                "allow_null": 0,
+                "multiple": 0,
+                "ui": 0,
+                "return_format": "value"
+            },
+            {
+                "key": "field_awards_award_11_link_1j2",
+                "label": "Award 11 External Link",
+                "name": "awards_award_11_link",
+                "type": "text",
+                "instructions": "Optional external link for the award",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "100",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_awards_award_12_title_1mb",
+                "label": "Award 12 Title",
+                "name": "awards_award_12_title",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "33",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_awards_award_12_year_1j6",
+                "label": "Award 12 Year",
+                "name": "awards_award_12_year",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "33",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_awards_award_12_issuer_1po",
+                "label": "Award 12 Issuer",
+                "name": "awards_award_12_issuer",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "33",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_awards_award_12_desc_1io",
+                "label": "Award 12 Description",
+                "name": "awards_award_12_desc",
+                "type": "textarea",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_awards_award_12_icon_1iy",
+                "label": "Award 12 Icon",
+                "name": "awards_award_12_icon",
+                "type": "select",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "Medal",
+                "choices": {
+                    "Trophy": "Trophy Icon",
+                    "Zap": "Zap Icon",
+                    "Star": "Star Icon",
+                    "Globe": "Globe Icon",
+                    "ShieldCheck": "Shield Check Icon",
+                    "Medal": "Medal Icon",
+                    "Award": "Award Icon"
+                },
+                "allow_null": 0,
+                "multiple": 0,
+                "ui": 0,
+                "return_format": "value"
+            },
+            {
+                "key": "field_awards_award_12_link_1j3",
+                "label": "Award 12 External Link",
+                "name": "awards_award_12_link",
+                "type": "text",
+                "instructions": "Optional external link for the award",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "100",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_tab_featured_section_1b8",
+                "label": "Featured Section",
+                "name": "",
+                "type": "tab",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "placement": "top",
+                "endpoint": 0
+            },
+            {
+                "key": "field_awards_featured_title_1pu",
+                "label": "Featured Title",
+                "name": "awards_featured_title",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "Recognized for |Global Excellence."
+            },
+            {
+                "key": "field_awards_featured_description_27o",
+                "label": "Featured Description",
+                "name": "awards_featured_description",
+                "type": "textarea",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "Our journey is marked by certifications and recognitions that validate our engineering prowess and operational maturity. From ISO standards to premier partnership tiers with tech giants, we ensure our clients work with the best."
+            },
+            {
+                "key": "field_awards_featured_image_1oz",
+                "label": "Featured Image",
+                "name": "awards_featured_image",
+                "type": "image",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "",
+                "return_format": "array",
+                "preview_size": "medium",
+                "library": "all"
+            },
+            {
+                "key": "field_awards_stat_1_label_1ho",
+                "label": "Stat 1 Label",
+                "name": "awards_stat_1_label",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "ISO Certified"
+            },
+            {
+                "key": "field_awards_stat_1_value_1ih",
+                "label": "Stat 1 Value",
+                "name": "awards_stat_1_value",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "9001 & 27001"
+            },
+            {
+                "key": "field_awards_stat_2_label_1hp",
+                "label": "Stat 2 Label",
+                "name": "awards_stat_2_label",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "Global Reach"
+            },
+            {
+                "key": "field_awards_stat_2_value_1ii",
+                "label": "Stat 2 Value",
+                "name": "awards_stat_2_value",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "12+ Countries"
+            },
+            {
+                "key": "field_awards_stat_3_label_1hq",
+                "label": "Stat 3 Label",
+                "name": "awards_stat_3_label",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "Elite Partners"
+            },
+            {
+                "key": "field_awards_stat_3_value_1ij",
+                "label": "Stat 3 Value",
+                "name": "awards_stat_3_value",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "AWS, Azure, GCP"
+            },
+            {
+                "key": "field_awards_stat_4_label_1hr",
+                "label": "Stat 4 Label",
+                "name": "awards_stat_4_label",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "Satisfaction"
+            },
+            {
+                "key": "field_awards_stat_4_value_1ik",
+                "label": "Stat 4 Value",
+                "name": "awards_stat_4_value",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "98% Client Retention"
+            },
+            {
+                "key": "field_tab_cta_section_wc",
+                "label": "CTA Section",
+                "name": "",
+                "type": "tab",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "placement": "top",
+                "endpoint": 0
+            },
+            {
+                "key": "field_awards_cta_title_1ay",
+                "label": "CTA Title",
+                "name": "awards_cta_title",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "Join our award-winning |journey."
+            },
+            {
+                "key": "field_awards_cta_btn1_text_1ld",
+                "label": "CTA Button 1 Text",
+                "name": "awards_cta_btn1_text",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "Explore Case Studies"
+            },
+            {
+                "key": "field_awards_cta_btn1_url_1i7",
+                "label": "CTA Button 1 URL",
+                "name": "awards_cta_btn1_url",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "/resources/case-studies"
+            },
+            {
+                "key": "field_awards_cta_btn2_text_1le",
+                "label": "CTA Button 2 Text",
+                "name": "awards_cta_btn2_text",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "Partner With Us"
+            },
+            {
+                "key": "field_awards_cta_btn2_url_1i8",
+                "label": "CTA Button 2 URL",
+                "name": "awards_cta_btn2_url",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "/contact"
+            }
+        ],
+        "location": [
+            [
+                {
+                    "param": "page_title",
+                    "operator": "==",
+                    "value": "awards"
+                }
+            ],
+            [
+                {
+                    "param": "page_title",
+                    "operator": "==",
+                    "value": "Awards"
+                }
+            ],
+            [
+                {
+                    "param": "page_title",
+                    "operator": "==",
+                    "value": "Awards & Recognition"
+                }
+            ],
+            [
+                {
+                    "param": "page_slug",
+                    "operator": "==",
+                    "value": "awards"
+                }
+            ]
+        ],
+        "menu_order": 0,
+        "position": "normal",
+        "style": "default",
+        "label_placement": "top",
+        "instruction_placement": "label",
+        "hide_on_screen": "",
+        "active": true,
+        "description": "All editable fields for the Awards and Recognition page (ACF Free compatible).",
+        "show_in_graphql": 1,
+        "graphql_field_name": "awardsPageFields"
+    }
+]

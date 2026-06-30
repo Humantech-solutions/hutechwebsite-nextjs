@@ -1,0 +1,74 @@
+[
+    {
+        "key": "group_news_post_fields",
+        "title": "News Details",
+        "fields": [
+            {
+                "key": "field_news_news_date_qi",
+                "label": "News Date",
+                "name": "news_date",
+                "type": "date_picker",
+                "instructions": "Date of the news article (e.g. Oct 12, 2025). Defaults to post publish date if left empty.",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "",
+                "display_format": "F j, Y",
+                "return_format": "F j, Y"
+            },
+            {
+                "key": "field_news_news_author_xb",
+                "label": "Author Name",
+                "name": "news_author",
+                "type": "text",
+                "instructions": "Author of the article.",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "Elena Vance"
+            },
+            {
+                "key": "field_news_news_role_r2",
+                "label": "Author Role / Title",
+                "name": "news_role",
+                "type": "text",
+                "instructions": "Role or title of the author (e.g. Corporate Communications).",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "Corporate Communications"
+            }
+        ],
+        "location": [
+            [
+                {
+                    "param": "post_type",
+                    "operator": "==",
+                    "value": "hutech_news"
+                }
+            ]
+        ],
+        "menu_order": 0,
+        "position": "normal",
+        "style": "default",
+        "label_placement": "top",
+        "instruction_placement": "label",
+        "hide_on_screen": "",
+        "active": true,
+        "description": "Custom fields for each individual News post.",
+        "show_in_graphql": 1,
+        "graphql_field_name": "newsFields"
+    }
+]

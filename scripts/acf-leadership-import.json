@@ -1,0 +1,1681 @@
+[
+    {
+        "key": "group_leadership_page_fields",
+        "title": "Leadership Page Fields",
+        "fields": [
+            {
+                "key": "field_tab_hero_section_f8ayx",
+                "label": "Hero Section",
+                "name": "",
+                "type": "tab",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "placement": "top",
+                "endpoint": 0
+            },
+            {
+                "key": "field_lead_hero_tagline_41ny0",
+                "label": "Hero Tagline",
+                "name": "lead_hero_tagline",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "The Executive Bench"
+            },
+            {
+                "key": "field_lead_hero_title_ouoci",
+                "label": "Hero Title",
+                "name": "lead_hero_title",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "The ^Visionaries."
+            },
+            {
+                "key": "field_lead_hero_description_lg3v1",
+                "label": "Hero Description",
+                "name": "lead_hero_description",
+                "type": "textarea",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "\"Leadership at Hutech is about enabling the brilliance of our engineers to solve the world's most complex digital challenges.\""
+            },
+            {
+                "key": "field_lead_hero_bg_image_cd6af",
+                "label": "Hero Background Image",
+                "name": "lead_hero_bg_image",
+                "type": "image",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "",
+                "return_format": "object",
+                "preview_size": "medium",
+                "library": "all"
+            },
+            {
+                "key": "field_tab_main_leadership_grid_7zpsy",
+                "label": "Main Leadership Grid",
+                "name": "",
+                "type": "tab",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "placement": "top",
+                "endpoint": 0
+            },
+            {
+                "key": "field_lead_leader_1_name_4a4ez",
+                "label": "Leader 1 Name",
+                "name": "lead_leader_1_name",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_lead_leader_1_role_va1tk",
+                "label": "Leader 1 Role",
+                "name": "lead_leader_1_role",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_lead_leader_1_img_vovoo",
+                "label": "Leader 1 Image",
+                "name": "lead_leader_1_img",
+                "type": "image",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50"
+                },
+                "default_value": "",
+                "return_format": "object",
+                "preview_size": "medium",
+                "library": "all"
+            },
+            {
+                "key": "field_lead_leader_1_bio_rudg6",
+                "label": "Leader 1 Bio",
+                "name": "lead_leader_1_bio",
+                "type": "textarea",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_lead_leader_1_linkedin_unw7z",
+                "label": "Leader 1 Linkedin URL",
+                "name": "lead_leader_1_linkedin",
+                "type": "url",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_lead_leader_1_linkedin_icon_jdd8a",
+                "label": "Leader 1 Linkedin Icon",
+                "name": "lead_leader_1_linkedin_icon",
+                "type": "image",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50"
+                },
+                "default_value": "",
+                "return_format": "object",
+                "preview_size": "medium",
+                "library": "all"
+            },
+            {
+                "key": "field_lead_leader_1_twitter_lzhsb",
+                "label": "Leader 1 Twitter URL",
+                "name": "lead_leader_1_twitter",
+                "type": "url",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_lead_leader_1_twitter_icon_4ajl3",
+                "label": "Leader 1 Twitter Icon",
+                "name": "lead_leader_1_twitter_icon",
+                "type": "image",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50"
+                },
+                "default_value": "",
+                "return_format": "object",
+                "preview_size": "medium",
+                "library": "all"
+            },
+            {
+                "key": "field_lead_leader_2_name_6nfdi",
+                "label": "Leader 2 Name",
+                "name": "lead_leader_2_name",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_lead_leader_2_role_6ehpq",
+                "label": "Leader 2 Role",
+                "name": "lead_leader_2_role",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_lead_leader_2_img_r96j6",
+                "label": "Leader 2 Image",
+                "name": "lead_leader_2_img",
+                "type": "image",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50"
+                },
+                "default_value": "",
+                "return_format": "object",
+                "preview_size": "medium",
+                "library": "all"
+            },
+            {
+                "key": "field_lead_leader_2_bio_20wmj",
+                "label": "Leader 2 Bio",
+                "name": "lead_leader_2_bio",
+                "type": "textarea",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_lead_leader_2_linkedin_uvf5m",
+                "label": "Leader 2 Linkedin URL",
+                "name": "lead_leader_2_linkedin",
+                "type": "url",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_lead_leader_2_linkedin_icon_lm0aw",
+                "label": "Leader 2 Linkedin Icon",
+                "name": "lead_leader_2_linkedin_icon",
+                "type": "image",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50"
+                },
+                "default_value": "",
+                "return_format": "object",
+                "preview_size": "medium",
+                "library": "all"
+            },
+            {
+                "key": "field_lead_leader_2_twitter_46qje",
+                "label": "Leader 2 Twitter URL",
+                "name": "lead_leader_2_twitter",
+                "type": "url",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_lead_leader_2_twitter_icon_4zle8",
+                "label": "Leader 2 Twitter Icon",
+                "name": "lead_leader_2_twitter_icon",
+                "type": "image",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50"
+                },
+                "default_value": "",
+                "return_format": "object",
+                "preview_size": "medium",
+                "library": "all"
+            },
+            {
+                "key": "field_lead_leader_3_name_tq447",
+                "label": "Leader 3 Name",
+                "name": "lead_leader_3_name",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_lead_leader_3_role_wyxbl",
+                "label": "Leader 3 Role",
+                "name": "lead_leader_3_role",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_lead_leader_3_img_x0xp2",
+                "label": "Leader 3 Image",
+                "name": "lead_leader_3_img",
+                "type": "image",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50"
+                },
+                "default_value": "",
+                "return_format": "object",
+                "preview_size": "medium",
+                "library": "all"
+            },
+            {
+                "key": "field_lead_leader_3_bio_tglr2",
+                "label": "Leader 3 Bio",
+                "name": "lead_leader_3_bio",
+                "type": "textarea",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_lead_leader_3_linkedin_hvabd",
+                "label": "Leader 3 Linkedin URL",
+                "name": "lead_leader_3_linkedin",
+                "type": "url",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_lead_leader_3_linkedin_icon_wxkg8",
+                "label": "Leader 3 Linkedin Icon",
+                "name": "lead_leader_3_linkedin_icon",
+                "type": "image",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50"
+                },
+                "default_value": "",
+                "return_format": "object",
+                "preview_size": "medium",
+                "library": "all"
+            },
+            {
+                "key": "field_lead_leader_3_twitter_plzl4",
+                "label": "Leader 3 Twitter URL",
+                "name": "lead_leader_3_twitter",
+                "type": "url",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_lead_leader_3_twitter_icon_2df0b",
+                "label": "Leader 3 Twitter Icon",
+                "name": "lead_leader_3_twitter_icon",
+                "type": "image",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50"
+                },
+                "default_value": "",
+                "return_format": "object",
+                "preview_size": "medium",
+                "library": "all"
+            },
+            {
+                "key": "field_lead_leader_4_name_wl5n3",
+                "label": "Leader 4 Name",
+                "name": "lead_leader_4_name",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_lead_leader_4_role_tiwvi",
+                "label": "Leader 4 Role",
+                "name": "lead_leader_4_role",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_lead_leader_4_img_xokrt",
+                "label": "Leader 4 Image",
+                "name": "lead_leader_4_img",
+                "type": "image",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50"
+                },
+                "default_value": "",
+                "return_format": "object",
+                "preview_size": "medium",
+                "library": "all"
+            },
+            {
+                "key": "field_lead_leader_4_bio_o19fw",
+                "label": "Leader 4 Bio",
+                "name": "lead_leader_4_bio",
+                "type": "textarea",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_lead_leader_4_linkedin_lhdjn",
+                "label": "Leader 4 Linkedin URL",
+                "name": "lead_leader_4_linkedin",
+                "type": "url",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_lead_leader_4_linkedin_icon_i1v2v",
+                "label": "Leader 4 Linkedin Icon",
+                "name": "lead_leader_4_linkedin_icon",
+                "type": "image",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50"
+                },
+                "default_value": "",
+                "return_format": "object",
+                "preview_size": "medium",
+                "library": "all"
+            },
+            {
+                "key": "field_lead_leader_4_twitter_8mt2y",
+                "label": "Leader 4 Twitter URL",
+                "name": "lead_leader_4_twitter",
+                "type": "url",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_lead_leader_4_twitter_icon_q0hea",
+                "label": "Leader 4 Twitter Icon",
+                "name": "lead_leader_4_twitter_icon",
+                "type": "image",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50"
+                },
+                "default_value": "",
+                "return_format": "object",
+                "preview_size": "medium",
+                "library": "all"
+            },
+            {
+                "key": "field_lead_leader_5_name_opeyp",
+                "label": "Leader 5 Name",
+                "name": "lead_leader_5_name",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_lead_leader_5_role_qka3r",
+                "label": "Leader 5 Role",
+                "name": "lead_leader_5_role",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_lead_leader_5_img_yejjs",
+                "label": "Leader 5 Image",
+                "name": "lead_leader_5_img",
+                "type": "image",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50"
+                },
+                "default_value": "",
+                "return_format": "object",
+                "preview_size": "medium",
+                "library": "all"
+            },
+            {
+                "key": "field_lead_leader_5_bio_7ysob",
+                "label": "Leader 5 Bio",
+                "name": "lead_leader_5_bio",
+                "type": "textarea",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_lead_leader_5_linkedin_vrjmz",
+                "label": "Leader 5 Linkedin URL",
+                "name": "lead_leader_5_linkedin",
+                "type": "url",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_lead_leader_5_linkedin_icon_f61z4",
+                "label": "Leader 5 Linkedin Icon",
+                "name": "lead_leader_5_linkedin_icon",
+                "type": "image",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50"
+                },
+                "default_value": "",
+                "return_format": "object",
+                "preview_size": "medium",
+                "library": "all"
+            },
+            {
+                "key": "field_lead_leader_5_twitter_hgh41",
+                "label": "Leader 5 Twitter URL",
+                "name": "lead_leader_5_twitter",
+                "type": "url",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_lead_leader_5_twitter_icon_g7v3q",
+                "label": "Leader 5 Twitter Icon",
+                "name": "lead_leader_5_twitter_icon",
+                "type": "image",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50"
+                },
+                "default_value": "",
+                "return_format": "object",
+                "preview_size": "medium",
+                "library": "all"
+            },
+            {
+                "key": "field_lead_leader_6_name_5r344",
+                "label": "Leader 6 Name",
+                "name": "lead_leader_6_name",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_lead_leader_6_role_3s6hb",
+                "label": "Leader 6 Role",
+                "name": "lead_leader_6_role",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_lead_leader_6_img_b24t9",
+                "label": "Leader 6 Image",
+                "name": "lead_leader_6_img",
+                "type": "image",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50"
+                },
+                "default_value": "",
+                "return_format": "object",
+                "preview_size": "medium",
+                "library": "all"
+            },
+            {
+                "key": "field_lead_leader_6_bio_oq3za",
+                "label": "Leader 6 Bio",
+                "name": "lead_leader_6_bio",
+                "type": "textarea",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_lead_leader_6_linkedin_zvfac",
+                "label": "Leader 6 Linkedin URL",
+                "name": "lead_leader_6_linkedin",
+                "type": "url",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_lead_leader_6_linkedin_icon_jfrb1",
+                "label": "Leader 6 Linkedin Icon",
+                "name": "lead_leader_6_linkedin_icon",
+                "type": "image",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50"
+                },
+                "default_value": "",
+                "return_format": "object",
+                "preview_size": "medium",
+                "library": "all"
+            },
+            {
+                "key": "field_lead_leader_6_twitter_crcgo",
+                "label": "Leader 6 Twitter URL",
+                "name": "lead_leader_6_twitter",
+                "type": "url",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_lead_leader_6_twitter_icon_phpmq",
+                "label": "Leader 6 Twitter Icon",
+                "name": "lead_leader_6_twitter_icon",
+                "type": "image",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50"
+                },
+                "default_value": "",
+                "return_format": "object",
+                "preview_size": "medium",
+                "library": "all"
+            },
+            {
+                "key": "field_lead_leader_7_name_m72xx",
+                "label": "Leader 7 Name",
+                "name": "lead_leader_7_name",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_lead_leader_7_role_afus2",
+                "label": "Leader 7 Role",
+                "name": "lead_leader_7_role",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_lead_leader_7_img_dia3r",
+                "label": "Leader 7 Image",
+                "name": "lead_leader_7_img",
+                "type": "image",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50"
+                },
+                "default_value": "",
+                "return_format": "object",
+                "preview_size": "medium",
+                "library": "all"
+            },
+            {
+                "key": "field_lead_leader_7_bio_682h4",
+                "label": "Leader 7 Bio",
+                "name": "lead_leader_7_bio",
+                "type": "textarea",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_lead_leader_7_linkedin_4rs2z",
+                "label": "Leader 7 Linkedin URL",
+                "name": "lead_leader_7_linkedin",
+                "type": "url",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_lead_leader_7_linkedin_icon_9rxuw",
+                "label": "Leader 7 Linkedin Icon",
+                "name": "lead_leader_7_linkedin_icon",
+                "type": "image",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50"
+                },
+                "default_value": "",
+                "return_format": "object",
+                "preview_size": "medium",
+                "library": "all"
+            },
+            {
+                "key": "field_lead_leader_7_twitter_gt0rs",
+                "label": "Leader 7 Twitter URL",
+                "name": "lead_leader_7_twitter",
+                "type": "url",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_lead_leader_7_twitter_icon_0qdcs",
+                "label": "Leader 7 Twitter Icon",
+                "name": "lead_leader_7_twitter_icon",
+                "type": "image",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50"
+                },
+                "default_value": "",
+                "return_format": "object",
+                "preview_size": "medium",
+                "library": "all"
+            },
+            {
+                "key": "field_lead_leader_8_name_7bjbv",
+                "label": "Leader 8 Name",
+                "name": "lead_leader_8_name",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_lead_leader_8_role_hxvvy",
+                "label": "Leader 8 Role",
+                "name": "lead_leader_8_role",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_lead_leader_8_img_rgj5y",
+                "label": "Leader 8 Image",
+                "name": "lead_leader_8_img",
+                "type": "image",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50"
+                },
+                "default_value": "",
+                "return_format": "object",
+                "preview_size": "medium",
+                "library": "all"
+            },
+            {
+                "key": "field_lead_leader_8_bio_xum08",
+                "label": "Leader 8 Bio",
+                "name": "lead_leader_8_bio",
+                "type": "textarea",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_lead_leader_8_linkedin_b0bu0",
+                "label": "Leader 8 Linkedin URL",
+                "name": "lead_leader_8_linkedin",
+                "type": "url",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_lead_leader_8_linkedin_icon_pidr1",
+                "label": "Leader 8 Linkedin Icon",
+                "name": "lead_leader_8_linkedin_icon",
+                "type": "image",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50"
+                },
+                "default_value": "",
+                "return_format": "object",
+                "preview_size": "medium",
+                "library": "all"
+            },
+            {
+                "key": "field_lead_leader_8_twitter_pud80",
+                "label": "Leader 8 Twitter URL",
+                "name": "lead_leader_8_twitter",
+                "type": "url",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_lead_leader_8_twitter_icon_ep5w6",
+                "label": "Leader 8 Twitter Icon",
+                "name": "lead_leader_8_twitter_icon",
+                "type": "image",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50"
+                },
+                "default_value": "",
+                "return_format": "object",
+                "preview_size": "medium",
+                "library": "all"
+            },
+            {
+                "key": "field_lead_leader_9_name_jqwym",
+                "label": "Leader 9 Name",
+                "name": "lead_leader_9_name",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_lead_leader_9_role_g19fx",
+                "label": "Leader 9 Role",
+                "name": "lead_leader_9_role",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_lead_leader_9_img_r6e97",
+                "label": "Leader 9 Image",
+                "name": "lead_leader_9_img",
+                "type": "image",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50"
+                },
+                "default_value": "",
+                "return_format": "object",
+                "preview_size": "medium",
+                "library": "all"
+            },
+            {
+                "key": "field_lead_leader_9_bio_z50zs",
+                "label": "Leader 9 Bio",
+                "name": "lead_leader_9_bio",
+                "type": "textarea",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_lead_leader_9_linkedin_29r3b",
+                "label": "Leader 9 Linkedin URL",
+                "name": "lead_leader_9_linkedin",
+                "type": "url",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_lead_leader_9_linkedin_icon_6p4k0",
+                "label": "Leader 9 Linkedin Icon",
+                "name": "lead_leader_9_linkedin_icon",
+                "type": "image",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50"
+                },
+                "default_value": "",
+                "return_format": "object",
+                "preview_size": "medium",
+                "library": "all"
+            },
+            {
+                "key": "field_lead_leader_9_twitter_00559",
+                "label": "Leader 9 Twitter URL",
+                "name": "lead_leader_9_twitter",
+                "type": "url",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_lead_leader_9_twitter_icon_eb03g",
+                "label": "Leader 9 Twitter Icon",
+                "name": "lead_leader_9_twitter_icon",
+                "type": "image",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50"
+                },
+                "default_value": "",
+                "return_format": "object",
+                "preview_size": "medium",
+                "library": "all"
+            },
+            {
+                "key": "field_tab_advisory_board_section_5dpsm",
+                "label": "Advisory Board Section",
+                "name": "",
+                "type": "tab",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "placement": "top",
+                "endpoint": 0
+            },
+            {
+                "key": "field_lead_advisory_title_1l6rg",
+                "label": "Advisory Title",
+                "name": "lead_advisory_title",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "Board of |~Advisors."
+            },
+            {
+                "key": "field_lead_advisory_description_f0id4",
+                "label": "Advisory Description",
+                "name": "lead_advisory_description",
+                "type": "textarea",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "Our strategic direction is refined by a global board of industry veterans who bring decades of leadership experience from the world's most successful organizations."
+            },
+            {
+                "key": "field_lead_advisory_btn_text_o9bwb",
+                "label": "Advisory Button Text",
+                "name": "lead_advisory_btn_text",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "Engage with Us"
+            },
+            {
+                "key": "field_lead_advisory_btn_url_051b4",
+                "label": "Advisory Button URL",
+                "name": "lead_advisory_btn_url",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "/contact"
+            },
+            {
+                "key": "field_lead_advisor_1_name_5doae",
+                "label": "Advisor 1 Name",
+                "name": "lead_advisor_1_name",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "33",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_lead_advisor_1_firm_wb2un",
+                "label": "Advisor 1 Firm",
+                "name": "lead_advisor_1_firm",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "33",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_lead_advisor_1_region_tp65g",
+                "label": "Advisor 1 Region",
+                "name": "lead_advisor_1_region",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "33",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_lead_advisor_2_name_yre3j",
+                "label": "Advisor 2 Name",
+                "name": "lead_advisor_2_name",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "33",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_lead_advisor_2_firm_zq5hz",
+                "label": "Advisor 2 Firm",
+                "name": "lead_advisor_2_firm",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "33",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_lead_advisor_2_region_q0f1i",
+                "label": "Advisor 2 Region",
+                "name": "lead_advisor_2_region",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "33",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_lead_advisor_3_name_rhrsh",
+                "label": "Advisor 3 Name",
+                "name": "lead_advisor_3_name",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "33",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_lead_advisor_3_firm_ph3ni",
+                "label": "Advisor 3 Firm",
+                "name": "lead_advisor_3_firm",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "33",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_lead_advisor_3_region_l3q13",
+                "label": "Advisor 3 Region",
+                "name": "lead_advisor_3_region",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "33",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_lead_advisor_4_name_1jllw",
+                "label": "Advisor 4 Name",
+                "name": "lead_advisor_4_name",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "33",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_lead_advisor_4_firm_f1lqv",
+                "label": "Advisor 4 Firm",
+                "name": "lead_advisor_4_firm",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "33",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_lead_advisor_4_region_pn46p",
+                "label": "Advisor 4 Region",
+                "name": "lead_advisor_4_region",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "33",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_lead_advisor_5_name_id9in",
+                "label": "Advisor 5 Name",
+                "name": "lead_advisor_5_name",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "33",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_lead_advisor_5_firm_p5dfp",
+                "label": "Advisor 5 Firm",
+                "name": "lead_advisor_5_firm",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "33",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_lead_advisor_5_region_oj355",
+                "label": "Advisor 5 Region",
+                "name": "lead_advisor_5_region",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "33",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_lead_advisor_6_name_b79oq",
+                "label": "Advisor 6 Name",
+                "name": "lead_advisor_6_name",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "33",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_lead_advisor_6_firm_mrw2w",
+                "label": "Advisor 6 Firm",
+                "name": "lead_advisor_6_firm",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "33",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_lead_advisor_6_region_7pkdp",
+                "label": "Advisor 6 Region",
+                "name": "lead_advisor_6_region",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "33",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_tab_cta_section_eihf4",
+                "label": "CTA Section",
+                "name": "",
+                "type": "tab",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "placement": "top",
+                "endpoint": 0
+            },
+            {
+                "key": "field_lead_cta_title_2fbev",
+                "label": "CTA Title",
+                "name": "lead_cta_title",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "Lead the Next |^Digital Frontier."
+            },
+            {
+                "key": "field_lead_cta_description_yl83o",
+                "label": "CTA Description",
+                "name": "lead_cta_description",
+                "type": "textarea",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "We are always looking for visionary leaders to join our executive bench. If you have a passion for engineering excellence and global growth, we want to hear from you."
+            },
+            {
+                "key": "field_lead_cta_btn1_text_0th4g",
+                "label": "CTA Button 1 Text",
+                "name": "lead_cta_btn1_text",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "Partner With Us"
+            },
+            {
+                "key": "field_lead_cta_btn1_url_9l53n",
+                "label": "CTA Button 1 URL",
+                "name": "lead_cta_btn1_url",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "/contact"
+            },
+            {
+                "key": "field_lead_cta_btn2_text_cpz5u",
+                "label": "CTA Button 2 Text",
+                "name": "lead_cta_btn2_text",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "Executive Careers"
+            },
+            {
+                "key": "field_lead_cta_btn2_url_ir5rm",
+                "label": "CTA Button 2 URL",
+                "name": "lead_cta_btn2_url",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "/careers"
+            }
+        ],
+        "location": [
+            [
+                {
+                    "param": "page_title",
+                    "operator": "==",
+                    "value": "Leadership"
+                }
+            ]
+        ],
+        "menu_order": 0,
+        "position": "normal",
+        "style": "default",
+        "label_placement": "top",
+        "instruction_placement": "label",
+        "hide_on_screen": "",
+        "active": true,
+        "description": "All editable fields for the Leadership page (ACF Free compatible).",
+        "show_in_graphql": 1,
+        "graphql_field_name": "leadershipPageFields"
+    }
+]

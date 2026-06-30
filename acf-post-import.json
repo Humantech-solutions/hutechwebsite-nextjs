@@ -1,0 +1,207 @@
+[
+    {
+        "key": "group_post_settings",
+        "title": "Post FAQs (ACF Free Version)",
+        "fields": [
+            {
+                "key": "field_post_faq_title",
+                "label": "FAQ Title",
+                "name": "faq_title",
+                "type": "text",
+                "instructions": "Use | for line break + orange color, ^ to toggle orange, ~ for blue.",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "Frequently Asked Questions"
+            },
+            {
+                "key": "field_post_faq_subtitle",
+                "label": "FAQ Subtitle",
+                "name": "faq_subtitle",
+                "type": "textarea",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "Common questions about implementing AI in enterprise environments, answered by our experts."
+            },
+            {
+                "key": "field_post_faq_1_question",
+                "label": "FAQ 1 Question",
+                "name": "faq_1_question",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_post_faq_1_answer",
+                "label": "FAQ 1 Answer",
+                "name": "faq_1_answer",
+                "type": "textarea",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_post_faq_2_question",
+                "label": "FAQ 2 Question",
+                "name": "faq_2_question",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_post_faq_2_answer",
+                "label": "FAQ 2 Answer",
+                "name": "faq_2_answer",
+                "type": "textarea",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_post_faq_3_question",
+                "label": "FAQ 3 Question",
+                "name": "faq_3_question",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_post_faq_3_answer",
+                "label": "FAQ 3 Answer",
+                "name": "faq_3_answer",
+                "type": "textarea",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_post_faq_4_question",
+                "label": "FAQ 4 Question",
+                "name": "faq_4_question",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_post_faq_4_answer",
+                "label": "FAQ 4 Answer",
+                "name": "faq_4_answer",
+                "type": "textarea",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_post_faq_5_question",
+                "label": "FAQ 5 Question",
+                "name": "faq_5_question",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_post_faq_5_answer",
+                "label": "FAQ 5 Answer",
+                "name": "faq_5_answer",
+                "type": "textarea",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            }
+        ],
+        "location": [
+            [
+                {
+                    "param": "post_type",
+                    "operator": "==",
+                    "value": "post"
+                }
+            ]
+        ],
+        "menu_order": 1,
+        "position": "normal",
+        "style": "default",
+        "label_placement": "top",
+        "instruction_placement": "label",
+        "hide_on_screen": "",
+        "active": true,
+        "description": "Add up to 5 FAQs for this blog post.",
+        "show_in_graphql": 1,
+        "graphql_field_name": "postFields"
+    }
+]

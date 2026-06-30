@@ -1,0 +1,111 @@
+[
+    {
+        "key": "group_press_release_page_fields",
+        "title": "Press Release Page Fields",
+        "fields": [
+            {
+                "key": "field_press_press_release_hero_tagline_24d",
+                "label": "Hero Tagline",
+                "name": "press_release_hero_tagline",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "Media Center"
+            },
+            {
+                "key": "field_press_press_release_hero_title_1yz",
+                "label": "Hero Title",
+                "name": "press_release_hero_title",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "Press |Releases."
+            },
+            {
+                "key": "field_press_press_release_hero_description_2gt",
+                "label": "Hero Description",
+                "name": "press_release_hero_description",
+                "type": "textarea",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "Official corporate announcements, strategic partnerships, and executive updates from Hutech Solutions' global leadership."
+            },
+            {
+                "key": "field_press_press_release_hero_bg_image_26c",
+                "label": "Hero Background Image",
+                "name": "press_release_hero_bg_image",
+                "type": "image",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "",
+                "return_format": "array",
+                "preview_size": "medium",
+                "library": "all"
+            }
+        ],
+        "location": [
+            [
+                {
+                    "param": "page_title",
+                    "operator": "==",
+                    "value": "press-release"
+                }
+            ],
+            [
+                {
+                    "param": "page_title",
+                    "operator": "==",
+                    "value": "Press Release"
+                }
+            ],
+            [
+                {
+                    "param": "page_title",
+                    "operator": "==",
+                    "value": "Press Releases"
+                }
+            ],
+            [
+                {
+                    "param": "page_slug",
+                    "operator": "==",
+                    "value": "press-release"
+                }
+            ]
+        ],
+        "menu_order": 0,
+        "position": "normal",
+        "style": "default",
+        "label_placement": "top",
+        "instruction_placement": "label",
+        "hide_on_screen": "",
+        "active": true,
+        "description": "Editable fields for the Press Release page hero.",
+        "show_in_graphql": 1,
+        "graphql_field_name": "pressReleasePageFields"
+    }
+]

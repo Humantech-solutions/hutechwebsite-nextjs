@@ -1,0 +1,58 @@
+[
+    {
+        "key": "group_document_post_fields",
+        "title": "Document Post Fields",
+        "fields": [
+            {
+                "key": "field_document_file_6jv2g",
+                "label": "Document File",
+                "name": "document_file",
+                "type": "file",
+                "instructions": "Upload the document (PDF, DOCX, etc.). Date and type will be inferred from this file.",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "100",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "",
+                "return_format": "array"
+            },
+            {
+                "key": "field_document_url_qgasm",
+                "label": "Document External URL",
+                "name": "document_url",
+                "type": "url",
+                "instructions": "Optional: If the document is hosted externally, provide the URL here. This overrides the file upload.",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            }
+        ],
+        "location": [
+            [
+                {
+                    "param": "post_type",
+                    "operator": "==",
+                    "value": "hutech_document"
+                }
+            ]
+        ],
+        "menu_order": 0,
+        "position": "normal",
+        "style": "default",
+        "label_placement": "top",
+        "instruction_placement": "label",
+        "hide_on_screen": "",
+        "active": true,
+        "description": "Fields for individual Hutech Document Posts.",
+        "show_in_graphql": 1,
+        "graphql_field_name": "documentPostFields"
+    }
+]

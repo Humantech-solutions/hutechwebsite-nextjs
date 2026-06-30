@@ -365,6 +365,7 @@ const HOMEPAGE_QUERY = `
         expertise {
           title
           description
+          serviceCategorySlug
           industry_1 { name icon { node { sourceUrl } } btnText btnLink }
           industry_2 { name icon { node { sourceUrl } } btnText btnLink }
           industry_3 { name icon { node { sourceUrl } } btnText btnLink }
@@ -436,6 +437,8 @@ const HOMEPAGE_QUERY = `
         whatsNew {
           title
           description
+          blogCategorySlug
+          postsCount
           news_item_1 { ${NEWS_FIELDS} }
           news_item_2 { ${NEWS_FIELDS} }
           news_item_3 { ${NEWS_FIELDS} }
@@ -577,7 +580,12 @@ export interface HomepageData {
 
 // ─── Data Transform ──────────────────────────────────────────────────────────
 
-function transformHomePage(raw: any): HomepageData | null {
+function transformHomePage(
+  raw: any,
+  dynamicServices: any[] = [],
+  dynamicTestimonials: any[] = [],
+  dynamicBlogs: any[] = []
+): HomepageData | null {
   const f = raw?.data?.page?.homepageFields;
   if (!f) return null;
 
@@ -611,14 +619,24 @@ function transformHomePage(raw: any): HomepageData | null {
 
   // Expertise
   const exp = f.expertise || {};
-  const industries = collectGroups(exp, "industry", 10)
-    .filter((ind: any) => ind?.name?.trim())
-    .map((ind: any) => ({
-      name: ind?.name,
-      iconUrl: imgUrl(ind?.icon),
-      btnText: ind?.btnText,
-      btnLink: ind?.btnLink
+  let industries = [];
+  if (dynamicServices && dynamicServices.length > 0) {
+    industries = dynamicServices.map((svc: any) => ({
+      name: svc.title,
+      iconUrl: imgUrl(svc.featuredImage),
+      btnText: "Learn More",
+      btnLink: `/services/${svc.slug}/`
     }));
+  } else {
+    industries = collectGroups(exp, "industry", 10)
+      .filter((ind: any) => ind?.name?.trim())
+      .map((ind: any) => ({
+        name: ind?.name,
+        iconUrl: imgUrl(ind?.icon),
+        btnText: ind?.btnText,
+        btnLink: ind?.btnLink
+      }));
+  }
 
   // Capabilities — only include capabilities with a name
   const cap = f.capabilities || {};
@@ -643,20 +661,48 @@ function transformHomePage(raw: any): HomepageData | null {
 
   // Success Stories — only include stories with a name or text
   const ss = f.successStories || {};
-  const stories: WpStory[] = collectGroups(ss, "story", 8)
-    .filter((s: any) => s?.name?.trim() || s?.text?.trim())
-    .map((s: any) => ({
-      name: s?.name,
-      title: s?.title,
-      text: s?.text,
-      imageUrl: imgUrl(s?.image),
-    }));
+  let stories: WpStory[] = [];
+  if (dynamicTestimonials && dynamicTestimonials.length > 0) {
+    stories = dynamicTestimonials.map((t: any) => {
+      const designation = t.testimonialFields?.designation || "";
+      const company = t.testimonialFields?.company || "";
+      const title = [designation, company].filter(Boolean).join(", ") || "Client Partner";
+      return {
+        name: t.title,
+        title,
+        text: t.content ? t.content.replace(/<[^>]+>/g, "").trim() : "",
+        imageUrl: imgUrl(t.featuredImage)
+      };
+    });
+  } else {
+    stories = collectGroups(ss, "story", 8)
+      .filter((s: any) => s?.name?.trim() || s?.text?.trim())
+      .map((s: any) => ({
+        name: s?.name,
+        title: s?.title,
+        text: s?.text,
+        imageUrl: imgUrl(s?.image),
+      }));
+  }
 
   // What's New — only include news items with a title
   const wn = f.whatsNew || {};
-  const newsItems: WpNewsItem[] = collectGroups(wn, "news_item", 6)
-    .filter((n: any) => n?.title?.trim())
-    .map((n: any) => ({ title: n?.title, date: n?.date, imageUrl: imgUrl(n?.image) }));
+  let newsItems: WpNewsItem[] = [];
+  if (dynamicBlogs && dynamicBlogs.length > 0) {
+    newsItems = dynamicBlogs.map((b: any) => ({
+      title: b.title,
+      date: new Date(b.date).toLocaleDateString("en-US", {
+        year: "numeric",
+        month: "long",
+        day: "numeric"
+      }),
+      imageUrl: imgUrl(b.featuredImage)
+    }));
+  } else {
+    newsItems = collectGroups(wn, "news_item", 6)
+      .filter((n: any) => n?.title?.trim())
+      .map((n: any) => ({ title: n?.title, date: n?.date, imageUrl: imgUrl(n?.image) }));
+  }
 
   // Why Hutech — only include accordion items with a title
   const why = f.whyHutech || {};
@@ -711,6 +757,116 @@ function transformHomePage(raw: any): HomepageData | null {
 
 // ─── Public API ──────────────────────────────────────────────────────────────
 
+const DYNAMIC_SERVICES_BY_CATEGORY_QUERY = `
+  query GetServicesByCategory($categorySlug: [String]!) {
+    serviceCategories(where: { slug: $categorySlug }) {
+      nodes {
+        hutechServices(first: 12) {
+          nodes {
+            title
+            slug
+            featuredImage {
+              node {
+                sourceUrl
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+`;
+
+const DYNAMIC_ALL_SERVICES_QUERY = `
+  query GetAllServices {
+    hutechServices(first: 12) {
+      nodes {
+        title
+        slug
+        featuredImage {
+          node {
+            sourceUrl
+          }
+        }
+      }
+    }
+  }
+`;
+
+const DYNAMIC_TESTIMONIALS_QUERY = `
+  query GetTestimonials {
+    hutechTestimonials(first: 20) {
+      nodes {
+        title
+        content
+        featuredImage {
+          node {
+            sourceUrl
+          }
+        }
+        testimonialFields {
+          designation
+          company
+        }
+      }
+    }
+  }
+`;
+
+const DYNAMIC_BLOGS_QUERY = `
+  query GetBlogsFiltered($categorySlug: String, $limit: Int!) {
+    posts(first: $limit, where: { categoryName: $categorySlug, orderby: { field: DATE, order: DESC } }) {
+      nodes {
+        title
+        date
+        slug
+        featuredImage {
+          node {
+            sourceUrl
+          }
+        }
+        categories {
+          nodes {
+            name
+          }
+        }
+        author {
+          node {
+            name
+          }
+        }
+      }
+    }
+  }
+`;
+
+const DYNAMIC_BLOGS_ALL_QUERY = `
+  query GetBlogsAll($limit: Int!) {
+    posts(first: $limit, where: { orderby: { field: DATE, order: DESC } }) {
+      nodes {
+        title
+        date
+        slug
+        featuredImage {
+          node {
+            sourceUrl
+          }
+        }
+        categories {
+          nodes {
+            name
+          }
+        }
+        author {
+          node {
+            name
+          }
+        }
+      }
+    }
+  }
+`;
+
 export async function getHomePage(): Promise<HomepageData | null> {
   try {
     const raw = await fetchGraphQL(HOMEPAGE_QUERY);
@@ -718,7 +874,39 @@ export async function getHomePage(): Promise<HomepageData | null> {
       console.warn("[WP] Could not fetch homepage data. Using static fallback.");
       return null;
     }
-    return transformHomePage(raw);
+
+    const hFields = raw?.data?.page?.homepageFields || {};
+    const serviceCategorySlug = hFields.expertise?.serviceCategorySlug;
+    const blogCategorySlug = hFields.whatsNew?.blogCategorySlug;
+    const postsCount = hFields.whatsNew?.postsCount ? parseInt(hFields.whatsNew.postsCount, 10) : 6;
+
+    // Fetch dynamic services, testimonials, and blogs in parallel
+    const [servicesRes, testimonialsRes, blogsRes] = await Promise.all([
+      // Services query
+      serviceCategorySlug
+        ? fetchGraphQL(DYNAMIC_SERVICES_BY_CATEGORY_QUERY, { categorySlug: [serviceCategorySlug] })
+        : fetchGraphQL(DYNAMIC_ALL_SERVICES_QUERY),
+      // Testimonials query
+      fetchGraphQL(DYNAMIC_TESTIMONIALS_QUERY),
+      // Blogs query
+      blogCategorySlug
+        ? fetchGraphQL(DYNAMIC_BLOGS_QUERY, { categorySlug: blogCategorySlug, limit: postsCount })
+        : fetchGraphQL(DYNAMIC_BLOGS_ALL_QUERY, { limit: postsCount })
+    ]);
+
+    // Parse services
+    let dynamicServices = [];
+    if (serviceCategorySlug) {
+      const catNodes = servicesRes?.data?.serviceCategories?.nodes || [];
+      dynamicServices = catNodes[0]?.hutechServices?.nodes || [];
+    } else {
+      dynamicServices = servicesRes?.data?.hutechServices?.nodes || [];
+    }
+
+    const dynamicTestimonials = testimonialsRes?.data?.hutechTestimonials?.nodes || [];
+    const dynamicBlogs = blogsRes?.data?.posts?.nodes || [];
+
+    return transformHomePage(raw, dynamicServices, dynamicTestimonials, dynamicBlogs);
   } catch (err) {
     console.warn("[WP] getHomePage() failed:", err);
     return null;

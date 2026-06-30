@@ -1,0 +1,73 @@
+[
+    {
+        "key": "group_case_studies_settings",
+        "title": "Case Studies Page Settings",
+        "fields": [
+            {
+                "key": "field_case_study_title",
+                "label": "Case Studies Page Title",
+                "name": "title",
+                "type": "text",
+                "instructions": "Use | for line break + orange color, ^ to toggle orange, ~ for blue.",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "Success |Stories."
+            },
+            {
+                "key": "field_case_study_description",
+                "label": "Case Studies Page Description",
+                "name": "description",
+                "type": "textarea",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "Discover how we've helped leading organizations transform their businesses with innovative technology solutions."
+            },
+            {
+                "key": "field_case_study_bg_image",
+                "label": "Background Image",
+                "name": "bg_image",
+                "type": "image",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "",
+                "return_format": "array"
+            }
+        ],
+        "location": [
+            [
+                {
+                    "param": "post_type",
+                    "operator": "==",
+                    "value": "page"
+                }
+            ]
+        ],
+        "menu_order": 1,
+        "position": "normal",
+        "style": "default",
+        "label_placement": "top",
+        "instruction_placement": "label",
+        "hide_on_screen": "",
+        "active": true,
+        "description": "Settings for the Case Studies landing page. (Only fill these out on the page named 'Case Studies')",
+        "show_in_graphql": 1,
+        "graphql_field_name": "caseStudyPageFields"
+    }
+]

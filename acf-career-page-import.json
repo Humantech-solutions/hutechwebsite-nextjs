@@ -1,0 +1,1506 @@
+[
+  {
+    "key": "group_career_page_all_fields",
+    "title": "Career Page Fields",
+    "fields": [
+      {
+        "key": "field_tab_hero_section_c99jx",
+        "label": "Hero Section",
+        "name": "tab_hero_section",
+        "type": "tab",
+        "instructions": "",
+        "required": 0,
+        "conditional_logic": 0,
+        "wrapper": {
+          "width": "",
+          "class": "",
+          "id": ""
+        },
+        "default_value": ""
+      },
+      {
+        "key": "field_career_page_hero_tagline_lnep9",
+        "label": "Hero Tagline",
+        "name": "career_page_hero_tagline",
+        "type": "text",
+        "instructions": "",
+        "required": 0,
+        "conditional_logic": 0,
+        "wrapper": {
+          "width": "",
+          "class": "",
+          "id": ""
+        },
+        "default_value": "Join our Talent Ecosystem"
+      },
+      {
+        "key": "field_career_page_hero_title_4zvkx",
+        "label": "Hero Title",
+        "name": "career_page_hero_title",
+        "type": "text",
+        "instructions": "",
+        "required": 0,
+        "conditional_logic": 0,
+        "wrapper": {
+          "width": "",
+          "class": "",
+          "id": ""
+        },
+        "default_value": "Build your ^Legacy. with us."
+      },
+      {
+        "key": "field_career_page_hero_desc_qpzvz",
+        "label": "Hero Description",
+        "name": "career_page_hero_desc",
+        "type": "textarea",
+        "instructions": "",
+        "required": 0,
+        "conditional_logic": 0,
+        "wrapper": {
+          "width": "",
+          "class": "",
+          "id": ""
+        },
+        "default_value": "Recruiting pioneers to solve complex engineering puzzles and architect the future."
+      },
+      {
+        "key": "field_tab_openings_section_bjek6",
+        "label": "Openings Section",
+        "name": "tab_openings_section",
+        "type": "tab",
+        "instructions": "",
+        "required": 0,
+        "conditional_logic": 0,
+        "wrapper": {
+          "width": "",
+          "class": "",
+          "id": ""
+        },
+        "default_value": ""
+      },
+      {
+        "key": "field_career_openings_tagline_1t2gv",
+        "label": "Openings Tagline",
+        "name": "career_openings_tagline",
+        "type": "text",
+        "instructions": "",
+        "required": 0,
+        "conditional_logic": 0,
+        "wrapper": {
+          "width": "",
+          "class": "",
+          "id": ""
+        },
+        "default_value": "Open Opportunities"
+      },
+      {
+        "key": "field_career_openings_title_cylr9",
+        "label": "Openings Title",
+        "name": "career_openings_title",
+        "type": "text",
+        "instructions": "",
+        "required": 0,
+        "conditional_logic": 0,
+        "wrapper": {
+          "width": "",
+          "class": "",
+          "id": ""
+        },
+        "default_value": "Join the \n Excellence Hub."
+      },
+      {
+        "key": "field_career_openings_no_jobs_title_0e9fw",
+        "label": "Openings No Jobs Title",
+        "name": "career_openings_no_jobs_title",
+        "type": "text",
+        "instructions": "",
+        "required": 0,
+        "conditional_logic": 0,
+        "wrapper": {
+          "width": "",
+          "class": "",
+          "id": ""
+        },
+        "default_value": "No relevant opening for your skill set?"
+      },
+      {
+        "key": "field_career_openings_no_jobs_desc_a3rfc",
+        "label": "Openings No Jobs Desc",
+        "name": "career_openings_no_jobs_desc",
+        "type": "textarea",
+        "instructions": "",
+        "required": 0,
+        "conditional_logic": 0,
+        "wrapper": {
+          "width": "",
+          "class": "",
+          "id": ""
+        },
+        "default_value": "We're always looking for exceptional talent. Drop your resume in our talent pool."
+      },
+      {
+        "key": "field_career_openings_gen_btn_p4dd4",
+        "label": "General App Button Text",
+        "name": "career_openings_gen_btn",
+        "type": "text",
+        "instructions": "",
+        "required": 0,
+        "conditional_logic": 0,
+        "wrapper": {
+          "width": "",
+          "class": "",
+          "id": ""
+        },
+        "default_value": "General Application"
+      },
+      {
+        "key": "field_tab_culture_section_ydzks",
+        "label": "Culture Section",
+        "name": "tab_culture_section",
+        "type": "tab",
+        "instructions": "",
+        "required": 0,
+        "conditional_logic": 0,
+        "wrapper": {
+          "width": "",
+          "class": "",
+          "id": ""
+        },
+        "default_value": ""
+      },
+      {
+        "key": "field_career_culture_tagline_4j319",
+        "label": "Culture Tagline",
+        "name": "career_culture_tagline",
+        "type": "text",
+        "instructions": "",
+        "required": 0,
+        "conditional_logic": 0,
+        "wrapper": {
+          "width": "",
+          "class": "",
+          "id": ""
+        },
+        "default_value": "The Hutech Spirit"
+      },
+      {
+        "key": "field_career_culture_title_98hnx",
+        "label": "Culture Title",
+        "name": "career_culture_title",
+        "type": "text",
+        "instructions": "",
+        "required": 0,
+        "conditional_logic": 0,
+        "wrapper": {
+          "width": "",
+          "class": "",
+          "id": ""
+        },
+        "default_value": "Innovation is \n our ^North Star."
+      },
+      {
+        "key": "field_career_culture_desc_wg1va",
+        "label": "Culture Description",
+        "name": "career_culture_desc",
+        "type": "textarea",
+        "instructions": "",
+        "required": 0,
+        "conditional_logic": 0,
+        "wrapper": {
+          "width": "",
+          "class": "",
+          "id": ""
+        },
+        "default_value": "We foster a culture of radical transparency and extreme ownership. Here, your ideas aren't just heard—they are engineered into reality. We believe in high-performance agility balanced with empathy."
+      },
+      {
+        "key": "field_career_culture_img_no587",
+        "label": "Culture Image",
+        "name": "career_culture_img",
+        "type": "image",
+        "instructions": "Image for 'Innovation is our North Star' section",
+        "required": 0,
+        "conditional_logic": 0,
+        "wrapper": {
+          "width": "",
+          "class": "",
+          "id": ""
+        },
+        "default_value": "",
+        "return_format": "url"
+      },
+      {
+        "key": "field_career_culture_stat1_val_dwn78",
+        "label": "Culture Stat 1 Value",
+        "name": "career_culture_stat1_val",
+        "type": "text",
+        "instructions": "",
+        "required": 0,
+        "conditional_logic": 0,
+        "wrapper": {
+          "width": "50",
+          "class": "",
+          "id": ""
+        },
+        "default_value": "92%"
+      },
+      {
+        "key": "field_career_culture_stat1_label_lnvou",
+        "label": "Culture Stat 1 Label",
+        "name": "career_culture_stat1_label",
+        "type": "text",
+        "instructions": "",
+        "required": 0,
+        "conditional_logic": 0,
+        "wrapper": {
+          "width": "50",
+          "class": "",
+          "id": ""
+        },
+        "default_value": "Engineering Ratio"
+      },
+      {
+        "key": "field_career_culture_stat2_val_ibudt",
+        "label": "Culture Stat 2 Value",
+        "name": "career_culture_stat2_val",
+        "type": "text",
+        "instructions": "",
+        "required": 0,
+        "conditional_logic": 0,
+        "wrapper": {
+          "width": "50",
+          "class": "",
+          "id": ""
+        },
+        "default_value": "15+"
+      },
+      {
+        "key": "field_career_culture_stat2_label_7jare",
+        "label": "Culture Stat 2 Label",
+        "name": "career_culture_stat2_label",
+        "type": "text",
+        "instructions": "",
+        "required": 0,
+        "conditional_logic": 0,
+        "wrapper": {
+          "width": "50",
+          "class": "",
+          "id": ""
+        },
+        "default_value": "Global Tech Hubs"
+      },
+      {
+        "key": "field_career_culture_badge1_381i5",
+        "label": "Culture Badge Line 1",
+        "name": "career_culture_badge1",
+        "type": "text",
+        "instructions": "",
+        "required": 0,
+        "conditional_logic": 0,
+        "wrapper": {
+          "width": "50",
+          "class": "",
+          "id": ""
+        },
+        "default_value": "Great Place"
+      },
+      {
+        "key": "field_career_culture_badge2_wls0a",
+        "label": "Culture Badge Line 2",
+        "name": "career_culture_badge2",
+        "type": "text",
+        "instructions": "",
+        "required": 0,
+        "conditional_logic": 0,
+        "wrapper": {
+          "width": "50",
+          "class": "",
+          "id": ""
+        },
+        "default_value": "To Work Certified"
+      },
+      {
+        "key": "field_tab_hiring_process_section_ux99i",
+        "label": "Hiring Process Section",
+        "name": "tab_hiring_process_section",
+        "type": "tab",
+        "instructions": "",
+        "required": 0,
+        "conditional_logic": 0,
+        "wrapper": {
+          "width": "",
+          "class": "",
+          "id": ""
+        },
+        "default_value": ""
+      },
+      {
+        "key": "field_career_hiring_tagline_ocw3h",
+        "label": "Hiring Tagline",
+        "name": "career_hiring_tagline",
+        "type": "text",
+        "instructions": "",
+        "required": 0,
+        "conditional_logic": 0,
+        "wrapper": {
+          "width": "",
+          "class": "",
+          "id": ""
+        },
+        "default_value": "Our Selection DNA"
+      },
+      {
+        "key": "field_career_hiring_desc_k5mdn",
+        "label": "Hiring Description",
+        "name": "career_hiring_desc",
+        "type": "textarea",
+        "instructions": "",
+        "required": 0,
+        "conditional_logic": 0,
+        "wrapper": {
+          "width": "",
+          "class": "",
+          "id": ""
+        },
+        "default_value": "We look for clarity of thought, passion for problem-solving, and a commitment to excellence."
+      },
+      {
+        "key": "field_career_hiring_step1_num_pvhuw",
+        "label": "Step 1 Number",
+        "name": "career_hiring_step1_num",
+        "type": "text",
+        "instructions": "",
+        "required": 0,
+        "conditional_logic": 0,
+        "wrapper": {
+          "width": "33",
+          "class": "",
+          "id": ""
+        },
+        "default_value": "01"
+      },
+      {
+        "key": "field_career_hiring_step1_title_8dfle",
+        "label": "Step 1 Title",
+        "name": "career_hiring_step1_title",
+        "type": "text",
+        "instructions": "",
+        "required": 0,
+        "conditional_logic": 0,
+        "wrapper": {
+          "width": "33",
+          "class": "",
+          "id": ""
+        },
+        "default_value": "Application"
+      },
+      {
+        "key": "field_career_hiring_step1_desc_i80cp",
+        "label": "Step 1 Desc",
+        "name": "career_hiring_step1_desc",
+        "type": "textarea",
+        "instructions": "",
+        "required": 0,
+        "conditional_logic": 0,
+        "wrapper": {
+          "width": "33",
+          "class": "",
+          "id": ""
+        },
+        "default_value": "Submit your profile."
+      },
+      {
+        "key": "field_career_hiring_step2_num_2y4x2",
+        "label": "Step 2 Number",
+        "name": "career_hiring_step2_num",
+        "type": "text",
+        "instructions": "",
+        "required": 0,
+        "conditional_logic": 0,
+        "wrapper": {
+          "width": "33",
+          "class": "",
+          "id": ""
+        },
+        "default_value": "02"
+      },
+      {
+        "key": "field_career_hiring_step2_title_6m5lv",
+        "label": "Step 2 Title",
+        "name": "career_hiring_step2_title",
+        "type": "text",
+        "instructions": "",
+        "required": 0,
+        "conditional_logic": 0,
+        "wrapper": {
+          "width": "33",
+          "class": "",
+          "id": ""
+        },
+        "default_value": "Screening"
+      },
+      {
+        "key": "field_career_hiring_step2_desc_ojujv",
+        "label": "Step 2 Desc",
+        "name": "career_hiring_step2_desc",
+        "type": "textarea",
+        "instructions": "",
+        "required": 0,
+        "conditional_logic": 0,
+        "wrapper": {
+          "width": "33",
+          "class": "",
+          "id": ""
+        },
+        "default_value": "Initial HR screening."
+      },
+      {
+        "key": "field_career_hiring_step3_num_gakee",
+        "label": "Step 3 Number",
+        "name": "career_hiring_step3_num",
+        "type": "text",
+        "instructions": "",
+        "required": 0,
+        "conditional_logic": 0,
+        "wrapper": {
+          "width": "33",
+          "class": "",
+          "id": ""
+        },
+        "default_value": "03"
+      },
+      {
+        "key": "field_career_hiring_step3_title_spzom",
+        "label": "Step 3 Title",
+        "name": "career_hiring_step3_title",
+        "type": "text",
+        "instructions": "",
+        "required": 0,
+        "conditional_logic": 0,
+        "wrapper": {
+          "width": "33",
+          "class": "",
+          "id": ""
+        },
+        "default_value": "Technical"
+      },
+      {
+        "key": "field_career_hiring_step3_desc_wp96h",
+        "label": "Step 3 Desc",
+        "name": "career_hiring_step3_desc",
+        "type": "textarea",
+        "instructions": "",
+        "required": 0,
+        "conditional_logic": 0,
+        "wrapper": {
+          "width": "33",
+          "class": "",
+          "id": ""
+        },
+        "default_value": "Technical interview."
+      },
+      {
+        "key": "field_career_hiring_step4_num_qit3s",
+        "label": "Step 4 Number",
+        "name": "career_hiring_step4_num",
+        "type": "text",
+        "instructions": "",
+        "required": 0,
+        "conditional_logic": 0,
+        "wrapper": {
+          "width": "33",
+          "class": "",
+          "id": ""
+        },
+        "default_value": "04"
+      },
+      {
+        "key": "field_career_hiring_step4_title_j8vok",
+        "label": "Step 4 Title",
+        "name": "career_hiring_step4_title",
+        "type": "text",
+        "instructions": "",
+        "required": 0,
+        "conditional_logic": 0,
+        "wrapper": {
+          "width": "33",
+          "class": "",
+          "id": ""
+        },
+        "default_value": "Culture Fit"
+      },
+      {
+        "key": "field_career_hiring_step4_desc_9zx77",
+        "label": "Step 4 Desc",
+        "name": "career_hiring_step4_desc",
+        "type": "textarea",
+        "instructions": "",
+        "required": 0,
+        "conditional_logic": 0,
+        "wrapper": {
+          "width": "33",
+          "class": "",
+          "id": ""
+        },
+        "default_value": "Meeting the team."
+      },
+      {
+        "key": "field_career_hiring_step5_num_0qe1x",
+        "label": "Step 5 Number",
+        "name": "career_hiring_step5_num",
+        "type": "text",
+        "instructions": "",
+        "required": 0,
+        "conditional_logic": 0,
+        "wrapper": {
+          "width": "33",
+          "class": "",
+          "id": ""
+        },
+        "default_value": "05"
+      },
+      {
+        "key": "field_career_hiring_step5_title_dw0dw",
+        "label": "Step 5 Title",
+        "name": "career_hiring_step5_title",
+        "type": "text",
+        "instructions": "",
+        "required": 0,
+        "conditional_logic": 0,
+        "wrapper": {
+          "width": "33",
+          "class": "",
+          "id": ""
+        },
+        "default_value": "Offer"
+      },
+      {
+        "key": "field_career_hiring_step5_desc_o2c9w",
+        "label": "Step 5 Desc",
+        "name": "career_hiring_step5_desc",
+        "type": "textarea",
+        "instructions": "",
+        "required": 0,
+        "conditional_logic": 0,
+        "wrapper": {
+          "width": "33",
+          "class": "",
+          "id": ""
+        },
+        "default_value": "Welcome aboard!"
+      },
+      {
+        "key": "field_tab_benefits_section_72qgr",
+        "label": "Benefits Section",
+        "name": "tab_benefits_section",
+        "type": "tab",
+        "instructions": "",
+        "required": 0,
+        "conditional_logic": 0,
+        "wrapper": {
+          "width": "",
+          "class": "",
+          "id": ""
+        },
+        "default_value": ""
+      },
+      {
+        "key": "field_career_benefits_tagline_om1c6",
+        "label": "Benefits Tagline",
+        "name": "career_benefits_tagline",
+        "type": "text",
+        "instructions": "",
+        "required": 0,
+        "conditional_logic": 0,
+        "wrapper": {
+          "width": "",
+          "class": "",
+          "id": ""
+        },
+        "default_value": "Perks & Benefits"
+      },
+      {
+        "key": "field_career_benefits_title_v1jx7",
+        "label": "Benefits Title",
+        "name": "career_benefits_title",
+        "type": "text",
+        "instructions": "",
+        "required": 0,
+        "conditional_logic": 0,
+        "wrapper": {
+          "width": "",
+          "class": "",
+          "id": ""
+        },
+        "default_value": "Investing \n in your \n ^Success."
+      },
+      {
+        "key": "field_career_benefits_desc_h14w1",
+        "label": "Benefits Description",
+        "name": "career_benefits_desc",
+        "type": "textarea",
+        "instructions": "",
+        "required": 0,
+        "conditional_logic": 0,
+        "wrapper": {
+          "width": "",
+          "class": "",
+          "id": ""
+        },
+        "default_value": "We provide the resources, environment, and support you need to do the best work of your life."
+      },
+      {
+        "key": "field_career_benefits_main_title_yy859",
+        "label": "Main Benefit Title",
+        "name": "career_benefits_main_title",
+        "type": "text",
+        "instructions": "",
+        "required": 0,
+        "conditional_logic": 0,
+        "wrapper": {
+          "width": "",
+          "class": "",
+          "id": ""
+        },
+        "default_value": "Learning Budget"
+      },
+      {
+        "key": "field_career_benefits_main_desc_xn98e",
+        "label": "Main Benefit Description",
+        "name": "career_benefits_main_desc",
+        "type": "textarea",
+        "instructions": "",
+        "required": 0,
+        "conditional_logic": 0,
+        "wrapper": {
+          "width": "",
+          "class": "",
+          "id": ""
+        },
+        "default_value": "$5,000 annual allowance for certifications, conferences, and courses."
+      },
+      {
+        "key": "field_career_benefit1_title_wiu8f",
+        "label": "Benefit 1 Title",
+        "name": "career_benefit1_title",
+        "type": "text",
+        "instructions": "",
+        "required": 0,
+        "conditional_logic": 0,
+        "wrapper": {
+          "width": "50",
+          "class": "",
+          "id": ""
+        },
+        "default_value": "Premium Health"
+      },
+      {
+        "key": "field_career_benefit1_desc_ks82f",
+        "label": "Benefit 1 Desc",
+        "name": "career_benefit1_desc",
+        "type": "textarea",
+        "instructions": "",
+        "required": 0,
+        "conditional_logic": 0,
+        "wrapper": {
+          "width": "50",
+          "class": "",
+          "id": ""
+        },
+        "default_value": "Comprehensive insurance."
+      },
+      {
+        "key": "field_career_benefit2_title_1okwg",
+        "label": "Benefit 2 Title",
+        "name": "career_benefit2_title",
+        "type": "text",
+        "instructions": "",
+        "required": 0,
+        "conditional_logic": 0,
+        "wrapper": {
+          "width": "50",
+          "class": "",
+          "id": ""
+        },
+        "default_value": "Performance Bonus"
+      },
+      {
+        "key": "field_career_benefit2_desc_dooaj",
+        "label": "Benefit 2 Desc",
+        "name": "career_benefit2_desc",
+        "type": "textarea",
+        "instructions": "",
+        "required": 0,
+        "conditional_logic": 0,
+        "wrapper": {
+          "width": "50",
+          "class": "",
+          "id": ""
+        },
+        "default_value": "Quarterly rewards."
+      },
+      {
+        "key": "field_career_benefit3_title_vsinv",
+        "label": "Benefit 3 Title",
+        "name": "career_benefit3_title",
+        "type": "text",
+        "instructions": "",
+        "required": 0,
+        "conditional_logic": 0,
+        "wrapper": {
+          "width": "50",
+          "class": "",
+          "id": ""
+        },
+        "default_value": "Flexible Work"
+      },
+      {
+        "key": "field_career_benefit3_desc_kpxek",
+        "label": "Benefit 3 Desc",
+        "name": "career_benefit3_desc",
+        "type": "textarea",
+        "instructions": "",
+        "required": 0,
+        "conditional_logic": 0,
+        "wrapper": {
+          "width": "50",
+          "class": "",
+          "id": ""
+        },
+        "default_value": "Remote & Hybrid support."
+      },
+      {
+        "key": "field_career_benefit4_title_i8o49",
+        "label": "Benefit 4 Title",
+        "name": "career_benefit4_title",
+        "type": "text",
+        "instructions": "",
+        "required": 0,
+        "conditional_logic": 0,
+        "wrapper": {
+          "width": "50",
+          "class": "",
+          "id": ""
+        },
+        "default_value": "Time to Recharge"
+      },
+      {
+        "key": "field_career_benefit4_desc_orrhn",
+        "label": "Benefit 4 Desc",
+        "name": "career_benefit4_desc",
+        "type": "textarea",
+        "instructions": "",
+        "required": 0,
+        "conditional_logic": 0,
+        "wrapper": {
+          "width": "50",
+          "class": "",
+          "id": ""
+        },
+        "default_value": "Generous PTO."
+      },
+      {
+        "key": "field_career_benefit5_title_0unx9",
+        "label": "Benefit 5 Title",
+        "name": "career_benefit5_title",
+        "type": "text",
+        "instructions": "",
+        "required": 0,
+        "conditional_logic": 0,
+        "wrapper": {
+          "width": "50",
+          "class": "",
+          "id": ""
+        },
+        "default_value": "Modern Stack"
+      },
+      {
+        "key": "field_career_benefit5_desc_y4tb8",
+        "label": "Benefit 5 Desc",
+        "name": "career_benefit5_desc",
+        "type": "textarea",
+        "instructions": "",
+        "required": 0,
+        "conditional_logic": 0,
+        "wrapper": {
+          "width": "50",
+          "class": "",
+          "id": ""
+        },
+        "default_value": "Access the latest tools."
+      },
+      {
+        "key": "field_career_benefit6_title_0flwe",
+        "label": "Benefit 6 Title",
+        "name": "career_benefit6_title",
+        "type": "text",
+        "instructions": "",
+        "required": 0,
+        "conditional_logic": 0,
+        "wrapper": {
+          "width": "50",
+          "class": "",
+          "id": ""
+        },
+        "default_value": "Global Mobility"
+      },
+      {
+        "key": "field_career_benefit6_desc_kv1gw",
+        "label": "Benefit 6 Desc",
+        "name": "career_benefit6_desc",
+        "type": "textarea",
+        "instructions": "",
+        "required": 0,
+        "conditional_logic": 0,
+        "wrapper": {
+          "width": "50",
+          "class": "",
+          "id": ""
+        },
+        "default_value": "Transfer opportunities."
+      },
+      {
+        "key": "field_tab_internship_section_xewd0",
+        "label": "Internship Section",
+        "name": "tab_internship_section",
+        "type": "tab",
+        "instructions": "",
+        "required": 0,
+        "conditional_logic": 0,
+        "wrapper": {
+          "width": "",
+          "class": "",
+          "id": ""
+        },
+        "default_value": ""
+      },
+      {
+        "key": "field_career_internship_tagline_hr5k9",
+        "label": "Internship Tagline",
+        "name": "career_internship_tagline",
+        "type": "text",
+        "instructions": "",
+        "required": 0,
+        "conditional_logic": 0,
+        "wrapper": {
+          "width": "",
+          "class": "",
+          "id": ""
+        },
+        "default_value": "Internship Programme"
+      },
+      {
+        "key": "field_career_internship_title_dtknb",
+        "label": "Internship Title",
+        "name": "career_internship_title",
+        "type": "text",
+        "instructions": "",
+        "required": 0,
+        "conditional_logic": 0,
+        "wrapper": {
+          "width": "",
+          "class": "",
+          "id": ""
+        },
+        "default_value": "Launch Your Career ^at Nabhira"
+      },
+      {
+        "key": "field_career_internship_desc_2vgmn",
+        "label": "Internship Description",
+        "name": "career_internship_desc",
+        "type": "textarea",
+        "instructions": "",
+        "required": 0,
+        "conditional_logic": 0,
+        "wrapper": {
+          "width": "",
+          "class": "",
+          "id": ""
+        },
+        "default_value": "The Nabhira Emerging Talent Programme is a structured 12-week immersion into enterprise technology..."
+      },
+      {
+        "key": "field_career_internship_img_kt85y",
+        "label": "Internship Image",
+        "name": "career_internship_img",
+        "type": "image",
+        "instructions": "",
+        "required": 0,
+        "conditional_logic": 0,
+        "wrapper": {
+          "width": "",
+          "class": "",
+          "id": ""
+        },
+        "default_value": "",
+        "return_format": "url"
+      },
+      {
+        "key": "field_career_internship_badge1_4y7t8",
+        "label": "Badge Line 1",
+        "name": "career_internship_badge1",
+        "type": "text",
+        "instructions": "",
+        "required": 0,
+        "conditional_logic": 0,
+        "wrapper": {
+          "width": "50",
+          "class": "",
+          "id": ""
+        },
+        "default_value": "Applications Open"
+      },
+      {
+        "key": "field_career_internship_badge2_yiucj",
+        "label": "Badge Line 2",
+        "name": "career_internship_badge2",
+        "type": "text",
+        "instructions": "",
+        "required": 0,
+        "conditional_logic": 0,
+        "wrapper": {
+          "width": "50",
+          "class": "",
+          "id": ""
+        },
+        "default_value": "2026 Cohort"
+      },
+      {
+        "key": "field_career_internship_btn1_o33fj",
+        "label": "Button 1 Text",
+        "name": "career_internship_btn1",
+        "type": "text",
+        "instructions": "",
+        "required": 0,
+        "conditional_logic": 0,
+        "wrapper": {
+          "width": "50",
+          "class": "",
+          "id": ""
+        },
+        "default_value": "Apply Now"
+      },
+      {
+        "key": "field_career_internship_btn1_link_z7kvw",
+        "label": "Button 1 Link",
+        "name": "career_internship_btn1_link",
+        "type": "url",
+        "instructions": "",
+        "required": 0,
+        "conditional_logic": 0,
+        "wrapper": {
+          "width": "50",
+          "class": "",
+          "id": ""
+        },
+        "default_value": "#"
+      },
+      {
+        "key": "field_career_internship_btn2_3ya58",
+        "label": "Button 2 Text",
+        "name": "career_internship_btn2",
+        "type": "text",
+        "instructions": "",
+        "required": 0,
+        "conditional_logic": 0,
+        "wrapper": {
+          "width": "50",
+          "class": "",
+          "id": ""
+        },
+        "default_value": "Download Brochure"
+      },
+      {
+        "key": "field_career_internship_btn2_file_dbm1t",
+        "label": "Button 2 File",
+        "name": "career_internship_btn2_file",
+        "type": "file",
+        "instructions": "",
+        "required": 0,
+        "conditional_logic": 0,
+        "wrapper": {
+          "width": "50",
+          "class": "",
+          "id": ""
+        },
+        "default_value": "",
+        "return_format": "url"
+      },
+      {
+        "key": "field_career_program1_title_1qvs6",
+        "label": "Program 1 Title",
+        "name": "career_program1_title",
+        "type": "text",
+        "instructions": "",
+        "required": 0,
+        "conditional_logic": 0,
+        "wrapper": {
+          "width": "50",
+          "class": "",
+          "id": ""
+        },
+        "default_value": "AI & Data Engineering"
+      },
+      {
+        "key": "field_career_program1_duration_dzbmy",
+        "label": "Program 1 Duration",
+        "name": "career_program1_duration",
+        "type": "text",
+        "instructions": "",
+        "required": 0,
+        "conditional_logic": 0,
+        "wrapper": {
+          "width": "50",
+          "class": "",
+          "id": ""
+        },
+        "default_value": "12 Weeks"
+      },
+      {
+        "key": "field_career_program2_title_1b47c",
+        "label": "Program 2 Title",
+        "name": "career_program2_title",
+        "type": "text",
+        "instructions": "",
+        "required": 0,
+        "conditional_logic": 0,
+        "wrapper": {
+          "width": "50",
+          "class": "",
+          "id": ""
+        },
+        "default_value": "Cloud Architecture"
+      },
+      {
+        "key": "field_career_program2_duration_0k8kv",
+        "label": "Program 2 Duration",
+        "name": "career_program2_duration",
+        "type": "text",
+        "instructions": "",
+        "required": 0,
+        "conditional_logic": 0,
+        "wrapper": {
+          "width": "50",
+          "class": "",
+          "id": ""
+        },
+        "default_value": "12 Weeks"
+      },
+      {
+        "key": "field_career_program3_title_mv707",
+        "label": "Program 3 Title",
+        "name": "career_program3_title",
+        "type": "text",
+        "instructions": "",
+        "required": 0,
+        "conditional_logic": 0,
+        "wrapper": {
+          "width": "50",
+          "class": "",
+          "id": ""
+        },
+        "default_value": "Digital Strategy"
+      },
+      {
+        "key": "field_career_program3_duration_6g7rj",
+        "label": "Program 3 Duration",
+        "name": "career_program3_duration",
+        "type": "text",
+        "instructions": "",
+        "required": 0,
+        "conditional_logic": 0,
+        "wrapper": {
+          "width": "50",
+          "class": "",
+          "id": ""
+        },
+        "default_value": "10 Weeks"
+      },
+      {
+        "key": "field_career_program4_title_y4uyk",
+        "label": "Program 4 Title",
+        "name": "career_program4_title",
+        "type": "text",
+        "instructions": "",
+        "required": 0,
+        "conditional_logic": 0,
+        "wrapper": {
+          "width": "50",
+          "class": "",
+          "id": ""
+        },
+        "default_value": "Product & UX Design"
+      },
+      {
+        "key": "field_career_program4_duration_fjdps",
+        "label": "Program 4 Duration",
+        "name": "career_program4_duration",
+        "type": "text",
+        "instructions": "",
+        "required": 0,
+        "conditional_logic": 0,
+        "wrapper": {
+          "width": "50",
+          "class": "",
+          "id": ""
+        },
+        "default_value": "10 Weeks"
+      },
+      {
+        "key": "field_tab_why_different_section_lfl8g",
+        "label": "Why Different Section",
+        "name": "tab_why_different_section",
+        "type": "tab",
+        "instructions": "",
+        "required": 0,
+        "conditional_logic": 0,
+        "wrapper": {
+          "width": "",
+          "class": "",
+          "id": ""
+        },
+        "default_value": ""
+      },
+      {
+        "key": "field_career_why_tagline_m8n1e",
+        "label": "Why Different Tagline",
+        "name": "career_why_tagline",
+        "type": "text",
+        "instructions": "",
+        "required": 0,
+        "conditional_logic": 0,
+        "wrapper": {
+          "width": "",
+          "class": "",
+          "id": ""
+        },
+        "default_value": "Career Advantage"
+      },
+      {
+        "key": "field_career_why_title_m8awq",
+        "label": "Why Different Title",
+        "name": "career_why_title",
+        "type": "text",
+        "instructions": "",
+        "required": 0,
+        "conditional_logic": 0,
+        "wrapper": {
+          "width": "",
+          "class": "",
+          "id": ""
+        },
+        "default_value": "Why Nabhira is ^Different"
+      },
+      {
+        "key": "field_career_why_point1_num_ciup3",
+        "label": "Point 1 Number",
+        "name": "career_why_point1_num",
+        "type": "text",
+        "instructions": "",
+        "required": 0,
+        "conditional_logic": 0,
+        "wrapper": {
+          "width": "50",
+          "class": "",
+          "id": ""
+        },
+        "default_value": "01"
+      },
+      {
+        "key": "field_career_why_point1_title_w82mx",
+        "label": "Point 1 Title",
+        "name": "career_why_point1_title",
+        "type": "text",
+        "instructions": "",
+        "required": 0,
+        "conditional_logic": 0,
+        "wrapper": {
+          "width": "50",
+          "class": "",
+          "id": ""
+        },
+        "default_value": "Global Exposure"
+      },
+      {
+        "key": "field_career_why_point2_num_oa66e",
+        "label": "Point 2 Number",
+        "name": "career_why_point2_num",
+        "type": "text",
+        "instructions": "",
+        "required": 0,
+        "conditional_logic": 0,
+        "wrapper": {
+          "width": "50",
+          "class": "",
+          "id": ""
+        },
+        "default_value": "02"
+      },
+      {
+        "key": "field_career_why_point2_title_9fxaa",
+        "label": "Point 2 Title",
+        "name": "career_why_point2_title",
+        "type": "text",
+        "instructions": "",
+        "required": 0,
+        "conditional_logic": 0,
+        "wrapper": {
+          "width": "50",
+          "class": "",
+          "id": ""
+        },
+        "default_value": "Accelerated Growth"
+      },
+      {
+        "key": "field_career_why_point3_num_d05tv",
+        "label": "Point 3 Number",
+        "name": "career_why_point3_num",
+        "type": "text",
+        "instructions": "",
+        "required": 0,
+        "conditional_logic": 0,
+        "wrapper": {
+          "width": "50",
+          "class": "",
+          "id": ""
+        },
+        "default_value": "03"
+      },
+      {
+        "key": "field_career_why_point3_title_hzo7e",
+        "label": "Point 3 Title",
+        "name": "career_why_point3_title",
+        "type": "text",
+        "instructions": "",
+        "required": 0,
+        "conditional_logic": 0,
+        "wrapper": {
+          "width": "50",
+          "class": "",
+          "id": ""
+        },
+        "default_value": "World-Class Mentorship"
+      },
+      {
+        "key": "field_career_why_point4_num_yqywq",
+        "label": "Point 4 Number",
+        "name": "career_why_point4_num",
+        "type": "text",
+        "instructions": "",
+        "required": 0,
+        "conditional_logic": 0,
+        "wrapper": {
+          "width": "50",
+          "class": "",
+          "id": ""
+        },
+        "default_value": "04"
+      },
+      {
+        "key": "field_career_why_point4_title_iuxw1",
+        "label": "Point 4 Title",
+        "name": "career_why_point4_title",
+        "type": "text",
+        "instructions": "",
+        "required": 0,
+        "conditional_logic": 0,
+        "wrapper": {
+          "width": "50",
+          "class": "",
+          "id": ""
+        },
+        "default_value": "Certified Excellence"
+      },
+      {
+        "key": "field_career_why_point5_num_08w3o",
+        "label": "Point 5 Number",
+        "name": "career_why_point5_num",
+        "type": "text",
+        "instructions": "",
+        "required": 0,
+        "conditional_logic": 0,
+        "wrapper": {
+          "width": "50",
+          "class": "",
+          "id": ""
+        },
+        "default_value": "05"
+      },
+      {
+        "key": "field_career_why_point5_title_2s7a6",
+        "label": "Point 5 Title",
+        "name": "career_why_point5_title",
+        "type": "text",
+        "instructions": "",
+        "required": 0,
+        "conditional_logic": 0,
+        "wrapper": {
+          "width": "50",
+          "class": "",
+          "id": ""
+        },
+        "default_value": "Inclusive Culture"
+      },
+      {
+        "key": "field_career_why_point6_num_rf0zx",
+        "label": "Point 6 Number",
+        "name": "career_why_point6_num",
+        "type": "text",
+        "instructions": "",
+        "required": 0,
+        "conditional_logic": 0,
+        "wrapper": {
+          "width": "50",
+          "class": "",
+          "id": ""
+        },
+        "default_value": "06"
+      },
+      {
+        "key": "field_career_why_point6_title_7bccw",
+        "label": "Point 6 Title",
+        "name": "career_why_point6_title",
+        "type": "text",
+        "instructions": "",
+        "required": 0,
+        "conditional_logic": 0,
+        "wrapper": {
+          "width": "50",
+          "class": "",
+          "id": ""
+        },
+        "default_value": "Innovation Time"
+      },
+      {
+        "key": "field_tab_cta_section_n4u9n",
+        "label": "CTA Section",
+        "name": "tab_cta_section",
+        "type": "tab",
+        "instructions": "",
+        "required": 0,
+        "conditional_logic": 0,
+        "wrapper": {
+          "width": "",
+          "class": "",
+          "id": ""
+        },
+        "default_value": ""
+      },
+      {
+        "key": "field_career_cta_title_lpwxc",
+        "label": "CTA Title",
+        "name": "career_cta_title",
+        "type": "text",
+        "instructions": "",
+        "required": 0,
+        "conditional_logic": 0,
+        "wrapper": {
+          "width": "",
+          "class": "",
+          "id": ""
+        },
+        "default_value": "Your Next Chapter \n starts ^now."
+      },
+      {
+        "key": "field_career_cta_desc_vvtgy",
+        "label": "CTA Description",
+        "name": "career_cta_desc",
+        "type": "textarea",
+        "instructions": "",
+        "required": 0,
+        "conditional_logic": 0,
+        "wrapper": {
+          "width": "",
+          "class": "",
+          "id": ""
+        },
+        "default_value": "Join a global team of visionaries, engineers, and creatives working together to build a more agile and innovative future."
+      },
+      {
+        "key": "field_career_cta_card1_title_g0jzk",
+        "label": "CTA Card 1 Title",
+        "name": "career_cta_card1_title",
+        "type": "text",
+        "instructions": "",
+        "required": 0,
+        "conditional_logic": 0,
+        "wrapper": {
+          "width": "50",
+          "class": "",
+          "id": ""
+        },
+        "default_value": "Interview Ready?"
+      },
+      {
+        "key": "field_career_cta_card1_desc_1cacw",
+        "label": "CTA Card 1 Desc",
+        "name": "career_cta_card1_desc",
+        "type": "text",
+        "instructions": "",
+        "required": 0,
+        "conditional_logic": 0,
+        "wrapper": {
+          "width": "50",
+          "class": "",
+          "id": ""
+        },
+        "default_value": "Get tips for success"
+      },
+      {
+        "key": "field_career_cta_card2_title_hekoa",
+        "label": "CTA Card 2 Title",
+        "name": "career_cta_card2_title",
+        "type": "text",
+        "instructions": "",
+        "required": 0,
+        "conditional_logic": 0,
+        "wrapper": {
+          "width": "50",
+          "class": "",
+          "id": ""
+        },
+        "default_value": "Fast-Track"
+      },
+      {
+        "key": "field_career_cta_card2_desc_zmnvm",
+        "label": "CTA Card 2 Desc",
+        "name": "career_cta_card2_desc",
+        "type": "text",
+        "instructions": "",
+        "required": 0,
+        "conditional_logic": 0,
+        "wrapper": {
+          "width": "50",
+          "class": "",
+          "id": ""
+        },
+        "default_value": "Hiring in 14 days"
+      }
+    ],
+    "location": [
+      [
+        {
+          "param": "page",
+          "operator": "==",
+          "value": "38"
+        }
+      ],
+      [
+        {
+          "param": "post_type",
+          "operator": "==",
+          "value": "page"
+        }
+      ]
+    ],
+    "menu_order": 0,
+    "position": "normal",
+    "style": "default",
+    "label_placement": "top",
+    "instruction_placement": "label",
+    "hide_on_screen": "",
+    "active": true,
+    "description": "",
+    "show_in_rest": 1
+  }
+]

@@ -1,0 +1,164 @@
+[
+    {
+        "key": "group_document_page_fields",
+        "title": "Document Page Fields",
+        "fields": [
+            {
+                "key": "field_tab_hero_section_ac91s",
+                "label": "Hero Section",
+                "name": "",
+                "type": "tab",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "placement": "top",
+                "endpoint": 0
+            },
+            {
+                "key": "field_doc_page_hero_tagline_k3sw6",
+                "label": "Hero Tagline",
+                "name": "doc_page_hero_tagline",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "Resource Library"
+            },
+            {
+                "key": "field_doc_page_hero_title_xfmst",
+                "label": "Hero Title",
+                "name": "doc_page_hero_title",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "Hutech ^Documents."
+            },
+            {
+                "key": "field_doc_page_hero_desc_1ju2p",
+                "label": "Hero Description",
+                "name": "doc_page_hero_desc",
+                "type": "textarea",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "Access official publications, corporate reports, and technical whitepapers."
+            },
+            {
+                "key": "field_tab_cta_section_1whvi",
+                "label": "CTA Section",
+                "name": "",
+                "type": "tab",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "placement": "top",
+                "endpoint": 0
+            },
+            {
+                "key": "field_doc_page_cta_title_h9b1v",
+                "label": "CTA Title",
+                "name": "doc_page_cta_title",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "Need custom documentation?"
+            },
+            {
+                "key": "field_doc_page_cta_desc_pwkk4",
+                "label": "CTA Description",
+                "name": "doc_page_cta_desc",
+                "type": "textarea",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "Our specialized teams can provide tailored technical whitepapers and architecture documentation for your enterprise needs."
+            },
+            {
+                "key": "field_doc_page_cta_btn_text_bc5yq",
+                "label": "CTA Button Text",
+                "name": "doc_page_cta_btn_text",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "REQUEST ACCESS"
+            },
+            {
+                "key": "field_doc_page_cta_btn_url_fddv0",
+                "label": "CTA Button URL",
+                "name": "doc_page_cta_btn_url",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "/contact"
+            }
+        ],
+        "location": [
+            [
+                {
+                    "param": "page_title",
+                    "operator": "==",
+                    "value": "Hutech Documents"
+                }
+            ]
+        ],
+        "menu_order": 0,
+        "position": "normal",
+        "style": "default",
+        "label_placement": "top",
+        "instruction_placement": "label",
+        "hide_on_screen": "",
+        "active": true,
+        "description": "All editable fields for the Hutech Documents page (ACF Free compatible).",
+        "show_in_graphql": 1,
+        "graphql_field_name": "documentPageFields"
+    }
+]

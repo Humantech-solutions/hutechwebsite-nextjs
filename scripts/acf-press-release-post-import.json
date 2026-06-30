@@ -1,0 +1,59 @@
+[
+    {
+        "key": "group_press_release_post_fields",
+        "title": "Press Release Details",
+        "fields": [
+            {
+                "key": "field_press_press_release_date_1gq",
+                "label": "Press Release Date",
+                "name": "press_release_date",
+                "type": "date_picker",
+                "instructions": "Specific date of the press release (e.g. Nov 05, 2025). Defaults to post publish date if left empty.",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "",
+                "display_format": "F j, Y",
+                "return_format": "F j, Y"
+            },
+            {
+                "key": "field_press_press_release_external_url_25d",
+                "label": "External URL",
+                "name": "press_release_external_url",
+                "type": "url",
+                "instructions": "URL to the external press release page (e.g. https://example.com/pr-article).",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            }
+        ],
+        "location": [
+            [
+                {
+                    "param": "post_type",
+                    "operator": "==",
+                    "value": "hutech_press_release"
+                }
+            ]
+        ],
+        "menu_order": 0,
+        "position": "normal",
+        "style": "default",
+        "label_placement": "top",
+        "instruction_placement": "label",
+        "hide_on_screen": "",
+        "active": true,
+        "description": "Custom fields for each individual Press Release post.",
+        "show_in_graphql": 1,
+        "graphql_field_name": "pressReleaseFields"
+    }
+]

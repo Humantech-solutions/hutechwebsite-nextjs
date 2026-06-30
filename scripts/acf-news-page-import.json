@@ -1,0 +1,171 @@
+[
+    {
+        "key": "group_news_page_fields",
+        "title": "News Page Fields",
+        "fields": [
+            {
+                "key": "field_news_news_hero_tagline_1e5",
+                "label": "Hero Tagline",
+                "name": "news_hero_tagline",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "Corporate Insights"
+            },
+            {
+                "key": "field_news_news_hero_title_18r",
+                "label": "Hero Title",
+                "name": "news_hero_title",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "In The |News."
+            },
+            {
+                "key": "field_news_news_hero_description_1ql",
+                "label": "Hero Description",
+                "name": "news_hero_description",
+                "type": "textarea",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "Keeping you updated with our latest milestones, global expansions, and industry-defining engineering breakthroughs."
+            },
+            {
+                "key": "field_news_news_hero_bg_image_1g4",
+                "label": "Hero Background Image",
+                "name": "news_hero_bg_image",
+                "type": "image",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "",
+                "return_format": "array",
+                "preview_size": "medium",
+                "library": "all"
+            },
+            {
+                "key": "field_news_news_cta_title_15h",
+                "label": "CTA Title",
+                "name": "news_cta_title",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "Media Inquiries"
+            },
+            {
+                "key": "field_news_news_cta_description_1nb",
+                "label": "CTA Description",
+                "name": "news_cta_description",
+                "type": "textarea",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "For press kits, high-resolution imagery, or executive interview requests, please contact our global communications office."
+            },
+            {
+                "key": "field_news_news_cta_btn_text_1ej",
+                "label": "CTA Button Text",
+                "name": "news_cta_btn_text",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "Contact Press Team"
+            },
+            {
+                "key": "field_news_news_cta_btn_url_1bd",
+                "label": "CTA Button URL",
+                "name": "news_cta_btn_url",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "/contact"
+            }
+        ],
+        "location": [
+            [
+                {
+                    "param": "page_title",
+                    "operator": "==",
+                    "value": "news"
+                }
+            ],
+            [
+                {
+                    "param": "page_title",
+                    "operator": "==",
+                    "value": "News"
+                }
+            ],
+            [
+                {
+                    "param": "page_title",
+                    "operator": "==",
+                    "value": "In The News"
+                }
+            ],
+            [
+                {
+                    "param": "page_slug",
+                    "operator": "==",
+                    "value": "news"
+                }
+            ]
+        ],
+        "menu_order": 0,
+        "position": "normal",
+        "style": "default",
+        "label_placement": "top",
+        "instruction_placement": "label",
+        "hide_on_screen": "",
+        "active": true,
+        "description": "Editable fields for the News page hero and CTA sections.",
+        "show_in_graphql": 1,
+        "graphql_field_name": "newsPageFields"
+    }
+]

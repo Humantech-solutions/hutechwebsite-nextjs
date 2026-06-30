@@ -1,0 +1,73 @@
+[
+    {
+        "key": "group_blog_settings",
+        "title": "Blog Page Settings",
+        "fields": [
+            {
+                "key": "field_blog_title",
+                "label": "Blog Page Title",
+                "name": "title",
+                "type": "text",
+                "instructions": "Use | for line break + orange color, ^ to toggle orange, ~ for blue. Example: 'Insights &|Perspectives.' renders 'Perspectives.' in orange on a new line.",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "Insights &|Perspectives."
+            },
+            {
+                "key": "field_blog_description",
+                "label": "Blog Page Description",
+                "name": "description",
+                "type": "textarea",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "Stay ahead of the curve with the latest trends, expert analyses, and technological innovations curated by our global team."
+            },
+            {
+                "key": "field_blog_bg_image",
+                "label": "Background Image",
+                "name": "bg_image",
+                "type": "image",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "",
+                "return_format": "array"
+            }
+        ],
+        "location": [
+            [
+                {
+                    "param": "post_type",
+                    "operator": "==",
+                    "value": "page"
+                }
+            ]
+        ],
+        "menu_order": 1,
+        "position": "normal",
+        "style": "default",
+        "label_placement": "top",
+        "instruction_placement": "label",
+        "hide_on_screen": "",
+        "active": true,
+        "description": "Settings for the Blog landing page. (Only fill these out on the page named 'Blog')",
+        "show_in_graphql": 1,
+        "graphql_field_name": "blogFields"
+    }
+]

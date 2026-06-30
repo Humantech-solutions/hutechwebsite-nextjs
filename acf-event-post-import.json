@@ -1,0 +1,1066 @@
+[
+    {
+        "key": "group_event_post_settings",
+        "title": "Event Details",
+        "fields": [
+            {
+                "key": "field_event_post_tab_basic_info_l2e47",
+                "label": "Basic Info",
+                "name": "",
+                "type": "tab",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "placement": "top",
+                "endpoint": 0
+            },
+            {
+                "key": "field_event_post_tagline",
+                "label": "Tagline",
+                "name": "tagline",
+                "type": "text",
+                "instructions": "Short tagline shown below the event title in the hero. Use | for line break + accent, ^ for accent, ~ for secondary.",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "Unleashing the Potential of Autonomous Intelligence"
+            },
+            {
+                "key": "field_event_post_event_type",
+                "label": "Event Type",
+                "name": "event_type",
+                "type": "select",
+                "instructions": "The display type of the event (shown as a badge).",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "In-Person",
+                "choices": {
+                    "In-Person": "In-Person",
+                    "Online": "Online",
+                    "Hybrid": "Hybrid",
+                    "Webinar": "Webinar"
+                },
+                "allow_null": 0,
+                "ui": 1,
+                "return_format": "value"
+            },
+            {
+                "key": "field_event_post_event_category_label",
+                "label": "Event Category / Format",
+                "name": "event_category_label",
+                "type": "select",
+                "instructions": "The category badge shown on the event (Summit, Workshop, Symposium, Webinar, etc.).",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "Summit",
+                "choices": {
+                    "Summit": "Summit",
+                    "Workshop": "Workshop",
+                    "Symposium": "Symposium",
+                    "Webinar": "Webinar",
+                    "Conference": "Conference",
+                    "Hackathon": "Hackathon",
+                    "Meetup": "Meetup",
+                    "Panel": "Panel"
+                },
+                "allow_null": 0,
+                "ui": 1,
+                "return_format": "value"
+            },
+            {
+                "key": "field_event_post_tab_date_&_time_1z9b3",
+                "label": "Date & Time",
+                "name": "",
+                "type": "tab",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "placement": "top",
+                "endpoint": 0
+            },
+            {
+                "key": "field_event_post_event_date",
+                "label": "Event Date",
+                "name": "event_date",
+                "type": "date_picker",
+                "instructions": "Date of the event. Will display as 'Month DD, YYYY' (e.g. April 20, 2026).",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "",
+                "display_format": "F j, Y",
+                "return_format": "F j, Y",
+                "first_day": 0
+            },
+            {
+                "key": "field_event_post_event_time_start",
+                "label": "Event Start Time",
+                "name": "event_time_start",
+                "type": "time_picker",
+                "instructions": "Start time. Will display as 'HH:MM AM/PM' (e.g. 09:00 AM).",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "",
+                "display_format": "h:i A",
+                "return_format": "h:i A"
+            },
+            {
+                "key": "field_event_post_event_time_end",
+                "label": "Event End Time",
+                "name": "event_time_end",
+                "type": "time_picker",
+                "instructions": "End time. Will display as 'HH:MM AM/PM TZ' (e.g. 05:00 PM GMT). Add timezone manually in the field if needed.",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "",
+                "display_format": "h:i A",
+                "return_format": "h:i A"
+            },
+            {
+                "key": "field_event_post_timezone",
+                "label": "Timezone",
+                "name": "timezone",
+                "type": "text",
+                "instructions": "Timezone abbreviation (e.g. GMT, EST, CET, IST). Displayed after the time.",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "GMT"
+            },
+            {
+                "key": "field_event_post_tab_location_&_details_98x4l",
+                "label": "Location & Details",
+                "name": "",
+                "type": "tab",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "placement": "top",
+                "endpoint": 0
+            },
+            {
+                "key": "field_event_post_title_about",
+                "label": "About Section Title",
+                "name": "title_about",
+                "type": "text",
+                "instructions": "Title for the 'About the Event' section. Supports renderTitle syntax.",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "About the Event"
+            },
+            {
+                "key": "field_event_post_location",
+                "label": "Location",
+                "name": "location",
+                "type": "text",
+                "instructions": "Venue or city (e.g. ExCeL London, UK / Online / New York, Hybrid).",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "London, UK"
+            },
+            {
+                "key": "field_event_post_description",
+                "label": "Full Description",
+                "name": "description",
+                "type": "textarea",
+                "instructions": "The main 'About the Event' paragraph shown in the event detail page.",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_event_post_tab_highlights_fynsu",
+                "label": "Highlights",
+                "name": "",
+                "type": "tab",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "placement": "top",
+                "endpoint": 0
+            },
+            {
+                "key": "field_event_post_highlight_1",
+                "label": "Highlight 1",
+                "name": "highlight_1",
+                "type": "text",
+                "instructions": "Key highlight bullet point 1. Supports renderTitle syntax (|, ^, ~, quotes).",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_event_post_highlight_2",
+                "label": "Highlight 2",
+                "name": "highlight_2",
+                "type": "text",
+                "instructions": "Key highlight bullet point 2. Supports renderTitle syntax (|, ^, ~, quotes).",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_event_post_highlight_3",
+                "label": "Highlight 3",
+                "name": "highlight_3",
+                "type": "text",
+                "instructions": "Key highlight bullet point 3. Supports renderTitle syntax (|, ^, ~, quotes).",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_event_post_highlight_4",
+                "label": "Highlight 4",
+                "name": "highlight_4",
+                "type": "text",
+                "instructions": "Key highlight bullet point 4. Supports renderTitle syntax (|, ^, ~, quotes).",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_event_post_highlight_5",
+                "label": "Highlight 5",
+                "name": "highlight_5",
+                "type": "text",
+                "instructions": "Key highlight bullet point 5. Supports renderTitle syntax (|, ^, ~, quotes).",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_event_post_highlight_6",
+                "label": "Highlight 6",
+                "name": "highlight_6",
+                "type": "text",
+                "instructions": "Key highlight bullet point 6. Supports renderTitle syntax (|, ^, ~, quotes).",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_event_post_tab_agenda_uqxqm",
+                "label": "Agenda",
+                "name": "",
+                "type": "tab",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "placement": "top",
+                "endpoint": 0
+            },
+            {
+                "key": "field_event_post_title_agenda",
+                "label": "Agenda Section Title",
+                "name": "title_agenda",
+                "type": "text",
+                "instructions": "Title for the 'Event Agenda' section. Supports renderTitle syntax.",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "Event Agenda"
+            },
+            {
+                "key": "field_event_post_agenda_1_time",
+                "label": "Agenda 1 Time",
+                "name": "agenda_1_time",
+                "type": "text",
+                "instructions": "Time for agenda session 1 (e.g. 09:00 AM).",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "09:00 AM"
+            },
+            {
+                "key": "field_event_post_agenda_1_title",
+                "label": "Agenda 1 Title",
+                "name": "agenda_1_title",
+                "type": "text",
+                "instructions": "Title for agenda session 1. Supports renderTitle syntax.",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_event_post_agenda_2_time",
+                "label": "Agenda 2 Time",
+                "name": "agenda_2_time",
+                "type": "text",
+                "instructions": "Time for agenda session 2 (e.g. 09:00 AM).",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_event_post_agenda_2_title",
+                "label": "Agenda 2 Title",
+                "name": "agenda_2_title",
+                "type": "text",
+                "instructions": "Title for agenda session 2. Supports renderTitle syntax.",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_event_post_agenda_3_time",
+                "label": "Agenda 3 Time",
+                "name": "agenda_3_time",
+                "type": "text",
+                "instructions": "Time for agenda session 3 (e.g. 09:00 AM).",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_event_post_agenda_3_title",
+                "label": "Agenda 3 Title",
+                "name": "agenda_3_title",
+                "type": "text",
+                "instructions": "Title for agenda session 3. Supports renderTitle syntax.",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_event_post_agenda_4_time",
+                "label": "Agenda 4 Time",
+                "name": "agenda_4_time",
+                "type": "text",
+                "instructions": "Time for agenda session 4 (e.g. 09:00 AM).",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_event_post_agenda_4_title",
+                "label": "Agenda 4 Title",
+                "name": "agenda_4_title",
+                "type": "text",
+                "instructions": "Title for agenda session 4. Supports renderTitle syntax.",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_event_post_agenda_5_time",
+                "label": "Agenda 5 Time",
+                "name": "agenda_5_time",
+                "type": "text",
+                "instructions": "Time for agenda session 5 (e.g. 09:00 AM).",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_event_post_agenda_5_title",
+                "label": "Agenda 5 Title",
+                "name": "agenda_5_title",
+                "type": "text",
+                "instructions": "Title for agenda session 5. Supports renderTitle syntax.",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_event_post_agenda_6_time",
+                "label": "Agenda 6 Time",
+                "name": "agenda_6_time",
+                "type": "text",
+                "instructions": "Time for agenda session 6 (e.g. 09:00 AM).",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_event_post_agenda_6_title",
+                "label": "Agenda 6 Title",
+                "name": "agenda_6_title",
+                "type": "text",
+                "instructions": "Title for agenda session 6. Supports renderTitle syntax.",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_event_post_agenda_7_time",
+                "label": "Agenda 7 Time",
+                "name": "agenda_7_time",
+                "type": "text",
+                "instructions": "Time for agenda session 7 (e.g. 09:00 AM).",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_event_post_agenda_7_title",
+                "label": "Agenda 7 Title",
+                "name": "agenda_7_title",
+                "type": "text",
+                "instructions": "Title for agenda session 7. Supports renderTitle syntax.",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_event_post_agenda_8_time",
+                "label": "Agenda 8 Time",
+                "name": "agenda_8_time",
+                "type": "text",
+                "instructions": "Time for agenda session 8 (e.g. 09:00 AM).",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_event_post_agenda_8_title",
+                "label": "Agenda 8 Title",
+                "name": "agenda_8_title",
+                "type": "text",
+                "instructions": "Title for agenda session 8. Supports renderTitle syntax.",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_event_post_tab_speakers_fmwny",
+                "label": "Speakers",
+                "name": "",
+                "type": "tab",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "placement": "top",
+                "endpoint": 0
+            },
+            {
+                "key": "field_event_post_title_speakers",
+                "label": "Speakers Section Title",
+                "name": "title_speakers",
+                "type": "text",
+                "instructions": "Title for the 'Featured Speakers' section. Supports renderTitle syntax.",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "Featured Speakers"
+            },
+            {
+                "key": "field_event_post_speaker_1_name",
+                "label": "Speaker 1 Name",
+                "name": "speaker_1_name",
+                "type": "text",
+                "instructions": "Full name of speaker 1.",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_event_post_speaker_1_role",
+                "label": "Speaker 1 Role",
+                "name": "speaker_1_role",
+                "type": "text",
+                "instructions": "Role/title of speaker 1 (e.g. CTO, Hutech Solutions).",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_event_post_speaker_1_image",
+                "label": "Speaker 1 Photo",
+                "name": "speaker_1_image",
+                "type": "image",
+                "instructions": "Portrait photo of speaker 1.",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "return_format": "object",
+                "preview_size": "medium",
+                "library": "all"
+            },
+            {
+                "key": "field_event_post_speaker_2_name",
+                "label": "Speaker 2 Name",
+                "name": "speaker_2_name",
+                "type": "text",
+                "instructions": "Full name of speaker 2.",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_event_post_speaker_2_role",
+                "label": "Speaker 2 Role",
+                "name": "speaker_2_role",
+                "type": "text",
+                "instructions": "Role/title of speaker 2 (e.g. CTO, Hutech Solutions).",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_event_post_speaker_2_image",
+                "label": "Speaker 2 Photo",
+                "name": "speaker_2_image",
+                "type": "image",
+                "instructions": "Portrait photo of speaker 2.",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "return_format": "object",
+                "preview_size": "medium",
+                "library": "all"
+            },
+            {
+                "key": "field_event_post_speaker_3_name",
+                "label": "Speaker 3 Name",
+                "name": "speaker_3_name",
+                "type": "text",
+                "instructions": "Full name of speaker 3.",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_event_post_speaker_3_role",
+                "label": "Speaker 3 Role",
+                "name": "speaker_3_role",
+                "type": "text",
+                "instructions": "Role/title of speaker 3 (e.g. CTO, Hutech Solutions).",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_event_post_speaker_3_image",
+                "label": "Speaker 3 Photo",
+                "name": "speaker_3_image",
+                "type": "image",
+                "instructions": "Portrait photo of speaker 3.",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "return_format": "object",
+                "preview_size": "medium",
+                "library": "all"
+            },
+            {
+                "key": "field_event_post_speaker_4_name",
+                "label": "Speaker 4 Name",
+                "name": "speaker_4_name",
+                "type": "text",
+                "instructions": "Full name of speaker 4.",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_event_post_speaker_4_role",
+                "label": "Speaker 4 Role",
+                "name": "speaker_4_role",
+                "type": "text",
+                "instructions": "Role/title of speaker 4 (e.g. CTO, Hutech Solutions).",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_event_post_speaker_4_image",
+                "label": "Speaker 4 Photo",
+                "name": "speaker_4_image",
+                "type": "image",
+                "instructions": "Portrait photo of speaker 4.",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "return_format": "object",
+                "preview_size": "medium",
+                "library": "all"
+            },
+            {
+                "key": "field_event_post_speaker_5_name",
+                "label": "Speaker 5 Name",
+                "name": "speaker_5_name",
+                "type": "text",
+                "instructions": "Full name of speaker 5.",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_event_post_speaker_5_role",
+                "label": "Speaker 5 Role",
+                "name": "speaker_5_role",
+                "type": "text",
+                "instructions": "Role/title of speaker 5 (e.g. CTO, Hutech Solutions).",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_event_post_speaker_5_image",
+                "label": "Speaker 5 Photo",
+                "name": "speaker_5_image",
+                "type": "image",
+                "instructions": "Portrait photo of speaker 5.",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "return_format": "object",
+                "preview_size": "medium",
+                "library": "all"
+            },
+            {
+                "key": "field_event_post_tab_helpful_links_8r0f6",
+                "label": "Helpful Links",
+                "name": "",
+                "type": "tab",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "placement": "top",
+                "endpoint": 0
+            },
+            {
+                "key": "field_event_post_helpful_links_title",
+                "label": "Helpful Links Title",
+                "name": "helpful_links_title",
+                "type": "text",
+                "instructions": "Title for the 'Helpful Links' box.",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "Helpful Links"
+            },
+            {
+                "key": "field_event_post_link_share_label",
+                "label": "Share Link Label",
+                "name": "link_share_label",
+                "type": "text",
+                "instructions": "Label for the share button.",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "Share with colleagues"
+            },
+            {
+                "key": "field_event_post_link_calendar_label",
+                "label": "Calendar Link Label",
+                "name": "link_calendar_label",
+                "type": "text",
+                "instructions": "Label for the 'Add to Calendar' button.",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "Add to Calendar"
+            },
+            {
+                "key": "field_event_post_link_contact_label",
+                "label": "Contact Link Label",
+                "name": "link_contact_label",
+                "type": "text",
+                "instructions": "Label for the 'Contact Organizer' button.",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "Contact Organizer"
+            },
+            {
+                "key": "field_event_post_link_contact_url",
+                "label": "Contact Link URL",
+                "name": "link_contact_url",
+                "type": "text",
+                "instructions": "URL for the 'Contact Organizer' button.",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "/contact"
+            },
+            {
+                "key": "field_event_post_tab_cta_section_hv879",
+                "label": "CTA Section",
+                "name": "",
+                "type": "tab",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "placement": "top",
+                "endpoint": 0
+            },
+            {
+                "key": "field_event_post_cta_title",
+                "label": "CTA Section Title",
+                "name": "cta_title",
+                "type": "text",
+                "instructions": "Title for the bottom CTA section. Supports renderTitle syntax (| ^ ~ quotes).",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "Can't make it to this |Event?"
+            },
+            {
+                "key": "field_event_post_cta_description",
+                "label": "CTA Section Description",
+                "name": "cta_description",
+                "type": "textarea",
+                "instructions": "Description text below the CTA title.",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "Subscribe to our tech newsletter to receive event summaries, recording links, and early-bird notifications for our upcoming summits."
+            },
+            {
+                "key": "field_event_post_cta_image",
+                "label": "CTA Section Image",
+                "name": "cta_image",
+                "type": "image",
+                "instructions": "Image shown on the right side of the CTA section. If a video URL is set below, a play button will overlay this image.",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "return_format": "object",
+                "preview_size": "medium",
+                "library": "all"
+            },
+            {
+                "key": "field_event_post_cta_video_url",
+                "label": "CTA Video URL",
+                "name": "cta_video_url",
+                "type": "url",
+                "instructions": "Optional YouTube or video URL. If provided, a play button will appear over the CTA image and clicking it will open/play the video.",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            }
+        ],
+        "location": [
+            [
+                {
+                    "param": "post_type",
+                    "operator": "==",
+                    "value": "hutech_event"
+                }
+            ]
+        ],
+        "menu_order": 1,
+        "position": "normal",
+        "style": "default",
+        "label_placement": "top",
+        "instruction_placement": "label",
+        "hide_on_screen": "",
+        "active": true,
+        "description": "All fields for the Event detail page.",
+        "show_in_graphql": 1,
+        "graphql_field_name": "eventPostFields"
+    }
+]

@@ -1,0 +1,1508 @@
+[
+    {
+        "key": "group_partnership_page_fields",
+        "title": "Partnership Page Fields",
+        "fields": [
+            {
+                "key": "field_tab_hero_section_20pix",
+                "label": "Hero Section",
+                "name": "",
+                "type": "tab",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "placement": "top",
+                "endpoint": 0
+            },
+            {
+                "key": "field_part_hero_tagline_06a5m",
+                "label": "Hero Tagline",
+                "name": "part_hero_tagline",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "Ecosystem of Excellence"
+            },
+            {
+                "key": "field_part_hero_title_6tssq",
+                "label": "Hero Title",
+                "name": "part_hero_title",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "Strategic |Technology ^Alliances."
+            },
+            {
+                "key": "field_part_hero_description_zset2",
+                "label": "Hero Description",
+                "name": "part_hero_description",
+                "type": "textarea",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "We collaborate with the world's leading technology providers to architect, implement, and manage comprehensive digital solutions that empower global enterprises."
+            },
+            {
+                "key": "field_part_hero_bg_image_kd1jd",
+                "label": "Hero Background Image",
+                "name": "part_hero_bg_image",
+                "type": "image",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "",
+                "return_format": "object",
+                "preview_size": "medium",
+                "library": "all"
+            },
+            {
+                "key": "field_tab_intro_section_6qzdm",
+                "label": "Intro Section",
+                "name": "",
+                "type": "tab",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "placement": "top",
+                "endpoint": 0
+            },
+            {
+                "key": "field_part_intro_title_kdmx7",
+                "label": "Intro Title",
+                "name": "part_intro_title",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "Architecting |Shared ^Success."
+            },
+            {
+                "key": "field_part_intro_description_efn5q",
+                "label": "Intro Description",
+                "name": "part_intro_description",
+                "type": "textarea",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "At Hutech Solutions, our partnership philosophy is built on mutual growth, shared innovation, and a commitment to delivering exceptional value. We don't just use technology; we build strategic bridges between platforms and business goals."
+            },
+            {
+                "key": "field_part_intro_bullet_1_0unls",
+                "label": "Intro Bullet 1",
+                "name": "part_intro_bullet_1",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "25",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "Accelerated Time-to-Market"
+            },
+            {
+                "key": "field_part_intro_bullet_2_hiprc",
+                "label": "Intro Bullet 2",
+                "name": "part_intro_bullet_2",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "25",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "Access to Specialized Labs"
+            },
+            {
+                "key": "field_part_intro_bullet_3_m83sb",
+                "label": "Intro Bullet 3",
+                "name": "part_intro_bullet_3",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "25",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "Joint Product Engineering"
+            },
+            {
+                "key": "field_part_intro_bullet_4_2ysf3",
+                "label": "Intro Bullet 4",
+                "name": "part_intro_bullet_4",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "25",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "Global Scaling Support"
+            },
+            {
+                "key": "field_part_intro_img_s7uzk",
+                "label": "Intro Image",
+                "name": "part_intro_img",
+                "type": "image",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "",
+                "return_format": "object",
+                "preview_size": "medium",
+                "library": "all"
+            },
+            {
+                "key": "field_tab_categories_grid_al204",
+                "label": "Categories Grid",
+                "name": "",
+                "type": "tab",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "placement": "top",
+                "endpoint": 0
+            },
+            {
+                "key": "field_part_categories_title_c9lsh",
+                "label": "Categories Title",
+                "name": "part_categories_title",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "Partner Ecosystem"
+            },
+            {
+                "key": "field_part_categories_description_wcykn",
+                "label": "Categories Description",
+                "name": "part_categories_description",
+                "type": "textarea",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "Our alliance network spans across multiple technology domains and industry verticals."
+            },
+            {
+                "key": "field_part_cat_1_title_z84ub",
+                "label": "Category 1 Title",
+                "name": "part_cat_1_title",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "33",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "Cloud & Infrastructure"
+            },
+            {
+                "key": "field_part_cat_1_desc_ybos0",
+                "label": "Category 1 Description",
+                "name": "part_cat_1_desc",
+                "type": "textarea",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "33",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "Empowering businesses with scalable, secure, and high-performance cloud ecosystems."
+            },
+            {
+                "key": "field_part_cat_1_partners_8ozl5",
+                "label": "Category 1 Partners (comma separated)",
+                "name": "part_cat_1_partners",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "33",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "AWS, Microsoft Azure, Google Cloud, IBM Cloud, DigitalOcean"
+            },
+            {
+                "key": "field_part_cat_2_title_mykw4",
+                "label": "Category 2 Title",
+                "name": "part_cat_2_title",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "33",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "Enterprise Solutions"
+            },
+            {
+                "key": "field_part_cat_2_desc_ari7z",
+                "label": "Category 2 Description",
+                "name": "part_cat_2_desc",
+                "type": "textarea",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "33",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "Driving operational excellence through world-class ERP and CRM integrations."
+            },
+            {
+                "key": "field_part_cat_2_partners_8l7pr",
+                "label": "Category 2 Partners (comma separated)",
+                "name": "part_cat_2_partners",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "33",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "ServiceNow, SAP, Oracle, Microsoft Dynamics, Salesforce"
+            },
+            {
+                "key": "field_part_cat_3_title_jomr8",
+                "label": "Category 3 Title",
+                "name": "part_cat_3_title",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "33",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "Data & Intelligence"
+            },
+            {
+                "key": "field_part_cat_3_desc_6xdw1",
+                "label": "Category 3 Description",
+                "name": "part_cat_3_desc",
+                "type": "textarea",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "33",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "Unlocking actionable insights with advanced analytics and AI-driven platforms."
+            },
+            {
+                "key": "field_part_cat_3_partners_77bld",
+                "label": "Category 3 Partners (comma separated)",
+                "name": "part_cat_3_partners",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "33",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "Snowflake, Databricks, Tableau, Power BI, Cloudera"
+            },
+            {
+                "key": "field_tab_meet_our_partners_l1a49",
+                "label": "Meet Our Partners",
+                "name": "",
+                "type": "tab",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "placement": "top",
+                "endpoint": 0
+            },
+            {
+                "key": "field_part_meet_title_a9gpu",
+                "label": "Meet Title",
+                "name": "part_meet_title",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "Meet Our Partners"
+            },
+            {
+                "key": "field_part_meet_description_v4agk",
+                "label": "Meet Description",
+                "name": "part_meet_description",
+                "type": "textarea",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "Our partners are industry leaders who share our commitment to innovation and excellence. Together, we combine strengths and leverage cutting-edge solutions to achieve outstanding results. Join us and experience the transformative power of a Hutech Solutions partnership."
+            },
+            {
+                "key": "field_part_meet_btn_text_wm6y8",
+                "label": "Meet Button Text",
+                "name": "part_meet_btn_text",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "Find What You Need"
+            },
+            {
+                "key": "field_part_meet_btn_url_mf2s9",
+                "label": "Meet Button URL",
+                "name": "part_meet_btn_url",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "/services"
+            },
+            {
+                "key": "field_part_meet_img_1_lhu1i",
+                "label": "Meet Image 1",
+                "name": "part_meet_img_1",
+                "type": "image",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50"
+                },
+                "default_value": "",
+                "return_format": "object",
+                "preview_size": "medium",
+                "library": "all"
+            },
+            {
+                "key": "field_part_meet_alt_1_yghj1",
+                "label": "Meet Image 1 Alt Text",
+                "name": "part_meet_alt_1",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "Hutech and Oots Strategic Partnership"
+            },
+            {
+                "key": "field_part_meet_img_2_f210i",
+                "label": "Meet Image 2",
+                "name": "part_meet_img_2",
+                "type": "image",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50"
+                },
+                "default_value": "",
+                "return_format": "object",
+                "preview_size": "medium",
+                "library": "all"
+            },
+            {
+                "key": "field_part_meet_alt_2_o4yet",
+                "label": "Meet Image 2 Alt Text",
+                "name": "part_meet_alt_2",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "Hutech and Maconsus Strategic Partnership"
+            },
+            {
+                "key": "field_part_meet_img_3_crh8j",
+                "label": "Meet Image 3",
+                "name": "part_meet_img_3",
+                "type": "image",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50"
+                },
+                "default_value": "",
+                "return_format": "object",
+                "preview_size": "medium",
+                "library": "all"
+            },
+            {
+                "key": "field_part_meet_alt_3_m5pgp",
+                "label": "Meet Image 3 Alt Text",
+                "name": "part_meet_alt_3",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "Nasscom Membership Certificate"
+            },
+            {
+                "key": "field_part_meet_img_4_lkn5b",
+                "label": "Meet Image 4",
+                "name": "part_meet_img_4",
+                "type": "image",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50"
+                },
+                "default_value": "",
+                "return_format": "object",
+                "preview_size": "medium",
+                "library": "all"
+            },
+            {
+                "key": "field_part_meet_alt_4_e0uc0",
+                "label": "Meet Image 4 Alt Text",
+                "name": "part_meet_alt_4",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_part_meet_img_5_h8m89",
+                "label": "Meet Image 5",
+                "name": "part_meet_img_5",
+                "type": "image",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50"
+                },
+                "default_value": "",
+                "return_format": "object",
+                "preview_size": "medium",
+                "library": "all"
+            },
+            {
+                "key": "field_part_meet_alt_5_4at7p",
+                "label": "Meet Image 5 Alt Text",
+                "name": "part_meet_alt_5",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_part_meet_img_6_mdnbf",
+                "label": "Meet Image 6",
+                "name": "part_meet_img_6",
+                "type": "image",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50"
+                },
+                "default_value": "",
+                "return_format": "object",
+                "preview_size": "medium",
+                "library": "all"
+            },
+            {
+                "key": "field_part_meet_alt_6_w89w3",
+                "label": "Meet Image 6 Alt Text",
+                "name": "part_meet_alt_6",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_part_meet_img_7_me720",
+                "label": "Meet Image 7",
+                "name": "part_meet_img_7",
+                "type": "image",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50"
+                },
+                "default_value": "",
+                "return_format": "object",
+                "preview_size": "medium",
+                "library": "all"
+            },
+            {
+                "key": "field_part_meet_alt_7_79ffz",
+                "label": "Meet Image 7 Alt Text",
+                "name": "part_meet_alt_7",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_part_meet_img_8_b0zyo",
+                "label": "Meet Image 8",
+                "name": "part_meet_img_8",
+                "type": "image",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50"
+                },
+                "default_value": "",
+                "return_format": "object",
+                "preview_size": "medium",
+                "library": "all"
+            },
+            {
+                "key": "field_part_meet_alt_8_s7asf",
+                "label": "Meet Image 8 Alt Text",
+                "name": "part_meet_alt_8",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_part_meet_img_9_k04t8",
+                "label": "Meet Image 9",
+                "name": "part_meet_img_9",
+                "type": "image",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50"
+                },
+                "default_value": "",
+                "return_format": "object",
+                "preview_size": "medium",
+                "library": "all"
+            },
+            {
+                "key": "field_part_meet_alt_9_jip7i",
+                "label": "Meet Image 9 Alt Text",
+                "name": "part_meet_alt_9",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_tab_logo_grid_ijcue",
+                "label": "Logo Grid",
+                "name": "",
+                "type": "tab",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "placement": "top",
+                "endpoint": 0
+            },
+            {
+                "key": "field_part_logo_1_name_vv0ee",
+                "label": "Logo 1 Name",
+                "name": "part_logo_1_name",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "AWS"
+            },
+            {
+                "key": "field_part_logo_1_img_sm73s",
+                "label": "Logo 1 Image",
+                "name": "part_logo_1_img",
+                "type": "image",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50"
+                },
+                "default_value": "",
+                "return_format": "object",
+                "preview_size": "medium",
+                "library": "all"
+            },
+            {
+                "key": "field_part_logo_2_name_0pgzg",
+                "label": "Logo 2 Name",
+                "name": "part_logo_2_name",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "Google Cloud"
+            },
+            {
+                "key": "field_part_logo_2_img_9fk8g",
+                "label": "Logo 2 Image",
+                "name": "part_logo_2_img",
+                "type": "image",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50"
+                },
+                "default_value": "",
+                "return_format": "object",
+                "preview_size": "medium",
+                "library": "all"
+            },
+            {
+                "key": "field_part_logo_3_name_7c36p",
+                "label": "Logo 3 Name",
+                "name": "part_logo_3_name",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "Microsoft Azure"
+            },
+            {
+                "key": "field_part_logo_3_img_3xmvb",
+                "label": "Logo 3 Image",
+                "name": "part_logo_3_img",
+                "type": "image",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50"
+                },
+                "default_value": "",
+                "return_format": "object",
+                "preview_size": "medium",
+                "library": "all"
+            },
+            {
+                "key": "field_part_logo_4_name_jjccm",
+                "label": "Logo 4 Name",
+                "name": "part_logo_4_name",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "IBM"
+            },
+            {
+                "key": "field_part_logo_4_img_5sc6h",
+                "label": "Logo 4 Image",
+                "name": "part_logo_4_img",
+                "type": "image",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50"
+                },
+                "default_value": "",
+                "return_format": "object",
+                "preview_size": "medium",
+                "library": "all"
+            },
+            {
+                "key": "field_part_logo_5_name_0al6l",
+                "label": "Logo 5 Name",
+                "name": "part_logo_5_name",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "ServiceNow"
+            },
+            {
+                "key": "field_part_logo_5_img_1lp0k",
+                "label": "Logo 5 Image",
+                "name": "part_logo_5_img",
+                "type": "image",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50"
+                },
+                "default_value": "",
+                "return_format": "object",
+                "preview_size": "medium",
+                "library": "all"
+            },
+            {
+                "key": "field_part_logo_6_name_ce7qb",
+                "label": "Logo 6 Name",
+                "name": "part_logo_6_name",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "Oracle"
+            },
+            {
+                "key": "field_part_logo_6_img_bo260",
+                "label": "Logo 6 Image",
+                "name": "part_logo_6_img",
+                "type": "image",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50"
+                },
+                "default_value": "",
+                "return_format": "object",
+                "preview_size": "medium",
+                "library": "all"
+            },
+            {
+                "key": "field_part_logo_7_name_po0ne",
+                "label": "Logo 7 Name",
+                "name": "part_logo_7_name",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "Snowflake"
+            },
+            {
+                "key": "field_part_logo_7_img_u36ty",
+                "label": "Logo 7 Image",
+                "name": "part_logo_7_img",
+                "type": "image",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50"
+                },
+                "default_value": "",
+                "return_format": "object",
+                "preview_size": "medium",
+                "library": "all"
+            },
+            {
+                "key": "field_part_logo_8_name_73xk6",
+                "label": "Logo 8 Name",
+                "name": "part_logo_8_name",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "SAP"
+            },
+            {
+                "key": "field_part_logo_8_img_dovip",
+                "label": "Logo 8 Image",
+                "name": "part_logo_8_img",
+                "type": "image",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50"
+                },
+                "default_value": "",
+                "return_format": "object",
+                "preview_size": "medium",
+                "library": "all"
+            },
+            {
+                "key": "field_part_logo_9_name_pgovz",
+                "label": "Logo 9 Name",
+                "name": "part_logo_9_name",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_part_logo_9_img_ihvze",
+                "label": "Logo 9 Image",
+                "name": "part_logo_9_img",
+                "type": "image",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50"
+                },
+                "default_value": "",
+                "return_format": "object",
+                "preview_size": "medium",
+                "library": "all"
+            },
+            {
+                "key": "field_part_logo_10_name_lncc4",
+                "label": "Logo 10 Name",
+                "name": "part_logo_10_name",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_part_logo_10_img_v9ohs",
+                "label": "Logo 10 Image",
+                "name": "part_logo_10_img",
+                "type": "image",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50"
+                },
+                "default_value": "",
+                "return_format": "object",
+                "preview_size": "medium",
+                "library": "all"
+            },
+            {
+                "key": "field_part_logo_11_name_4qqo2",
+                "label": "Logo 11 Name",
+                "name": "part_logo_11_name",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_part_logo_11_img_g3sp7",
+                "label": "Logo 11 Image",
+                "name": "part_logo_11_img",
+                "type": "image",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50"
+                },
+                "default_value": "",
+                "return_format": "object",
+                "preview_size": "medium",
+                "library": "all"
+            },
+            {
+                "key": "field_part_logo_12_name_vcnrw",
+                "label": "Logo 12 Name",
+                "name": "part_logo_12_name",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_part_logo_12_img_q5sfn",
+                "label": "Logo 12 Image",
+                "name": "part_logo_12_img",
+                "type": "image",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50"
+                },
+                "default_value": "",
+                "return_format": "object",
+                "preview_size": "medium",
+                "library": "all"
+            },
+            {
+                "key": "field_part_logo_13_name_nhe8w",
+                "label": "Logo 13 Name",
+                "name": "part_logo_13_name",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_part_logo_13_img_snga2",
+                "label": "Logo 13 Image",
+                "name": "part_logo_13_img",
+                "type": "image",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50"
+                },
+                "default_value": "",
+                "return_format": "object",
+                "preview_size": "medium",
+                "library": "all"
+            },
+            {
+                "key": "field_part_logo_14_name_nlv6f",
+                "label": "Logo 14 Name",
+                "name": "part_logo_14_name",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_part_logo_14_img_jfcmf",
+                "label": "Logo 14 Image",
+                "name": "part_logo_14_img",
+                "type": "image",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50"
+                },
+                "default_value": "",
+                "return_format": "object",
+                "preview_size": "medium",
+                "library": "all"
+            },
+            {
+                "key": "field_part_logo_15_name_r5x08",
+                "label": "Logo 15 Name",
+                "name": "part_logo_15_name",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_part_logo_15_img_nsfbm",
+                "label": "Logo 15 Image",
+                "name": "part_logo_15_img",
+                "type": "image",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50"
+                },
+                "default_value": "",
+                "return_format": "object",
+                "preview_size": "medium",
+                "library": "all"
+            },
+            {
+                "key": "field_part_logo_16_name_av2sv",
+                "label": "Logo 16 Name",
+                "name": "part_logo_16_name",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_part_logo_16_img_1kmc5",
+                "label": "Logo 16 Image",
+                "name": "part_logo_16_img",
+                "type": "image",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50"
+                },
+                "default_value": "",
+                "return_format": "object",
+                "preview_size": "medium",
+                "library": "all"
+            },
+            {
+                "key": "field_tab_benefits_section_3lvlx",
+                "label": "Benefits Section",
+                "name": "",
+                "type": "tab",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "placement": "top",
+                "endpoint": 0
+            },
+            {
+                "key": "field_part_ben_title_upqg1",
+                "label": "Benefits Title",
+                "name": "part_ben_title",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "Value of |^Association."
+            },
+            {
+                "key": "field_part_ben_img_hh61t",
+                "label": "Benefits Image",
+                "name": "part_ben_img",
+                "type": "image",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "",
+                "return_format": "object",
+                "preview_size": "medium",
+                "library": "all"
+            },
+            {
+                "key": "field_part_ben_1_title_ysejx",
+                "label": "Benefit 1 Title",
+                "name": "part_ben_1_title",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "Global Delivery Capabilities"
+            },
+            {
+                "key": "field_part_ben_1_desc_uf6ei",
+                "label": "Benefit 1 Description",
+                "name": "part_ben_1_desc",
+                "type": "textarea",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "Access our worldwide network of development centers and domain experts."
+            },
+            {
+                "key": "field_part_ben_2_title_k6iev",
+                "label": "Benefit 2 Title",
+                "name": "part_ben_2_title",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "Co-Innovation Programs"
+            },
+            {
+                "key": "field_part_ben_2_desc_5zkne",
+                "label": "Benefit 2 Description",
+                "name": "part_ben_2_desc",
+                "type": "textarea",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "Work with our R&D teams to build next-generation prototypes and POCs."
+            },
+            {
+                "key": "field_part_ben_3_title_u4pa8",
+                "label": "Benefit 3 Title",
+                "name": "part_ben_3_title",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "Strategic Go-to-Market"
+            },
+            {
+                "key": "field_part_ben_3_desc_wiu39",
+                "label": "Benefit 3 Description",
+                "name": "part_ben_3_desc",
+                "type": "textarea",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "Joint marketing and sales initiatives to accelerate market penetration."
+            },
+            {
+                "key": "field_part_ben_4_title_w1bre",
+                "label": "Benefit 4 Title",
+                "name": "part_ben_4_title",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "Governance & Compliance"
+            },
+            {
+                "key": "field_part_ben_4_desc_vzek0",
+                "label": "Benefit 4 Description",
+                "name": "part_ben_4_desc",
+                "type": "textarea",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "Rigorous security standards and multi-region regulatory compliance."
+            },
+            {
+                "key": "field_tab_cta_section_6pr67",
+                "label": "CTA Section",
+                "name": "",
+                "type": "tab",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "placement": "top",
+                "endpoint": 0
+            },
+            {
+                "key": "field_part_cta_title_ulyez",
+                "label": "CTA Title",
+                "name": "part_cta_title",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "Become a |^Strategic Partner."
+            },
+            {
+                "key": "field_part_cta_description_s4pz6",
+                "label": "CTA Description",
+                "name": "part_cta_description",
+                "type": "textarea",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "Are you ready to redefine industry standards? Join our ecosystem and leverage our global reach and engineering excellence to scale your business."
+            },
+            {
+                "key": "field_part_cta_email_wtq3y",
+                "label": "CTA Inquiry Email",
+                "name": "part_cta_email",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "alliances@hutechsolutions.com"
+            }
+        ],
+        "location": [
+            [
+                {
+                    "param": "page_title",
+                    "operator": "==",
+                    "value": "Partnership"
+                }
+            ]
+        ],
+        "menu_order": 0,
+        "position": "normal",
+        "style": "default",
+        "label_placement": "top",
+        "instruction_placement": "label",
+        "hide_on_screen": "",
+        "active": true,
+        "description": "All editable fields for the Partnership page (ACF Free compatible).",
+        "show_in_graphql": 1,
+        "graphql_field_name": "partnershipPageFields"
+    }
+]

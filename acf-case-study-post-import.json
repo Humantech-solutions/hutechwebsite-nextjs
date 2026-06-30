@@ -1,0 +1,1047 @@
+[
+    {
+        "key": "group_case_study_post_settings",
+        "title": "Case Study Details (ACF Free Version)",
+        "fields": [
+            {
+                "key": "field_case_study_post_page_title",
+                "label": "Page Title",
+                "name": "page_title",
+                "type": "text",
+                "instructions": "Optional custom title for the inner page (supports {} for orange and [] for blue text)",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_case_study_post_client",
+                "label": "Client Name",
+                "name": "client",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "Global Fashion Brand Storefront on Shopify"
+            },
+            {
+                "key": "field_case_study_post_impact",
+                "label": "Impact",
+                "name": "impact",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "Seamless Data Validation & Brand-Consistent Design"
+            },
+            {
+                "key": "field_case_study_post_short_desc",
+                "label": "Short Description",
+                "name": "short_desc",
+                "type": "textarea",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "Establishing international fashion brand presence..."
+            },
+            {
+                "key": "field_case_study_post_list_client",
+                "label": "List Client Name",
+                "name": "list_client",
+                "type": "text",
+                "instructions": "Client name shown only on the main Case Studies list page",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_case_study_post_list_desc",
+                "label": "List Description",
+                "name": "list_desc",
+                "type": "textarea",
+                "instructions": "Description shown only on the main Case Studies list page",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_case_study_post_client_domain",
+                "label": "Client Domain",
+                "name": "client_domain",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "Global Fashion Retail"
+            },
+            {
+                "key": "field_case_study_post_platform",
+                "label": "Platform",
+                "name": "platform",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "Shopify Plus"
+            },
+            {
+                "key": "field_case_study_post_geography",
+                "label": "Geography",
+                "name": "geography",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "Global / Indonesia"
+            },
+            {
+                "key": "field_case_study_post_overview_quote",
+                "label": "Overview Quote",
+                "name": "overview_quote",
+                "type": "textarea",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "Developing a brand-consistent..."
+            },
+            {
+                "key": "field_case_study_post_overview_text_1",
+                "label": "Overview Text 1",
+                "name": "overview_text_1",
+                "type": "textarea",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_case_study_post_overview_text_2",
+                "label": "Overview Text 2",
+                "name": "overview_text_2",
+                "type": "textarea",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_case_study_post_challenge_1_title",
+                "label": "Challenge 1 Title",
+                "name": "challenge_1_title",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_case_study_post_challenge_1_desc",
+                "label": "Challenge 1 Description",
+                "name": "challenge_1_desc",
+                "type": "textarea",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_case_study_post_challenge_1_icon",
+                "label": "Challenge 1 Icon (Lucide Name)",
+                "name": "challenge_1_icon",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "Target"
+            },
+            {
+                "key": "field_case_study_post_challenge_2_title",
+                "label": "Challenge 2 Title",
+                "name": "challenge_2_title",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_case_study_post_challenge_2_desc",
+                "label": "Challenge 2 Description",
+                "name": "challenge_2_desc",
+                "type": "textarea",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_case_study_post_challenge_2_icon",
+                "label": "Challenge 2 Icon (Lucide Name)",
+                "name": "challenge_2_icon",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "Target"
+            },
+            {
+                "key": "field_case_study_post_challenge_3_title",
+                "label": "Challenge 3 Title",
+                "name": "challenge_3_title",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_case_study_post_challenge_3_desc",
+                "label": "Challenge 3 Description",
+                "name": "challenge_3_desc",
+                "type": "textarea",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_case_study_post_challenge_3_icon",
+                "label": "Challenge 3 Icon (Lucide Name)",
+                "name": "challenge_3_icon",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "Target"
+            },
+            {
+                "key": "field_case_study_post_solution_1_title",
+                "label": "Solution 1 Title",
+                "name": "solution_1_title",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_case_study_post_solution_1_desc",
+                "label": "Solution 1 Description",
+                "name": "solution_1_desc",
+                "type": "textarea",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_case_study_post_solution_1_icon",
+                "label": "Solution 1 Icon (Lucide Name)",
+                "name": "solution_1_icon",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "Zap"
+            },
+            {
+                "key": "field_case_study_post_solution_2_title",
+                "label": "Solution 2 Title",
+                "name": "solution_2_title",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_case_study_post_solution_2_desc",
+                "label": "Solution 2 Description",
+                "name": "solution_2_desc",
+                "type": "textarea",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_case_study_post_solution_2_icon",
+                "label": "Solution 2 Icon (Lucide Name)",
+                "name": "solution_2_icon",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "Zap"
+            },
+            {
+                "key": "field_case_study_post_solution_3_title",
+                "label": "Solution 3 Title",
+                "name": "solution_3_title",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_case_study_post_solution_3_desc",
+                "label": "Solution 3 Description",
+                "name": "solution_3_desc",
+                "type": "textarea",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_case_study_post_solution_3_icon",
+                "label": "Solution 3 Icon (Lucide Name)",
+                "name": "solution_3_icon",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "Zap"
+            },
+            {
+                "key": "field_case_study_post_solution_4_title",
+                "label": "Solution 4 Title",
+                "name": "solution_4_title",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_case_study_post_solution_4_desc",
+                "label": "Solution 4 Description",
+                "name": "solution_4_desc",
+                "type": "textarea",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_case_study_post_solution_4_icon",
+                "label": "Solution 4 Icon (Lucide Name)",
+                "name": "solution_4_icon",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "Zap"
+            },
+            {
+                "key": "field_case_study_post_process_1_number",
+                "label": "Process 1 Number",
+                "name": "process_1_number",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "01"
+            },
+            {
+                "key": "field_case_study_post_process_1_title",
+                "label": "Process 1 Title",
+                "name": "process_1_title",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_case_study_post_process_1_desc",
+                "label": "Process 1 Description",
+                "name": "process_1_desc",
+                "type": "textarea",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_case_study_post_process_2_number",
+                "label": "Process 2 Number",
+                "name": "process_2_number",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "02"
+            },
+            {
+                "key": "field_case_study_post_process_2_title",
+                "label": "Process 2 Title",
+                "name": "process_2_title",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_case_study_post_process_2_desc",
+                "label": "Process 2 Description",
+                "name": "process_2_desc",
+                "type": "textarea",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_case_study_post_process_3_number",
+                "label": "Process 3 Number",
+                "name": "process_3_number",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "03"
+            },
+            {
+                "key": "field_case_study_post_process_3_title",
+                "label": "Process 3 Title",
+                "name": "process_3_title",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_case_study_post_process_3_desc",
+                "label": "Process 3 Description",
+                "name": "process_3_desc",
+                "type": "textarea",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_case_study_post_process_4_number",
+                "label": "Process 4 Number",
+                "name": "process_4_number",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "04"
+            },
+            {
+                "key": "field_case_study_post_process_4_title",
+                "label": "Process 4 Title",
+                "name": "process_4_title",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_case_study_post_process_4_desc",
+                "label": "Process 4 Description",
+                "name": "process_4_desc",
+                "type": "textarea",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_case_study_post_process_5_number",
+                "label": "Process 5 Number",
+                "name": "process_5_number",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "05"
+            },
+            {
+                "key": "field_case_study_post_process_5_title",
+                "label": "Process 5 Title",
+                "name": "process_5_title",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_case_study_post_process_5_desc",
+                "label": "Process 5 Description",
+                "name": "process_5_desc",
+                "type": "textarea",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_case_study_post_result_1_title",
+                "label": "Result 1 Title",
+                "name": "result_1_title",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_case_study_post_result_1_desc",
+                "label": "Result 1 Description",
+                "name": "result_1_desc",
+                "type": "textarea",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_case_study_post_result_2_title",
+                "label": "Result 2 Title",
+                "name": "result_2_title",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_case_study_post_result_2_desc",
+                "label": "Result 2 Description",
+                "name": "result_2_desc",
+                "type": "textarea",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_case_study_post_result_3_title",
+                "label": "Result 3 Title",
+                "name": "result_3_title",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_case_study_post_result_3_desc",
+                "label": "Result 3 Description",
+                "name": "result_3_desc",
+                "type": "textarea",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_case_study_post_result_4_title",
+                "label": "Result 4 Title",
+                "name": "result_4_title",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_case_study_post_result_4_desc",
+                "label": "Result 4 Description",
+                "name": "result_4_desc",
+                "type": "textarea",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_case_study_post_faq_title",
+                "label": "FAQ Title",
+                "name": "faq_title",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "Frequently Asked Questions"
+            },
+            {
+                "key": "field_case_study_post_faq_subtitle",
+                "label": "FAQ Subtitle",
+                "name": "faq_subtitle",
+                "type": "textarea",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "Common questions about this case study."
+            },
+            {
+                "key": "field_case_study_post_faq_1_question",
+                "label": "FAQ 1 Question",
+                "name": "faq_1_question",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_case_study_post_faq_1_answer",
+                "label": "FAQ 1 Answer",
+                "name": "faq_1_answer",
+                "type": "textarea",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_case_study_post_faq_2_question",
+                "label": "FAQ 2 Question",
+                "name": "faq_2_question",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_case_study_post_faq_2_answer",
+                "label": "FAQ 2 Answer",
+                "name": "faq_2_answer",
+                "type": "textarea",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_case_study_post_faq_3_question",
+                "label": "FAQ 3 Question",
+                "name": "faq_3_question",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_case_study_post_faq_3_answer",
+                "label": "FAQ 3 Answer",
+                "name": "faq_3_answer",
+                "type": "textarea",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_case_study_post_faq_4_question",
+                "label": "FAQ 4 Question",
+                "name": "faq_4_question",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_case_study_post_faq_4_answer",
+                "label": "FAQ 4 Answer",
+                "name": "faq_4_answer",
+                "type": "textarea",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_case_study_post_faq_5_question",
+                "label": "FAQ 5 Question",
+                "name": "faq_5_question",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_case_study_post_faq_5_answer",
+                "label": "FAQ 5 Answer",
+                "name": "faq_5_answer",
+                "type": "textarea",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            }
+        ],
+        "location": [
+            [
+                {
+                    "param": "post_type",
+                    "operator": "==",
+                    "value": "case_study"
+                }
+            ]
+        ],
+        "menu_order": 1,
+        "position": "normal",
+        "style": "default",
+        "label_placement": "top",
+        "instruction_placement": "label",
+        "hide_on_screen": "",
+        "active": true,
+        "description": "Detailed sections for the Case Study.",
+        "show_in_graphql": 1,
+        "graphql_field_name": "caseStudyPostFields"
+    }
+]
