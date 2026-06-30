@@ -8,6 +8,12 @@ import {
   getServicesList,
 } from "@/lib/wordpress";
 
+// Required for Next.js static export (output: "export") mode.
+// The sitemap is pre-rendered at build time using WordPress data (with .catch fallbacks).
+export const dynamic = "force-static";
+export const revalidate = false;
+
+
 const staticPaths = [
   "/",
   "/about/",

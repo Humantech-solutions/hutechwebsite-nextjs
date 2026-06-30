@@ -1,7 +1,11 @@
 import type { MetadataRoute } from "next";
 import { siteConfig } from "@/config/site";
 
+// Required for Next.js static export (output: "export") mode.
+export const dynamic = "force-static";
+
 export default function robots(): MetadataRoute.Robots {
+
   return {
     rules: {
       userAgent: "*",
