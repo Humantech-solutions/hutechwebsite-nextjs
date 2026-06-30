@@ -1,0 +1,61 @@
+[
+    {
+        "key": "group_hutech_testimonial_fields",
+        "title": "Testimonial Details",
+        "fields": [
+            {
+                "key": "field_testimonial_designation",
+                "label": "Designation",
+                "name": "designation",
+                "type": "text",
+                "instructions": "Client designation, e.g., CEO, Founder, Director",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "",
+                "show_in_graphql": 1,
+                "graphql_field_name": "designation"
+            },
+            {
+                "key": "field_testimonial_company",
+                "label": "Company",
+                "name": "company",
+                "type": "text",
+                "instructions": "Client company name",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "",
+                "show_in_graphql": 1,
+                "graphql_field_name": "company"
+            }
+        ],
+        "location": [
+            [
+                {
+                    "param": "post_type",
+                    "operator": "==",
+                    "value": "hutech_testimonial"
+                }
+            ]
+        ],
+        "menu_order": 0,
+        "position": "normal",
+        "style": "default",
+        "label_placement": "top",
+        "instruction_placement": "label",
+        "hide_on_screen": "",
+        "active": true,
+        "description": "Fields for client testimonials CPT",
+        "show_in_graphql": 1,
+        "graphql_field_name": "testimonialFields"
+    }
+]

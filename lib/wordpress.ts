@@ -366,16 +366,6 @@ const HOMEPAGE_QUERY = `
           title
           description
           serviceCategorySlug
-          industry_1 { name icon { node { sourceUrl } } btnText btnLink }
-          industry_2 { name icon { node { sourceUrl } } btnText btnLink }
-          industry_3 { name icon { node { sourceUrl } } btnText btnLink }
-          industry_4 { name icon { node { sourceUrl } } btnText btnLink }
-          industry_5 { name icon { node { sourceUrl } } btnText btnLink }
-          industry_6 { name icon { node { sourceUrl } } btnText btnLink }
-          industry_7 { name icon { node { sourceUrl } } btnText btnLink }
-          industry_8 { name icon { node { sourceUrl } } btnText btnLink }
-          industry_9 { name icon { node { sourceUrl } } btnText btnLink }
-          industry_10 { name icon { node { sourceUrl } } btnText btnLink }
         }
         capabilities {
           title
@@ -425,30 +415,15 @@ const HOMEPAGE_QUERY = `
         successStories {
           title
           description
-          story_1 { ${STORY_FIELDS} }
-          story_2 { ${STORY_FIELDS} }
-          story_3 { ${STORY_FIELDS} }
-          story_4 { ${STORY_FIELDS} }
-          story_5 { ${STORY_FIELDS} }
-          story_6 { ${STORY_FIELDS} }
-          story_7 { ${STORY_FIELDS} }
-          story_8 { ${STORY_FIELDS} }
         }
         whatsNew {
           title
           description
           blogCategorySlug
           postsCount
-          news_item_1 { ${NEWS_FIELDS} }
-          news_item_2 { ${NEWS_FIELDS} }
-          news_item_3 { ${NEWS_FIELDS} }
-          news_item_4 { ${NEWS_FIELDS} }
-          news_item_5 { ${NEWS_FIELDS} }
-          news_item_6 { ${NEWS_FIELDS} }
         }
-        techStack {
-          title
-        }
+        techStackTitle
+        techStackDescription
         whyHutech {
           title
           bgImage { node { sourceUrl } }
@@ -712,7 +687,7 @@ function transformHomePage(
 
 
   // Tech Stack
-  const ts = f.techStack || {};
+  const techStackTitle = f.techStackTitle || "";
 
   return {
     heroSlides,
@@ -750,7 +725,7 @@ function transformHomePage(
       accordionItems,
     },
     techStack: {
-      title: ts.title,
+      title: techStackTitle,
     },
   };
 }
