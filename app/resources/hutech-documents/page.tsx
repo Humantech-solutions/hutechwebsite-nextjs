@@ -1,5 +1,13 @@
 import HutechDocumentsClient from "./HutechDocumentsClient";
 import { getHutechDocuments, getDocumentPageData } from "@/lib/wordpress";
+import { constructMetadata } from "@/lib/seo";
+
+export const metadata = constructMetadata({
+  title: "Hutech Documents | Hutech Solutions",
+  description: "Access whitepapers, technical guides, case study reports, and other resources from Hutech Solutions to support your digital transformation journey.",
+  path: "/resources/hutech-documents/",
+});
+
 
 export const revalidate = 60; // ISR revalidation every 60 seconds
 

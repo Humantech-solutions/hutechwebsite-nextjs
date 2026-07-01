@@ -1,5 +1,13 @@
 import EventsClient from "./EventsClient";
 import { getEvents, getEventPageData } from "@/lib/wordpress";
+import { constructMetadata } from "@/lib/seo";
+
+export const metadata = constructMetadata({
+  title: "Events | Hutech Solutions",
+  description: "Stay up to date with Hutech Solutions events, webinars, conferences, and meetups focused on technology, innovation, and digital transformation.",
+  path: "/resources/events/",
+});
+
 
 // Static fallback data used when WordPress is not available
 const STATIC_EVENTS = [

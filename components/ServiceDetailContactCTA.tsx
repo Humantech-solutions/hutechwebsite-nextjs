@@ -6,6 +6,8 @@ import { motion as Motion } from "framer-motion";
 import { MessageSquare, FileText, Sparkles, MoveRight } from "lucide-react";
 import { toast } from "sonner";
 
+import { submitContactForm } from "@/lib/api";
+
 interface FormState {
   name: string;
   email: string;
@@ -182,8 +184,14 @@ export function ServiceDetailContactCTA() {
     setIsSubmitting(true);
 
     try {
-      // Simulate form submission API call
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+      await submitContactForm({
+        name: formData.name,
+        email: formData.email,
+        phone: formData.phone,
+        subject: `Inquiry for ${config.serviceName}`,
+        message: formData.requirements,
+        category: `Service Consultation: ${config.serviceName}`,
+      });
       toast.success("Thank you! Your project request has been submitted successfully. A consultant will contact you shortly.");
       setFormData({
         name: "",

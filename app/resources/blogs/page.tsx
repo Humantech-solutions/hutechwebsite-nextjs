@@ -1,6 +1,13 @@
 import { Suspense } from "react";
 import BlogsClient from "./BlogsClient";
 import { getBlogs, getBlogPageData } from "@/lib/wordpress";
+import { constructMetadata } from "@/lib/seo";
+
+export const metadata = constructMetadata({
+  title: "Blogs | Hutech Solutions",
+  description: "Explore the Hutech Solutions blog for technology insights, industry trends, and expert perspectives on AI, cloud, DevOps, and digital transformation.",
+  path: "/resources/blogs/",
+});
 
 
 export const revalidate = 60;

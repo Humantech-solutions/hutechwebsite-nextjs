@@ -39,6 +39,8 @@ export default function BlogDetailClient({ blog }: { blog: Blog }) {
     );
   }
 
+  const shareUrl = typeof window !== 'undefined' ? window.location.href.replace(window.location.origin, 'https://hutechsolutions.ai') : '';
+
   return (
     <div className="flex flex-col bg-white min-h-screen">
       <Meta title={`${blog.title} | Blogs | Hutech Solutions`} description={blog.excerpt ?? (blog.content?.[0]?.text ?? "")} />
@@ -117,13 +119,13 @@ export default function BlogDetailClient({ blog }: { blog: Blog }) {
                     Share Article <span className="w-12 h-[1px] bg-gray-200"></span>
                  </div>
                  <div className="flex flex-col items-center gap-4">
-                    <button onClick={() => window.open(`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(window.location.href)}`, '_blank')} className="p-3 rounded-full bg-gray-50 text-gray-400 hover:bg-[#0171c1] hover:text-white transition-all">
+                    <button onClick={() => window.open(`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(shareUrl)}`, '_blank')} className="p-3 rounded-full bg-gray-50 text-gray-400 hover:bg-[#0171c1] hover:text-white transition-all">
                        <Linkedin size={18} />
                     </button>
-                    <button onClick={() => window.open(`https://twitter.com/intent/tweet?url=${encodeURIComponent(window.location.href)}&text=${encodeURIComponent(blog.title)}`, '_blank')} className="p-3 rounded-full bg-gray-50 text-gray-400 hover:bg-[#0171c1] hover:text-white transition-all">
+                    <button onClick={() => window.open(`https://twitter.com/intent/tweet?url=${encodeURIComponent(shareUrl)}&text=${encodeURIComponent(blog.title)}`, '_blank')} className="p-3 rounded-full bg-gray-50 text-gray-400 hover:bg-[#0171c1] hover:text-white transition-all">
                        <Twitter size={18} />
                     </button>
-                    <button onClick={() => window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(window.location.href)}`, '_blank')} className="p-3 rounded-full bg-gray-50 text-gray-400 hover:bg-[#0171c1] hover:text-white transition-all">
+                    <button onClick={() => window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}`, '_blank')} className="p-3 rounded-full bg-gray-50 text-gray-400 hover:bg-[#0171c1] hover:text-white transition-all">
                        <Facebook size={18} />
                     </button>
                     <button onClick={async () => {
@@ -132,13 +134,13 @@ export default function BlogDetailClient({ blog }: { blog: Blog }) {
                           await navigator.share({
                             title: blog.title,
                             text: blog.excerpt || blog.title,
-                            url: window.location.href,
+                            url: shareUrl,
                           });
                         } catch (err) {
                           console.log('Error sharing', err);
                         }
                       } else {
-                        navigator.clipboard.writeText(window.location.href);
+                        navigator.clipboard.writeText(shareUrl);
                         alert("Link copied to clipboard!");
                       }
                     }} className="p-3 rounded-full bg-gray-50 text-gray-400 hover:bg-[#F99D1C] hover:text-white transition-all">
@@ -154,7 +156,7 @@ export default function BlogDetailClient({ blog }: { blog: Blog }) {
                 {(blog as any).contentHtml ? (
                   // WordPress post: render HTML content
                   <div
-                    className="wp-content text-lg text-gray-500 font-medium leading-[1.8] [&_h2]:text-3xl [&_h2]:md:text-4xl [&_h2]:font-bold [&_h2]:text-[#001A3D] [&_h2]:display-font [&_h2]:mt-12 [&_h2]:mb-8 [&_h3]:text-2xl [&_h3]:font-bold [&_h3]:text-[#001A3D] [&_h3]:mt-8 [&_h3]:mb-4 [&_p]:mb-8 [&_ul]:list-disc [&_ul]:pl-6 [&_ul]:mb-6 [&_ol]:list-decimal [&_ol]:pl-6 [&_ol]:mb-6 [&_li]:mb-2 [&_blockquote]:border-l-8 [&_blockquote]:border-[#F99D1C] [&_blockquote]:pl-8 [&_blockquote]:italic [&_blockquote]:text-[#001A3D] [&_blockquote]:font-bold [&_a]:text-[#0171c1] [&_a]:underline"
+                    className="wp-content text-lg text-gray-500 font-medium leading-[1.8] [&_h2]:text-3xl [&_h2]:md:text-4xl [&_h2]:font-bold [&_h2]:text-[#001A3D] [&_h2]:display-font [&_h2]:mt-12 [&_h2]:mb-8 [&_h3]:text-2xl [&_h3]:font-bold [&_h3]:text-[#001A3D] [&_h3]:mt-8 [&_h3]:mb-4 [&_p]:mb-8 [&_ul]:list-disc [&_ul]:pl-6 [&_ul]:mb-6 [&_ol]:list-decimal [&_ol]:pl-6 [&_ol]:mb-6 [&_li]:mb-2 [&_a]:text-[#0171c1] [&_a]:underline"
                     dangerouslySetInnerHTML={{ __html: (blog as any).contentHtml }}
                   />
                 ) : (
@@ -247,26 +249,6 @@ export default function BlogDetailClient({ blog }: { blog: Blog }) {
                     </div>
                  </div>
 
-                 {/* Newsletter CTA */}
-                 <div className="bg-[#001A3D] p-10 rounded-[2.5rem] text-white relative overflow-hidden">
-                    <div className="absolute top-0 right-0 w-32 h-32 bg-[#0171c1]/20 rounded-full blur-3xl -mr-16 -mt-16"></div>
-                    <div className="relative z-10 space-y-6">
-                       <h4 className="text-2xl font-bold display-font">Stay Informed.</h4>
-                       <p className="text-sm text-white/50 leading-relaxed font-medium">
-                          Get the latest insights and thought leadership delivered to your inbox weekly.
-                       </p>
-                       <form className="space-y-4">
-                          <input
-                            type="email"
-                            placeholder="Corporate Email"
-                            className="w-full px-6 py-4 bg-white/5 border border-white/10 rounded-sm focus:outline-none focus:border-[#0171c1] text-sm"
-                          />
-                          <button className="w-full py-4 bg-[#0171c1] text-white font-black uppercase tracking-widest text-[10px] hover:bg-white hover:text-[#001A3D] transition-all duration-500 rounded-sm">
-                             Subscribe Now
-                          </button>
-                       </form>
-                    </div>
-                 </div>
               </div>
             </div>
           </div>

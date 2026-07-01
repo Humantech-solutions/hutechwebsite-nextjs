@@ -3,231 +3,241 @@
 import { useState } from "react";
 import { motion as Motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
-import { Brain,
-  TrendingUp,
-  MessageSquare,
-  Eye,
-  Cpu,
-  Zap,
+import {
+  Server,
+  Cloud,
+  Workflow,
   BarChart3,
-  Check,
-  Rocket,
-  ChevronDown, MoveRight, } from "lucide-react";
+  ShieldCheck,
+  Settings,
+  TrendingUp,
+  Sparkles,
+  Smartphone,
+  Globe,
+  Database,
+  Network,
+  MessageSquare,
+  FileText,
+  Zap,
+  ChevronRight,
+  MoveRight,
+  ArrowRight,
+  Lock,
+  RefreshCw,
+} from "lucide-react";
 import { Breadcrumbs } from "@/components/Breadcrumbs";
 import { Meta } from "@/components/Meta";
 import { ImageWithFallback } from "@/components/figma/ImageWithFallback";
-import { Meta } from "@/components/Meta";
+import { InlineContactForm } from "@/components/InlineContactForm";
 
-import { ServiceDetailContactCTA } from "@/components/ServiceDetailContactCTA";
-
-const AI_SERVICES = [
+const DEVOPS_SERVICES = [
   {
-    icon: Brain,
-    title: "AI Application Development",
+    icon: Cloud,
+    title: "DevOps & Cloud Support",
     description:
-      "Design and deploy custom AI-powered applications that automate complex workflows, optimize business processes, and unlock the full potential of artificial intelligence across your enterprise.",
+      "Navigate your journey to the cloud with confidence. We develop comprehensive roadmaps—including Rehost, Refactor, and Replatform strategies—to ensure a seamless transition for your legacy systems.",
   },
   {
-    icon: TrendingUp,
-    title: "Machine Learning Solutions",
+    icon: Workflow,
+    title: "Continuous Release Pipelines",
     description:
-      "Build production-grade ML models tailored to your industry. From predictive analytics to recommendation engines, we develop data-driven systems that evolve and improve over time.",
+      "Maximize flexibility and avoid vendor lock-in. We design and manage complex architectures across AWS, Azure, and Google Cloud, ensuring your workloads are optimized for performance and cost.",
   },
   {
-    icon: MessageSquare,
-    title: "Natural Language Processing",
+    icon: Server,
+    title: "Site Observability & Monitoring",
     description:
-      "Extract actionable insights from unstructured text at scale. Our NLP services cover sentiment analysis, entity recognition, document summarization, and intelligent chatbot development.",
+      "Build for the future of the web. We leverage microservices, containers (Kubernetes), and serverless architectures to create highly scalable, resilient, and high-performance applications.",
   },
   {
-    icon: Eye,
-    title: "Computer Vision Solutions",
+    icon: Zap,
+    title: "Kubernetes Orchestration",
     description:
-      "Teach machines to see and understand. We build visual recognition systems for object detection, facial recognition, quality inspection, and real-time video analytics.",
+      "Stop overspending on unused resources. Our experts perform deep audits of your cloud infrastructure to identify waste, right-size instances, and implement automated cost-saving measures.",
   },
   {
-    icon: Cpu,
-    title: "Generative AI & LLM Integration",
+    icon: RefreshCw,
+    title: "Infrastructure as Code (IaC)",
     description:
-      "Harness the power of large language models. We integrate GPT-4, Claude, and Gemini into your products, building RAG pipelines, AI agents, and custom fine-tuned models.",
+      "Don't let aging software hold you back. We transform monolithic legacy applications into agile, cloud-ready systems that can take full advantage of modern infrastructure capabilities.",
   },
   {
-    icon: BarChart3,
-    title: "Predictive Analytics & Forecasting",
+    icon: Network,
+    title: "Service Mesh Architecture",
     description:
-      "Turn historical data into future intelligence. Our predictive models help you forecast demand, detect churn, identify fraud, and anticipate market shifts with high accuracy.",
+      "Focus on your business while we handle the infrastructure. We provide 24/7 monitoring, security patching, and proactive maintenance for your entire cloud environment.",
   },
 ];
 
 const ESSENTIAL_SOLUTIONS = [
   {
     icon: Lock,
-    title: "Data Privacy & Governance",
+    title: "Blue-Green Release Stability",
     description:
-      "Protect your AI systems from the ground up. We implement robust data governance frameworks, access controls, and model explainability tools to ensure regulatory compliance.",
+      "Protect your cloud perimeter. We implement robust identity management, end-to-end encryption, and continuous security monitoring to ensure your data remains secure in the cloud.",
   },
   {
     icon: Workflow,
-    title: "MLOps & Model Lifecycle Management",
+    title: "Automated Rollback Safeguards",
     description:
-      "Accelerate your AI delivery cycles. We automate model training, versioning, deployment, and monitoring so your teams can ship reliable models faster and with confidence.",
+      "Accelerate your delivery cycles. We automate your development, testing, and deployment workflows, allowing your teams to ship features faster and with higher quality.",
   },
   {
     icon: BarChart3,
-    title: "Real-Time Data Pipelines",
+    title: "Continuous Security Integration",
     description:
-      "Power your AI with live data. We architect low-latency streaming pipelines using Kafka and Spark, ensuring your models always operate on the most current information.",
+      "Unlock the value of your data. We build scalable data lakes and warehouses in the cloud, enabling real-time analytics and AI-driven insights for your organization.",
   },
   {
     icon: ShieldCheck,
-    title: "Responsible AI & Bias Mitigation",
+    title: "Distributed Log Aggregation",
     description:
-      "Build AI your users can trust. We apply fairness audits, bias detection, and interpretability techniques to ensure your models are transparent, equitable, and defensible.",
+      "Ensure your business never stops. We design automated backup and failover solutions that guarantee your systems are back online in minutes, not days.",
   },
   {
     icon: Settings,
-    title: "Feature Engineering & Data Prep",
+    title: "Cost-Optimized Cloud Usage",
     description:
-      "Great models start with great data. We transform raw datasets into powerful feature sets, handling missing values, normalization, and domain-specific transformations at scale.",
+      "Automate your infrastructure management. We use Terraform and CloudFormation to define your environment in code, ensuring consistency, repeatability, and speed.",
   },
   {
     icon: TrendingUp,
-    title: "Continuous Model Optimization",
+    title: "Proactive Disaster Recovery",
     description:
-      "Keep your AI performing at its peak. We implement automated retraining triggers, A/B model testing, and performance monitoring to prevent model drift and maintain accuracy.",
+      "Deliver lightning-fast experiences to your users. We optimize your cloud network, storage, and compute configurations to ensure peak performance under any load.",
   },
 ];
 
 const INNOVATIONS = [
   {
     icon: Sparkles,
-    title: "Agentic AI Systems",
+    title: "AI-Driven Log Anomaly Detection",
     description:
-      "Deploy autonomous AI agents that plan, reason, and act. We build multi-agent workflows that handle complex, multi-step tasks without constant human supervision.",
+      "Leverage machine learning to automate resource scaling and anomaly detection, ensuring your cloud remains efficient and self-healing.",
   },
   {
     icon: Smartphone,
-    title: "On-Device AI & Edge Inference",
+    title: "GitOps Workflow Orchestration",
     description:
-      "Run intelligence at the edge. We optimize and deploy ML models directly on mobile and IoT devices, enabling real-time AI without cloud dependency or latency.",
+      "Process data closer to the source. We integrate cloud backends with edge devices to reduce latency and improve response times for real-time applications.",
   },
   {
     icon: Globe,
-    title: "Multimodal AI Architectures",
+    title: "Chaos Engineering Injection",
     description:
-      "Go beyond text. We build multimodal systems combining vision, audio, and language models to create richer, more context-aware AI experiences for your users.",
+      "Reduce your environmental impact. We design energy-efficient cloud solutions that align with your corporate sustainability goals and reduce your carbon footprint.",
   },
   {
     icon: Database,
-    title: "Vector Search & RAG Pipelines",
+    title: "Serverless Edge Pipelines",
     description:
-      "Give your LLMs a memory. We build retrieval-augmented generation systems that ground AI responses in your proprietary data, dramatically improving accuracy and relevance.",
+      "Eliminate server management entirely. We build applications that scale automatically from zero to millions of users, charging you only for what you use.",
   },
   {
     icon: Network,
-    title: "Federated Learning",
+    title: "Zero-Trust Network Controls",
     description:
-      "Train AI without centralizing sensitive data. Our federated learning frameworks enable collaborative model training across distributed nodes while preserving full data privacy.",
+      "Manage complex microservices communications with ease. We implement Istio and Linkerd to provide security, visibility, and control across your network.",
   },
   {
     icon: Lock,
-    title: "AI Security & Adversarial Defense",
+    title: "Self-Healing Pod Clusters",
     description:
-      "Protect your models from attacks. We implement adversarial robustness testing, prompt injection defenses, and model hardening techniques to keep your AI systems secure.",
+      "Protect data even while it's being processed. We leverage TEE (Trusted Execution Environments) to ensure your most sensitive workloads remain private.",
   },
 ];
 
 const WHY_CHOOSE = [
   {
-    title: "Deep AI Research Foundation",
+    title: "Elite Shared-Service Support",
     description:
-      "Our team includes researchers and engineers with backgrounds in top AI labs. We bring academic rigor and production pragmatism to every model we build.",
+      "Our team is certified across AWS, Microsoft Azure, and Google Cloud Platform, ensuring you get the best tool for your specific business requirements.",
   },
   {
-    title: "End-to-End ML Ownership",
+    title: "Follow-the-Sun Monitoring",
     description:
-      "We don't just build models — we own the full lifecycle from data ingestion to production deployment, monitoring, and continuous improvement.",
+      "We don't treat security as an afterthought. We build multi-layered protection into every layer of your cloud architecture from day one.",
   },
   {
-    title: "Business-Outcome Obsessed",
+    title: "Vendor-Neutral Philosophy",
     description:
-      "We measure success in business metrics, not model metrics. Every AI system we build is tied directly to a measurable impact on revenue, efficiency, or risk.",
+      "We use a battle-tested methodology for cloud migration that minimizes risk, prevents data loss, and ensures zero disruption to your business operations.",
   },
   {
-    title: "Rapid Proof-of-Value Delivery",
+    title: "Accelerate Release Speed",
     description:
-      "We use sprint-based delivery to put working AI prototypes in your hands within weeks, validating business value before committing to full-scale development.",
+      "We don't just move you to the cloud; we ensure it's profitable. Our focus is on long-term cost efficiency and maximizing your return on investment.",
   },
 ];
 
 const FAQS = [
   {
-    question: "What industries do you serve with AI/ML solutions?",
+    question: "What is DevOps as a Service?",
     answer:
-      "We have delivered AI/ML projects across healthcare, financial services, retail, manufacturing, logistics, and technology. Our team adapts models and architectures to the unique data and regulatory requirements of each industry.",
+      "Our service model allows organizations to access a dedicated team of DevOps architects and SREs on demand to manage deployment pipelines, optimize cloud spend, and configure automated system alerts.",
   },
   {
-    question: "How long does it take to build and deploy an AI model?",
+    question: "How do you ensure security inside our CI/CD pipelines?",
     answer:
-      "A focused proof-of-concept typically takes 4–8 weeks. A production-grade ML system with full MLOps pipelines ranges from 3–6 months depending on data readiness, integration complexity, and model requirements.",
+      "We integrate automated security audits (DevSecOps) directly into build runs, utilizing static scans, secrets vaulting, container security checks, and identity validation rules.",
   },
   {
-    question: "How do you ensure our data remains private and secure?",
+    question: "Do you support migration to Google Cloud or Microsoft Azure?",
     answer:
-      "We operate with a security-first mindset — using encrypted data pipelines, role-based access, and on-premises or private cloud deployments where required. We are compliant with GDPR, HIPAA, and SOC 2 standards.",
+      "Yes, we have certified experts cross-trained in AWS, Google Cloud, Azure, and private virtualization layers to manage complete cloud migration and database failovers.",
   },
   {
-    question: "Can you integrate AI into our existing software systems?",
+    question: "What is your response time for high-severity automated alerts?",
     answer:
-      "Absolutely. We design AI solutions as modular APIs and microservices that integrate seamlessly with your existing ERP, CRM, data warehouse, or custom applications with minimal disruption.",
+      "We operate under strict Service Level Agreements (SLAs), offering follow-the-sun continuous monitoring that responds to critical P0 system outages in under 15 minutes.",
   },
   {
-    question: "Do you offer post-deployment support and model maintenance?",
+    question: "Can we use Terraform if we already have manual setups?",
     answer:
-      "Yes. We offer managed AI services including 24/7 monitoring, drift detection, automated retraining pipelines, and dedicated support to ensure your models continue to perform at their best.",
+      "Absolutely. We perform a complete infrastructure audit of your existing resources, export configurations, and convert them into clean, repeatable Terraform code scripts.",
   },
 ];
 
 const BLOG_POSTS = [
   {
     id: "1",
-    title: "The Rise of Agentic AI: How Autonomous Systems Are Reshaping Enterprise",
+    title: "GitOps Best Practices: Scaling Kubernetes in 2026",
     description:
-      "AI agents that plan, reason, and act autonomously are no longer science fiction — they are reshaping how enterprises operate at scale...",
+      "Syncing cluster configurations with repository files is standard, but scaling enterprise clusters requires unified GitOps architectures...",
     image:
-      "https://images.unsplash.com/photo-1677442136019-21780ecad995?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080",
+      "https://images.unsplash.com/photo-1744868562210-fffb7fa882d9?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080",
   },
   {
     id: "2",
-    title: "RAG vs. Fine-Tuning: Choosing the Right LLM Strategy for Your Business",
+    title: "Chaos Engineering: Injecting Outages to Discover Weakness",
     description:
-      "As large language models become standard infrastructure, organizations must decide when to fine-tune and when to retrieve...",
+      "Why leading engineering teams deliberately shut down production nodes and inject latency to test recovery automated scripts...",
     image:
-      "https://images.unsplash.com/photo-1620712943543-bcc4688e7485?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080",
+      "https://images.unsplash.com/photo-1581092580497-e0d23cbdf1dc?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080",
   },
   {
     id: "3",
-    title: "MLOps in 2026: Building Production AI That Actually Stays Reliable",
+    title: "DevSecOps: Embedding Vulnerability Auditing in Pull Requests",
     description:
-      "Deploying a model is the beginning, not the end. Discover how leading teams are building robust ML pipelines that scale...",
+      "Save weeks of bug-fixing. Learn how automated SAST scans inside merge workflows alert developers to security leaks before deployment...",
     image:
-      "https://images.unsplash.com/photo-1551288049-bebda4e38f71?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080",
+      "https://images.unsplash.com/photo-1686061593213-98dad7c599b9?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080",
   },
 ];
 
-const AI_ML_STACK = [
-  { primary: "OPENAI", secondary: "GENERATIVE AI" },
-  { primary: "LANGCHAIN", secondary: "ORCHESTRATION" },
-  { primary: "HUGGING FACE", secondary: "MODELS" },
-  { primary: "PYTORCH", secondary: "DEEP LEARNING" },
-  { primary: "TENSORFLOW", secondary: "ML FRAMEWORK" },
-  { primary: "PINECONE", secondary: "VECTOR DB" },
-  { primary: "AWS SAGEMAKER", secondary: "CLOUD AI" },
-  { primary: "AZURE AI", secondary: "COGNITIVE SERVICES" },
-  { primary: "VERTEX AI", secondary: "GOOGLE CLOUD" },
-  { primary: "NVIDIA CUDA", secondary: "ACCELERATION" },
-  { primary: "KUBEFLOW", secondary: "MLOPS" },
-  { primary: "PYTHON", secondary: "LANGUAGE" },
+const DEVOPS_STACK = [
+  { primary: "KUBERNETES", secondary: "ORCHESTRATION" },
+  { primary: "TERRAFORM", secondary: "IaC TOOL" },
+  { primary: "JENKINS", secondary: "PIPELINE ENGINE" },
+  { primary: "GITHUB ACTIONS", secondary: "WORKFLOW RUNNER" },
+  { primary: "ARGOCD", secondary: "GITOPS ENGINE" },
+  { primary: "PROMETHEUS", secondary: "MONITORING TOOL" },
+  { primary: "GRAFANA", secondary: "OBSERVABILITY" },
+  { primary: "DATADOG", secondary: "LOG METRICS" },
+  { primary: "DOCKER", secondary: "VIRTUALIZATION" },
+  { primary: "HELM", secondary: "PACKAGE MANAGER" },
+  { primary: "AWS", secondary: "CLOUD PLATFORM" },
+  { primary: "ANSIBLE", secondary: "CONFIGURATION" },
 ];
 
 function FAQItem({ question, answer }: { question: string; answer: string }) {
@@ -268,12 +278,12 @@ function FAQItem({ question, answer }: { question: string; answer: string }) {
   );
 }
 
-export default function AiMlSolutions() {
+export default function SreDevopsServices() {
   return (
     <div className="flex flex-col overflow-hidden bg-white">
       <Meta
-        title="AI & ML Solutions | Hutech Solutions"
-        description="Transform your business with Hutech's AI & ML solutions. Expert AI application development, NLP, computer vision, generative AI, and predictive analytics services."
+        title="SRE & DevOps Services | Hutech Solutions"
+        description="Transform your infrastructure with Hutech's SRE & DevOps services. Specialized in CI/CD automation, Kubernetes scaling, and cloud reliability."
       />
 
       <Breadcrumbs variant="light" />
@@ -282,45 +292,35 @@ export default function AiMlSolutions() {
       <section className="relative flex h-[450px] items-center overflow-hidden bg-[#001A3D] text-white">
         <div className="absolute inset-0 z-0">
           <ImageWithFallback
-            src="https://images.unsplash.com/photo-1677442136019-21780ecad995?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1920"
-            alt="AI and Machine Learning Architecture"
+            src="https://images.unsplash.com/photo-1744868562210-fffb7fa882d9?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1920"
+            alt="DevOps Automation Infrastructure"
             className="h-full w-full scale-105 object-cover opacity-20"
           />
           <div className="absolute inset-0 bg-gradient-to-r from-[#001A3D] via-[#001A3D]/80 to-transparent"></div>
         </div>
 
-        <Motion.div
-          className="relative z-10 mx-auto flex h-full w-full max-w-[1280px] items-center px-6 md:px-8 lg:px-20"
-          style={{ opacity: heroOpacity }}
-        >
-          <div className="max-w-4xl py-12">
-            <Motion.div
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8 }}
-              className="max-w-4xl"
-            >
-              <div className="mb-6 flex items-center gap-3">
-                <span className="h-[1px] w-12 bg-[#F99D1C]"></span>
-                <span className="text-[10px] font-bold tracking-[0.3em] text-[#F99D1C] uppercase">
-                  Intelligence Redefined
-                </span>
-              </div>
-              <h1 className="display-font mb-8 text-3xl leading-[1.1] font-semibold tracking-tight text-white sm:text-4xl md:text-5xl md:leading-[1.05] lg:text-6xl">
-                AI/ML Application <br />
-                <span className="text-[#F99D1C]">Development.</span>
-              </h1>
-              <p className="max-w-2xl text-lg leading-relaxed font-medium text-gray-300 md:text-xl">
-                Step into a realm of endless possibilities. We blend visionary thinking with
-                cutting-edge technology to create powerful solutions for businesses of all sizes.
-              </p>
-              <Link href="/contact" className="btn-banner-cta mt-6 group">
-              Consult Us
-              <MoveRight className="w-4 h-4 transition-transform group-hover:translate-x-1 shrink-0" />
-            </Link>
-            </Motion.div>
-          </div>
-        </Motion.div>
+        <div className="relative z-10 mx-auto w-full max-w-[1280px] px-6 lg:px-20">
+          <Motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            className="max-w-4xl"
+          >
+            <div className="mb-6 flex items-center gap-3">
+              <span className="h-[1px] w-12 bg-[#F99D1C]"></span>
+              <span className="text-[10px] font-bold tracking-[0.3em] text-[#F99D1C] uppercase">
+                DevOps Excellence
+              </span>
+            </div>
+            <h1 className="display-font mb-8 text-3xl leading-[1.1] font-semibold tracking-tight text-white sm:text-4xl md:text-5xl md:leading-[1.05] lg:text-6xl">
+              Your Deployment Vision. <br />
+              <span className="text-[#F99D1C]">DevOps Revolution.</span>
+            </h1>
+            <p className="max-w-2xl text-lg leading-relaxed font-medium text-gray-300 md:text-xl">
+              We craft automated release pipelines, site reliability frameworks, and cloud orchestration systems for global enterprise software teams.
+            </p>
+          </Motion.div>
+        </div>
       </section>
 
       {/* Intro Section */}
@@ -330,42 +330,40 @@ export default function AiMlSolutions() {
             <div className="space-y-10">
               <div className="space-y-6">
                 <h2 className="display-font text-3xl leading-tight font-semibold text-[#001A3D] md:text-5xl">
-                  Empowering Organizations with Smart, Scalable AI-First Solutions
+                  Empowering Organizations with Smart, Scalable SRE & DevOps Services
                 </h2>
                 <div className="h-1 w-20 bg-[#0171c1]"></div>
               </div>
               <div className="space-y-6">
                 <p className="text-lg leading-relaxed font-medium text-gray-500">
                   At Hutech Solutions, we bring deep expertise in implementing, supporting, and
-                  managing integrated AI platforms. Our end-to-end solutions include model
-                  development, MLOps pipelines, performance optimization, and seamless enterprise
-                  integrations.
+                  managing integrated cloud infrastructures. Our end-to-end solutions include cloud
+                  automation provisioning, site reliability engineering, release pipeline designs, and 24/7 incident response.
                 </p>
                 <p className="text-lg leading-relaxed font-medium text-gray-500">
-                  We ensure our clients can operate with intelligence, security, and efficiency,
-                  enabling them to expand operations and integrate fresh AI-driven solutions to meet
-                  specific business and market needs.
+                  We ensure our clients can operate with agility, high availability, and efficiency, enabling
+                  them to expand operations and integrate modern deployment frameworks to meet specific software and market needs.
                 </p>
               </div>
               <div className="flex flex-wrap gap-8 pt-4">
                 <div className="space-y-1">
-                  <p className="display-font text-3xl font-bold text-[#001A3D]">200+</p>
+                  <p className="display-font text-3xl font-bold text-[#001A3D]">600+</p>
                   <p className="text-[10px] font-bold tracking-widest text-[#0171c1] uppercase">
-                    Models Deployed
+                    Pipelines Built
                   </p>
                 </div>
                 <div className="hidden h-12 w-[1px] bg-gray-200 md:block"></div>
                 <div className="space-y-1">
-                  <p className="display-font text-3xl font-bold text-[#001A3D]">95%</p>
+                  <p className="display-font text-3xl font-bold text-[#001A3D]">80%</p>
                   <p className="text-[10px] font-bold tracking-widest text-[#0171c1] uppercase">
-                    Avg Accuracy Rate
+                    Faster Deployments
                   </p>
                 </div>
                 <div className="hidden h-12 w-[1px] bg-gray-200 md:block"></div>
                 <div className="space-y-1">
-                  <p className="display-font text-3xl font-bold text-[#001A3D]">3x</p>
+                  <p className="display-font text-3xl font-bold text-[#001A3D]">99.99%</p>
                   <p className="text-[10px] font-bold tracking-widest text-[#0171c1] uppercase">
-                    Avg ROI Increase
+                    System Uptime
                   </p>
                 </div>
               </div>
@@ -373,17 +371,16 @@ export default function AiMlSolutions() {
             <div className="relative">
               <div className="aspect-square overflow-hidden rounded-sm shadow-2xl">
                 <ImageWithFallback
-                  src="https://images.unsplash.com/photo-1620712943543-bcc4688e7485?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080"
-                  alt="AI Development Center"
+                  src="https://images.unsplash.com/photo-1581092580497-e0d23cbdf1dc?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080"
+                  alt="DevOps Operations Center"
                   className="h-full w-full object-cover"
                 />
               </div>
               <div className="absolute -bottom-10 -left-10 hidden max-w-xs space-y-4 bg-[#0171c1] p-10 text-white shadow-2xl md:block">
-                <Brain size={32} strokeWidth={1.5} />
-                <h3 className="display-font text-xl font-bold">Intelligent Automation</h3>
+                <Server size={32} strokeWidth={1.5} />
+                <h3 className="display-font text-xl font-bold">Reliable Operations</h3>
                 <p className="text-sm leading-relaxed font-medium opacity-80">
-                  Integrating cutting-edge AI and machine learning across enterprise platforms to
-                  automate tasks and enhance decision intelligence.
+                  Integrating advanced chaos engineering, containerized platforms, and automated logging networks to enhance operational uptime.
                 </p>
               </div>
             </div>
@@ -396,16 +393,16 @@ export default function AiMlSolutions() {
         <div className="mx-auto max-w-[1280px] px-6 lg:px-20">
           <div className="mb-20 space-y-6 text-center">
             <h2 className="display-font text-3xl font-semibold text-[#001A3D] md:text-5xl">
-              Our AI & Machine Learning Services
+              Our SRE & DevOps Services
             </h2>
             <p className="mx-auto max-w-4xl text-lg leading-relaxed font-medium text-gray-500">
-              At Hutech Solutions, we specialize in delivering cutting-edge AI and ML solutions
-              tailored for the global enterprise landscape.
+              At Hutech Solutions, we specialize in delivering cutting-edge software technology
+              solutions tailored for the global DevOps automation landscape.
             </p>
           </div>
 
           <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
-            {AI_SERVICES.map((service, i) => {
+            {DEVOPS_SERVICES.map((service, i) => {
               const Icon = service.icon;
               return (
                 <Motion.div
@@ -448,12 +445,12 @@ export default function AiMlSolutions() {
         <div className="mx-auto max-w-[1280px] px-6 lg:px-20">
           <div className="mb-20 space-y-6 text-center">
             <h2 className="display-font mx-auto max-w-4xl text-3xl leading-tight font-semibold md:text-5xl">
-              What Makes Custom AI/ML Solutions Essential for Your Business?
+              What Makes Custom DevOps Solutions Essential for Your Business?
             </h2>
             <div className="mx-auto h-1 w-20 bg-[#0171c1]"></div>
             <p className="mx-auto max-w-3xl text-lg leading-relaxed font-medium text-gray-400">
-              In the modern digital landscape, custom AI and machine learning solutions are key to
-              staying competitive and ensuring operational excellence.
+              In the modern digital landscape, custom automation and site reliability are key to staying
+              competitive and ensuring operational excellence.
             </p>
           </div>
 
@@ -490,11 +487,11 @@ export default function AiMlSolutions() {
         <div className="mx-auto max-w-[1280px] px-6 lg:px-20">
           <div className="mb-20 space-y-6 text-center">
             <h2 className="display-font text-3xl font-semibold text-[#001A3D] md:text-5xl">
-              Which Innovations Can Transform Your AI Capabilities?
+              Which Innovations Can Transform Your DevOps Infrastructure?
             </h2>
             <p className="mx-auto max-w-3xl text-lg leading-relaxed font-medium text-gray-500">
-              Incorporating advanced AI technologies can significantly enhance your business
-              capabilities for the intelligence-first era.
+              Incorporating advanced tools can significantly enhance your deployment capabilities
+              for the digital-first era.
             </p>
           </div>
 
@@ -535,12 +532,12 @@ export default function AiMlSolutions() {
             <div className="flex-1 space-y-10">
               <div className="space-y-6">
                 <h2 className="display-font text-3xl leading-[1.2] font-semibold text-[#001A3D] md:text-5xl">
-                  Discover Your AI & ML Transformation Strategy With Us
+                  Discover Your SRE & DevOps Strategy With Us
                 </h2>
                 <div className="h-1 w-20 bg-[#0171c1]"></div>
                 <p className="text-lg leading-relaxed font-medium text-gray-500">
-                  Schedule a consultation with our expert AI/ML team and take the first step
-                  towards a data-driven, intelligence-first business transformation.
+                  Schedule a consultation with our expert DevOps team and take the
+                  first step towards a digital-first automated infrastructure.
                 </p>
               </div>
               <div>
@@ -555,8 +552,8 @@ export default function AiMlSolutions() {
             <div className="relative flex-1">
               <div className="relative z-10 aspect-video rounded-sm bg-white p-2 shadow-2xl">
                 <ImageWithFallback
-                  src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080"
-                  alt="AI Analytics Dashboard"
+                  src="https://images.unsplash.com/photo-1581092580497-e0d23cbdf1dc?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080"
+                  alt="Infrastructure Cost Analytics"
                   className="h-full w-full object-cover"
                 />
               </div>
@@ -573,6 +570,7 @@ export default function AiMlSolutions() {
         <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:60px_60px] pointer-events-none" />
 
         <div className="relative z-10 mx-auto max-w-[1280px] px-6 lg:px-20">
+          {/* Header */}
           <div className="mb-16 text-center md:mb-20">
             <div className="flex items-center justify-center gap-3 text-[10px] font-bold tracking-[0.3em] text-[#F99D1C] uppercase">
               <span className="h-[1px] w-8 bg-gradient-to-r from-transparent to-[#F99D1C]" />
@@ -581,20 +579,20 @@ export default function AiMlSolutions() {
             </div>
 
             <h2 className="mt-4 display-font text-3xl font-bold tracking-wider text-white sm:text-4xl md:text-5xl uppercase">
-              MODERN AI/ML STACK
+              MODERN SRE & DEVOPS STACK
             </h2>
 
             <div className="mx-auto mt-4 h-[3px] w-14 bg-[#F99D1C]" />
 
             <p className="mx-auto mt-6 max-w-2xl text-sm font-medium text-gray-400 md:text-base leading-relaxed">
-              Industry-leading AI and machine learning technologies powering intelligent,
-              scalable, and future-ready enterprise transformation
+              Reliable DevOps and SRE technologies enabling scalable infrastructure, automation, monitoring, and continuous delivery
             </p>
           </div>
 
+          {/* Cards Grid */}
           <div className="border-l border-t border-white/10">
             <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6">
-              {AI_ML_STACK.map((item, idx) => (
+              {DEVOPS_STACK.map((item, idx) => (
                 <Motion.div
                   key={idx}
                   initial={{ opacity: 0, y: 20 }}
@@ -621,10 +619,10 @@ export default function AiMlSolutions() {
         <div className="mx-auto max-w-[1280px] px-6 lg:px-20">
           <div className="mb-20 space-y-6 text-center">
             <h2 className="display-font text-3xl font-semibold text-[#001A3D] md:text-5xl">
-              Why Choose Hutech Solutions for Your AI/ML Project?
+              Why Choose Hutech Solutions for Your DevOps Project?
             </h2>
             <p className="mx-auto max-w-4xl text-lg leading-relaxed font-medium text-gray-500">
-              At Hutech Solutions, we specialize in delivering AI and machine learning solutions
+              At Hutech Solutions, we specialize in delivering SRE & DevOps solutions
               tailored to your unique organizational needs.
             </p>
           </div>
@@ -639,7 +637,7 @@ export default function AiMlSolutions() {
                 className="group flex items-start gap-8"
               >
                 <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-sm bg-[#0171c1]/5 text-[#0171c1] transition-all duration-500 group-hover:bg-[#0171c1] group-hover:text-white">
-                  <Zap size={24} strokeWidth={1.5} />
+                  <Settings size={24} strokeWidth={1.5} />
                 </div>
                 <div className="space-y-4">
                   <h3 className="display-font text-xl font-bold tracking-tight text-[#001A3D]">
@@ -661,35 +659,12 @@ export default function AiMlSolutions() {
           <div className="grid grid-cols-1 gap-20 lg:grid-cols-12">
             <div className="rounded-sm border border-gray-100 bg-white p-10 shadow-2xl md:p-14 lg:col-span-7">
               <h2 className="display-font mb-10 text-3xl font-bold text-[#001A3D]">
-                Share Your AI/ML Project With Us
+                Start Your SRE & DevOps Project
               </h2>
-              <form className="grid grid-cols-1 gap-6 md:grid-cols-2">
-                <input
-                  type="text"
-                  placeholder="Name*"
-                  className="w-full border border-gray-200 p-4 text-sm font-medium transition-all outline-none focus:border-[#0171c1]"
-                />
-                <input
-                  type="email"
-                  placeholder="Email*"
-                  className="w-full border border-gray-200 p-4 text-sm font-medium transition-all outline-none focus:border-[#0171c1]"
-                />
-                <input
-                  type="tel"
-                  placeholder="Phone Number*"
-                  className="w-full border border-gray-200 p-4 text-sm font-medium transition-all outline-none focus:border-[#0171c1] md:col-span-2"
-                />
-                <textarea
-                  placeholder="Tell us about your AI/ML requirements"
-                  rows={4}
-                  className="w-full resize-none border border-gray-200 p-4 text-sm font-medium transition-all outline-none focus:border-[#0171c1] md:col-span-2"
-                ></textarea>
-                <div className="md:col-span-2">
-                  <button className="w-full rounded-sm bg-[#F99D1C] px-12 py-5 text-[11px] font-bold tracking-wider text-[#001A3D] uppercase shadow-xl transition-all duration-500 hover:bg-[#001A3D] hover:text-white md:w-auto">
-                    Submit Project Request
-                  </button>
-                </div>
-              </form>
+              <InlineContactForm
+                category="DevOps & SRE"
+                textareaPlaceholder="Tell us about your deployment and infrastructure needs"
+              />
             </div>
             <div className="space-y-12 py-8 lg:col-span-5">
               <h2 className="display-font text-3xl font-bold text-[#001A3D]">
@@ -699,15 +674,15 @@ export default function AiMlSolutions() {
                 {[
                   {
                     icon: MessageSquare,
-                    text: "An AI/ML consultant will review your request and contact you within a few business hours.",
+                    text: "A senior DevOps architect reviews your infrastructure goals and contacts you within 4 business hours.",
                   },
                   {
                     icon: FileText,
-                    text: "We will schedule a deep-dive session to understand your data landscape, use cases, and AI goals.",
+                    text: "We perform a preliminary audit of your CI/CD pipelines and cloud architecture.",
                   },
                   {
                     icon: Sparkles,
-                    text: "You will receive a detailed proposal including model architecture, implementation roadmap, and ROI analysis.",
+                    text: "You receive a custom shared-service proposal with immediate cost-saving recommendations.",
                   },
                 ].map((step, i) => {
                   const Icon = step.icon;
@@ -751,10 +726,10 @@ export default function AiMlSolutions() {
           <div className="mb-16 flex items-end justify-between gap-8">
             <div className="max-w-2xl space-y-6">
               <h2 className="display-font text-3xl font-semibold text-[#001A3D] md:text-5xl">
-                AI/ML Insights & Articles
+                DevOps Insights & Articles
               </h2>
               <p className="text-lg font-medium text-gray-500">
-                Explore our latest thinking on artificial intelligence and machine learning trends.
+                Explore our latest thinking on DevOps technology and digital infrastructure trends.
               </p>
             </div>
             <Link
@@ -779,7 +754,7 @@ export default function AiMlSolutions() {
                   />
                   <div className="absolute top-4 left-4">
                     <span className="rounded-sm bg-[#0171c1] px-3 py-1 text-[9px] font-bold tracking-widest text-white uppercase">
-                      AI/ML
+                      DevOps
                     </span>
                   </div>
                 </div>
@@ -813,8 +788,6 @@ export default function AiMlSolutions() {
           </div>
         </div>
       </section>
-      <ServiceDetailContactCTA />
-
     </div>
   );
 }

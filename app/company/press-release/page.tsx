@@ -1,79 +1,26 @@
-"use client";
+// Server component – fetches WordPress data then renders the client UI
+import { getPressReleases, getPressReleasePageData } from "@/lib/wordpress";
+import PressReleaseClient from "./PressReleaseClient";
+import { constructMetadata } from "@/lib/seo";
 
-import { motion as Motion } from "framer-motion";
-import { Breadcrumbs } from "@/components/Breadcrumbs";
-import { FileText, Download, ArrowRight } from "lucide-react";
-import { Meta } from "@/components/Meta";
-import Link from "next/link";
+export const metadata = constructMetadata({
+  title: "Press Releases | Hutech Solutions",
+  description: "Official press releases and announcements from Hutech Solutions covering our latest achievements, product launches, and corporate updates.",
+  path: "/company/press-release/",
+});
 
-export default function PressRelease() {
-  const releases = [
-    { title: "Hutech Solutions Announces Q3 Financial Results", date: "Nov 05, 2025" },
-    { title: "Strategic Partnership with Major Cloud Provider", date: "Oct 20, 2025" },
-    { title: "Launch of Next-Gen Autonomous Systems", date: "Oct 02, 2025" },
-  ];
+export default async function PressReleasePage() {
+  const [wpReleases, wpPageData] = await Promise.all([
+    getPressReleases(),
+    getPressReleasePageData()
+  ]);
 
+  // Pass WP fields as props; PressReleaseClient falls back to static
+  // defaults when a prop/field is undefined or empty.
   return (
-    <div className="flex flex-col overflow-hidden bg-white">
-      <Meta
-        title="Press Release | Hutech Solutions"
-        description="Official press releases and corporate announcements from Hutech Solutions."
-      />
-      <Breadcrumbs variant="light" />
-      <section className="relative flex h-[450px] items-center overflow-hidden bg-[#001A3D] text-white">
-        <div className="absolute inset-0 z-0">
-          <img
-            src="https://images.unsplash.com/photo-1591453214154-c95db71dbd83?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1920"
-            alt="Press Releases"
-            className="h-full w-full object-cover opacity-20"
-          />
-          <div className="absolute inset-0 bg-gradient-to-r from-[#001A3D] via-[#001A3D]/80 to-transparent"></div>
-        </div>
-        <div className="relative z-10 mx-auto w-full max-w-[1280px] px-6 text-left lg:px-20">
-          <Motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            className="max-w-3xl"
-          >
-            <div className="mb-6 flex items-center gap-3">
-              <span className="h-[1px] w-12 bg-[#F99D1C]"></span>
-              <span className="text-[10px] font-bold tracking-[0.3em] text-[#F99D1C] uppercase">
-                Media Center
-              </span>
-            </div>
-            <h1 className="display-font mb-8 text-3xl leading-[1.1] font-semibold tracking-tight text-white sm:text-4xl md:text-5xl md:leading-[1.05] lg:text-6xl">
-              Press <br />
-              <span className="text-[#F99D1C]">Releases.</span>
-            </h1>
-            <p className="max-w-2xl text-lg leading-relaxed font-medium text-gray-300 md:text-xl">
-              Official corporate announcements, strategic partnerships, and executive updates from
-              Hutech Solutions' global leadership.
-            </p>
-          </Motion.div>
-        </div>
-      </section>
-
-      <section className="py-20">
-        <div className="mx-auto max-w-[1280px] px-6 lg:px-20">
-          <div className="space-y-6">
-            {releases.map((rel, i) => (
-              <div
-                key={i}
-                className="group flex cursor-pointer items-center justify-between rounded-xl border-b border-gray-100 p-8 transition-all hover:bg-gray-50"
-              >
-                <div>
-                  <p className="mb-2 text-xs font-bold text-[#F99D1C]">{rel.date}</p>
-                  <h3 className="display-font text-xl font-bold text-[#001A3D]">{rel.title}</h3>
-                </div>
-                <button className="flex items-center gap-2 text-xs font-bold tracking-widest text-[#001A3D] uppercase opacity-0 transition-all group-hover:opacity-100">
-                  Read More <ArrowRight size={14} />
-                </button>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-    </div>
+    <PressReleaseClient
+      releases={wpReleases}
+      {...(wpPageData ?? {})}
+    />
   );
 }

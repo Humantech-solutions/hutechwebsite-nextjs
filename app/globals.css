@@ -283,3 +283,110 @@
     display: none;
   }
 }
+
+/* ── WordPress Rendered Content: Blockquote Card Styling ── */
+/* Replicates the custom quote card design for all WP-rendered blockquotes */
+.wp-content blockquote {
+  position: relative;
+  margin: 4rem 0;
+  padding: 3rem;
+  background-color: #f9fafb;
+  border-radius: 2rem;
+  border-left: 8px solid #F99D1C;
+  border-top: none;
+  border-right: none;
+  border-bottom: none;
+  font-style: normal;
+}
+
+/* Large decorative closing-quote icon (top-right) via pseudo-element */
+.wp-content blockquote::before {
+  content: '\201D';
+  position: absolute;
+  top: 1.5rem;
+  right: 2rem;
+  font-size: 8rem;
+  line-height: 1;
+  color: rgba(249, 157, 28, 0.10);
+  font-family: Georgia, serif;
+  font-weight: 900;
+  pointer-events: none;
+}
+
+/* FIRST paragraph = the quote text (large, bold, italic, dark) */
+.wp-content blockquote > p:first-child {
+  font-size: 1.5rem !important;
+  font-weight: 700 !important;
+  color: #001a3d !important;
+  line-height: 1.6 !important;
+  margin-bottom: 1.75rem !important;
+  font-family: var(--font-family-display);
+}
+
+/* SECOND paragraph = author name (medium bold dark, with orange bar on left) */
+.wp-content blockquote > p:nth-child(2) {
+  font-size: 0.9375rem !important;
+  font-weight: 700 !important;
+  color: #001a3d !important;
+  font-style: normal !important;
+  line-height: 1.4 !important;
+  margin-bottom: 0.25rem !important;
+  padding-left: 3.5rem !important;
+  position: relative;
+  text-transform: none !important;
+  letter-spacing: normal !important;
+  font-family: var(--font-family-display);
+}
+
+/* Orange accent bar before author name */
+.wp-content blockquote > p:nth-child(2)::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 2.5rem;
+  height: 2px;
+  background-color: #F99D1C;
+}
+
+/* THIRD paragraph = role / designation (small, gray, uppercase) */
+.wp-content blockquote > p:nth-child(3) {
+  font-size: 0.75rem !important;
+  font-weight: 700 !important;
+  color: #9ca3af !important;
+  font-style: normal !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.1em !important;
+  line-height: 1.4 !important;
+  margin-bottom: 0 !important;
+  padding-left: 3.5rem !important;
+}
+
+/* Fallback: if WP uses <cite> tag for attribution */
+.wp-content blockquote cite {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  font-style: normal;
+  font-size: 0.875rem;
+  color: #9ca3af;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-top: 1.5rem;
+}
+
+/* Orange accent bar before cite */
+.wp-content blockquote cite::before {
+  content: '';
+  display: inline-block;
+  width: 2.5rem;
+  height: 2px;
+  background-color: #F99D1C;
+  flex-shrink: 0;
+}
+input, textarea{
+  background: none;
+}
+

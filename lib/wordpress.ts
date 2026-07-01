@@ -77,37 +77,37 @@ export async function fetchGraphQL(query: string, variables = {}) {
 
   try {
     const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), 10000); // 10s timeout
+    const timeout = setTimeout(() => controller.abort(), 30000); // 30s timeout
 
     const res = await fetch(WORDPRESS_API_URL, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ query, variables }),
-      next: { revalidate: 60 }, // Re-fetch from WP every 60 seconds (ISR)
+      next: { revalidate: 60 },
       signal: controller.signal,
     });
 
     clearTimeout(timeout);
 
     if (!res.ok) {
-      console.error(`[WP] HTTP ${res.status}: ${res.statusText}`);
+      console.warn(`[WP] HTTP ${res.status}: ${res.statusText}`);
       try {
         const text = await res.text();
-        console.error(`[WP] Error Body: ${text}`);
+        console.warn(`[WP] Error Body: ${text}`);
       } catch (e) {}
       return { data: null, errors: [{ message: `HTTP ${res.status}` }] };
     }
 
     const json = await res.json();
     if (json.errors) {
-      console.error("[WP] GraphQL errors:", JSON.stringify(json.errors));
+      console.warn("[WP] GraphQL errors:", JSON.stringify(json.errors));
     }
     return normalizeBlankStrings(json);
   } catch (err: any) {
     if (err.name === "AbortError") {
-      console.error("[WP] Request timed out after 10s");
+      console.warn("[WP] Request timed out after 10s");
     } else {
-      console.error("[WP] Fetch error:", err.message);
+      console.warn("[WP] Fetch error:", err.message);
     }
     return { data: null, errors: [{ message: err.message }] };
   }
@@ -183,6 +183,7 @@ export type FooterChromeData = {
     phone?: string;
     phoneUrl?: string;
     email?: string;
+    mapUrl?: string;
   }[];
   about?: {
     text?: string;
@@ -210,21 +211,42 @@ export type SiteChromeData = {
   footer: FooterChromeData;
 };
 
-function flattenMenuItems(items?: ChromeMenuItem[]): { name: string; path: string }[] {
+function applyParentSlug(parentPath: string | undefined, childPath: string | undefined): string {
+  const p = parentPath || "#";
+  let c = childPath || "#";
+  if (c === "#" || c.startsWith("http") || p === "#" || p === "/") return c;
+  
+  // Remove the default CPT slugs if they exist so we can cleanly append to the parent
+  c = c.replace(/^\/(hutech_service|case_study|hutech_event|hutech_news|hutech_career|hutech_press_release|hutech_document)\//, "/");
+
+  const cleanP = p.replace(/\/$/, "");
+  if (!c.startsWith(cleanP + "/") && c !== cleanP) {
+    const cleanC = c.startsWith("/") ? c : `/${c}`;
+    c = `${cleanP}${cleanC}`;
+  }
+  return c;
+}
+
+function flattenMenuItems(items?: ChromeMenuItem[], parentPath?: string): { name: string; path: string }[] {
   return (items || []).map((item) => ({
     name: item.label,
-    path: item.path || "#",
+    path: parentPath ? applyParentSlug(parentPath, item.path) : (item.path || "#"),
   }));
 }
 
 function transformPrimaryMenu(items?: ChromeMenuItem[]): HeaderNavItem[] {
   return (items || []).map((item) => {
+    // Infer a parent path if the top-level item uses '#' or '/'
+    const parentPath = item.path && item.path !== "#" && item.path !== "/"
+      ? item.path
+      : `/${item.label.toLowerCase().replace(/[^a-z0-9]+/g, "-")}`;
+
     const dropdown = item.children?.length
       ? item.children.map((section) => ({
           title: section.label,
           items: section.children?.length
-            ? flattenMenuItems(section.children)
-            : [{ name: section.label, path: section.path || "#" }],
+            ? flattenMenuItems(section.children, parentPath)
+            : [{ name: section.label, path: applyParentSlug(parentPath, section.path) }],
         }))
       : undefined;
 
@@ -263,12 +285,12 @@ export async function getSiteChrome(): Promise<SiteChromeData | null> {
       footer: {
         ...raw.footer,
         menus: {
-          services: flattenMenuItems(menus.footerServices),
-          industries: flattenMenuItems(menus.footerIndustries),
-          resources: flattenMenuItems(menus.footerResources),
-          company: flattenMenuItems(menus.footerCompany),
-          caseStudies: flattenMenuItems(menus.footerCaseStudies),
-          legal: flattenMenuItems(menus.footerLegal),
+          services: flattenMenuItems(menus.footerServices, "/services"),
+          industries: flattenMenuItems(menus.footerIndustries, "/industries"),
+          resources: flattenMenuItems(menus.footerResources, "/resources"),
+          company: flattenMenuItems(menus.footerCompany, "/company"),
+          caseStudies: flattenMenuItems(menus.footerCaseStudies, "/resources/case-studies"),
+          legal: flattenMenuItems(menus.footerLegal, "/legal"),
         },
       },
     };
@@ -343,16 +365,8 @@ const HOMEPAGE_QUERY = `
         expertise {
           title
           description
-          industry_1 { name icon { node { sourceUrl } } btnText btnLink }
-          industry_2 { name icon { node { sourceUrl } } btnText btnLink }
-          industry_3 { name icon { node { sourceUrl } } btnText btnLink }
-          industry_4 { name icon { node { sourceUrl } } btnText btnLink }
-          industry_5 { name icon { node { sourceUrl } } btnText btnLink }
-          industry_6 { name icon { node { sourceUrl } } btnText btnLink }
-          industry_7 { name icon { node { sourceUrl } } btnText btnLink }
-          industry_8 { name icon { node { sourceUrl } } btnText btnLink }
-          industry_9 { name icon { node { sourceUrl } } btnText btnLink }
-          industry_10 { name icon { node { sourceUrl } } btnText btnLink }
+          category { nodes { slug name } }
+          postsCount
         }
         capabilities {
           title
@@ -402,24 +416,13 @@ const HOMEPAGE_QUERY = `
         successStories {
           title
           description
-          story_1 { ${STORY_FIELDS} }
-          story_2 { ${STORY_FIELDS} }
-          story_3 { ${STORY_FIELDS} }
-          story_4 { ${STORY_FIELDS} }
-          story_5 { ${STORY_FIELDS} }
-          story_6 { ${STORY_FIELDS} }
-          story_7 { ${STORY_FIELDS} }
-          story_8 { ${STORY_FIELDS} }
+          postsCount
         }
         whatsNew {
           title
           description
-          news_item_1 { ${NEWS_FIELDS} }
-          news_item_2 { ${NEWS_FIELDS} }
-          news_item_3 { ${NEWS_FIELDS} }
-          news_item_4 { ${NEWS_FIELDS} }
-          news_item_5 { ${NEWS_FIELDS} }
-          news_item_6 { ${NEWS_FIELDS} }
+          category { nodes { slug name } }
+          postsCount
         }
         techStack {
           title
@@ -555,7 +558,12 @@ export interface HomepageData {
 
 // ─── Data Transform ──────────────────────────────────────────────────────────
 
-function transformHomePage(raw: any): HomepageData | null {
+function transformHomePage(
+  raw: any,
+  dynamicServices: any[] = [],
+  dynamicTestimonials: any[] = [],
+  dynamicBlogs: any[] = []
+): HomepageData | null {
   const f = raw?.data?.page?.homepageFields;
   if (!f) return null;
 
@@ -587,16 +595,21 @@ function transformHomePage(raw: any): HomepageData | null {
   // Big Thinkers
   const bt = f.bigThinkers || {};
 
-  // Expertise
+  // Expertise — prefer dynamic services fetched by category slug
   const exp = f.expertise || {};
-  const industries = collectGroups(exp, "industry", 10)
-    .filter((ind: any) => ind?.name?.trim())
-    .map((ind: any) => ({
-      name: ind?.name,
-      iconUrl: imgUrl(ind?.icon),
-      btnText: ind?.btnText,
-      btnLink: ind?.btnLink
+  // ACF Free taxonomy fields return AcfTermNodeConnection, so access via nodes[0].slug
+  const expCategorySlug = exp.category?.nodes?.[0]?.slug || "";
+  let industries: any[];
+  if (dynamicServices.length > 0) {
+    industries = dynamicServices.map((svc: any) => ({
+      name: svc.title,
+      iconUrl: imgUrl(svc.featuredImage),
+      btnText: "Learn More",
+      btnLink: `/services/${svc.slug}/`,
     }));
+  } else {
+    industries = [];
+  }
 
   // Capabilities — only include capabilities with a name
   const cap = f.capabilities || {};
@@ -619,22 +632,39 @@ function transformHomePage(raw: any): HomepageData | null {
     .filter((p: any) => p?.name?.trim() || imgUrl(p?.logo))
     .map((p: any) => ({ name: p?.name, logoUrl: imgUrl(p?.logo) }));
 
-  // Success Stories — only include stories with a name or text
+  // Success Stories — prefer dynamic testimonials if available
   const ss = f.successStories || {};
-  const stories: WpStory[] = collectGroups(ss, "story", 8)
-    .filter((s: any) => s?.name?.trim() || s?.text?.trim())
-    .map((s: any) => ({
-      name: s?.name,
-      title: s?.title,
-      text: s?.text,
-      imageUrl: imgUrl(s?.image),
+  let stories: WpStory[];
+  if (dynamicTestimonials.length > 0) {
+    stories = dynamicTestimonials.map((t: any) => ({
+      name: t.title,
+      title: [t.testimonialFields?.designation, t.testimonialFields?.company]
+        .filter(Boolean).join(", ") || "Client",
+      text: t.testimonialFields?.description || "",
+      imageUrl: imgUrl(t.featuredImage),
     }));
+  } else {
+    stories = [];
+  }
 
-  // What's New — only include news items with a title
+  // What's New — prefer dynamic blog posts if available
   const wn = f.whatsNew || {};
-  const newsItems: WpNewsItem[] = collectGroups(wn, "news_item", 6)
-    .filter((n: any) => n?.title?.trim())
-    .map((n: any) => ({ title: n?.title, date: n?.date, imageUrl: imgUrl(n?.image) }));
+  // ACF Free taxonomy fields return AcfTermNodeConnection, so access via nodes[0].slug
+  const wnCategorySlug = wn.category?.nodes?.[0]?.slug || "";
+  let newsItems: WpNewsItem[];
+  if (dynamicBlogs.length > 0) {
+    newsItems = dynamicBlogs.map((b: any) => ({
+      title: b.title,
+      date: new Date(b.date).toLocaleDateString("en-US", {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+      }),
+      imageUrl: imgUrl(b.featuredImage),
+    }));
+  } else {
+    newsItems = [];
+  }
 
   // Why Hutech — only include accordion items with a title
   const why = f.whyHutech || {};
@@ -689,6 +719,79 @@ function transformHomePage(raw: any): HomepageData | null {
 
 // ─── Public API ──────────────────────────────────────────────────────────────
 
+// ─── Dynamic queries used by getHomePage ─────────────────────────────────────
+
+const SERVICES_BY_CATEGORY_QUERY = `
+  query GetServicesByCategory($categorySlug: [String]!, $limit: Int!) {
+    serviceCategories(where: { slug: $categorySlug }) {
+      nodes {
+        hutechServices(first: $limit) {
+          nodes {
+            title
+            slug
+            featuredImage { node { sourceUrl } }
+          }
+        }
+      }
+    }
+  }
+`;
+
+const ALL_SERVICES_QUERY = `
+  query GetAllServicesForHome($limit: Int!) {
+    hutechServices(first: $limit) {
+      nodes {
+        title
+        slug
+        featuredImage { node { sourceUrl } }
+      }
+    }
+  }
+`;
+
+const TESTIMONIALS_FOR_HOME_QUERY = `
+  query GetTestimonialsForHome($limit: Int!) {
+    hutechTestimonials(first: $limit) {
+      nodes {
+        title
+        featuredImage { node { sourceUrl } }
+        testimonialFields {
+          designation
+          company
+          description
+        }
+      }
+    }
+  }
+`;
+
+
+const BLOGS_FOR_HOME_QUERY = `
+  query GetBlogsForHome($limit: Int!) {
+    posts(first: $limit, where: { orderby: { field: DATE, order: DESC } }) {
+      nodes {
+        title
+        date
+        slug
+        featuredImage { node { sourceUrl } }
+      }
+    }
+  }
+`;
+
+const BLOGS_BY_CATEGORY_FOR_HOME_QUERY = `
+  query GetBlogsByCategoryForHome($categoryName: String!, $limit: Int!) {
+    posts(first: $limit, where: { orderby: { field: DATE, order: DESC }, categoryName: $categoryName }) {
+      nodes {
+        title
+        date
+        slug
+        featuredImage { node { sourceUrl } }
+      }
+    }
+  }
+`;
+
 export async function getHomePage(): Promise<HomepageData | null> {
   try {
     const raw = await fetchGraphQL(HOMEPAGE_QUERY);
@@ -696,7 +799,53 @@ export async function getHomePage(): Promise<HomepageData | null> {
       console.warn("[WP] Could not fetch homepage data. Using static fallback.");
       return null;
     }
-    return transformHomePage(raw);
+
+    const acf = raw?.data?.page?.homepageFields || {};
+    const exp = acf.expertise || {};
+    const ss  = acf.successStories || {};
+    const wn  = acf.whatsNew || {};
+
+    // ── Expertise / Industries ──────────────────────────────────────────────
+    const serviceCategory = exp.category?.nodes?.[0]?.slug || "";
+    const servicesLimit   = exp.postsCount ? Math.max(1, parseInt(exp.postsCount, 10)) : 100;
+
+    let dynamicServices: any[] = [];
+    if (serviceCategory) {
+      const svcRaw = await fetchGraphQL(SERVICES_BY_CATEGORY_QUERY, {
+        categorySlug: [serviceCategory],
+        limit: servicesLimit,
+      });
+      dynamicServices =
+        svcRaw?.data?.serviceCategories?.nodes?.[0]?.hutechServices?.nodes || [];
+    } else {
+      const svcRaw = await fetchGraphQL(ALL_SERVICES_QUERY, { limit: servicesLimit });
+      dynamicServices = svcRaw?.data?.hutechServices?.nodes || [];
+    }
+
+    // ── Testimonials / Success Stories ──────────────────────────────────────
+    const testimonialsLimit = ss.postsCount ? Math.max(1, parseInt(ss.postsCount, 10)) : 100;
+
+    let dynamicTestimonials: any[] = [];
+    const tRaw = await fetchGraphQL(TESTIMONIALS_FOR_HOME_QUERY, { limit: testimonialsLimit });
+    dynamicTestimonials = tRaw?.data?.hutechTestimonials?.nodes || [];
+
+    // ── Blog Posts / What's New ─────────────────────────────────────────────
+    const blogCategory = wn.category?.nodes?.[0]?.slug || "";
+    const blogsLimit   = wn.postsCount ? Math.max(1, parseInt(wn.postsCount, 10)) : 100;
+
+    let dynamicBlogs: any[] = [];
+    if (blogCategory) {
+      const bRaw = await fetchGraphQL(BLOGS_BY_CATEGORY_FOR_HOME_QUERY, {
+        categoryName: blogCategory,
+        limit: blogsLimit,
+      });
+      dynamicBlogs = bRaw?.data?.posts?.nodes || [];
+    } else {
+      const bRaw = await fetchGraphQL(BLOGS_FOR_HOME_QUERY, { limit: blogsLimit });
+      dynamicBlogs = bRaw?.data?.posts?.nodes || [];
+    }
+
+    return transformHomePage(raw, dynamicServices, dynamicTestimonials, dynamicBlogs);
   } catch (err) {
     console.warn("[WP] getHomePage() failed:", err);
     return null;
@@ -1228,7 +1377,7 @@ const CASE_STUDIES_QUERY = `
             name
           }
         }
-        tags {
+        caseStudyTags {
           nodes {
             name
           }
@@ -1269,7 +1418,7 @@ const CASE_STUDY_BY_SLUG_QUERY = `
           name
         }
       }
-      tags {
+      caseStudyTags {
         nodes {
           name
         }
@@ -1383,7 +1532,7 @@ function transformCaseStudyNode(node: any): CaseStudy {
   const pf = node.caseStudyPostFields || {};
   
   const category = node.caseStudyCategories?.nodes?.[0]?.name ?? "Case Study";
-  const tags = node.tags?.nodes?.map((t: any) => t.name) ?? [];
+  const tags = node.caseStudyTags?.nodes?.map((t: any) => t.name) ?? node.tags?.nodes?.map((t: any) => t.name) ?? [];
   const imageUrl = imgUrl(node.featuredImage) || DEFAULT_CASE_STUDY_IMAGE;
 
   const overviewText = [];
@@ -1666,6 +1815,110 @@ export async function getAboutPageData(): Promise<ReturnType<typeof transformAbo
   }
 }
 
+// ─── Awards Page ─────────────────────────────────────────────────────────────
+
+const AWARDS_PAGE_QUERY = `
+  query GetAwardsPageData {
+    pages(where: { name: "awards" }) {
+      nodes {
+        awardsPageFields {
+          awardsHeroTagline
+          awardsHeroTitle
+          awardsHeroDescription
+          awardsHeroBgImage { node { sourceUrl } }
+          
+          awardsJourneyTagline
+          awardsJourneyTitle
+          awardsJourneyDescription
+          
+          awardsAward1Title awardsAward1Year awardsAward1Issuer awardsAward1Desc awardsAward1Icon awardsAward1Link
+          awardsAward2Title awardsAward2Year awardsAward2Issuer awardsAward2Desc awardsAward2Icon awardsAward2Link
+          awardsAward3Title awardsAward3Year awardsAward3Issuer awardsAward3Desc awardsAward3Icon awardsAward3Link
+          awardsAward4Title awardsAward4Year awardsAward4Issuer awardsAward4Desc awardsAward4Icon awardsAward4Link
+          awardsAward5Title awardsAward5Year awardsAward5Issuer awardsAward5Desc awardsAward5Icon awardsAward5Link
+          awardsAward6Title awardsAward6Year awardsAward6Issuer awardsAward6Desc awardsAward6Icon awardsAward6Link
+          awardsAward7Title awardsAward7Year awardsAward7Issuer awardsAward7Desc awardsAward7Icon awardsAward7Link
+          awardsAward8Title awardsAward8Year awardsAward8Issuer awardsAward8Desc awardsAward8Icon awardsAward8Link
+          awardsAward9Title awardsAward9Year awardsAward9Issuer awardsAward9Desc awardsAward9Icon awardsAward9Link
+          awardsAward10Title awardsAward10Year awardsAward10Issuer awardsAward10Desc awardsAward10Icon awardsAward10Link
+          awardsAward11Title awardsAward11Year awardsAward11Issuer awardsAward11Desc awardsAward11Icon awardsAward11Link
+          awardsAward12Title awardsAward12Year awardsAward12Issuer awardsAward12Desc awardsAward12Icon awardsAward12Link
+          
+          awardsFeaturedTitle
+          awardsFeaturedDescription
+          awardsFeaturedImage { node { sourceUrl } }
+          
+          awardsStat1Label awardsStat1Value
+          awardsStat2Label awardsStat2Value
+          awardsStat3Label awardsStat3Value
+          awardsStat4Label awardsStat4Value
+          
+          awardsCtaTitle
+          awardsCtaBtn1Text awardsCtaBtn1Url
+          awardsCtaBtn2Text awardsCtaBtn2Url
+        }
+      }
+    }
+  }
+`;
+
+function transformAwardsPageData(f: any) {
+  const awardsList = Array.from({ length: 12 }, (_, i) => {
+    const idx = i + 1;
+    return {
+      title: f[`awardsAward${idx}Title`] || "",
+      year: f[`awardsAward${idx}Year`] || "",
+      issuer: f[`awardsAward${idx}Issuer`] || "",
+      desc: f[`awardsAward${idx}Desc`] || "",
+      iconName: f[`awardsAward${idx}Icon`] || "Trophy",
+      link: f[`awardsAward${idx}Link`] || ""
+    };
+  }).filter(a => a.title);
+
+  const stats = Array.from({ length: 4 }, (_, i) => {
+    const idx = i + 1;
+    return {
+      label: f[`awardsStat${idx}Label`] || "",
+      value: f[`awardsStat${idx}Value`] || ""
+    };
+  }).filter(s => s.value);
+
+  return {
+    heroTagline: f.awardsHeroTagline || "Our Milestones",
+    heroTitle: f.awardsHeroTitle || "Awards & |Recognition.",
+    heroDescription: f.awardsHeroDescription || "",
+    heroBgImage: imgUrl(f.awardsHeroBgImage),
+    
+    journeyTagline: f.awardsJourneyTagline || "Milestones",
+    journeyTitle: f.awardsJourneyTitle || "A Journey of Distinction",
+    journeyDescription: f.awardsJourneyDescription || "",
+    awardsList: awardsList.length > 0 ? awardsList : undefined,
+    
+    featuredTitle: f.awardsFeaturedTitle || "Recognized for |Global Excellence.",
+    featuredDescription: f.awardsFeaturedDescription || "",
+    featuredImage: imgUrl(f.awardsFeaturedImage),
+    stats: stats.length > 0 ? stats : undefined,
+    
+    ctaTitle: f.awardsCtaTitle || "Join our award-winning |journey.",
+    ctaBtn1Text: f.awardsCtaBtn1Text || "Explore Case Studies",
+    ctaBtn1Url: f.awardsCtaBtn1Url || "/resources/case-studies",
+    ctaBtn2Text: f.awardsCtaBtn2Text || "Partner With Us",
+    ctaBtn2Url: f.awardsCtaBtn2Url || "/contact"
+  };
+}
+
+export async function getAwardsPageData(): Promise<ReturnType<typeof transformAwardsPageData> | null> {
+  try {
+    const raw = await fetchGraphQL(AWARDS_PAGE_QUERY);
+    const f = raw?.data?.pages?.nodes?.[0]?.awardsPageFields;
+    if (!f) return null;
+    return transformAwardsPageData(f);
+  } catch (err) {
+    console.warn("[WP] getAwardsPageData failed:", err);
+    return null;
+  }
+}
+
 // ─── Vision Mission & Values Page ────────────────────────────────────────────
 
 const VMV_PAGE_QUERY = `
@@ -1760,7 +2013,7 @@ const LEADERSHIP_PAGE_QUERY = `
           leadLeader9Name leadLeader9Role leadLeader9Img { node { sourceUrl } } leadLeader9Bio leadLeader9Linkedin leadLeader9LinkedinIcon { node { sourceUrl } } leadLeader9Twitter leadLeader9TwitterIcon { node { sourceUrl } }
           leadAdvisoryTitle
           leadAdvisoryDescription
-          leadAdvisoryBtnText leadAdvisoryBtnUrl
+          leadAdvisoryBtnText leadAdvisoryBtnUrl { url title target }
           leadAdvisor1Name leadAdvisor1Firm leadAdvisor1Region
           leadAdvisor2Name leadAdvisor2Firm leadAdvisor2Region
           leadAdvisor3Name leadAdvisor3Firm leadAdvisor3Region
@@ -1804,7 +2057,7 @@ function transformLeadershipPageData(f: any) {
     advisoryTitle:       f.leadAdvisoryTitle       || "Board of |~Advisors.",
     advisoryDescription: f.leadAdvisoryDescription || "",
     advisoryBtnText:     f.leadAdvisoryBtnText     || "Engage with Us",
-    advisoryBtnUrl:      f.leadAdvisoryBtnUrl      || "/contact",
+    advisoryBtnUrl:      f.leadAdvisoryBtnUrl?.url      || "/contact",
     advisors:            advisors.length > 0 ? advisors : undefined,
     ctaTitle:            f.leadCtaTitle            || "Lead the Next |^Digital Frontier.",
     ctaDescription:      f.leadCtaDescription      || "",
@@ -1852,7 +2105,7 @@ const PARTNERSHIP_PAGE_QUERY = `
           
           partMeetTitle
           partMeetDescription
-          partMeetBtnText partMeetBtnUrl
+          partMeetBtnText partMeetBtnUrl { url title target }
           partMeetImg1 { node { sourceUrl } } partMeetAlt1
           partMeetImg2 { node { sourceUrl } } partMeetAlt2
           partMeetImg3 { node { sourceUrl } } partMeetAlt3
@@ -1942,7 +2195,7 @@ function transformPartnershipPageData(f: any) {
     meetTitle:        f.partMeetTitle || "Meet Our Partners",
     meetDescription:  f.partMeetDescription || "",
     meetBtnText:      f.partMeetBtnText || "Find What You Need",
-    meetBtnUrl:       f.partMeetBtnUrl || "/services",
+    meetBtnUrl:       f.partMeetBtnUrl?.url || "/services",
     meetImages:       meetImages.length > 0 ? meetImages : undefined,
     
     logos:            logos.length > 0 ? logos : undefined,
@@ -1998,7 +2251,7 @@ const CONTACT_PAGE_QUERY = `
           contactSupportLabel
           contactSupportDescription
           contactSupportBtnText
-          contactSupportBtnUrl
+          contactSupportBtnUrl { url title target }
           
           contactOfficesTitle
           contactOfficesDescription
@@ -2060,7 +2313,7 @@ function transformContactPageData(f: any) {
     supportLabel: f.contactSupportLabel || "Customer Support",
     supportDescription: f.contactSupportDescription || "",
     supportBtnText: f.contactSupportBtnText || "Support Portal",
-    supportBtnUrl: f.contactSupportBtnUrl || "#",
+    supportBtnUrl: f.contactSupportBtnUrl?.url || "#",
 
     officesTitle: f.contactOfficesTitle || "Our Offices",
     officesDescription: f.contactOfficesDescription || "",
@@ -2099,7 +2352,7 @@ const DOCUMENTS_PAGE_QUERY = `
           docPageCtaTitle
           docPageCtaDesc
           docPageCtaBtnText
-          docPageCtaBtnUrl
+          docPageCtaBtnUrl { url title target }
         }
       }
     }
@@ -2164,7 +2417,7 @@ export async function getDocumentPageData() {
       ctaTitle: f.docPageCtaTitle || "Need custom documentation?",
       ctaDesc: f.docPageCtaDesc || "Our specialized teams can provide tailored technical whitepapers and architecture documentation for your enterprise needs.",
       ctaBtnText: f.docPageCtaBtnText || "REQUEST ACCESS",
-      ctaBtnUrl: f.docPageCtaBtnUrl || "/contact",
+      ctaBtnUrl: f.docPageCtaBtnUrl?.url || "/contact",
     };
   } catch (err) {
     console.warn("[WP] getDocumentPageData failed:", err);
@@ -2565,5 +2818,775 @@ export async function getCareerBySlug(slug: string): Promise<Job | null> {
   } catch (err) {
     console.warn("[WP] getCareerBySlug failed:", err);
     return null;
+  }
+}
+
+// ==========================================
+// PRESS RELEASE PAGE & POST TYPE
+// ==========================================
+
+const PRESS_RELEASE_PAGE_QUERY = `
+  query GetPressReleasePageData {
+    pages(where: { name: "press-release" }) {
+      nodes {
+        pressReleasePageFields {
+          pressReleaseHeroTagline
+          pressReleaseHeroTitle
+          pressReleaseHeroDescription
+          pressReleaseHeroBgImage {
+            node {
+              mediaItemUrl
+            }
+          }
+        }
+      }
+    }
+  }
+`;
+
+const PRESS_RELEASES_LIST_QUERY = `
+  query GetPressReleases {
+    hutechPressReleases(first: 100) {
+      nodes {
+        title
+        date
+        pressReleaseFields {
+          pressReleaseDate
+          pressReleaseExternalUrl
+        }
+      }
+    }
+  }
+`;
+
+export interface PressReleaseItem {
+  title: string;
+  date: string;
+  externalUrl?: string;
+}
+
+export async function getPressReleasePageData() {
+  try {
+    const raw = await fetchGraphQL(PRESS_RELEASE_PAGE_QUERY);
+    const node = raw?.data?.pages?.nodes?.[0];
+    const f = node?.pressReleasePageFields;
+    if (!f) return null;
+    return {
+      heroTagline: f.pressReleaseHeroTagline || undefined,
+      heroTitle: f.pressReleaseHeroTitle || undefined,
+      heroDescription: f.pressReleaseHeroDescription || undefined,
+      heroBgImage: imgUrl(f.pressReleaseHeroBgImage) || undefined,
+    };
+  } catch (err) {
+    console.warn("[WP] getPressReleasePageData failed:", err);
+    return null;
+  }
+}
+
+export async function getPressReleases(): Promise<PressReleaseItem[]> {
+  try {
+    const raw = await fetchGraphQL(PRESS_RELEASES_LIST_QUERY);
+    const nodes = raw?.data?.hutechPressReleases?.nodes || [];
+    return nodes.map((node: any) => {
+      const f = node.pressReleaseFields || {};
+      
+      const dateVal = f.pressReleaseDate || node.date;
+      let formattedDate = "";
+      try {
+        if (dateVal) {
+          formattedDate = new Date(dateVal).toLocaleDateString('en-US', {
+            month: 'short',
+            day: '2-digit',
+            year: 'numeric'
+          });
+        }
+      } catch (e) {
+        formattedDate = dateVal || "";
+      }
+
+      return {
+        title: node.title,
+        date: formattedDate,
+        externalUrl: f.pressReleaseExternalUrl || undefined,
+      };
+    });
+  } catch (err) {
+    console.warn("[WP] getPressReleases failed:", err);
+    return [];
+  }
+}
+
+// ==========================================
+// NEWS PAGE & POST TYPE
+// ==========================================
+
+const NEWS_PAGE_QUERY = `
+  query GetNewsPageData {
+    pages(where: { name: "news" }) {
+      nodes {
+        newsPageFields {
+          newsHeroTagline
+          newsHeroTitle
+          newsHeroDescription
+          newsHeroBgImage {
+            node {
+              mediaItemUrl
+            }
+          }
+          newsCtaTitle
+          newsCtaDescription
+          newsCtaBtnText
+          newsCtaBtnUrl { url title target }
+        }
+      }
+    }
+  }
+`;
+
+const NEWS_LIST_QUERY = `
+  query GetNewsItems {
+    hutechNewsItems(first: 100) {
+      nodes {
+        slug
+        title
+        date
+        content(format: RENDERED)
+        featuredImage {
+          node {
+            mediaItemUrl
+          }
+        }
+        newsCategories {
+          nodes {
+            name
+          }
+        }
+        newsTags {
+          nodes {
+            name
+          }
+        }
+        newsFields {
+          newsDate
+          newsAuthor
+          newsRole
+        }
+      }
+    }
+  }
+`;
+
+const NEWS_DETAIL_QUERY = `
+  query GetNewsBySlug($slug: ID!) {
+    hutechNews(id: $slug, idType: SLUG) {
+      slug
+      title
+      date
+      content(format: RENDERED)
+      featuredImage {
+        node {
+          mediaItemUrl
+        }
+      }
+      newsCategories {
+        nodes {
+          name
+        }
+      }
+      newsTags {
+        nodes {
+          name
+        }
+      }
+      newsFields {
+        newsDate
+        newsAuthor
+        newsRole
+      }
+    }
+  }
+`;
+
+export interface NewsItem {
+  id: string;
+  title: string;
+  date: string;
+  category: string;
+  readTime: string;
+  desc?: string;
+  author: string;
+  role: string;
+  image?: string;
+  contentHtml?: string;
+  tags: string[];
+}
+function transformNewsNode(node: any): NewsItem {
+  const f = node.newsFields || {};
+  
+  const dateVal = f.newsDate || node.date;
+  let formattedDate = "";
+  try {
+    if (dateVal) {
+      formattedDate = new Date(dateVal).toLocaleDateString('en-US', {
+        month: 'short',
+        day: '2-digit',
+        year: 'numeric'
+      });
+    }
+  } catch (e) {
+    formattedDate = dateVal || "";
+  }
+
+  const category = node.newsCategories?.nodes?.[0]?.name || node.categories?.nodes?.[0]?.name || "Corporate";
+  const tags = node.newsTags?.nodes?.map((t: any) => t.name) || node.tags?.nodes?.map((t: any) => t.name) || ["News"];
+
+  const rawContent = node.content || "";
+  let desc = "";
+  if (rawContent) {
+    desc = rawContent.replace(/<[^>]*>/g, '').trim().substring(0, 160) + "...";
+  }
+
+  const readTime = estimateReadTime(rawContent);
+
+  return {
+    id: node.slug,
+    title: node.title,
+    date: formattedDate,
+    category,
+    readTime,
+    desc: desc || undefined,
+    author: f.newsAuthor || "Elena Vance",
+    role: f.newsRole || "Corporate Communications",
+    image: imgUrl(node.featuredImage) || undefined,
+    contentHtml: rawContent || undefined,
+    tags: tags.length > 0 ? tags : ["News"],
+  };
+}
+
+export async function getNewsItems(): Promise<NewsItem[]> {
+  try {
+    const raw = await fetchGraphQL(NEWS_LIST_QUERY);
+    const nodes = raw?.data?.hutechNewsItems?.nodes || [];
+    return nodes.map(transformNewsNode);
+  } catch (err) {
+    console.warn("[WP] getNewsItems failed:", err);
+    return [];
+  }
+}
+
+export async function getNewsBySlug(slug: string): Promise<NewsItem | null> {
+  try {
+    const raw = await fetchGraphQL(NEWS_DETAIL_QUERY, { slug });
+    const node = raw?.data?.hutechNews;
+    if (!node) return null;
+    return transformNewsNode(node);
+  } catch (err) {
+    console.warn("[WP] getNewsBySlug failed:", err);
+    return null;
+  }
+}
+
+export async function getNewsPageData() {
+  try {
+    const raw = await fetchGraphQL(NEWS_PAGE_QUERY);
+    const node = raw?.data?.pages?.nodes?.[0];
+    const f = node?.newsPageFields;
+    if (!f) return null;
+    return {
+      heroTagline: f.newsHeroTagline || undefined,
+      heroTitle: f.newsHeroTitle || undefined,
+      heroDescription: f.newsHeroDescription || undefined,
+      heroBgImage: imgUrl(f.newsHeroBgImage) || undefined,
+      ctaTitle: f.newsCtaTitle || undefined,
+      ctaDescription: f.newsCtaDescription || undefined,
+      ctaBtnText: f.newsCtaBtnText || undefined,
+      ctaBtnUrl: f.newsCtaBtnUrl?.url || undefined,
+    };
+  } catch (err) {
+    console.warn("[WP] getNewsPageData failed:", err);
+    return null;
+  }
+}
+
+
+// ─── Service Custom Post Type GraphQL ──────────────────────────────────────────
+
+export interface HutechService {
+  id: string;
+  slug: string;
+  title: string;
+  heroTagline?: string;
+  heroTitle?: string;
+  heroDescription?: string;
+  heroBgImage?: string;
+  
+  introHeading?: string;
+  introText1?: string;
+  introText2?: string;
+  introImage?: string;
+  introImageTitle?: string;
+  introImageDesc?: string;
+  stats?: { label: string; value: string }[];
+  
+  servicesSectionTitle?: string;
+  servicesSectionDesc?: string;
+  services?: { title: string; description: string; btnname: string; btnurl: string }[];
+  
+  solutionsSectionTitle?: string;
+  solutionsSectionDesc?: string;
+  solutions?: { title: string; description: string; btnname: string; btnurl: string }[];
+  
+  innovationsSectionTitle?: string;
+  innovationsSectionDesc?: string;
+  innovations?: { title: string; description: string; btnname: string; btnurl: string }[];
+  
+  ctaTitle?: string;
+  ctaDescription?: string;
+  ctaBtnName?: string;
+  ctaBtnUrl?: string;
+  ctaImage?: string;
+  
+  techStackTagline?: string;
+  techStackTitle?: string;
+  techStackDesc?: string;
+  techStack?: { name: string; cat: string }[];
+  
+  whyChooseSectionTitle?: string;
+  whyChooseSectionDesc?: string;
+  whyChoose?: { title: string; description: string }[];
+  
+  contactFormTitle?: string;
+  contactFormBtnName?: string;
+  nextStepSectionTitle?: string;
+  nextSteps?: { title: string }[];
+  
+  faqSectionTitle?: string;
+  faqs?: { question: string; answer: string }[];
+  
+  blogSectionTitle?: string;
+  blogSectionDesc?: string;
+  blogLinkName?: string;
+  blogLinkUrl?: string;
+  blogCategory?: string;
+  blogCategorySlug?: string;
+}
+
+const SERVICES_LIST_QUERY = `
+  query GetAllServices {
+    hutechServices(first: 100) {
+      nodes {
+        slug
+      }
+    }
+  }
+`;
+
+const SERVICE_BY_SLUG_QUERY = `
+  query GetServiceBySlug($slug: ID!) {
+    hutechService(id: $slug, idType: SLUG) {
+      id
+      slug
+      title
+      serviceFields {
+        heroTagline
+        heroTitle
+        heroDescription
+        heroBgImage { node { sourceUrl } }
+        
+        introHeading
+        introText1
+        introText2
+        introImage { node { sourceUrl } }
+        introImageTitle
+        introImageDesc
+        
+        stat1Value
+        stat1Label
+        stat2Value
+        stat2Label
+        stat3Value
+        stat3Label
+        
+        servicesSectionTitle
+        servicesSectionDesc
+        service1Title
+        service1Description
+        service1BtnName
+        service1BtnUrl { url title target }
+        service2Title
+        service2Description
+        service2BtnName
+        service2BtnUrl { url title target }
+        service3Title
+        service3Description
+        service3BtnName
+        service3BtnUrl { url title target }
+        service4Title
+        service4Description
+        service4BtnName
+        service4BtnUrl { url title target }
+        service5Title
+        service5Description
+        service5BtnName
+        service5BtnUrl { url title target }
+        service6Title
+        service6Description
+        service6BtnName
+        service6BtnUrl { url title target }
+        service7Title
+        service7Description
+        service7BtnName
+        service7BtnUrl { url title target }
+        service8Title
+        service8Description
+        service8BtnName
+        service8BtnUrl { url title target }
+        service9Title
+        service9Description
+        service9BtnName
+        service9BtnUrl { url title target }
+        service10Title
+        service10Description
+        service10BtnName
+        service10BtnUrl { url title target }
+        
+        solutionsSectionTitle
+        solutionsSectionDesc
+        solution1Title
+        solution1Description
+        solution1BtnName
+        solution1BtnUrl { url title target }
+        solution2Title
+        solution2Description
+        solution2BtnName
+        solution2BtnUrl { url title target }
+        solution3Title
+        solution3Description
+        solution3BtnName
+        solution3BtnUrl { url title target }
+        solution4Title
+        solution4Description
+        solution4BtnName
+        solution4BtnUrl { url title target }
+        solution5Title
+        solution5Description
+        solution5BtnName
+        solution5BtnUrl { url title target }
+        solution6Title
+        solution6Description
+        solution6BtnName
+        solution6BtnUrl { url title target }
+        solution7Title
+        solution7Description
+        solution7BtnName
+        solution7BtnUrl { url title target }
+        solution8Title
+        solution8Description
+        solution8BtnName
+        solution8BtnUrl { url title target }
+        solution9Title
+        solution9Description
+        solution9BtnName
+        solution9BtnUrl { url title target }
+        solution10Title
+        solution10Description
+        solution10BtnName
+        solution10BtnUrl { url title target }
+        
+        innovationsSectionTitle
+        innovationsSectionDesc
+        innovation1Title
+        innovation1Description
+        innovation1BtnName
+        innovation1BtnUrl { url title target }
+        innovation2Title
+        innovation2Description
+        innovation2BtnName
+        innovation2BtnUrl { url title target }
+        innovation3Title
+        innovation3Description
+        innovation3BtnName
+        innovation3BtnUrl { url title target }
+        innovation4Title
+        innovation4Description
+        innovation4BtnName
+        innovation4BtnUrl { url title target }
+        innovation5Title
+        innovation5Description
+        innovation5BtnName
+        innovation5BtnUrl { url title target }
+        innovation6Title
+        innovation6Description
+        innovation6BtnName
+        innovation6BtnUrl { url title target }
+        innovation7Title
+        innovation7Description
+        innovation7BtnName
+        innovation7BtnUrl { url title target }
+        innovation8Title
+        innovation8Description
+        innovation8BtnName
+        innovation8BtnUrl { url title target }
+        innovation9Title
+        innovation9Description
+        innovation9BtnName
+        innovation9BtnUrl { url title target }
+        innovation10Title
+        innovation10Description
+        innovation10BtnName
+        innovation10BtnUrl { url title target }
+        
+        ctaTitle
+        ctaDescription
+        ctaBtnName
+        ctaBtnUrl { url title target }
+        ctaImage { node { sourceUrl } }
+        
+        techStackTagline
+        techStackTitle
+        techStackDesc
+        techStack1Name
+        techStack1Cat
+        techStack2Name
+        techStack2Cat
+        techStack3Name
+        techStack3Cat
+        techStack4Name
+        techStack4Cat
+        techStack5Name
+        techStack5Cat
+        techStack6Name
+        techStack6Cat
+        techStack7Name
+        techStack7Cat
+        techStack8Name
+        techStack8Cat
+        techStack9Name
+        techStack9Cat
+        techStack10Name
+        techStack10Cat
+        techStack11Name
+        techStack11Cat
+        techStack12Name
+        techStack12Cat
+        techStack13Name
+        techStack13Cat
+        techStack14Name
+        techStack14Cat
+        techStack15Name
+        techStack15Cat
+        
+        whyChooseSectionTitle
+        whyChooseSectionDesc
+        whyChoose1Title
+        whyChoose1Description
+        whyChoose2Title
+        whyChoose2Description
+        whyChoose3Title
+        whyChoose3Description
+        whyChoose4Title
+        whyChoose4Description
+        whyChoose5Title
+        whyChoose5Description
+        whyChoose6Title
+        whyChoose6Description
+        whyChoose7Title
+        whyChoose7Description
+        whyChoose8Title
+        whyChoose8Description
+        
+        contactFormTitle
+        contactFormBtnName
+        nextStepSectionTitle
+        nextStep1Title
+        nextStep2Title
+        nextStep3Title
+        nextStep4Title
+        nextStep5Title
+        
+        faqSectionTitle
+        faq1Question
+        faq1Answer
+        faq2Question
+        faq2Answer
+        faq3Question
+        faq3Answer
+        faq4Question
+        faq4Answer
+        faq5Question
+        faq5Answer
+        faq6Question
+        faq6Answer
+        faq7Question
+        faq7Answer
+        faq8Question
+        faq8Answer
+        faq9Question
+        faq9Answer
+        faq10Question
+        faq10Answer
+        
+        blogSectionTitle
+        blogSectionDesc
+        blogLinkName
+        blogLinkUrl { url title target }
+        blogCategory {
+          nodes {
+            ... on Category {
+              slug
+              name
+            }
+          }
+        }
+      }
+    }
+  }
+`;
+
+const BLOGS_BY_CATEGORY_QUERY = `
+  query GetBlogsByCategory($categoryName: String!) {
+    posts(first: 10, where: { orderby: { field: DATE, order: DESC }, categoryName: $categoryName }) {
+      nodes {
+        id
+        slug
+        title
+        date
+        excerpt(format: RENDERED)
+        featuredImage {
+          node {
+            sourceUrl
+          }
+        }
+        categories {
+          nodes {
+            name
+          }
+        }
+        tags {
+          nodes {
+            name
+          }
+        }
+        author {
+          node {
+            name
+          }
+        }
+      }
+    }
+  }
+`;
+
+
+function transformServiceNode(node: any): HutechService {
+  const f = node.serviceFields || {};
+
+  const parseRepeater = (prefix: string, max: number, fields: string[]) => {
+    const items = [];
+    for (let i = 1; i <= max; i++) {
+      let hasData = false;
+      const item: any = {};
+      for (const field of fields) {
+        const val = f[`${prefix}${i}${field}`];
+        if (val) hasData = true;
+        item[field.toLowerCase()] = typeof val === 'object' && val !== null && val.url ? val.url : (val || "");
+      }
+      if (hasData) items.push(item);
+    }
+    return items;
+  };
+
+  return {
+    id: node.id,
+    slug: node.slug,
+    title: node.title,
+    heroTagline: f.heroTagline,
+    heroTitle: f.heroTitle,
+    heroDescription: f.heroDescription,
+    heroBgImage: imgUrl(f.heroBgImage) || undefined,
+    
+    introHeading: f.introHeading,
+    introText1: f.introText1,
+    introText2: f.introText2,
+    introImage: imgUrl(f.introImage) || undefined,
+    introImageTitle: f.introImageTitle,
+    introImageDesc: f.introImageDesc,
+    stats: parseRepeater('stat', 3, ['Value', 'Label']),
+    
+    servicesSectionTitle: f.servicesSectionTitle,
+    servicesSectionDesc: f.servicesSectionDesc,
+    services: parseRepeater('service', 10, ['Title', 'Description', 'BtnName', 'BtnUrl']),
+    
+    solutionsSectionTitle: f.solutionsSectionTitle,
+    solutionsSectionDesc: f.solutionsSectionDesc,
+    solutions: parseRepeater('solution', 10, ['Title', 'Description', 'BtnName', 'BtnUrl']),
+    
+    innovationsSectionTitle: f.innovationsSectionTitle,
+    innovationsSectionDesc: f.innovationsSectionDesc,
+    innovations: parseRepeater('innovation', 10, ['Title', 'Description', 'BtnName', 'BtnUrl']),
+    
+    ctaTitle: f.ctaTitle,
+    ctaDescription: f.ctaDescription,
+    ctaBtnName: f.ctaBtnName,
+    ctaBtnUrl: f.ctaBtnUrl?.url || "",
+    ctaImage: imgUrl(f.ctaImage) || undefined,
+    
+    techStackTagline: f.techStackTagline,
+    techStackTitle: f.techStackTitle,
+    techStackDesc: f.techStackDesc,
+    techStack: parseRepeater('techStack', 15, ['Name', 'Cat']),
+    
+    whyChooseSectionTitle: f.whyChooseSectionTitle,
+    whyChooseSectionDesc: f.whyChooseSectionDesc,
+    whyChoose: parseRepeater('whyChoose', 8, ['Title', 'Description']),
+    
+    contactFormTitle: f.contactFormTitle,
+    contactFormBtnName: f.contactFormBtnName,
+    nextStepSectionTitle: f.nextStepSectionTitle,
+    nextSteps: parseRepeater('nextStep', 5, ['Title']),
+    
+    faqSectionTitle: f.faqSectionTitle,
+    faqs: parseRepeater('faq', 10, ['Question', 'Answer']),
+    
+    blogSectionTitle: f.blogSectionTitle,
+    blogSectionDesc: f.blogSectionDesc,
+    blogLinkName: f.blogLinkName,
+    blogLinkUrl: f.blogLinkUrl?.url || "",
+    blogCategory: f.blogCategory?.nodes?.[0]?.name || "AI/ML",
+    blogCategorySlug: f.blogCategory?.nodes?.[0]?.slug || "",
+  };
+}
+
+export async function getServicesList(): Promise<{ slug: string }[]> {
+  try {
+    const raw = await fetchGraphQL(SERVICES_LIST_QUERY);
+    const nodes = raw?.data?.hutechServices?.nodes || [];
+    return nodes.map((n: any) => ({ slug: n.slug }));
+  } catch (err) {
+    console.warn("[WP] getServicesList failed:", err);
+    return [];
+  }
+}
+
+export async function getServiceBySlug(slug: string): Promise<HutechService | null> {
+  try {
+    const raw = await fetchGraphQL(SERVICE_BY_SLUG_QUERY, { slug });
+    const node = raw?.data?.hutechService;
+    if (!node) return null;
+    return transformServiceNode(node);
+  } catch (err) {
+    console.warn("[WP] getServiceBySlug failed:", err);
+    return null;
+  }
+}
+
+export async function getBlogsByCategory(categoryName: string): Promise<WpBlog[]> {
+  try {
+    const raw = await fetchGraphQL(BLOGS_BY_CATEGORY_QUERY, { categoryName });
+    const nodes = raw?.data?.posts?.nodes || [];
+    return nodes.map(transformBlogNode);
+  } catch (err) {
+    console.warn("[WP] getBlogsByCategory failed:", err);
+    return [];
   }
 }

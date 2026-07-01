@@ -4,6 +4,9 @@ import { useState } from "react";
 import { motion as Motion, AnimatePresence } from "motion/react";
 import { X, Upload, Send } from "lucide-react";
 
+import { toast } from "sonner";
+import { submitCareerForm } from "@/lib/api";
+
 export interface ApplicationModalProps {
   isOpen: boolean;
   onClose: () => void;
@@ -17,13 +20,38 @@ export function ApplicationModal({ isOpen, onClose, jobTitle }: ApplicationModal
     linkedIn: '',
     resume: null as File | null
   });
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   if (!isOpen) return null;
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('Form submitted:', formData);
-    onClose();
+    if (!formData.resume) {
+      toast.error("Please upload your resume.");
+      return;
+    }
+
+    setIsSubmitting(true);
+    try {
+      await submitCareerForm({
+        name: formData.fullName,
+        email: formData.email,
+        linkedin: formData.linkedIn,
+        resume: formData.resume
+      });
+      toast.success("Application submitted successfully!");
+      setFormData({
+        fullName: '',
+        email: '',
+        linkedIn: '',
+        resume: null
+      });
+      onClose();
+    } catch (error) {
+      toast.error("Failed to submit application. Please try again.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -121,9 +149,10 @@ export function ApplicationModal({ isOpen, onClose, jobTitle }: ApplicationModal
 
               <button
                 type="submit"
-                className="w-full bg-[#F99D1C] hover:bg-[#ff9d00] text-[#001A3D] py-5 rounded-lg font-bold transition-all tracking-widest text-sm shadow-xl flex items-center justify-center gap-3"
+                disabled={isSubmitting}
+                className="w-full bg-[#F99D1C] hover:bg-[#ff9d00] text-[#001A3D] py-5 rounded-lg font-bold transition-all tracking-widest text-sm shadow-xl flex items-center justify-center gap-3 disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                SUBMIT APPLICATION <Send size={18} />
+                {isSubmitting ? "SUBMITTING..." : <>SUBMIT APPLICATION <Send size={18} /></>}
               </button>
 
               <p className="text-white/40 text-xs text-center leading-relaxed">
