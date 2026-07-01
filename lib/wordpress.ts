@@ -77,7 +77,7 @@ export async function fetchGraphQL(query: string, variables = {}) {
 
   try {
     const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), 10000); // 10s timeout
+    const timeout = setTimeout(() => controller.abort(), 30000); // 30s timeout
 
     const res = await fetch(WORDPRESS_API_URL, {
       method: "POST",
@@ -365,16 +365,8 @@ const HOMEPAGE_QUERY = `
         expertise {
           title
           description
-          industry_1 { name icon { node { sourceUrl } } btnText btnLink }
-          industry_2 { name icon { node { sourceUrl } } btnText btnLink }
-          industry_3 { name icon { node { sourceUrl } } btnText btnLink }
-          industry_4 { name icon { node { sourceUrl } } btnText btnLink }
-          industry_5 { name icon { node { sourceUrl } } btnText btnLink }
-          industry_6 { name icon { node { sourceUrl } } btnText btnLink }
-          industry_7 { name icon { node { sourceUrl } } btnText btnLink }
-          industry_8 { name icon { node { sourceUrl } } btnText btnLink }
-          industry_9 { name icon { node { sourceUrl } } btnText btnLink }
-          industry_10 { name icon { node { sourceUrl } } btnText btnLink }
+          category { nodes { slug name } }
+          postsCount
         }
         capabilities {
           title
@@ -424,24 +416,13 @@ const HOMEPAGE_QUERY = `
         successStories {
           title
           description
-          story_1 { ${STORY_FIELDS} }
-          story_2 { ${STORY_FIELDS} }
-          story_3 { ${STORY_FIELDS} }
-          story_4 { ${STORY_FIELDS} }
-          story_5 { ${STORY_FIELDS} }
-          story_6 { ${STORY_FIELDS} }
-          story_7 { ${STORY_FIELDS} }
-          story_8 { ${STORY_FIELDS} }
+          postsCount
         }
         whatsNew {
           title
           description
-          news_item_1 { ${NEWS_FIELDS} }
-          news_item_2 { ${NEWS_FIELDS} }
-          news_item_3 { ${NEWS_FIELDS} }
-          news_item_4 { ${NEWS_FIELDS} }
-          news_item_5 { ${NEWS_FIELDS} }
-          news_item_6 { ${NEWS_FIELDS} }
+          category { nodes { slug name } }
+          postsCount
         }
         techStack {
           title
@@ -577,7 +558,12 @@ export interface HomepageData {
 
 // ─── Data Transform ──────────────────────────────────────────────────────────
 
-function transformHomePage(raw: any): HomepageData | null {
+function transformHomePage(
+  raw: any,
+  dynamicServices: any[] = [],
+  dynamicTestimonials: any[] = [],
+  dynamicBlogs: any[] = []
+): HomepageData | null {
   const f = raw?.data?.page?.homepageFields;
   if (!f) return null;
 
@@ -609,16 +595,21 @@ function transformHomePage(raw: any): HomepageData | null {
   // Big Thinkers
   const bt = f.bigThinkers || {};
 
-  // Expertise
+  // Expertise — prefer dynamic services fetched by category slug
   const exp = f.expertise || {};
-  const industries = collectGroups(exp, "industry", 10)
-    .filter((ind: any) => ind?.name?.trim())
-    .map((ind: any) => ({
-      name: ind?.name,
-      iconUrl: imgUrl(ind?.icon),
-      btnText: ind?.btnText,
-      btnLink: ind?.btnLink
+  // ACF Free taxonomy fields return AcfTermNodeConnection, so access via nodes[0].slug
+  const expCategorySlug = exp.category?.nodes?.[0]?.slug || "";
+  let industries: any[];
+  if (dynamicServices.length > 0) {
+    industries = dynamicServices.map((svc: any) => ({
+      name: svc.title,
+      iconUrl: imgUrl(svc.featuredImage),
+      btnText: "Learn More",
+      btnLink: `/services/${svc.slug}/`,
     }));
+  } else {
+    industries = [];
+  }
 
   // Capabilities — only include capabilities with a name
   const cap = f.capabilities || {};
@@ -641,22 +632,39 @@ function transformHomePage(raw: any): HomepageData | null {
     .filter((p: any) => p?.name?.trim() || imgUrl(p?.logo))
     .map((p: any) => ({ name: p?.name, logoUrl: imgUrl(p?.logo) }));
 
-  // Success Stories — only include stories with a name or text
+  // Success Stories — prefer dynamic testimonials if available
   const ss = f.successStories || {};
-  const stories: WpStory[] = collectGroups(ss, "story", 8)
-    .filter((s: any) => s?.name?.trim() || s?.text?.trim())
-    .map((s: any) => ({
-      name: s?.name,
-      title: s?.title,
-      text: s?.text,
-      imageUrl: imgUrl(s?.image),
+  let stories: WpStory[];
+  if (dynamicTestimonials.length > 0) {
+    stories = dynamicTestimonials.map((t: any) => ({
+      name: t.title,
+      title: [t.testimonialFields?.designation, t.testimonialFields?.company]
+        .filter(Boolean).join(", ") || "Client",
+      text: t.testimonialFields?.description || "",
+      imageUrl: imgUrl(t.featuredImage),
     }));
+  } else {
+    stories = [];
+  }
 
-  // What's New — only include news items with a title
+  // What's New — prefer dynamic blog posts if available
   const wn = f.whatsNew || {};
-  const newsItems: WpNewsItem[] = collectGroups(wn, "news_item", 6)
-    .filter((n: any) => n?.title?.trim())
-    .map((n: any) => ({ title: n?.title, date: n?.date, imageUrl: imgUrl(n?.image) }));
+  // ACF Free taxonomy fields return AcfTermNodeConnection, so access via nodes[0].slug
+  const wnCategorySlug = wn.category?.nodes?.[0]?.slug || "";
+  let newsItems: WpNewsItem[];
+  if (dynamicBlogs.length > 0) {
+    newsItems = dynamicBlogs.map((b: any) => ({
+      title: b.title,
+      date: new Date(b.date).toLocaleDateString("en-US", {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+      }),
+      imageUrl: imgUrl(b.featuredImage),
+    }));
+  } else {
+    newsItems = [];
+  }
 
   // Why Hutech — only include accordion items with a title
   const why = f.whyHutech || {};
@@ -711,6 +719,79 @@ function transformHomePage(raw: any): HomepageData | null {
 
 // ─── Public API ──────────────────────────────────────────────────────────────
 
+// ─── Dynamic queries used by getHomePage ─────────────────────────────────────
+
+const SERVICES_BY_CATEGORY_QUERY = `
+  query GetServicesByCategory($categorySlug: [String]!, $limit: Int!) {
+    serviceCategories(where: { slug: $categorySlug }) {
+      nodes {
+        hutechServices(first: $limit) {
+          nodes {
+            title
+            slug
+            featuredImage { node { sourceUrl } }
+          }
+        }
+      }
+    }
+  }
+`;
+
+const ALL_SERVICES_QUERY = `
+  query GetAllServicesForHome($limit: Int!) {
+    hutechServices(first: $limit) {
+      nodes {
+        title
+        slug
+        featuredImage { node { sourceUrl } }
+      }
+    }
+  }
+`;
+
+const TESTIMONIALS_FOR_HOME_QUERY = `
+  query GetTestimonialsForHome($limit: Int!) {
+    hutechTestimonials(first: $limit) {
+      nodes {
+        title
+        featuredImage { node { sourceUrl } }
+        testimonialFields {
+          designation
+          company
+          description
+        }
+      }
+    }
+  }
+`;
+
+
+const BLOGS_FOR_HOME_QUERY = `
+  query GetBlogsForHome($limit: Int!) {
+    posts(first: $limit, where: { orderby: { field: DATE, order: DESC } }) {
+      nodes {
+        title
+        date
+        slug
+        featuredImage { node { sourceUrl } }
+      }
+    }
+  }
+`;
+
+const BLOGS_BY_CATEGORY_FOR_HOME_QUERY = `
+  query GetBlogsByCategoryForHome($categoryName: String!, $limit: Int!) {
+    posts(first: $limit, where: { orderby: { field: DATE, order: DESC }, categoryName: $categoryName }) {
+      nodes {
+        title
+        date
+        slug
+        featuredImage { node { sourceUrl } }
+      }
+    }
+  }
+`;
+
 export async function getHomePage(): Promise<HomepageData | null> {
   try {
     const raw = await fetchGraphQL(HOMEPAGE_QUERY);
@@ -718,7 +799,53 @@ export async function getHomePage(): Promise<HomepageData | null> {
       console.warn("[WP] Could not fetch homepage data. Using static fallback.");
       return null;
     }
-    return transformHomePage(raw);
+
+    const acf = raw?.data?.page?.homepageFields || {};
+    const exp = acf.expertise || {};
+    const ss  = acf.successStories || {};
+    const wn  = acf.whatsNew || {};
+
+    // ── Expertise / Industries ──────────────────────────────────────────────
+    const serviceCategory = exp.category?.nodes?.[0]?.slug || "";
+    const servicesLimit   = exp.postsCount ? Math.max(1, parseInt(exp.postsCount, 10)) : 100;
+
+    let dynamicServices: any[] = [];
+    if (serviceCategory) {
+      const svcRaw = await fetchGraphQL(SERVICES_BY_CATEGORY_QUERY, {
+        categorySlug: [serviceCategory],
+        limit: servicesLimit,
+      });
+      dynamicServices =
+        svcRaw?.data?.serviceCategories?.nodes?.[0]?.hutechServices?.nodes || [];
+    } else {
+      const svcRaw = await fetchGraphQL(ALL_SERVICES_QUERY, { limit: servicesLimit });
+      dynamicServices = svcRaw?.data?.hutechServices?.nodes || [];
+    }
+
+    // ── Testimonials / Success Stories ──────────────────────────────────────
+    const testimonialsLimit = ss.postsCount ? Math.max(1, parseInt(ss.postsCount, 10)) : 100;
+
+    let dynamicTestimonials: any[] = [];
+    const tRaw = await fetchGraphQL(TESTIMONIALS_FOR_HOME_QUERY, { limit: testimonialsLimit });
+    dynamicTestimonials = tRaw?.data?.hutechTestimonials?.nodes || [];
+
+    // ── Blog Posts / What's New ─────────────────────────────────────────────
+    const blogCategory = wn.category?.nodes?.[0]?.slug || "";
+    const blogsLimit   = wn.postsCount ? Math.max(1, parseInt(wn.postsCount, 10)) : 100;
+
+    let dynamicBlogs: any[] = [];
+    if (blogCategory) {
+      const bRaw = await fetchGraphQL(BLOGS_BY_CATEGORY_FOR_HOME_QUERY, {
+        categoryName: blogCategory,
+        limit: blogsLimit,
+      });
+      dynamicBlogs = bRaw?.data?.posts?.nodes || [];
+    } else {
+      const bRaw = await fetchGraphQL(BLOGS_FOR_HOME_QUERY, { limit: blogsLimit });
+      dynamicBlogs = bRaw?.data?.posts?.nodes || [];
+    }
+
+    return transformHomePage(raw, dynamicServices, dynamicTestimonials, dynamicBlogs);
   } catch (err) {
     console.warn("[WP] getHomePage() failed:", err);
     return null;
