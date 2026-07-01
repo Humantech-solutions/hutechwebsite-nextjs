@@ -3,19 +3,18 @@
 import { motion as Motion } from "framer-motion";
 import { Breadcrumbs } from "@/components/Breadcrumbs";
 import {
-  Heart,
   HeartPulse,
   BookOpen,
   Coffee,
-  Users,
-  Star,
-  Award,
-  ShieldCheck,
   Trophy,
-  MoveRight,
   ChevronLeft,
   ChevronRight,
   X,
+  Star,
+  ShieldCheck,
+  Award,
+  Heart,
+  Users
 } from "lucide-react";
 import { Meta } from "@/components/Meta";
 import { ImageWithFallback } from "@/components/figma/ImageWithFallback";
@@ -24,9 +23,37 @@ import Link from "next/link";
 import { useState, useCallback, useEffect, useRef } from "react";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
+import { LifeAtHutechData } from "@/lib/wordpress";
 
-export default function LifeAtHutech() {
+const formatTitle = (text: string | undefined) => {
+  if (!text) return null;
+  const parts = text.split('|');
+  if (parts.length === 1) return <>{text}</>;
+  return (
+    <>
+      {parts[0]} <br />
+      <span className="text-[#F99D1C]">{parts.slice(1).join('')}</span>
+    </>
+  );
+}
+
+const getIcon = (name: string | undefined, defaultIcon: React.ReactNode) => {
+  if (!name) return defaultIcon;
+  const lower = name.toLowerCase();
+  if (lower.includes('health') || lower.includes('heart')) return <HeartPulse className="h-10 w-10" />;
+  if (lower.includes('learn') || lower.includes('book')) return <BookOpen className="h-10 w-10" />;
+  if (lower.includes('work') || lower.includes('coffee') || lower.includes('balance')) return <Coffee className="h-10 w-10" />;
+  if (lower.includes('reward') || lower.includes('trophy')) return <Trophy className="h-10 w-10" />;
+  if (lower.includes('star')) return <Star className="h-10 w-10" />;
+  if (lower.includes('shield')) return <ShieldCheck className="h-10 w-10" />;
+  if (lower.includes('award')) return <Award className="h-10 w-10" />;
+  if (lower.includes('user') || lower.includes('people')) return <Users className="h-10 w-10" />;
+  return defaultIcon;
+};
+
+export default function LifeAtHutech({ data }: { data: LifeAtHutechData | null }) {
   const [lightboxOpen, setLightboxOpen] = useState(false);
+  const [currentPostIndex, setCurrentPostIndex] = useState(0);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [mounted, setMounted] = useState(false);
   const workplaceSliderRef = useRef<Slider>(null);
@@ -35,8 +62,9 @@ export default function LifeAtHutech() {
     setMounted(true);
   }, []);
 
-  const openLightbox = useCallback((index: number) => {
-    setCurrentImageIndex(index);
+  const openLightbox = useCallback((postIndex: number) => {
+    setCurrentPostIndex(postIndex);
+    setCurrentImageIndex(0);
     setLightboxOpen(true);
     document.body.style.overflow = "hidden";
   }, []);
@@ -46,13 +74,55 @@ export default function LifeAtHutech() {
     document.body.style.overflow = "unset";
   }, []);
 
+  const settings = data?.settings || {};
+  
+  // Group gallery images by post
+  const galleryPosts = (data?.galleries || []).map(g => {
+    // If the post has a featured image, we prepend it to the content images (if it's not already there)
+    // Actually, g.imagesFromContent includes all img tags. g.imageUrl is either featured or first content img.
+    // Let's gather all unique images.
+    let allImages = [...(g.imagesFromContent || [])];
+    if (g.imageUrl && !allImages.includes(g.imageUrl)) {
+      allImages.unshift(g.imageUrl);
+    }
+    return {
+      title: g.title,
+      tag: g.categories?.[0]?.name || "Occasion",
+      coverImage: allImages[0] || "",
+      allImages: allImages
+    };
+  }).filter(p => p.allImages.length > 0);
+  
+  // Fallback if no images found
+  if (galleryPosts.length === 0) {
+    galleryPosts.push(
+      { 
+        title: "Team Outing", 
+        tag: "Team Outing", 
+        coverImage: "https://images.unsplash.com/photo-1522071820081-009f0129c71c",
+        allImages: ["https://images.unsplash.com/photo-1522071820081-009f0129c71c"]
+      },
+      { 
+        title: "Tech Summit", 
+        tag: "Tech Summit", 
+        coverImage: "https://images.unsplash.com/photo-1517048676732-d65bc937f952",
+        allImages: ["https://images.unsplash.com/photo-1517048676732-d65bc937f952"]
+      }
+    );
+  }
+
+  const activePost = galleryPosts[currentPostIndex] || galleryPosts[0];
+  const activeImages = activePost?.allImages || [];
+
   const nextImage = useCallback(() => {
-    setCurrentImageIndex((prev) => (prev + 1) % 8);
-  }, []);
+    if (activeImages.length === 0) return;
+    setCurrentImageIndex((prev) => (prev + 1) % activeImages.length);
+  }, [activeImages.length]);
 
   const prevImage = useCallback(() => {
-    setCurrentImageIndex((prev) => (prev - 1 + 8) % 8);
-  }, []);
+    if (activeImages.length === 0) return;
+    setCurrentImageIndex((prev) => (prev - 1 + activeImages.length) % activeImages.length);
+  }, [activeImages.length]);
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -64,36 +134,19 @@ export default function LifeAtHutech() {
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [lightboxOpen, closeLightbox, nextImage, prevImage]);
-  const cultureItems = [
-    {
-      icon: <Heart className="h-8 w-8 text-[#F99D1C]" />,
-      title: "The Hutech Family",
-      desc: "More than just a workplace, we are a global family that supports each other's personal and professional growth.",
-    },
-    {
-      icon: <Users className="h-8 w-8 text-[#F99D1C]" />,
-      title: "Inclusive Culture",
-      desc: "We celebrate diversity and foster an environment where every voice is heard and every contribution is valued.",
-    },
-    {
-      icon: <Star className="h-8 w-8 text-[#F99D1C]" />,
-      title: "Continuous Learning",
-      desc: "We invest in our people with regular workshops, certifications, and mentorship programs to keep us at the cutting edge.",
-    },
-  ];
 
-  const galleryImages = [
-    { src: "https://images.unsplash.com/photo-1522071820081-009f0129c71c", tag: "Team Outing" },
-    { src: "https://images.unsplash.com/photo-1517048676732-d65bc937f952", tag: "Tech Summit" },
-    { src: "https://images.unsplash.com/photo-1543269865-cbf427effbad", tag: "Celebrations" },
-    { src: "https://images.unsplash.com/photo-1522202176988-66273c2fd55f", tag: "Collaboration" },
-    { src: "https://images.unsplash.com/photo-1511632765486-a01980e01a18", tag: "Holiday Party" },
-    { src: "https://images.unsplash.com/photo-1556761175-b413da4baf72", tag: "Workspace" },
-    { src: "https://images.unsplash.com/photo-1552664730-d307ca884978", tag: "Workshop" },
-    { src: "https://images.unsplash.com/photo-1600880212340-02d956ea3a92", tag: "Global Meet" },
-  ];
+  const rawBenefits = [
+    settings.benefit1,
+    settings.benefit2,
+    settings.benefit3,
+    settings.benefit4,
+  ].filter(b => b?.title);
 
-  const benefits = [
+  const benefits = rawBenefits.length > 0 ? rawBenefits.map((b, i) => ({
+    icon: getIcon(b.icon, [<HeartPulse className="h-10 w-10"/>, <BookOpen className="h-10 w-10"/>, <Coffee className="h-10 w-10"/>, <Trophy className="h-10 w-10"/>][i % 4]),
+    title: b.title,
+    desc: b.description
+  })) : [
     {
       icon: <HeartPulse className="h-10 w-10" />,
       title: "Health & Wellness",
@@ -116,52 +169,57 @@ export default function LifeAtHutech() {
     },
   ];
 
-  const PrevArrow = (props: any) => {
-    const { onClick } = props;
-    return (
-      <button
-        onClick={onClick}
-        className="group absolute top-1/2 -left-4 z-20 flex h-12 w-12 -translate-y-1/2 cursor-pointer items-center justify-center rounded-full border border-gray-200 bg-white text-[#001A3D] shadow-sm transition-all duration-300 hover:bg-[#001A3D] hover:text-white md:-left-12"
-        aria-label="Previous slide"
-      >
-        <ChevronLeft size={24} className="transition-transform group-hover:-translate-x-0.5" />
-      </button>
+  // Filter workplace slides by selected workplaceCategories if any
+  const workplaceSlides = (data?.galleries || []).filter(g => {
+    if (!settings.workplaceCategories?.length) return true;
+    const selectedSlugs = settings.workplaceCategories.map((c: any) => c.slug);
+    return g.categories.some(c => selectedSlugs.includes(c.slug));
+  }).map(g => {
+    let allImages = [...(g.imagesFromContent || [])];
+    if (g.imageUrl && !allImages.includes(g.imageUrl)) {
+      allImages.unshift(g.imageUrl);
+    }
+    return {
+      title: g.title,
+      tag: g.categories?.[0]?.name || "Workplace",
+      coverImage: allImages[0] || "",
+    };
+  }).filter(p => p.coverImage);
+
+  if (workplaceSlides.length === 0) {
+    workplaceSlides.push(
+      {
+        coverImage: "https://images.unsplash.com/photo-1761818645928-47e5dad8ec76",
+        title: "Modern Collaboration Hubs",
+        tag: "Innovation",
+      },
+      {
+        coverImage: "https://images.unsplash.com/photo-1716703373041-bd135107d947",
+        title: "Inclusive Social Spaces",
+        tag: "Culture",
+      }
     );
+  }
+
+  const carouselSettings = {
+    dots: true,
+    infinite: true,
+    speed: 800,
+    slidesToShow: 1,
+    slidesToScroll: 1,
+    autoplay: true,
+    autoplaySpeed: 5000,
+    arrows: false,
+    swipe: true,
+    draggable: true,
+    adaptiveHeight: false,
   };
-
-  const NextArrow = (props: any) => {
-    const { onClick } = props;
-    return (
-      <button
-        onClick={onClick}
-        className="group absolute top-1/2 -right-4 z-20 flex h-12 w-12 -translate-y-1/2 cursor-pointer items-center justify-center rounded-full border border-gray-200 bg-white text-[#001A3D] shadow-sm transition-all duration-300 hover:bg-[#001A3D] hover:text-white md:-right-12"
-        aria-label="Next slide"
-      >
-        <ChevronRight size={24} className="transition-transform group-hover:translate-x-0.5" />
-      </button>
-    );
-  };
-
-const carouselSettings = {
-  dots: true,
-  infinite: true,
-  speed: 800,
-  slidesToShow: 1,
-  slidesToScroll: 1,
-  autoplay: true,
-  autoplaySpeed: 5000,
-  arrows: false,
-  swipe: true,
-  draggable: true,
-  adaptiveHeight: false,
-};
-
 
   return (
     <div className="flex flex-col overflow-hidden bg-white">
       <Meta
-        title="Life at Hutech Solutions | Our Family & Culture"
-        description="Experience the vibrant culture at Hutech Solutions. Discover how our family-centric approach drives innovation and excellence."
+        title={data?.title || "Life at Hutech Solutions | Our Family & Culture"}
+        description={settings.heroDescription || "Experience the vibrant culture at Hutech Solutions."}
       />
       <Breadcrumbs variant="light" />
 
@@ -169,7 +227,7 @@ const carouselSettings = {
       <section className="relative flex h-[450px] items-center overflow-hidden bg-[#001A3D] text-white">
         <div className="absolute inset-0 z-0">
           <ImageWithFallback
-            src="https://images.unsplash.com/photo-1556761175-b413da4baf72?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1920"
+            src={settings.heroImage || "https://images.unsplash.com/photo-1556761175-b413da4baf72?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1920"}
             alt="Life at Hutech"
             className="h-full w-full scale-105 object-cover opacity-20"
           />
@@ -186,16 +244,14 @@ const carouselSettings = {
               <div className="mb-6 flex items-center gap-3">
                 <span className="h-[1px] w-12 bg-[#F99D1C]"></span>
                 <span className="text-[10px] font-bold tracking-[0.3em] text-[#F99D1C] uppercase">
-                  People & Culture
+                  {settings.heroEyebrow || "People & Culture"}
                 </span>
               </div>
               <h1 className="display-font mb-8 text-3xl leading-[1.1] font-semibold tracking-tight text-white sm:text-4xl md:text-5xl md:leading-[1.05] lg:text-6xl">
-                The Hutech <br />
-                <span className="text-[#F99D1C]">Family.</span>
+                {formatTitle(settings.heroTitle) || formatTitle("The Hutech |Family.")}
               </h1>
               <p className="max-w-2xl text-xl leading-relaxed font-medium text-gray-400">
-                At Hutech Solutions, we don't just build software; we build careers and lifelong
-                relationships. Discover what makes us more than just a company.
+                {settings.heroDescription || "At Hutech Solutions, we don't just build software; we build careers and lifelong relationships."}
               </p>
             </Motion.div>
           </div>
@@ -206,20 +262,19 @@ const carouselSettings = {
       <section className="overflow-hidden bg-white py-24">
         <div className="mx-auto mb-16 max-w-[1280px] space-y-4 px-6 lg:px-20">
           <span className="text-xs font-bold tracking-widest text-[#F99D1C] uppercase">
-            Gallery
+            {settings.galleryEyebrow || "Gallery"}
           </span>
           <h2 className="display-font text-4xl font-semibold tracking-tight text-[#001A3D] md:text-6xl">
-            Take a sneak peek at <br /> <span className="text-[#F99D1C]">Life at Hutech</span>
+            {formatTitle(settings.galleryTitle) || formatTitle("Take a sneak peek at |Life at Hutech")}
           </h2>
           <p className="max-w-xl text-lg font-medium text-gray-500">
-            A visual journey through our celebrations, team building, and everyday excellence across
-            our global offices.
+            {settings.galleryDescription || "A visual journey through our celebrations, team building, and everyday excellence."}
           </p>
         </div>
 
         <div className="mx-auto max-w-[1440px] px-6 lg:px-10">
           <div className="grid grid-cols-2 gap-6 md:grid-cols-4">
-            {galleryImages.map((img, i) => (
+            {galleryPosts.map((post, i) => (
               <Motion.div
                 key={i}
                 initial={{ opacity: 0, scale: 0.95 }}
@@ -230,16 +285,21 @@ const carouselSettings = {
                 className="group relative aspect-square cursor-pointer overflow-hidden rounded-3xl shadow-lg"
               >
                 <ImageWithFallback
-                  src={`${img.src}?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=600`}
-                  alt={img.tag}
+                  src={`${post.coverImage}?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=600`}
+                  alt={post.tag}
                   className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110"
                 />
                 <div className="absolute inset-0 flex items-end bg-gradient-to-t from-[#001A3D]/90 via-[#001A3D]/20 to-transparent p-6">
                   <div className="text-white">
                     <p className="mb-1 text-[10px] font-bold tracking-widest text-[#F99D1C] uppercase">
-                      Occasion
+                      {post.tag}
                     </p>
-                    <h4 className="display-font text-lg font-bold">{img.tag}</h4>
+                    <h4 className="display-font text-lg font-bold">{post.title}</h4>
+                    {post.allImages.length > 1 && (
+                      <p className="mt-1 text-xs text-gray-300">
+                        {post.allImages.length} Photos
+                      </p>
+                    )}
                   </div>
                 </div>
               </Motion.div>
@@ -260,34 +320,45 @@ const carouselSettings = {
             >
               <X size={24} />
             </button>
-            <button
-              onClick={(e) => { e.stopPropagation(); prevImage(); }}
-              className="absolute left-4 md:left-8 flex h-12 w-12 items-center justify-center rounded-full bg-white/10 text-white transition-all hover:bg-[#F99D1C] hover:text-[#001A3D]"
-              aria-label="Previous image"
-            >
-              <ChevronLeft size={24} />
-            </button>
+            
+            {activeImages.length > 1 && (
+              <button
+                onClick={(e) => { e.stopPropagation(); prevImage(); }}
+                className="absolute left-4 md:left-8 flex h-12 w-12 items-center justify-center rounded-full bg-white/10 text-white transition-all hover:bg-[#F99D1C] hover:text-[#001A3D]"
+                aria-label="Previous image"
+              >
+                <ChevronLeft size={24} />
+              </button>
+            )}
+
             <div
               className="relative max-h-[85vh] max-w-5xl w-full overflow-hidden rounded-2xl"
               onClick={(e) => e.stopPropagation()}
             >
               <ImageWithFallback
-                src={`${galleryImages[currentImageIndex].src}?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=90&w=1600`}
-                alt={galleryImages[currentImageIndex].tag}
+                src={`${activeImages[currentImageIndex]}?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=90&w=1600`}
+                alt={activePost.tag}
                 className="h-full w-full object-contain"
               />
               <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-6">
-                <p className="text-center text-lg font-bold text-white">{galleryImages[currentImageIndex].tag}</p>
-                <p className="text-center text-xs text-gray-400">{currentImageIndex + 1} / {galleryImages.length}</p>
+                <p className="text-center text-lg font-bold text-white">{activePost.title}</p>
+                {activeImages.length > 1 && (
+                  <p className="text-center text-xs text-gray-400">
+                    {currentImageIndex + 1} / {activeImages.length}
+                  </p>
+                )}
               </div>
             </div>
-            <button
-              onClick={(e) => { e.stopPropagation(); nextImage(); }}
-              className="absolute right-4 md:right-8 flex h-12 w-12 items-center justify-center rounded-full bg-white/10 text-white transition-all hover:bg-[#F99D1C] hover:text-[#001A3D]"
-              aria-label="Next image"
-            >
-              <ChevronRight size={24} />
-            </button>
+
+            {activeImages.length > 1 && (
+              <button
+                onClick={(e) => { e.stopPropagation(); nextImage(); }}
+                className="absolute right-4 md:right-8 flex h-12 w-12 items-center justify-center rounded-full bg-white/10 text-white transition-all hover:bg-[#F99D1C] hover:text-[#001A3D]"
+                aria-label="Next image"
+              >
+                <ChevronRight size={24} />
+              </button>
+            )}
           </div>
         )}
       </section>
@@ -301,10 +372,10 @@ const carouselSettings = {
         <div className="relative z-10 mx-auto max-w-[1280px] px-6 lg:px-20">
           <div className="mb-16 space-y-4 text-center">
             <span className="text-xs font-bold tracking-widest text-[#F99D1C] uppercase">
-              Benefits
+              {settings.benefitsEyebrow || "Benefits"}
             </span>
             <h2 className="display-font text-4xl leading-tight font-semibold tracking-tight text-[#001A3D] md:text-6xl">
-              More Than a Workplace— <br /> <span className="text-[#F99D1C]">A Place to Thrive</span>
+              {formatTitle(settings.benefitsTitle) || formatTitle("More Than a Workplace— |A Place to Thrive")}
             </h2>
           </div>
 
@@ -338,14 +409,12 @@ const carouselSettings = {
         <div className="mx-auto mb-12 max-w-[1280px] px-6 lg:px-20 flex flex-col md:flex-row md:items-end justify-between gap-6">
           <div className="space-y-4">
             <span className="text-xs font-bold tracking-widest text-[#F99D1C] uppercase">
-              Our Ecosystem
+              {settings.workplaceEyebrow || "Our Ecosystem"}
             </span>
             <h2 className="display-font text-4xl font-semibold tracking-tight text-[#001A3D] md:text-5xl">
-              While There's Still A Lot To <br />{" "}
-              <span className="text-[#F99D1C]">Explore In Our Workplace</span>
+              {formatTitle(settings.workplaceTitle) || formatTitle("While There's Still A Lot To |Explore In Our Workplace")}
             </h2>
           </div>
-          {/* Slider Navigation Buttons */}
           <div className="flex items-center gap-3">
             <button 
               onClick={() => workplaceSliderRef.current?.slickPrev()}
@@ -370,37 +439,11 @@ const carouselSettings = {
               ref={workplaceSliderRef} 
               {...carouselSettings}
             >
-              {[
-                {
-                  src: "https://images.unsplash.com/photo-1761818645928-47e5dad8ec76",
-                  title: "Modern Collaboration Hubs",
-                  tag: "Innovation",
-                },
-                {
-                  src: "https://images.unsplash.com/photo-1716703373041-bd135107d947",
-                  title: "Inclusive Social Spaces",
-                  tag: "Culture",
-                },
-                {
-                  src: "https://images.unsplash.com/photo-1726365222176-425a1a1b9b98",
-                  title: "Innovation Tech Labs",
-                  tag: "R&D",
-                },
-                {
-                  src: "https://images.unsplash.com/photo-1497366216548-37526070297c",
-                  title: "Strategic Thinking Zones",
-                  tag: "Strategy",
-                },
-                {
-                  src: "https://images.unsplash.com/photo-1519389950473-47ba0277781c",
-                  title: "Cross-Functional Pods",
-                  tag: "Teams",
-                },
-              ].map((slide, i) => (
+              {workplaceSlides.map((slide, i) => (
                 <div key={i} className="w-full min-w-0 outline-none pb-8">
                   <div className="group relative h-[400px] w-full overflow-hidden rounded-[2.5rem] shadow-2xl md:h-[500px]">
                     <ImageWithFallback
-                      src={`${slide.src}?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1920`}
+                      src={`${slide.coverImage}?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1920`}
                       alt={slide.title}
                       className="h-full w-full object-cover transition-transform duration-[1.5s] ease-in-out group-hover:scale-105"
                     />
@@ -434,26 +477,24 @@ const carouselSettings = {
 
         <div className="relative z-10 mx-auto max-w-[1280px] space-y-12 px-6 text-center lg:px-20">
           <h2 className="display-font mx-auto max-w-4xl text-4xl leading-tight font-semibold tracking-tight md:text-6xl">
-            Ready to become a part of <br /> our <span className="text-[#F99D1C]">Family?</span>
+            {formatTitle(settings.ctaTitle) || formatTitle("Ready to become a part of |our Family?")}
           </h2>
           <div className="flex flex-col justify-center gap-6 sm:flex-row">
             <Link
-              href="/careers"
+              href={settings.ctaBtn1Link || "/careers"}
               className="rounded-sm bg-white px-12 py-5 text-center text-xs font-bold tracking-wide text-[#001A3D] transition-all hover:bg-[#F99D1C]"
             >
-              See Open Positions
+              {settings.ctaBtn1Text || "See Open Positions"}
             </Link>
             <Link
-              href="/contact"
+              href={settings.ctaBtn2Link || "/contact"}
               className="rounded-sm border border-white/20 bg-transparent px-12 py-5 text-center text-xs font-bold tracking-wide text-white transition-all hover:border-[#F99D1C] hover:text-[#F99D1C]"
             >
-              Contact HR Team
+              {settings.ctaBtn2Text || "Contact HR Team"}
             </Link>
           </div>
         </div>
       </section>
-
-      
     </div>
   );
 }

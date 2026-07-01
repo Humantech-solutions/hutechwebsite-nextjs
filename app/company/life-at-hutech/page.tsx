@@ -6,4 +6,10 @@ export const metadata = constructMetadata({
   path: "/company/life-at-hutech/",
 });
 
-export { default } from "./PageClient";
+import PageClient from "./PageClient";
+import { getLifeAtHutechPage } from "@/lib/wordpress";
+
+export default async function LifeAtHutechPage() {
+  const data = await getLifeAtHutechPage();
+  return <PageClient data={data} />;
+}
