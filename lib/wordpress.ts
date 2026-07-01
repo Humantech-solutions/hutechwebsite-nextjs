@@ -3590,3 +3590,125 @@ export async function getBlogsByCategory(categoryName: string): Promise<WpBlog[]
     return [];
   }
 }
+
+// ─── Life at Hutech Query ────────────────────────────────────────────────────────
+
+const LIFE_AT_HUTECH_QUERY = `
+  query GetLifeAtHutechPage {
+    page(id: "life-at-hutech", idType: URI) {
+      title
+      lifeAtHutechSettings {
+        heroEyebrow
+        heroTitle
+        heroDescription
+        heroImage { node { sourceUrl } }
+        galleryEyebrow
+        galleryTitle
+        galleryDescription
+        galleryCategories { nodes { name slug } }
+        galleryTags { nodes { name slug } }
+        benefitsEyebrow
+        benefitsTitle
+        benefit1 { icon title description }
+        benefit2 { icon title description }
+        benefit3 { icon title description }
+        benefit4 { icon title description }
+        workplaceEyebrow
+        workplaceTitle
+        workplaceCategories { nodes { name slug } }
+        workplaceTags { nodes { name slug } }
+        ctaTitle
+        ctaBtn1Text
+        ctaBtn1Link
+        ctaBtn2Text
+        ctaBtn2Link
+      }
+    }
+    lifeGalleries(first: 100) {
+      nodes {
+        title
+        featuredImage { node { sourceUrl } }
+        content
+        lifeGalleryCategories { nodes { name slug } }
+        lifeGalleryTags { nodes { name slug } }
+      }
+    }
+  }
+`;
+
+export interface LifeGalleryPost {
+  title: string;
+  imageUrl: string;
+  categories: { name: string; slug: string }[];
+  tags: { name: string; slug: string }[];
+  imagesFromContent: string[];
+}
+
+export interface LifeAtHutechData {
+  title: string;
+  settings: any;
+  galleries: LifeGalleryPost[];
+}
+
+export async function getLifeAtHutechPage(): Promise<LifeAtHutechData | null> {
+  try {
+    const raw = await fetchGraphQL(LIFE_AT_HUTECH_QUERY);
+    if (!raw?.data?.page) return null;
+    
+    const settings = raw.data.page.lifeAtHutechSettings || {};
+    const galleriesNodes = raw.data.lifeGalleries?.nodes || [];
+    
+    const galleries = galleriesNodes.map((n: any) => {
+      const content = n.content || "";
+      const imgRegex = /<img[^>]+src=["']([^"']+)["']/gi;
+      const images = [];
+      let match;
+      while ((match = imgRegex.exec(content)) !== null) {
+        images.push(match[1]);
+      }
+      
+      return {
+        title: n.title,
+        imageUrl: n.featuredImage?.node?.sourceUrl || images[0] || "",
+        categories: n.lifeGalleryCategories?.nodes || [],
+        tags: n.lifeGalleryTags?.nodes || [],
+        imagesFromContent: images,
+      };
+    });
+    
+    return {
+      title: raw.data.page.title,
+      settings: {
+        heroEyebrow: settings.heroEyebrow,
+        heroTitle: settings.heroTitle,
+        heroDescription: settings.heroDescription,
+        heroImage: settings.heroImage?.node?.sourceUrl || "",
+        galleryEyebrow: settings.galleryEyebrow,
+        galleryTitle: settings.galleryTitle,
+        galleryDescription: settings.galleryDescription,
+        galleryCategories: settings.galleryCategories?.nodes || [],
+        galleryTags: settings.galleryTags?.nodes || [],
+        benefitsEyebrow: settings.benefitsEyebrow,
+        benefitsTitle: settings.benefitsTitle,
+        benefit1: settings.benefit1,
+        benefit2: settings.benefit2,
+        benefit3: settings.benefit3,
+        benefit4: settings.benefit4,
+        workplaceEyebrow: settings.workplaceEyebrow,
+        workplaceTitle: settings.workplaceTitle,
+        workplaceCategories: settings.workplaceCategories?.nodes || [],
+        workplaceTags: settings.workplaceTags?.nodes || [],
+        ctaTitle: settings.ctaTitle,
+        ctaBtn1Text: settings.ctaBtn1Text,
+        ctaBtn1Link: settings.ctaBtn1Link,
+        ctaBtn2Text: settings.ctaBtn2Text,
+        ctaBtn2Link: settings.ctaBtn2Link,
+      },
+      galleries,
+    };
+  } catch (err) {
+    console.warn("[WP] getLifeAtHutechPage failed:", err);
+    return null;
+  }
+}
+
