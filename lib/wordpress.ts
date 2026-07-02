@@ -2013,7 +2013,7 @@ const LEADERSHIP_PAGE_QUERY = `
           leadLeader9Name leadLeader9Role leadLeader9Img { node { sourceUrl } } leadLeader9Bio leadLeader9Linkedin leadLeader9LinkedinIcon { node { sourceUrl } } leadLeader9Twitter leadLeader9TwitterIcon { node { sourceUrl } }
           leadAdvisoryTitle
           leadAdvisoryDescription
-          leadAdvisoryBtnText leadAdvisoryBtnUrl { url title target }
+          leadAdvisoryBtnText leadAdvisoryBtnUrl
           leadAdvisor1Name leadAdvisor1Firm leadAdvisor1Region
           leadAdvisor2Name leadAdvisor2Firm leadAdvisor2Region
           leadAdvisor3Name leadAdvisor3Firm leadAdvisor3Region
@@ -2057,7 +2057,7 @@ function transformLeadershipPageData(f: any) {
     advisoryTitle:       f.leadAdvisoryTitle       || "Board of |~Advisors.",
     advisoryDescription: f.leadAdvisoryDescription || "",
     advisoryBtnText:     f.leadAdvisoryBtnText     || "Engage with Us",
-    advisoryBtnUrl:      f.leadAdvisoryBtnUrl?.url      || "/contact",
+    advisoryBtnUrl:      f.leadAdvisoryBtnUrl      || "/contact",
     advisors:            advisors.length > 0 ? advisors : undefined,
     ctaTitle:            f.leadCtaTitle            || "Lead the Next |^Digital Frontier.",
     ctaDescription:      f.leadCtaDescription      || "",
@@ -2105,7 +2105,7 @@ const PARTNERSHIP_PAGE_QUERY = `
           
           partMeetTitle
           partMeetDescription
-          partMeetBtnText partMeetBtnUrl { url title target }
+          partMeetBtnText partMeetBtnUrl
           partMeetImg1 { node { sourceUrl } } partMeetAlt1
           partMeetImg2 { node { sourceUrl } } partMeetAlt2
           partMeetImg3 { node { sourceUrl } } partMeetAlt3
@@ -2195,7 +2195,7 @@ function transformPartnershipPageData(f: any) {
     meetTitle:        f.partMeetTitle || "Meet Our Partners",
     meetDescription:  f.partMeetDescription || "",
     meetBtnText:      f.partMeetBtnText || "Find What You Need",
-    meetBtnUrl:       f.partMeetBtnUrl?.url || "/services",
+    meetBtnUrl:       f.partMeetBtnUrl || "/services",
     meetImages:       meetImages.length > 0 ? meetImages : undefined,
     
     logos:            logos.length > 0 ? logos : undefined,
@@ -2251,7 +2251,7 @@ const CONTACT_PAGE_QUERY = `
           contactSupportLabel
           contactSupportDescription
           contactSupportBtnText
-          contactSupportBtnUrl { url title target }
+          contactSupportBtnUrl
           
           contactOfficesTitle
           contactOfficesDescription
@@ -2313,7 +2313,7 @@ function transformContactPageData(f: any) {
     supportLabel: f.contactSupportLabel || "Customer Support",
     supportDescription: f.contactSupportDescription || "",
     supportBtnText: f.contactSupportBtnText || "Support Portal",
-    supportBtnUrl: f.contactSupportBtnUrl?.url || "#",
+    supportBtnUrl: f.contactSupportBtnUrl || "/contact",
 
     officesTitle: f.contactOfficesTitle || "Our Offices",
     officesDescription: f.contactOfficesDescription || "",
@@ -2352,7 +2352,7 @@ const DOCUMENTS_PAGE_QUERY = `
           docPageCtaTitle
           docPageCtaDesc
           docPageCtaBtnText
-          docPageCtaBtnUrl { url title target }
+          docPageCtaBtnUrl
         }
       }
     }
@@ -2417,7 +2417,7 @@ export async function getDocumentPageData() {
       ctaTitle: f.docPageCtaTitle || "Need custom documentation?",
       ctaDesc: f.docPageCtaDesc || "Our specialized teams can provide tailored technical whitepapers and architecture documentation for your enterprise needs.",
       ctaBtnText: f.docPageCtaBtnText || "REQUEST ACCESS",
-      ctaBtnUrl: f.docPageCtaBtnUrl?.url || "/contact",
+      ctaBtnUrl: f.docPageCtaBtnUrl || "/contact",
     };
   } catch (err) {
     console.warn("[WP] getDocumentPageData failed:", err);
@@ -2936,7 +2936,7 @@ const NEWS_PAGE_QUERY = `
           newsCtaTitle
           newsCtaDescription
           newsCtaBtnText
-          newsCtaBtnUrl { url title target }
+          newsCtaBtnUrl
         }
       }
     }
@@ -3100,7 +3100,7 @@ export async function getNewsPageData() {
       ctaTitle: f.newsCtaTitle || undefined,
       ctaDescription: f.newsCtaDescription || undefined,
       ctaBtnText: f.newsCtaBtnText || undefined,
-      ctaBtnUrl: f.newsCtaBtnUrl?.url || undefined,
+      ctaBtnUrl: f.newsCtaBtnUrl || undefined,
     };
   } catch (err) {
     console.warn("[WP] getNewsPageData failed:", err);

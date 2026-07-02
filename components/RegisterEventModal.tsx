@@ -19,9 +19,10 @@ export function RegisterEventModal({ isOpen, onClose, eventTitle }: RegisterEven
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    const form = e.currentTarget;
     setIsSubmitting(true);
     
-    const formData = new FormData(e.currentTarget);
+    const formData = new FormData(form);
     const name = formData.get("name") as string;
     const emailVal = formData.get("email") as string;
     const organization = formData.get("organization") as string;
@@ -38,7 +39,7 @@ export function RegisterEventModal({ isOpen, onClose, eventTitle }: RegisterEven
       });
       setIsSuccess(true);
     } catch (error) {
-      toast.error("Registration failed. Please try again.");
+      toast.error(error instanceof Error ? error.message : "Registration failed. Please try again.");
     } finally {
       setIsSubmitting(false);
     }
