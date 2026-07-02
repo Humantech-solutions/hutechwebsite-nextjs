@@ -4,6 +4,7 @@ import { useState } from "react";
 import { motion as Motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import { toast } from "sonner";
+import { renderTitle } from "@/lib/utils";
 import {
   Brain,
   TrendingUp,
@@ -95,9 +96,7 @@ function FAQItem({ question, answer }: { question: string; answer: string }) {
 export default function ServiceDetailClient({ service, blogs = [] }: { service: HutechService, blogs?: any[] }) {
   const [isContactSubmitting, setIsContactSubmitting] = useState(false);
   
-  const heroTitleParts = (service.heroTitle || service.title || "").split("|");
-  const heroTitle1 = heroTitleParts[0];
-  const heroTitle2 = heroTitleParts.length > 1 ? heroTitleParts[1] : "";
+  const heroTitleText = service.heroTitle || service.title || "";
 
   const statsToRender = service.stats && service.stats.length > 0 ? service.stats : [
     { value: "200+", label: "Models Deployed" },
@@ -235,8 +234,7 @@ export default function ServiceDetailClient({ service, blogs = [] }: { service: 
               </span>
             </div>
             <h1 className="display-font mb-8 text-3xl leading-[1.1] font-semibold tracking-tight text-white sm:text-4xl md:text-5xl md:leading-[1.05] lg:text-6xl">
-              {heroTitle1} {heroTitle2 && <br />}
-              {heroTitle2 && <span className="text-[#F99D1C]">{heroTitle2}</span>}
+              {renderTitle(heroTitleText, "text-inherit", "text-[#F99D1C]", "text-[#0171c1]")}
             </h1>
             <p className="max-w-2xl text-lg leading-relaxed font-medium text-gray-300 md:text-xl">
               {service.heroDescription || "We craft intelligent data-driven experiences through cutting-edge AI/ML models and expert consulting for global enterprise leaders."}
