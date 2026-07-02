@@ -19,9 +19,10 @@ export function InlineContactForm({
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    const form = e.currentTarget;
     setIsSubmitting(true);
 
-    const formData = new FormData(e.currentTarget);
+    const formData = new FormData(form);
     const name = formData.get("name") as string;
     const email = formData.get("email") as string;
     const phone = formData.get("phone") as string;
@@ -37,9 +38,9 @@ export function InlineContactForm({
         category,
       });
       toast.success("Thank you! Your project request has been submitted successfully.");
-      e.currentTarget.reset();
+      form.reset();
     } catch (error) {
-      toast.error("Failed to submit request. Please try again later.");
+      toast.error(error instanceof Error ? error.message : "Failed to submit request. Please try again later.");
     } finally {
       setIsSubmitting(false);
     }

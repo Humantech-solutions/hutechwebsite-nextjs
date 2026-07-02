@@ -49,14 +49,15 @@ export default function Graduates() {
       toast.success("Application submitted successfully! Our team will contact you soon.");
       reset();
     } catch (error) {
-      toast.error("Failed to submit application. Please try again later.");
+      toast.error(error instanceof Error ? error.message : "Failed to submit application. Please try again later.");
     }
   };
 
   const handleInitiatePartnership = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    const form = e.currentTarget;
     setIsInitiating(true);
-    const formData = new FormData(e.currentTarget);
+    const formData = new FormData(form);
     const instName = formData.get("institutionName") as string;
     const contactPerson = formData.get("contactPerson") as string;
     const emailVal = formData.get("email") as string;
@@ -73,9 +74,9 @@ export default function Graduates() {
         category: "Academic Partnership",
       });
       toast.success("Partnership request sent. Our Academic Liaison will contact you.");
-      e.currentTarget.reset();
+      form.reset();
     } catch (error) {
-      toast.error("Failed to send partnership request. Please try again later.");
+      toast.error(error instanceof Error ? error.message : "Failed to send partnership request. Please try again later.");
     } finally {
       setIsInitiating(false);
     }
