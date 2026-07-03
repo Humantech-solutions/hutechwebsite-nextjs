@@ -26,7 +26,7 @@ import { Job } from "@/lib/data/careers";
 import { ApplicationModal } from "@/components/ApplicationModal";
 import { renderTitle } from "@/lib/utils";
 
-export default function JobDetailsClient({ job }: { job: Job }) {
+export default function JobDetailsClient({ job, source }: { job: Job; source?: 'recruitpro' | 'wordpress' }) {
   const [isApplicationModalOpen, setIsApplicationModalOpen] = useState(false);
   const [isShareOpen, setIsShareOpen] = useState(false);
   const [copied, setCopied] = useState(false);
@@ -278,16 +278,30 @@ export default function JobDetailsClient({ job }: { job: Job }) {
                 </div>
               )}
 
-              <div className="space-y-8 p-10 bg-gradient-to-br from-[#001A3D] to-[#002b66] rounded-[2.5rem] text-white">
-                <h2 className="text-3xl font-semibold display-font tracking-tight">
-                  {renderTitle(job.aboutTitle)}
-                </h2>
-                <div className="space-y-6 text-gray-300 font-medium leading-relaxed">
-                  {aboutParagraphs.map((para, i) => (
-                    <p key={i}>{para}</p>
-                  ))}
+              {/* About section: static for RecruitPro jobs, ACF-driven for WordPress jobs */}
+              {source === 'recruitpro' ? (
+                <div className="space-y-8 p-10 bg-gradient-to-br from-[#001A3D] to-[#002b66] rounded-[2.5rem] text-white">
+                  <h2 className="text-3xl font-semibold display-font tracking-tight">
+                    About <span className="text-[#F99D1C]">Hutech Solutions</span>
+                  </h2>
+                  <div className="space-y-6 text-gray-300 font-medium leading-relaxed">
+                    <p>Hutech Solutions is a global software powerhouse at the forefront of the AI revolution. As a leading innovator in Artificial Intelligence, Agentic AI, and Deep Learning technologies, we design and deliver next-generation solutions that empower businesses to unlock transformative intelligence and automation.</p>
+                    <p>We are actively partnering with large enterprises and business houses to reimagine and transform enterprise software applications. Our mission is to develop innovative software utilities that accelerate business performance by leveraging cutting-edge AI and Generative AI tools and techniques.</p>
+                    <p>From streamlining operations in logistics, enhancing customer experiences in eCommerce, to driving intelligent automation in the BFSI sector, Hutech Solutions is a trusted force in modern digital transformation.</p>
+                  </div>
                 </div>
-              </div>
+              ) : (
+                <div className="space-y-8 p-10 bg-gradient-to-br from-[#001A3D] to-[#002b66] rounded-[2.5rem] text-white">
+                  <h2 className="text-3xl font-semibold display-font tracking-tight">
+                    {renderTitle(job.aboutTitle)}
+                  </h2>
+                  <div className="space-y-6 text-gray-300 font-medium leading-relaxed">
+                    {aboutParagraphs.map((para, i) => (
+                      <p key={i}>{para}</p>
+                    ))}
+                  </div>
+                </div>
+              )}
             </div>
 
             {/* Sidebar */}

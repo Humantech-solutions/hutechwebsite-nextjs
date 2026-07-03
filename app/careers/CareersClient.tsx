@@ -148,13 +148,13 @@ export default function CareersClient({ jobs, pageData }: CareersClientProps) {
               </h2>
             </div>
             
-            {/* Horizontal Tabs */}
-            <div className="flex flex-wrap items-center gap-2">
+            {/* Horizontal Scrollable Tabs */}
+            <div className="flex items-center gap-2 overflow-x-auto pb-1 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden flex-nowrap max-w-full">
               {departments.map((dept) => (
                 <button
                   key={dept}
                   onClick={() => setActiveDepartment(dept)}
-                  className={`px-6 py-3 text-xs font-semibold rounded-md transition-all ${
+                  className={`px-6 py-3 text-xs font-semibold rounded-md transition-all whitespace-nowrap shrink-0 ${
                     activeDepartment === dept
                       ? "bg-[#001A3D] text-white shadow-lg"
                       : "bg-[#F8F9FA] text-[#6C757D] hover:bg-gray-200"
