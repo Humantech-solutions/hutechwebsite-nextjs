@@ -40,7 +40,7 @@ function getPageMeta(defaultTitle: string) {
     };
   }
 
-  const pageTitle = clean(window.document.title, defaultTitle);
+  let pageTitle = clean(window.document.title, defaultTitle);
   const currentUrl = new URL(window.location.href);
   const siteUrl = new URL(SITE_BASE_URL);
 
@@ -49,9 +49,19 @@ function getPageMeta(defaultTitle: string) {
     currentUrl.host = siteUrl.host;
   }
 
+  let pageUrlStr = currentUrl.toString();
+
+  // If we are currently on the contact page, grab the previous page info
+  if (currentUrl.pathname.includes('/contact')) {
+    const prevUrl = sessionStorage.getItem('hutech_prev_url');
+    const prevTitle = sessionStorage.getItem('hutech_prev_title');
+    if (prevUrl) pageUrlStr = prevUrl;
+    if (prevTitle) pageTitle = prevTitle;
+  }
+
   return {
     pageTitle,
-    pageUrl: currentUrl.toString(),
+    pageUrl: pageUrlStr,
   };
 }
 
