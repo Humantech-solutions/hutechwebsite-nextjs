@@ -223,8 +223,27 @@ export default function Footer({ data }: { data?: FooterChromeData }) {
                   </h5>
                 )}
                 <div className="text-sm text-gray-400 leading-relaxed space-y-1">
-                  {office.company && <p className="text-white/80">{office.company}</p>}
-                  {office.address?.map((line) => <p key={line}>{line}</p>)}
+                  {office.mapUrl ? (
+                    <a
+                      href={office.mapUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="block cursor-pointer hover:text-white transition-colors"
+                      title="Open in Google Maps"
+                    >
+                      {office.company && (
+                        <p className="text-white/80">{office.company}</p>
+                      )}
+                      {office.address?.map((line) => (
+                        <p key={line}>{line}</p>
+                      ))}
+                    </a>
+                  ) : (
+                    <>
+                      {office.company && <p className="text-white/80">{office.company}</p>}
+                      {office.address?.map((line) => <p key={line}>{line}</p>)}
+                    </>
+                  )}
                   {(office.phone || office.email) && (
                     <div className="pt-3 flex flex-col items-start gap-1.5">
                       {office.phone && (
