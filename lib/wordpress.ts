@@ -371,14 +371,14 @@ const HOMEPAGE_QUERY = `
         capabilities {
           title
           description
-          capability_1 { name image { node { sourceUrl } } color }
-          capability_2 { name image { node { sourceUrl } } color }
-          capability_3 { name image { node { sourceUrl } } color }
-          capability_4 { name image { node { sourceUrl } } color }
-          capability_5 { name image { node { sourceUrl } } color }
-          capability_6 { name image { node { sourceUrl } } color }
-          capability_7 { name image { node { sourceUrl } } color }
-          capability_8 { name image { node { sourceUrl } } color }
+          capability_1 { name image { node { sourceUrl } } color url }
+          capability_2 { name image { node { sourceUrl } } color url }
+          capability_3 { name image { node { sourceUrl } } color url }
+          capability_4 { name image { node { sourceUrl } } color url }
+          capability_5 { name image { node { sourceUrl } } color url }
+          capability_6 { name image { node { sourceUrl } } color url }
+          capability_7 { name image { node { sourceUrl } } color url }
+          capability_8 { name image { node { sourceUrl } } color url }
         }
         awards {
           title
@@ -486,6 +486,7 @@ export interface WpCapability {
   name?: string;
   image?: any;
   color?: string;
+  url?: string;
 }
 
 export interface WpIndustry {
@@ -615,7 +616,7 @@ function transformHomePage(
   const cap = f.capabilities || {};
   const capList: WpCapability[] = collectGroups(cap, "capability", 8)
     .filter((c: any) => c?.name?.trim())
-    .map((c: any) => ({ name: c?.name, imageUrl: imgUrl(c?.image), color: c?.color }));
+    .map((c: any) => ({ name: c?.name, imageUrl: imgUrl(c?.image), color: c?.color, url: c?.url || "" }));
 
   // Awards — only include awards with a label
   const aw = f.awards || {};

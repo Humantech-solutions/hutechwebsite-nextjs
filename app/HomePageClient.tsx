@@ -515,6 +515,7 @@ export default function HomePageClient({ data }: HomePageClientProps) {
         name:  c.name?.trim()  || CAPABILITIES_DATA[i]?.name || "",
         image: c.imageUrl?.trim() || c.image?.trim() || CAPABILITIES_DATA[i]?.image || CAPABILITIES_DATA[0].image,
         color: c.color?.trim() || CAPABILITIES_DATA[i]?.color || "#001A3D",
+        url:   c.url?.trim()   || "",
       }))
     : CAPABILITIES_DATA;
 
@@ -871,17 +872,24 @@ export default function HomePageClient({ data }: HomePageClientProps) {
           <div className="flex flex-col lg:flex-row items-start gap-12 lg:gap-20">
             <div className="flex-1 space-y-1 relative z-10 w-full">
               <div className="grid grid-cols-1">
-                {CAPABILITIES_FINAL.map((cap, idx) => (
-                  <button 
-                    key={idx} 
-                    onMouseEnter={() => setActiveCapIdx(idx)}
-                    onClick={() => setActiveCapIdx(idx)}
-                    className={`flex items-center justify-between w-full group py-4 md:py-6 border-b border-white/10 text-left transition-all duration-300 ${activeCapIdx === idx ? "text-[#F99D1C] pl-2 md:pl-4" : "hover:text-[#F99D1C] hover:pl-1 md:hover:pl-2"}`}
-                  >
-                    <span className={`text-lg md:text-xl font-medium tracking-tight ${activeCapIdx === idx ? "font-semibold" : "font-normal"}`}>{cap.name}</span>
-                    <ChevronRight className={`w-5 h-5 md:w-6 md:h-6 transition-all duration-300 ${activeCapIdx === idx ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-4"}`} />
-                  </button>
-                ))}
+                {CAPABILITIES_FINAL.map((cap, idx) => {
+                  const inner = (
+                    <button 
+                      key={idx} 
+                      onMouseEnter={() => setActiveCapIdx(idx)}
+                      onClick={() => setActiveCapIdx(idx)}
+                      className={`flex items-center justify-between w-full group py-4 md:py-6 border-b border-white/10 text-left transition-all duration-300 ${activeCapIdx === idx ? "text-[#F99D1C] pl-2 md:pl-4" : "hover:text-[#F99D1C] hover:pl-1 md:hover:pl-2"}`}
+                    >
+                      <span className={`text-lg md:text-xl font-medium tracking-tight ${activeCapIdx === idx ? "font-semibold" : "font-normal"}`}>{cap.name}</span>
+                      <ChevronRight className={`w-5 h-5 md:w-6 md:h-6 transition-all duration-300 ${activeCapIdx === idx ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-4"}`} />
+                    </button>
+                  );
+                  return (cap as any).url ? (
+                    <Link key={idx} href={(cap as any).url}>{inner}</Link>
+                  ) : (
+                    <div key={idx}>{inner}</div>
+                  );
+                })}
               </div>
             </div>
             
