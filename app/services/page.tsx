@@ -1,3 +1,6 @@
+import { Suspense } from "react";
+import PageClient from "./PageClient";
+import { getServicePageData, getServiceCategoriesWithServices } from "@/lib/wordpress";
 import { constructMetadata } from "@/lib/seo";
 
 export const metadata = constructMetadata({
@@ -6,4 +9,25 @@ export const metadata = constructMetadata({
   path: "/services/",
 });
 
-export { default } from "./PageClient";
+export const revalidate = 60;
+
+export default async function ServicesPage() {
+  const [pageData, serviceCategories] = await Promise.all([
+    getServicePageData(),
+    getServiceCategoriesWithServices(),
+  ]);
+
+  const pageTitle = pageData?.title || "Comprehensive Technology Services for |Complex Businesses.";
+  const pageDescription = pageData?.description || "From strategic consulting to full-cycle development, we provide the technical edge needed to dominate your industry.";
+
+  return (
+    <Suspense>
+      <PageClient 
+        pageTitle={pageTitle}
+        pageDescription={pageDescription}
+        serviceCategories={serviceCategories}
+        pageData={pageData}
+      />
+    </Suspense>
+  );
+}
