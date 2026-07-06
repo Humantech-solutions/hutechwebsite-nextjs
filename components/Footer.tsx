@@ -102,11 +102,13 @@ const DEFAULT_OFFICES = [
     phone: "(+91) 8867487771",
     phoneUrl: "+918867487771",
     email: "sales@hutechsolutions.com",
+    mapUrl: "",
   },
   {
     title: "USA:",
     address: ["1205, SE 33rd Street, Bentonville,", "AR 72712"],
     phone: "+1 (479) 696 1146",
+    mapUrl: "",
   },
 ];
 

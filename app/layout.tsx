@@ -10,10 +10,11 @@ import { ScrollToTopButton } from "@/components/ScrollToTopButton";
 import { ChatWidget } from "@/components/ChatWidget";
 import { CookieBanner } from "@/components/CookieBanner";
 import TemporaryPasswordGate from "@/components/TemporaryPasswordGate";
+import { RouteTracker } from "@/components/RouteTracker";
+import Script from "next/script";
 
 export const metadata = constructMetadata();
 
-import Script from "next/script";
 import { ThemeProvider } from "next-themes";
 
 export default async function RootLayout({
@@ -45,6 +46,7 @@ export default async function RootLayout({
             `}
           </Script>
           <TemporaryPasswordGate>
+            <RouteTracker />
             <div className="w-full">
               <Navbar data={siteChrome?.header} />
               <main>{children}</main>
