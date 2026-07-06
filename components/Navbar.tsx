@@ -3,7 +3,7 @@
 import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { Search, Globe, Menu, X, ChevronDown, MoveRight } from "lucide-react";
+import { Search, Globe, Menu, X, ChevronDown, MoveRight, Phone, Mail, Linkedin } from "lucide-react";
 import { motion as Motion, AnimatePresence, useScroll, useTransform } from "framer-motion";
 import { ImageWithFallback } from "./figma/ImageWithFallback";
 import type { HeaderChromeData } from "@/lib/wordpress";
@@ -183,6 +183,7 @@ export default function Navbar({ data }: { data?: HeaderChromeData }) {
   // Disable height animation when mobile menu is open
   const navHeight = useTransform(scrollY, [0, 50], ["80px", "64px"]);
   const logoScale = useTransform(scrollY, [0, 50], [1, 0.85]);
+  const megaMenuTop = useTransform(scrollY, [0, 38, 50], ["118px", "67.8px", "64px"]);
 
   useEffect(() => {
     if (mobileMenuOpen) {
@@ -222,20 +223,41 @@ export default function Navbar({ data }: { data?: HeaderChromeData }) {
 
   return (
     <>
-      <Motion.nav
-        role="navigation"
-        aria-label="Main Navigation"
-        style={{
-          height: navHeight,
-          backgroundColor: navBackground,
-          backdropFilter: navBlur,
-          color: textColorValue,
-        }}
-        className={`fixed top-0 left-0 z-50 w-full bg-white transition-shadow duration-300 ${
-          scrolled ? "border-b border-gray-100 shadow-md" : "border-b border-gray-50"
-        }`}
-        ref={dropdownRef}
-      >
+      <header className="sticky top-[-40px] md:top-[-38px] left-0 z-50 w-full flex flex-col pointer-events-none">
+        <div className="pointer-events-auto bg-[#00142D] w-full h-[40px] md:h-[38px] text-white text-[10px] sm:text-xs md:text-sm font-medium">
+          <div className="mx-auto flex h-full w-full max-w-[1280px] items-center justify-end px-6 lg:px-20">
+            <div className="flex items-center space-x-2 sm:space-x-3 md:space-x-4">
+              <a href="tel:+919035180487" className="flex items-center space-x-1 sm:space-x-1.5 md:space-x-2 hover:text-[#0171c1] transition-colors">
+                <Phone className="w-3 h-3 sm:w-3.5 sm:h-3.5 md:w-4 md:h-4" />
+                <span className="whitespace-nowrap">IN (+91) 90351 80487</span>
+              </a>
+              <div className="h-3 md:h-4 w-[1px] bg-white/20"></div>
+              <a href="mailto:sales@hutechsolutions.com" className="flex items-center space-x-1 sm:space-x-1.5 md:space-x-2 hover:text-[#0171c1] transition-colors">
+                <Mail className="w-3 h-3 sm:w-3.5 sm:h-3.5 md:w-4 md:h-4" />
+                <span className="whitespace-nowrap">sales@hutechsolutions.com</span>
+              </a>
+              <div className="h-3 md:h-4 w-[1px] bg-white/20"></div>
+              <a href="https://www.linkedin.com/company/hutechsolutions" target="_blank" rel="noopener noreferrer" className="flex items-center hover:text-[#0171c1] transition-colors">
+                <Linkedin className="w-3 h-3 sm:w-3.5 sm:h-3.5 md:w-4 md:h-4" fill="currentColor" />
+              </a>
+            </div>
+          </div>
+        </div>
+        <div className="relative w-full h-[80px] pointer-events-none">
+          <Motion.nav
+            role="navigation"
+            aria-label="Main Navigation"
+            style={{
+              height: navHeight,
+              backgroundColor: navBackground,
+              backdropFilter: navBlur,
+              color: textColorValue,
+            }}
+            className={`pointer-events-auto absolute top-0 left-0 w-full bg-white transition-shadow duration-300 ${
+              scrolled ? "border-b border-gray-100 shadow-md" : "border-b border-gray-50"
+            }`}
+            ref={dropdownRef}
+          >
         <div className="mx-auto h-full max-w-[1280px] px-6 lg:px-20">
           <div className="flex h-full items-center justify-between">
             <div className="flex items-center">
@@ -314,13 +336,13 @@ export default function Navbar({ data }: { data?: HeaderChromeData }) {
                         {isMega && (
                           <AnimatePresence>
                             {activeDropdown === idx && (
-                              <Motion.div
-                                initial={{ opacity: 0, y: -5 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                exit={{ opacity: 0, y: -5 }}
-                                className="fixed top-[80px] left-0 z-50 w-full overflow-hidden border-t border-gray-100 bg-white shadow-2xl"
-                                style={{ top: scrolled ? "64px" : "80px" }}
-                              >
+                                <Motion.div
+                                  initial={{ opacity: 0, y: -5 }}
+                                  animate={{ opacity: 1, y: 0 }}
+                                  exit={{ opacity: 0, y: -5 }}
+                                  className="fixed left-0 z-50 w-full overflow-hidden border-t border-gray-100 bg-white shadow-2xl"
+                                  style={{ top: megaMenuTop }}
+                                >
                                 <div className="mx-auto max-w-[1280px] px-6 py-12 lg:px-20">
                                   <div className="grid grid-cols-12 gap-12">
                                     <div className="col-span-3">
@@ -414,7 +436,9 @@ export default function Navbar({ data }: { data?: HeaderChromeData }) {
             </div>
           </div>
         </div>
-      </Motion.nav>
+          </Motion.nav>
+        </div>
+      </header>
 
       {/* Mobile Menu Overlay */}
       <AnimatePresence>
@@ -469,11 +493,11 @@ export default function Navbar({ data }: { data?: HeaderChromeData }) {
                         }
                         className="group flex w-full items-center justify-between text-2xl font-semibold tracking-tight text-white"
                       >
-                        <span className={mobileExpandedItem === idx ? "text-[#0171c1]" : ""}>
+                        <span className={mobileExpandedItem === idx ? "text-[#F99D1C]" : ""}>
                           {item.label}
                         </span>
                         <ChevronDown
-                          className={`h-6 w-6 text-[#0171c1] transition-transform duration-500 ${
+                          className={`h-6 w-6 text-[#F99D1C] transition-transform duration-500 ${
                             mobileExpandedItem === idx ? "rotate-180" : ""
                           }`}
                         />
@@ -491,9 +515,9 @@ export default function Navbar({ data }: { data?: HeaderChromeData }) {
                               {item.dropdown.map((section) => (
                                 <div
                                   key={section.title}
-                                  className="space-y-4 border-l border-[#0171c1]/20 pl-4"
+                                  className="space-y-4 border-l border-[#F99D1C]/20 pl-4"
                                 >
-                                  <h4 className="text-sm font-semibold text-[#0171c1] opacity-80">
+                                  <h4 className="text-sm font-semibold text-[#F99D1C] opacity-80">
                                     {section.title}
                                   </h4>
                                   <div className="grid gap-4">
@@ -504,7 +528,7 @@ export default function Navbar({ data }: { data?: HeaderChromeData }) {
                                         className="group flex items-center text-base font-semibold text-gray-300 transition-colors hover:text-white"
                                         onClick={() => setMobileMenuOpen(false)}
                                       >
-                                        <div className="mr-3 h-1.5 w-1.5 rounded-full bg-[#0171c1] opacity-0 transition-opacity group-hover:opacity-100"></div>
+                                        <div className="mr-3 h-1.5 w-1.5 rounded-full bg-[#F99D1C] opacity-0 transition-opacity group-hover:opacity-100"></div>
                                         {subItem.name}
                                       </Link>
                                     ))}
@@ -519,7 +543,7 @@ export default function Navbar({ data }: { data?: HeaderChromeData }) {
                   ) : (
                     <Link
                       href={item.path}
-                      className="block text-2xl font-semibold tracking-tight text-white transition-colors hover:text-[#0171c1]"
+                      className="block text-2xl font-semibold tracking-tight text-white transition-colors hover:text-[#F99D1C]"
                       onClick={() => setMobileMenuOpen(false)}
                     >
                       {item.label}
@@ -539,7 +563,7 @@ export default function Navbar({ data }: { data?: HeaderChromeData }) {
               </Link>
               <div className="flex items-center justify-between border-t border-white/5 pt-4 text-[11px] font-semibold tracking-wide text-gray-500">
                 <div>{mobileFooter.left}</div>
-                <div className="text-[#0171c1]">{mobileFooter.right}</div>
+                <div className="text-[#F99D1C]">{mobileFooter.right}</div>
               </div>
             </div>
           </Motion.div>
