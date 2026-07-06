@@ -45,7 +45,7 @@ export default async function RootLayout({
             `}
           </Script>
           <TemporaryPasswordGate>
-            <div className="pt-[80px] md:pt-[80px]">
+            <div className="w-full">
               <Navbar data={siteChrome?.header} />
               <main>{children}</main>
               <Footer data={siteChrome?.footer} />
