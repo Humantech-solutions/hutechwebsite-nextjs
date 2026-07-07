@@ -16,7 +16,7 @@ import {
   Filter,
 } from "lucide-react";
 import { Meta } from "@/components/Meta";
-
+import { DownloadFormModal } from "@/components/DownloadFormModal";
 import { HutechDocument } from "@/lib/wordpress";
 
 interface HutechDocumentsClientProps {
@@ -44,6 +44,7 @@ export default function HutechDocumentsClient({ documents, pageData }: HutechDoc
   const [searchQuery, setSearchQuery] = useState("");
   const [activeCategory, setActiveCategory] = useState("All");
   const [showFilterMenu, setShowFilterMenu] = useState(false);
+  const [selectedDoc, setSelectedDoc] = useState<HutechDocument | null>(null);
 
   const categories = ["All", ...Array.from(new Set(documents.map(d => d.category).filter(Boolean)))];
 
@@ -192,15 +193,12 @@ export default function HutechDocumentsClient({ documents, pageData }: HutechDoc
                         </div>
                       </div>
                     </div>
-                    <a 
-                      href={doc.externalUrl || doc.fileUrl || "#"} 
-                      download={!doc.externalUrl ? true : undefined}
-                      target={doc.externalUrl ? "_blank" : undefined}
-                      rel="noopener noreferrer"
+                    <button 
+                      onClick={() => setSelectedDoc(doc)}
                       className="flex w-full items-center justify-center gap-3 rounded-lg bg-gray-50 px-8 py-4 text-[11px] font-bold tracking-widest text-[#001A3D] transition-all group-hover:bg-[#F99D1C] md:w-auto"
                     >
                       DOWNLOAD <Download size={16} />
-                    </a>
+                    </button>
                   </div>
                 ))
                 ) : (
@@ -252,15 +250,12 @@ export default function HutechDocumentsClient({ documents, pageData }: HutechDoc
                       </div>
                     </div>
 
-                    <a 
-                      href={doc.externalUrl || doc.fileUrl || "#"} 
-                      download={!doc.externalUrl ? true : undefined}
-                      target={doc.externalUrl ? "_blank" : undefined}
-                      rel="noopener noreferrer"
+                    <button 
+                      onClick={() => setSelectedDoc(doc)}
                       className="mt-12 flex w-full items-center justify-between rounded-2xl p-5 text-xs font-bold tracking-widest transition-all group-hover:bg-[#001A3D] group-hover:text-white bg-gray-50 text-[#001A3D]"
                     >
                       GET DOCUMENT <Download size={18} className="text-[#F99D1C]" />
-                    </a>
+                    </button>
                   </div>
                 ))
                 ) : (
@@ -303,6 +298,14 @@ export default function HutechDocumentsClient({ documents, pageData }: HutechDoc
           </div>
         </div>
       </section>
+
+      {/* Download Form Modal */}
+      <DownloadFormModal
+        isOpen={!!selectedDoc}
+        onClose={() => setSelectedDoc(null)}
+        documentTitle={selectedDoc?.title || ""}
+        downloadUrl={selectedDoc?.externalUrl || selectedDoc?.fileUrl || ""}
+      />
     </div>
   );
 }
