@@ -340,8 +340,7 @@ export default function Navbar({ data }: { data?: HeaderChromeData }) {
                                   initial={{ opacity: 0, y: -5 }}
                                   animate={{ opacity: 1, y: 0 }}
                                   exit={{ opacity: 0, y: -5 }}
-                                  className="fixed left-0 z-50 w-full overflow-hidden border-t border-gray-100 bg-white shadow-2xl"
-                                  style={{ top: megaMenuTop }}
+                                  className="absolute left-0 top-full z-50 w-full overflow-hidden border-t border-gray-100 bg-white shadow-2xl"
                                 >
                                 <div className="mx-auto max-w-[1280px] px-6 py-12 lg:px-20">
                                   <div className="grid grid-cols-12 gap-12">

@@ -7,6 +7,7 @@ import {
   MoveRight,
   ChevronRight,
   ChevronLeft,
+  ChevronDown,
   Plus,
   Minus,
   Cpu,
@@ -153,42 +154,50 @@ const CAPABILITIES_DATA = [
   { 
     name: "Artificial Intelligence", 
     image: "https://hutechsolutions.com/wp-content/uploads/2026/05/AI.jpg",
-    color: "#002964"
+    color: "#002964",
+    desc: "Build intelligent AI-powered solutions using machine learning, generative AI, computer vision, and predictive analytics to drive measurable outcomes."
   },
   { 
     name: "Banking & Financial Services", 
     image: "https://hutechsolutions.com/wp-content/uploads/2026/05/financial-services.jpg",
-    color: "#001A3D"
+    color: "#001A3D",
+    desc: "Accelerate banking innovation with secure digital platforms, payment solutions, and modern financial technologies for the next generation of finance."
   },
   { 
     name: "Ecommerce Development", 
     image: "https://hutechsolutions.com/wp-content/uploads/2026/05/next-gen-ecommerce.jpg",
-    color: "#1A2E35"
+    color: "#1A2E35",
+    desc: "Create scalable ecommerce experiences that increase conversions and deliver seamless omnichannel shopping journeys across all devices."
   },
   { 
     name: "SRE & DevOps Services", 
     image: "https://hutechsolutions.com/wp-content/uploads/2026/05/devops-services.jpg",
-    color: "#2C3E50"
+    color: "#2C3E50",
+    desc: "Improve software delivery through automation, monitoring, cloud infrastructure, and DevOps best practices that boost reliability and speed."
   },
   { 
     name: "Cloud Transformation", 
     image: "https://hutechsolutions.com/wp-content/uploads/2026/05/clouds-transformation.jpg",
-    color: "#1C2833"
+    color: "#1C2833",
+    desc: "Modernize your enterprise with scalable cloud platforms, migration services, and cloud-native applications for maximum agility."
   },
   { 
     name: "Blockchain Development", 
     image: "https://hutechsolutions.com/wp-content/uploads/2026/05/blockchain-devlopment.jpg",
-    color: "#001A3D"
+    color: "#001A3D",
+    desc: "Develop secure decentralized applications using blockchain technologies and smart contracts for transparent and trustworthy systems."
   },
   { 
     name: "Enterprise Digital Solutions", 
     image: "https://hutechsolutions.com/wp-content/uploads/2026/05/enterprise-digital-solutions.jpg",
-    color: "#002964"
+    color: "#002964",
+    desc: "Transform business operations with enterprise software, automation, and intelligent digital ecosystems that unify your organization."
   },
   { 
     name: "Development and Maintenance", 
     image: "https://hutechsolutions.com/wp-content/uploads/2026/05/development.jpg",
-    color: "#003366"
+    color: "#003366",
+    desc: "Ensure long-term application performance with continuous development, testing, maintenance, and optimization services."
   }
 ];
 
@@ -515,7 +524,11 @@ export default function HomePageClient({ data }: HomePageClientProps) {
         name:  c.name?.trim()  || CAPABILITIES_DATA[i]?.name || "",
         image: c.imageUrl?.trim() || c.image?.trim() || CAPABILITIES_DATA[i]?.image || CAPABILITIES_DATA[0].image,
         color: c.color?.trim() || CAPABILITIES_DATA[i]?.color || "#001A3D",
+<<<<<<< HEAD
         url:   c.url?.trim()   || "",
+=======
+        desc: c.description?.trim() || c.desc?.trim() || CAPABILITIES_DATA[i]?.desc || ""
+>>>>>>> 9940681 (UI changes)
       }))
     : CAPABILITIES_DATA;
 
@@ -576,7 +589,7 @@ export default function HomePageClient({ data }: HomePageClientProps) {
       <section className="relative w-full overflow-hidden" aria-label="Hero Section">
         <Slider ref={heroSliderRef} {...heroSettings}>
           {HERO_SLIDES.map((slide, idx) => (
-            <div key={idx} className="relative h-[600px] md:h-[620px]">
+            <div key={idx} className="relative h-[500px] sm:h-[540px] md:h-[620px]">
               <ImageWithFallback
                 src={slide.image}
                 alt={slide.alt}
@@ -606,25 +619,25 @@ export default function HomePageClient({ data }: HomePageClientProps) {
                     </h1>
 
                     {/* Description */}
-                    <p className="text-gray-200 text-base md:text-xl font-medium max-w-2xl leading-relaxed opacity-90">
+                    <p className="text-gray-200 text-[14px] sm:text-base md:text-xl font-medium max-w-2xl leading-relaxed opacity-90 line-clamp-3 sm:line-clamp-none">
                       {slide.description}
                     </p>
 
                     {/* CTAs */}
-                    <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 md:gap-6 pt-2">
+                    <div className="flex flex-row items-center gap-3 md:gap-6 pt-2 w-full">
                       {slide.btn1Text && (
                         <Link 
                           href={slide.btn1Link || "/contact"}
-                          className="group flex items-center justify-center gap-3 bg-[#0171c1] text-white font-bold py-4 px-8 md:px-10 text-[11px] md:text-xs tracking-wider hover:bg-white hover:text-[#001A3D] transition-all duration-300 shadow-xl w-full sm:w-auto"
+                          className="group flex-1 md:flex-initial flex items-center justify-center gap-3 bg-[#0171c1] text-white font-bold py-4 px-6 md:px-10 text-[11px] md:text-xs tracking-wider hover:bg-[#005fa3] transition-all duration-300 shadow-xl md:w-auto"
                         >
                           {slide.btn1Text}
-                          <MoveRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
+                          <MoveRight className="w-4 h-4 transition-transform group-hover:translate-x-1 hidden md:block" />
                         </Link>
                       )}
                       {slide.btn2Text && (
                         <Link 
                           href={slide.btn2Link || "/services"}
-                          className="flex items-center justify-center border border-white/40 text-white font-semibold py-4 px-8 md:px-10 text-[11px] md:text-xs tracking-wider hover:border-white hover:bg-white/10 transition-all duration-300 w-full sm:w-auto"
+                          className="flex-1 md:flex-initial flex items-center justify-center bg-[#f0f4f8] border border-[#0171c1] text-[#0171c1] font-semibold py-4 px-6 md:px-10 text-[11px] md:text-xs tracking-wider hover:bg-[#e0eaf5] transition-all duration-300 md:w-auto"
                         >
                           {slide.btn2Text}
                         </Link>
@@ -706,16 +719,48 @@ export default function HomePageClient({ data }: HomePageClientProps) {
       </section>
 
       {/* "with Hutech Solutions" section */}
-      <section className="py-20 bg-[#FAF9F6] border-b border-gray-100 overflow-hidden" aria-label="About Hutech Solutions">
-        <div className="max-w-[1280px] mx-auto px-6 lg:px-20 flex flex-col md:flex-row items-center gap-12 md:gap-32">
-          <div className="flex-1 space-y-6 md:space-y-8 order-2 md:order-1">
+      <section className="py-12 md:py-20 bg-[#FAF9F6] border-b border-gray-100 overflow-hidden" aria-label="About Hutech Solutions">
+        {/* Mobile View Layout (exact sequence: Title -> Description -> Image -> Buttons) */}
+        <div className="block md:hidden px-6 space-y-6">
+          <h2 className="text-3xl font-semibold text-[#001A3D] display-font tracking-tight leading-tight">
+            {renderTitle(withHutechTitle, "text-[#001A3D]", "text-gray-400")}
+          </h2>
+          <p className="text-gray-600 text-base font-medium leading-relaxed">
+            {withHutechDesc}
+          </p>
+          <div className="relative w-full aspect-[16/10] rounded-lg overflow-hidden shadow-lg">
+            <ImageWithFallback 
+              src={withHutechImg}
+              alt="Digital engineering excellence at Hutech Solutions"
+              className="w-full h-full object-cover"
+            />
+          </div>
+          <div className="flex items-center gap-4 pt-2">
+            <Link 
+              href={withHutechKnowMoreLink} 
+              className="flex-1 bg-[#0171c1] text-white flex justify-center items-center font-semibold h-[52px] rounded-[4px] text-xs tracking-wider shadow-md hover:bg-[#001A3D] transition-all"
+            >
+              {data?.withHutech?.knowMoreLink?.title || "Know More"}
+            </Link>
+            <Link 
+              href={withHutechBrandStoryLink} 
+              className="flex-1 border border-[#0171c1] text-[#0171c1] bg-transparent flex justify-center items-center font-semibold h-[52px] rounded-[4px] text-xs tracking-wider hover:bg-[#0171c1]/5 transition-all"
+            >
+              {data?.withHutech?.brandStoryLink?.title || "The Brand Story"}
+            </Link>
+          </div>
+        </div>
+
+        {/* Desktop View Layout */}
+        <div className="hidden md:flex max-w-[1280px] mx-auto px-6 lg:px-20 flex-row items-center gap-12 md:gap-32">
+          <div className="flex-1 space-y-6 md:space-y-8">
             <h2 className="text-3xl sm:text-4xl md:text-5xl font-semibold text-[#001A3D] display-font tracking-tight leading-tight">
               {renderTitle(withHutechTitle, "text-[#001A3D]", "text-gray-400")}
             </h2>
             <p className="text-gray-600 text-base md:text-lg font-medium leading-relaxed max-w-xl">
               {withHutechDesc}
             </p>
-            <div className="flex flex-col sm:flex-row gap-4">
+            <div className="flex flex-row gap-4">
               <Link href={withHutechKnowMoreLink} className="bg-[#0171c1] text-white flex justify-center items-center font-semibold py-4 px-10 text-[11px] tracking-wider shadow-lg hover:shadow-xl hover:bg-[#001A3D] transition-all">
                 {data?.withHutech?.knowMoreLink?.title || "Know More"}
               </Link>
@@ -724,8 +769,8 @@ export default function HomePageClient({ data }: HomePageClientProps) {
               </Link>
             </div>
           </div>
-          <div className="flex-1 relative order-1 md:order-2 w-full">
-            <div className="aspect-[16/9] rounded-sm overflow-hidden shadow-2xl rotate-1 md:rotate-2">
+          <div className="flex-1 relative w-full">
+            <div className="aspect-[16/9] rounded-sm overflow-hidden shadow-2xl rotate-2">
               <ImageWithFallback 
                 src={withHutechImg}
                 alt="Digital engineering excellence at Hutech Solutions"
@@ -733,7 +778,7 @@ export default function HomePageClient({ data }: HomePageClientProps) {
               />
             </div>
             {/* Decorative BG element */}
-            <div className="absolute -inset-4 bg-[#0171c1]/5 -z-10 -rotate-1 md:-rotate-2"></div>
+            <div className="absolute -inset-4 bg-[#0171c1]/5 -z-10 -rotate-2"></div>
           </div>
         </div>
       </section>
@@ -770,7 +815,7 @@ export default function HomePageClient({ data }: HomePageClientProps) {
 
 
       {/* Expertise Across Industries */}
-      <section className="py-20 bg-white relative overflow-hidden">
+      <section className="py-[50px] md:py-20 bg-white relative overflow-hidden">
         <div className="max-w-[1280px] mx-auto px-6 lg:px-20">
           <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-0 md:gap-4 mb-8 md:mb-20">
             <div className="max-w-2xl space-y-6">
@@ -856,66 +901,186 @@ export default function HomePageClient({ data }: HomePageClientProps) {
 
       {/* Capabilities Section */}
       <section 
-        className="py-20 text-white overflow-hidden bg-[#0A2A60]"
+        className="relative text-white overflow-hidden"
         aria-labelledby="capabilities-title"
       >
-        <div className="max-w-[1280px] mx-auto px-6 lg:px-20">
-          <div className="max-w-2xl mb-12 md:mb-16 space-y-4">
-            <h2 id="capabilities-title" className="text-4xl sm:text-5xl md:text-6xl font-semibold display-font tracking-tight">
-              {renderTitle(capTitle, "text-inherit", "text-[#F99D1C]")}
+        {/* Background Images Crossfade layer (Mobile Only) */}
+        <div className="absolute inset-0 z-0 md:hidden block">
+          {/* Base background color */}
+          <div className="absolute inset-0 bg-[#08111F]" />
+          
+          <AnimatePresence mode="popLayout">
+            {CAPABILITIES_FINAL.map((cap, idx) => {
+              const isSelected = activeCapIdx === idx;
+              const isBgActive = isSelected || (activeCapIdx === -1 && idx === 0);
+              
+              if (!isBgActive) return null;
+              
+              return (
+                <Motion.div
+                  key={idx}
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.35, ease: "easeInOut" }}
+                  className="absolute inset-0"
+                >
+                  <img
+                    src={cap.image}
+                    alt=""
+                    className="w-full h-full object-cover"
+                  />
+                  {/* 65-70% dark overlay for readability */}
+                  <div className="absolute inset-0 bg-black/70" />
+                </Motion.div>
+              );
+            })}
+          </AnimatePresence>
+        </div>
+
+        {/* Desktop Base Background (unchanged) */}
+        <div className="absolute inset-0 z-0 hidden md:block bg-[#08111F]" />
+
+        {/* ── MOBILE accordion ── */}
+        <div className="relative z-10 block md:hidden">
+          {/* Header */}
+          <div className="px-6 pt-12 pb-8 space-y-3">
+            <h2 id="capabilities-title" className="text-4xl font-semibold display-font tracking-tight">
+              {renderTitle(capTitle, "text-inherit", "text-[#F5A623]")}
             </h2>
-            <p className="text-blue-100/70 font-medium text-sm md:text-base leading-relaxed">
+            <p className="text-white/50 text-sm leading-relaxed">
               {capDesc}
             </p>
           </div>
 
-          <div className="flex flex-col lg:flex-row items-start gap-12 lg:gap-20">
-            <div className="flex-1 space-y-1 relative z-10 w-full">
-              <div className="grid grid-cols-1">
-                {CAPABILITIES_FINAL.map((cap, idx) => {
-                  const inner = (
-                    <button 
-                      key={idx} 
-                      onMouseEnter={() => setActiveCapIdx(idx)}
-                      onClick={() => setActiveCapIdx(idx)}
-                      className={`flex items-center justify-between w-full group py-4 md:py-6 border-b border-white/10 text-left transition-all duration-300 ${activeCapIdx === idx ? "text-[#F99D1C] pl-2 md:pl-4" : "hover:text-[#F99D1C] hover:pl-1 md:hover:pl-2"}`}
-                    >
-                      <span className={`text-lg md:text-xl font-medium tracking-tight ${activeCapIdx === idx ? "font-semibold" : "font-normal"}`}>{cap.name}</span>
-                      <ChevronRight className={`w-5 h-5 md:w-6 md:h-6 transition-all duration-300 ${activeCapIdx === idx ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-4"}`} />
-                    </button>
-                  );
-                  return (cap as any).url ? (
-                    <Link key={idx} href={(cap as any).url}>{inner}</Link>
-                  ) : (
-                    <div key={idx}>{inner}</div>
-                  );
-                })}
-              </div>
-            </div>
-            
-            <div className="flex-1 relative h-[400px] md:h-[600px] w-full hidden md:block">
-              <div className="relative w-full h-full">
-                <AnimatePresence mode="wait">
-                  <Motion.div
-                    key={activeCapIdx}
-                    initial={{ opacity: 0, x: 20, filter: "blur(10px)" }}
-                    animate={{ opacity: 1, x: 0, filter: "blur(0px)" }}
-                    exit={{ opacity: 0, x: -20, filter: "blur(10px)" }}
-                    transition={{ duration: 0.4, ease: "easeOut" }}
-                    className="absolute inset-0"
+          {/* Accordion items */}
+          <div className="flex flex-col">
+            {CAPABILITIES_FINAL.map((cap, idx) => {
+              const isOpen = activeCapIdx === idx;
+              
+              const accordionContent = (
+                <div className="border-t border-white/10 last:border-b">
+                  {/* Row trigger */}
+                  <button
+                    onClick={() => setActiveCapIdx(isOpen ? -1 : idx)}
+                    className="flex items-center justify-between w-full px-6 py-5 text-left transition-colors duration-200"
                   >
-                    <ImageWithFallback 
-                      src={CAPABILITIES_FINAL[activeCapIdx].image}
-                      alt={CAPABILITIES_FINAL[activeCapIdx].name}
-                      className="w-full h-full object-cover rounded-sm shadow-2xl brightness-90"
+                    <span className={`text-base font-semibold tracking-tight transition-colors duration-200 ${
+                      isOpen ? "text-[#F5A623]" : "text-white"
+                    }`}>
+                      {cap.name}
+                    </span>
+                    <ChevronDown
+                      className={`w-5 h-5 shrink-0 transition-transform duration-300 text-[#F5A623] ${
+                        isOpen ? "rotate-0" : "-rotate-90"
+                      }`}
                     />
-                    <div className="absolute inset-0 bg-gradient-to-tr from-[#0A2A60]/40 to-transparent"></div>
-                  </Motion.div>
-                </AnimatePresence>
-                
-                {/* Decorative elements */}
-                <div className="absolute -top-4 -right-4 w-24 md:w-32 h-24 md:h-32 border-t-2 border-r-2 border-[#0171c1]/40 pointer-events-none"></div>
-                <div className="absolute -bottom-4 -left-4 w-24 md:w-32 h-24 md:h-32 border-b-2 border-l-2 border-[#0171c1]/40 pointer-events-none"></div>
+                  </button>
+
+                  {/* Expanded panel with glassmorphism container */}
+                  <AnimatePresence initial={false}>
+                    {isOpen && (
+                      <Motion.div
+                        initial={{ height: 0, opacity: 0 }}
+                        animate={{ height: "auto", opacity: 1 }}
+                        exit={{ height: 0, opacity: 0 }}
+                        transition={{ duration: 0.3, ease: [0.25, 1, 0.5, 1] }}
+                        className="overflow-hidden"
+                      >
+                        <div className="mx-6 mb-5">
+                          <Motion.div
+                            initial={{ y: 15, opacity: 0 }}
+                            animate={{ y: 0, opacity: 1 }}
+                            exit={{ y: 15, opacity: 0 }}
+                            transition={{ duration: 0.3, ease: "easeOut" }}
+                            className="bg-white/5 backdrop-blur-md border border-white/10 rounded-[14px] p-6 shadow-xl space-y-2"
+                          >
+                            <h3 className="text-white text-lg font-bold tracking-tight">
+                              {cap.name}
+                            </h3>
+                            <p className="text-white/80 text-sm leading-relaxed">
+                              {(cap as any).desc || ""}
+                            </p>
+                          </Motion.div>
+                        </div>
+                      </Motion.div>
+                    )}
+                  </AnimatePresence>
+                </div>
+              );
+
+              return (cap as any).url ? (
+                <Link key={idx} href={(cap as any).url} className="block">
+                  {accordionContent}
+                </Link>
+              ) : (
+                <div key={idx}>{accordionContent}</div>
+              );
+            })}
+          </div>
+
+          {/* Bottom padding */}
+          <div className="h-10" />
+        </div>
+
+        {/* ── DESKTOP layout (unchanged) ── */}
+        <div className="relative z-10 hidden md:block py-20">
+          <div className="max-w-[1280px] mx-auto px-6 lg:px-20">
+            <div className="max-w-2xl mb-12 md:mb-16 space-y-4">
+              <h2 className="text-4xl sm:text-5xl md:text-6xl font-semibold display-font tracking-tight">
+                {renderTitle(capTitle, "text-inherit", "text-[#F99D1C]")}
+              </h2>
+              <p className="text-blue-100/70 font-medium text-sm md:text-base leading-relaxed">
+                {capDesc}
+              </p>
+            </div>
+
+            <div className="flex flex-row items-start gap-12 lg:gap-20">
+              <div className="flex-1 space-y-1 relative z-10 w-full">
+                <div className="grid grid-cols-1">
+                  {CAPABILITIES_FINAL.map((cap, idx) => {
+                    const inner = (
+                      <button 
+                        key={idx} 
+                        onMouseEnter={() => setActiveCapIdx(idx)}
+                        onClick={() => setActiveCapIdx(idx)}
+                        className={`flex items-center justify-between w-full group py-4 md:py-6 border-b border-white/10 text-left transition-all duration-300 ${activeCapIdx === idx ? "text-[#F99D1C] pl-2 md:pl-4" : "hover:text-[#F99D1C] hover:pl-1 md:hover:pl-2"}`}
+                      >
+                        <span className={`text-lg md:text-xl font-medium tracking-tight ${activeCapIdx === idx ? "font-semibold" : "font-normal"}`}>{cap.name}</span>
+                        <ChevronRight className={`w-5 h-5 md:w-6 md:h-6 transition-all duration-300 ${activeCapIdx === idx ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-4"}`} />
+                      </button>
+                    );
+                    return (cap as any).url ? (
+                      <Link key={idx} href={(cap as any).url}>{inner}</Link>
+                    ) : (
+                      <div key={idx}>{inner}</div>
+                    );
+                  })}
+                </div>
+              </div>
+              
+              <div className="flex-1 relative h-[400px] md:h-[600px] w-full">
+                <div className="relative w-full h-full">
+                  <AnimatePresence mode="wait">
+                    <Motion.div
+                      key={activeCapIdx}
+                      initial={{ opacity: 0, x: 20, filter: "blur(10px)" }}
+                      animate={{ opacity: 1, x: 0, filter: "blur(0px)" }}
+                      exit={{ opacity: 0, x: -20, filter: "blur(10px)" }}
+                      transition={{ duration: 0.4, ease: "easeOut" }}
+                      className="absolute inset-0"
+                    >
+                      <ImageWithFallback 
+                        src={CAPABILITIES_FINAL[activeCapIdx]?.image ?? ""}
+                        alt={CAPABILITIES_FINAL[activeCapIdx]?.name ?? ""}
+                        className="w-full h-full object-cover rounded-sm shadow-2xl brightness-90"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-tr from-[#0A2A60]/40 to-transparent"></div>
+                    </Motion.div>
+                  </AnimatePresence>
+                  <div className="absolute -top-4 -right-4 w-24 md:w-32 h-24 md:h-32 border-t-2 border-r-2 border-[#0171c1]/40 pointer-events-none"></div>
+                  <div className="absolute -bottom-4 -left-4 w-24 md:w-32 h-24 md:h-32 border-b-2 border-l-2 border-[#0171c1]/40 pointer-events-none"></div>
+                </div>
               </div>
             </div>
           </div>

@@ -224,7 +224,7 @@ export default function PartnershipClient({
       </section>
 
       {/* Intro Section */}
-      <section className="bg-white py-24">
+      <section className="bg-white py-[50px]">
         <div className="mx-auto max-w-[1280px] px-6 lg:px-20">
           <div className="grid grid-cols-1 items-center gap-20 lg:grid-cols-2">
             <Motion.div
@@ -257,7 +257,7 @@ export default function PartnershipClient({
               viewport={{ once: true }}
               className="relative"
             >
-              <div className="relative z-10 aspect-[4/3] overflow-hidden rounded-[3rem] shadow-2xl">
+              <div className="relative z-10 aspect-[4/3] overflow-hidden rounded-[15px] shadow-2xl">
                 <ImageWithFallback
                   src={introImage}
                   alt="Team Collaboration"
@@ -272,7 +272,7 @@ export default function PartnershipClient({
       </section>
 
       {/* Categories Grid */}
-      <section className="bg-gray-50 py-24">
+      <section className="bg-gray-50 py-[50px]">
         <div className="mx-auto max-w-[1280px] px-6 lg:px-20">
           <div className="mb-20 space-y-4 text-center">
             <h2 className="display-font text-3xl font-semibold text-[#001A3D] md:text-5xl">
@@ -296,7 +296,7 @@ export default function PartnershipClient({
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ delay: i * 0.1 }}
-                  className="group border border-gray-100 bg-white p-10 shadow-sm transition-all duration-500 hover:shadow-xl"
+                  className="group border border-gray-100 bg-white p-10 shadow-sm transition-all duration-500 hover:shadow-xl rounded-[15px]"
                 >
                   <div className="mb-8 flex h-16 w-16 items-center justify-center rounded-sm bg-[#0171c1]/5 text-[#0171c1] transition-colors duration-500 group-hover:bg-[#0171c1] group-hover:text-white">
                     <Icon size={28} />
@@ -323,7 +323,7 @@ export default function PartnershipClient({
       </section>
 
       {/* Meet Our Partners Section */}
-      <section className="bg-white py-24 border-t border-gray-100">
+      <section className="bg-white py-[50px] border-t border-gray-100">
         <div className="mx-auto max-w-[1280px] px-6 lg:px-20">
           <div className="mb-12 text-center space-y-4">
             <Motion.h2
@@ -367,9 +367,9 @@ export default function PartnershipClient({
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: i * 0.1, duration: 0.6 }}
-                className="group relative overflow-hidden rounded-[2rem] border border-gray-100 bg-white p-4 shadow-sm transition-all duration-300 hover:-translate-y-1.5 hover:shadow-2xl hover:border-gray-200 flex items-center justify-center"
+                className="group relative overflow-hidden rounded-[15px] border border-gray-100 bg-white p-4 shadow-sm transition-all duration-300 hover:-translate-y-1.5 hover:shadow-2xl hover:border-gray-200 flex items-center justify-center"
               >
-                <div className="aspect-[4/3] w-full overflow-hidden rounded-2xl bg-gray-50 flex items-center justify-center">
+                <div className="aspect-[4/3] w-full overflow-hidden rounded-[15px] bg-gray-50 flex items-center justify-center">
                   <img
                     src={card.src}
                     alt={card.alt}
@@ -383,7 +383,7 @@ export default function PartnershipClient({
       </section>
 
       {/* Logo Grid */}
-      <section className="border-y border-gray-100 bg-white py-24">
+      <section className="border-y border-gray-100 bg-white py-[50px]">
         <div className="mx-auto max-w-[1280px] px-6 lg:px-20">
           <div className="grid grid-cols-2 items-center gap-12 md:grid-cols-4 lg:grid-cols-8">
             {logos.map((logo, i) => (
@@ -399,7 +399,7 @@ export default function PartnershipClient({
       </section>
 
       {/* Benefits Section */}
-      <section className="bg-[#001A3D] py-24 text-white">
+      <section className="bg-[#001A3D] py-[50px] text-white">
         <div className="mx-auto max-w-[1280px] px-6 lg:px-20">
           <div className="grid grid-cols-1 items-center gap-20 lg:grid-cols-2">
             <div>
@@ -427,22 +427,22 @@ export default function PartnershipClient({
               <ImageWithFallback
                 src={benefitsImage}
                 alt="Cloud Infrastructure"
-                className="h-full w-full rounded-[3rem] object-cover opacity-80"
+                className="h-full w-full rounded-[15px] object-cover opacity-80"
               />
-              <div className="absolute inset-0 rounded-[3rem] bg-[#001A3D]/20"></div>
+              <div className="absolute inset-0 rounded-[15px] bg-[#001A3D]/20"></div>
             </div>
           </div>
         </div>
       </section>
 
       {/* CTA / Form Section */}
-      <section className="bg-white py-32">
-        <div className="mx-auto max-w-[1280px] px-6 lg:px-20">
-          <div className="relative overflow-hidden rounded-[4rem] border border-gray-100 bg-gray-50 p-12 lg:p-24">
+      <section className="bg-white py-[50px]">
+        <div className="mx-auto max-w-[1280px] px-0 sm:px-6 lg:px-20">
+          <div className="relative overflow-hidden rounded-none sm:rounded-[15px] border-x-0 sm:border border-gray-100 bg-gray-50 p-4 sm:p-10 lg:p-12">
             <div className="absolute top-0 right-0 h-96 w-96 rounded-full bg-[#0171c1]/5 blur-[100px]"></div>
 
             <div className="relative z-10 grid grid-cols-1 items-start gap-20 lg:grid-cols-2">
-              <div className="space-y-8">
+              <div className="space-y-8 px-4 sm:px-0">
                 <h2 className="display-font text-4xl leading-tight font-semibold text-[#001A3D] md:text-6xl">
                   {renderTitle(ctaTitle, "text-[#001A3D]", "text-[#F99D1C]", "text-[#0171c1]")}
                 </h2>
@@ -450,7 +450,7 @@ export default function PartnershipClient({
                   {ctaDescription}
                 </p>
                 <div className="space-y-6">
-                  <div className="flex items-center gap-4 border border-gray-100 bg-white p-6 shadow-sm">
+                  <div className="flex items-center gap-4 border border-gray-100 bg-white p-6 shadow-sm rounded-[15px]">
                     <div className="flex h-12 w-12 items-center justify-center rounded-sm bg-[#0171c1] text-white">
                       <MessageSquare size={20} />
                     </div>
@@ -464,7 +464,7 @@ export default function PartnershipClient({
                 </div>
               </div>
 
-              <div className="rounded-2xl border border-gray-100 bg-white p-10 shadow-2xl md:p-12">
+              <div className="rounded-[15px] border border-gray-100 bg-white p-4 sm:p-10 shadow-2xl md:p-8">
                 <h3 className="display-font mb-8 text-2xl font-bold text-[#001A3D]">
                   Partner Registration
                 </h3>

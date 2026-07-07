@@ -14,6 +14,8 @@ import {
   Code2,
   Cpu,
   Fingerprint,
+  Layers,
+  ChevronRight,
 } from "lucide-react";
 import Link from "next/link";
 import { Meta } from "@/components/Meta";
@@ -162,7 +164,7 @@ export default function AboutClient({
       <Breadcrumbs variant="light" />
 
       {/* ── Hero ──────────────────────────────────────────────────────────────── */}
-      <section className="relative flex min-h-[600px] items-center overflow-hidden bg-[#001A3D] pt-20">
+      <section className="relative flex min-h-[45vh] sm:min-h-[50vh] lg:min-h-[600px] items-center overflow-hidden bg-[#001A3D] py-[50px] lg:py-0">
         <div className="absolute inset-0 z-0 opacity-20">
           <div className="absolute top-0 right-0 h-full w-full bg-[radial-gradient(circle_at_70%_30%,#0171c1_0%,transparent_50%)]" />
           <div className="absolute bottom-0 left-0 h-full w-full bg-[radial-gradient(circle_at_20%_80%,#F99D1C_0%,transparent_40%)]" />
@@ -204,7 +206,7 @@ export default function AboutClient({
                     initial={{ opacity: 0, scale: 0.8 }}
                     animate={{ opacity: 1, scale: 1 }}
                     transition={{ delay: 0.3 + i * 0.1 }}
-                    className="rounded-2xl border border-white/10 bg-white/5 p-8 text-center backdrop-blur-md"
+                    className="rounded-[15px] border border-white/10 bg-white/5 p-8 text-center backdrop-blur-md"
                   >
                     <div className="display-font mb-1 text-3xl font-black text-white">{stat.value}</div>
                     <div className="text-[10px] font-bold tracking-widest text-[#F99D1C] uppercase">{stat.label}</div>
@@ -217,7 +219,7 @@ export default function AboutClient({
       </section>
 
       {/* ── Strategic Overview ────────────────────────────────────────────────── */}
-      <section className="bg-white py-32">
+      <section className="bg-white py-[50px] lg:py-32">
         <div className="mx-auto max-w-[1280px] px-6 lg:px-20">
           <div className="grid grid-cols-1 gap-20 lg:grid-cols-12">
             <div className="space-y-8 lg:col-span-4">
@@ -243,76 +245,150 @@ export default function AboutClient({
       </section>
 
       {/* ── Narrative ─────────────────────────────────────────────────────────── */}
-      <section className="relative overflow-hidden bg-[#FAF9F6] py-32">
-        <div className="absolute top-0 right-0 hidden h-full w-1/3 bg-[#001A3D] lg:block" />
-        <div className="relative z-10 mx-auto max-w-[1280px] px-6 lg:px-20">
-          <div className="grid grid-cols-1 gap-0 lg:grid-cols-12">
-            <div className="space-y-16 rounded-l-[3rem] bg-white p-12 shadow-2xl lg:col-span-8 lg:p-24">
-              <div className="grid grid-cols-1 gap-16 md:grid-cols-2">
+      <section className="bg-slate-50/50 py-[50px] lg:py-32 overflow-hidden">
+        <div className="mx-auto max-w-[1280px] px-6 lg:pl-20 lg:pr-0">
+          <div className="flex flex-col lg:flex-row items-stretch shadow-[0_8px_40px_rgba(0,0,0,0.08)] bg-white rounded-[15px] lg:rounded-r-none lg:rounded-l-[15px]">
+
+            {/* ── LEFT: White card (65%) ── */}
+            <div className="w-full lg:w-[65%] bg-white rounded-t-[15px] lg:rounded-t-none lg:rounded-l-[15px] flex flex-col gap-10 p-6 md:p-12 lg:p-16">
+
+              {/* Two-column top content */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-10 lg:gap-14">
+
                 {/* What We Do */}
-                <div className="space-y-6">
-                  <h3 className="display-font text-3xl font-bold text-[#001A3D]">{whatWeDoTitle}</h3>
-                  <p className="leading-relaxed font-medium text-gray-500">{whatWeDoDesc}</p>
-                  <ul className="space-y-4">
+                <div>
+                  <div className="w-11 h-11 rounded-xl bg-blue-50 flex items-center justify-center text-[#0171c1] mb-5">
+                    <Layers size={22} />
+                  </div>
+                  <h3 className="display-font text-[26px] font-bold text-[#001A3D] leading-tight mb-2">
+                    {whatWeDoTitle}
+                  </h3>
+                  <div className="w-9 h-[3px] bg-[#0171c1] mb-4" />
+                  <p className="text-[15px] leading-[1.75] text-gray-500 mb-6">
+                    {whatWeDoDesc}
+                  </p>
+                  <ul className="space-y-0">
                     {whatWeDoItems.map((item, i) => (
-                      <li key={i} className="flex items-center gap-3 text-sm font-bold text-[#001A3D]">
-                        <div className="h-1.5 w-1.5 rounded-full bg-[#0171c1]" />
-                        {item}
+                      <li key={i} className="flex items-center gap-3 py-[11px] border-b border-gray-100 last:border-0">
+                        <span className="w-[7px] h-[7px] rounded-full bg-[#0171c1] shrink-0" />
+                        <span className="text-[15px] font-semibold text-[#0F1C35]">{item}</span>
                       </li>
                     ))}
                   </ul>
                 </div>
 
                 {/* Who We Help */}
-                <div className="space-y-6">
-                  <h3 className="display-font text-3xl font-bold text-[#001A3D]">{whoWeHelpTitle}</h3>
-                  <p className="leading-relaxed font-medium text-gray-500">{whoWeHelpDesc}</p>
-                  <ul className="space-y-4">
+                <div>
+                  <div className="w-11 h-11 rounded-xl bg-[#FFF6E9] flex items-center justify-center text-[#F99D1C] mb-5">
+                    <Users size={22} />
+                  </div>
+                  <h3 className="display-font text-[26px] font-bold text-[#001A3D] leading-tight mb-2">
+                    {whoWeHelpTitle}
+                  </h3>
+                  <div className="w-9 h-[3px] bg-[#F99D1C] mb-4" />
+                  <p className="text-[15px] leading-[1.75] text-gray-500 mb-6">
+                    {whoWeHelpDesc}
+                  </p>
+                  <ul className="space-y-0">
                     {whoWeHelpItems.map((item, i) => (
-                      <li key={i} className="flex items-center gap-3 text-sm font-bold text-[#001A3D]">
-                        <div className="h-1.5 w-1.5 rounded-full bg-[#F99D1C]" />
-                        {item}
+                      <li key={i} className="flex items-center gap-3 py-[11px] border-b border-gray-100 last:border-0">
+                        <span className="w-[7px] h-[7px] rounded-full bg-[#F99D1C] shrink-0" />
+                        <span className="text-[15px] font-semibold text-[#0F1C35]">{item}</span>
                       </li>
                     ))}
                   </ul>
                 </div>
               </div>
 
-              {/* Why Choose Us */}
-              <div className="flex flex-col items-center gap-8 rounded-3xl border border-[#0171c1]/10 bg-[#0171c1]/5 p-10 md:flex-row">
-                <div className="flex h-20 w-20 shrink-0 items-center justify-center rounded-2xl bg-[#0171c1] text-white">
-                  <TrendingUp size={40} />
+              {/* Why Choose Us CTA */}
+              <div className="flex items-center gap-5 rounded-[15px] bg-[#F4F6FA] border border-[#E8ECF4] shadow-sm px-6 py-5">
+                <div className="flex-shrink-0 w-[64px] h-[64px] rounded-[16px] bg-[#0171c1] flex items-center justify-center shadow-md shadow-[#0171c1]/25">
+                  <TrendingUp className="w-7 h-7 text-white" />
                 </div>
+                <div className="flex-1 min-w-0">
+                  <h4 className="text-[17px] font-bold text-[#001A3D] mb-1">{whyChooseTitle}</h4>
+                  <p className="text-[13px] leading-[1.65] text-gray-500">{whyChooseDesc}</p>
+                </div>
+                <ChevronRight className="w-5 h-5 text-[#0171c1] shrink-0" />
+              </div>
+            </div>
+
+            {/* ── RIGHT: Dark navy panel — extends to viewport right edge ── */}
+            <div className="relative w-full lg:w-[35%] bg-[#000c24] rounded-b-[15px] lg:rounded-b-none lg:rounded-tr-none flex flex-col justify-start pt-14 px-8 md:px-10 pb-10 min-h-[480px]">
+
+              {/* Background color bleed: extends 200vw to the right on desktop.
+                  The parent <section> has overflow-hidden which clips it at the
+                  viewport edge — giving a seamless full-bleed navy right half. */}
+              <div className="hidden lg:block absolute inset-y-0 left-0 right-[-200vw] bg-[#000c24] z-0" />
+
+              {/* Globe background container - covers the entire panel with overflow-hidden and matching rounded corners */}
+              <div className="absolute inset-0 rounded-b-[15px] lg:rounded-b-none lg:rounded-tr-none overflow-hidden pointer-events-none select-none z-[1]">
+                <img
+                  src="/assets/global_synergy_globe.jpg"
+                  alt=""
+                  aria-hidden="true"
+                  draggable={false}
+                  className="absolute inset-0 w-full h-full object-cover pointer-events-none select-none"
+                  style={{
+                    transform: "scaleX(-1)", // Flips the globe to span from bottom-right to top-left
+                    filter: "brightness(0.95) contrast(1.1)",
+                  }}
+                />
+                {/* 60-75% opacity blue overlay to ensure text readability and seamless edge blending */}
+                <div className="absolute inset-0 bg-gradient-to-r from-[#04152D]/75 via-[#061B3A]/65 to-[#000c24]" />
+              </div>
+
+              {/* Content */}
+              <div className="relative z-20 space-y-6 max-w-[280px]">
+                {/* Heading */}
                 <div>
-                  <h4 className="mb-2 text-xl font-bold text-[#001A3D]">{whyChooseTitle}</h4>
-                  <p className="text-sm leading-relaxed font-medium text-gray-500">{whyChooseDesc}</p>
+                  <h2 className="text-[40px] md:text-[46px] font-bold leading-[1.1] text-white">
+                    Global<br />
+                    <span className="text-[#F99D1C]">Synergy.</span>
+                  </h2>
+                  <div className="w-9 h-[3px] bg-[#F99D1C] mt-3" />
+                </div>
+
+                {/* Description */}
+                <p className="text-[14px] leading-[1.8] text-white/75">
+                  {synergyDesc}
+                </p>
+
+                {/* Stat cards */}
+                <div className="space-y-3 pt-2">
+                  {/* Stat 1 */}
+                  <div className="flex items-center gap-4 rounded-[15px] border border-white/[0.10] bg-white/[0.07] backdrop-blur-sm px-4 py-4">
+                    <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-white/[0.10]">
+                      <Globe2 size={18} className="text-[#F99D1C]" />
+                    </div>
+                    <div>
+                      <div className="text-[22px] font-bold text-white leading-none mb-0.5">
+                        {synergyStat1.split(" ")[0] || "4"}
+                      </div>
+                      <div className="text-[10px] font-bold tracking-[0.12em] text-white/55 uppercase">
+                        {synergyStat1.replace(synergyStat1.split(" ")[0], "").trim() || "GLOBAL OFFICES"}
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Stat 2 */}
+                  <div className="flex items-center gap-4 rounded-[15px] border border-white/[0.10] bg-white/[0.07] backdrop-blur-sm px-4 py-4">
+                    <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-white/[0.10]">
+                      <Users size={18} className="text-[#F99D1C]" />
+                    </div>
+                    <div>
+                      <div className="text-[22px] font-bold text-white leading-none mb-0.5">
+                        {synergyStat2.split(" ")[0] || "90+"}
+                      </div>
+                      <div className="text-[10px] font-bold tracking-[0.12em] text-white/55 uppercase">
+                        {synergyStat2.replace(synergyStat2.split(" ")[0], "").trim() || "MEMBER TEAM"}
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
 
-            {/* Synergy panel */}
-            <div className="flex items-center rounded-r-[3rem] bg-[#001A3D] p-12 lg:col-span-4 lg:p-24">
-              <div className="space-y-8">
-                <h2 className="display-font text-4xl leading-tight font-bold text-white">
-                  {renderTitle(synergyTitle, "text-white", "text-[#F99D1C]", "text-[#0171c1]")}
-                </h2>
-                <p className="leading-relaxed font-medium text-white/60">{synergyDesc}</p>
-                <div className="space-y-6 pt-6">
-                  <div className="group flex items-center gap-4">
-                    <div className="flex h-10 w-10 items-center justify-center rounded-lg border border-white/10 bg-white/5 text-[#F99D1C] transition-colors group-hover:bg-[#F99D1C] group-hover:text-[#001A3D]">
-                      <Globe2 size={20} />
-                    </div>
-                    <span className="text-xs font-bold tracking-widest text-white uppercase">{synergyStat1}</span>
-                  </div>
-                  <div className="group flex items-center gap-4">
-                    <div className="flex h-10 w-10 items-center justify-center rounded-lg border border-white/10 bg-white/5 text-[#F99D1C] transition-colors group-hover:bg-[#F99D1C] group-hover:text-[#001A3D]">
-                      <Users size={20} />
-                    </div>
-                    <span className="text-xs font-bold tracking-widest text-white uppercase">{synergyStat2}</span>
-                  </div>
-                </div>
-              </div>
-            </div>
           </div>
         </div>
       </section>
@@ -330,9 +406,9 @@ export default function AboutClient({
       />
 
       {/* ── History Timeline ──────────────────────────────────────────────────── */}
-      <section className="bg-white py-32">
+      <section className="bg-white pt-[50px] pb-[50px] lg:py-32">
         <div className="mx-auto max-w-[1280px] px-6 lg:px-20">
-          <div className="mb-24 space-y-6 text-center">
+          <div className="mb-[50px] space-y-6 text-center">
             <span className="text-[10px] font-black tracking-[0.2em] text-[#0171c1] uppercase">
               {historySubtitle}
             </span>
@@ -349,7 +425,7 @@ export default function AboutClient({
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: idx * 0.1 }}
-                className="group relative overflow-hidden rounded-[2.5rem] border border-gray-100 bg-white p-10 transition-all duration-500 hover:border-[#0171c1] hover:shadow-2xl"
+                className="group relative overflow-hidden rounded-[15px] border border-gray-100 bg-white p-10 transition-all duration-500 hover:border-[#0171c1] hover:shadow-2xl"
               >
                 <div className="pointer-events-none absolute top-0 right-0 p-8 text-[#001A3D] opacity-[0.05] transition-opacity group-hover:opacity-[0.1]">
                   <span className="display-font text-6xl font-black">{item.year.split(" – ")[0]}</span>
@@ -367,9 +443,9 @@ export default function AboutClient({
       </section>
 
       {/* ── CTA ───────────────────────────────────────────────────────────────── */}
-      <section className="py-24">
+      <section className="py-[50px] lg:py-24">
         <div className="mx-auto max-w-[1280px] px-6 lg:px-20">
-          <div className="relative overflow-hidden rounded-[4rem] bg-[#001A3D] p-12 text-center lg:p-24">
+          <div className="relative overflow-hidden rounded-[15px] lg:rounded-[4rem] bg-[#001A3D] p-6 md:p-12 lg:p-24 text-center">
             <div className="absolute inset-0 z-0">
               <ImageWithFallback
                 src={ctaBgImage}
