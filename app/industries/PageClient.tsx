@@ -18,6 +18,8 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { Meta } from "@/components/Meta";
+import { IndustryPageData, IndustryItem } from "@/lib/wordpress";
+import { renderTitle } from "@/lib/utils";
 
 const INDUSTRIES_DATA = [
   {
@@ -76,7 +78,24 @@ const INDUSTRIES_DATA = [
   },
 ];
 
-export default function Industries() {
+export default function Industries({
+  pageData,
+  industriesList,
+}: {
+  pageData?: IndustryPageData | null;
+  industriesList?: IndustryItem[];
+}) {
+  // Use dynamic data if available (has items), otherwise fall back to static
+  const hasWpData = industriesList && industriesList.length > 0;
+
+  const label = pageData?.label || "Industry Verticals";
+  const titleRaw = pageData?.title || "Domain Expertise. |Universal Impact.";
+  const description = pageData?.description || "We specialize in vertical-specific technology solutions that address the unique complexities and compliance requirements of global markets.";
+  const ctaTitle = pageData?.ctaTitle || "Scale Your Industry Dominance Today.";
+  const ctaBtnText = pageData?.ctaBtnText || "Request Consultation";
+  const ctaBtnLink = pageData?.ctaBtnLink || "/contact";
+  const ctaSecondaryText = pageData?.ctaSecondaryText || "Global Offices";
+  const ctaSecondaryLink = pageData?.ctaSecondaryLink || "/contact";
   return (
     <div className="flex flex-col overflow-hidden bg-white">
       <Meta
@@ -100,16 +119,14 @@ export default function Industries() {
             <div className="flex items-center space-x-3">
               <span className="h-[1px] w-12 bg-[#F99D1C]"></span>
               <span className="text-xs font-semibold tracking-wide text-[#F99D1C]">
-                Industry Verticals
+                {label}
               </span>
             </div>
             <h1 className="display-font text-5xl leading-[1.05] font-semibold tracking-tight md:text-8xl">
-              Domain Expertise. <br />
-              <span className="text-[#F99D1C]">Universal Impact.</span>
+              {renderTitle(titleRaw)}
             </h1>
             <p className="max-w-2xl text-xl leading-relaxed font-medium text-gray-400">
-              We specialize in vertical-specific technology solutions that address the unique
-              complexities and compliance requirements of global markets.
+              {description}
             </p>
           </Motion.div>
         </div>
@@ -118,9 +135,9 @@ export default function Industries() {
       {/* Industries Alternate Grid */}
       <section className="bg-white py-20">
         <div className="mx-auto max-w-[1280px] space-y-48 px-6 lg:px-20">
-          {INDUSTRIES_DATA.map((ind, idx) => (
+          {(hasWpData ? industriesList! : INDUSTRIES_DATA).map((ind: any, idx: number) => (
             <div
-              key={ind.name}
+              key={ind.name || ind.title}
               className={`flex flex-col items-center gap-24 lg:flex-row ${idx % 2 !== 0 ? "lg:flex-row-reverse" : ""}`}
             >
               <Motion.div
@@ -130,36 +147,40 @@ export default function Industries() {
                 className="flex-1 space-y-10"
               >
                 <div className="w-fit rounded-2xl border border-gray-100 bg-gray-50 p-5 shadow-sm">
-                  {ind.icon}
+                  {ind.icon || <Globe2 className="h-12 w-12 text-[#F99D1C]" />}
                 </div>
                 <div className="space-y-4">
                   <h2 className="display-font text-4xl leading-tight font-semibold tracking-tight text-[#001A3D] md:text-5xl">
-                    {ind.name}
+                    {ind.name || ind.title}
                   </h2>
                   <p className="text-lg leading-relaxed font-medium text-gray-500">{ind.desc}</p>
                 </div>
 
-                <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
-                  {ind.stats.map((stat) => (
-                    <div
-                      key={stat}
-                      className="flex items-center space-x-2 rounded-lg border border-gray-100 bg-gray-50 px-4 py-3 text-[11px] font-semibold tracking-wide text-[#001A3D]"
-                    >
-                      <ShieldCheck className="h-4 w-4 text-[#F99D1C]" />
-                      <span>{stat}</span>
-                    </div>
-                  ))}
-                </div>
+                {ind.stats && (
+                  <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+                    {ind.stats.map((stat: any, i: number) => (
+                      <div
+                        key={i}
+                        className="flex items-center space-x-2 rounded-lg border border-gray-100 bg-gray-50 px-4 py-3 text-[11px] font-semibold tracking-wide text-[#001A3D]"
+                      >
+                        <ShieldCheck className="h-4 w-4 text-[#F99D1C] flex-shrink-0" />
+                        <span>{typeof stat === 'string' ? stat : `${stat.value} ${stat.label}`}</span>
+                      </div>
+                    ))}
+                  </div>
+                )}
 
                 <ul className="space-y-6 pt-4">
-                  {["Strategic Transformation", "Domain Consulting", "Operational Efficiency"].map(
-                    (item) => (
-                      <li
-                        key={item}
-                        className="group flex cursor-pointer items-center text-sm font-semibold tracking-wide text-gray-400"
-                      >
-                        <span className="mr-4 h-[1.5px] w-8 bg-[#F99D1C] transition-all duration-500 group-hover:w-14"></span>
-                        <span className="transition-colors group-hover:text-[#001A3D]">{item}</span>
+                  {(ind.topSolutions && ind.topSolutions.length > 0
+                    ? ind.topSolutions
+                    : ["Strategic Transformation", "Domain Consulting", "Operational Efficiency"]
+                  ).map(
+                    (solution: string, i: number) => (
+                      <li key={i} className="group flex cursor-pointer items-center text-sm font-semibold tracking-wide text-gray-400">
+                        <div className="mr-4 h-[1.5px] w-8 bg-[#F99D1C] transition-all duration-500 group-hover:w-14" />
+                        <span className="transition-colors group-hover:text-[#001A3D]">
+                          {solution}
+                        </span>
                       </li>
                     )
                   )}
@@ -167,10 +188,10 @@ export default function Industries() {
 
                 <div className="pt-6">
                   <Link
-                    href={ind.path}
+                    href={ind.path || ind.href || `/industries/${ind.slug}`}
                     className="group inline-flex items-center rounded-sm bg-[#001A3D] px-10 py-5 text-xs font-bold tracking-wide text-white shadow-2xl shadow-[#001A3D]/20 transition-all hover:bg-[#0171c1]"
                   >
-                    Explore {ind.name.split(" ")[0]} Solutions
+                    Explore {(ind.name || ind.title || "").split(" ")[0]} Solutions
                     <MoveRight className="ml-3 h-4 w-4 transition-transform group-hover:translate-x-2" />
                   </Link>
                 </div>
@@ -184,8 +205,8 @@ export default function Industries() {
               >
                 <div className="group relative z-10 aspect-[4/3] overflow-hidden rounded-[3rem] border-[12px] border-white shadow-2xl">
                   <ImageWithFallback
-                    src={ind.image}
-                    alt={ind.name}
+                    src={ind.image || ind.imageUrl || ""}
+                    alt={ind.name || ind.title}
                     className="h-full w-full object-cover transition-transform duration-1000 group-hover:scale-110"
                   />
                   <div className="absolute inset-0 bg-[#001A3D]/10 mix-blend-overlay"></div>
@@ -201,78 +222,25 @@ export default function Industries() {
           ))}
         </div>
       </section>
-      {/* Expertise Section */}
-      <section className="relative overflow-hidden border-y border-gray-100 bg-gray-50 py-20">
-        <div className="mx-auto max-w-[1280px] px-6 lg:px-20">
-          <div className="grid grid-cols-1 items-center gap-16 lg:grid-cols-3">
-            <div className="space-y-8 lg:col-span-1">
-              <h2 className="display-font text-4xl leading-tight font-semibold tracking-tight text-[#001A3D]">
-                Beyond the <br /> Standard Verticals.
-              </h2>
-              <p className="font-medium text-gray-500">
-                Our engineering principles are universal. We apply the same level of precision and
-                security across any industry that demands digital leadership.
-              </p>
-              <button className="group flex items-center text-xs font-semibold tracking-wide text-[#001A3D]">
-                Learn about our methodology{" "}
-                <MoveRight className="ml-3 h-4 w-4 transition-transform group-hover:translate-x-2" />
-              </button>
-            </div>
-            <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:col-span-2">
-              {[
-                { title: "Retail & Commerce", icon: <Zap /> },
-                { title: "Manufacturing 4.0", icon: <Globe2 /> },
-                { title: "EdTech Platforms", icon: <ShieldCheck /> },
-                { title: "Public Sector", icon: <Landmark /> },
-              ].map((item, i) => (
-                <div
-                  key={i}
-                  className="group relative bg-white border border-gray-100 rounded-sm p-8 flex flex-col min-h-[340px] transition-all duration-500 hover:shadow-2xl hover:border-[#F99D1C]/20 cursor-pointer"
-                >
-                  {/* Icon */}
-                  <div className="text-[#F99D1C] mb-8 transition-transform duration-500 group-hover:scale-110">
-                    {(() => {
-                      const IconComponent = item.icon.type;
-                      return <IconComponent size={40} strokeWidth={1.5} />;
-                    })()}
-                  </div>
-
-                  {/* Content */}
-                  <div className="flex-grow space-y-4">
-                    <h4 className="text-[#001A3D] text-2xl font-bold leading-tight display-font">
-                      {item.title}
-                    </h4>
-                    <div className="w-10 h-[1px] bg-gray-100 group-hover:w-16 group-hover:bg-[#F99D1C] transition-all duration-500"></div>
-                  </div>
-
-                  {/* Bottom Button */}
-                  <div className="mt-8">
-                    <div className="w-10 h-10 rounded-full border border-gray-100 flex items-center justify-center text-gray-200 group-hover:border-[#F99D1C] group-hover:text-[#F99D1C] transition-all duration-500">
-                      <ChevronRight size={18} />
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
 
       {/* CTA Section */}
       <section className="relative overflow-hidden bg-[#001A3D] py-20 text-white">
         <div className="relative z-10 mx-auto max-w-4xl space-y-12 px-6 text-center">
           <h2 className="display-font text-4xl leading-tight font-semibold tracking-tight md:text-6xl">
-            Scale Your Industry <br /> Dominance Today.
+            {renderTitle(ctaTitle)}
           </h2>
           <div className="flex flex-wrap justify-center gap-6">
-            <button className="rounded-sm bg-[#F99D1C] px-12 py-6 text-sm font-bold tracking-wide text-[#001A3D] shadow-2xl transition-all hover:bg-[#ff9d00]">
-              Request Consultation
-            </button>
             <Link
-              href="/contact"
+              href={ctaBtnLink}
+              className="rounded-sm bg-[#F99D1C] px-12 py-6 text-sm font-bold tracking-wide text-[#001A3D] shadow-2xl transition-all hover:bg-[#ff9d00]"
+            >
+              {ctaBtnText}
+            </Link>
+            <Link
+              href={ctaSecondaryLink}
               className="rounded-sm border border-white/10 bg-white/5 px-12 py-6 text-sm font-bold tracking-wide text-white transition-all hover:bg-white/10"
             >
-              Global Offices
+              {ctaSecondaryText}
             </Link>
           </div>
         </div>
