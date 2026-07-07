@@ -237,11 +237,13 @@ export default function Footer({ data }: { data?: FooterChromeData }) {
           {/* Logo & About Info */}
           <div className="space-y-6 text-left">
             <Link href="/" className="inline-block">
-              <img
-                src="/assets/hutech_footer_logo.png"
-                alt="Hutech Solutions Logo"
-                className="h-12 w-auto object-contain"
-              />
+              <div className="bg-white rounded-md px-3 py-2 inline-block shadow-sm">
+                <img
+                  src="/assets/c57ecabe59306129194824425137d2ccde6918ce.png"
+                  alt="Hutech Solutions Logo"
+                  className="h-10 w-auto object-contain"
+                />
+              </div>
             </Link>
             <p className="text-[14px] text-gray-400 leading-relaxed line-clamp-4">{about.text}</p>
             <div className="pt-2">
@@ -261,75 +263,75 @@ export default function Footer({ data }: { data?: FooterChromeData }) {
           {/* Follow Us & Social Icons */}
           <div className="space-y-4 text-left">
             <h4 className="text-lg font-bold tracking-tight text-white/90">Follow Us</h4>
-            <div className="flex items-center justify-start gap-4">
+            <div className="flex items-center justify-start gap-8">
               <a
                 href={socials.facebook}
-                className="flex h-10 w-10 items-center justify-center rounded-full bg-[#B7BABD] text-[#000F1A] hover:bg-[#F99D1C] hover:text-white transition-colors"
+                className="text-gray-500 hover:text-white transition-colors"
                 aria-label="Facebook"
               >
                 {socialIcons.facebook ? (
                   <img
                     src={socialIcons.facebook}
                     alt="Facebook"
-                    className="h-5 w-5 object-contain"
+                    className="h-[22px] w-[22px] object-contain opacity-70 transition-opacity hover:opacity-100"
                   />
                 ) : (
-                  <Facebook size={20} />
+                  <Facebook size={22} strokeWidth={1.5} />
                 )}
               </a>
               <a
                 href={socials.linkedin}
-                className="flex h-10 w-10 items-center justify-center rounded-full bg-[#B7BABD] text-[#000F1A] hover:bg-[#F99D1C] hover:text-white transition-colors"
+                className="text-gray-500 hover:text-white transition-colors"
                 aria-label="Linkedin"
               >
                 {socialIcons.linkedin ? (
                   <img
                     src={socialIcons.linkedin}
                     alt="Linkedin"
-                    className="h-5 w-5 object-contain"
+                    className="h-[22px] w-[22px] object-contain opacity-70 transition-opacity hover:opacity-100"
                   />
                 ) : (
-                  <Linkedin size={20} />
+                  <Linkedin size={22} strokeWidth={1.5} />
                 )}
               </a>
               <a
                 href={socials.instagram}
-                className="flex h-10 w-10 items-center justify-center rounded-full bg-[#B7BABD] text-[#000F1A] hover:bg-[#F99D1C] hover:text-white transition-colors"
+                className="text-gray-500 hover:text-white transition-colors"
                 aria-label="Instagram"
               >
                 {socialIcons.instagram ? (
                   <img
                     src={socialIcons.instagram}
                     alt="Instagram"
-                    className="h-5 w-5 object-contain"
+                    className="h-[22px] w-[22px] object-contain opacity-70 transition-opacity hover:opacity-100"
                   />
                 ) : (
-                  <Instagram size={20} />
+                  <Instagram size={22} strokeWidth={1.5} />
                 )}
               </a>
               <a
                 href={socials.youtube}
-                className="flex h-10 w-10 items-center justify-center rounded-full bg-[#B7BABD] text-[#000F1A] hover:bg-[#F99D1C] hover:text-white transition-colors"
+                className="text-gray-500 hover:text-white transition-colors"
                 aria-label="Youtube"
               >
                 {socialIcons.youtube ? (
                   <img
                     src={socialIcons.youtube}
                     alt="Youtube"
-                    className="h-5 w-5 object-contain"
+                    className="h-6 w-6 object-contain opacity-70 transition-opacity hover:opacity-100"
                   />
                 ) : (
-                  <Youtube size={20} />
+                  <Youtube size={24} strokeWidth={1.5} />
                 )}
               </a>
               <a
                 href="https://twitter.com/hutechsolutions"
-                className="flex h-10 w-10 items-center justify-center rounded-full bg-[#B7BABD] text-[#000F1A] hover:bg-[#F99D1C] hover:text-white transition-colors"
+                className="text-gray-500 hover:text-white transition-colors"
                 aria-label="X (Twitter)"
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                <svg className="h-[18px] w-[18px]" fill="currentColor" viewBox="0 0 24 24">
+                <svg className="h-[18px] w-[18px] opacity-70 hover:opacity-100 transition-opacity" fill="currentColor" viewBox="0 0 24 24">
                   <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
                 </svg>
               </a>
@@ -642,27 +644,22 @@ export default function Footer({ data }: { data?: FooterChromeData }) {
       {/* Bottom Bar */}
       <div className="bg-[#00080F] py-8 md:py-10">
         <div className="max-w-[1280px] mx-auto px-6 lg:px-12 flex flex-col lg:flex-row items-center justify-between gap-8">
-          <div className="flex flex-col lg:flex-row items-center gap-6 md:gap-8 text-[12px] md:text-[13px] text-gray-500 w-full">
-            {/* Preferences Icon */}
-            <div
-              onClick={() => localStorage.removeItem("hutech_cookies_accepted")}
-              className="bg-[#0171c1] w-10 h-10 rounded-full flex items-center justify-center text-white shadow-lg shadow-[#0171c1]/20 cursor-pointer hover:scale-110 transition-transform flex-shrink-0 group"
-              title="Cookie Preferences"
-            >
-              <ShieldCheck size={20} className="group-hover:rotate-12 transition-transform" />
-            </div>
-
+          <div className="flex flex-col lg:flex-row items-center justify-between gap-6 md:gap-8 text-[12px] md:text-[13px] text-gray-500 w-full">
             <p className="text-center lg:text-left leading-relaxed">{copyright}</p>
 
-            <div className="flex flex-wrap items-center justify-center lg:justify-end gap-x-6 gap-y-3 lg:border-l lg:border-white/10 lg:pl-8 w-full">
-              {menus.legal.map((link) => (
-                <Link
-                  key={`${link.name}-${link.path}`}
-                  href={link.path || "#"}
-                  className="hover:text-white transition-colors border-b border-transparent hover:border-white/20 pb-0.5 whitespace-nowrap"
-                >
-                  {link.name}
-                </Link>
+            <div className="flex flex-wrap items-center justify-center lg:justify-end gap-x-2 gap-y-1.5 lg:border-l lg:border-white/10 lg:pl-8 leading-[20px]">
+              {menus.legal.map((link, index) => (
+                <span key={`${link.name}-${link.path}`} className="flex items-center">
+                  <Link
+                    href={link.path || "#"}
+                    className="hover:text-white transition-colors border-b border-transparent hover:border-white/20 pb-0.5 whitespace-nowrap"
+                  >
+                    {link.name}
+                  </Link>
+                  {index < menus.legal.length - 1 && (
+                    <span className="mx-2 text-gray-600 select-none">|</span>
+                  )}
+                </span>
               ))}
             </div>
           </div>

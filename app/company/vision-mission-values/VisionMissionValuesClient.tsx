@@ -84,7 +84,7 @@ export default function VisionMissionValuesClient({
       <Breadcrumbs variant="light" />
 
       {/* ── Hero Section ─────────────────────────────────────────────────── */}
-      <section className="relative flex h-[450px] items-center overflow-hidden bg-[#001A3D] text-white">
+      <section className="relative flex min-h-[45vh] lg:h-[450px] items-center overflow-hidden bg-[#001A3D] text-white py-[50px] lg:py-0">
         <div className="pointer-events-none absolute inset-0 opacity-10">
           <div className="absolute top-0 right-0 -mt-96 -mr-96 h-[800px] w-[800px] rounded-full bg-[#F99D1C]/20 blur-[120px]"></div>
           <div className="absolute bottom-0 left-0 -mb-48 -ml-48 h-[600px] w-[600px] rounded-full bg-[#F99D1C]/10 blur-[100px]"></div>
@@ -113,7 +113,7 @@ export default function VisionMissionValuesClient({
       </section>
 
       {/* ── Vision & Mission Section ─────────────────────────────────────── */}
-      <section className="relative overflow-hidden bg-white py-24">
+      <section className="relative overflow-hidden bg-white py-[50px] lg:py-24">
         <div className="mx-auto max-w-[1280px] px-6 lg:px-20">
           <div className="grid grid-cols-1 gap-12 md:gap-20 lg:grid-cols-2">
             {/* Vision */}
@@ -121,7 +121,7 @@ export default function VisionMissionValuesClient({
               initial={{ opacity: 0, x: -20 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
-              className="group relative space-y-10 overflow-hidden rounded-[3rem] border border-gray-100 bg-gray-50 p-12 transition-all duration-500 hover:shadow-2xl md:p-16"
+              className="group relative space-y-10 overflow-hidden rounded-[15px] lg:rounded-[3rem] border border-gray-100 bg-gray-50 p-8 md:p-12 transition-all duration-500 hover:shadow-2xl lg:p-16"
             >
               <div className="pointer-events-none absolute top-0 right-0 p-8 text-[#001A3D] opacity-[0.03]">
                 <Eye size={120} />
@@ -144,7 +144,7 @@ export default function VisionMissionValuesClient({
               initial={{ opacity: 0, x: 20 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
-              className="group relative space-y-10 overflow-hidden rounded-[3rem] bg-[#001A3D] p-12 text-white transition-all duration-500 hover:shadow-2xl md:p-16"
+              className="group relative space-y-10 overflow-hidden rounded-[15px] lg:rounded-[3rem] bg-[#001A3D] p-8 md:p-12 text-white transition-all duration-500 hover:shadow-2xl lg:p-16"
             >
               <div className="pointer-events-none absolute top-0 right-0 p-8 text-white opacity-[0.05]">
                 <Target size={120} />
@@ -166,7 +166,7 @@ export default function VisionMissionValuesClient({
       </section>
 
       {/* ── Core Values Section ───────────────────────────────────────────── */}
-      <section className="relative overflow-hidden border-y border-gray-100 bg-gray-50 py-24">
+      <section className="relative overflow-hidden border-y border-gray-100 bg-gray-50 py-[50px] lg:py-24">
         <div className="pointer-events-none absolute top-1/2 left-1/2 h-full w-full -translate-x-1/2 -translate-y-1/2 opacity-[0.02]">
           <svg viewBox="0 0 100 100" className="h-full w-full fill-[#001A3D]">
             <pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse">
@@ -177,7 +177,7 @@ export default function VisionMissionValuesClient({
         </div>
 
         <div className="relative z-10 mx-auto max-w-[1280px] px-6 lg:px-20">
-          <div className="mx-auto mb-24 max-w-3xl space-y-6 text-center">
+          <div className="mx-auto mb-[50px] lg:mb-24 max-w-3xl space-y-6 text-center">
             <span className="text-xs font-bold tracking-widest text-[#F99D1C] uppercase">
               {valuesTagline}
             </span>
@@ -197,7 +197,7 @@ export default function VisionMissionValuesClient({
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: i * 0.1 }}
-                className="group space-y-8 rounded-[2.5rem] border border-gray-100 bg-white p-10 transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl md:p-12"
+                className="group space-y-8 rounded-[15px] lg:rounded-[2.5rem] border border-gray-100 bg-white p-8 md:p-10 transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl lg:p-12"
               >
                 <div className="w-fit rounded-2xl bg-gray-50 p-4 text-[#F99D1C] transition-all duration-300 group-hover:bg-[#F99D1C] group-hover:text-white">
                   {VALUE_ICONS[i % VALUE_ICONS.length]}
@@ -215,9 +215,9 @@ export default function VisionMissionValuesClient({
       </section>
 
       {/* ── CTA Section ───────────────────────────────────────────────────── */}
-      <section className="bg-white py-24">
+      <section className="bg-white py-[50px] lg:py-24">
         <div className="mx-auto max-w-[1280px] px-6 lg:px-20">
-          <div className="group relative overflow-hidden rounded-[3rem] bg-[#001A3D] p-12 text-center text-white md:p-24">
+          <div className="group relative overflow-hidden rounded-[15px] lg:rounded-[3rem] bg-[#001A3D] p-6 md:p-12 text-center text-white lg:p-24">
             <div className="absolute top-0 right-0 -mt-48 -mr-48 h-96 w-96 rounded-full bg-[#F99D1C]/10 blur-[100px] transition-transform duration-700 group-hover:scale-150"></div>
             <div className="relative z-10 space-y-10">
               <h2 className="display-font mx-auto max-w-4xl text-4xl leading-tight font-semibold tracking-tight md:text-6xl">

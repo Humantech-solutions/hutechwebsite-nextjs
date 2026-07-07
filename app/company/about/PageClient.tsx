@@ -78,7 +78,7 @@ export default function AboutHutech() {
       <Breadcrumbs variant="light" />
 
       {/* Architectural Hero */}
-      <section className="relative flex min-h-[600px] items-center overflow-hidden bg-[#001A3D] pt-20">
+      <section className="relative flex min-h-[45vh] sm:min-h-[50vh] lg:min-h-[600px] items-center overflow-hidden bg-[#001A3D] py-[50px] lg:py-0">
         <div className="absolute inset-0 z-0 opacity-20">
           <div className="absolute top-0 right-0 h-full w-full bg-[radial-gradient(circle_at_70%_30%,#0171c1_0%,transparent_50%)]"></div>
           <div className="absolute bottom-0 left-0 h-full w-full bg-[radial-gradient(circle_at_20%_80%,#F99D1C_0%,transparent_40%)]"></div>
@@ -124,7 +124,7 @@ export default function AboutHutech() {
                     initial={{ opacity: 0, scale: 0.8 }}
                     animate={{ opacity: 1, scale: 1 }}
                     transition={{ delay: 0.3 + i * 0.1 }}
-                    className="rounded-2xl border border-white/10 bg-white/5 p-8 text-center backdrop-blur-md"
+                    className="rounded-[15px] border border-white/10 bg-white/5 p-8 text-center backdrop-blur-md"
                   >
                     <div className="display-font mb-1 text-3xl font-black text-white">
                       {stat.value}
@@ -141,7 +141,7 @@ export default function AboutHutech() {
       </section>
 
       {/* Strategic Overview - High Density Text Grid */}
-      <section className="bg-white py-32">
+      <section className="bg-white py-[50px] lg:py-32">
         <div className="mx-auto max-w-[1280px] px-6 lg:px-20">
           <div className="grid grid-cols-1 gap-20 lg:grid-cols-12">
             <div className="space-y-8 lg:col-span-4">
@@ -205,11 +205,11 @@ export default function AboutHutech() {
       </section>
 
       {/* Narrative Section - Immersive Content */}
-      <section className="relative overflow-hidden bg-[#FAF9F6] py-32">
+      <section className="relative overflow-hidden bg-[#FAF9F6] py-[50px] lg:py-32">
         <div className="absolute top-0 right-0 hidden h-full w-1/3 bg-[#001A3D] lg:block"></div>
         <div className="relative z-10 mx-auto max-w-[1280px] px-6 lg:px-20">
           <div className="grid grid-cols-1 gap-0 lg:grid-cols-12">
-            <div className="space-y-16 rounded-l-[3rem] bg-white p-12 shadow-2xl lg:col-span-8 lg:p-24">
+            <div className="space-y-16 rounded-[15px] lg:rounded-r-none lg:rounded-l-[15px] bg-white p-6 md:p-12 lg:p-24 shadow-2xl lg:col-span-8">
               <div className="grid grid-cols-1 gap-16 md:grid-cols-2">
                 <div className="space-y-6">
                   <h3 className="display-font text-3xl font-bold text-[#001A3D]">What We Do</h3>
@@ -259,7 +259,7 @@ export default function AboutHutech() {
                   </ul>
                 </div>
               </div>
-              <div className="flex flex-col items-center gap-8 rounded-3xl border border-[#0171c1]/10 bg-[#0171c1]/5 p-10 md:flex-row">
+              <div className="flex flex-col items-center gap-8 rounded-[15px] border border-[#0171c1]/10 bg-[#0171c1]/5 p-10 md:flex-row">
                 <div className="flex h-20 w-20 shrink-0 items-center justify-center rounded-2xl bg-[#0171c1] text-white">
                   <TrendingUp size={40} />
                 </div>
@@ -272,7 +272,7 @@ export default function AboutHutech() {
                 </div>
               </div>
             </div>
-            <div className="flex items-center rounded-r-[3rem] bg-[#001A3D] p-12 lg:col-span-4 lg:p-24">
+            <div className="flex items-center rounded-[15px] lg:rounded-l-none lg:rounded-r-[15px] bg-[#001A3D] p-12 lg:col-span-4 lg:p-24">
               <div className="space-y-8">
                 <h2 className="display-font text-4xl leading-tight font-bold text-white">
                   Global <br /> <span className="text-[#F99D1C]">Synergy.</span>
@@ -309,7 +309,7 @@ export default function AboutHutech() {
       <GlobalMap />
 
       {/* History Timeline - Staggered Grid Design */}
-      <section className="bg-white py-32">
+      <section className="bg-white py-[50px] lg:py-32">
         <div className="mx-auto max-w-[1280px] px-6 lg:px-20">
           <div className="mb-24 space-y-6 text-center">
             <span className="text-[10px] font-black tracking-[0.2em] text-[#0171c1] uppercase">
@@ -328,7 +328,7 @@ export default function AboutHutech() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: idx * 0.1 }}
-                className="group relative overflow-hidden rounded-[2.5rem] border border-gray-100 bg-white p-10 transition-all duration-500 hover:border-[#0171c1] hover:shadow-2xl"
+                className="group relative overflow-hidden rounded-[15px] border border-gray-100 bg-white p-10 transition-all duration-500 hover:border-[#0171c1] hover:shadow-2xl"
               >
                 <div className="pointer-events-none absolute top-0 right-0 p-8 text-[#001A3D] opacity-[0.05] transition-opacity group-hover:opacity-[0.1]">
                   <span className="display-font text-6xl font-black">
@@ -348,9 +348,9 @@ export default function AboutHutech() {
       </section>
 
       {/* Modern CTA */}
-      <section className="py-24">
+      <section className="py-[50px] lg:py-24">
         <div className="mx-auto max-w-[1280px] px-6 lg:px-20">
-          <div className="relative overflow-hidden rounded-[4rem] bg-[#001A3D] p-12 text-center lg:p-24">
+          <div className="relative overflow-hidden rounded-[15px] lg:rounded-[4rem] bg-[#001A3D] p-6 md:p-12 lg:p-24 text-center">
             <div className="absolute inset-0 z-0">
               <ImageWithFallback
                 src="https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1920"
