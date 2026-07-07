@@ -162,7 +162,7 @@ export default function NewsDetailClient({ news: wpNews, id, latestReleases }: {
             </h1>
 
             <div className="flex w-fit flex-wrap items-center gap-10 border-t border-white/10 pt-4 pr-12">
-              <div className="flex items-center gap-4">
+              {/* <div className="flex items-center gap-4">
                 <div className="flex h-12 w-12 items-center justify-center rounded-full bg-[#0171c1] text-lg font-bold text-white">
                   {news.author.charAt(0)}
                 </div>
@@ -172,7 +172,7 @@ export default function NewsDetailClient({ news: wpNews, id, latestReleases }: {
                     {news.role}
                   </div>
                 </div>
-              </div>
+              </div> */}
               <div className="flex items-center gap-4 border-l border-white/10 pl-10">
                 <Calendar className="h-5 w-5 text-[#FFAF2B]" />
                 <div>

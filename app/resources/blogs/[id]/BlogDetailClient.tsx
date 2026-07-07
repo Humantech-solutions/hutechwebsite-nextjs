@@ -86,7 +86,7 @@ export default function BlogDetailClient({ blog }: { blog: Blog }) {
             </h1>
 
             <div className="flex flex-wrap items-center gap-10 pt-4 border-t border-white/10 w-fit pr-12">
-               <div className="flex items-center gap-4">
+               {/* <div className="flex items-center gap-4">
                   <div className="w-12 h-12 rounded-full bg-[#0171c1] flex items-center justify-center font-bold text-lg text-white">
                     {blog.author.charAt(0)}
                   </div>
@@ -94,7 +94,7 @@ export default function BlogDetailClient({ blog }: { blog: Blog }) {
                     <div className="text-sm font-bold text-white">{blog.author}</div>
                     <div className="text-[10px] text-white/40 font-bold uppercase tracking-widest">{blog.role}</div>
                   </div>
-               </div>
+               </div> */}
                <div className="flex items-center gap-4 border-l border-white/10 pl-10">
                   <Calendar className="text-[#F99D1C] w-5 h-5" />
                   <div>

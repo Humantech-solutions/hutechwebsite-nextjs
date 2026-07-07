@@ -200,7 +200,7 @@ export function ServiceDetailContactCTA() {
         requirements: "",
       });
     } catch (error) {
-      toast.error("Failed to submit request. Please try again later.");
+      toast.error(error instanceof Error ? error.message : "Failed to submit request. Please try again later.");
     } finally {
       setIsSubmitting(false);
     }

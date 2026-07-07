@@ -1,8 +1,9 @@
 import CareersClient from "./CareersClient";
 import { getCareers, getCareerPageData } from "@/lib/wordpress";
 import { JOBS } from "@/lib/data/careers";
+import { getRecruitProJobs } from "@/lib/api";
 
-export const revalidate = 60; // ISR
+export const revalidate = 120; // ISR — refresh every 2 minutes to pick up new HR postings
 
 export async function generateMetadata() {
   const pageData = await getCareerPageData();
@@ -13,10 +14,16 @@ export async function generateMetadata() {
 }
 
 export default async function CareersPage() {
-  const [jobs, pageData] = await Promise.all([
+  const [recruitProJobs, wpJobs, pageData] = await Promise.all([
+    getRecruitProJobs(),
     getCareers(),
     getCareerPageData(),
   ]);
+
+  // Merge RecruitPro (HR app) jobs + WordPress career posts — both shown together.
+  // RecruitPro jobs appear first. Fall back to static JOBS only when both sources are empty.
+  const mergedJobs = [...recruitProJobs, ...wpJobs];
+  const jobs = mergedJobs.length > 0 ? mergedJobs : JOBS;
 
   const fallbackPageData: any = {
     heroBgImg: "https://images.unsplash.com/photo-1760611656615-db3fad24a314?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1920",
@@ -69,5 +76,5 @@ export default async function CareersPage() {
     ctaCard2Desc: "Hiring in 14 days",
   };
 
-  return <CareersClient jobs={jobs.length > 0 ? jobs : JOBS} pageData={pageData || fallbackPageData} />;
+  return <CareersClient jobs={jobs} pageData={pageData || fallbackPageData} />;
 }

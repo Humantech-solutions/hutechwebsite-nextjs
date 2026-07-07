@@ -10,6 +10,8 @@ import { ScrollToTopButton } from "@/components/ScrollToTopButton";
 import { ChatWidget } from "@/components/ChatWidget";
 import { CookieBanner } from "@/components/CookieBanner";
 import TemporaryPasswordGate from "@/components/TemporaryPasswordGate";
+import { RouteTracker } from "@/components/RouteTracker";
+import Script from "next/script";
 
 export const metadata = constructMetadata();
 
@@ -30,8 +32,22 @@ export default async function RootLayout({
             type="application/ld+json"
             dangerouslySetInnerHTML={{ __html: JSON.stringify(getSiteSchema()) }}
           />
+          <Script
+            src="https://www.googletagmanager.com/gtag/js?id=G-CZ2CW8X92G"
+            strategy="afterInteractive"
+          />
+          <Script id="google-analytics" strategy="afterInteractive">
+            {`
+              window.dataLayer = window.dataLayer || [];
+              function gtag(){dataLayer.push(arguments);}
+              gtag('js', new Date());
+            
+              gtag('config', 'G-CZ2CW8X92G');
+            `}
+          </Script>
           <TemporaryPasswordGate>
-            <div className="pt-[80px] md:pt-[80px]">
+            <RouteTracker />
+            <div className="w-full">
               <Navbar data={siteChrome?.header} />
               <main>{children}</main>
               <Footer data={siteChrome?.footer} />

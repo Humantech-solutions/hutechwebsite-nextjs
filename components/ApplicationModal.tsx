@@ -48,7 +48,7 @@ export function ApplicationModal({ isOpen, onClose, jobTitle }: ApplicationModal
       });
       onClose();
     } catch (error) {
-      toast.error("Failed to submit application. Please try again.");
+      toast.error(error instanceof Error ? error.message : "Failed to submit application. Please try again.");
     } finally {
       setIsSubmitting(false);
     }

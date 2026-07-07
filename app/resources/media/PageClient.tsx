@@ -101,8 +101,9 @@ export default function MediaListing() {
 
   const handleSubscribe = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    const form = e.currentTarget;
     setIsSubmitting(true);
-    const formData = new FormData(e.currentTarget);
+    const formData = new FormData(form);
     const emailVal = formData.get("email") as string;
 
     try {
@@ -115,9 +116,9 @@ export default function MediaListing() {
         category: "Media Newsletter Subscription",
       });
       toast.success("Subscribed successfully!");
-      e.currentTarget.reset();
+      form.reset();
     } catch (error) {
-      toast.error("Failed to subscribe. Please try again.");
+      toast.error(error instanceof Error ? error.message : "Failed to subscribe. Please try again.");
     } finally {
       setIsSubmitting(false);
     }

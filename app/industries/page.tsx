@@ -1,3 +1,6 @@
+import { Suspense } from "react";
+import PageClient from "./PageClient";
+import { getIndustryPageData, getIndustriesList } from "@/lib/wordpress";
 import { constructMetadata } from "@/lib/seo";
 
 export const metadata = constructMetadata({
@@ -6,4 +9,20 @@ export const metadata = constructMetadata({
   path: "/industries/",
 });
 
-export { default } from "./PageClient";
+export const revalidate = 60;
+
+export default async function IndustriesPage() {
+  const [pageData, industriesList] = await Promise.all([
+    getIndustryPageData(),
+    getIndustriesList(),
+  ]);
+
+  return (
+    <Suspense>
+      <PageClient
+        pageData={pageData}
+        industriesList={industriesList}
+      />
+    </Suspense>
+  );
+}

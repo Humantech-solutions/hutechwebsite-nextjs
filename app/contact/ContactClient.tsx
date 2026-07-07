@@ -138,9 +138,10 @@ export default function ContactClient({
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    const form = e.currentTarget;
     setIsSubmitting(true);
 
-    const formData = new FormData(e.currentTarget);
+    const formData = new FormData(form);
     const name = formData.get("name") as string;
     const emailVal = formData.get("email") as string;
     const phoneVal = formData.get("phone") as string;
@@ -157,9 +158,9 @@ export default function ContactClient({
         category: "Contact Us Form",
       });
       toast.success("Thank you! Your inquiry has been received. Our team will contact you shortly.");
-      e.currentTarget.reset();
+      form.reset();
     } catch (error) {
-      toast.error("Failed to submit inquiry. Please try again later.");
+      toast.error(error instanceof Error ? error.message : "Failed to submit inquiry. Please try again later.");
     } finally {
       setIsSubmitting(false);
     }

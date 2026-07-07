@@ -2013,7 +2013,7 @@ const LEADERSHIP_PAGE_QUERY = `
           leadLeader9Name leadLeader9Role leadLeader9Img { node { sourceUrl } } leadLeader9Bio leadLeader9Linkedin leadLeader9LinkedinIcon { node { sourceUrl } } leadLeader9Twitter leadLeader9TwitterIcon { node { sourceUrl } }
           leadAdvisoryTitle
           leadAdvisoryDescription
-          leadAdvisoryBtnText leadAdvisoryBtnUrl { url title target }
+          leadAdvisoryBtnText leadAdvisoryBtnUrl
           leadAdvisor1Name leadAdvisor1Firm leadAdvisor1Region
           leadAdvisor2Name leadAdvisor2Firm leadAdvisor2Region
           leadAdvisor3Name leadAdvisor3Firm leadAdvisor3Region
@@ -2057,7 +2057,7 @@ function transformLeadershipPageData(f: any) {
     advisoryTitle:       f.leadAdvisoryTitle       || "Board of |~Advisors.",
     advisoryDescription: f.leadAdvisoryDescription || "",
     advisoryBtnText:     f.leadAdvisoryBtnText     || "Engage with Us",
-    advisoryBtnUrl:      f.leadAdvisoryBtnUrl?.url      || "/contact",
+    advisoryBtnUrl:      f.leadAdvisoryBtnUrl      || "/contact",
     advisors:            advisors.length > 0 ? advisors : undefined,
     ctaTitle:            f.leadCtaTitle            || "Lead the Next |^Digital Frontier.",
     ctaDescription:      f.leadCtaDescription      || "",
@@ -2105,7 +2105,7 @@ const PARTNERSHIP_PAGE_QUERY = `
           
           partMeetTitle
           partMeetDescription
-          partMeetBtnText partMeetBtnUrl { url title target }
+          partMeetBtnText partMeetBtnUrl
           partMeetImg1 { node { sourceUrl } } partMeetAlt1
           partMeetImg2 { node { sourceUrl } } partMeetAlt2
           partMeetImg3 { node { sourceUrl } } partMeetAlt3
@@ -2195,7 +2195,7 @@ function transformPartnershipPageData(f: any) {
     meetTitle:        f.partMeetTitle || "Meet Our Partners",
     meetDescription:  f.partMeetDescription || "",
     meetBtnText:      f.partMeetBtnText || "Find What You Need",
-    meetBtnUrl:       f.partMeetBtnUrl?.url || "/services",
+    meetBtnUrl:       f.partMeetBtnUrl || "/services",
     meetImages:       meetImages.length > 0 ? meetImages : undefined,
     
     logos:            logos.length > 0 ? logos : undefined,
@@ -2251,7 +2251,7 @@ const CONTACT_PAGE_QUERY = `
           contactSupportLabel
           contactSupportDescription
           contactSupportBtnText
-          contactSupportBtnUrl { url title target }
+          contactSupportBtnUrl
           
           contactOfficesTitle
           contactOfficesDescription
@@ -2313,7 +2313,7 @@ function transformContactPageData(f: any) {
     supportLabel: f.contactSupportLabel || "Customer Support",
     supportDescription: f.contactSupportDescription || "",
     supportBtnText: f.contactSupportBtnText || "Support Portal",
-    supportBtnUrl: f.contactSupportBtnUrl?.url || "#",
+    supportBtnUrl: f.contactSupportBtnUrl || "/contact",
 
     officesTitle: f.contactOfficesTitle || "Our Offices",
     officesDescription: f.contactOfficesDescription || "",
@@ -2352,7 +2352,7 @@ const DOCUMENTS_PAGE_QUERY = `
           docPageCtaTitle
           docPageCtaDesc
           docPageCtaBtnText
-          docPageCtaBtnUrl { url title target }
+          docPageCtaBtnUrl
         }
       }
     }
@@ -2417,7 +2417,7 @@ export async function getDocumentPageData() {
       ctaTitle: f.docPageCtaTitle || "Need custom documentation?",
       ctaDesc: f.docPageCtaDesc || "Our specialized teams can provide tailored technical whitepapers and architecture documentation for your enterprise needs.",
       ctaBtnText: f.docPageCtaBtnText || "REQUEST ACCESS",
-      ctaBtnUrl: f.docPageCtaBtnUrl?.url || "/contact",
+      ctaBtnUrl: f.docPageCtaBtnUrl || "/contact",
     };
   } catch (err) {
     console.warn("[WP] getDocumentPageData failed:", err);
@@ -2936,7 +2936,7 @@ const NEWS_PAGE_QUERY = `
           newsCtaTitle
           newsCtaDescription
           newsCtaBtnText
-          newsCtaBtnUrl { url title target }
+          newsCtaBtnUrl
         }
       }
     }
@@ -3100,7 +3100,7 @@ export async function getNewsPageData() {
       ctaTitle: f.newsCtaTitle || undefined,
       ctaDescription: f.newsCtaDescription || undefined,
       ctaBtnText: f.newsCtaBtnText || undefined,
-      ctaBtnUrl: f.newsCtaBtnUrl?.url || undefined,
+      ctaBtnUrl: f.newsCtaBtnUrl || undefined,
     };
   } catch (err) {
     console.warn("[WP] getNewsPageData failed:", err);
@@ -3590,3 +3590,413 @@ export async function getBlogsByCategory(categoryName: string): Promise<WpBlog[]
     return [];
   }
 }
+
+// ─── Service List Page Queries ───────────────────────────────────────────────────
+
+const SERVICE_PAGE_QUERY = `
+  query GetServicePageData {
+    pages(where: { name: "services" }) {
+      nodes {
+        servicePageSettings {
+          title
+          description
+          expertiseLabel
+          ctaTitle
+          ctaBtnText
+          ctaBtnLink
+        }
+      }
+    }
+  }
+`;
+
+const ALL_SERVICES_WITH_CATEGORIES_QUERY = `
+  query GetAllServicesWithCategories {
+    hutechServices(first: 100) {
+      nodes {
+        title
+        slug
+        featuredImage { node { sourceUrl } }
+        serviceFields {
+          heroDescription
+        }
+        serviceCategories {
+          nodes {
+            name
+            slug
+          }
+        }
+        serviceSubCategories {
+          nodes {
+            name
+            slug
+          }
+        }
+      }
+    }
+  }
+`;
+
+export interface ServiceCategoryGroup {
+  category: string;
+  subcategories?: {
+    name: string;
+    items: {
+      title: string;
+      href: string;
+      iconUrl: string;
+      desc: string;
+      slug: string;
+    }[];
+  }[];
+  items?: {
+    title: string;
+    href: string;
+    iconUrl: string;
+    desc: string;
+    slug: string;
+  }[];
+}
+
+export interface ServicePageData {
+  title: string;
+  description: string;
+  expertiseLabel: string;
+  ctaTitle: string;
+  ctaBtnText: string;
+  ctaBtnLink: string;
+}
+
+export async function getServicePageData(): Promise<ServicePageData | null> {
+  try {
+    const raw = await fetchGraphQL(SERVICE_PAGE_QUERY);
+    const node = raw?.data?.pages?.nodes?.[0]?.servicePageSettings;
+    if (!node) return null;
+    return {
+      title: node.title || "",
+      description: node.description || "",
+      expertiseLabel: node.expertiseLabel || "Our Expertise",
+      ctaTitle: node.ctaTitle || "Ready to engineer your next ^breakthrough?^",
+      ctaBtnText: node.ctaBtnText || "Start a Project",
+      ctaBtnLink: node.ctaBtnLink || "/contact",
+    };
+  } catch (err) {
+    console.warn("[WP] getServicePageData() failed:", err);
+    return null;
+  }
+}
+
+export async function getServiceCategoriesWithServices(): Promise<ServiceCategoryGroup[]> {
+  try {
+    const raw = await fetchGraphQL(ALL_SERVICES_WITH_CATEGORIES_QUERY);
+    const nodes = raw?.data?.hutechServices?.nodes || [];
+    
+    // Grouping structure: Map<CategoryName, Map<SubcategoryName, items[]>>
+    const groupMap = new Map<string, Map<string, any[]>>();
+
+    nodes.forEach((svc: any) => {
+      const catNodes = svc.serviceCategories?.nodes || [];
+      const subCatNodes = svc.serviceSubCategories?.nodes || [];
+      
+      const catName = catNodes.length > 0 ? catNodes[0].name : "General Services";
+      const subCatName = subCatNodes.length > 0 ? subCatNodes[0].name : ""; // Empty string for no subcategory
+
+      if (!groupMap.has(catName)) {
+        groupMap.set(catName, new Map<string, any[]>());
+      }
+      
+      const subMap = groupMap.get(catName)!;
+      if (!subMap.has(subCatName)) {
+        subMap.set(subCatName, []);
+      }
+
+      subMap.get(subCatName)!.push({
+        title: svc.title,
+        slug: svc.slug,
+        href: `/services/${svc.slug}`,
+        iconUrl: imgUrl(svc.featuredImage) || "",
+        desc: svc.serviceFields?.heroDescription || "",
+      });
+    });
+
+    const result: ServiceCategoryGroup[] = [];
+
+    groupMap.forEach((subMap, catName) => {
+      const subcategories: { name: string; items: any[] }[] = [];
+      let directItems: any[] = []; // Items without a subcategory
+
+      subMap.forEach((items, subCatName) => {
+        if (subCatName === "") {
+          directItems = items;
+        } else {
+          subcategories.push({ name: subCatName, items });
+        }
+      });
+
+      result.push({
+        category: catName,
+        subcategories: subcategories.length > 0 ? subcategories : undefined,
+        items: directItems.length > 0 ? directItems : undefined,
+      });
+    });
+
+    return result;
+  } catch (err) {
+    console.warn("[WP] getServiceCategoriesWithServices() failed:", err);
+    return [];
+  }
+}
+
+// ─── Industry List Page Queries ──────────────────────────────────────────────────
+
+const INDUSTRY_PAGE_QUERY = `
+  query GetIndustryPageData {
+    pages(where: { name: "industries" }) {
+      nodes {
+        industryPageSettings {
+          industryVerticalLabel
+          pageTitle
+          pageDescription
+          ctaTitle
+          ctaBtn1Text
+          ctaBtn1Link
+          ctaBtn2Text
+          ctaBtn2Link
+        }
+      }
+    }
+  }
+`;
+
+const ALL_INDUSTRIES_QUERY = `
+  query GetAllIndustries {
+    hutechServices(first: 100) {
+      nodes {
+        title
+        slug
+        featuredImage { node { sourceUrl } }
+        excerpt
+        serviceFields {
+          heroDescription
+          stat1Value
+          stat1Label
+          stat2Value
+          stat2Label
+          stat3Value
+          stat3Label
+          solution1Title
+          solution2Title
+          solution3Title
+        }
+        serviceCategories {
+          nodes {
+            slug
+          }
+        }
+      }
+    }
+  }
+`;
+
+export interface IndustryPageData {
+  label: string;
+  title: string;
+  description: string;
+  ctaTitle: string;
+  ctaBtnText: string;
+  ctaBtnLink: string;
+  ctaSecondaryText: string;
+  ctaSecondaryLink: string;
+}
+
+export interface IndustryItem {
+  title: string;
+  slug: string;
+  href: string;
+  imageUrl: string;
+  desc: string;
+  stats?: { value: string; label: string }[];
+  topSolutions?: string[];
+}
+
+export async function getIndustryPageData(): Promise<IndustryPageData | null> {
+  try {
+    const raw = await fetchGraphQL(INDUSTRY_PAGE_QUERY);
+    const node = raw?.data?.pages?.nodes?.[0]?.industryPageSettings;
+    if (!node) return null;
+    return {
+      label: node.industryVerticalLabel || "Industry Verticals",
+      title: node.pageTitle || "Domain Expertise. |Universal Impact.",
+      description: node.pageDescription || "We specialize in vertical-specific technology solutions that address the unique complexities and compliance requirements of global markets.",
+      ctaTitle: node.ctaTitle || "Scale Your Industry Dominance Today.",
+      ctaBtnText: node.ctaBtn1Text || "Request Consultation",
+      ctaBtnLink: node.ctaBtn1Link || "/contact",
+      ctaSecondaryText: node.ctaBtn2Text || "Global Offices",
+      ctaSecondaryLink: node.ctaBtn2Link || "/contact",
+    };
+  } catch (err) {
+    console.warn("[WP] getIndustryPageData() failed:", err);
+    return null;
+  }
+}
+
+export async function getIndustriesList(): Promise<IndustryItem[]> {
+  try {
+    const raw = await fetchGraphQL(ALL_INDUSTRIES_QUERY);
+    const allNodes = raw?.data?.hutechServices?.nodes || [];
+    
+    // Filter to only include items in the "industries" category
+    const nodes = allNodes.filter((item: any) => {
+      const cats = item.serviceCategories?.nodes || [];
+      return cats.some((cat: any) => cat.slug === 'industries' || cat.slug === 'industry');
+    });
+
+    return nodes.map((item: any) => {
+      const sf = item.serviceFields || {};
+      const stats = [];
+      if (sf.stat1Value || sf.stat1Label) stats.push({ value: sf.stat1Value || "", label: sf.stat1Label || "" });
+      if (sf.stat2Value || sf.stat2Label) stats.push({ value: sf.stat2Value || "", label: sf.stat2Label || "" });
+      if (sf.stat3Value || sf.stat3Label) stats.push({ value: sf.stat3Value || "", label: sf.stat3Label || "" });
+
+      const topSolutions = [];
+      if (sf.solution1Title) topSolutions.push(sf.solution1Title);
+      if (sf.solution2Title) topSolutions.push(sf.solution2Title);
+      if (sf.solution3Title) topSolutions.push(sf.solution3Title);
+
+      return {
+        title: item.title,
+        slug: item.slug,
+        href: `/industries/${item.slug}`,
+        imageUrl: imgUrl(item.featuredImage) || "",
+        desc: sf.heroDescription || item.excerpt || "",
+        stats,
+        topSolutions,
+      };
+    });
+  } catch (err) {
+    console.warn("[WP] getIndustriesList() failed:", err);
+    return [];
+  }
+}
+
+// ─── Life at Hutech Query ────────────────────────────────────────────────────────
+
+const LIFE_AT_HUTECH_QUERY = `
+  query GetLifeAtHutechPage {
+    page(id: "life-at-hutech", idType: URI) {
+      title
+      lifeAtHutechSettings {
+        heroEyebrow
+        heroTitle
+        heroDescription
+        heroImage { node { sourceUrl } }
+        galleryEyebrow
+        galleryTitle
+        galleryDescription
+        galleryCategories { nodes { name slug } }
+        galleryTags { nodes { name slug } }
+        benefitsEyebrow
+        benefitsTitle
+        benefit1 { icon title description }
+        benefit2 { icon title description }
+        benefit3 { icon title description }
+        benefit4 { icon title description }
+        workplaceEyebrow
+        workplaceTitle
+        workplaceCategories { nodes { name slug } }
+        workplaceTags { nodes { name slug } }
+        ctaTitle
+        ctaBtn1Text
+        ctaBtn1Link
+        ctaBtn2Text
+        ctaBtn2Link
+      }
+    }
+    lifeGalleries(first: 100) {
+      nodes {
+        title
+        featuredImage { node { sourceUrl } }
+        content
+        lifeGalleryCategories { nodes { name slug } }
+        lifeGalleryTags { nodes { name slug } }
+      }
+    }
+  }
+`;
+
+export interface LifeGalleryPost {
+  title: string;
+  imageUrl: string;
+  categories: { name: string; slug: string }[];
+  tags: { name: string; slug: string }[];
+  imagesFromContent: string[];
+}
+
+export interface LifeAtHutechData {
+  title: string;
+  settings: any;
+  galleries: LifeGalleryPost[];
+}
+
+export async function getLifeAtHutechPage(): Promise<LifeAtHutechData | null> {
+  try {
+    const raw = await fetchGraphQL(LIFE_AT_HUTECH_QUERY);
+    if (!raw?.data?.page) return null;
+    
+    const settings = raw.data.page.lifeAtHutechSettings || {};
+    const galleriesNodes = raw.data.lifeGalleries?.nodes || [];
+    
+    const galleries = galleriesNodes.map((n: any) => {
+      const content = n.content || "";
+      const imgRegex = /<img[^>]+src=["']([^"']+)["']/gi;
+      const images = [];
+      let match;
+      while ((match = imgRegex.exec(content)) !== null) {
+        images.push(match[1]);
+      }
+      
+      return {
+        title: n.title,
+        imageUrl: n.featuredImage?.node?.sourceUrl || images[0] || "",
+        categories: n.lifeGalleryCategories?.nodes || [],
+        tags: n.lifeGalleryTags?.nodes || [],
+        imagesFromContent: images,
+      };
+    });
+    
+    return {
+      title: raw.data.page.title,
+      settings: {
+        heroEyebrow: settings.heroEyebrow,
+        heroTitle: settings.heroTitle,
+        heroDescription: settings.heroDescription,
+        heroImage: settings.heroImage?.node?.sourceUrl || "",
+        galleryEyebrow: settings.galleryEyebrow,
+        galleryTitle: settings.galleryTitle,
+        galleryDescription: settings.galleryDescription,
+        galleryCategories: settings.galleryCategories?.nodes || [],
+        galleryTags: settings.galleryTags?.nodes || [],
+        benefitsEyebrow: settings.benefitsEyebrow,
+        benefitsTitle: settings.benefitsTitle,
+        benefit1: settings.benefit1,
+        benefit2: settings.benefit2,
+        benefit3: settings.benefit3,
+        benefit4: settings.benefit4,
+        workplaceEyebrow: settings.workplaceEyebrow,
+        workplaceTitle: settings.workplaceTitle,
+        workplaceCategories: settings.workplaceCategories?.nodes || [],
+        workplaceTags: settings.workplaceTags?.nodes || [],
+        ctaTitle: settings.ctaTitle,
+        ctaBtn1Text: settings.ctaBtn1Text,
+        ctaBtn1Link: settings.ctaBtn1Link,
+        ctaBtn2Text: settings.ctaBtn2Text,
+        ctaBtn2Link: settings.ctaBtn2Link,
+      },
+      galleries,
+    };
+  } catch (err) {
+    console.warn("[WP] getLifeAtHutechPage failed:", err);
+    return null;
+  }
+}
+

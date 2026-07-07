@@ -3,6 +3,8 @@
 import { useState } from "react";
 import { motion as Motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
+import { toast } from "sonner";
+import { renderTitle } from "@/lib/utils";
 import {
   Brain,
   TrendingUp,
@@ -31,6 +33,7 @@ import {
 import { Breadcrumbs } from "@/components/Breadcrumbs";
 import { Meta } from "@/components/Meta";
 import { ImageWithFallback } from "@/components/figma/ImageWithFallback";
+import { submitContactForm } from "@/lib/api";
 import { HutechService } from "@/lib/wordpress";
 
 const FALLBACK_ICONS = [
@@ -91,10 +94,9 @@ function FAQItem({ question, answer }: { question: string; answer: string }) {
 }
 
 export default function ServiceDetailClient({ service, blogs = [] }: { service: HutechService, blogs?: any[] }) {
+  const [isContactSubmitting, setIsContactSubmitting] = useState(false);
   
-  const heroTitleParts = (service.heroTitle || service.title || "").split("|");
-  const heroTitle1 = heroTitleParts[0];
-  const heroTitle2 = heroTitleParts.length > 1 ? heroTitleParts[1] : "";
+  const heroTitleText = service.heroTitle || service.title || "";
 
   const statsToRender = service.stats && service.stats.length > 0 ? service.stats : [
     { value: "200+", label: "Models Deployed" },
@@ -167,6 +169,37 @@ export default function ServiceDetailClient({ service, blogs = [] }: { service: 
   
   const stepIcons = [MessageSquare, FileText, Sparkles, Zap, Brain];
 
+  const handleContactSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const form = e.currentTarget;
+    const formData = new FormData(form);
+
+    const name = formData.get("name") as string;
+    const email = formData.get("email") as string;
+    const phone = formData.get("phone") as string;
+    const message = formData.get("message") as string;
+    const serviceName = service.title || service.slug || "Service";
+
+    setIsContactSubmitting(true);
+
+    try {
+      await submitContactForm({
+        name,
+        email,
+        phone,
+        subject: `Service Inquiry: ${serviceName}`,
+        message,
+        category: `Service Consultation: ${serviceName}`,
+      });
+      toast.success("Thank you! Your project request has been submitted successfully.");
+      form.reset();
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : "Failed to submit request. Please try again later.");
+    } finally {
+      setIsContactSubmitting(false);
+    }
+  };
+
   return (
     <div className="flex flex-col overflow-hidden bg-white">
       <Meta
@@ -201,8 +234,7 @@ export default function ServiceDetailClient({ service, blogs = [] }: { service: 
               </span>
             </div>
             <h1 className="display-font mb-8 text-3xl leading-[1.1] font-semibold tracking-tight text-white sm:text-4xl md:text-5xl md:leading-[1.05] lg:text-6xl">
-              {heroTitle1} {heroTitle2 && <br />}
-              {heroTitle2 && <span className="text-[#F99D1C]">{heroTitle2}</span>}
+              {renderTitle(heroTitleText, "text-inherit", "text-[#F99D1C]", "text-[#0171c1]")}
             </h1>
             <p className="max-w-2xl text-lg leading-relaxed font-medium text-gray-300 md:text-xl">
               {service.heroDescription || "We craft intelligent data-driven experiences through cutting-edge AI/ML models and expert consulting for global enterprise leaders."}
@@ -543,30 +575,42 @@ export default function ServiceDetailClient({ service, blogs = [] }: { service: 
               <h2 className="display-font mb-10 text-3xl font-bold text-[#001A3D]">
                 {service.contactFormTitle || "Share Your AI/ML Project With Us"}
               </h2>
-              <form className="grid grid-cols-1 gap-6 md:grid-cols-2">
+              <form onSubmit={handleContactSubmit} className="grid grid-cols-1 gap-6 md:grid-cols-2">
                 <input
+                  required
                   type="text"
+                  name="name"
                   placeholder="Name*"
                   className="w-full border border-gray-200 p-4 text-sm font-medium transition-all outline-none focus:border-[#0171c1]"
                 />
                 <input
+                  required
                   type="email"
+                  name="email"
                   placeholder="Email*"
                   className="w-full border border-gray-200 p-4 text-sm font-medium transition-all outline-none focus:border-[#0171c1]"
                 />
                 <input
+                  required
                   type="tel"
+                  name="phone"
                   placeholder="Phone Number*"
                   className="w-full border border-gray-200 p-4 text-sm font-medium transition-all outline-none focus:border-[#0171c1] md:col-span-2"
                 />
                 <textarea
+                  required
+                  name="message"
                   placeholder="Tell us about your requirements"
                   rows={4}
                   className="w-full resize-none border border-gray-200 p-4 text-sm font-medium transition-all outline-none focus:border-[#0171c1] md:col-span-2"
                 ></textarea>
                 <div className="md:col-span-2">
-                  <button className="w-full rounded-sm bg-[#F99D1C] px-12 py-5 text-[11px] font-bold tracking-wider text-[#001A3D] uppercase shadow-xl transition-all duration-500 hover:bg-[#001A3D] hover:text-white md:w-auto">
-                    {service.contactFormBtnName || "Submit Project Request"}
+                  <button
+                    type="submit"
+                    disabled={isContactSubmitting}
+                    className="w-full rounded-sm bg-[#F99D1C] px-12 py-5 text-[11px] font-bold tracking-wider text-[#001A3D] uppercase shadow-xl transition-all duration-500 hover:bg-[#001A3D] hover:text-white md:w-auto disabled:cursor-not-allowed disabled:opacity-50"
+                  >
+                    {isContactSubmitting ? "Submitting..." : service.contactFormBtnName || "Submit Project Request"}
                   </button>
                 </div>
               </form>

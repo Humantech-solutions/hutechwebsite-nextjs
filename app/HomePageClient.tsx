@@ -261,7 +261,7 @@ function ValuedPartnersCarousel({ valued, special }: { valued: {name:string;logo
   );
 
   return (
-    <div className="relative pb-16">
+    <div className="relative">
       {/* Carousel Container */}
       <div className="overflow-hidden" ref={emblaRef}>
         <div className="flex cursor-grab active:cursor-grabbing touch-pan-y -ml-4 md:-ml-6 py-4">
@@ -293,14 +293,14 @@ function SuccessStoriesCarousel({ title, description, stories }: { title: React.
   return (
     <div>
       {/* Header with Navigation */}
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-8 mb-12 md:mb-16">
+      <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-0 md:gap-4 mb-8 md:mb-16">
         <div className="space-y-4 max-w-xl">
           <h2 className="text-4xl md:text-5xl font-semibold text-[#001A3D] display-font tracking-tight leading-tight">{title}</h2>
           <p className="text-gray-500 font-medium text-sm">
             {description}
           </p>
         </div>
-        <div className="flex gap-3 mb-2">
+        <div className="flex gap-3 justify-end shrink-0 mt-4 md:mt-2 md:self-start">
           <button
             onClick={() => scrollRef.current?.scrollBy({ left: -320, behavior: 'smooth' })}
             className="carousel-arrow"
@@ -771,7 +771,7 @@ export default function HomePageClient({ data }: HomePageClientProps) {
       {/* Expertise Across Industries */}
       <section className="py-20 bg-white relative overflow-hidden">
         <div className="max-w-[1280px] mx-auto px-6 lg:px-20">
-          <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-8 mb-12 md:mb-20">
+          <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-0 md:gap-4 mb-8 md:mb-20">
             <div className="max-w-2xl space-y-6">
               <h2 className="text-4xl md:text-5xl font-semibold text-[#001A3D] display-font tracking-tight leading-tight">
                 {renderTitle(expertiseTitle, "text-[#001A3D]", "text-[#F99D1C]")}
@@ -780,7 +780,7 @@ export default function HomePageClient({ data }: HomePageClientProps) {
                 {expertiseDesc}
               </p>
             </div>
-            <div className="flex gap-3 md:mb-2">
+            <div className="flex gap-3 justify-end shrink-0 mt-4 md:mt-2 md:self-start">
               <button 
                 onClick={() => industryScrollRef.current?.scrollBy({ left: -320, behavior: 'smooth' })}
                 className="carousel-arrow"
@@ -802,27 +802,29 @@ export default function HomePageClient({ data }: HomePageClientProps) {
             style={{ scrollBehavior: 'smooth' }}
           >
               {EXPERTISE_INDUSTRIES.map((industry, idx) => (
-                <div key={idx} className="w-[85vw] min-w-[280px] sm:w-[300px] sm:min-w-[300px] md:w-[320px] md:min-w-[320px] lg:w-[calc(25%-18px)] lg:min-w-[calc(25%-18px)] shrink-0 snap-start flex flex-col">
+                <div key={idx} className="w-[calc(50vw-32px)] min-w-[140px] sm:w-[280px] sm:min-w-[280px] md:w-[320px] md:min-w-[320px] lg:w-[calc(25%-18px)] lg:min-w-[calc(25%-18px)] shrink-0 snap-start flex flex-col">
                   <div 
-                    className="bg-white p-6 sm:p-8 md:p-10 border border-gray-100 shadow-sm hover:shadow-2xl transition-all cursor-pointer group flex flex-col justify-between min-h-[300px] md:min-h-[340px] hover:border-[#F99D1C]/30 flex-grow"
+                    className="bg-white p-4 sm:p-6 md:p-10 border border-gray-100 shadow-sm hover:shadow-2xl transition-all cursor-pointer group flex flex-col justify-between min-h-[220px] sm:min-h-[280px] md:min-h-[340px] hover:border-[#F99D1C]/30 flex-grow rounded-[4px]"
                   >
-                    <div className="text-[#F99D1C] transition-all group-hover:scale-110">
+                    <div className="text-[#F99D1C] transition-all group-hover:scale-110 flex items-center h-10">
                       {industry.iconUrl ? (
-                        <ImageWithFallback src={industry.iconUrl} alt={industry.name} className="w-10 h-10 object-contain" />
+                        <ImageWithFallback src={industry.iconUrl} alt={industry.name} className="w-8 h-8 md:w-10 md:h-10 object-contain" />
                       ) : (
-                        industry.fallbackIcon
+                        <div className="w-8 h-8 md:w-10 md:h-10 flex items-center justify-center [&>svg]:w-full [&>svg]:h-full">
+                          {industry.fallbackIcon}
+                        </div>
                       )}
                     </div>
-                    <div className="space-y-4 md:space-y-6">
-                      <h4 className="text-[#001A3D] text-xl md:text-2xl font-bold leading-tight tracking-tight display-font break-words">
+                    <div className="space-y-3 sm:space-y-4 md:space-y-6 mt-4 md:mt-0">
+                      <h4 className="text-[#001A3D] text-[15px] sm:text-xl md:text-2xl font-bold leading-tight tracking-tight display-font break-words">
                         {industry.name}
                       </h4>
-                      <div className="pt-4 md:pt-6 border-t border-gray-100">
+                      <div className="pt-3 sm:pt-4 md:pt-6 border-t border-gray-100">
                         <Link href={industry.btnLink || "#"}>
                           <Motion.button
                             whileHover="expanded"
                             initial="initial"
-                            className="flex items-center justify-center h-10 md:h-12 rounded-full border border-[#F99D1C]/40 hover:border-[#F99D1C] bg-transparent text-[#F99D1C] overflow-hidden cursor-pointer"
+                            className="flex items-center justify-center h-10 rounded-full border border-[#F99D1C]/40 hover:border-[#F99D1C] bg-transparent text-[#F99D1C] overflow-hidden cursor-pointer"
                             variants={{
                               initial: { width: 40 },
                               expanded: { width: "auto", paddingLeft: 16, paddingRight: 16 }
@@ -943,10 +945,10 @@ export default function HomePageClient({ data }: HomePageClientProps) {
       </section>
 
       {/* Our Valued Partners Section */}
-      <section className="py-24 bg-white border-y border-gray-100 overflow-hidden">
+      <section className="py-[50px] md:py-[100px] bg-white border-y border-gray-100 overflow-hidden">
         <div className="max-w-[1280px] mx-auto px-6 lg:px-20">
-          <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-12 mb-20">
-            <div className="max-w-2xl space-y-6">
+          <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-8 md:gap-12 mb-8 md:mb-20">
+            <div className="max-w-2xl space-y-4 md:space-y-6">
               <h2 className="text-4xl md:text-5xl font-semibold text-[#001A3D] display-font tracking-tight leading-tight">
                 {renderTitle(partnersTitle, "text-[#001A3D]", "text-[#F99D1C]")}
               </h2>
@@ -954,7 +956,7 @@ export default function HomePageClient({ data }: HomePageClientProps) {
                 {partnersDesc}
               </p>
             </div>
-            <div className="flex items-center gap-4 group cursor-pointer">
+            <div className="flex items-center gap-4 group cursor-pointer mt-2 md:mt-0">
               <div className="w-12 h-[2px] bg-[#F99D1C]"></div>
               <span className="text-[#001A3D] font-bold text-xs uppercase tracking-widest group-hover:text-[#0171c1] transition-colors">Trusted Globally</span>
             </div>
@@ -965,14 +967,14 @@ export default function HomePageClient({ data }: HomePageClientProps) {
       </section>
 
       {/* Success Stories */}
-      <section className="py-20 bg-white">
+      <section className="py-[50px] bg-white border-b border-gray-100">
         <div className="max-w-[1280px] mx-auto px-6 lg:px-20">
           <SuccessStoriesCarousel title={renderTitle(successTitle, "text-[#001A3D]", "text-[#F99D1C]")} description={successDesc} stories={SUCCESS_STORIES_DATA} />
         </div>
       </section>
 
       {/* Tech Stack Section */}
-      <section className="py-20 bg-white">
+      <section className="py-20 bg-white border-t border-gray-100">
         <div className="max-w-[1280px] mx-auto px-6 lg:px-20">
           {/* Heading */}
           <div className="mb-16 space-y-3">
@@ -992,7 +994,7 @@ export default function HomePageClient({ data }: HomePageClientProps) {
               <div className="w-full md:w-[200px] shrink-0 flex items-center px-8 py-8 bg-gray-50 border-b md:border-b-0 md:border-r border-gray-200">
                 <span className="text-[#001A3D] font-semibold text-sm tracking-tight leading-snug">Data & AI</span>
               </div>
-              <div className="flex-1 flex flex-wrap items-center gap-x-10 gap-y-8 px-10 py-8">
+              <div className="flex-1 grid grid-cols-3 md:flex md:flex-wrap items-center gap-6 md:gap-x-10 md:gap-y-8 px-6 md:px-10 py-6 md:py-8 justify-items-center md:justify-items-start">
                 <div className="flex flex-col items-center gap-2 group cursor-pointer">
                   <div className="w-14 h-14 flex items-center justify-center">
                     <svg viewBox="0 0 48 48" className="w-12 h-12" fill="none">
@@ -1051,7 +1053,7 @@ export default function HomePageClient({ data }: HomePageClientProps) {
               <div className="w-full md:w-[200px] shrink-0 flex items-center px-8 py-8 bg-gray-50 border-b md:border-b-0 md:border-r border-gray-200">
                 <span className="text-[#001A3D] font-semibold text-sm tracking-tight leading-snug">Cloud Technology</span>
               </div>
-              <div className="flex-1 flex flex-wrap items-center gap-x-10 gap-y-8 px-10 py-8">
+              <div className="flex-1 grid grid-cols-3 md:flex md:flex-wrap items-center gap-6 md:gap-x-10 md:gap-y-8 px-6 md:px-10 py-6 md:py-8 justify-items-center md:justify-items-start">
                 {/* AWS */}
                 <div className="flex flex-col items-center gap-2 group cursor-pointer">
                   <div className="w-14 h-14 flex items-center justify-center">
@@ -1131,7 +1133,7 @@ export default function HomePageClient({ data }: HomePageClientProps) {
               <div className="w-full md:w-[200px] shrink-0 flex items-center px-8 py-8 bg-gray-50 border-b md:border-b-0 md:border-r border-gray-200">
                 <span className="text-[#001A3D] font-semibold text-sm tracking-tight leading-snug">Platform Engineering</span>
               </div>
-              <div className="flex-1 flex flex-wrap items-center gap-x-10 gap-y-8 px-10 py-8">
+              <div className="flex-1 grid grid-cols-3 md:flex md:flex-wrap items-center gap-6 md:gap-x-10 md:gap-y-8 px-6 md:px-10 py-6 md:py-8 justify-items-center md:justify-items-start">
                 {/* Node.js */}
                 <div className="flex flex-col items-center gap-2 group cursor-pointer">
                   <div className="w-14 h-14 flex items-center justify-center">
@@ -1218,7 +1220,7 @@ export default function HomePageClient({ data }: HomePageClientProps) {
               <div className="w-full md:w-[200px] shrink-0 flex items-center px-8 py-8 bg-gray-50 border-b md:border-b-0 md:border-r border-gray-200">
                 <span className="text-[#001A3D] font-semibold text-sm tracking-tight leading-snug">Mobile Development</span>
               </div>
-              <div className="flex-1 flex flex-wrap items-center gap-x-10 gap-y-8 px-10 py-8">
+              <div className="flex-1 grid grid-cols-3 md:flex md:flex-wrap items-center gap-6 md:gap-x-10 md:gap-y-8 px-6 md:px-10 py-6 md:py-8 justify-items-center md:justify-items-start">
                 {/* React Native */}
                 <div className="flex flex-col items-center gap-2 group cursor-pointer">
                   <div className="w-14 h-14 flex items-center justify-center bg-[#282C34] rounded-xl">
@@ -1301,7 +1303,7 @@ export default function HomePageClient({ data }: HomePageClientProps) {
         ></div>
         
         <div className="max-w-[1280px] mx-auto px-6 lg:px-20 relative z-10">
-          <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-12 md:mb-16 gap-8">
+          <div className="flex flex-col md:flex-row md:items-start md:justify-between mb-8 md:mb-16 gap-0 md:gap-4">
              <div className="space-y-3">
               <h2 className="text-3xl sm:text-4xl md:text-5xl font-semibold text-[#001A3D] display-font tracking-tight">
                 {renderTitle(whatsNewTitle, "text-[#001A3D]", "text-[#F99D1C]")}
@@ -1309,7 +1311,7 @@ export default function HomePageClient({ data }: HomePageClientProps) {
                 <p className="text-gray-500 font-medium text-sm md:text-base">{whatsNewDesc}</p>
              </div>
              {/* Navigation Arrows */}
-             <div className="flex gap-3">
+             <div className="flex gap-3 justify-end shrink-0 mt-4 md:mt-2 md:self-start">
                 <button 
                   onClick={() => whatsNewApi?.scrollPrev()} 
                   className="w-10 h-10 md:w-12 md:h-12 rounded-full border border-gray-200 bg-white flex items-center justify-center text-[#001A3D] hover:border-[#F99D1C] hover:text-[#F99D1C] hover:bg-white transition-all duration-300 cursor-pointer focus:outline-none focus:ring-2 focus:ring-[#F99D1C] focus:ring-offset-2 shrink-0"

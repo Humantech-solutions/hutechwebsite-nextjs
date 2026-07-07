@@ -71,8 +71,8 @@ module.exports = {
         xl: 'calc(var(--radius) + 4px)'
       },
       fontFamily: {
-        sans: ['Inter', 'system-ui', '-apple-system', 'sans-serif'],
-        display: ['Inter', 'system-ui', '-apple-system', 'sans-serif']
+        sans: ['Manrope', 'system-ui', '-apple-system', 'sans-serif'],
+        display: ['Manrope', 'system-ui', '-apple-system', 'sans-serif']
       }
     }
   },
