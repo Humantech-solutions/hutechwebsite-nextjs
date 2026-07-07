@@ -105,7 +105,7 @@ export default function LeadershipClient({
       <Breadcrumbs variant="light" />
 
       {/* Hero Section */}
-      <section className="relative flex min-h-[45vh] lg:h-[450px] items-center overflow-hidden bg-[#001A3D] text-white py-[50px] lg:py-0">
+      <section className="relative flex h-[450px] items-center overflow-hidden bg-[#001A3D] text-white">
         <div className="absolute inset-0 z-0">
           <ImageWithFallback
             src={heroBgImage}
@@ -138,7 +138,7 @@ export default function LeadershipClient({
       </section>
 
       {/* Main Leadership Grid */}
-      <section className="bg-white py-[50px] lg:py-32">
+      <section className="bg-white py-32">
         <div className="mx-auto max-w-[1280px] px-6 lg:px-20">
           <div className="grid grid-cols-1 gap-x-10 gap-y-16 md:grid-cols-2 lg:grid-cols-3">
             {leaders.map((leader, i) => (
@@ -150,7 +150,7 @@ export default function LeadershipClient({
                 transition={{ delay: i * 0.05 }}
                 className="group"
               >
-                <div className="relative mb-8 aspect-[4/5] overflow-hidden rounded-[15px] lg:rounded-[2.5rem] border border-gray-100 shadow-md transition-all duration-500 group-hover:-translate-y-2 group-hover:shadow-2xl group-hover:border-[#0171c1]/20">
+                <div className="relative mb-8 aspect-[4/5] overflow-hidden rounded-[2.5rem] border border-gray-100 shadow-md transition-all duration-500 group-hover:-translate-y-2 group-hover:shadow-2xl group-hover:border-[#0171c1]/20">
                   <ImageWithFallback
                     src={leader.img || "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=600"}
                     alt={leader.name}
@@ -197,7 +197,7 @@ export default function LeadershipClient({
       </section>
 
       {/* Advisory Board Section */}
-      <section className="relative overflow-hidden bg-[#FAF9F6] py-[50px] lg:py-32">
+      <section className="relative overflow-hidden bg-[#FAF9F6] py-32">
         <div className="pointer-events-none absolute top-0 right-0 p-32 text-[#001A3D] opacity-[0.03]">
           <Globe size={400} />
         </div>
@@ -221,7 +221,7 @@ export default function LeadershipClient({
               {advisors.map((advisor, idx) => (
                 <div
                   key={idx}
-                  className="group rounded-[15px] lg:rounded-[2.5rem] border border-gray-100 bg-white p-8 lg:p-10 shadow-sm transition-all duration-500 hover:shadow-xl"
+                  className="group rounded-[2.5rem] border border-gray-100 bg-white p-10 shadow-sm transition-all duration-500 hover:shadow-xl"
                 >
                   <div className="mb-6 flex h-12 w-12 items-center justify-center rounded-xl bg-gray-50 transition-colors group-hover:bg-[#F99D1C] group-hover:text-white">
                     <Briefcase size={20} />
@@ -241,9 +241,9 @@ export default function LeadershipClient({
       </section>
 
       {/* Philosophy Join CTA */}
-      <section className="py-[50px] lg:py-32">
+      <section className="py-32">
         <div className="mx-auto max-w-[1280px] px-6 lg:px-20">
-          <div className="group relative overflow-hidden rounded-[15px] lg:rounded-[3rem] bg-[#001A3D] p-6 md:p-12 text-center text-white lg:p-24">
+          <div className="group relative overflow-hidden rounded-[3rem] bg-[#001A3D] p-12 text-center text-white md:p-24">
             <div className="absolute top-0 right-0 -mt-48 -mr-48 h-96 w-96 rounded-full bg-[#0171c1]/20 blur-[100px]"></div>
             <div className="relative z-10 mx-auto max-w-4xl space-y-10">
               <div className="flex justify-center">

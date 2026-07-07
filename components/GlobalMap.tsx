@@ -73,7 +73,7 @@ export function GlobalMap({
   const [activeId, setActiveId] = useState<string>(locations[0]?.id ?? "india");
 
   return (
-    <section className="relative overflow-hidden bg-[#001A3D] py-[50px] lg:py-32 text-white">
+    <section className="relative overflow-hidden bg-[#001A3D] py-32 text-white">
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_60%_50%,rgba(1,113,193,0.25)_0%,transparent_70%)]" />
 
       <div className="relative z-10 mx-auto max-w-[1280px] px-6 lg:px-20">
@@ -101,7 +101,7 @@ export function GlobalMap({
                     key={loc.id}
                     onMouseEnter={() => setActiveId(loc.id)}
                     onClick={() => setActiveId(loc.id)}
-                    className={`w-full rounded-[15px] border p-5 text-left transition-all duration-300 ${
+                    className={`w-full rounded-2xl border p-5 text-left transition-all duration-300 ${
                       active
                         ? "border-[#F99D1C] bg-white/10 shadow-[0_0_30px_-10px_rgba(255,175,43,0.25)]"
                         : "border-white/5 bg-transparent hover:border-white/15"
@@ -201,7 +201,7 @@ export function GlobalMap({
                 );
               })}
               {/* Floating Stats */}
-              <div className="absolute -bottom-10 right-4 z-20 rounded-[15px] bg-[#0171c1] px-6 py-5 shadow-xl md:-bottom-28 md:right-0">
+              <div className="absolute -bottom-6 -right-6 z-20 rounded-[2rem] bg-[#0171c1] px-10 py-8 shadow-xl lg:-bottom-28 lg:right-0">
                 <div className="flex items-center gap-10">
                   <div className="text-center">
                     <p className="display-font text-4xl font-black text-white">{stat1Value}</p>
