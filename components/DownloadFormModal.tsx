@@ -4,6 +4,7 @@ import { useState } from "react";
 import { motion as Motion, AnimatePresence } from "motion/react";
 import { X, CheckCircle2, Loader2, Send, FileText } from "lucide-react";
 import { toast } from "sonner";
+import { submitDocumentRequest } from "@/lib/api";
 
 export interface DownloadFormModalProps {
   isOpen: boolean;
@@ -35,26 +36,26 @@ export function DownloadFormModal({
     onClose();
   };
 
-  // const handleSubmit = async (e: React.FormEvent) => {
-  //   e.preventDefault();
-  //   setIsSubmitting(true);
-  //   try {
-  //     await submitDocumentRequest({
-  //       name: formData.name,
-  //       email: formData.email,
-  //       phone: formData.phone,
-  //       documentTitle,
-  //       downloadUrl,
-  //     });
-  //     setIsSuccess(true);
-  //   } catch (error) {
-  //     toast.error(
-  //       error instanceof Error ? error.message : "Failed to send the link. Please try again."
-  //     );
-  //   } finally {
-  //     setIsSubmitting(false);
-  //   }
-  // };
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    try {
+      await submitDocumentRequest({
+        name: formData.name,
+        email: formData.email,
+        phone: formData.phone,
+        documentTitle,
+        downloadUrl,
+      });
+      setIsSuccess(true);
+    } catch (error) {
+      toast.error(
+        error instanceof Error ? error.message : "Failed to send the link. Please try again."
+      );
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   return (
     <AnimatePresence>
@@ -123,7 +124,7 @@ export function DownloadFormModal({
                 </div>
 
                 <form
-                  // onSubmit={handleSubmit}
+                  onSubmit={handleSubmit}
                   className="space-y-5"
                 >
                   <div className="space-y-2">

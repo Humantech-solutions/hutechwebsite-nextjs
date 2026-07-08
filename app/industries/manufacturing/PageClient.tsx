@@ -36,6 +36,7 @@ import {
 } from "lucide-react";
 import { Breadcrumbs } from "@/components/Breadcrumbs";
 import { Meta } from "@/components/Meta";
+import { InlineContactForm } from "@/components/InlineContactForm";
 import { ImageWithFallback } from "@/components/figma/ImageWithFallback";
 import Link from "next/link";
 
@@ -522,17 +523,7 @@ export default function Manufacturing() {
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-20">
             <div className="lg:col-span-7 bg-white p-10 md:p-14 shadow-2xl border border-gray-100 rounded-sm">
               <h2 className="text-3xl font-bold text-[#001A3D] display-font mb-10">Share Your Industrial Project With Us</h2>
-              <form className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <input type="text" placeholder="Name*" className="w-full p-4 border border-gray-200 outline-none focus:border-[#0171c1] transition-all font-medium text-sm" />
-                <input type="email" placeholder="Email*" className="w-full p-4 border border-gray-200 outline-none focus:border-[#0171c1] transition-all font-medium text-sm" />
-                <input type="tel" placeholder="Phone Number*" className="w-full p-4 border border-gray-200 outline-none focus:border-[#0171c1] transition-all font-medium text-sm md:col-span-2" />
-                <textarea placeholder="Tell us about your production needs" rows={4} className="w-full p-4 border border-gray-200 outline-none focus:border-[#0171c1] transition-all font-medium text-sm md:col-span-2 resize-none"></textarea>
-                <div className="md:col-span-2">
-                  <button className="bg-[#FFAF2B] text-[#001A3D] px-12 py-5 font-bold uppercase tracking-wider text-[11px] hover:bg-[#001A3D] hover:text-white transition-all duration-500 shadow-xl rounded-sm w-full md:w-auto">
-                    Submit Project Request
-                  </button>
-                </div>
-              </form>
+              <InlineContactForm textareaPlaceholder="Message" category="Industries" />
             </div>
             <div className="lg:col-span-5 space-y-12 py-8">
               <h2 className="text-3xl font-bold text-[#001A3D] display-font">What Is The Next Step?</h2>
