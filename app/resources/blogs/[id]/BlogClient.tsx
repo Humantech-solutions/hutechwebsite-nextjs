@@ -324,7 +324,7 @@ export default function BlogClient() {
                   <h2 className="display-font text-3xl font-bold text-[#001A3D] tracking-tight">Frequently Asked Questions</h2>
                   <div className="space-y-4">
                     {blog.faqs.map((faq, i) => (
-                      <div key={i} className="border border-gray-100 rounded-2xl overflow-hidden">
+                      <div key={i} className="border border-gray-100 rounded-[15px] md:rounded-2xl overflow-hidden">
                         <button
                           onClick={() => setOpenFaq(openFaq === i ? null : i)}
                           className="w-full flex items-center justify-between p-6 text-left bg-white hover:bg-gray-50 transition-colors"
@@ -346,7 +346,7 @@ export default function BlogClient() {
 
             {/* Sidebar */}
             <div className="lg:col-span-4 space-y-8">
-              <div className="bg-[#001A3D] p-8 rounded-3xl text-white space-y-4">
+              <div className="bg-[#001A3D] p-8 rounded-[15px] md:rounded-3xl text-white space-y-4">
                 <div className="w-16 h-16 rounded-2xl bg-[#FFAF2B]/20 flex items-center justify-center">
                   <User size={28} className="text-[#FFAF2B]" />
                 </div>
@@ -356,7 +356,7 @@ export default function BlogClient() {
                 </div>
                 <p className="text-xs text-gray-400 font-medium leading-relaxed">Expert at Hutech Solutions sharing insights on {blog.category} trends and innovations.</p>
               </div>
-              <div className="border border-gray-100 rounded-3xl p-8 space-y-6">
+              <div className="border border-gray-100 rounded-[15px] md:rounded-3xl p-8 space-y-6">
                 <h4 className="font-bold text-[#001A3D] flex items-center gap-2"><Share2 size={18} className="text-[#FFAF2B]" /> Share Article</h4>
                 <div className="flex gap-3">
                   <button
@@ -382,7 +382,7 @@ export default function BlogClient() {
                   </button>
                 </div>
               </div>
-              <div className="bg-[#FFAF2B] p-8 rounded-3xl space-y-4">
+              <div className="bg-[#FFAF2B] p-8 rounded-[15px] md:rounded-3xl space-y-4">
                 <h4 className="font-bold text-[#001A3D] text-lg display-font">Ready to Transform?</h4>
                 <p className="text-sm text-[#001A3D]/70 font-medium">Talk to our experts about implementing these solutions for your business.</p>
                 <Link href="/contact" className="block text-center bg-[#001A3D] text-white font-bold text-xs tracking-wide py-4 rounded-xl hover:bg-[#002b66] transition-colors">GET IN TOUCH</Link>

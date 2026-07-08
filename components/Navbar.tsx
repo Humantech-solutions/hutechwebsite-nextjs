@@ -510,31 +510,39 @@ export default function Navbar({ data }: { data?: HeaderChromeData }) {
                             transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
                             className="overflow-hidden"
                           >
-                            <div className="space-y-8 pt-4">
-                              {item.dropdown.map((section) => (
-                                <div
-                                  key={section.title}
-                                  className="space-y-4 border-l border-[#F99D1C]/20 pl-4"
-                                >
-                                  <h4 className="text-sm font-semibold text-[#F99D1C] opacity-80">
-                                    {section.title}
-                                  </h4>
-                                  <div className="grid gap-4">
-                                    {section.items.map((subItem) => (
-                                      <Link
-                                        key={subItem.name}
-                                        href={subItem.path}
-                                        className="group flex items-center text-base font-semibold text-gray-300 transition-colors hover:text-white"
-                                        onClick={() => setMobileMenuOpen(false)}
-                                      >
-                                        <div className="mr-3 h-1.5 w-1.5 rounded-full bg-[#F99D1C] opacity-0 transition-opacity group-hover:opacity-100"></div>
-                                        {subItem.name}
-                                      </Link>
-                                    ))}
-                                  </div>
+                            {(() => {
+                              const isSmallDropdown =
+                                item.label === "Industries" || item.label === "Resources";
+                              return (
+                                <div className="space-y-8 pt-4">
+                                  {item.dropdown.map((section) => (
+                                    <div
+                                      key={section.title}
+                                      className="border-l border-[#F99D1C]/20 pl-4"
+                                    >
+                                      {!isSmallDropdown && (
+                                        <h4 className="mb-4 text-sm font-semibold text-[#F99D1C] opacity-80">
+                                          {section.title}
+                                        </h4>
+                                      )}
+                                      <div className={`grid ${isSmallDropdown ? "gap-[18px]" : "gap-4"}`}>
+                                        {section.items.map((subItem) => (
+                                          <Link
+                                            key={subItem.name}
+                                            href={subItem.path}
+                                            className="group flex items-center text-base font-semibold text-gray-300 transition-colors hover:text-white"
+                                            onClick={() => setMobileMenuOpen(false)}
+                                          >
+                                            <div className="mr-3 h-1.5 w-1.5 rounded-full bg-[#F99D1C] opacity-0 transition-opacity group-hover:opacity-100"></div>
+                                            {subItem.name}
+                                          </Link>
+                                        ))}
+                                      </div>
+                                    </div>
+                                  ))}
                                 </div>
-                              ))}
-                            </div>
+                              );
+                            })()}
                           </Motion.div>
                         )}
                       </AnimatePresence>

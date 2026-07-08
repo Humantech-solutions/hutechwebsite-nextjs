@@ -207,7 +207,7 @@ export default function AwardsClient({
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ delay: i * 0.05, duration: 0.6 }}
-                  className="group relative flex flex-col md:grid md:grid-cols-[160px_1fr_80px] md:items-center gap-6 md:gap-12 py-12 px-6 md:px-12 bg-transparent hover:bg-white hover:shadow-[0_20px_50px_rgba(0,0,0,0.03)] rounded-3xl transition-all duration-500 border-b border-gray-200/80 last:border-b-0 -mx-6 md:-mx-12"
+                  className="group relative flex flex-col md:grid md:grid-cols-[160px_1fr_80px] md:items-center gap-6 md:gap-12 py-12 px-6 md:px-12 bg-transparent hover:bg-white hover:shadow-[0_20px_50px_rgba(0,0,0,0.03)] rounded-[15px] md:rounded-3xl transition-all duration-500 border-b border-gray-200/80 last:border-b-0 -mx-6 md:-mx-12"
                 >
                   <Wrapper {...wrapperProps} className="contents">
                     {/* Left Side: Large Year Text */}
@@ -275,7 +275,7 @@ export default function AwardsClient({
                 <ImageWithFallback
                   src={featuredImage}
                   alt="Corporate Milestone"
-                  className="relative z-10 rounded-[3rem] shadow-2xl"
+                  className="relative z-10 rounded-[15px] md:rounded-[3rem] shadow-2xl"
                 />
               </div>
             </div>

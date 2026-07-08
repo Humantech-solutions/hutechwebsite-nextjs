@@ -79,7 +79,7 @@ export default function BlogsClient({ blogs, pageTitle, pageDescription, bgImage
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ delay: i * 0.1 }}
-                  className="group flex flex-col h-full bg-white border border-gray-100 rounded-3xl overflow-hidden hover:shadow-2xl transition-all"
+                  className="group flex flex-col h-full bg-white border border-gray-100 rounded-[15px] md:rounded-3xl overflow-hidden hover:shadow-2xl transition-all"
                 >
                   <div className="relative h-64 overflow-hidden">
                     <ImageWithFallback

@@ -160,7 +160,7 @@ export default function CaseStudyClient({ slug }: { slug: string }) {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: i * 0.1 }}
-                className="group rounded-[4rem] border border-gray-100/50 bg-white p-16 shadow-[0_32px_64px_-16px_rgba(0,0,0,0.05)] transition-all duration-700 hover:shadow-[0_48px_100px_-20px_rgba(0,0,0,0.1)]"
+                className="group rounded-[15px] md:rounded-[4rem] border border-gray-100/50 bg-white p-16 shadow-[0_32px_64px_-16px_rgba(0,0,0,0.05)] transition-all duration-700 hover:shadow-[0_48px_100px_-20px_rgba(0,0,0,0.1)]"
               >
                 <div className="mb-10 flex h-20 w-20 items-center justify-center rounded-3xl bg-gray-50 text-[#0171c1] shadow-sm transition-all duration-500 group-hover:bg-[#0171c1] group-hover:text-white">
                   {item.icon}
@@ -234,7 +234,7 @@ export default function CaseStudyClient({ slug }: { slug: string }) {
                     The project was carried out in organized stages to guarantee quality and
                     conformity with brand standards.
                   </p>
-                  <div className="space-y-6 rounded-[2.5rem] bg-[#001A3D] p-10 text-white shadow-2xl">
+                  <div className="space-y-6 rounded-[15px] md:rounded-[2.5rem] bg-[#001A3D] p-10 text-white shadow-2xl">
                     <Zap className="h-8 w-8 text-[#FFAF2B]" />
                     <h4 className="display-font text-2xl font-bold">Agile Methodology</h4>
                     <p className="text-base leading-relaxed font-medium opacity-70">
@@ -324,25 +324,6 @@ export default function CaseStudyClient({ slug }: { slug: string }) {
       {/* Bottom CTA */}
       <section className="relative overflow-hidden bg-white py-32">
         <div className="relative z-10 mx-auto max-w-[1280px] px-6 text-center lg:px-20">
-          <div className="flex flex-col items-center justify-between gap-16 rounded-[4rem] border border-gray-100 bg-gray-50 p-16 shadow-sm lg:flex-row lg:p-32">
-            <div className="max-w-2xl space-y-8 text-center lg:text-left">
-              <h2 className="display-font text-5xl leading-tight font-bold tracking-tight text-[#001A3D] uppercase md:text-7xl">
-                Ready to <br />
-                <span className="text-[#0171c1]">Scale?</span>
-              </h2>
-              <p className="text-2xl leading-relaxed font-medium text-gray-500">
-                Let our engineering experts build your next-gen digital ecosystem with precision and
-                peak performance.
-              </p>
-            </div>
-            <Link
-              href="/contact"
-              className="group flex h-20 items-center gap-4 rounded-[1rem] bg-[#001A3D] px-16 py-8 text-[11px] font-black tracking-[0.3em] text-white uppercase shadow-2xl transition-all hover:bg-[#0171c1]"
-            >
-              DISCUSS YOUR PROJECT{" "}
-              <MoveRight className="transition-transform group-hover:translate-x-3" size={20} />
-            </Link>
-          </div>
 
           <Motion.button
             onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}

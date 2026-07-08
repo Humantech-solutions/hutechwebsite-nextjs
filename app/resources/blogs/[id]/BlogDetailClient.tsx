@@ -170,7 +170,7 @@ export default function BlogDetailClient({ blog }: { blog: Blog }) {
                     }
                     if (block.type === "quote") {
                       return (
-                        <div key={idx} className="my-16 relative p-12 bg-gray-50 rounded-[2rem] border-l-8 border-[#F99D1C]">
+                        <div key={idx} className="my-16 relative p-12 bg-gray-50 rounded-[15px] md:rounded-[2rem] border-l-8 border-[#F99D1C]">
                           <Quote className="absolute top-8 right-8 w-12 h-12 text-[#F99D1C]/10" />
                           <blockquote className="space-y-6">
                              <p className="text-2xl font-bold text-[#001A3D] display-font italic leading-relaxed">
