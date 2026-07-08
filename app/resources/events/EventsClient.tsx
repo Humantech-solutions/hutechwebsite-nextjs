@@ -72,7 +72,7 @@ export default function EventsClient({ events, pageTitle, pageDescription, bgIma
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: i * 0.1 }}
-                className="group flex flex-col overflow-hidden rounded-3xl border border-transparent bg-gray-50 transition-all hover:border-gray-100 hover:bg-white hover:shadow-2xl md:flex-row"
+                className="group flex flex-col overflow-hidden rounded-[15px] md:rounded-3xl border border-transparent bg-gray-50 transition-all hover:border-gray-100 hover:bg-white hover:shadow-2xl md:flex-row"
               >
                 <div className="h-64 overflow-hidden md:h-auto md:w-1/3">
                   <ImageWithFallback

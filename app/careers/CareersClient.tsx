@@ -135,7 +135,7 @@ export default function CareersClient({ jobs, pageData }: CareersClientProps) {
       </section>
 
       {/* Open Positions */}
-      <section id="openings" className="py-20 bg-white">
+      <section id="openings" className="py-[50px] bg-white">
         <div className="max-w-[1280px] mx-auto px-6 lg:px-20">
           <div className="mb-12 flex flex-col md:flex-row md:items-end justify-between gap-8">
             <div className="space-y-6">
@@ -167,7 +167,7 @@ export default function CareersClient({ jobs, pageData }: CareersClientProps) {
           </div>
 
           {filteredJobs.length === 0 ? (
-            <div className="py-20 text-center border border-gray-100 rounded-xl bg-gray-50">
+            <div className="py-[50px] text-center border border-gray-100 rounded-xl bg-gray-50">
               <p className="text-lg text-gray-500 font-medium">No open positions found in this category.</p>
             </div>
           ) : (
@@ -199,8 +199,8 @@ export default function CareersClient({ jobs, pageData }: CareersClientProps) {
                         <span className="flex items-center gap-2"><Clock size={14} className="text-[#F99D1C]" /> {job.type}</span>
                       </div>
                     </div>
-                    <div className="bg-gray-50 text-[#001A3D] group-hover:bg-[#F99D1C] group-hover:text-[#001A3D] p-4 rounded-xl transition-all duration-500 shrink-0">
-                      <MoveRight size={24} />
+                    <div className="flex items-center gap-2 bg-[#F99D1C] text-[#001A3D] group-hover:bg-[#001A3D] group-hover:text-[#F99D1C] px-5 py-3 rounded-[15px] md:rounded-xl transition-all duration-500 shrink-0 font-bold text-xs tracking-wide">
+                      Apply Now <MoveRight size={16} />
                     </div>
                   </Motion.div>
                 </Link>
@@ -227,7 +227,7 @@ export default function CareersClient({ jobs, pageData }: CareersClientProps) {
       </section>
 
       {/* Culture & Spirit */}
-      <section className="py-20 bg-white relative">
+      <section className="py-[50px] bg-white relative">
         <div className="max-w-[1280px] mx-auto px-6 lg:px-20">
           <div className="flex flex-col lg:flex-row gap-20 items-center">
             <div className="flex-1 space-y-10">
@@ -257,7 +257,7 @@ export default function CareersClient({ jobs, pageData }: CareersClientProps) {
             </div>
 
             <div className="flex-1 relative w-full">
-              <div className="aspect-[4/3] rounded-[3rem] overflow-hidden shadow-3xl rotate-2 relative z-10">
+              <div className="aspect-[4/3] rounded-[15px] lg:rounded-[3rem] overflow-hidden shadow-3xl rotate-2 relative z-10">
                 <ImageWithFallback
                   src={pageData.cultureImg}
                   alt="Team Collaboration"
@@ -280,7 +280,7 @@ export default function CareersClient({ jobs, pageData }: CareersClientProps) {
       </section>
 
       {/* Hiring Process */}
-      <section className="py-20 bg-[#FAF9F6] border-y border-gray-100">
+      <section className="py-[50px] bg-[#FAF9F6] border-y border-gray-100">
         <div className="max-w-[1280px] mx-auto px-6 lg:px-20">
           <div className="text-center max-w-3xl mx-auto mb-20 space-y-4">
             <h2 className="text-3xl md:text-5xl font-semibold text-[#001A3D] display-font tracking-tight">{renderTitle(pageData.hiringTagline)}</h2>
@@ -298,7 +298,7 @@ export default function CareersClient({ jobs, pageData }: CareersClientProps) {
                 transition={{ delay: idx * 0.1 }}
                 className="relative group"
               >
-                <div className="bg-white p-8 rounded-3xl border border-gray-100 shadow-sm hover:shadow-xl transition-all duration-500 h-full flex flex-col">
+                <div className="bg-white p-8 rounded-[15px] md:rounded-3xl border border-gray-100 shadow-sm hover:shadow-xl transition-all duration-500 h-full flex flex-col">
                   <div className="text-4xl font-semibold text-gray-100 group-hover:text-[#F99D1C]/20 transition-colors mb-6 display-font">{item.stepNumber}</div>
                   <h4 className="text-lg font-semibold text-[#001A3D] tracking-tight mb-4 group-hover:text-[#F99D1C] transition-colors display-font">{item.stepTitle}</h4>
                   <p className="text-xs text-gray-500 font-medium leading-relaxed flex-grow">{item.stepDesc}</p>
@@ -315,7 +315,7 @@ export default function CareersClient({ jobs, pageData }: CareersClientProps) {
       </section>
 
       {/* Benefits */}
-      <section className="py-20 bg-white">
+      <section className="py-[50px] bg-white">
         <div className="max-w-[1280px] mx-auto px-6 lg:px-20">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-20">
             <div className="lg:col-span-4 space-y-8">
@@ -353,7 +353,7 @@ export default function CareersClient({ jobs, pageData }: CareersClientProps) {
                   <Globe2 key="6" className="text-cyan-500" />
                 ];
                 return (
-                  <div key={idx} className="p-8 bg-gray-50 border border-gray-100 rounded-2xl hover:bg-white hover:border-[#F99D1C]/30 hover:shadow-lg transition-all group">
+                  <div key={idx} className="p-8 bg-gray-50 border border-gray-100 rounded-[15px] md:rounded-2xl hover:bg-white hover:border-[#F99D1C]/30 hover:shadow-lg transition-all group">
                     <div className="mb-6 group-hover:scale-110 transition-transform">{icons[idx % icons.length]}</div>
                     <h4 className="text-lg font-semibold text-[#001A3D] display-font tracking-tight mb-2">{benefit.benefitTitle}</h4>
                     <p className="text-xs text-gray-500 font-medium leading-relaxed whitespace-pre-line">{benefit.benefitDesc}</p>
@@ -366,11 +366,11 @@ export default function CareersClient({ jobs, pageData }: CareersClientProps) {
       </section>
 
       {/* Internship Programme */}
-      <section className="py-20 bg-white border-t border-gray-100">
+      <section className="py-[50px] bg-white border-t border-gray-100">
         <div className="max-w-[1280px] mx-auto px-6 lg:px-20 grid grid-cols-1 lg:grid-cols-12 gap-16 items-center">
           {/* Left Column: Image with Badge */}
           <div className="lg:col-span-5 relative">
-            <div className="relative group overflow-hidden rounded-[2rem] shadow-xl">
+            <div className="relative group overflow-hidden rounded-[15px] lg:rounded-[2rem] shadow-xl">
               <ImageWithFallback
                 src={pageData.internshipImg}
                 alt="Internship Programme Campus"
@@ -414,7 +414,7 @@ export default function CareersClient({ jobs, pageData }: CareersClientProps) {
                   <BookOpen key="4" className="h-6 w-6" />
                 ];
                 return (
-                  <div key={idx} className="p-5 bg-gray-50 border border-gray-100 rounded-2xl hover:bg-white hover:border-[#F99D1C]/30 hover:shadow-lg transition-all flex items-center gap-4">
+                  <div key={idx} className="p-5 bg-gray-50 border border-gray-100 rounded-[15px] md:rounded-2xl hover:bg-white hover:border-[#F99D1C]/30 hover:shadow-lg transition-all flex items-center gap-4">
                     <div className="flex-shrink-0 p-3 bg-white rounded-xl text-[#F99D1C] shadow-sm">
                       {icons[idx % icons.length]}
                     </div>
@@ -427,11 +427,11 @@ export default function CareersClient({ jobs, pageData }: CareersClientProps) {
               })}
             </div>
 
-            <div className="flex flex-wrap gap-4 pt-4">
+            <div className="flex flex-row gap-3 pt-4 w-full">
               {pageData.internshipBtn1Link && pageData.internshipBtn1Link !== "#" ? (
                 <Link
                   href={pageData.internshipBtn1Link}
-                  className="bg-[#001A3D] hover:bg-[#002B66] text-white font-semibold py-4 px-8 rounded-sm text-[11px] tracking-wide transition-all uppercase inline-flex items-center gap-2 shadow-lg active:scale-[0.98]"
+                  className="flex-1 bg-[#001A3D] hover:bg-[#002B66] text-white font-bold py-4 px-6 rounded-2xl text-[11px] tracking-widest transition-all uppercase inline-flex items-center justify-center gap-2 shadow-lg active:scale-[0.98]"
                 >
                   {pageData.internshipBtn1} <ChevronRight size={14} />
                 </Link>
@@ -441,17 +441,16 @@ export default function CareersClient({ jobs, pageData }: CareersClientProps) {
                     setSelectedJobTitle("Emerging Talent / Internship Programme");
                     setIsApplicationModalOpen(true);
                   }}
-                  className="bg-[#001A3D] hover:bg-[#002B66] text-white font-semibold py-4 px-8 rounded-sm text-[11px] tracking-wide transition-all uppercase inline-flex items-center gap-2 shadow-lg active:scale-[0.98]"
+                  className="flex-1 bg-[#001A3D] hover:bg-[#002B66] text-white font-bold py-4 px-6 rounded-2xl text-[11px] tracking-widest transition-all uppercase inline-flex items-center justify-center gap-2 shadow-lg active:scale-[0.98]"
                 >
                   {pageData.internshipBtn1} <ChevronRight size={14} />
                 </button>
               )}
-              
               <Link
                 href={pageData.internshipBtn2File || "#"}
                 target={(pageData.internshipBtn2File && pageData.internshipBtn2File !== "#") ? "_blank" : undefined}
                 rel="noopener noreferrer"
-                className="border border-[#001A3D]/20 hover:border-[#001A3D] text-[#001A3D] font-semibold py-4 px-8 rounded-sm text-[11px] tracking-wide transition-all uppercase inline-flex items-center justify-center active:scale-[0.98]"
+                className="flex-1 border-2 border-[#001A3D]/30 hover:border-[#001A3D] text-[#001A3D] font-bold py-4 px-6 rounded-2xl text-[11px] tracking-widest transition-all uppercase inline-flex items-center justify-center text-center gap-2 active:scale-[0.98] bg-white"
               >
                 {pageData.internshipBtn2}
               </Link>
@@ -461,7 +460,7 @@ export default function CareersClient({ jobs, pageData }: CareersClientProps) {
       </section>
 
       {/* Why Nabhira is Different */}
-      <section className="py-20 bg-gray-50 border-t border-b border-gray-100">
+      <section className="py-[50px] bg-gray-50 border-t border-b border-gray-100">
         <div className="max-w-[1280px] mx-auto px-6 lg:px-20">
           <div className="space-y-4 mb-16 text-center max-w-3xl mx-auto">
             <div className="flex items-center justify-center gap-3">
@@ -535,7 +534,7 @@ export default function CareersClient({ jobs, pageData }: CareersClientProps) {
 
 
       {/* CTA Section */}
-      <section className="py-20 bg-gray-50 border-t border-gray-100">
+      <section className="py-[50px] bg-gray-50 border-t border-gray-100">
         <div className="max-w-[1280px] mx-auto px-6 lg:px-20 text-center space-y-12">
           <div className="space-y-6 max-w-2xl mx-auto">
             <h2 className="text-3xl md:text-5xl font-semibold text-[#001A3D] display-font tracking-tight leading-tight whitespace-pre-line">
@@ -547,20 +546,38 @@ export default function CareersClient({ jobs, pageData }: CareersClientProps) {
           </div>
 
           <div className="flex flex-wrap justify-center gap-6">
-            <div className="flex items-center gap-4 bg-white p-6 rounded-2xl border border-gray-100 shadow-sm w-full md:w-auto">
+            <div className="flex items-center gap-4 bg-white p-6 rounded-[15px] md:rounded-2xl border border-gray-100 shadow-sm w-full md:w-auto">
               <CalendarCheck className="text-[#F99D1C]" size={24} />
               <div className="text-left">
                 <p className="text-[11px] font-semibold tracking-wide text-[#001A3D]">{pageData.ctaCard1Title}</p>
                 <p className="text-xs text-gray-500 font-medium">{pageData.ctaCard1Desc}</p>
               </div>
             </div>
-            <div className="flex items-center gap-4 bg-white p-6 rounded-2xl border border-gray-100 shadow-sm w-full md:w-auto">
+            <div className="flex items-center gap-4 bg-white p-6 rounded-[15px] md:rounded-2xl border border-gray-100 shadow-sm w-full md:w-auto">
               <Zap className="text-[#F99D1C]" size={24} />
               <div className="text-left">
                 <p className="text-[11px] font-semibold tracking-wide text-[#001A3D]">{pageData.ctaCard2Title}</p>
                 <p className="text-xs text-gray-500 font-medium">{pageData.ctaCard2Desc}</p>
               </div>
             </div>
+          </div>
+
+          <div className="flex flex-row gap-3 pt-2 w-full max-w-md mx-auto">
+            <button
+              onClick={() => {
+                setSelectedJobTitle("General Application");
+                setIsApplicationModalOpen(true);
+              }}
+              className="flex-1 bg-[#F99D1C] hover:bg-[#e08a10] text-[#001A3D] font-bold py-4 px-6 rounded-2xl text-sm tracking-wide transition-all shadow-lg active:scale-95 inline-flex items-center justify-center gap-2"
+            >
+              Apply Now <MoveRight size={16} />
+            </button>
+            <Link
+              href="#"
+              className="flex-1 border-2 border-[#001A3D] text-[#001A3D] hover:bg-[#001A3D] hover:text-white font-bold py-4 px-6 rounded-2xl text-sm tracking-wide transition-all inline-flex items-center justify-center text-center gap-2 bg-white"
+            >
+              Download Brochure
+            </Link>
           </div>
         </div>
       </section>

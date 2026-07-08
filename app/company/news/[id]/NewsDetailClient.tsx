@@ -263,7 +263,7 @@ export default function NewsDetailClient({ news: wpNews, id, latestReleases }: {
                       return (
                         <div
                           key={idx}
-                          className="relative my-16 rounded-[2rem] border-l-8 border-[#FFAF2B] bg-gray-50 p-12"
+                          className="relative my-16 rounded-[15px] md:rounded-[2rem] border-l-8 border-[#FFAF2B] bg-gray-50 p-12"
                         >
                           <Quote className="absolute top-8 right-8 h-12 w-12 text-[#FFAF2B]/10" />
                           <blockquote className="space-y-6">

@@ -168,7 +168,7 @@ export default function HutechDocumentsClient({ documents, pageData }: HutechDoc
                   filteredDocs.map((doc, i) => (
                   <div
                     key={doc.id}
-                    className="group flex flex-col items-start justify-between gap-6 rounded-xl border border-gray-100 bg-white p-6 transition-all duration-300 hover:border-[#F99D1C] hover:shadow-xl md:flex-row md:items-center"
+                    className="group flex flex-col items-start justify-between gap-6 rounded-[15px] md:rounded-xl border border-gray-100 bg-white p-6 transition-all duration-300 hover:border-[#F99D1C] hover:shadow-xl md:flex-row md:items-center"
                   >
                     <div className="flex flex-1 items-center gap-6">
                       <div className="rounded-xl bg-gray-50 p-4 transition-colors group-hover:bg-[#F99D1C]/10">
@@ -227,7 +227,7 @@ export default function HutechDocumentsClient({ documents, pageData }: HutechDoc
                   filteredDocs.map((doc, i) => (
                   <div
                     key={doc.id}
-                    className="group flex flex-col justify-between rounded-[2.5rem] border border-gray-100 bg-white p-8 transition-all duration-500 hover:border-[#F99D1C] hover:shadow-2xl"
+                    className="group flex flex-col justify-between rounded-[15px] md:rounded-[2.5rem] border border-gray-100 bg-white p-8 transition-all duration-500 hover:border-[#F99D1C] hover:shadow-2xl"
                   >
                     <div className="space-y-8">
                       <div className="flex items-start justify-between">
@@ -282,7 +282,7 @@ export default function HutechDocumentsClient({ documents, pageData }: HutechDoc
       {/* Support Section */}
       <section className="border-t border-gray-100 bg-[#FAF9F6] py-20">
         <div className="mx-auto max-w-[1280px] px-6 lg:px-20">
-          <div className="relative overflow-hidden rounded-[3rem] bg-[#001A3D] p-12 md:p-16">
+          <div className="relative overflow-hidden rounded-[15px] md:rounded-[3rem] bg-[#001A3D] p-12 md:p-16">
             <div className="relative z-10 flex flex-col items-center justify-between gap-12 lg:flex-row">
               <div className="space-y-6 text-center lg:text-left">
                 <h2 className="display-font text-3xl font-semibold tracking-tight text-white md:text-5xl">

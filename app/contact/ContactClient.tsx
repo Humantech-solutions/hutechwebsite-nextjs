@@ -218,7 +218,8 @@ export default function ContactClient({
       </section>
 
       {/* Main Content: Form & Offices */}
-      <section id="contact-form" className="relative z-20 bg-white py-20">
+      <section id="contact-form" className="relative z-20 bg-white py-[50px]">
+        {/* Desktop: side-by-side grid inside max-width container */}
         <div className="mx-auto max-w-[1280px] px-6 lg:px-20">
           <div className="grid grid-cols-1 gap-16 lg:grid-cols-12 lg:gap-24">
             {/* Contact Form - Left Column */}
@@ -308,21 +309,21 @@ export default function ContactClient({
               </Motion.div>
             </div>
 
-            {/* Side Info - Right Column */}
-            <div className="space-y-12 lg:col-span-5">
+            {/* Side Info - Right Column (desktop: inside grid, mobile: full-width below form) */}
+            <div className="hidden lg:block lg:col-span-5">
               <Motion.div
                 initial={{ opacity: 0, x: 20 }}
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true }}
-                className="relative space-y-12 overflow-hidden rounded-[2rem] bg-[#001A3D] p-6 sm:p-10 text-white md:p-8"
+                className="relative space-y-12 overflow-hidden rounded-[2rem] bg-[#001A3D] p-10 text-white"
               >
-                <div className="absolute top-0 right-0 -mt-16 -mr-16 h-32 w-32 rounded-full bg-[#F99D1C]/10 blur-2xl"></div>
+                <div className="absolute top-0 right-0 -mt-16 -mr-16 h-32 w-32 rounded-full bg-[#0171c1]/20 blur-2xl"></div>
 
                 <div className="space-y-6">
                   <h3 className="display-font text-xl font-semibold tracking-tight md:text-2xl">{directTitle}</h3>
                   <div className="space-y-6">
                     <a href={`mailto:${email}`} className="group flex items-center gap-5 md:gap-6">
-                      <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-white/5 transition-all duration-300 group-hover:bg-[#F99D1C] group-hover:text-[#001A3D]">
+                      <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-white/5 transition-all duration-300 group-hover:bg-[#0171c1] group-hover:text-white">
                         <Mail size={20} />
                       </div>
                       <div>
@@ -331,7 +332,7 @@ export default function ContactClient({
                       </div>
                     </a>
                     <a href={`tel:${phone.replace(/\s+/g, '')}`} className="group flex items-center gap-5 md:gap-6">
-                      <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-white/5 transition-all duration-300 group-hover:bg-[#F99D1C] group-hover:text-[#001A3D]">
+                      <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-white/5 transition-all duration-300 group-hover:bg-[#0171c1] group-hover:text-white">
                         <Phone size={20} />
                       </div>
                       <div>
@@ -352,7 +353,7 @@ export default function ContactClient({
                           href={item.url}
                           target={item.url !== "#" ? "_blank" : undefined}
                           rel={item.url !== "#" ? "noopener noreferrer" : undefined}
-                          className="group flex h-14 w-14 items-center justify-center rounded-2xl bg-white/5 transition-all duration-300 hover:bg-[#F99D1C] hover:text-[#001A3D]"
+                          className="group flex h-14 w-14 items-center justify-center rounded-2xl bg-white/5 transition-all duration-300 hover:bg-[#0171c1] hover:text-white"
                           aria-label={item.label}
                         >
                           {item.icon}
@@ -362,12 +363,12 @@ export default function ContactClient({
                   </div>
                 )}
 
-                <div className="space-y-4 rounded-2xl bg-[#F99D1C] p-8 text-[#001A3D]">
-                  <h4 className="text-xs font-semibold tracking-wide">{supportLabel}</h4>
+                <div className="space-y-4 rounded-2xl bg-[#0171c1] p-8 text-white">
+                  <h4 className="text-xs font-semibold tracking-wide text-white/80">{supportLabel}</h4>
                   <p className="text-lg leading-snug font-bold">
                     {supportDescription}
                   </p>
-                  <a href={supportBtnUrl} className="flex items-center gap-2 border-b-2 border-[#001A3D] pb-1 w-fit text-[11px] font-semibold tracking-wide">
+                  <a href={supportBtnUrl} className="flex items-center gap-2 border-b-2 border-white pb-1 w-fit text-[11px] font-semibold tracking-wide hover:text-[#F99D1C] hover:border-[#F99D1C] transition-colors">
                     {supportBtnText} <ChevronRight size={14} />
                   </a>
                 </div>
@@ -375,10 +376,76 @@ export default function ContactClient({
             </div>
           </div>
         </div>
+
+        {/* Mobile-only: Direct Contact — full width, no horizontal margin */}
+        <div className="lg:hidden mt-10">
+          <Motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="relative space-y-10 overflow-hidden bg-[#001A3D] p-8 text-white"
+          >
+            <div className="absolute top-0 right-0 -mt-16 -mr-16 h-32 w-32 rounded-full bg-[#0171c1]/20 blur-2xl"></div>
+
+            <div className="space-y-6">
+              <h3 className="display-font text-xl font-semibold tracking-tight">{directTitle}</h3>
+              <div className="space-y-6">
+                <a href={`mailto:${email}`} className="group flex items-center gap-5">
+                  <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-white/5 transition-all duration-300 group-hover:bg-[#0171c1] group-hover:text-white">
+                    <Mail size={20} />
+                  </div>
+                  <div>
+                    <p className="text-[11px] font-semibold tracking-wide text-gray-400">Email Us</p>
+                    <p className="text-sm font-bold break-all">{email}</p>
+                  </div>
+                </a>
+                <a href={`tel:${phone.replace(/\s+/g, '')}`} className="group flex items-center gap-5">
+                  <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-white/5 transition-all duration-300 group-hover:bg-[#0171c1] group-hover:text-white">
+                    <Phone size={20} />
+                  </div>
+                  <div>
+                    <p className="text-[11px] font-semibold tracking-wide text-gray-400">Call Us</p>
+                    <p className="text-lg font-bold">{phone}</p>
+                  </div>
+                </a>
+              </div>
+            </div>
+
+            {socialLinks.length > 0 && (
+              <div className="space-y-6 border-t border-white/10 pt-8">
+                <h3 className="display-font text-xl font-semibold tracking-tight">{socialTitle}</h3>
+                <div className="flex flex-wrap gap-3">
+                  {socialLinks.map((item, idx) => (
+                    <a
+                      key={idx}
+                      href={item.url}
+                      target={item.url !== "#" ? "_blank" : undefined}
+                      rel={item.url !== "#" ? "noopener noreferrer" : undefined}
+                      className="group flex h-14 w-14 items-center justify-center rounded-2xl bg-white/5 transition-all duration-300 hover:bg-[#0171c1] hover:text-white"
+                      aria-label={item.label}
+                    >
+                      {item.icon}
+                    </a>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            <div className="space-y-4 rounded-[15px] md:rounded-[25px] bg-[#0171c1] p-8 text-white">
+              <h4 className="text-xs font-semibold tracking-wide text-white/80">{supportLabel}</h4>
+              <p className="text-lg leading-snug font-bold">
+                {supportDescription}
+              </p>
+              <a href={supportBtnUrl} className="flex items-center gap-2 border-b-2 border-white pb-1 w-fit text-[11px] font-semibold tracking-wide hover:text-[#F99D1C] hover:border-[#F99D1C] transition-colors">
+                {supportBtnText} <ChevronRight size={14} />
+              </a>
+            </div>
+          </Motion.div>
+        </div>
       </section>
 
       {/* Global Presence - Offices Grid */}
-      <section className="bg-gray-50 py-20">
+      <section className="bg-gray-50 py-[50px]">
         <div className="mx-auto max-w-[1280px] px-6 lg:px-20">
           <div className="mx-auto mb-20 max-w-2xl space-y-4 text-center">
             <h2 className="display-font text-3xl font-semibold tracking-tight text-[#001A3D] md:text-5xl">
@@ -398,7 +465,7 @@ export default function ContactClient({
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: idx * 0.1 }}
-                className="group overflow-hidden rounded-[2rem] border border-gray-100 bg-white shadow-xl transition-all duration-500 hover:shadow-2xl"
+                className="group overflow-hidden rounded-[15px] md:rounded-[2rem] border border-gray-100 bg-white shadow-xl transition-all duration-500 hover:shadow-2xl"
               >
                 <div className="relative h-48 overflow-hidden">
                   <ImageWithFallback
@@ -430,32 +497,10 @@ export default function ContactClient({
         </div>
       </section>
 
-      {/* World Map Section */}
-      <section className="overflow-hidden bg-white py-20">
-        <div className="mx-auto max-w-[1280px] px-6 lg:px-20">
-          <div className="relative aspect-[21/9] overflow-hidden rounded-[3rem] bg-[#001A3D]">
-            <ImageWithFallback
-              src={mapBgImage}
-              alt="Global Network"
-              className="h-full w-full object-cover opacity-40 grayscale"
-            />
-            <div className="absolute inset-0 flex flex-col items-center justify-center bg-gradient-to-t from-[#001A3D] to-transparent p-10 text-center">
-              <div className="max-w-2xl space-y-6">
-                <Globe className="mx-auto h-16 w-16 animate-pulse text-[#F99D1C]" />
-                <h2 className="display-font text-3xl font-semibold tracking-tight text-white md:text-5xl">
-                  {renderTitle(mapTitle, "text-white", "text-[#F99D1C]", "text-[#0171c1]")}
-                </h2>
-                <p className="text-lg leading-relaxed font-medium text-gray-300">
-                  {mapDescription}
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
+
 
       {/* Trust Builders */}
-      <section className="border-t border-gray-100 py-20">
+      <section className="border-t border-gray-100 py-[50px]">
         <div className="mx-auto max-w-[1280px] px-6 lg:px-20">
           <div className="flex flex-wrap items-center justify-between gap-10">
             {trustBuilders.map((builder, idx) => {

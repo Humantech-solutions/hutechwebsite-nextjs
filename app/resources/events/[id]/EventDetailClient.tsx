@@ -176,7 +176,7 @@ export default function EventDetailClient({ event }: { event: any }) {
                     {event.highlights.map((highlight: string, idx: number) => (
                       <div
                         key={idx}
-                        className="flex items-center gap-4 rounded-xl border border-[#E5E7EB] bg-white p-5"
+                        className="flex items-center gap-4 rounded-[15px] md:rounded-xl border border-[#E5E7EB] bg-white p-5"
                       >
                         <CheckCircle2 className="h-5 w-5 text-[#2563EB] flex-shrink-0" />
                         <span className="text-[16px] font-semibold text-[#0F172A]">
@@ -198,7 +198,7 @@ export default function EventDetailClient({ event }: { event: any }) {
                     {event.agenda.map((item: any, idx: number) => (
                       <div
                         key={idx}
-                        className="flex flex-col md:flex-row items-start md:items-center rounded-2xl border border-[#E5E7EB] bg-white p-6 md:h-[88px] md:px-8 md:py-0"
+                        className="flex flex-col md:flex-row items-start md:items-center rounded-[15px] md:rounded-2xl border border-[#E5E7EB] bg-white p-6 md:h-[88px] md:px-8 md:py-0"
                       >
                         <div className="text-[#0171c1] font-black text-lg whitespace-nowrap w-24 tracking-tight">
                           {item.time}
@@ -258,7 +258,7 @@ export default function EventDetailClient({ event }: { event: any }) {
             <div className="w-full lg:w-[320px] flex-shrink-0 mt-12 lg:mt-0">
               <div className="sticky top-24">
                 {/* Registration Card */}
-                <div className="rounded-[28px] bg-[#031B4E] p-[24px] shadow-[0_20px_60px_rgba(0,0,0,0.15)]">
+                <div className="rounded-[15px] md:rounded-[28px] bg-[#031B4E] p-[24px] shadow-[0_20px_60px_rgba(0,0,0,0.15)]">
                   <h3 className="mb-[24px] text-[24px] font-bold leading-[1.1] text-white">
                     Registration
                   </h3>
@@ -312,7 +312,7 @@ export default function EventDetailClient({ event }: { event: any }) {
                 </div>
 
                 {/* Helpful Links Card */}
-                <div className="mt-6 rounded-[20px] border border-[#E5E7EB] bg-white p-6">
+                <div className="mt-6 rounded-[15px] md:rounded-[20px] border border-[#E5E7EB] bg-white p-6">
                   <h4 className="mb-4 text-[16px] font-bold text-[#0F172A]">
                     {event.helpfulLinksTitle || "Helpful Links"}
                   </h4>
@@ -362,7 +362,7 @@ export default function EventDetailClient({ event }: { event: any }) {
 
             {/* Right Side Image */}
             <div className="w-full lg:w-1/2">
-              <div className="relative h-[350px] w-full overflow-hidden rounded-[20px] shadow-xl md:rounded-[24px]">
+              <div className="relative h-[350px] w-full overflow-hidden rounded-[15px] shadow-xl md:rounded-[24px]">
                 <ImageWithFallback
                   src={ctaImage}
                   alt="Event recording"
