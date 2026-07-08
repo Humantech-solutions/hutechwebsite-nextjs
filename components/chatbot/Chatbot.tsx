@@ -167,10 +167,10 @@ function App() {
       const raw = localStorage.getItem('__chatMsgs');
       if (raw) {
         const arr = JSON.parse(raw) as any[];
-        const restored: Message[] = arr.map((m:any) => ({ ...m, timestamp: new Date(m.timestamp) }));
+        const restored: Message[] = arr.map((m: any) => ({ ...m, timestamp: new Date(m.timestamp) }));
         if (restored.length) setMessages(restored);
       }
-    } catch {}
+    } catch { }
     setHydrated(true);
   }, []);
 
@@ -180,9 +180,9 @@ function App() {
     try {
       const toSave = messages.map(m => ({ ...m, timestamp: m.timestamp instanceof Date ? m.timestamp.toISOString() : m.timestamp }));
       localStorage.setItem('__chatMsgs', JSON.stringify(toSave));
-    } catch {}
+    } catch { }
   }, [messages, hydrated]);
-  useEffect(() => { if (!hydrated) return; try { localStorage.setItem('__page', currentPage); } catch {} }, [currentPage, hydrated]);
+  useEffect(() => { if (!hydrated) return; try { localStorage.setItem('__page', currentPage); } catch { } }, [currentPage, hydrated]);
 
   const questionCards: QuestionCard[] = [
     {
@@ -242,30 +242,30 @@ function App() {
         const url = new URL(u);
         url.hash = '';
         url.search = '';
-        const path = url.pathname.replace(/\/+$/,'');
+        const path = url.pathname.replace(/\/+$/, '');
         const port = url.port ? `:${url.port}` : '';
         return `${url.protocol}//${url.hostname}${port}${path}`.toLowerCase();
       } catch {
-        return (u || '').trim().toLowerCase().replace(/[?#].*$/,'').replace(/\/+$/,'');
+        return (u || '').trim().toLowerCase().replace(/[?#].*$/, '').replace(/\/+$/, '');
       }
     };
 
     const cleanedRelated = Array.isArray(response.related_content)
       ? (() => {
-          const seen = new Set<string>();
-          const out: RelatedContent[] = [];
-          for (const it of response.related_content as RelatedContent[]) {
-            if (!it || typeof it.title !== 'string' || typeof it.url !== 'string') continue;
-            const url = it.url.trim();
-            if (!url) continue;
-            if (isImageUrl(url)) continue; // exclude direct image links
-            const key = normalizeUrl(url);
-            if (seen.has(key)) continue;
-            seen.add(key);
-            out.push({ title: it.title, url, image: it.image });
-          }
-          return out;
-        })()
+        const seen = new Set<string>();
+        const out: RelatedContent[] = [];
+        for (const it of response.related_content as RelatedContent[]) {
+          if (!it || typeof it.title !== 'string' || typeof it.url !== 'string') continue;
+          const url = it.url.trim();
+          if (!url) continue;
+          if (isImageUrl(url)) continue; // exclude direct image links
+          const key = normalizeUrl(url);
+          if (seen.has(key)) continue;
+          seen.add(key);
+          out.push({ title: it.title, url, image: it.image });
+        }
+        return out;
+      })()
       : undefined;
 
     return {
@@ -479,8 +479,8 @@ function App() {
         } catch { return false; }
       });
       const defaultCandidates = (filteredEnv.length || window.location.hostname === 'localhost')
-        ? (filteredEnv.length ? filteredEnv : ['http://localhost:3001/query', '/api/query', '/query', '/api/chat', '/chat', '/api/ask', '/ask'])
-        : ['https://api.husqy.hutechsolutions.in/query', '/api/query', '/query', '/api/chat', '/chat', '/api/ask', '/ask'];
+        ? (filteredEnv.length ? filteredEnv : ['https://apis.hutechbot.hutechsolutions.in/query', '/api/query', '/query', '/api/chat', '/chat', '/api/ask', '/ask'])
+        : ['https://https//apis.hutechbot.hutechsolutions.in/query', '/api/query', '/query', '/api/chat', '/chat', '/api/ask', '/ask'];
       const candidates: string[] = (filteredEnv.length ? filteredEnv : defaultCandidates).filter(Boolean);
 
       let finalResponse: Response | null = null;
@@ -641,8 +641,8 @@ function App() {
       }
     ];
     setMessages(reset);
-    try { const toSave = reset.map(m => ({ ...m, timestamp: (m.timestamp as Date).toISOString() })); localStorage.setItem('__chatMsgs', JSON.stringify(toSave)); } catch {}
-    try { localStorage.removeItem('__contactNoteShown'); } catch {}
+    try { const toSave = reset.map(m => ({ ...m, timestamp: (m.timestamp as Date).toISOString() })); localStorage.setItem('__chatMsgs', JSON.stringify(toSave)); } catch { }
+    try { localStorage.removeItem('__contactNoteShown'); } catch { }
     setInputValue('');
     setCurrentPage('chat');
     setShowMenu(false);
@@ -655,7 +655,7 @@ function App() {
   // Chat Page
   return (
     <div className="bg-white body" id='body'>
-      
+
       {/* Chat History Panel */}
       <div id="chat-history" className="chat-history-container">
         {messages.length <= 1 ? (
@@ -1109,7 +1109,7 @@ const MessageActions: React.FC<{
         const dataUrl = await fetchImageDataUrl(logoUrl);
         doc.addImage(dataUrl, 'PNG', margin, y, 140, 46);
         y += 75;
-      } catch {}
+      } catch { }
 
       if (message.query) {
         addSectionTitle('Question');
@@ -1142,7 +1142,7 @@ const MessageActions: React.FC<{
             if (y + h > pageHeight - margin) { doc.addPage(); y = margin; }
             doc.addImage(dataUrl, 'PNG', margin, y, w, h);
             y += h + 6;
-          } catch {}
+          } catch { }
         }
       }
 
@@ -1182,8 +1182,8 @@ const MessageActions: React.FC<{
 
       const files = message.response?.file_links || [];
       if (files.length) { y += 16; addParagraph('Files'); files.forEach(f => addParagraph(`- ${f.title}: ${f.url}`)); }
-      const pages = (message.response?.related_content || []).filter((p:any) => !p.image);
-      if (pages.length) { y += 16; addParagraph('Related Pages'); pages.forEach((p:any) => addParagraph(`- ${p.title}: ${p.url}`)); }
+      const pages = (message.response?.related_content || []).filter((p: any) => !p.image);
+      if (pages.length) { y += 16; addParagraph('Related Pages'); pages.forEach((p: any) => addParagraph(`- ${p.title}: ${p.url}`)); }
 
       doc.save('hutech-response.pdf');
     } catch (error) {
@@ -1260,9 +1260,9 @@ const MessageActions: React.FC<{
       const logoUrl = 'https://cdn.builder.io/api/v1/image/assets%2Fdc4265ec2f2449c79371971938c19898%2F496df066ecdc418c994b8726633ae9a3?format=png&width=800';
       try {
         const bytes = await fetchImageBytes(logoUrl);
-        children.push(new Paragraph({ children: [ new ImageRun({ data: bytes, transformation: { width: 360, height: 120 } } as any) ] }));
+        children.push(new Paragraph({ children: [new ImageRun({ data: bytes, transformation: { width: 360, height: 120 } } as any)] }));
         children.push(new Paragraph({ children: [new TextRun('')], spacing: { after: 160 } }));
-      } catch {}
+      } catch { }
 
       if (message.query) {
         children.push(new Paragraph({ text: message.query, heading: HeadingLevel.HEADING_1 }));
@@ -1284,8 +1284,8 @@ const MessageActions: React.FC<{
           const w = Math.round(width * scale);
           const h = Math.round(height * scale);
           const bytes = await fetchImageBytes(it.image);
-          children.push(new Paragraph({ children: [ new ImageRun({ data: bytes, transformation: { width: w, height: h } } as any) ], spacing: { after: 120 } }));
-        } catch {}
+          children.push(new Paragraph({ children: [new ImageRun({ data: bytes, transformation: { width: w, height: h } } as any)], spacing: { after: 120 } }));
+        } catch { }
       }
 
       const tables = message.response?.tables || [];
@@ -1491,7 +1491,7 @@ const BotMessage: React.FC<{
       if (finished >= answerImages.length) { settled = true; setImagesReady(true); }
     };
     answerImages.forEach(src => { try { const im = new Image(); im.onload = done; im.onerror = done; im.src = src; } catch { done(); } });
-    return () => {};
+    return () => { };
   }, [answerImages]);
 
   useEffect(() => {
@@ -1800,7 +1800,7 @@ const AnswerImagesCarousel: React.FC<{ images: string[] }> = ({ images }) => {
             )}
             <img
               src={src}
-              alt={`image ${i+1}`}
+              alt={`image ${i + 1}`}
               className="answer-image"
               style={{ opacity: loaded[src] ? 1 : 0 }}
               onLoad={() => setLoaded(prev => ({ ...prev, [src]: true }))}
@@ -1840,9 +1840,9 @@ const AnswerGifSmart: React.FC<{ query?: string; answer?: string; related?: Rela
     const category: Cat = isSuccess ? 'success' : isLocation ? 'location' : isServices ? 'services' : 'general';
 
 
-    const banned = ['person','man','woman','men','women','girl','boy','kid','baby','face','selfie','actor','actress','celebrity','human','crowd','kiss','dance','dancing','hug','wedding','party','football','cricket','basketball','reaction','meme','fail','when you','me:','her:','him:','zombie','brain','cat','dog','glitch','distort','distortion','noisy','noise','static','grain','datamosh','matrix','error','404','bug','broken','corrupt','corrupted','scanline','hacker','hack','leak','malware','virus','bloody','gore','nsfw','explicit','nudity','nude','sexy','thirst','twerk','prank','heart','love','valentine','cute','kawaii','anime','manga','sakura','cherry blossom','festival','logo','watermark','brand','branding','sponsor','sponsored','copyright','trademark','tm'];
-    const irrelevant = ['meme','reaction','fail','wtf','omg','lol','lmao','vine'];
-    const noisyOrCasual = ['song','lyrics','music','audio','tiktok','reel','shorts','cartoon','character','emoji','sticker','funny','yeah','oh yeah','yolo','prank','comic','subtitle','subtitles','caption','typography','letters','font','word','title','install','subscribe','welcome','click','download','promo','advert','ad','commercial','intro','fun','kaleidoscope','trippy','psychedelic','glitter','neon','pattern','texture'];
+    const banned = ['person', 'man', 'woman', 'men', 'women', 'girl', 'boy', 'kid', 'baby', 'face', 'selfie', 'actor', 'actress', 'celebrity', 'human', 'crowd', 'kiss', 'dance', 'dancing', 'hug', 'wedding', 'party', 'football', 'cricket', 'basketball', 'reaction', 'meme', 'fail', 'when you', 'me:', 'her:', 'him:', 'zombie', 'brain', 'cat', 'dog', 'glitch', 'distort', 'distortion', 'noisy', 'noise', 'static', 'grain', 'datamosh', 'matrix', 'error', '404', 'bug', 'broken', 'corrupt', 'corrupted', 'scanline', 'hacker', 'hack', 'leak', 'malware', 'virus', 'bloody', 'gore', 'nsfw', 'explicit', 'nudity', 'nude', 'sexy', 'thirst', 'twerk', 'prank', 'heart', 'love', 'valentine', 'cute', 'kawaii', 'anime', 'manga', 'sakura', 'cherry blossom', 'festival', 'logo', 'watermark', 'brand', 'branding', 'sponsor', 'sponsored', 'copyright', 'trademark', 'tm'];
+    const irrelevant = ['meme', 'reaction', 'fail', 'wtf', 'omg', 'lol', 'lmao', 'vine'];
+    const noisyOrCasual = ['song', 'lyrics', 'music', 'audio', 'tiktok', 'reel', 'shorts', 'cartoon', 'character', 'emoji', 'sticker', 'funny', 'yeah', 'oh yeah', 'yolo', 'prank', 'comic', 'subtitle', 'subtitles', 'caption', 'typography', 'letters', 'font', 'word', 'title', 'install', 'subscribe', 'welcome', 'click', 'download', 'promo', 'advert', 'ad', 'commercial', 'intro', 'fun', 'kaleidoscope', 'trippy', 'psychedelic', 'glitter', 'neon', 'pattern', 'texture'];
 
     const isBanned = (s?: string) => {
       const t = (s || '').toLowerCase();
@@ -1871,10 +1871,10 @@ const AnswerGifSmart: React.FC<{ query?: string; answer?: string; related?: Rela
     };
 
     const catTokens: Record<Cat, string[]> = {
-      location: ['map','globe','world map','location pin','marker','office building','city skyline','navigation','route','airplane','plane','airport','suitcase','teamwork','handshake','meeting'],
-      services: ['technology','circuit','code','server','cloud','pipeline','robot arm','ai chip','data','dashboard','network','laptop','shield','monitor'],
-      success: ['celebration','confetti','fireworks','checkmark','success badge','trophy','ribbon','party popper'],
-      general: ['business','technology','network','process','workflow','collaboration','globe','corporate','office building']
+      location: ['map', 'globe', 'world map', 'location pin', 'marker', 'office building', 'city skyline', 'navigation', 'route', 'airplane', 'plane', 'airport', 'suitcase', 'teamwork', 'handshake', 'meeting'],
+      services: ['technology', 'circuit', 'code', 'server', 'cloud', 'pipeline', 'robot arm', 'ai chip', 'data', 'dashboard', 'network', 'laptop', 'shield', 'monitor'],
+      success: ['celebration', 'confetti', 'fireworks', 'checkmark', 'success badge', 'trophy', 'ribbon', 'party popper'],
+      general: ['business', 'technology', 'network', 'process', 'workflow', 'collaboration', 'globe', 'corporate', 'office building']
     };
 
 
@@ -1918,20 +1918,20 @@ const AnswerGifSmart: React.FC<{ query?: string; answer?: string; related?: Rela
     const giphykey = process.env.REACT_APP_GIPHY_KEY;
 
     const requiredBySubject: Record<string, string[]> = {
-      office: ['map','pin','location','office','building','globe','world map','marker','route','city'],
-      leave: ['calendar','date','schedule'],
-      payroll: ['money','payment','invoice','rupee','dollar','coin','transaction'],
-      hr: ['handshake','support','help','hr'],
-      meeting: ['meeting','handshake','discussion','consult','consultation','calendar','video','call','conference','schedule'],
-      project: ['checklist','progress','rocket','delivery','task','milestone'],
-      engagement: ['team','teamwork','collaboration'],
-      communication: ['communication','chat','message','email','support'],
-      industries: ['industry','factory','gear','cog','cogs','sectors','sector','icons','grid'],
-      contact: ['phone','call','email','mail','envelope','support','headset','contact'],
-      services: ['technology','server','cloud','devops','ai','code','network','laptop'],
-      success: ['success','checkmark','trophy','confetti','celebration','badge'],
-      general: ['business','technology','network','process','workflow','collaboration','globe','office','corporate'],
-      about: ['company','office','team','leadership','corporate','organization','ceo','founder','executive','chief']
+      office: ['map', 'pin', 'location', 'office', 'building', 'globe', 'world map', 'marker', 'route', 'city'],
+      leave: ['calendar', 'date', 'schedule'],
+      payroll: ['money', 'payment', 'invoice', 'rupee', 'dollar', 'coin', 'transaction'],
+      hr: ['handshake', 'support', 'help', 'hr'],
+      meeting: ['meeting', 'handshake', 'discussion', 'consult', 'consultation', 'calendar', 'video', 'call', 'conference', 'schedule'],
+      project: ['checklist', 'progress', 'rocket', 'delivery', 'task', 'milestone'],
+      engagement: ['team', 'teamwork', 'collaboration'],
+      communication: ['communication', 'chat', 'message', 'email', 'support'],
+      industries: ['industry', 'factory', 'gear', 'cog', 'cogs', 'sectors', 'sector', 'icons', 'grid'],
+      contact: ['phone', 'call', 'email', 'mail', 'envelope', 'support', 'headset', 'contact'],
+      services: ['technology', 'server', 'cloud', 'devops', 'ai', 'code', 'network', 'laptop'],
+      success: ['success', 'checkmark', 'trophy', 'confetti', 'celebration', 'badge'],
+      general: ['business', 'technology', 'network', 'process', 'workflow', 'collaboration', 'globe', 'office', 'corporate'],
+      about: ['company', 'office', 'team', 'leadership', 'corporate', 'organization', 'ceo', 'founder', 'executive', 'chief']
     };
     const matchesRequired = (meta: string, subj: string) => {
       const req = requiredBySubject[subj] || [];
@@ -1955,7 +1955,7 @@ const AnswerGifSmart: React.FC<{ query?: string; answer?: string; related?: Rela
       if (h.length > 12) h.splice(0, h.length - 12);
     };
 
-    const tryTenor = async (q: string): Promise<{url?: string; link?: string; title?: string} | null> => {
+    const tryTenor = async (q: string): Promise<{ url?: string; link?: string; title?: string } | null> => {
       if (!tenorkey) return null;
       try {
         const r = await fetch(`https://tenor.googleapis.com/v2/search?q=${encodeURIComponent(q)}&key=${tenorkey}&limit=50&contentfilter=high&media_filter=gif,tinygif`);
@@ -1963,12 +1963,12 @@ const AnswerGifSmart: React.FC<{ query?: string; answer?: string; related?: Rela
         const items = Array.isArray(j?.results) ? j.results : [];
         const ranked = items.map((it: any) => {
           const url = it?.media_formats?.gif?.url || it?.media_formats?.tinygif?.url || '';
-          const meta = `${(it?.content_description||'')} ${(it?.h1_title||'')} ${((it?.tags||[]).join(' ')||'')} ${(it?.itemurl||'')}`.toLowerCase();
+          const meta = `${(it?.content_description || '')} ${(it?.h1_title || '')} ${((it?.tags || []).join(' ') || '')} ${(it?.itemurl || '')}`.toLowerCase();
           const score = scoreMeta(meta, url, category);
           return { url, link: it?.itemurl as string | undefined, title: it?.content_description || it?.h1_title || 'gif', score, meta };
         })
-        .filter((x: any) => x.url && /\.gif(\?|$)/i.test(x.url) && x.score >= MIN_SCORE && matchesRequired(x.meta, subject as string) && !hasBranding(x.meta) && !hasBranding(x.link || '') && (wantsCharts || !hasCharts(x.meta)))
-        .sort((a: any,b: any) => b.score - a.score);
+          .filter((x: any) => x.url && /\.gif(\?|$)/i.test(x.url) && x.score >= MIN_SCORE && matchesRequired(x.meta, subject as string) && !hasBranding(x.meta) && !hasBranding(x.link || '') && (wantsCharts || !hasCharts(x.meta)))
+          .sort((a: any, b: any) => b.score - a.score);
         const history = getHistory();
         const pool = ranked.filter((r: any) => !history.includes(r.url));
         const list = pool.length ? pool : ranked;
@@ -1980,7 +1980,7 @@ const AnswerGifSmart: React.FC<{ query?: string; answer?: string; related?: Rela
       } catch { return null; }
     };
 
-    const tryGiphy = async (q: string): Promise<{url?: string; link?: string; title?: string} | null> => {
+    const tryGiphy = async (q: string): Promise<{ url?: string; link?: string; title?: string } | null> => {
       if (!giphykey) return null;
       try {
         const r = await fetch(`https://api.giphy.com/v1/gifs/search?api_key=${giphykey}&q=${encodeURIComponent(q)}&limit=50&rating=g&lang=en`);
@@ -1988,12 +1988,12 @@ const AnswerGifSmart: React.FC<{ query?: string; answer?: string; related?: Rela
         const items = Array.isArray(j?.data) ? j.data : [];
         const ranked = items.map((it: any) => {
           const url = it?.images?.downsized?.url || it?.images?.original?.url || '';
-          const meta = `${it?.title||''} ${it?.slug||''} ${it?.url||''}`.toLowerCase();
+          const meta = `${it?.title || ''} ${it?.slug || ''} ${it?.url || ''}`.toLowerCase();
           const score = scoreMeta(meta, url, category);
           return { url, link: it?.url as string | undefined, title: it?.title || 'gif', score, meta };
         })
-        .filter((x: any) => x.url && /\.gif(\?|$)/i.test(x.url) && x.score >= MIN_SCORE && matchesRequired(x.meta, subject as string) && !hasBranding(x.meta) && !hasBranding(x.link || '') && (wantsCharts || !hasCharts(x.meta)))
-        .sort((a: any,b: any) => b.score - a.score);
+          .filter((x: any) => x.url && /\.gif(\?|$)/i.test(x.url) && x.score >= MIN_SCORE && matchesRequired(x.meta, subject as string) && !hasBranding(x.meta) && !hasBranding(x.link || '') && (wantsCharts || !hasCharts(x.meta)))
+          .sort((a: any, b: any) => b.score - a.score);
         const history = getHistory();
         const pool = ranked.filter((r: any) => !history.includes(r.url));
         const list = pool.length ? pool : ranked;
@@ -2043,14 +2043,14 @@ const AnswerGifSmart: React.FC<{ query?: string; answer?: string; related?: Rela
     // Extract significant keywords from the answer text
     const extractKeywords = (t: string): string[] => {
       const s = (t || '').toLowerCase().replace(/[^a-z0-9\s]/g, ' ');
-      const stop = new Set(['the','and','for','with','that','this','from','your','you','our','are','about','have','into','over','such','their','them','they','will','can','any','than','then','there','here','what','why','who','how','when','where','within','one','two','three','more','most','less','least','a','an','of','in','on','to','by','at','as','is','it','be','or','we','us','me','my','mine','I','was','were','been','being','do','does','did']);
+      const stop = new Set(['the', 'and', 'for', 'with', 'that', 'this', 'from', 'your', 'you', 'our', 'are', 'about', 'have', 'into', 'over', 'such', 'their', 'them', 'they', 'will', 'can', 'any', 'than', 'then', 'there', 'here', 'what', 'why', 'who', 'how', 'when', 'where', 'within', 'one', 'two', 'three', 'more', 'most', 'less', 'least', 'a', 'an', 'of', 'in', 'on', 'to', 'by', 'at', 'as', 'is', 'it', 'be', 'or', 'we', 'us', 'me', 'my', 'mine', 'I', 'was', 'were', 'been', 'being', 'do', 'does', 'did']);
       const counts: Record<string, number> = {};
       s.split(/\s+/).forEach(w => {
         if (!w || w.length < 3) return;
         if (stop.has(w)) return;
         counts[w] = (counts[w] || 0) + 1;
       });
-      const words = Object.keys(counts).sort((a,b) => (counts[b]-counts[a]) || (b.length - a.length));
+      const words = Object.keys(counts).sort((a, b) => (counts[b] - counts[a]) || (b.length - a.length));
       return words.slice(0, 15);
     };
 
@@ -2102,7 +2102,7 @@ const AnswerGifSmart: React.FC<{ query?: string; answer?: string; related?: Rela
     const setRotation = (key: string, idx: number) => {
       const m = getRotation();
       m[key] = idx;
-      try { localStorage.setItem('__gifRotation', JSON.stringify(m)); } catch {}
+      try { localStorage.setItem('__gifRotation', JSON.stringify(m)); } catch { }
     };
 
     const preloadImage = (src: string) => new Promise<boolean>((resolve) => { const im = new Image(); im.onload = () => resolve(true); im.onerror = () => resolve(false); im.src = src; });
@@ -2145,7 +2145,7 @@ const AnswerGifSmart: React.FC<{ query?: string; answer?: string; related?: Rela
       if (usedOverride) { console.log('GIF Debug: Used override'); return; }
 
       // Try new keywords from the current answer/query first (avoid ones used before)
-      const kwFromText = extractKeywords(`${intentText} ${text} ${(related||[]).map(r=>r.title).join(' ')}`);
+      const kwFromText = extractKeywords(`${intentText} ${text} ${(related || []).map(r => r.title).join(' ')}`);
       console.log('GIF Debug: Extracted keywords:', kwFromText);
       const kwHistory = getKwHistory();
       const fresh = kwFromText.filter(k => !kwHistory.includes(k));
@@ -2399,7 +2399,7 @@ const getExportableImageUrl = (src: string): string => {
   try {
     const u = new URL(src, window.location.href);
     if (u.origin === window.location.origin) return src;
-  } catch {}
+  } catch { }
   const proxy = process.env.REACT_APP_IMAGE_PROXY || 'https://images.weserv.nl/?url=';
   const cleaned = src.replace(/^https?:\/\//, '');
   return proxy + encodeURIComponent(cleaned);
