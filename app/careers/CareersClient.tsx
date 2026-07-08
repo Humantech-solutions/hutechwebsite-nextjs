@@ -27,6 +27,7 @@ import {
 import Link from "next/link";
 import { Job, HIRING_PROCESS } from "@/lib/data/careers";
 import { ApplicationModal } from "@/components/ApplicationModal";
+import { DownloadFormModal } from "@/components/DownloadFormModal";
 import { renderTitle } from "@/lib/utils";
 
 interface CareersClientProps {
@@ -87,6 +88,7 @@ const BRAND_ORANGE = "#F99D1C";
 
 export default function CareersClient({ jobs, pageData }: CareersClientProps) {
   const [isApplicationModalOpen, setIsApplicationModalOpen] = useState(false);
+  const [isDownloadModalOpen, setIsDownloadModalOpen] = useState(false);
   const [selectedJobTitle, setSelectedJobTitle] = useState("General Application");
   const [activeDepartment, setActiveDepartment] = useState("All Categories");
 
@@ -447,14 +449,12 @@ export default function CareersClient({ jobs, pageData }: CareersClientProps) {
                 </button>
               )}
               
-              <Link
-                href={pageData.internshipBtn2File || "#"}
-                target={(pageData.internshipBtn2File && pageData.internshipBtn2File !== "#") ? "_blank" : undefined}
-                rel="noopener noreferrer"
+              <button
+                onClick={() => setIsDownloadModalOpen(true)}
                 className="border border-[#001A3D]/20 hover:border-[#001A3D] text-[#001A3D] font-semibold py-4 px-8 rounded-sm text-[11px] tracking-wide transition-all uppercase inline-flex items-center justify-center active:scale-[0.98]"
               >
                 {pageData.internshipBtn2}
-              </Link>
+              </button>
             </div>
           </div>
         </div>
@@ -569,6 +569,13 @@ export default function CareersClient({ jobs, pageData }: CareersClientProps) {
         isOpen={isApplicationModalOpen}
         onClose={() => setIsApplicationModalOpen(false)}
         jobTitle={selectedJobTitle}
+      />
+      
+      <DownloadFormModal
+        isOpen={isDownloadModalOpen}
+        onClose={() => setIsDownloadModalOpen(false)}
+        documentTitle="Hutech Careers Brochure"
+        downloadUrl={pageData.internshipBtn2File || "#"}
       />
     </div>
   );
