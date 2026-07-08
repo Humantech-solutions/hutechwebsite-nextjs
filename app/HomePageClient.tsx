@@ -524,11 +524,8 @@ export default function HomePageClient({ data }: HomePageClientProps) {
         name:  c.name?.trim()  || CAPABILITIES_DATA[i]?.name || "",
         image: c.imageUrl?.trim() || c.image?.trim() || CAPABILITIES_DATA[i]?.image || CAPABILITIES_DATA[0].image,
         color: c.color?.trim() || CAPABILITIES_DATA[i]?.color || "#001A3D",
-<<<<<<< HEAD
-        url:   c.url?.trim()   || "",
-=======
+        url: c.url?.trim() || "",
         desc: c.description?.trim() || c.desc?.trim() || CAPABILITIES_DATA[i]?.desc || ""
->>>>>>> 9940681 (UI changes)
       }))
     : CAPABILITIES_DATA;
 
