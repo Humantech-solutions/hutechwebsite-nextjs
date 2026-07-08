@@ -175,7 +175,7 @@ export default function EventDetailClient({ event }: { event: any }) {
                     {event.highlights.map((highlight: string, idx: number) => (
                       <div
                         key={idx}
-                        className="flex items-center gap-4 rounded-xl border border-[#E5E7EB] bg-white p-5"
+                        className="flex items-center gap-4 rounded-[15px] border border-[#E5E7EB] bg-white p-5 md:rounded-xl"
                       >
                         <CheckCircle2 className="h-5 w-5 flex-shrink-0 text-[#2563EB]" />
                         <span className="text-[16px] font-semibold text-[#0F172A]">
@@ -197,7 +197,7 @@ export default function EventDetailClient({ event }: { event: any }) {
                     {event.agenda.map((item: any, idx: number) => (
                       <div
                         key={idx}
-                        className="flex flex-col items-start rounded-2xl border border-[#E5E7EB] bg-white p-6 md:h-[88px] md:flex-row md:items-center md:px-8 md:py-0"
+                        className="flex flex-col items-start rounded-[15px] border border-[#E5E7EB] bg-white p-6 md:h-[88px] md:flex-row md:items-center md:rounded-2xl md:px-8 md:py-0"
                       >
                         <div className="w-24 whitespace-nowrap text-lg font-black tracking-tight text-[#0171c1]">
                           {item.time}
@@ -257,7 +257,7 @@ export default function EventDetailClient({ event }: { event: any }) {
             <div className="mt-12 w-full flex-shrink-0 lg:mt-0 lg:w-[320px]">
               <div className="sticky top-24">
                 {/* Registration Card */}
-                <div className="rounded-[28px] bg-[#031B4E] p-[24px] shadow-[0_20px_60px_rgba(0,0,0,0.15)]">
+                <div className="rounded-[15px] bg-[#031B4E] p-[24px] shadow-[0_20px_60px_rgba(0,0,0,0.15)] md:rounded-[28px]">
                   <h3 className="mb-[24px] text-[24px] font-bold leading-[1.1] text-white">
                     Registration
                   </h3>
@@ -323,7 +323,7 @@ export default function EventDetailClient({ event }: { event: any }) {
                 </div>
 
                 {/* Helpful Links Card */}
-                <div className="mt-6 rounded-[20px] border border-[#E5E7EB] bg-white p-6">
+                <div className="mt-6 rounded-[15px] border border-[#E5E7EB] bg-white p-6 md:rounded-[20px]">
                   <h4 className="mb-4 text-[16px] font-bold text-[#0F172A]">
                     {event.helpfulLinksTitle || "Helpful Links"}
                   </h4>
@@ -369,12 +369,11 @@ export default function EventDetailClient({ event }: { event: any }) {
               <p className="mb-[40px] max-w-[620px] text-[16px] font-normal leading-[1.8] text-[#64748B] md:text-[18px]">
                 {ctaDesc}
               </p>
-
             </div>
 
             {/* Right Side - Inline Video Container */}
             <div className="w-full lg:w-1/2">
-              <div className="relative aspect-video w-full overflow-hidden rounded-[20px] bg-black shadow-xl md:rounded-[24px]">
+              <div className="relative aspect-video w-full overflow-hidden rounded-[15px] bg-black shadow-xl md:rounded-[24px]">
                 {/* Thumbnail + Play Button */}
                 {!showVideo && (
                   <>
