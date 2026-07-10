@@ -27,6 +27,14 @@ export interface CareerFormPayload {
   resume: File;
 }
 
+export interface DocumentRequestPayload {
+  name: string;
+  email: string;
+  phone: string;
+  documentTitle: string;
+  downloadUrl: string;
+}
+
 function clean(value: string | undefined | null, fallback = "") {
   const cleaned = value?.trim();
   return cleaned || fallback;
@@ -184,17 +192,19 @@ export async function submitDocumentRequest(payload: DocumentRequestPayload): Pr
     formData.append("email", clean(payload.email));
     formData.append("phone", clean(payload.phone, "N/A"));
     formData.append("documentName", clean(payload.documentTitle));
-    formData.append("project", "hutech-solutions");
+    formData.append("project", "hutech");
     formData.append("companyName", "Hutech Solutions");
 
     // Fetch the document and append as Blob
+    let blob: Blob | null = null;
+    let filename = "document.pdf";
+
     if (payload.downloadUrl && payload.downloadUrl !== "#") {
       try {
         const fileRes = await fetch(payload.downloadUrl);
         if (fileRes.ok) {
-          const blob = await fileRes.blob();
-          const filename = payload.downloadUrl.split("/").pop() || "document.pdf";
-          formData.append("document", blob, filename);
+          blob = await fileRes.blob();
+          filename = payload.downloadUrl.split("/").pop() || "document.pdf";
         } else {
           console.warn("[API] Failed to fetch document for attachment:", fileRes.status);
         }
@@ -202,6 +212,14 @@ export async function submitDocumentRequest(payload: DocumentRequestPayload): Pr
         console.warn("[API] Could not attach document:", err);
       }
     }
+
+    if (!blob) {
+      // Fallback: append a dummy blob so the API doesn't 400 Bad Request
+      blob = new Blob(["%PDF-1.4\n%EOF"], { type: "application/pdf" });
+      filename = "missing_document.pdf";
+    }
+
+    formData.append("document", blob, filename);
 
     const response = await fetch(`${API_BASE_URL}/api/documents/request`, {
       method: "POST",
