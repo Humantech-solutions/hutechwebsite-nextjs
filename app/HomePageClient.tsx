@@ -575,6 +575,30 @@ export default function HomePageClient({ data }: HomePageClientProps) {
   const expertiseDesc  = data?.expertise?.description?.trim() || "Our expertise spans 15 industries including Banking, Insurance, Healthcare, Life Sciences, Media, Entertainment, Distribution and more.";
   const stackTitle     = data?.techStack?.title?.trim()       || "The ^Stack^ Behind\\nEvery Build";
 
+  // Awards section variables
+  const awardsTitle       = data?.awards?.title?.trim()               || "Recognized for Excellence.";
+  const awardsDesc        = data?.awards?.description?.trim()         || "Our commitment to engineering quality and innovation has been recognized by global industry leaders and certification bodies.";
+  const awardsViewAllLink = data?.awards?.viewAllLink?.url?.trim()    || "/company/awards";
+  const awardsViewAllText = data?.awards?.viewAllLink?.title?.trim()  || "View All Awards";
+
+  const STATIC_AWARDS_ICONS = [
+    { icon: <Award className="w-8 h-8" />, label: "Excellence in Digital", iconUrl: undefined as string | undefined },
+    { icon: <ShieldCheck className="w-8 h-8" />, label: "ISO 27001 Certified", iconUrl: undefined as string | undefined },
+    { icon: <Trophy className="w-8 h-8" />, label: "AI Innovation", iconUrl: undefined as string | undefined },
+    { icon: <Star className="w-8 h-8" />, label: "Top Workplace", iconUrl: undefined as string | undefined },
+  ];
+
+  const AWARDS_LIST = (data?.awards?.list && data.awards.list.length > 0)
+    ? data.awards.list.map((item: any, i: number) => ({
+        label:   item.label,
+        iconUrl: item.iconUrl,
+        icon:    STATIC_AWARDS_ICONS[i % STATIC_AWARDS_ICONS.length]?.icon || <Award className="w-8 h-8" />,
+      }))
+    : STATIC_AWARDS_ICONS;
+
+  // Tech Stack description
+  const stackDesc = data?.techStack?.description?.trim() || "We leverage best-in-class technologies across every layer of the stack to engineer robust, scalable, and future-ready solutions.";
+
 
   return (
     <div className="flex flex-col bg-white overflow-hidden">
@@ -1089,22 +1113,23 @@ export default function HomePageClient({ data }: HomePageClientProps) {
         <div className="max-w-[1280px] mx-auto px-6 lg:px-20">
           <div className="flex flex-col md:flex-row items-center justify-between gap-12">
             <div className="max-w-md space-y-4">
-               <h2 className="text-3xl md:text-4xl font-semibold text-[#001A3D] display-font tracking-tight">Recognized for Excellence.</h2>
-               <p className="text-gray-500 font-medium leading-relaxed">Our commitment to engineering quality and innovation has been recognized by global industry leaders and certification bodies.</p>
-               <Link href="/company/awards" className="inline-flex items-center gap-2 text-[#0171c1] font-bold text-sm hover:gap-4 transition-all">
-                  View All Awards <MoveRight size={16} />
+               <h2 className="text-3xl md:text-4xl font-semibold text-[#001A3D] display-font tracking-tight">
+                 {renderTitle(awardsTitle, "text-[#001A3D]", "text-[#F99D1C]")}
+               </h2>
+               <p className="text-gray-500 font-medium leading-relaxed">{awardsDesc}</p>
+               <Link href={awardsViewAllLink} className="inline-flex items-center gap-2 text-[#0171c1] font-bold text-sm hover:gap-4 transition-all">
+                  {awardsViewAllText} <MoveRight size={16} />
                </Link>
             </div>
             <div className="flex-1 grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-12">
-               {[
-                 { icon: <Award className="w-8 h-8" />, label: "Excellence in Digital" },
-                 { icon: <ShieldCheck className="w-8 h-8" />, label: "ISO 27001 Certified" },
-                 { icon: <Trophy className="w-8 h-8" />, label: "AI Innovation" },
-                 { icon: <Star className="w-8 h-8" />, label: "Top Workplace" }
-               ].map((item, i) => (
+               {AWARDS_LIST.map((item, i) => (
                  <div key={i} className="flex flex-col items-center text-center space-y-3 group">
                     <div className="w-16 h-16 rounded-2xl bg-gray-50 flex items-center justify-center text-[#0171c1] group-hover:bg-[#0171c1] group-hover:text-white transition-all duration-500 shadow-sm group-hover:shadow-lg">
-                       {item.icon}
+                       {item.iconUrl ? (
+                         <img src={item.iconUrl} alt={item.label} className="w-8 h-8 object-contain" />
+                       ) : (
+                         item.icon
+                       )}
                     </div>
                     <span className="text-[10px] font-bold text-[#001A3D] uppercase tracking-widest leading-tight">{item.label}</span>
                  </div>
@@ -1152,13 +1177,38 @@ export default function HomePageClient({ data }: HomePageClientProps) {
               {renderTitle(stackTitle, "text-[#001A3D]", "text-[#F99D1C]")}
             </h2>
             <p className="text-gray-500 font-medium text-sm max-w-xl leading-relaxed">
-              We leverage best-in-class technologies across every layer of the stack to engineer robust, scalable, and future-ready solutions.
+              {stackDesc}
             </p>
           </div>
 
           {/* Table */}
           <div className="border border-gray-200 rounded-sm overflow-hidden shadow-sm">
 
+            {/* Dynamic ACF rows — rendered when categories are configured in WordPress */}
+            {data?.techStack?.categories && data.techStack.categories.length > 0 ? (
+              data.techStack.categories.map((cat, catIdx) => (
+                <div key={catIdx} className="flex flex-col md:flex-row border-b border-gray-200 last:border-b-0">
+                  <div className="w-full md:w-[200px] shrink-0 flex items-center px-8 py-8 bg-gray-50 border-b md:border-b-0 md:border-r border-gray-200">
+                    <span className="text-[#001A3D] font-semibold text-sm tracking-tight leading-snug">{cat.categoryName}</span>
+                  </div>
+                  <div className="flex-1 grid grid-cols-3 md:flex md:flex-wrap items-center gap-6 md:gap-x-10 md:gap-y-8 px-6 md:px-10 py-6 md:py-8 justify-items-center md:justify-items-start">
+                    {(cat.technologies ?? []).map((tech, techIdx) => (
+                      <div key={techIdx} className="flex flex-col items-center gap-2 group cursor-pointer">
+                        <div className="w-14 h-14 flex items-center justify-center">
+                          {tech.iconUrl ? (
+                            <img src={tech.iconUrl} alt={tech.name} className="w-12 h-12 object-contain" />
+                          ) : (
+                            <div className="w-12 h-12 bg-gray-100 rounded-lg flex items-center justify-center text-[10px] text-gray-400 font-bold uppercase">{(tech.name ?? "").slice(0, 2)}</div>
+                          )}
+                        </div>
+                        <span className="text-[11px] text-gray-500 font-medium group-hover:text-[#001A3D] transition-colors">{tech.name}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              ))
+            ) : (
+              <>
             {/* Row: Data & AI */}
             <div className="flex flex-col md:flex-row border-b border-gray-200">
               <div className="w-full md:w-[200px] shrink-0 flex items-center px-8 py-8 bg-gray-50 border-b md:border-b-0 md:border-r border-gray-200">
@@ -1455,6 +1505,8 @@ export default function HomePageClient({ data }: HomePageClientProps) {
                 </div>
               </div>
             </div>
+              </>
+            )}
 
           </div>
         </div>

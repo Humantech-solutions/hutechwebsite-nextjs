@@ -54,6 +54,14 @@ const Chatbot = dynamic(() => import("./chatbot/Chatbot"), {
 export function ChatWidget() {
   const [isOpen, setIsOpen] = useState(false);
 
+  useEffect(() => {
+    const handleOpen = () => setIsOpen(true);
+    window.addEventListener("open-chatbot", handleOpen);
+    return () => {
+      window.removeEventListener("open-chatbot", handleOpen);
+    };
+  }, []);
+
   return (
     <>
       <AnimatePresence>

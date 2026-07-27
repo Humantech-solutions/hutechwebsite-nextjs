@@ -407,8 +407,16 @@ export default function ContactClient({
                     {supportLabel}
                   </h4>
                   <p className="text-lg font-bold leading-snug">{supportDescription}</p>
+
                   <a
-                    href={supportBtnUrl}
+                    href={supportBtnUrl || "#"}
+                    onClick={(e) => {
+                      const isChatLink = supportBtnUrl && supportBtnUrl !== "#" && supportBtnUrl !== "";
+                      if (!isChatLink) {
+                        e.preventDefault();
+                        window.dispatchEvent(new CustomEvent("open-chatbot"));
+                      }
+                    }}
                     className="flex w-fit items-center gap-2 border-b-2 border-white pb-1 text-[11px] font-semibold tracking-wide transition-colors hover:border-[#F99D1C] hover:text-[#F99D1C]"
                   >
                     {supportBtnText} <ChevronRight size={14} />
@@ -482,7 +490,14 @@ export default function ContactClient({
               <h4 className="text-xs font-semibold tracking-wide text-white/80">{supportLabel}</h4>
               <p className="text-lg font-bold leading-snug">{supportDescription}</p>
               <a
-                href={supportBtnUrl}
+                href={supportBtnUrl || "#"}
+                onClick={(e) => {
+                  const isChatLink = supportBtnUrl && supportBtnUrl !== "#" && supportBtnUrl !== "";
+                  if (!isChatLink) {
+                    e.preventDefault();
+                    window.dispatchEvent(new CustomEvent("open-chatbot"));
+                  }
+                }}
                 className="flex w-fit items-center gap-2 border-b-2 border-white pb-1 text-[11px] font-semibold tracking-wide transition-colors hover:border-[#F99D1C] hover:text-[#F99D1C]"
               >
                 {supportBtnText} <ChevronRight size={14} />
