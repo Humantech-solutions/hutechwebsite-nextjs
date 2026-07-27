@@ -371,14 +371,14 @@ const HOMEPAGE_QUERY = `
         capabilities {
           title
           description
-          capability_1 { name image { node { sourceUrl } } color url }
-          capability_2 { name image { node { sourceUrl } } color url }
-          capability_3 { name image { node { sourceUrl } } color url }
-          capability_4 { name image { node { sourceUrl } } color url }
-          capability_5 { name image { node { sourceUrl } } color url }
-          capability_6 { name image { node { sourceUrl } } color url }
-          capability_7 { name image { node { sourceUrl } } color url }
-          capability_8 { name image { node { sourceUrl } } color url }
+          capability_1 { name image { node { sourceUrl } } description url }
+          capability_2 { name image { node { sourceUrl } } description url }
+          capability_3 { name image { node { sourceUrl } } description url }
+          capability_4 { name image { node { sourceUrl } } description url }
+          capability_5 { name image { node { sourceUrl } } description url }
+          capability_6 { name image { node { sourceUrl } } description url }
+          capability_7 { name image { node { sourceUrl } } description url }
+          capability_8 { name image { node { sourceUrl } } description url }
         }
         awards {
           title
@@ -426,6 +426,62 @@ const HOMEPAGE_QUERY = `
         }
         techStack {
           title
+          description
+          category_1 {
+            categoryName
+            technology_1 { name icon { node { sourceUrl } } }
+            technology_2 { name icon { node { sourceUrl } } }
+            technology_3 { name icon { node { sourceUrl } } }
+            technology_4 { name icon { node { sourceUrl } } }
+            technology_5 { name icon { node { sourceUrl } } }
+            technology_6 { name icon { node { sourceUrl } } }
+            technology_7 { name icon { node { sourceUrl } } }
+            technology_8 { name icon { node { sourceUrl } } }
+          }
+          category_2 {
+            categoryName
+            technology_1 { name icon { node { sourceUrl } } }
+            technology_2 { name icon { node { sourceUrl } } }
+            technology_3 { name icon { node { sourceUrl } } }
+            technology_4 { name icon { node { sourceUrl } } }
+            technology_5 { name icon { node { sourceUrl } } }
+            technology_6 { name icon { node { sourceUrl } } }
+            technology_7 { name icon { node { sourceUrl } } }
+            technology_8 { name icon { node { sourceUrl } } }
+          }
+          category_3 {
+            categoryName
+            technology_1 { name icon { node { sourceUrl } } }
+            technology_2 { name icon { node { sourceUrl } } }
+            technology_3 { name icon { node { sourceUrl } } }
+            technology_4 { name icon { node { sourceUrl } } }
+            technology_5 { name icon { node { sourceUrl } } }
+            technology_6 { name icon { node { sourceUrl } } }
+            technology_7 { name icon { node { sourceUrl } } }
+            technology_8 { name icon { node { sourceUrl } } }
+          }
+          category_4 {
+            categoryName
+            technology_1 { name icon { node { sourceUrl } } }
+            technology_2 { name icon { node { sourceUrl } } }
+            technology_3 { name icon { node { sourceUrl } } }
+            technology_4 { name icon { node { sourceUrl } } }
+            technology_5 { name icon { node { sourceUrl } } }
+            technology_6 { name icon { node { sourceUrl } } }
+            technology_7 { name icon { node { sourceUrl } } }
+            technology_8 { name icon { node { sourceUrl } } }
+          }
+          category_5 {
+            categoryName
+            technology_1 { name icon { node { sourceUrl } } }
+            technology_2 { name icon { node { sourceUrl } } }
+            technology_3 { name icon { node { sourceUrl } } }
+            technology_4 { name icon { node { sourceUrl } } }
+            technology_5 { name icon { node { sourceUrl } } }
+            technology_6 { name icon { node { sourceUrl } } }
+            technology_7 { name icon { node { sourceUrl } } }
+            technology_8 { name icon { node { sourceUrl } } }
+          }
         }
         whyHutech {
           title
@@ -485,6 +541,7 @@ export interface WpAccordionItem {
 export interface WpCapability {
   name?: string;
   image?: any;
+  description?: string;
   color?: string;
   url?: string;
 }
@@ -554,6 +611,14 @@ export interface HomepageData {
   };
   techStack?: {
     title?: string;
+    description?: string;
+    categories?: {
+      categoryName?: string;
+      technologies?: {
+        name?: string;
+        iconUrl?: string;
+      }[];
+    }[];
   };
 }
 
@@ -616,7 +681,7 @@ function transformHomePage(
   const cap = f.capabilities || {};
   const capList: WpCapability[] = collectGroups(cap, "capability", 8)
     .filter((c: any) => c?.name?.trim())
-    .map((c: any) => ({ name: c?.name, imageUrl: imgUrl(c?.image), color: c?.color, url: c?.url || "" }));
+    .map((c: any) => ({ name: c?.name, imageUrl: imgUrl(c?.image), description: c?.description, color: c?.color, url: c?.url || "" }));
 
   // Awards — only include awards with a label
   const aw = f.awards || {};
@@ -676,6 +741,28 @@ function transformHomePage(
 
   // Tech Stack
   const ts = f.techStack || {};
+  const tsCategories: any[] = [];
+  for (let i = 1; i <= 5; i++) {
+    const cat = ts[`category_${i}`];
+    if (cat && cat.categoryName?.trim()) {
+      const techs: any[] = [];
+      for (let j = 1; j <= 8; j++) {
+        const tech = cat[`technology_${j}`];
+        if (tech && tech.name?.trim()) {
+          techs.push({
+            name: tech.name,
+            iconUrl: imgUrl(tech.icon)
+          });
+        }
+      }
+      if (techs.length > 0) {
+        tsCategories.push({
+          categoryName: cat.categoryName,
+          technologies: techs
+        });
+      }
+    }
+  }
 
   return {
     heroSlides,
@@ -714,6 +801,8 @@ function transformHomePage(
     },
     techStack: {
       title: ts.title,
+      description: ts.description,
+      categories: tsCategories.length > 0 ? tsCategories : undefined,
     },
   };
 }
@@ -2512,7 +2601,14 @@ function transformContactPageData(f: any) {
     supportLabel: f.contactSupportLabel || "Customer Support",
     supportDescription: f.contactSupportDescription || "",
     supportBtnText: f.contactSupportBtnText || "Support Portal",
-    supportBtnUrl: f.contactSupportBtnUrl || "/contact",
+    supportBtnUrl: (() => {
+      const raw = f.contactSupportBtnUrl;
+      if (!raw) return "";
+      // If already an absolute URL, hash, or root-relative path, use as-is
+      if (raw.startsWith("http") || raw.startsWith("//") || raw.startsWith("/") || raw.startsWith("#")) return raw;
+      // Otherwise it's a bare slug like "contact" — prepend slash
+      return `/${raw}`;
+    })(),
 
     officesTitle: f.contactOfficesTitle || "Our Offices",
     officesDescription: f.contactOfficesDescription || "",
