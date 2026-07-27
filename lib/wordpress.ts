@@ -371,14 +371,14 @@ const HOMEPAGE_QUERY = `
         capabilities {
           title
           description
-          capability_1 { name image { node { sourceUrl } } color }
-          capability_2 { name image { node { sourceUrl } } color }
-          capability_3 { name image { node { sourceUrl } } color }
-          capability_4 { name image { node { sourceUrl } } color }
-          capability_5 { name image { node { sourceUrl } } color }
-          capability_6 { name image { node { sourceUrl } } color }
-          capability_7 { name image { node { sourceUrl } } color }
-          capability_8 { name image { node { sourceUrl } } color }
+          capability_1 { name image { node { sourceUrl } } description url }
+          capability_2 { name image { node { sourceUrl } } description url }
+          capability_3 { name image { node { sourceUrl } } description url }
+          capability_4 { name image { node { sourceUrl } } description url }
+          capability_5 { name image { node { sourceUrl } } description url }
+          capability_6 { name image { node { sourceUrl } } description url }
+          capability_7 { name image { node { sourceUrl } } description url }
+          capability_8 { name image { node { sourceUrl } } description url }
         }
         awards {
           title
@@ -426,6 +426,62 @@ const HOMEPAGE_QUERY = `
         }
         techStack {
           title
+          description
+          category_1 {
+            categoryName
+            technology_1 { name icon { node { sourceUrl } } }
+            technology_2 { name icon { node { sourceUrl } } }
+            technology_3 { name icon { node { sourceUrl } } }
+            technology_4 { name icon { node { sourceUrl } } }
+            technology_5 { name icon { node { sourceUrl } } }
+            technology_6 { name icon { node { sourceUrl } } }
+            technology_7 { name icon { node { sourceUrl } } }
+            technology_8 { name icon { node { sourceUrl } } }
+          }
+          category_2 {
+            categoryName
+            technology_1 { name icon { node { sourceUrl } } }
+            technology_2 { name icon { node { sourceUrl } } }
+            technology_3 { name icon { node { sourceUrl } } }
+            technology_4 { name icon { node { sourceUrl } } }
+            technology_5 { name icon { node { sourceUrl } } }
+            technology_6 { name icon { node { sourceUrl } } }
+            technology_7 { name icon { node { sourceUrl } } }
+            technology_8 { name icon { node { sourceUrl } } }
+          }
+          category_3 {
+            categoryName
+            technology_1 { name icon { node { sourceUrl } } }
+            technology_2 { name icon { node { sourceUrl } } }
+            technology_3 { name icon { node { sourceUrl } } }
+            technology_4 { name icon { node { sourceUrl } } }
+            technology_5 { name icon { node { sourceUrl } } }
+            technology_6 { name icon { node { sourceUrl } } }
+            technology_7 { name icon { node { sourceUrl } } }
+            technology_8 { name icon { node { sourceUrl } } }
+          }
+          category_4 {
+            categoryName
+            technology_1 { name icon { node { sourceUrl } } }
+            technology_2 { name icon { node { sourceUrl } } }
+            technology_3 { name icon { node { sourceUrl } } }
+            technology_4 { name icon { node { sourceUrl } } }
+            technology_5 { name icon { node { sourceUrl } } }
+            technology_6 { name icon { node { sourceUrl } } }
+            technology_7 { name icon { node { sourceUrl } } }
+            technology_8 { name icon { node { sourceUrl } } }
+          }
+          category_5 {
+            categoryName
+            technology_1 { name icon { node { sourceUrl } } }
+            technology_2 { name icon { node { sourceUrl } } }
+            technology_3 { name icon { node { sourceUrl } } }
+            technology_4 { name icon { node { sourceUrl } } }
+            technology_5 { name icon { node { sourceUrl } } }
+            technology_6 { name icon { node { sourceUrl } } }
+            technology_7 { name icon { node { sourceUrl } } }
+            technology_8 { name icon { node { sourceUrl } } }
+          }
         }
         whyHutech {
           title
@@ -485,7 +541,9 @@ export interface WpAccordionItem {
 export interface WpCapability {
   name?: string;
   image?: any;
+  description?: string;
   color?: string;
+  url?: string;
 }
 
 export interface WpIndustry {
@@ -553,6 +611,14 @@ export interface HomepageData {
   };
   techStack?: {
     title?: string;
+    description?: string;
+    categories?: {
+      categoryName?: string;
+      technologies?: {
+        name?: string;
+        iconUrl?: string;
+      }[];
+    }[];
   };
 }
 
@@ -615,7 +681,7 @@ function transformHomePage(
   const cap = f.capabilities || {};
   const capList: WpCapability[] = collectGroups(cap, "capability", 8)
     .filter((c: any) => c?.name?.trim())
-    .map((c: any) => ({ name: c?.name, imageUrl: imgUrl(c?.image), color: c?.color }));
+    .map((c: any) => ({ name: c?.name, imageUrl: imgUrl(c?.image), description: c?.description, color: c?.color, url: c?.url || "" }));
 
   // Awards — only include awards with a label
   const aw = f.awards || {};
@@ -675,6 +741,28 @@ function transformHomePage(
 
   // Tech Stack
   const ts = f.techStack || {};
+  const tsCategories: any[] = [];
+  for (let i = 1; i <= 5; i++) {
+    const cat = ts[`category_${i}`];
+    if (cat && cat.categoryName?.trim()) {
+      const techs: any[] = [];
+      for (let j = 1; j <= 8; j++) {
+        const tech = cat[`technology_${j}`];
+        if (tech && tech.name?.trim()) {
+          techs.push({
+            name: tech.name,
+            iconUrl: imgUrl(tech.icon)
+          });
+        }
+      }
+      if (techs.length > 0) {
+        tsCategories.push({
+          categoryName: cat.categoryName,
+          technologies: techs
+        });
+      }
+    }
+  }
 
   return {
     heroSlides,
@@ -713,6 +801,8 @@ function transformHomePage(
     },
     techStack: {
       title: ts.title,
+      description: ts.description,
+      categories: tsCategories.length > 0 ? tsCategories : undefined,
     },
   };
 }
@@ -1444,9 +1534,65 @@ const CASE_STUDY_FAQ_QUERY = `
         clientDomain
         platform
         geography
+        downloadBtnText
+        caseStudyPdf {
+          node {
+            sourceUrl
+          }
+        }
         overviewQuote
+        projectOverviewTitle
         overviewText1
         overviewText2
+        screensTopTitle
+        screensTitle
+        screensDesc
+        challengesTopTitle
+        challengesSectionTitle
+        challengesDesc
+        challengesTitle
+        solutionsTitle
+        processTopTitle
+        processTitle
+        techTopTitle
+        techTitle
+        techDesc
+        techCard1Title
+        techCard1Desc
+        techCard1Icon
+        techCard1Gradient
+        techCard2Title
+        techCard2Desc
+        techCard2Icon
+        techCard2Gradient
+        techCard3Title
+        techCard3Desc
+        techCard3Icon
+        techCard3Gradient
+        techCard4Title
+        techCard4Desc
+        techCard4Icon
+        techCard4Gradient
+        techStackTopTitle
+        techStackTitle
+        techStackDesc
+        techItem1Name
+        techItem1Logo { node { sourceUrl } }
+        techItem2Name
+        techItem2Logo { node { sourceUrl } }
+        techItem3Name
+        techItem3Logo { node { sourceUrl } }
+        techItem4Name
+        techItem4Logo { node { sourceUrl } }
+        techItem5Name
+        techItem5Logo { node { sourceUrl } }
+        techItem6Name
+        techItem6Logo { node { sourceUrl } }
+        techItem7Name
+        techItem7Logo { node { sourceUrl } }
+        techItem8Name
+        techItem8Logo { node { sourceUrl } }
+        resultsTitle
         challenge1Title
         challenge1Desc
         challenge1Icon
@@ -1456,6 +1602,21 @@ const CASE_STUDY_FAQ_QUERY = `
         challenge3Title
         challenge3Desc
         challenge3Icon
+        challenge4Title
+        challenge4Desc
+        challenge4Icon
+        challenge5Title
+        challenge5Desc
+        challenge5Icon
+        challenge6Title
+        challenge6Desc
+        challenge6Icon
+        challenge7Title
+        challenge7Desc
+        challenge7Icon
+        challenge8Title
+        challenge8Desc
+        challenge8Icon
         solution1Title
         solution1Desc
         solution1Icon
@@ -1468,6 +1629,18 @@ const CASE_STUDY_FAQ_QUERY = `
         solution4Title
         solution4Desc
         solution4Icon
+        solution5Title
+        solution5Desc
+        solution5Icon
+        solution6Title
+        solution6Desc
+        solution6Icon
+        solution7Title
+        solution7Desc
+        solution7Icon
+        solution8Title
+        solution8Desc
+        solution8Icon
         process1Number
         process1Title
         process1Desc
@@ -1483,6 +1656,15 @@ const CASE_STUDY_FAQ_QUERY = `
         process5Number
         process5Title
         process5Desc
+        process6Number
+        process6Title
+        process6Desc
+        process7Number
+        process7Title
+        process7Desc
+        process8Number
+        process8Title
+        process8Desc
         result1Title
         result1Desc
         result2Title
@@ -1491,18 +1673,59 @@ const CASE_STUDY_FAQ_QUERY = `
         result3Desc
         result4Title
         result4Desc
-        faqTitle
-        faqSubtitle
-        faq1Question
-        faq1Answer
-        faq2Question
-        faq2Answer
-        faq3Question
-        faq3Answer
-        faq4Question
-        faq4Answer
-        faq5Question
-        faq5Answer
+        ctaTitle
+        ctaDesc
+        ctaBtnText
+        ctaBtnLink
+      }
+    }
+  }
+`;
+
+const CASE_STUDY_SCREENS_QUERY = `
+  query GetCaseStudyScreens($slug: ID!) {
+    caseStudy(id: $slug, idType: SLUG) {
+      caseStudyPostFields {
+        img1 { node { sourceUrl } }
+        img1Device
+        img1TopTitle
+        img1Title
+        img1Desc
+        img2 { node { sourceUrl } }
+        img2Device
+        img2TopTitle
+        img2Title
+        img2Desc
+        img3 { node { sourceUrl } }
+        img3Device
+        img3TopTitle
+        img3Title
+        img3Desc
+        img4 { node { sourceUrl } }
+        img4Device
+        img4TopTitle
+        img4Title
+        img4Desc
+        img5 { node { sourceUrl } }
+        img5Device
+        img5TopTitle
+        img5Title
+        img5Desc
+        img6 { node { sourceUrl } }
+        img6Device
+        img6TopTitle
+        img6Title
+        img6Desc
+        img7 { node { sourceUrl } }
+        img7Device
+        img7TopTitle
+        img7Title
+        img7Desc
+        img8 { node { sourceUrl } }
+        img8Device
+        img8TopTitle
+        img8Title
+        img8Desc
       }
     }
   }
@@ -1540,7 +1763,7 @@ function transformCaseStudyNode(node: any): CaseStudy {
   if (pf.overviewText2) overviewText.push(pf.overviewText2);
 
   const challenges = [];
-  for (let i = 1; i <= 3; i++) {
+  for (let i = 1; i <= 8; i++) {
     if (pf[`challenge${i}Title`]) {
       challenges.push({
         title: pf[`challenge${i}Title`],
@@ -1551,7 +1774,7 @@ function transformCaseStudyNode(node: any): CaseStudy {
   }
 
   const solutions = [];
-  for (let i = 1; i <= 4; i++) {
+  for (let i = 1; i <= 8; i++) {
     if (pf[`solution${i}Title`]) {
       solutions.push({
         title: pf[`solution${i}Title`],
@@ -1562,7 +1785,7 @@ function transformCaseStudyNode(node: any): CaseStudy {
   }
 
   const process = [];
-  for (let i = 1; i <= 5; i++) {
+  for (let i = 1; i <= 8; i++) {
     if (pf[`process${i}Title`]) {
       process.push({
         number: pf[`process${i}Number`] || `0${i}`,
@@ -1582,12 +1805,40 @@ function transformCaseStudyNode(node: any): CaseStudy {
     }
   }
 
-  const faqs = [];
-  for (let i = 1; i <= 5; i++) {
-    if (pf[`faq${i}Question`] && pf[`faq${i}Answer`]) {
-      faqs.push({
-        question: pf[`faq${i}Question`],
-        answer: pf[`faq${i}Answer`],
+
+
+  const screens = [];
+  for (let i = 1; i <= 8; i++) {
+    const screenImg = pf[`img${i}`]?.node?.sourceUrl;
+    if (screenImg) {
+      screens.push({
+        image: screenImg,
+        device: pf[`img${i}Device`] || "laptop",
+        topTitle: pf[`img${i}TopTitle`] || "",
+        title: pf[`img${i}Title`] || "",
+        desc: pf[`img${i}Desc`] || "",
+      });
+    }
+  }
+
+  const techCards = [];
+  for (let i = 1; i <= 4; i++) {
+    if (pf[`techCard${i}Title`]) {
+      techCards.push({
+        title: pf[`techCard${i}Title`],
+        desc: pf[`techCard${i}Desc`] || "",
+        icon: pf[`techCard${i}Icon`] || "Layers",
+        gradient: pf[`techCard${i}Gradient`] || "from-blue-500 to-blue-700",
+      });
+    }
+  }
+
+  const techStackItems = [];
+  for (let i = 1; i <= 8; i++) {
+    if (pf[`techItem${i}Name`]) {
+      techStackItems.push({
+        name: pf[`techItem${i}Name`],
+        logo: pf[`techItem${i}Logo`]?.node?.sourceUrl ?? "",
       });
     }
   }
@@ -1608,14 +1859,41 @@ function transformCaseStudyNode(node: any): CaseStudy {
     platform: pf.platform ?? "",
     geography: pf.geography ?? "",
     overviewQuote: pf.overviewQuote ?? "",
+    projectOverviewTitle: pf.projectOverviewTitle ?? "",
+    projectOverview: pf.projectOverview ?? "",
     overviewText,
+    img1: pf.img1?.node?.sourceUrl ?? "",
+    img2: pf.img2?.node?.sourceUrl ?? "",
+    challengesTopTitle: pf.challengesTopTitle ?? "",
+    challengesSectionTitle: pf.challengesSectionTitle ?? "",
+    challengesDesc: pf.challengesDesc ?? "",
+    challengesTitle: pf.challengesTitle ?? "",
+    solutionsTitle: pf.solutionsTitle ?? "",
     challenges,
     solutions,
+    processTopTitle: pf.processTopTitle ?? "",
+    processTitle: pf.processTitle ?? "",
     process,
+    techTopTitle: pf.techTopTitle ?? "",
+    techTitle: pf.techTitle ?? "",
+    techDesc: pf.techDesc ?? "",
+    techCards,
+    techStackTopTitle: pf.techStackTopTitle ?? "",
+    techStackTitle: pf.techStackTitle ?? "",
+    techStackDesc: pf.techStackDesc ?? "",
+    techStackItems,
+    resultsTitle: pf.resultsTitle ?? "",
     results,
-    faqs,
-    faqTitle: pf.faqTitle,
-    faqSubtitle: pf.faqSubtitle,
+    ctaTitle: pf.ctaTitle ?? "",
+    ctaDesc: pf.ctaDesc ?? "",
+    ctaBtnText: pf.ctaBtnText ?? "",
+    ctaBtnLink: pf.ctaBtnLink ?? "",
+    screensTopTitle: pf.screensTopTitle ?? "",
+    screensTitle: pf.screensTitle ?? "",
+    screensDesc: pf.screensDesc ?? "",
+    screens,
+    downloadBtnText: pf.downloadBtnText ?? "",
+    caseStudyPdf: pf.caseStudyPdf?.node?.sourceUrl ?? "",
   } as any;
 }
 
@@ -1652,6 +1930,16 @@ export async function getCaseStudyBySlug(slug: string): Promise<CaseStudy | null
       }
     } catch (err) {
       console.warn("[WP] Could not fetch FAQs for case study:", slug);
+    }
+
+    try {
+      const screensRaw = await fetchGraphQL(CASE_STUDY_SCREENS_QUERY, { slug });
+      if (!screensRaw?.errors && screensRaw?.data?.caseStudy?.caseStudyPostFields) {
+        if (!postNode.caseStudyPostFields) postNode.caseStudyPostFields = {};
+        Object.assign(postNode.caseStudyPostFields, screensRaw.data.caseStudy.caseStudyPostFields);
+      }
+    } catch (err) {
+      console.warn("[WP] Could not fetch screens for case study:", slug);
     }
 
     return transformCaseStudyNode(postNode);
@@ -2313,7 +2601,14 @@ function transformContactPageData(f: any) {
     supportLabel: f.contactSupportLabel || "Customer Support",
     supportDescription: f.contactSupportDescription || "",
     supportBtnText: f.contactSupportBtnText || "Support Portal",
-    supportBtnUrl: f.contactSupportBtnUrl || "/contact",
+    supportBtnUrl: (() => {
+      const raw = f.contactSupportBtnUrl;
+      if (!raw) return "";
+      // If already an absolute URL, hash, or root-relative path, use as-is
+      if (raw.startsWith("http") || raw.startsWith("//") || raw.startsWith("/") || raw.startsWith("#")) return raw;
+      // Otherwise it's a bare slug like "contact" — prepend slash
+      return `/${raw}`;
+    })(),
 
     officesTitle: f.contactOfficesTitle || "Our Offices",
     officesDescription: f.contactOfficesDescription || "",

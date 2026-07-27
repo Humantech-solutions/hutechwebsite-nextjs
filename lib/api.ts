@@ -27,6 +27,14 @@ export interface CareerFormPayload {
   resume: File;
 }
 
+export interface DocumentRequestPayload {
+  name: string;
+  email: string;
+  phone: string;
+  documentTitle: string;
+  downloadUrl: string;
+}
+
 function clean(value: string | undefined | null, fallback = "") {
   const cleaned = value?.trim();
   return cleaned || fallback;
@@ -108,6 +116,23 @@ async function parseSubmitResponse(response: Response) {
   }
 }
 
+function inferCategory(pageUrl: string, payloadCategory?: string): string {
+  const urlLower = pageUrl.toLowerCase();
+  const catLower = (payloadCategory || "").toLowerCase();
+
+  if (urlLower.includes("/industries") || catLower.includes("industries")) return "Industries";
+  if (urlLower.includes("/solutions") || catLower.includes("solutions")) return "Solutions";
+  if (urlLower.includes("/case-studies") || catLower.includes("case study")) return "Case Study";
+  if (urlLower.includes("/blogs") || catLower.includes("blog")) return "Blog";
+  if (urlLower.includes("/services") || catLower.includes("service")) return "Service";
+  if (urlLower.includes("/careers") || catLower.includes("career")) return "Career";
+  if (urlLower.includes("/clients") || catLower.includes("client")) return "Client";
+  if (catLower.includes("footer")) return "Footer";
+  if (urlLower.includes("/contact") || catLower.includes("contact")) return "Contact";
+  
+  return "Other";
+}
+
 /**
  * Submits a contact inquiry to the Hutech contact API.
  */
@@ -127,7 +152,7 @@ export async function submitContactForm(payload: ContactFormPayload): Promise<bo
         : message,
     project: "hutech",
     companyName: "Hutech Solutions",
-    category: "Contact",
+    category: inferCategory(pageUrl, payload.category),
     pageTitle,
     pageUrl,
   };
@@ -151,6 +176,65 @@ export async function submitContactForm(payload: ContactFormPayload): Promise<bo
     return parseSubmitResponse(response);
   } catch (error) {
     console.error("[API] Contact submit failed:", error);
+    throw error;
+  }
+}
+
+/**
+ * Submits a document download request.
+ */
+export async function submitDocumentRequest(payload: DocumentRequestPayload): Promise<boolean> {
+  const { pageTitle, pageUrl } = getPageMeta("Document Download");
+
+  try {
+    const formData = new FormData();
+    formData.append("name", clean(payload.name));
+    formData.append("email", clean(payload.email));
+    formData.append("phone", clean(payload.phone, "N/A"));
+    formData.append("documentName", clean(payload.documentTitle));
+    formData.append("project", "hutech");
+    formData.append("companyName", "Hutech Solutions");
+
+    // Fetch the document and append as Blob
+    let blob: Blob | null = null;
+    let filename = "document.pdf";
+
+    if (payload.downloadUrl && payload.downloadUrl !== "#") {
+      try {
+        const fileRes = await fetch(payload.downloadUrl);
+        if (fileRes.ok) {
+          blob = await fileRes.blob();
+          filename = payload.downloadUrl.split("/").pop() || "document.pdf";
+        } else {
+          console.warn("[API] Failed to fetch document for attachment:", fileRes.status);
+        }
+      } catch (err) {
+        console.warn("[API] Could not attach document:", err);
+      }
+    }
+
+    if (!blob) {
+      // Fallback: append a dummy blob so the API doesn't 400 Bad Request
+      blob = new Blob(["%PDF-1.4\n%EOF"], { type: "application/pdf" });
+      filename = "missing_document.pdf";
+    }
+
+    formData.append("document", blob, filename);
+
+    const response = await fetch(`${API_BASE_URL}/api/documents/request`, {
+      method: "POST",
+      body: formData,
+    });
+
+    if (!response.ok) {
+      const errText = await getErrorMessage(response);
+      console.error("[API] Document request submit error response:", response.status, errText);
+      throw new Error(errText || `HTTP error! status: ${response.status}`);
+    }
+
+    return parseSubmitResponse(response);
+  } catch (error) {
+    console.error("[API] Document request submit failed:", error);
     throw error;
   }
 }

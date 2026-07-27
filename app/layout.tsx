@@ -9,7 +9,7 @@ import { Toaster } from "sonner";
 import { ScrollToTopButton } from "@/components/ScrollToTopButton";
 import { ChatWidget } from "@/components/ChatWidget";
 import { CookieBanner } from "@/components/CookieBanner";
-import TemporaryPasswordGate from "@/components/TemporaryPasswordGate";
+// import TemporaryPasswordGate from "@/components/TemporaryPasswordGate";
 import { RouteTracker } from "@/components/RouteTracker";
 import Script from "next/script";
 
@@ -45,18 +45,18 @@ export default async function RootLayout({
               gtag('config', 'G-CZ2CW8X92G');
             `}
           </Script>
-          <TemporaryPasswordGate>
-            <RouteTracker />
-            <div className="w-full">
-              <Navbar data={siteChrome?.header} />
-              <main>{children}</main>
-              <Footer data={siteChrome?.footer} />
-              <ScrollToTopButton />
-              <ChatWidget />
-              <CookieBanner />
-              <Toaster position="top-right" />
-            </div>
-          </TemporaryPasswordGate>
+          {/* <TemporaryPasswordGate> */}
+          <RouteTracker />
+          <div className="w-full">
+            <Navbar data={siteChrome?.header} />
+            <main>{children}</main>
+            <Footer data={siteChrome?.footer} />
+            <ScrollToTopButton />
+            <ChatWidget />
+            <CookieBanner />
+            <Toaster position="top-right" />
+          </div>
+          {/* </TemporaryPasswordGate> */}
         </ThemeProvider>
       </body>
     </html>

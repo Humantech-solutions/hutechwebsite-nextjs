@@ -30,30 +30,35 @@ const STATIC_OFFICES = [
   {
     city: "Bangalore",
     country: "India (HQ)",
-    address: "2nd Floor, Humantech Solutions India Pvt. Ltd House, 218, 9th Main Rd, Sector 6, HSR Layout, Bengaluru, Karnataka - 560102",
+    address:
+      "2nd Floor, Humantech Solutions India Pvt. Ltd House, 218, 9th Main Rd, Sector 6, HSR Layout, Bengaluru, Karnataka - 560102",
     phone: "+91 88674 87771",
-    image: "https://images.unsplash.com/photo-1596422846543-75c6fc197f07?q=80&w=800&auto=format&fit=crop",
+    image:
+      "https://images.unsplash.com/photo-1596422846543-75c6fc197f07?q=80&w=800&auto=format&fit=crop",
   },
   {
     city: "San Jose",
     country: "United States",
     address: "2880 Zanker Road, Suite 203, San Jose, CA 95134",
     phone: "+1 408 123 4567",
-    image: "https://images.unsplash.com/photo-1549144511-f099e773c147?q=80&w=800&auto=format&fit=crop",
+    image:
+      "https://images.unsplash.com/photo-1549144511-f099e773c147?q=80&w=800&auto=format&fit=crop",
   },
   {
     city: "Ireland",
     country: "Ireland",
     address: "46 Ridgewood Manor, Melitta Road, Kildare, Ireland - R51 H728",
     phone: "(+65) 86180073",
-    image: "https://images.unsplash.com/photo-1582650625119-3a31f8fa2699?q=80&w=800&auto=format&fit=crop",
+    image:
+      "https://images.unsplash.com/photo-1582650625119-3a31f8fa2699?q=80&w=800&auto=format&fit=crop",
   },
   {
     city: "Singapore",
     country: "Singapore",
     address: "105 Cecil Street, The Octagon, Singapore - 069534",
     phone: "(+65) 86180073",
-    image: "https://images.unsplash.com/photo-1525625293386-3f8f99389edd?q=80&w=800&auto=format&fit=crop",
+    image:
+      "https://images.unsplash.com/photo-1525625293386-3f8f99389edd?q=80&w=800&auto=format&fit=crop",
   },
 ];
 
@@ -157,10 +162,14 @@ export default function ContactClient({
         message,
         category: "Contact Us Form",
       });
-      toast.success("Thank you! Your inquiry has been received. Our team will contact you shortly.");
+      toast.success(
+        "Thank you! Your inquiry has been received. Our team will contact you shortly."
+      );
       form.reset();
     } catch (error) {
-      toast.error(error instanceof Error ? error.message : "Failed to submit inquiry. Please try again later.");
+      toast.error(
+        error instanceof Error ? error.message : "Failed to submit inquiry. Please try again later."
+      );
     } finally {
       setIsSubmitting(false);
     }
@@ -172,7 +181,7 @@ export default function ContactClient({
     { icon: <Facebook size={22} />, label: "Facebook", url: socialFacebook },
     { icon: <Twitter size={22} />, label: "Twitter", url: socialTwitter },
     { icon: <Youtube size={22} />, label: "YouTube", url: socialYoutube },
-  ].filter(item => item.url && item.url !== "");
+  ].filter((item) => item.url && item.url !== "");
 
   return (
     <div className="flex flex-col bg-white">
@@ -191,7 +200,7 @@ export default function ContactClient({
             className="h-full w-full scale-105 object-cover opacity-20 brightness-50"
           />
           <div className="absolute inset-0 bg-gradient-to-r from-[#001A3D]/95 via-[#001A3D]/70 to-transparent"></div>
-          <div className="absolute top-0 left-0 h-full w-1 bg-gradient-to-b from-transparent via-[#F99D1C] to-transparent opacity-90"></div>
+          <div className="absolute left-0 top-0 h-full w-1 bg-gradient-to-b from-transparent via-[#F99D1C] to-transparent opacity-90"></div>
         </div>
 
         <div className="relative z-10 mx-auto w-full max-w-[1280px] px-6 lg:px-20">
@@ -203,14 +212,14 @@ export default function ContactClient({
           >
             <div className="flex items-center gap-3">
               <span className="block h-[2px] w-6 shrink-0 bg-[#F99D1C] md:w-8"></span>
-              <span className="text-[11px] font-semibold tracking-wide text-[#F99D1C] uppercase md:text-[12px]">
+              <span className="text-[11px] font-semibold uppercase tracking-wide text-[#F99D1C] md:text-[12px]">
                 {heroTagline}
               </span>
             </div>
-            <h1 className="display-font text-3xl leading-tight font-semibold tracking-tight text-white md:text-5xl lg:text-6xl">
+            <h1 className="display-font text-3xl font-semibold leading-tight tracking-tight text-white md:text-5xl lg:text-6xl">
               {renderTitle(heroTitle, "text-white", "text-[#F99D1C]", "text-[#0171c1]")}
             </h1>
-            <p className="max-w-2xl text-sm leading-relaxed font-medium text-gray-200 opacity-90 md:text-lg">
+            <p className="max-w-2xl text-sm font-medium leading-relaxed text-gray-200 opacity-90 md:text-lg">
               {heroDescription}
             </p>
           </Motion.div>
@@ -218,7 +227,8 @@ export default function ContactClient({
       </section>
 
       {/* Main Content: Form & Offices */}
-      <section id="contact-form" className="relative z-20 bg-white py-20">
+      <section id="contact-form" className="relative z-20 bg-white py-[50px]">
+        {/* Desktop: side-by-side grid inside max-width container */}
         <div className="mx-auto max-w-[1280px] px-6 lg:px-20">
           <div className="grid grid-cols-1 gap-16 lg:grid-cols-12 lg:gap-24">
             {/* Contact Form - Left Column */}
@@ -233,49 +243,58 @@ export default function ContactClient({
                   <h2 className="display-font text-3xl font-semibold tracking-tight text-[#001A3D] md:text-5xl">
                     {renderTitle(formTitle, "text-[#001A3D]", "text-[#F99D1C]", "text-[#0171c1]")}
                   </h2>
-                  <p className="text-lg font-medium text-gray-500">
-                    {formDescription}
-                  </p>
+                  <p className="text-lg font-medium text-gray-500">{formDescription}</p>
                 </div>
 
                 <form onSubmit={handleSubmit} className="space-y-8">
                   <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
                     <div className="space-y-2">
-                      <label className="text-xs font-semibold tracking-wide text-[#001A3D]">Full Name</label>
+                      <label className="text-xs font-semibold tracking-wide text-[#001A3D]">
+                        Full Name
+                      </label>
                       <input
                         required
                         type="text"
                         name="name"
-                        placeholder="e.g. John Doe"
-                        className="w-full rounded-sm border border-gray-100 bg-gray-50 px-6 py-4 font-medium text-[#001A3D] transition-all focus:border-[#F99D1C] focus:ring-1 focus:ring-[#F99D1C] focus:outline-none"
+                        placeholder="Full Name"
+                        className="w-full rounded-sm border border-gray-100 bg-gray-50 px-6 py-4 font-medium text-[#001A3D] transition-all focus:border-[#F99D1C] focus:outline-none focus:ring-1 focus:ring-[#F99D1C]"
                       />
                     </div>
                     <div className="space-y-2">
-                      <label className="text-xs font-semibold tracking-wide text-[#001A3D]">Email Address</label>
+                      <label className="text-xs font-semibold tracking-wide text-[#001A3D]">
+                        Email Address
+                      </label>
                       <input
                         required
                         type="email"
                         name="email"
-                        placeholder="john@company.com"
-                        className="w-full rounded-sm border border-gray-100 bg-gray-50 px-6 py-4 font-medium text-[#001A3D] transition-all focus:border-[#F99D1C] focus:ring-1 focus:ring-[#F99D1C] focus:outline-none"
+                        placeholder="Email Address"
+                        className="w-full rounded-sm border border-gray-100 bg-gray-50 px-6 py-4 font-medium text-[#001A3D] transition-all focus:border-[#F99D1C] focus:outline-none focus:ring-1 focus:ring-[#F99D1C]"
                       />
                     </div>
                   </div>
 
                   <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
                     <div className="space-y-2">
-                      <label className="text-xs font-semibold tracking-wide text-[#001A3D]">Phone Number</label>
+                      <label className="text-xs font-semibold tracking-wide text-[#001A3D]">
+                        Phone Number
+                      </label>
                       <input
                         required
                         type="tel"
                         name="phone"
-                        placeholder="+1 (555) 000-0000"
-                        className="w-full rounded-sm border border-gray-100 bg-gray-50 px-6 py-4 font-medium text-[#001A3D] transition-all focus:border-[#F99D1C] focus:ring-1 focus:ring-[#F99D1C] focus:outline-none"
+                        placeholder="Phone Number"
+                        className="w-full rounded-sm border border-gray-100 bg-gray-50 px-6 py-4 font-medium text-[#001A3D] transition-all focus:border-[#F99D1C] focus:outline-none focus:ring-1 focus:ring-[#F99D1C]"
                       />
                     </div>
                     <div className="space-y-2">
-                      <label className="text-xs font-semibold tracking-wide text-[#001A3D]">Subject</label>
-                      <select name="subject" className="w-full cursor-pointer appearance-none rounded-sm border border-gray-100 bg-gray-50 px-6 py-4 font-medium text-[#001A3D] transition-all focus:border-[#F99D1C] focus:ring-1 focus:ring-[#F99D1C] focus:outline-none">
+                      <label className="text-xs font-semibold tracking-wide text-[#001A3D]">
+                        Subject
+                      </label>
+                      <select
+                        name="subject"
+                        className="w-full cursor-pointer appearance-none rounded-sm border border-gray-100 bg-gray-50 px-6 py-4 font-medium text-[#001A3D] transition-all focus:border-[#F99D1C] focus:outline-none focus:ring-1 focus:ring-[#F99D1C]"
+                      >
                         <option>New Project Inquiry</option>
                         <option>Partnership Opportunity</option>
                         <option>Career Inquiry</option>
@@ -285,13 +304,15 @@ export default function ContactClient({
                   </div>
 
                   <div className="space-y-2">
-                    <label className="text-xs font-semibold tracking-wide text-[#001A3D]">Message</label>
+                    <label className="text-xs font-semibold tracking-wide text-[#001A3D]">
+                      Message
+                    </label>
                     <textarea
                       required
                       name="message"
                       rows={6}
                       placeholder="How can we help you?"
-                      className="w-full resize-none rounded-sm border border-gray-100 bg-gray-50 px-6 py-4 font-medium text-[#001A3D] transition-all focus:border-[#F99D1C] focus:ring-1 focus:ring-[#F99D1C] focus:outline-none"
+                      className="w-full resize-none rounded-sm border border-gray-100 bg-gray-50 px-6 py-4 font-medium text-[#001A3D] transition-all focus:border-[#F99D1C] focus:outline-none focus:ring-1 focus:ring-[#F99D1C]"
                     ></textarea>
                   </div>
 
@@ -300,42 +321,59 @@ export default function ContactClient({
                     whileTap={{ scale: 0.98 }}
                     type="submit"
                     disabled={isSubmitting}
-                    className="flex w-full items-center justify-center gap-4 rounded-sm bg-[#F99D1C] px-12 py-5 text-sm font-bold tracking-wide text-[#001A3D] shadow-xl shadow-[#F99D1C]/10 transition-all md:w-fit disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="flex w-full items-center justify-center gap-4 rounded-sm bg-[#F99D1C] px-12 py-5 text-sm font-bold tracking-wide text-[#001A3D] shadow-xl shadow-[#F99D1C]/10 transition-all disabled:cursor-not-allowed disabled:opacity-50 md:w-fit"
                   >
-                    {isSubmitting ? "Sending..." : <>Send Inquiry <Send size={18} /></>}
+                    {isSubmitting ? (
+                      "Sending..."
+                    ) : (
+                      <>
+                        Send Inquiry <Send size={18} />
+                      </>
+                    )}
                   </Motion.button>
                 </form>
               </Motion.div>
             </div>
 
-            {/* Side Info - Right Column */}
-            <div className="space-y-12 lg:col-span-5">
+            {/* Side Info - Right Column (desktop: inside grid, mobile: full-width below form) */}
+            <div className="hidden lg:col-span-5 lg:block">
               <Motion.div
                 initial={{ opacity: 0, x: 20 }}
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true }}
-                className="relative space-y-12 overflow-hidden rounded-[2rem] bg-[#001A3D] p-6 sm:p-10 text-white md:p-8"
+                className="relative space-y-12 overflow-hidden rounded-[2rem] bg-[#001A3D] p-10 text-white"
               >
-                <div className="absolute top-0 right-0 -mt-16 -mr-16 h-32 w-32 rounded-full bg-[#F99D1C]/10 blur-2xl"></div>
+                <div className="absolute right-0 top-0 -mr-16 -mt-16 h-32 w-32 rounded-full bg-[#0171c1]/20 blur-2xl"></div>
 
                 <div className="space-y-6">
-                  <h3 className="display-font text-xl font-semibold tracking-tight md:text-2xl">{directTitle}</h3>
+                  <h3 className="display-font text-xl font-semibold tracking-tight md:text-2xl">
+                    {directTitle}
+                  </h3>
                   <div className="space-y-6">
                     <a href={`mailto:${email}`} className="group flex items-center gap-5 md:gap-6">
-                      <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-white/5 transition-all duration-300 group-hover:bg-[#F99D1C] group-hover:text-[#001A3D]">
+                      <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-white/5 transition-all duration-300 group-hover:bg-[#0171c1] group-hover:text-white">
                         <Mail size={20} />
                       </div>
                       <div>
-                        <p className="text-[11px] font-semibold tracking-wide text-gray-400">Email Us</p>
-                        <p className="text-sm font-bold sm:text-base md:text-lg break-all">{email}</p>
+                        <p className="text-[11px] font-semibold tracking-wide text-gray-400">
+                          Email Us
+                        </p>
+                        <p className="break-all text-sm font-bold sm:text-base md:text-lg">
+                          {email}
+                        </p>
                       </div>
                     </a>
-                    <a href={`tel:${phone.replace(/\s+/g, '')}`} className="group flex items-center gap-5 md:gap-6">
-                      <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-white/5 transition-all duration-300 group-hover:bg-[#F99D1C] group-hover:text-[#001A3D]">
+                    <a
+                      href={`tel:${phone.replace(/\s+/g, "")}`}
+                      className="group flex items-center gap-5 md:gap-6"
+                    >
+                      <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-white/5 transition-all duration-300 group-hover:bg-[#0171c1] group-hover:text-white">
                         <Phone size={20} />
                       </div>
                       <div>
-                        <p className="text-[11px] font-semibold tracking-wide text-gray-400">Call Us</p>
+                        <p className="text-[11px] font-semibold tracking-wide text-gray-400">
+                          Call Us
+                        </p>
                         <p className="text-lg font-bold">{phone}</p>
                       </div>
                     </a>
@@ -344,7 +382,9 @@ export default function ContactClient({
 
                 {socialLinks.length > 0 && (
                   <div className="space-y-6 border-t border-white/10 pt-10">
-                    <h3 className="display-font text-xl font-semibold tracking-tight md:text-2xl">{socialTitle}</h3>
+                    <h3 className="display-font text-xl font-semibold tracking-tight md:text-2xl">
+                      {socialTitle}
+                    </h3>
                     <div className="flex flex-wrap gap-3 sm:gap-4">
                       {socialLinks.map((item, idx) => (
                         <a
@@ -352,7 +392,7 @@ export default function ContactClient({
                           href={item.url}
                           target={item.url !== "#" ? "_blank" : undefined}
                           rel={item.url !== "#" ? "noopener noreferrer" : undefined}
-                          className="group flex h-14 w-14 items-center justify-center rounded-2xl bg-white/5 transition-all duration-300 hover:bg-[#F99D1C] hover:text-[#001A3D]"
+                          className="group flex h-14 w-14 items-center justify-center rounded-2xl bg-white/5 transition-all duration-300 hover:bg-[#0171c1] hover:text-white"
                           aria-label={item.label}
                         >
                           {item.icon}
@@ -362,12 +402,23 @@ export default function ContactClient({
                   </div>
                 )}
 
-                <div className="space-y-4 rounded-2xl bg-[#F99D1C] p-8 text-[#001A3D]">
-                  <h4 className="text-xs font-semibold tracking-wide">{supportLabel}</h4>
-                  <p className="text-lg leading-snug font-bold">
-                    {supportDescription}
-                  </p>
-                  <a href={supportBtnUrl} className="flex items-center gap-2 border-b-2 border-[#001A3D] pb-1 w-fit text-[11px] font-semibold tracking-wide">
+                <div className="space-y-4 rounded-2xl bg-[#0171c1] p-8 text-white">
+                  <h4 className="text-xs font-semibold tracking-wide text-white/80">
+                    {supportLabel}
+                  </h4>
+                  <p className="text-lg font-bold leading-snug">{supportDescription}</p>
+
+                  <a
+                    href={supportBtnUrl || "#"}
+                    onClick={(e) => {
+                      const isChatLink = supportBtnUrl && supportBtnUrl !== "#" && supportBtnUrl !== "";
+                      if (!isChatLink) {
+                        e.preventDefault();
+                        window.dispatchEvent(new CustomEvent("open-chatbot"));
+                      }
+                    }}
+                    className="flex w-fit items-center gap-2 border-b-2 border-white pb-1 text-[11px] font-semibold tracking-wide transition-colors hover:border-[#F99D1C] hover:text-[#F99D1C]"
+                  >
                     {supportBtnText} <ChevronRight size={14} />
                   </a>
                 </div>
@@ -375,19 +426,96 @@ export default function ContactClient({
             </div>
           </div>
         </div>
+
+        {/* Mobile-only: Direct Contact — full width, no horizontal margin */}
+        <div className="mt-10 lg:hidden">
+          <Motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="relative space-y-10 overflow-hidden bg-[#001A3D] p-8 text-white"
+          >
+            <div className="absolute right-0 top-0 -mr-16 -mt-16 h-32 w-32 rounded-full bg-[#0171c1]/20 blur-2xl"></div>
+
+            <div className="space-y-6">
+              <h3 className="display-font text-xl font-semibold tracking-tight">{directTitle}</h3>
+              <div className="space-y-6">
+                <a href={`mailto:${email}`} className="group flex items-center gap-5">
+                  <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-white/5 transition-all duration-300 group-hover:bg-[#0171c1] group-hover:text-white">
+                    <Mail size={20} />
+                  </div>
+                  <div>
+                    <p className="text-[11px] font-semibold tracking-wide text-gray-400">
+                      Email Us
+                    </p>
+                    <p className="break-all text-sm font-bold">{email}</p>
+                  </div>
+                </a>
+                <a
+                  href={`tel:${phone.replace(/\s+/g, "")}`}
+                  className="group flex items-center gap-5"
+                >
+                  <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-white/5 transition-all duration-300 group-hover:bg-[#0171c1] group-hover:text-white">
+                    <Phone size={20} />
+                  </div>
+                  <div>
+                    <p className="text-[11px] font-semibold tracking-wide text-gray-400">Call Us</p>
+                    <p className="text-lg font-bold">{phone}</p>
+                  </div>
+                </a>
+              </div>
+            </div>
+
+            {socialLinks.length > 0 && (
+              <div className="space-y-6 border-t border-white/10 pt-8">
+                <h3 className="display-font text-xl font-semibold tracking-tight">{socialTitle}</h3>
+                <div className="flex flex-wrap gap-3">
+                  {socialLinks.map((item, idx) => (
+                    <a
+                      key={idx}
+                      href={item.url}
+                      target={item.url !== "#" ? "_blank" : undefined}
+                      rel={item.url !== "#" ? "noopener noreferrer" : undefined}
+                      className="group flex h-14 w-14 items-center justify-center rounded-2xl bg-white/5 transition-all duration-300 hover:bg-[#0171c1] hover:text-white"
+                      aria-label={item.label}
+                    >
+                      {item.icon}
+                    </a>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            <div className="space-y-4 rounded-[15px] bg-[#0171c1] p-8 text-white md:rounded-[25px]">
+              <h4 className="text-xs font-semibold tracking-wide text-white/80">{supportLabel}</h4>
+              <p className="text-lg font-bold leading-snug">{supportDescription}</p>
+              <a
+                href={supportBtnUrl || "#"}
+                onClick={(e) => {
+                  const isChatLink = supportBtnUrl && supportBtnUrl !== "#" && supportBtnUrl !== "";
+                  if (!isChatLink) {
+                    e.preventDefault();
+                    window.dispatchEvent(new CustomEvent("open-chatbot"));
+                  }
+                }}
+                className="flex w-fit items-center gap-2 border-b-2 border-white pb-1 text-[11px] font-semibold tracking-wide transition-colors hover:border-[#F99D1C] hover:text-[#F99D1C]"
+              >
+                {supportBtnText} <ChevronRight size={14} />
+              </a>
+            </div>
+          </Motion.div>
+        </div>
       </section>
 
       {/* Global Presence - Offices Grid */}
-      <section className="bg-gray-50 py-20">
+      <section className="bg-gray-50 py-[50px]">
         <div className="mx-auto max-w-[1280px] px-6 lg:px-20">
           <div className="mx-auto mb-20 max-w-2xl space-y-4 text-center">
             <h2 className="display-font text-3xl font-semibold tracking-tight text-[#001A3D] md:text-5xl">
               {renderTitle(officesTitle, "text-[#001A3D]", "text-[#F99D1C]", "text-[#0171c1]")}
             </h2>
             <div className="mx-auto h-1 w-16 bg-[#F99D1C]"></div>
-            <p className="font-medium text-gray-500">
-              {officesDescription}
-            </p>
+            <p className="font-medium text-gray-500">{officesDescription}</p>
           </div>
 
           <div className="grid grid-cols-1 gap-10 md:grid-cols-2 lg:grid-cols-3">
@@ -398,7 +526,7 @@ export default function ContactClient({
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: idx * 0.1 }}
-                className="group overflow-hidden rounded-[2rem] border border-gray-100 bg-white shadow-xl transition-all duration-500 hover:shadow-2xl"
+                className="group overflow-hidden rounded-[15px] border border-gray-100 bg-white shadow-xl transition-all duration-500 hover:shadow-2xl md:rounded-[2rem]"
               >
                 <div className="relative h-48 overflow-hidden">
                   <ImageWithFallback
@@ -408,14 +536,20 @@ export default function ContactClient({
                   />
                   <div className="absolute inset-0 bg-[#001A3D]/20 transition-colors group-hover:bg-[#001A3D]/40"></div>
                   <div className="absolute bottom-6 left-8">
-                    <h3 className="display-font text-2xl font-semibold tracking-tight text-white">{office.city}</h3>
-                    <p className="text-[11px] font-semibold tracking-wide text-[#F99D1C]">{office.country}</p>
+                    <h3 className="display-font text-2xl font-semibold tracking-tight text-white">
+                      {office.city}
+                    </h3>
+                    <p className="text-[11px] font-semibold tracking-wide text-[#F99D1C]">
+                      {office.country}
+                    </p>
                   </div>
                 </div>
                 <div className="space-y-6 p-10">
                   <div className="flex items-start gap-4">
                     <MapPin className="mt-1 shrink-0 text-[#F99D1C]" size={18} />
-                    <p className="text-sm leading-relaxed font-medium text-gray-600 whitespace-pre-line">{office.address}</p>
+                    <p className="whitespace-pre-line text-sm font-medium leading-relaxed text-gray-600">
+                      {office.address}
+                    </p>
                   </div>
                   <div className="space-y-3 border-t border-gray-50 pt-4">
                     <div className="flex items-center gap-4">
@@ -430,32 +564,8 @@ export default function ContactClient({
         </div>
       </section>
 
-      {/* World Map Section */}
-      <section className="overflow-hidden bg-white py-20">
-        <div className="mx-auto max-w-[1280px] px-6 lg:px-20">
-          <div className="relative aspect-[21/9] overflow-hidden rounded-[3rem] bg-[#001A3D]">
-            <ImageWithFallback
-              src={mapBgImage}
-              alt="Global Network"
-              className="h-full w-full object-cover opacity-40 grayscale"
-            />
-            <div className="absolute inset-0 flex flex-col items-center justify-center bg-gradient-to-t from-[#001A3D] to-transparent p-10 text-center">
-              <div className="max-w-2xl space-y-6">
-                <Globe className="mx-auto h-16 w-16 animate-pulse text-[#F99D1C]" />
-                <h2 className="display-font text-3xl font-semibold tracking-tight text-white md:text-5xl">
-                  {renderTitle(mapTitle, "text-white", "text-[#F99D1C]", "text-[#0171c1]")}
-                </h2>
-                <p className="text-lg leading-relaxed font-medium text-gray-300">
-                  {mapDescription}
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
       {/* Trust Builders */}
-      <section className="border-t border-gray-100 py-20">
+      <section className="border-t border-gray-100 py-[50px]">
         <div className="mx-auto max-w-[1280px] px-6 lg:px-20">
           <div className="flex flex-wrap items-center justify-between gap-10">
             {trustBuilders.map((builder, idx) => {
@@ -464,7 +574,9 @@ export default function ContactClient({
                 <div key={idx} className="flex items-center gap-4">
                   <Icon className="text-[#F99D1C]" size={24} />
                   <div>
-                    <p className="text-[11px] font-semibold tracking-wide text-[#001A3D]">{builder.title}</p>
+                    <p className="text-[11px] font-semibold tracking-wide text-[#001A3D]">
+                      {builder.title}
+                    </p>
                     <p className="text-sm font-bold text-gray-500">{builder.sub}</p>
                   </div>
                 </div>

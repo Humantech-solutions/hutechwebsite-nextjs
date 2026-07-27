@@ -14,7 +14,8 @@ import {
   ShieldCheck,
   Award,
   Heart,
-  Users
+  Users,
+  Cpu
 } from "lucide-react";
 import { Meta } from "@/components/Meta";
 import { ImageWithFallback } from "@/components/figma/ImageWithFallback";
@@ -135,38 +136,22 @@ export default function LifeAtHutech({ data }: { data: LifeAtHutechData | null }
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [lightboxOpen, closeLightbox, nextImage, prevImage]);
 
-  const rawBenefits = [
-    settings.benefit1,
-    settings.benefit2,
-    settings.benefit3,
-    settings.benefit4,
-  ].filter(b => b?.title);
-
-  const benefits = rawBenefits.length > 0 ? rawBenefits.map((b, i) => ({
-    icon: getIcon(b.icon, [<HeartPulse className="h-10 w-10"/>, <BookOpen className="h-10 w-10"/>, <Coffee className="h-10 w-10"/>, <Trophy className="h-10 w-10"/>][i % 4]),
-    title: b.title,
-    desc: b.description
-  })) : [
+  const benefits = [
     {
-      icon: <HeartPulse className="h-10 w-10" />,
-      title: "Health & Wellness",
-      desc: "Comprehensive health insurance, wellness initiatives, and employee assistance programs.",
+      icon: <Users className="h-7 w-7" />,
+      title: "Great Place Great Culture",
+      desc: "At Hutech Solutions, we foster a culture of collaboration, innovation, and growth, where every team member is valued and supported. It’s a great place to thrive both personally and professionally."
     },
     {
-      icon: <BookOpen className="h-10 w-10" />,
-      title: "Learning & Growth",
-      desc: "Access to certifications, mentorship, training programs, and continuous learning opportunities.",
+      icon: <Cpu className="h-7 w-7" />,
+      title: "Cutting Edge Tech Work",
+      desc: "At our company, we are at the forefront of leveraging the latest technologies like AI ML, IoT, and more, while solving complex tech challenges. Our team thrives on innovation, pushing boundaries to deliver impactful solutions that drive real-world results."
     },
     {
-      icon: <Coffee className="h-10 w-10" />,
-      title: "Work-Life Balance",
-      desc: "Flexible work arrangements, paid time off, and a supportive work environment.",
-    },
-    {
-      icon: <Trophy className="h-10 w-10" />,
-      title: "Rewards & Recognition",
-      desc: "Performance-based rewards, employee appreciation programs, and career advancement opportunities.",
-    },
+      icon: <Trophy className="h-7 w-7" />,
+      title: "Work Hard, Claim Reward",
+      desc: "Work hard and you’ll be rewarded. We promote a culture where commitment results in measurable accomplishment because we think that hard work merits acknowledgment."
+    }
   ];
 
   // Filter workplace slides by selected workplaceCategories if any
@@ -259,7 +244,7 @@ export default function LifeAtHutech({ data }: { data: LifeAtHutechData | null }
       </section>
 
       {/* Gallery Section */}
-      <section className="overflow-hidden bg-white py-24">
+      <section className="overflow-hidden bg-white py-[50px]">
         <div className="mx-auto mb-16 max-w-[1280px] space-y-4 px-6 lg:px-20">
           <span className="text-xs font-bold tracking-widest text-[#F99D1C] uppercase">
             {settings.galleryEyebrow || "Gallery"}
@@ -282,7 +267,7 @@ export default function LifeAtHutech({ data }: { data: LifeAtHutechData | null }
                 viewport={{ once: true }}
                 transition={{ delay: i * 0.05 }}
                 onClick={() => openLightbox(i)}
-                className="group relative aspect-square cursor-pointer overflow-hidden rounded-3xl shadow-lg"
+                className="group relative aspect-square cursor-pointer overflow-hidden rounded-[15px] sm:rounded-3xl shadow-lg"
               >
                 <ImageWithFallback
                   src={`${post.coverImage}?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=600`}
@@ -332,7 +317,7 @@ export default function LifeAtHutech({ data }: { data: LifeAtHutechData | null }
             )}
 
             <div
-              className="relative max-h-[85vh] max-w-5xl w-full overflow-hidden rounded-2xl"
+              className="relative max-h-[85vh] max-w-5xl w-full overflow-hidden rounded-[15px] sm:rounded-2xl"
               onClick={(e) => e.stopPropagation()}
             >
               <ImageWithFallback
@@ -364,7 +349,7 @@ export default function LifeAtHutech({ data }: { data: LifeAtHutechData | null }
       </section>
 
       {/* Benefits Section */}
-      <section className="relative overflow-hidden border-y border-gray-100 bg-gray-50 py-24">
+      <section className="relative overflow-hidden border-y border-gray-100 bg-gray-50 py-[50px]">
         <div className="pointer-events-none absolute top-0 right-0 p-20 text-[#001A3D] opacity-[0.03]">
           <HeartPulse size={400} />
         </div>
@@ -379,7 +364,7 @@ export default function LifeAtHutech({ data }: { data: LifeAtHutechData | null }
             </h2>
           </div>
 
-          <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+          <div className="grid grid-cols-1 gap-8 md:grid-cols-3">
             {benefits.map((benefit, i) => (
               <Motion.div
                 key={i}
@@ -387,16 +372,18 @@ export default function LifeAtHutech({ data }: { data: LifeAtHutechData | null }
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: i * 0.1 }}
-                className="group flex flex-col items-start gap-8 rounded-[2.5rem] border border-gray-100 bg-white p-10 transition-all hover:shadow-2xl md:flex-row"
+                className="group relative flex flex-col justify-between items-start rounded-[15px] sm:rounded-[24px] border border-gray-100 bg-white p-8 shadow-sm hover:shadow-2xl hover:-translate-y-1.5 transition-all duration-300 min-h-[300px]"
               >
-                <div className="shrink-0 rounded-2xl bg-gray-50 p-5 text-[#F99D1C] transition-all duration-500 group-hover:bg-[#F99D1C] group-hover:text-white">
-                  {benefit.icon}
-                </div>
-                <div className="space-y-3">
-                  <h3 className="display-font text-2xl font-bold text-[#001A3D]">
-                    {benefit.title}
-                  </h3>
-                  <p className="leading-relaxed font-medium text-gray-500">{benefit.desc}</p>
+                <div className="space-y-6 w-full">
+                  <div className="shrink-0 w-14 h-14 rounded-[15px] sm:rounded-2xl bg-[#F99D1C]/10 text-[#F99D1C] flex items-center justify-center transition-all duration-500 group-hover:bg-[#F99D1C] group-hover:text-white group-hover:scale-105">
+                    {benefit.icon}
+                  </div>
+                  <div className="space-y-3 w-full">
+                    <h3 className="display-font text-xl font-bold text-[#001A3D] tracking-tight">
+                      {benefit.title}
+                    </h3>
+                    <p className="leading-relaxed text-sm font-medium text-gray-500">{benefit.desc}</p>
+                  </div>
                 </div>
               </Motion.div>
             ))}
@@ -405,7 +392,7 @@ export default function LifeAtHutech({ data }: { data: LifeAtHutechData | null }
       </section>
 
       {/* Workplace Exploration Section */}
-      <section className="overflow-hidden bg-white py-24">
+      <section className="overflow-hidden bg-white py-[50px]">
         <div className="mx-auto mb-12 max-w-[1280px] px-6 lg:px-20 flex flex-col md:flex-row md:items-end justify-between gap-6">
           <div className="space-y-4">
             <span className="text-xs font-bold tracking-widest text-[#F99D1C] uppercase">
@@ -440,8 +427,8 @@ export default function LifeAtHutech({ data }: { data: LifeAtHutechData | null }
               {...carouselSettings}
             >
               {workplaceSlides.map((slide, i) => (
-                <div key={i} className="w-full min-w-0 outline-none pb-8">
-                  <div className="group relative h-[400px] w-full overflow-hidden rounded-[2.5rem] shadow-2xl md:h-[500px]">
+                <div className="w-full min-w-0 outline-none pb-8">
+                  <div className="group relative h-[400px] w-full overflow-hidden rounded-[15px] sm:rounded-[2.5rem] shadow-2xl md:h-[500px]">
                     <ImageWithFallback
                       src={`${slide.coverImage}?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1920`}
                       alt={slide.title}
@@ -470,7 +457,7 @@ export default function LifeAtHutech({ data }: { data: LifeAtHutechData | null }
       </section>
 
       {/* CTA Section */}
-      <section className="relative overflow-hidden bg-[#001A3D] py-24 text-white">
+      <section className="relative overflow-hidden bg-[#001A3D] py-[50px] text-white">
         <div className="pointer-events-none absolute inset-0 opacity-10">
           <div className="absolute top-0 right-0 -mt-48 -mr-48 h-96 w-96 rounded-full bg-[#F99D1C]/20 blur-[100px]"></div>
         </div>

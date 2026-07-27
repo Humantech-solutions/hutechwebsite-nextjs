@@ -340,8 +340,7 @@ export default function Navbar({ data }: { data?: HeaderChromeData }) {
                                   initial={{ opacity: 0, y: -5 }}
                                   animate={{ opacity: 1, y: 0 }}
                                   exit={{ opacity: 0, y: -5 }}
-                                  className="fixed left-0 z-50 w-full overflow-hidden border-t border-gray-100 bg-white shadow-2xl"
-                                  style={{ top: megaMenuTop }}
+                                  className="absolute left-0 top-full z-50 w-full overflow-hidden border-t border-gray-100 bg-white shadow-2xl"
                                 >
                                 <div className="mx-auto max-w-[1280px] px-6 py-12 lg:px-20">
                                   <div className="grid grid-cols-12 gap-12">
@@ -511,31 +510,39 @@ export default function Navbar({ data }: { data?: HeaderChromeData }) {
                             transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
                             className="overflow-hidden"
                           >
-                            <div className="space-y-8 pt-4">
-                              {item.dropdown.map((section) => (
-                                <div
-                                  key={section.title}
-                                  className="space-y-4 border-l border-[#F99D1C]/20 pl-4"
-                                >
-                                  <h4 className="text-sm font-semibold text-[#F99D1C] opacity-80">
-                                    {section.title}
-                                  </h4>
-                                  <div className="grid gap-4">
-                                    {section.items.map((subItem) => (
-                                      <Link
-                                        key={subItem.name}
-                                        href={subItem.path}
-                                        className="group flex items-center text-base font-semibold text-gray-300 transition-colors hover:text-white"
-                                        onClick={() => setMobileMenuOpen(false)}
-                                      >
-                                        <div className="mr-3 h-1.5 w-1.5 rounded-full bg-[#F99D1C] opacity-0 transition-opacity group-hover:opacity-100"></div>
-                                        {subItem.name}
-                                      </Link>
-                                    ))}
-                                  </div>
+                            {(() => {
+                              const isSmallDropdown =
+                                item.label === "Industries" || item.label === "Resources";
+                              return (
+                                <div className="space-y-8 pt-4">
+                                  {item.dropdown.map((section) => (
+                                    <div
+                                      key={section.title}
+                                      className="border-l border-[#F99D1C]/20 pl-4"
+                                    >
+                                      {!isSmallDropdown && (
+                                        <h4 className="mb-4 text-sm font-semibold text-[#F99D1C] opacity-80">
+                                          {section.title}
+                                        </h4>
+                                      )}
+                                      <div className={`grid ${isSmallDropdown ? "gap-[18px]" : "gap-4"}`}>
+                                        {section.items.map((subItem) => (
+                                          <Link
+                                            key={subItem.name}
+                                            href={subItem.path}
+                                            className="group flex items-center text-base font-semibold text-gray-300 transition-colors hover:text-white"
+                                            onClick={() => setMobileMenuOpen(false)}
+                                          >
+                                            <div className="mr-3 h-1.5 w-1.5 rounded-full bg-[#F99D1C] opacity-0 transition-opacity group-hover:opacity-100"></div>
+                                            {subItem.name}
+                                          </Link>
+                                        ))}
+                                      </div>
+                                    </div>
+                                  ))}
                                 </div>
-                              ))}
-                            </div>
+                              );
+                            })()}
                           </Motion.div>
                         )}
                       </AnimatePresence>
