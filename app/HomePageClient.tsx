@@ -70,17 +70,20 @@ const WHATS_NEW = [
   {
     title: "Hutech Solutions & AWS Partner to Accelerate Fintech Solutions",
     date: "News • March 10, 2026",
-    image: "https://images.unsplash.com/photo-1762279388952-85187155e48d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080"
+    image: "https://images.unsplash.com/photo-1762279388952-85187155e48d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080",
+    slug: ""
   },
   {
     title: "Hutech Named 'Leader' in Gartner Magic Quadrant for Managed IT Services",
     date: "News • February 15, 2026",
-    image: "https://images.unsplash.com/photo-1714601344981-75e003bc5d18?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080"
+    image: "https://images.unsplash.com/photo-1714601344981-75e003bc5d18?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080",
+    slug: ""
   },
   {
     title: "Tech Mahindra & Hutech Partnering to Drive Next-Gen AI Consulting",
     date: "Press Release • January 20, 2026",
-    image: "https://images.unsplash.com/photo-1758843412266-e8661a80ada2?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080"
+    image: "https://images.unsplash.com/photo-1758843412266-e8661a80ada2?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080",
+    slug: ""
   }
 ];
 
@@ -477,6 +480,7 @@ export default function HomePageClient({ data }: HomePageClientProps) {
         title: n.title?.trim() || WHATS_NEW[i]?.title || "",
         date:  n.date?.trim()  || WHATS_NEW[i]?.date || "",
         image: n.imageUrl?.trim() || n.image?.trim() || WHATS_NEW[i]?.image || WHATS_NEW[0].image,
+        slug:  n.slug?.trim()  || "",
       }))
     : WHATS_NEW;
 
@@ -1559,7 +1563,7 @@ export default function HomePageClient({ data }: HomePageClientProps) {
             <div className="flex -mx-3 md:-mx-4">
               {WHATS_NEW_DATA.map((news, idx) => {
                 const isSelected = whatsNewSelectedIndex === idx;
-                return (
+                const cardContent = (
                   <div 
                     key={`${idx}-${news.title}`} 
                     className="flex-[0_0_100%] min-w-0 md:flex-[0_0_50%] lg:flex-[0_0_33.333333%] px-3 md:px-4 shrink-0"
@@ -1590,6 +1594,58 @@ export default function HomePageClient({ data }: HomePageClientProps) {
                           <span className="text-[#0171c1] text-[10px] md:text-[11px] font-semibold tracking-wide uppercase">{news.date}</span>
                           <h4 className="text-[#001A3D] text-base md:text-lg font-semibold leading-snug flex-grow group-hover:text-[#0171c1] transition-colors duration-300">{news.title}</h4>
                           {/* Bottom line indicator */}
+                          <div className="h-[2px] w-12 bg-[#0171c1] group-hover:w-full transition-all duration-500 ease-[cubic-bezier(0.4,0,0.2,1)]"></div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                );
+                return (news as any).slug ? (
+                  <Link key={`${idx}-${news.title}`} href={`/resources/blogs/${(news as any).slug}`} className="flex-[0_0_100%] min-w-0 md:flex-[0_0_50%] lg:flex-[0_0_33.333333%] px-3 md:px-4 shrink-0 block">
+                    <div 
+                      className="h-full transition-transform duration-400 ease-[cubic-bezier(0.4,0,0.2,1)]"
+                      style={{ transform: isSelected ? 'scale(1)' : 'scale(0.975)' }}
+                    >
+                      <div className="bg-white rounded-[20px] overflow-hidden border border-gray-100 shadow-[0_4px_16px_rgba(0,0,0,0.015)] hover:shadow-[0_8px_32px_rgba(0,0,0,0.03)] hover:-translate-y-1.5 transition-all duration-400 ease-[cubic-bezier(0.4,0,0.2,1)] group flex flex-col h-full cursor-pointer relative">
+                        <div className="h-48 md:h-56 overflow-hidden relative">
+                          <ImageWithFallback 
+                            src={news.image} 
+                            alt={news.title} 
+                            className="w-full h-full object-cover grayscale-[0.3] group-hover:grayscale-0 group-hover:scale-105 transition-all duration-700 ease-[cubic-bezier(0.4,0,0.2,1)]" 
+                          />
+                          <div className="absolute inset-0 bg-gradient-to-t from-[#001A3D]/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
+                          <div className="absolute inset-0 bg-[#001A3D]/10 mix-blend-color group-hover:opacity-0 transition-opacity duration-700 pointer-events-none"></div>
+                        </div>
+                        <div className="p-6 md:p-8 flex flex-col flex-grow space-y-4">
+                          <span className="text-[#0171c1] text-[10px] md:text-[11px] font-semibold tracking-wide uppercase">{news.date}</span>
+                          <h4 className="text-[#001A3D] text-base md:text-lg font-semibold leading-snug flex-grow group-hover:text-[#0171c1] transition-colors duration-300">{news.title}</h4>
+                          <div className="h-[2px] w-12 bg-[#0171c1] group-hover:w-full transition-all duration-500 ease-[cubic-bezier(0.4,0,0.2,1)]"></div>
+                        </div>
+                      </div>
+                    </div>
+                  </Link>
+                ) : (
+                  <div 
+                    key={`${idx}-${news.title}`} 
+                    className="flex-[0_0_100%] min-w-0 md:flex-[0_0_50%] lg:flex-[0_0_33.333333%] px-3 md:px-4 shrink-0"
+                  >
+                    <div 
+                      className="h-full transition-transform duration-400 ease-[cubic-bezier(0.4,0,0.2,1)]"
+                      style={{ transform: isSelected ? 'scale(1)' : 'scale(0.975)' }}
+                    >
+                      <div className="bg-white rounded-[20px] overflow-hidden border border-gray-100 shadow-[0_4px_16px_rgba(0,0,0,0.015)] hover:shadow-[0_8px_32px_rgba(0,0,0,0.03)] hover:-translate-y-1.5 transition-all duration-400 ease-[cubic-bezier(0.4,0,0.2,1)] group flex flex-col h-full cursor-pointer relative">
+                        <div className="h-48 md:h-56 overflow-hidden relative">
+                          <ImageWithFallback 
+                            src={news.image} 
+                            alt={news.title} 
+                            className="w-full h-full object-cover grayscale-[0.3] group-hover:grayscale-0 group-hover:scale-105 transition-all duration-700 ease-[cubic-bezier(0.4,0,0.2,1)]" 
+                          />
+                          <div className="absolute inset-0 bg-gradient-to-t from-[#001A3D]/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
+                          <div className="absolute inset-0 bg-[#001A3D]/10 mix-blend-color group-hover:opacity-0 transition-opacity duration-700 pointer-events-none"></div>
+                        </div>
+                        <div className="p-6 md:p-8 flex flex-col flex-grow space-y-4">
+                          <span className="text-[#0171c1] text-[10px] md:text-[11px] font-semibold tracking-wide uppercase">{news.date}</span>
+                          <h4 className="text-[#001A3D] text-base md:text-lg font-semibold leading-snug flex-grow group-hover:text-[#0171c1] transition-colors duration-300">{news.title}</h4>
                           <div className="h-[2px] w-12 bg-[#0171c1] group-hover:w-full transition-all duration-500 ease-[cubic-bezier(0.4,0,0.2,1)]"></div>
                         </div>
                       </div>

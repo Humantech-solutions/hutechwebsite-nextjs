@@ -531,6 +531,8 @@ export interface WpNewsItem {
   title?: string;
   date?: string;
   image?: any;
+  slug?: string;
+  imageUrl?: string;
 }
 
 export interface WpAccordionItem {
@@ -721,6 +723,7 @@ function transformHomePage(
   if (dynamicBlogs.length > 0) {
     newsItems = dynamicBlogs.map((b: any) => ({
       title: b.title,
+      slug: b.slug,
       date: new Date(b.date).toLocaleDateString("en-US", {
         year: "numeric",
         month: "long",
