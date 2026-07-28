@@ -4,7 +4,10 @@ import { motion as Motion } from "framer-motion";
 import Link from "next/link";
 import { Meta } from "@/components/Meta";
 import { Breadcrumbs } from "@/components/Breadcrumbs";
+import { WpPage } from "@/lib/wordpress";
+import { renderTitle } from "@/lib/utils";
 
+// Sitemap data fallback
 const SITEMAP_DATA = [
   {
     title: "Company",
@@ -77,30 +80,38 @@ const SITEMAP_DATA = [
   },
 ];
 
-export default function Sitemap() {
+interface Props {
+  page: WpPage;
+}
+
+export default function GenericLegalPageClient({ page }: Props) {
+  const isSitemap = page.slug === "sitemap";
+
   return (
     <div className="flex flex-col bg-white">
       <Meta
-        title="Sitemap | Hutech Solutions"
-        description="Navigate through all pages on Hutech Solutions website."
+        title={`${page.title} | Hutech Solutions`}
+        description={page.content.replace(/<[^>]+>/g, "").slice(0, 150) + "..."}
       />
       <Breadcrumbs variant="light" />
 
-      <section className="relative overflow-hidden bg-[#001A3D] py-20 text-white">
-        <div className="absolute inset-0 z-0">
-          <div className="absolute inset-0 bg-gradient-to-r from-[#001A3D] via-[#001A3D]/80 to-transparent"></div>
-        </div>
-        <div className="relative z-10 mx-auto max-w-[1280px] px-6 lg:px-20">
+      <section className="bg-[#001A3D] text-white py-20 relative overflow-hidden">
+        {isSitemap && (
+          <div className="absolute inset-0 z-0">
+            <div className="absolute inset-0 bg-gradient-to-r from-[#001A3D] via-[#001A3D]/80 to-transparent"></div>
+          </div>
+        )}
+        <div className="max-w-[1280px] mx-auto px-6 lg:px-20 relative z-10">
           <Motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             className="max-w-3xl"
           >
-            <h1 className="display-font mb-6 text-4xl font-semibold tracking-tight md:text-5xl">
-              <span className="text-[#F99D1C]">Site</span>map
+            <h1 className="text-4xl md:text-5xl font-semibold mb-6 display-font tracking-tight">
+              {renderTitle(page.title, "text-inherit", "text-[#F99D1C]")}
             </h1>
             <p className="text-lg text-gray-300">
-              A comprehensive directory of our website content.
+              {isSitemap ? "A comprehensive directory of our website content." : `Effective Date: ${page.date}`}
             </p>
           </Motion.div>
         </div>
@@ -108,28 +119,37 @@ export default function Sitemap() {
 
       <section className="py-20">
         <div className="mx-auto max-w-[1280px] px-6 lg:px-20">
-          <div className="grid grid-cols-1 gap-12 sm:grid-cols-2 lg:grid-cols-3">
-            {SITEMAP_DATA.map((section) => (
-              <div key={section.title} className="space-y-6">
-                <h2 className="border-b border-gray-100 pb-4 text-xl font-bold text-[#001A3D]">
-                  {section.title}
-                </h2>
-                <ul className="space-y-3">
-                  {section.links.map((link) => (
-                    <li key={link.name}>
-                      <Link
-                        href={link.path}
-                        className="group flex items-center text-sm font-medium text-gray-500 transition-colors hover:text-[#0171c1]"
-                      >
-                        <span className="mr-0 h-[1px] w-0 bg-[#0171c1] transition-all group-hover:mr-2 group-hover:w-3"></span>
-                        {link.name}
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            ))}
-          </div>
+          {page.content && (
+            <div 
+              className="prose prose-blue max-w-4xl text-gray-600 leading-relaxed space-y-8 mb-12"
+              dangerouslySetInnerHTML={{ __html: page.content }}
+            />
+          )}
+
+          {isSitemap && (
+            <div className="grid grid-cols-1 gap-12 sm:grid-cols-2 lg:grid-cols-3">
+              {SITEMAP_DATA.map((section) => (
+                <div key={section.title} className="space-y-6">
+                  <h2 className="border-b border-gray-100 pb-4 text-xl font-bold text-[#001A3D]">
+                    {section.title}
+                  </h2>
+                  <ul className="space-y-3">
+                    {section.links.map((link) => (
+                      <li key={link.name}>
+                        <Link
+                          href={link.path}
+                          className="group flex items-center text-sm font-medium text-gray-500 transition-colors hover:text-[#0171c1]"
+                        >
+                          <span className="mr-0 h-[1px] w-0 bg-[#0171c1] transition-all group-hover:mr-2 group-hover:w-3"></span>
+                          {link.name}
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
       </section>
     </div>

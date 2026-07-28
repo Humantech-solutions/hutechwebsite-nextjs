@@ -4298,3 +4298,46 @@ export async function getLifeAtHutechPage(): Promise<LifeAtHutechData | null> {
   }
 }
 
+// ─── Standard Pages ────────────────────────────────────────────────────────────
+
+export type WpPage = {
+  title: string;
+  content: string;
+  date: string;
+  slug: string;
+};
+
+const PAGE_BY_SLUG_QUERY = `
+  query GetPageBySlug($slug: String!) {
+    pages(where: { name: $slug }) {
+      nodes {
+        title
+        content
+        date
+        slug
+      }
+    }
+  }
+`;
+
+export async function getPageBySlug(slug: string): Promise<WpPage | null> {
+  try {
+    const raw = await fetchGraphQL(PAGE_BY_SLUG_QUERY, { slug });
+    const pageNode = raw?.data?.pages?.nodes?.[0];
+    if (!pageNode) return null;
+    
+    return {
+      title: pageNode.title,
+      content: pageNode.content,
+      date: new Date(pageNode.date).toLocaleDateString("en-US", {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+      }),
+      slug: pageNode.slug,
+    };
+  } catch (err) {
+    console.warn(`[WP] getPageBySlug(${slug}) failed:`, err);
+    return null;
+  }
+}
