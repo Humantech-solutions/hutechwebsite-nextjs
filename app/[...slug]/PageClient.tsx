@@ -91,7 +91,7 @@ export default function GenericLegalPageClient({ page }: Props) {
     <div className="flex flex-col bg-white">
       <Meta
         title={`${page.title} | Hutech Solutions`}
-        description={page.content.replace(/<[^>]+>/g, "").slice(0, 150) + "..."}
+        description={(page.content || "").replace(/<[^>]+>/g, "").slice(0, 150) || page.title}
       />
       <Breadcrumbs variant="light" />
 
