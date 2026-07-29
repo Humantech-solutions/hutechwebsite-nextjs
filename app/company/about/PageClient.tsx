@@ -26,48 +26,95 @@ import Link from "next/link";
 import { Meta } from "@/components/Meta";
 import { GlobalMap } from "@/components/GlobalMap";
 
-export default function AboutHutech() {
-  const stats = [
-    { label: "Associates", value: "100+", icon: <Users size={20} /> },
-    { label: "Happy Clients", value: "20+", icon: <Briefcase size={20} /> },
-    { label: "Project Delivered", value: "40+", icon: <CheckCircle2 size={20} /> },
-    { label: "Countries Served", value: "10+", icon: <Globe2 size={20} /> },
-    { label: "Years in Business", value: "5+", icon: <TrendingUp size={20} /> },
-    { label: "Client Satisfaction", value: "100%", icon: <Star size={20} /> },
+interface AboutClientProps {
+  heroTagline?: string;
+  heroTitle?: string;
+  heroDescription?: string;
+  heroBgImage?: string;
+  stats?: { value: string; label: string }[];
+  overviewTitle?: string;
+  overviewDescription?: string;
+  features?: { title: string; desc: string }[];
+  whatWeDoTitle?: string;
+  whatWeDoDesc?: string;
+  whatWeDoItems?: string[];
+  whoWeHelpTitle?: string;
+  whoWeHelpDesc?: string;
+  whoWeHelpItems?: string[];
+  whyChooseUsTitle?: string;
+  whyChooseUsDesc?: string;
+  globalSynergyTitle?: string;
+  globalSynergyDesc?: string;
+  globalFootprintTitle?: string;
+  globalFootprintDesc?: string;
+  historyTitle?: string;
+  milestones?: { year: string; title: string; desc: string }[];
+  ctaTitle?: string;
+  ctaDescription?: string;
+  ctaBgImage?: string;
+  ctaBtn1Text?: string;
+  ctaBtn1Url?: string;
+  ctaBtn2Text?: string;
+  ctaBtn2Url?: string;
+}
+
+export default function AboutHutech(props: AboutClientProps = {}) {
+  const {
+    heroTagline = "Corporate Profile",
+    heroTitle = "Architecting |Business Value.",
+    heroDescription = "We are a remarkable group of creatives who transform traditional company concepts into reliable digital solutions. We provide comprehensive solutions that effortlessly include cutting-edge ideas by employing cutting-edge methodologies. Our tried-and-true digital techniques follow accepted industry standards and provide usable products that appeal to a wide audience.",
+    stats: wpStats,
+    overviewTitle = "Providing The Finest |Digital Experiences.",
+    whatWeDoTitle = "What We Do",
+    whatWeDoDesc = "We offer a wide range of IT services and solutions that empower businesses to leverage technology for success. From core development to advanced enterprise consulting.",
+    whatWeDoItems: wpWhatWeDoItems,
+    whoWeHelpTitle = "Who We Help?",
+    whoWeHelpDesc = "We are dedicated to helping a wide range of organizations across various industries, from early-stage funded startups to established global entities.",
+    whoWeHelpItems: wpWhoWeHelpItems,
+    whyChooseUsTitle = "Why Choose Us",
+    whyChooseUsDesc = "Partner with us to unlock the full potential of technology and drive meaningful business outcomes through transparency and engineering excellence.",
+    globalSynergyTitle = "Global |Synergy.",
+    globalSynergyDesc = "Our offices in India, US, and UK work in a unified ecosystem to provide round-the-clock delivery and strategic support for our global clients.",
+    historyTitle = "Our History.",
+    milestones: wpMilestones,
+    ctaTitle = "Join the Next |Digital Revolution.",
+    ctaDescription = "Whether you're looking for a technology partner or your next career move, we're building the future together.",
+    ctaBtn1Text = "Start Your Project",
+    ctaBtn1Url = "/contact",
+    ctaBtn2Text = "Executive Careers",
+    ctaBtn2Url = "/careers",
+  } = props;
+
+  const stats = (wpStats && wpStats.length > 0 ? wpStats : [
+    { label: "Associates", value: "100+" },
+    { label: "Happy Clients", value: "20+" },
+    { label: "Project Delivered", value: "40+" },
+    { label: "Countries Served", value: "10+" },
+    { label: "Years in Business", value: "5+" },
+    { label: "Client Satisfaction", value: "100%" },
+  ]).map((s, i) => ({
+    ...s,
+    icon: [<Users size={20} key={i}/>, <Briefcase size={20} key={i}/>, <CheckCircle2 size={20} key={i}/>, <Globe2 size={20} key={i}/>, <TrendingUp size={20} key={i}/>, <Star size={20} key={i}/>][i] ?? <Award size={20} key={i}/>,
+  }));
+
+  const milestones = (wpMilestones && wpMilestones.length > 0) ? wpMilestones : [
+    { year: "2019", title: "Foundation", desc: "Incorporated with a 2-member core. Grew to 10 members and secured 2 major clients by Q1." },
+    { year: "2020 – 21", title: "Resilience", desc: "Developed 2 enterprise products for funded startups. Signed MOU with Singapore-based IT org." },
+    { year: "2021 – 22", title: "Expansion", desc: "Secured tech partnerships in Logistics & EV sectors. Team scaled to 78 specialists." },
+    { year: "2022 – 23", title: "Global Reach", desc: "Opened Pune office, US subsidiary, and strategic UK collaboration with Acend Solutions." },
+    { year: "2023 – 24", title: "Leadership", desc: "Established Hutech Inc. (USA), joined NASSCOM, and achieved ISO 9001:2015 certification. Team 90+." },
+    { year: "2025 – Now", title: "Innovation", desc: "Forged alliances with XOOTS & Maconsus (Vietnam), enhancing our global network and R&D." },
   ];
 
-  const milestones = [
-    {
-      year: "2019",
-      title: "Foundation",
-      desc: "Incorporated with a 2-member core. Grew to 10 members and secured 2 major clients by Q1.",
-    },
-    {
-      year: "2020 – 21",
-      title: "Resilience",
-      desc: "Developed 2 enterprise products for funded startups. Signed MOU with Singapore-based IT org.",
-    },
-    {
-      year: "2021 – 22",
-      title: "Expansion",
-      desc: "Secured tech partnerships in Logistics & EV sectors. Team scaled to 78 specialists.",
-    },
-    {
-      year: "2022 – 23",
-      title: "Global Reach",
-      desc: "Opened Pune office, US subsidiary, and strategic UK collaboration with Acend Solutions.",
-    },
-    {
-      year: "2023 – 24",
-      title: "Leadership",
-      desc: "Established Hutech Inc. (USA), joined NASSCOM, and achieved ISO 9001:2015 certification. Team 90+.",
-    },
-    {
-      year: "2025 – Now",
-      title: "Innovation",
-      desc: "Forged alliances with XOOTS & Maconsus (Vietnam), enhancing our global network and R&D.",
-    },
-  ];
+  const whatWeDoItems = (wpWhatWeDoItems && wpWhatWeDoItems.length > 0) ? wpWhatWeDoItems : ["Strategic IT Consulting", "Full-Stack Development", "Cloud Infrastructure", "Managed Maintenance"];
+  const whoWeHelpItems = (wpWhoWeHelpItems && wpWhoWeHelpItems.length > 0) ? wpWhoWeHelpItems : ["Funded Tech Startups", "SME Growth Entities", "Global Enterprises", "Industry Specialists"];
+
+  // Helper to parse the pipe-delimited title format used by WP
+  const renderHeroTitle = (raw: string) => {
+    const parts = raw.split("|");
+    if (parts.length === 1) return <>{raw}</>;
+    return <>{parts[0]}<br /><span className="text-[#F99D1C]">{parts[1]}</span></>;
+  };
 
   return (
     <div className="flex flex-col overflow-hidden bg-white selection:bg-[#0171c1] selection:text-white">
@@ -100,19 +147,14 @@ export default function AboutHutech() {
                 <div className="inline-flex items-center gap-4 rounded-full border border-white/10 bg-white/5 px-6 py-2 backdrop-blur-md">
                   <span className="h-2 w-2 animate-pulse rounded-full bg-[#F99D1C]"></span>
                   <span className="text-[10px] font-bold tracking-widest text-white uppercase">
-                    Corporate Profile
+                    {heroTagline}
                   </span>
                 </div>
                 <h1 className="display-font text-3xl leading-[1.1] font-semibold tracking-tight text-white sm:text-4xl md:text-5xl md:leading-[1.05] lg:text-6xl">
-                  Architecting <br />
-                  <span className="text-[#F99D1C]">Business Value.</span>
+                  {renderHeroTitle(heroTitle)}
                 </h1>
                 <p className="max-w-2xl text-xl leading-relaxed font-medium text-white/60">
-                  We are a remarkable group of creatives who transform traditional company concepts
-                  into reliable digital solutions. We provide comprehensive solutions that
-                  effortlessly include cutting-edge ideas by employing cutting-edge methodologies.
-                  Our tried-and-true digital techniques follow accepted industry standards and
-                  provide usable products that appeal to a wide audience.
+                  {heroDescription}
                 </p>
               </Motion.div>
             </div>
@@ -147,8 +189,7 @@ export default function AboutHutech() {
             <div className="space-y-8 lg:col-span-4">
               <div className="h-2 w-20 bg-[#0171c1]"></div>
               <h2 className="display-font text-4xl leading-tight font-bold text-[#001A3D] md:text-5xl">
-                Providing The Finest <br />{" "}
-                <span className="text-[#0171c1]">Digital Experiences.</span>
+                {renderHeroTitle(overviewTitle)}
               </h2>
               <p className="font-medium text-gray-400">
                 "We don't just build products; we architect the growth of businesses through
@@ -212,19 +253,10 @@ export default function AboutHutech() {
             <div className="space-y-16 rounded-[15px] lg:rounded-r-none lg:rounded-l-[15px] bg-white p-6 md:p-12 lg:p-24 shadow-2xl lg:col-span-8">
               <div className="grid grid-cols-1 gap-16 md:grid-cols-2">
                 <div className="space-y-6">
-                  <h3 className="display-font text-3xl font-bold text-[#001A3D]">What We Do</h3>
-                  <p className="leading-relaxed font-medium text-gray-500">
-                    We offer a wide range of IT services and solutions that empower businesses to
-                    leverage technology for success. From core development to advanced enterprise
-                    consulting.
-                  </p>
+                  <h3 className="display-font text-3xl font-bold text-[#001A3D]">{whatWeDoTitle}</h3>
+                  <p className="leading-relaxed font-medium text-gray-500">{whatWeDoDesc}</p>
                   <ul className="space-y-4">
-                    {[
-                      "Strategic IT Consulting",
-                      "Full-Stack Development",
-                      "Cloud Infrastructure",
-                      "Managed Maintenance",
-                    ].map((item, i) => (
+                    {whatWeDoItems.map((item, i) => (
                       <li
                         key={i}
                         className="flex items-center gap-3 text-sm font-bold text-[#001A3D]"
@@ -236,18 +268,10 @@ export default function AboutHutech() {
                   </ul>
                 </div>
                 <div className="space-y-6">
-                  <h3 className="display-font text-3xl font-bold text-[#001A3D]">Who We Help?</h3>
-                  <p className="leading-relaxed font-medium text-gray-500">
-                    We are dedicated to helping a wide range of organizations across various
-                    industries, from early-stage funded startups to established global entities.
-                  </p>
+                  <h3 className="display-font text-3xl font-bold text-[#001A3D]">{whoWeHelpTitle}</h3>
+                  <p className="leading-relaxed font-medium text-gray-500">{whoWeHelpDesc}</p>
                   <ul className="space-y-4">
-                    {[
-                      "Funded Tech Startups",
-                      "SME Growth Entities",
-                      "Global Enterprises",
-                      "Industry Specialists",
-                    ].map((item, i) => (
+                    {whoWeHelpItems.map((item, i) => (
                       <li
                         key={i}
                         className="flex items-center gap-3 text-sm font-bold text-[#001A3D]"
@@ -264,10 +288,8 @@ export default function AboutHutech() {
                   <TrendingUp size={40} />
                 </div>
                 <div>
-                  <h4 className="mb-2 text-xl font-bold text-[#001A3D]">Why Choose Us</h4>
-                  <p className="text-sm leading-relaxed font-medium text-gray-500">
-                    Partner with us to unlock the full potential of technology and drive meaningful
-                    business outcomes through transparency and engineering excellence.
+                  <h4 className="mb-2 text-xl font-bold text-[#001A3D]">{whyChooseUsTitle}</h4>
+                  <p className="text-sm leading-relaxed font-medium text-gray-500">{whyChooseUsDesc}
                   </p>
                 </div>
               </div>
@@ -275,11 +297,9 @@ export default function AboutHutech() {
             <div className="flex items-center rounded-[15px] lg:rounded-l-none lg:rounded-r-[15px] bg-[#001A3D] p-12 lg:col-span-4 lg:p-24">
               <div className="space-y-8">
                 <h2 className="display-font text-4xl leading-tight font-bold text-white">
-                  Global <br /> <span className="text-[#F99D1C]">Synergy.</span>
+                  {renderHeroTitle(globalSynergyTitle)}
                 </h2>
-                <p className="leading-relaxed font-medium text-white/60">
-                  Our offices in India, US, and UK work in a unified ecosystem to provide
-                  round-the-clock delivery and strategic support for our global clients.
+                <p className="leading-relaxed font-medium text-white/60">{globalSynergyDesc}
                 </p>
                 <div className="space-y-6 pt-6">
                   <div className="group flex items-center gap-4">
@@ -316,7 +336,7 @@ export default function AboutHutech() {
               Corporate Evolution
             </span>
             <h2 className="display-font text-4xl font-bold tracking-tight text-[#001A3D] md:text-6xl">
-              Our History.
+              {historyTitle.replace("|", "").replace("^", "")}
             </h2>
           </div>
 
@@ -360,24 +380,22 @@ export default function AboutHutech() {
             </div>
             <div className="relative z-10 mx-auto max-w-4xl space-y-10">
               <h2 className="display-font text-4xl leading-tight font-bold text-white md:text-6xl">
-                Join the Next <br /> <span className="text-[#F99D1C]">Digital Revolution.</span>
+                {renderHeroTitle(ctaTitle)}
               </h2>
-              <p className="text-xl leading-relaxed font-medium text-white/50">
-                Whether you're looking for a technology partner or your next career move, we're
-                building the future together.
+              <p className="text-xl leading-relaxed font-medium text-white/50">{ctaDescription}
               </p>
               <div className="flex flex-col justify-center gap-6 sm:flex-row">
                 <Link
-                  href="/contact"
+                  href={ctaBtn1Url}
                   className="rounded-sm bg-[#0171c1] px-12 py-5 text-[11px] font-black tracking-widest text-white uppercase shadow-xl transition-all hover:bg-[#F99D1C] hover:text-[#001A3D]"
                 >
-                  Start Your Project
+                  {ctaBtn1Text}
                 </Link>
                 <Link
-                  href="/careers"
+                  href={ctaBtn2Url}
                   className="rounded-sm border border-white/20 px-12 py-5 text-[11px] font-black tracking-widest text-white uppercase transition-all hover:bg-white/10"
                 >
-                  Executive Careers
+                  {ctaBtn2Text}
                 </Link>
               </div>
             </div>

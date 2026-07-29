@@ -83,7 +83,7 @@ export async function fetchGraphQL(query: string, variables = {}) {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ query, variables }),
-      next: { revalidate: 60 },
+      next: { revalidate: process.env.NODE_ENV === "development" ? 0 : 60 },
       signal: controller.signal,
     });
 
@@ -336,8 +336,8 @@ const ACCORDION_FIELDS = `
 `;
 
 const HOMEPAGE_QUERY = `
-  query GetHomePage {
-    page(id: "home", idType: URI) {
+  query GetHomePage($uri: String!) {
+    pageBy(uri: $uri) {
       id
       title
       homepageFields {
@@ -632,7 +632,7 @@ function transformHomePage(
   dynamicTestimonials: any[] = [],
   dynamicBlogs: any[] = []
 ): HomepageData | null {
-  const f = raw?.data?.page?.homepageFields;
+  const f = raw?.data?.pageBy?.homepageFields || raw?.data?.page?.homepageFields;
   if (!f) return null;
 
   // Returns true only if the group object has at least one non-blank string value.
@@ -885,15 +885,16 @@ const BLOGS_BY_CATEGORY_FOR_HOME_QUERY = `
   }
 `;
 
-export async function getHomePage(): Promise<HomepageData | null> {
+export async function getHomePage(uri: string = "/"): Promise<HomepageData | null> {
   try {
-    const raw = await fetchGraphQL(HOMEPAGE_QUERY);
-    if (raw?.errors || !raw?.data?.page) {
+    const queryUri = uri === "/" ? "home" : uri;
+    const raw = await fetchGraphQL(HOMEPAGE_QUERY, { uri: queryUri });
+    if (raw?.errors || !raw?.data?.pageBy) {
       console.warn("[WP] Could not fetch homepage data. Using static fallback.");
       return null;
     }
 
-    const acf = raw?.data?.page?.homepageFields || {};
+    const acf = raw?.data?.pageBy?.homepageFields || {};
     const exp = acf.expertise || {};
     const ss  = acf.successStories || {};
     const wn  = acf.whatsNew || {};
@@ -1971,10 +1972,9 @@ export async function getCaseStudyPageData(): Promise<BlogPageData | null> {
 // ─── About Page GraphQL Query ─────────────────────────────────────────────────
 
 const ABOUT_PAGE_QUERY = `
-  query GetAboutPageData {
-    pages(where: { title: "About" }) {
-      nodes {
-        aboutPageFields {
+  query GetAboutPageData($uri: String!) {
+    pageBy(uri: $uri) {
+      aboutPageFields {
           heroTagline
           heroTitle
           heroDescription
@@ -2015,7 +2015,6 @@ const ABOUT_PAGE_QUERY = `
           ctaTitle ctaDescription
           ctaButton1Text ctaButton1Url
           ctaButton2Text ctaButton2Url
-        }
       }
     }
   }
@@ -2094,14 +2093,14 @@ function transformAboutPageData(f: any) {
   };
 }
 
-export async function getAboutPageData(): Promise<ReturnType<typeof transformAboutPageData> | null> {
+export async function getAboutPageData(uri: string = "/about/"): Promise<ReturnType<typeof transformAboutPageData> | null> {
   try {
-    const raw = await fetchGraphQL(ABOUT_PAGE_QUERY);
-    const f = raw?.data?.pages?.nodes?.[0]?.aboutPageFields;
+    const raw = await fetchGraphQL(ABOUT_PAGE_QUERY, { uri });
+    const f = raw?.data?.pageBy?.aboutPageFields;
     if (!f) return null;
     return transformAboutPageData(f);
   } catch (err) {
-    console.warn("[WP] getAboutPageData() failed:", err);
+    console.warn(`[WP] getAboutPageData(${uri}) failed:`, err);
     return null;
   }
 }
@@ -2109,9 +2108,8 @@ export async function getAboutPageData(): Promise<ReturnType<typeof transformAbo
 // ─── Awards Page ─────────────────────────────────────────────────────────────
 
 const AWARDS_PAGE_QUERY = `
-  query GetAwardsPageData {
-    pages(where: { name: "awards" }) {
-      nodes {
+  query GetAwardsPageData($uri: String!) {
+    pageBy(uri: $uri) {
         awardsPageFields {
           awardsHeroTagline
           awardsHeroTitle
@@ -2148,7 +2146,6 @@ const AWARDS_PAGE_QUERY = `
           awardsCtaBtn1Text awardsCtaBtn1Url
           awardsCtaBtn2Text awardsCtaBtn2Url
         }
-      }
     }
   }
 `;
@@ -2198,10 +2195,10 @@ function transformAwardsPageData(f: any) {
   };
 }
 
-export async function getAwardsPageData(): Promise<ReturnType<typeof transformAwardsPageData> | null> {
+export async function getAwardsPageData(uri: string = "/awards/"): Promise<ReturnType<typeof transformAwardsPageData> | null> {
   try {
-    const raw = await fetchGraphQL(AWARDS_PAGE_QUERY);
-    const f = raw?.data?.pages?.nodes?.[0]?.awardsPageFields;
+    const raw = await fetchGraphQL(AWARDS_PAGE_QUERY, { uri });
+    const f = raw?.data?.pageBy?.awardsPageFields;
     if (!f) return null;
     return transformAwardsPageData(f);
   } catch (err) {
@@ -2213,9 +2210,8 @@ export async function getAwardsPageData(): Promise<ReturnType<typeof transformAw
 // ─── Vision Mission & Values Page ────────────────────────────────────────────
 
 const VMV_PAGE_QUERY = `
-  query GetVMVPageData {
-    pages(where: { title: "Vision Mission Values" }) {
-      nodes {
+  query GetVMVPageData($uri: String!) {
+    pageBy(uri: $uri) {
         visionMissionValuesPageFields {
           vmvHeroTagline
           vmvHeroTitle
@@ -2237,9 +2233,8 @@ const VMV_PAGE_QUERY = `
           vmvCtaDescription
           vmvCtaBtn1Text vmvCtaBtn1Url
           vmvCtaBtn2Text vmvCtaBtn2Url
-        }
-      }
     }
+  }
   }
 `;
 
@@ -2270,10 +2265,10 @@ function transformVMVPageData(f: any) {
   };
 }
 
-export async function getVMVPageData(): Promise<ReturnType<typeof transformVMVPageData> | null> {
+export async function getVMVPageData(uri: string = "/vision-mission-values/"): Promise<ReturnType<typeof transformVMVPageData> | null> {
   try {
-    const raw = await fetchGraphQL(VMV_PAGE_QUERY);
-    const f = raw?.data?.pages?.nodes?.[0]?.visionMissionValuesPageFields;
+    const raw = await fetchGraphQL(VMV_PAGE_QUERY, { uri });
+    const f = raw?.data?.pageBy?.visionMissionValuesPageFields;
     if (!f) return null;
     return transformVMVPageData(f);
   } catch (err) {
@@ -2285,9 +2280,8 @@ export async function getVMVPageData(): Promise<ReturnType<typeof transformVMVPa
 // ─── Leadership Page ─────────────────────────────────────────────────────────
 
 const LEADERSHIP_PAGE_QUERY = `
-  query GetLeadershipPageData {
-    pages(where: { title: "Leadership" }) {
-      nodes {
+  query GetLeadershipPageData($uri: String!) {
+    pageBy(uri: $uri) {
         leadershipPageFields {
           leadHeroTagline
           leadHeroTitle
@@ -2316,7 +2310,6 @@ const LEADERSHIP_PAGE_QUERY = `
           leadCtaBtn1Text leadCtaBtn1Url
           leadCtaBtn2Text leadCtaBtn2Url
         }
-      }
     }
   }
 `;
@@ -2359,10 +2352,10 @@ function transformLeadershipPageData(f: any) {
   };
 }
 
-export async function getLeadershipPageData(): Promise<ReturnType<typeof transformLeadershipPageData> | null> {
+export async function getLeadershipPageData(uri: string = "/leadership/"): Promise<ReturnType<typeof transformLeadershipPageData> | null> {
   try {
-    const raw = await fetchGraphQL(LEADERSHIP_PAGE_QUERY);
-    const f = raw?.data?.pages?.nodes?.[0]?.leadershipPageFields;
+    const raw = await fetchGraphQL(LEADERSHIP_PAGE_QUERY, { uri });
+    const f = raw?.data?.pageBy?.leadershipPageFields;
     if (!f) return null;
     return transformLeadershipPageData(f);
   } catch (err) {
@@ -2374,10 +2367,9 @@ export async function getLeadershipPageData(): Promise<ReturnType<typeof transfo
 // ─── Partnership Page ────────────────────────────────────────────────────────
 
 const PARTNERSHIP_PAGE_QUERY = `
-  query GetPartnershipPageData {
-    pages(where: { title: "Partnership" }) {
-      nodes {
-        partnershipPageFields {
+  query GetPartnershipPageData($uri: String!) {
+    pageBy(uri: $uri) {
+      partnershipPageFields {
           partHeroTagline
           partHeroTitle
           partHeroDescription
@@ -2435,7 +2427,6 @@ const PARTNERSHIP_PAGE_QUERY = `
           partCtaDescription
           partCtaEmail
         }
-      }
     }
   }
 `;
@@ -2501,14 +2492,14 @@ function transformPartnershipPageData(f: any) {
   };
 }
 
-export async function getPartnershipPageData(): Promise<ReturnType<typeof transformPartnershipPageData> | null> {
+export async function getPartnershipPageData(uri: string = "/partnership/"): Promise<ReturnType<typeof transformPartnershipPageData> | null> {
   try {
-    const raw = await fetchGraphQL(PARTNERSHIP_PAGE_QUERY);
-    const f = raw?.data?.pages?.nodes?.[0]?.partnershipPageFields;
+    const raw = await fetchGraphQL(PARTNERSHIP_PAGE_QUERY, { uri });
+    const f = raw?.data?.pageBy?.partnershipPageFields;
     if (!f) return null;
     return transformPartnershipPageData(f);
   } catch (err) {
-    console.warn("[WP] getPartnershipPageData() failed:", err);
+    console.warn(`[WP] getPartnershipPageData(${uri}) failed:`, err);
     return null;
   }
 }
@@ -4180,8 +4171,8 @@ export async function getIndustriesList(): Promise<IndustryItem[]> {
 // ─── Life at Hutech Query ────────────────────────────────────────────────────────
 
 const LIFE_AT_HUTECH_QUERY = `
-  query GetLifeAtHutechPage {
-    page(id: "life-at-hutech", idType: URI) {
+  query GetLifeAtHutechPage($uri: String!) {
+    page: pageBy(uri: $uri) {
       title
       lifeAtHutechSettings {
         heroEyebrow
@@ -4236,9 +4227,9 @@ export interface LifeAtHutechData {
   galleries: LifeGalleryPost[];
 }
 
-export async function getLifeAtHutechPage(): Promise<LifeAtHutechData | null> {
+export async function getLifeAtHutechPage(uri: string = "/life-at-hutech/"): Promise<LifeAtHutechData | null> {
   try {
-    const raw = await fetchGraphQL(LIFE_AT_HUTECH_QUERY);
+    const raw = await fetchGraphQL(LIFE_AT_HUTECH_QUERY, { uri });
     if (!raw?.data?.page) return null;
     
     const settings = raw.data.page.lifeAtHutechSettings || {};
@@ -4298,3 +4289,81 @@ export async function getLifeAtHutechPage(): Promise<LifeAtHutechData | null> {
   }
 }
 
+// ─── Standard Pages ────────────────────────────────────────────────────────────
+
+export type WpPage = {
+  title: string;
+  content: string | null;
+  date: string;
+  slug: string;
+  uri: string;
+  templateName?: string;
+  pageRoutingSettings?: {
+    nextjsTemplate?: string[] | string;
+  };
+};
+
+const PAGE_BY_URI_QUERY = `
+  query GetPageByUri($uri: String!) {
+    pageBy(uri: $uri) {
+      title
+      content
+      date
+      uri
+      slug
+      template {
+        templateName
+      }
+      pageRoutingSettings {
+        nextjsTemplate
+      }
+    }
+  }
+`;
+
+export async function getPageByUri(uri: string): Promise<WpPage | null> {
+  try {
+    const raw = await fetchGraphQL(PAGE_BY_URI_QUERY, { uri });
+    const pageNode = raw?.data?.pageBy;
+    if (!pageNode) return null;
+    
+    return {
+      title: pageNode.title,
+      content: pageNode.content,
+      date: new Date(pageNode.date).toLocaleDateString("en-US", {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+      }),
+      slug: pageNode.slug,
+      uri: pageNode.uri,
+      templateName: pageNode.template?.templateName,
+      pageRoutingSettings: pageNode.pageRoutingSettings,
+    };
+  } catch (err) {
+    console.warn(`[WP] getPageByUri(${uri}) failed:`, err);
+    return null;
+  }
+}
+
+const ALL_PAGE_URIS_QUERY = `
+  query GetAllPageUris {
+    pages(first: 100) {
+      nodes {
+        uri
+        slug
+      }
+    }
+  }
+`;
+
+export async function getAllPageUris(): Promise<{ uri: string, slug: string }[]> {
+  try {
+    const raw = await fetchGraphQL(ALL_PAGE_URIS_QUERY);
+    const nodes = raw?.data?.pages?.nodes || [];
+    return nodes.map((node: any) => ({ uri: node.uri, slug: node.slug }));
+  } catch (err) {
+    console.warn("[WP] getAllPageUris failed:", err);
+    return [];
+  }
+}
