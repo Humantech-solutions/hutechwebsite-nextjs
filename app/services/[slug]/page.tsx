@@ -2,15 +2,18 @@ import { getServiceBySlug, getBlogsByCategory, getServicesList } from "@/lib/wor
 import ServiceDetailClient from "./ServiceDetailClient";
 import { constructMetadata } from "@/lib/seo";
 
+export const revalidate = 60;
+
 export async function generateStaticParams() {
   const services = await getServicesList();
   
-  // These are the static hardcoded pages currently existing.
-  // We provide them as fallbacks if WP isn't fully populated yet.
+  // These are the static slugs provided as fallbacks if WP is unreachable during build
   const staticSlugs = [
     "ai-consulting", "ai-ml", "application-development-maintenance", 
     "cloud-transformation", "consulting", "cybersecurity", "data-engineering", 
-    "data-visualization-reporting", "devops", "ecommerce", "erp", "fintech", "iot"
+    "data-visualization-reporting", "devops", "ecommerce", "erp", "fintech", "iot",
+    "retail-consumer", "manufacturing", "logistics-supply-chain", "utilities-energy",
+    "healthcare-life-sciences", "banking-finance"
   ];
   
   const allSlugs = Array.from(new Set([...staticSlugs, ...services.map(s => s.slug)]));

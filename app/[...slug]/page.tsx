@@ -31,7 +31,7 @@ import {
 } from "@/lib/wordpress";
 import { Suspense } from "react";
 import PageClient from "./PageClient";
-import AboutClient from "@/app/company/about/PageClient";
+import AboutClient from "@/app/about/AboutClient";
 import PartnershipClient from "@/app/company/partnership/PartnershipClient";
 import LifeAtHutechClient from "@/app/company/life-at-hutech/PageClient";
 import LeadershipClient from "@/app/company/leadership/LeadershipClient";

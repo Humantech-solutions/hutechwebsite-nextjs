@@ -343,8 +343,7 @@ export default function AboutClient({
                 {/* Heading */}
                 <div>
                   <h2 className="text-[40px] md:text-[46px] font-bold leading-[1.1] text-white">
-                    Global<br />
-                    <span className="text-[#F99D1C]">Synergy.</span>
+                    {renderTitle(synergyTitle, "text-white", "text-[#F99D1C]", "text-[#0171c1]")}
                   </h2>
                   <div className="w-9 h-[3px] bg-[#F99D1C] mt-3" />
                 </div>
