@@ -83,7 +83,9 @@ export async function fetchGraphQL(query: string, variables = {}) {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ query, variables }),
-      next: { revalidate: process.env.NODE_ENV === "development" ? 0 : 60 },
+      ...(process.env.NODE_ENV === "development"
+        ? { cache: "no-store" }
+        : { next: { revalidate: 60 } }),
       signal: controller.signal,
     });
 
@@ -2038,65 +2040,76 @@ function transformAboutPageData(f: any) {
   const features = [1, 2, 3, 4].map(i => ({
     title: f[`overviewFeature${i}Title`] || "",
     desc:  f[`overviewFeature${i}Desc`] || "",
-    icon:  "" // Icons are static in AboutClient
+    icon:  ["Code2", "Cpu", "Fingerprint", "ShieldCheck"][i - 1] || "Code2"
   })).filter(feat => feat.title);
 
   const offices = [1, 2, 3, 4, 5].map(i => ({
-    id: f[`location${i}Name`]?.toLowerCase().replace(/\s+/g, '-') || `office-${i}`,
-    name: f[`location${i}Name`] || "",
+    id: (f[`location${i}Name`] || f[`location${i}City`] || `office-${i}`).toLowerCase().replace(/\s+/g, '-'),
+    name: f[`location${i}Name`] || f[`location${i}City`] || "",
     city: f[`location${i}City`] || "",
     type: f[`location${i}Type`] || "",
     details: f[`location${i}Details`] || "",
     lat: f[`location${i}Lat`] || "",
     lng: f[`location${i}Lng`] || ""
-  })).filter(loc => loc.name);
+  })).filter(loc => loc.city || loc.name);
 
   return {
-    heroTagline:    f.heroTagline    || "Corporate Profile",
-    heroTitle:      f.heroTitle      || "Architecting |Business Value.",
-    heroDescription:f.heroDescription|| "",
+    heroTagline:    f.heroTagline    || undefined,
+    heroTitle:      f.heroTitle      || undefined,
+    heroDescription:f.heroDescription|| undefined,
     heroBgImage:    imgUrl(f.heroBgImage) || undefined,
-    stats,
-    overviewTitle:  f.overviewTitle  || "Providing The Finest |Digital Experiences.",
-    overviewQuote:  f.overviewDescription || "",
-    features,
-    whatWeDoTitle:  f.whatWeDoTitle  || "What We Do",
-    whatWeDoDesc:   f.whatWeDoDesc   || "",
-    whatWeDoItems,
-    whoWeHelpTitle: f.whoWeHelpTitle || "Who We Help?",
-    whoWeHelpDesc:  f.whoWeHelpDesc  || "",
-    whoWeHelpItems,
-    whyChooseTitle: f.whyChooseUsTitle || "Why Choose Us",
-    whyChooseDesc:  f.whyChooseUsDesc  || "",
-    synergyTitle:   f.globalSynergyTitle || "Global |Synergy.",
-    synergyDesc:    f.globalSynergyDesc || "",
-    synergyStat1:   f.synergyStat1Label || "4 Global Offices",
-    synergyStat2:   f.synergyStat2Label || "90+ Member Team",
+    stats:          stats.length > 0 ? stats : undefined,
+    overviewTitle:  f.overviewTitle  || undefined,
+    overviewQuote:  f.overviewDescription || undefined,
+    features:       features.length > 0 ? features : undefined,
+    whatWeDoTitle:  f.whatWeDoTitle  || undefined,
+    whatWeDoDesc:   f.whatWeDoDesc   || undefined,
+    whatWeDoItems:  whatWeDoItems.length > 0 ? whatWeDoItems : undefined,
+    whoWeHelpTitle: f.whoWeHelpTitle || undefined,
+    whoWeHelpDesc:  f.whoWeHelpDesc  || undefined,
+    whoWeHelpItems: whoWeHelpItems.length > 0 ? whoWeHelpItems : undefined,
+    whyChooseTitle: f.whyChooseUsTitle || undefined,
+    whyChooseDesc:  f.whyChooseUsDesc  || undefined,
+    synergyTitle:   f.globalSynergyTitle || undefined,
+    synergyDesc:    f.globalSynergyDesc || undefined,
+    synergyStat1:   f.synergyStat1Label || undefined,
+    synergyStat2:   f.synergyStat2Label || undefined,
     // Map stats
-    mapTitle:       f.globalFootprintTitle || "Global Footprint, |Local Expertise.",
-    mapDescription: f.globalFootprintDesc || "",
-    mapStat1Value:  f.globalStat1Value  || "24/7",
-    mapStat1Label:  f.globalStat1Label  || "Operations",
-    mapStat2Value:  f.globalStat2Value  || "3",
-    mapStat2Label:  f.globalStat2Label  || "Continents",
-    offices,
-    historySubtitle:f.historySubtitle || "Corporate Evolution",
-    historyTitle:   f.historyTitle   || "Our |History.",
-    milestones,
+    mapTitle:       f.globalFootprintTitle || undefined,
+    mapDescription: f.globalFootprintDesc || undefined,
+    mapStat1Value:  f.globalStat1Value  || undefined,
+    mapStat1Label:  f.globalStat1Label  || undefined,
+    mapStat2Value:  f.globalStat2Value  || undefined,
+    mapStat2Label:  f.globalStat2Label  || undefined,
+    offices:        offices.length > 0 ? offices : undefined,
+    historySubtitle:f.historySubtitle || undefined,
+    historyTitle:   f.historyTitle   || undefined,
+    milestones:     milestones.length > 0 ? milestones : undefined,
     ctaBgImage:     imgUrl(f.ctaBgImage) || undefined,
-    ctaTitle:       f.ctaTitle       || "Join the Next |Digital Revolution.",
-    ctaDescription: f.ctaDescription || "",
-    ctaBtn1Text:    f.ctaButton1Text || "Start Your Project",
-    ctaBtn1Url:     f.ctaButton1Url  || "/contact",
-    ctaBtn2Text:    f.ctaButton2Text || "Executive Careers",
-    ctaBtn2Url:     f.ctaButton2Url  || "/careers",
+    ctaTitle:       f.ctaTitle       || undefined,
+    ctaDescription: f.ctaDescription || undefined,
+    ctaBtn1Text:    f.ctaButton1Text || undefined,
+    ctaBtn1Url:     f.ctaButton1Url  || undefined,
+    ctaBtn2Text:    f.ctaButton2Text || undefined,
+    ctaBtn2Url:     f.ctaButton2Url  || undefined,
   };
 }
 
 export async function getAboutPageData(uri: string = "/about/"): Promise<ReturnType<typeof transformAboutPageData> | null> {
   try {
-    const raw = await fetchGraphQL(ABOUT_PAGE_QUERY, { uri });
-    const f = raw?.data?.pageBy?.aboutPageFields;
+    let raw = await fetchGraphQL(ABOUT_PAGE_QUERY, { uri });
+    let f = raw?.data?.pageBy?.aboutPageFields;
+
+    if (!f && uri !== "/about/") {
+      raw = await fetchGraphQL(ABOUT_PAGE_QUERY, { uri: "/about/" });
+      f = raw?.data?.pageBy?.aboutPageFields;
+    }
+
+    if (!f && uri !== "about") {
+      raw = await fetchGraphQL(ABOUT_PAGE_QUERY, { uri: "about" });
+      f = raw?.data?.pageBy?.aboutPageFields;
+    }
+
     if (!f) return null;
     return transformAboutPageData(f);
   } catch (err) {

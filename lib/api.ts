@@ -280,12 +280,14 @@ export async function submitCareerForm(payload: CareerFormPayload): Promise<bool
 
 const RECRUIT_PRO_API_URL =
   process.env.RECRUIT_PRO_API_URL?.replace(/\/+$/, "") ||
-  "https://apis.test-recruitpro.hutechsolutions.in";
+  "https://apis.recruitpro.hutechsolutions.in";
 
 const RECRUIT_PRO_COMPANY_ID =
-  process.env.RECRUIT_PRO_COMPANY_ID || "4b805074-5fb0-4431-a7a3-30c38682e6c8";
+  process.env.RECRUIT_PRO_COMPANY_ID || "25d95f0d-4c7d-4f7c-acdc-dd37d8fa7d5a";
 
-const RECRUIT_PRO_TOKEN = process.env.RECRUIT_PRO_TOKEN || "";
+const RECRUIT_PRO_TOKEN =
+  process.env.RECRUIT_PRO_TOKEN ||
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIyOTE4YzU5MS01YTZlLTRmMmUtYTkyYy1lMzJlN2I3MmNhMjIiLCJlbWFpbCI6Imt1bWFydmt5NDcyQGdtYWlsLmNvbSIsInJvbGUiOiJhZG1pbiIsImNvbXBhbnlJZCI6Ijg5YzU0OTM5LTdiMjQtNGVkZC1hOTI4LWU1ZTBjZWQ2NzIxOSIsIm5hbWUiOiJWaWNreSBLdW1hciIsImlhdCI6MTc4NTc1NTYyOSwiZXhwIjoxNzg2MzYwNDI5fQ.EevbYy7p2Goe6S3AO-MnuuUCv-TiCGQAmN5CXwjjVrU";
 
 /** Raw shape returned by the RecruitPro API */
 export interface RecruitProJob {
@@ -381,27 +383,79 @@ function mapRecruitProJob(raw: RecruitProJob) {
 
 /**
  * Fetches all enabled jobs from the RecruitPro HR platform.
+ * Supports both Board and Company endpoints.
  * Falls back to an empty array on any network or parse error.
  */
 export async function getRecruitProJobs() {
   try {
-    const url = `${RECRUIT_PRO_API_URL}/api/jobs/company/${RECRUIT_PRO_COMPANY_ID}`;
-    const res = await fetch(url, {
-      headers: {
-        Authorization: `Bearer ${RECRUIT_PRO_TOKEN}`,
-        "Content-Type": "application/json",
-      },
-      next: { revalidate: 120 }, // ISR: refresh every 2 minutes
-    });
+    const rawUrl =
+      process.env.RECRUIT_PRO_API_URL?.replace(/\/+$/, "") ||
+      "https://apis.recruitpro.hutechsolutions.in";
+    const companyOrBoardId =
+      process.env.RECRUIT_PRO_COMPANY_ID || "25d95f0d-4c7d-4f7c-acdc-dd37d8fa7d5a";
+    const token =
+      process.env.RECRUIT_PRO_TOKEN ||
+      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIyOTE4YzU5MS01YTZlLTRmMmUtYTkyYy1lMzJlN2I3MmNhMjIiLCJlbWFpbCI6Imt1bWFydmt5NDcyQGdtYWlsLmNvbSIsInJvbGUiOiJhZG1pbiIsImNvbXBhbnlJZCI6Ijg5YzU0OTM5LTdiMjQtNGVkZC1hOTI4LWU1ZTBjZWQ2NzIxOSIsIm5hbWUiOiJWaWNreSBLdW1hciIsImlhdCI6MTc4NTc1NTYyOSwiZXhwIjoxNzg2MzYwNDI5fQ.EevbYy7p2Goe6S3AO-MnuuUCv-TiCGQAmN5CXwjjVrU";
 
-    if (!res.ok) {
-      console.warn("[RecruitPro] Failed to fetch jobs:", res.status);
-      return [];
+    // Extract companyId from JWT token if available
+    let tokenCompanyId = "";
+    try {
+      if (token && token.includes(".")) {
+        const payloadBase64 = token.split(".")[1];
+        const payloadJson = Buffer.from(payloadBase64, "base64").toString("utf-8");
+        const payload = JSON.parse(payloadJson);
+        tokenCompanyId = payload.companyId || "";
+      }
+    } catch {
+      // ignore JWT parse errors
     }
 
-    const data = await res.json();
-    const jobs: RecruitProJob[] = data?.jobs || [];
-    return jobs.filter((j) => j.enabled).map(mapRecruitProJob);
+    const baseHost = rawUrl.split("/api/")[0] || "https://apis.recruitpro.hutechsolutions.in";
+    const endpointsToTry: string[] = [];
+
+    if (rawUrl.includes("/api/jobs/")) {
+      endpointsToTry.push(rawUrl);
+    } else {
+      endpointsToTry.push(`${baseHost}/api/jobs/board/${companyOrBoardId}`);
+    }
+
+    if (tokenCompanyId && !endpointsToTry.some(u => u.includes(tokenCompanyId))) {
+      endpointsToTry.push(`${baseHost}/api/jobs/company/${tokenCompanyId}`);
+    }
+
+    const allRawJobs: RecruitProJob[] = [];
+    const seenIds = new Set<string>();
+
+    await Promise.all(
+      endpointsToTry.map(async (url) => {
+        try {
+          const res = await fetch(url, {
+            headers: {
+              Authorization: `Bearer ${token}`,
+              "Content-Type": "application/json",
+            },
+            next: { revalidate: 60 },
+          });
+
+          if (!res.ok) {
+            return;
+          }
+
+          const data = await res.json();
+          const jobs: RecruitProJob[] = data?.jobs || [];
+          for (const job of jobs) {
+            if (job && (job.id || job.slug) && !seenIds.has(job.id || job.slug)) {
+              seenIds.add(job.id || job.slug);
+              allRawJobs.push(job);
+            }
+          }
+        } catch {
+          // continue with other endpoints
+        }
+      })
+    );
+
+    return allRawJobs.filter((j) => j.enabled !== false).map(mapRecruitProJob);
   } catch (err) {
     console.warn("[RecruitPro] getRecruitProJobs error:", err);
     return [];
