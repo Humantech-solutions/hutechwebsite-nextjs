@@ -40,14 +40,11 @@ export default async function RootLayout({
            * user interaction. The CookieConsentProvider calls gtag("consent","update")
            * with the actual preferences as soon as consent is known.
            */}
-          <Script
-            id="google-consent-defaults"
-            strategy="beforeInteractive"
-          >{`
+          <Script id="google-consent-defaults" strategy="beforeInteractive">{`
             window.dataLayer = window.dataLayer || [];
             function gtag(){dataLayer.push(arguments);}
             gtag('consent', 'default', {
-              analytics_storage:       'denied',
+              analytics_storage:       'granted',
               ad_storage:              'denied',
               ad_user_data:            'denied',
               ad_personalization:      'denied',
@@ -67,7 +64,10 @@ export default async function RootLayout({
               window.dataLayer = window.dataLayer || [];
               function gtag(){dataLayer.push(arguments);}
               gtag('js', new Date());
-              gtag('config', 'G-CZ2CW8X92G');
+              gtag('config', 'G-CZ2CW8X92G', {
+                send_page_view: true,
+                debug_mode: true
+              });
             `}
           </Script>
 

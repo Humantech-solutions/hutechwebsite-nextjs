@@ -28,6 +28,7 @@ import {
   getPressReleasePageData,
   getHutechDocuments,
   getDocumentPageData,
+  getSitemapData,
 } from "@/lib/wordpress";
 import { Suspense } from "react";
 import PageClient from "./PageClient";
@@ -289,6 +290,12 @@ export default async function DynamicPage({ params }: PageProps) {
   // ── Insights ─────────────────────────────────────────────────────────────────
   if (activeTemplate === "insights" || activeTemplate === "insight") {
     return <InsightsClient />;
+  }
+
+  // ── Sitemap ──────────────────────────────────────────────────────────────────
+  if (activeTemplate === "sitemap" || page.slug === "sitemap" || slug.includes("sitemap")) {
+    const sitemapSections = await getSitemapData(uri);
+    return <PageClient page={page} sitemapSections={sitemapSections} />;
   }
 
   // ── Fallback: generic text/legal content page ─────────────────────────────────

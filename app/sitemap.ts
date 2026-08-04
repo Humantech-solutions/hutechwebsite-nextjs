@@ -6,87 +6,97 @@ import {
   getCaseStudies,
   getEvents,
   getServicesList,
+  getIndustriesList,
+  getNewsItems,
+  getPressReleases,
+  getHutechDocuments,
+  getAllPageUris,
 } from "@/lib/wordpress";
+import { getRecruitProJobs } from "@/lib/api";
 
 // Required for Next.js static export (output: "export") mode.
-// The sitemap is pre-rendered at build time using WordPress data (with .catch fallbacks).
 export const dynamic = "force-static";
 export const revalidate = false;
 
-
-const staticPaths = [
-  "/",
-  "/about/",
-  "/company/about/",
-  "/company/vision-mission-values/",
-  "/company/leadership/",
-  "/company/partnership/",
-  "/company/life-at-hutech/",
-  "/company/news/",
-  "/company/press-release/",
-  "/company/awards/",
-  "/careers/",
-  "/contact/",
-  "/industries/",
-  "/industries/banking-finance/",
-  "/industries/healthcare-life-sciences/",
-  "/industries/logistics-supply-chain/",
-  "/industries/manufacturing/",
-  "/industries/retail-consumer/",
-  "/industries/utilities-energy/",
-  "/products/",
-  "/resources/",
-  "/resources/blogs/",
-  "/resources/case-studies/",
-  "/resources/events/",
-  "/resources/hutech-documents/",
-  "/services/",
-  "/services/ai-consulting/",
-  "/services/ai-ml/",
-  "/services/application-development-maintenance/",
-  "/services/cloud-transformation/",
-  "/services/consulting/",
-  "/services/cybersecurity/",
-  "/services/data-engineering/",
-  "/services/data-visualization-reporting/",
-  "/services/devops/",
-  "/services/ecommerce/",
-  "/services/erp/",
-  "/services/fintech/",
-  "/services/iot/",
-  "/legal/code-of-conduct/",
-  "/legal/cookie-policy/",
-  "/legal/privacy/",
-  "/legal/sitemap/",
-  "/legal/terms/",
-];
-
 function url(path: string) {
-  return new URL(path, siteConfig.url).toString();
+  const cleanPath = path.startsWith("/") ? path : `/${path}`;
+  const normalizedPath = cleanPath.endsWith("/") ? cleanPath : `${cleanPath}/`;
+  return new URL(normalizedPath, siteConfig.url).toString();
 }
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const now = new Date();
-  const [blogs, caseStudies, events, jobs, services] = await Promise.all([
+  const [
+    blogs,
+    caseStudies,
+    events,
+    wpJobs,
+    recruitProJobs,
+    services,
+    industries,
+    newsItems,
+    pressReleases,
+    documents,
+    allWpPages,
+  ] = await Promise.all([
     getBlogs().catch(() => []),
     getCaseStudies().catch(() => []),
     getEvents().catch(() => []),
     getCareers().catch(() => []),
+    getRecruitProJobs().catch(() => []),
     getServicesList().catch(() => []),
+    getIndustriesList().catch(() => []),
+    getNewsItems().catch(() => []),
+    getPressReleases().catch(() => []),
+    getHutechDocuments().catch(() => []),
+    getAllPageUris().catch(() => []),
   ]);
 
+  // Root & section hub paths that exist
+  const basePaths = [
+    "/",
+    "/about/",
+    "/careers/",
+    "/contact/",
+    "/services/",
+    "/industries/",
+    "/resources/",
+    "/blogs/",
+    "/events/",
+    "/legal/sitemap/",
+  ];
+
+  // Live WordPress pages from getAllPageUris()
+  const wpPagePaths = allWpPages
+    .map((p) => p.uri)
+    .filter((uri) => uri && uri !== "/" && !uri.startsWith("/wp-"));
+
+  // Live dynamic paths only
   const dynamicPaths = [
+    ...basePaths,
+    ...wpPagePaths,
+    ...services.map((item) => `/services/${item.slug}/`),
+    ...industries.map((item) => `/industries/${item.slug}/`),
     ...blogs.map((item) => `/resources/blogs/${item.slug}/`),
     ...caseStudies.map((item) => `/resources/case-studies/${item.slug}/`),
-    ...events.map((item) => `/resources/events/${item.id || item.slug}/`),
-    ...jobs.map((item) => `/careers/${item.id}/`),
-    ...services.map((item) => `/services/${item.slug}/`),
+    ...events.map((item) => `/resources/events/${item.slug || item.id}/`),
+    ...events.map((item) => `/events/${item.slug || item.id}/`),
+    ...newsItems.map((item) => `/company/news/${item.id || item.slug}/`),
+    ...recruitProJobs.map((j) => `/careers/${j.id}/`),
+    ...wpJobs.map((j) => `/careers/${j.id}/`),
   ].filter(Boolean);
 
-  return Array.from(new Set([...staticPaths, ...dynamicPaths])).map((path) => ({
+  const allUniquePaths = Array.from(new Set(dynamicPaths));
+
+  return allUniquePaths.map((path) => ({
     url: url(path),
     lastModified: now,
     changeFrequency: path === "/" ? "weekly" : "monthly",
-    priority: path === "/" ? 1 : path.split("/").filter(Boolean).length > 1 ? 0.7 : 0.8,
+    priority:
+      path === "/"
+        ? 1
+        : path.split("/").filter(Boolean).length > 1
+        ? 0.7
+        : 0.8,
   }));
 }
