@@ -81,7 +81,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ...caseStudies.map((item) => `/resources/case-studies/${item.slug}/`),
     ...events.map((item) => `/resources/events/${item.slug || item.id}/`),
     ...events.map((item) => `/events/${item.slug || item.id}/`),
-    ...newsItems.map((item) => `/company/news/${item.id || item.slug}/`),
+    ...newsItems.map((item) => `/company/news/${item.id}/`),
     ...recruitProJobs.map((j) => `/careers/${j.id}/`),
     ...wpJobs.map((j) => `/careers/${j.id}/`),
   ].filter(Boolean);

@@ -43,8 +43,20 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
 export default async function Page({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
 
-  // 1. Try WordPress first
-  const wpBlog = await getBlogBySlug(id).catch(() => null);
+  // 1. Fetch WP blog & latest blogs in parallel
+  const [wpBlog, allWpBlogs] = await Promise.all([
+    getBlogBySlug(id).catch(() => null),
+    getBlogs().catch(() => []),
+  ]);
+
+  const latestBlogs = allWpBlogs.map((b) => ({
+    id: b.id,
+    slug: b.slug,
+    title: b.title,
+    category: b.category,
+    date: b.date,
+    path: `/resources/blogs/${b.slug}/`,
+  }));
 
   if (wpBlog) {
     // Convert WpBlog to the Blog shape BlogDetailClient expects
@@ -67,7 +79,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
       faqTitle: wpBlog.faqTitle,
       faqSubtitle: wpBlog.faqSubtitle,
     };
-    return <BlogDetailClient blog={blog as any} />;
+    return <BlogDetailClient blog={blog as any} latestBlogs={latestBlogs} />;
   }
 
   const staticBlog = BLOG_DATA[id];
@@ -75,5 +87,5 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
     notFound();
   }
 
-  return <BlogDetailClient blog={staticBlog} />;
+  return <BlogDetailClient blog={staticBlog} latestBlogs={latestBlogs} />;
 }

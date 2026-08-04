@@ -24,7 +24,22 @@ import { FAQAccordion } from "@/components/FAQAccordion";
 
 const BRAND_ORANGE = "#F99D1C";
 
-export default function BlogDetailClient({ blog }: { blog: Blog }) {
+export type LatestThinkingBlog = {
+  id?: string;
+  slug?: string;
+  title: string;
+  category: string;
+  date: string;
+  path?: string;
+};
+
+export default function BlogDetailClient({
+  blog,
+  latestBlogs,
+}: {
+  blog: Blog;
+  latestBlogs?: LatestThinkingBlog[];
+}) {
   if (!blog) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-white p-6">
@@ -40,6 +55,18 @@ export default function BlogDetailClient({ blog }: { blog: Blog }) {
   }
 
   const shareUrl = typeof window !== 'undefined' ? window.location.href.replace(window.location.origin, 'https://hutechsolutions.ai') : '';
+
+  // Filter out the currently viewed blog so it doesn't recommend itself
+  const currentSlugOrId = (blog as any).slug || blog.id || "";
+  const dynamicFiltered = (latestBlogs || []).filter(
+    (item) =>
+      item.slug !== currentSlugOrId &&
+      item.id !== currentSlugOrId &&
+      item.title !== blog.title
+  );
+
+  // Strictly only published posts from WordPress post type (no dummy static blogs)
+  const latestThinkingItems = dynamicFiltered.slice(0, 3);
 
   return (
     <div className="flex flex-col bg-white min-h-screen">
@@ -86,15 +113,6 @@ export default function BlogDetailClient({ blog }: { blog: Blog }) {
             </h1>
 
             <div className="flex flex-wrap items-center gap-10 pt-4 border-t border-white/10 w-fit pr-12">
-               {/* <div className="flex items-center gap-4">
-                  <div className="w-12 h-12 rounded-full bg-[#0171c1] flex items-center justify-center font-bold text-lg text-white">
-                    {blog.author.charAt(0)}
-                  </div>
-                  <div>
-                    <div className="text-sm font-bold text-white">{blog.author}</div>
-                    <div className="text-[10px] text-white/40 font-bold uppercase tracking-widest">{blog.role}</div>
-                  </div>
-               </div> */}
                <div className="flex items-center gap-4 border-l border-white/10 pl-10">
                   <Calendar className="text-[#F99D1C] w-5 h-5" />
                   <div>
@@ -223,32 +241,33 @@ export default function BlogDetailClient({ blog }: { blog: Blog }) {
             {/* Sidebar: Related Blogs */}
             <div className="lg:col-span-4 lg:pl-12">
               <div className="sticky top-32 space-y-12">
-                 <div className="space-y-8">
-                    <h4 className="text-xl font-bold text-[#001A3D] display-font border-b border-gray-100 pb-4">Latest Thinking</h4>
-                    <div className="space-y-8">
-                       {[
-                         { title: "Securing the Hybrid Cloud", category: "Cybersecurity", date: "Mar 05, 2026" },
-                         { title: "Data-Driven Logistics", category: "Logistics", date: "Feb 28, 2026" },
-                         { title: "The Rise of Edge Computing in IoT", category: "Technology", date: "Feb 15, 2026" }
-                       ].map((item, idx) => (
-                         <div key={idx} className="group cursor-pointer">
-                            <div className="text-[10px] text-[#F99D1C] font-bold uppercase tracking-widest mb-2 flex items-center gap-2">
-                               <Calendar size={12} /> {item.date}
-                            </div>
-                            <h5 className="font-bold text-[#001A3D] group-hover:text-[#0171c1] transition-colors leading-snug">
-                               {item.title}
-                            </h5>
-                            <div className="text-[10px] text-gray-400 font-bold uppercase tracking-widest mt-2">
-                               {item.category}
-                            </div>
-                            <div className="mt-4 flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-gray-300 group-hover:text-[#001A3D] transition-all">
-                               Read Article <ChevronRight size={14} />
-                            </div>
-                         </div>
-                       ))}
-                    </div>
-                 </div>
-
+                 {latestThinkingItems.length > 0 && (
+                   <div className="space-y-8">
+                      <h4 className="text-xl font-bold text-[#001A3D] display-font border-b border-gray-100 pb-4">Latest Thinking</h4>
+                      <div className="space-y-8">
+                         {latestThinkingItems.map((item, idx) => (
+                           <Link
+                             key={item.slug || item.id || idx}
+                             href={item.path || `/resources/blogs/${item.slug || item.id}/`}
+                             className="group block cursor-pointer"
+                           >
+                              <div className="text-[10px] text-[#F99D1C] font-bold uppercase tracking-widest mb-2 flex items-center gap-2">
+                                 <Calendar size={12} /> {item.date}
+                              </div>
+                              <h5 className="font-bold text-[#001A3D] group-hover:text-[#0171c1] transition-colors leading-snug">
+                                 {renderTitle(item.title)}
+                              </h5>
+                              <div className="text-[10px] text-gray-400 font-bold uppercase tracking-widest mt-2">
+                                 {item.category}
+                              </div>
+                              <div className="mt-4 flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-gray-300 group-hover:text-[#001A3D] transition-all">
+                                 Read Article <ChevronRight size={14} />
+                              </div>
+                           </Link>
+                         ))}
+                      </div>
+                   </div>
+                 )}
               </div>
             </div>
           </div>
@@ -257,3 +276,4 @@ export default function BlogDetailClient({ blog }: { blog: Blog }) {
     </div>
   );
 }
+
