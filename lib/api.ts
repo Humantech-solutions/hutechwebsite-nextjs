@@ -282,8 +282,8 @@ const RECRUIT_PRO_API_URL =
   process.env.RECRUIT_PRO_API_URL?.replace(/\/+$/, "") ||
   "https://apis.recruitpro.hutechsolutions.in";
 
-const RECRUIT_PRO_COMPANY_ID =
-  process.env.RECRUIT_PRO_COMPANY_ID || "25d95f0d-4c7d-4f7c-acdc-dd37d8fa7d5a";
+const RECRUIT_PRO_BOARD_ID =
+  process.env.RECRUIT_PRO_COMPANY_ID || "8bbf3624-215a-48a8-8eab-eb814fc60d48";
 
 const RECRUIT_PRO_TOKEN =
   process.env.RECRUIT_PRO_TOKEN ||
@@ -294,17 +294,18 @@ export interface RecruitProJob {
   id: string;
   title: string;
   slug: string;
-  description: string;
-  requirements: string;
-  location: string;
-  experience: string;
-  enabled: boolean;
-  createdAt: string;
-  createdBy: string;
-  createdByName: string;
-  companyId: string;
-  minCtc: string;
-  maxCtc: string;
+  description?: string;
+  requirements?: string;
+  location?: string;
+  experience?: string;
+  employmentType?: string;
+  enabled?: boolean;
+  createdAt?: string;
+  createdBy?: string;
+  createdByName?: string;
+  companyId?: string;
+  minCtc?: string;
+  maxCtc?: string;
 }
 
 /**
@@ -338,8 +339,8 @@ function mapRecruitProJob(raw: RecruitProJob) {
     department = "Data & AI";
   else if (titleLower.includes("devops") || titleLower.includes("cloud") || titleLower.includes("sre"))
     department = "DevOps & Cloud";
-  else if (titleLower.includes("manager") || titleLower.includes("lead") || titleLower.includes("senior"))
-    department = "Leadership";
+  else if (titleLower.includes("manager") || titleLower.includes("lead") || titleLower.includes("senior") || titleLower.includes("project"))
+    department = "Management";
 
   const ctcRange =
     raw.minCtc && raw.maxCtc
@@ -349,10 +350,10 @@ function mapRecruitProJob(raw: RecruitProJob) {
   return {
     // Core identity — use slug as ID so the URL is human-readable
     id: raw.slug || raw.id,
-    title: raw.title,
+    title: raw.title.trim(),
     department,
     location: raw.location || "Bangalore, India",
-    type: "Full-time",
+    type: raw.employmentType || "Full-time",
     tags: raw.experience ? [raw.experience, department] : [department],
 
     // Detail page fields
@@ -383,79 +384,38 @@ function mapRecruitProJob(raw: RecruitProJob) {
 
 /**
  * Fetches all enabled jobs from the RecruitPro HR platform.
- * Supports both Board and Company endpoints.
  * Falls back to an empty array on any network or parse error.
  */
 export async function getRecruitProJobs() {
   try {
     const rawUrl =
       process.env.RECRUIT_PRO_API_URL?.replace(/\/+$/, "") ||
-      "https://apis.recruitpro.hutechsolutions.in";
-    const companyOrBoardId =
-      process.env.RECRUIT_PRO_COMPANY_ID || "25d95f0d-4c7d-4f7c-acdc-dd37d8fa7d5a";
+      RECRUIT_PRO_API_URL;
+    const boardId =
+      process.env.RECRUIT_PRO_COMPANY_ID || RECRUIT_PRO_BOARD_ID;
     const token =
-      process.env.RECRUIT_PRO_TOKEN ||
-      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIyOTE4YzU5MS01YTZlLTRmMmUtYTkyYy1lMzJlN2I3MmNhMjIiLCJlbWFpbCI6Imt1bWFydmt5NDcyQGdtYWlsLmNvbSIsInJvbGUiOiJhZG1pbiIsImNvbXBhbnlJZCI6Ijg5YzU0OTM5LTdiMjQtNGVkZC1hOTI4LWU1ZTBjZWQ2NzIxOSIsIm5hbWUiOiJWaWNreSBLdW1hciIsImlhdCI6MTc4NTc1NTYyOSwiZXhwIjoxNzg2MzYwNDI5fQ.EevbYy7p2Goe6S3AO-MnuuUCv-TiCGQAmN5CXwjjVrU";
+      process.env.RECRUIT_PRO_TOKEN || RECRUIT_PRO_TOKEN;
 
-    // Extract companyId from JWT token if available
-    let tokenCompanyId = "";
-    try {
-      if (token && token.includes(".")) {
-        const payloadBase64 = token.split(".")[1];
-        const payloadJson = Buffer.from(payloadBase64, "base64").toString("utf-8");
-        const payload = JSON.parse(payloadJson);
-        tokenCompanyId = payload.companyId || "";
-      }
-    } catch {
-      // ignore JWT parse errors
+    const url = rawUrl.includes("/api/jobs/")
+      ? rawUrl
+      : `${rawUrl}/api/jobs/board/${boardId}`;
+
+    const res = await fetch(url, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+      next: { revalidate: 60 },
+    });
+
+    if (!res.ok) {
+      console.warn("[RecruitPro] Failed to fetch jobs:", res.status, "from URL:", url);
+      return [];
     }
 
-    const baseHost = rawUrl.split("/api/")[0] || "https://apis.recruitpro.hutechsolutions.in";
-    const endpointsToTry: string[] = [];
-
-    if (rawUrl.includes("/api/jobs/")) {
-      endpointsToTry.push(rawUrl);
-    } else {
-      endpointsToTry.push(`${baseHost}/api/jobs/board/${companyOrBoardId}`);
-    }
-
-    if (tokenCompanyId && !endpointsToTry.some(u => u.includes(tokenCompanyId))) {
-      endpointsToTry.push(`${baseHost}/api/jobs/company/${tokenCompanyId}`);
-    }
-
-    const allRawJobs: RecruitProJob[] = [];
-    const seenIds = new Set<string>();
-
-    await Promise.all(
-      endpointsToTry.map(async (url) => {
-        try {
-          const res = await fetch(url, {
-            headers: {
-              Authorization: `Bearer ${token}`,
-              "Content-Type": "application/json",
-            },
-            next: { revalidate: 60 },
-          });
-
-          if (!res.ok) {
-            return;
-          }
-
-          const data = await res.json();
-          const jobs: RecruitProJob[] = data?.jobs || [];
-          for (const job of jobs) {
-            if (job && (job.id || job.slug) && !seenIds.has(job.id || job.slug)) {
-              seenIds.add(job.id || job.slug);
-              allRawJobs.push(job);
-            }
-          }
-        } catch {
-          // continue with other endpoints
-        }
-      })
-    );
-
-    return allRawJobs.filter((j) => j.enabled !== false).map(mapRecruitProJob);
+    const data = await res.json();
+    const jobs: RecruitProJob[] = data?.jobs || [];
+    return jobs.filter((j) => j.enabled !== false).map(mapRecruitProJob);
   } catch (err) {
     console.warn("[RecruitPro] getRecruitProJobs error:", err);
     return [];
@@ -463,13 +423,13 @@ export async function getRecruitProJobs() {
 }
 
 /**
- * Finds a single job by slug from the RecruitPro HR platform.
+ * Finds a single job by slug or ID from the RecruitPro HR platform.
  * Returns null if not found or on error.
  */
 export async function getRecruitProJobBySlug(slug: string) {
   try {
     const jobs = await getRecruitProJobs();
-    return jobs.find((j) => j.id === slug || j.id === slug) || null;
+    return jobs.find((j) => j.id === slug) || null;
   } catch (err) {
     console.warn("[RecruitPro] getRecruitProJobBySlug error:", err);
     return null;

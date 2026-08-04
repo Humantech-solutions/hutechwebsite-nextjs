@@ -4380,3 +4380,297 @@ export async function getAllPageUris(): Promise<{ uri: string, slug: string }[]>
     return [];
   }
 }
+
+// ─── Sitemap Dynamic Query & Types ─────────────────────────────────────────────
+
+export type SitemapLink = {
+  name: string;
+  path: string;
+};
+
+export type SitemapSection = {
+  title: string;
+  links: SitemapLink[];
+};
+
+const SITEMAP_GRAPHQL_QUERY = `
+  query GetSitemapData {
+    menus {
+      nodes {
+        id
+        name
+        slug
+        locations
+        menuItems(first: 100) {
+          nodes {
+            id
+            label
+            url
+            path
+            parentId
+          }
+        }
+      }
+    }
+    pages(first: 100) {
+      nodes {
+        id
+        title
+        slug
+        uri
+      }
+    }
+    hutechServices(first: 100) {
+      nodes {
+        title
+        slug
+        serviceCategories {
+          nodes {
+            slug
+          }
+        }
+      }
+    }
+    posts(first: 50) {
+      nodes {
+        title
+        slug
+      }
+    }
+    caseStudies(first: 50) {
+      nodes {
+        title
+        slug
+      }
+    }
+    hutechEvents(first: 50) {
+      nodes {
+        title
+        slug
+      }
+    }
+    hutechDocuments(first: 50) {
+      nodes {
+        title
+        slug
+      }
+    }
+  }
+`;
+
+function cleanSitemapTitle(title: string): string {
+  return (title || "").replace(/\^/g, "").replace(/\|/g, "").trim();
+}
+
+function normalizeSitemapPath(rawPath: string): string {
+  if (!rawPath) return "#";
+  if (rawPath.startsWith("http")) {
+    try {
+      const parsed = new URL(rawPath);
+      return parsed.pathname.replace(/^\/hutech-website/, "") || "/";
+    } catch {
+      return rawPath;
+    }
+  }
+  return rawPath.replace(/^\/hutech-website/, "") || "/";
+}
+
+export async function getSitemapData(pageUri: string = "/legal/sitemap/"): Promise<SitemapSection[]> {
+  try {
+    const raw = await fetchGraphQL(SITEMAP_GRAPHQL_QUERY);
+    const data = raw?.data || {};
+    const menus = data.menus?.nodes || [];
+
+    // 1. Check for dedicated WordPress Sitemap menu
+    const sitemapMenu = menus.find(
+      (m: any) =>
+        m.slug?.toLowerCase().includes("sitemap") ||
+        m.name?.toLowerCase().includes("sitemap")
+    );
+
+    if (sitemapMenu && sitemapMenu.menuItems?.nodes?.length > 0) {
+      const items: any[] = sitemapMenu.menuItems.nodes;
+      const topLevel = items.filter((i) => !i.parentId);
+      const hasChildren = items.some((i) => i.parentId);
+
+      if (hasChildren && topLevel.length > 0) {
+        const sections: SitemapSection[] = topLevel
+          .map((parent) => {
+            const children = items.filter((i) => i.parentId === parent.id);
+            return {
+              title: cleanSitemapTitle(parent.label),
+              links: children.map((c) => ({
+                name: cleanSitemapTitle(c.label),
+                path: normalizeSitemapPath(c.path || c.url),
+              })),
+            };
+          })
+          .filter((s) => s.links.length > 0);
+
+        if (sections.length > 0) return sections;
+      } else {
+        return [
+          {
+            title: cleanSitemapTitle(sitemapMenu.name || "Sitemap"),
+            links: items.map((i) => ({
+              name: cleanSitemapTitle(i.label),
+              path: normalizeSitemapPath(i.path || i.url),
+            })),
+          },
+        ];
+      }
+    }
+
+    // 2. Check for ACF sitemap fields on the page via REST if configured
+    if (WORDPRESS_BASE_URL) {
+      try {
+        const restRes = await fetch(`${WORDPRESS_BASE_URL}/wp-json/wp/v2/pages?slug=sitemap`, {
+          next: { revalidate: 60 },
+        });
+        if (restRes.ok) {
+          const pageJson = await restRes.json();
+          const acf = pageJson?.[0]?.acf;
+          
+          // ACF Repeater: sitemap_sections or sections
+          const acfSections = acf?.sitemap_sections || acf?.sitemapSections || acf?.sections;
+          if (Array.isArray(acfSections) && acfSections.length > 0) {
+            const parsedAcfSections: SitemapSection[] = acfSections.map((sec: any) => ({
+              title: cleanSitemapTitle(sec.title || sec.section_title || sec.sectionTitle || "Section"),
+              links: (sec.links || sec.items || []).map((lnk: any) => ({
+                name: cleanSitemapTitle(lnk.name || lnk.label || lnk.title || "Link"),
+                path: normalizeSitemapPath(lnk.path || lnk.url || lnk.link || "#"),
+              })),
+            })).filter((s) => s.links.length > 0);
+
+            if (parsedAcfSections.length > 0) return parsedAcfSections;
+          }
+
+          // ACF Menu selector: sitemap_menu
+          const selectedMenuSlug = acf?.sitemap_menu || acf?.sitemapMenu || acf?.menu;
+          if (selectedMenuSlug) {
+            const matchedMenu = menus.find((m: any) => m.slug === selectedMenuSlug || m.name === selectedMenuSlug || m.id === selectedMenuSlug);
+            if (matchedMenu && matchedMenu.menuItems?.nodes?.length > 0) {
+              const items: any[] = matchedMenu.menuItems.nodes;
+              const topLevel = items.filter((i) => !i.parentId);
+              if (topLevel.length > 0 && items.some((i) => i.parentId)) {
+                return topLevel.map((parent) => ({
+                  title: cleanSitemapTitle(parent.label),
+                  links: items.filter((i) => i.parentId === parent.id).map((c) => ({
+                    name: cleanSitemapTitle(c.label),
+                    path: normalizeSitemapPath(c.path || c.url),
+                  })),
+                })).filter((s) => s.links.length > 0);
+              }
+            }
+          }
+        }
+      } catch (e) {
+        // Continue to dynamic fallback
+      }
+    }
+
+    // 3. Dynamic Fallback: Query ONLY live content from WordPress
+    const pages: any[] = data.pages?.nodes || [];
+    const services: any[] = data.hutechServices?.nodes || [];
+    const posts: any[] = data.posts?.nodes || [];
+    const caseStudies: any[] = data.caseStudies?.nodes || [];
+    const events: any[] = data.hutechEvents?.nodes || [];
+    const documents: any[] = data.hutechDocuments?.nodes || [];
+
+    // Company pages (ordered logically)
+    const companyOrder = [
+      "/about/",
+      "/vision-mission-values/",
+      "/leadership/",
+      "/partnership/",
+      "/life-at-hutech/",
+      "/news/",
+      "/press-release/",
+      "/awards/",
+      "/careers/",
+      "/graduates/",
+      "/contact/",
+    ];
+
+    const companyPages = pages
+      .filter((p) => {
+        const u = p.uri || "";
+        return u.startsWith("/company/") || companyOrder.includes(u);
+      })
+      .sort((a, b) => {
+        const indexA = companyOrder.indexOf(a.uri);
+        const indexB = companyOrder.indexOf(b.uri);
+        if (indexA !== -1 && indexB !== -1) return indexA - indexB;
+        if (indexA !== -1) return -1;
+        if (indexB !== -1) return 1;
+        return a.title.localeCompare(b.title);
+      })
+      .map((p) => ({
+        name: cleanSitemapTitle(p.title),
+        path: p.uri,
+      }));
+
+    // Services vs Industries
+    const liveServices: SitemapLink[] = [];
+    const liveIndustries: SitemapLink[] = [];
+
+    services.forEach((s) => {
+      const cats = s.serviceCategories?.nodes?.map((c: any) => c.slug?.toLowerCase()) || [];
+      if (cats.includes("industries") || cats.includes("industry")) {
+        liveIndustries.push({
+          name: cleanSitemapTitle(s.title),
+          path: `/industries/${s.slug}`,
+        });
+      } else {
+        liveServices.push({
+          name: cleanSitemapTitle(s.title),
+          path: `/services/${s.slug}`,
+        });
+      }
+    });
+
+    // Resources
+    const liveResources: SitemapLink[] = [];
+    const hasBlogsPage = pages.some((p) => p.uri === "/blogs/" || p.uri === "/resources/blogs/");
+    if (hasBlogsPage || posts.length > 0) {
+      liveResources.push({ name: "Blogs", path: "/blogs" });
+    }
+    const hasCsPage = pages.some((p) => p.uri === "/case-studies/" || p.uri === "/resources/case-studies/");
+    if (hasCsPage || caseStudies.length > 0) {
+      liveResources.push({ name: "Case Studies", path: "/resources/case-studies" });
+    }
+    const hasEventsPage = pages.some((p) => p.uri === "/events/" || p.uri === "/resources/events/");
+    if (hasEventsPage || events.length > 0) {
+      liveResources.push({ name: "Events", path: "/events" });
+    }
+    const hasDocsPage = pages.some((p) => p.uri === "/hutech-documents/" || p.uri === "/resources/hutech-documents/");
+    if (hasDocsPage || documents.length > 0) {
+      liveResources.push({ name: "Hutech Documents", path: "/hutech-documents" });
+    }
+
+    // Legal Pages
+    const legalPages = pages
+      .filter((p) => {
+        const u = p.uri || "";
+        return u.startsWith("/legal/") || ["/legal/terms/", "/legal/privacy/", "/legal/sitemap/"].includes(u);
+      })
+      .map((p) => ({
+        name: cleanSitemapTitle(p.title),
+        path: p.uri,
+      }));
+
+    const sections: SitemapSection[] = [
+      { title: "Company", links: companyPages },
+      { title: "Services", links: liveServices },
+      { title: "Industries", links: liveIndustries },
+      { title: "Resources", links: liveResources },
+      { title: "Legal & Policies", links: legalPages },
+    ].filter((s) => s.links && s.links.length > 0);
+
+    return sections;
+  } catch (err) {
+    console.warn("[WP] getSitemapData failed:", err);
+    return [];
+  }
+}
+
