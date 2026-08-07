@@ -100,9 +100,9 @@ export default function BlogsClient({ blogs, pageTitle, pageDescription, bgImage
                         <span className="flex items-center gap-1">
                           <Calendar size={14} /> {blog.date}
                         </span>
-                        <span className="flex items-center gap-1">
+                        {/* <span className="flex items-center gap-1">
                           <User size={14} /> {blog.author}
-                        </span>
+                        </span> */}
                       </div>
                       <h3 className="display-font text-2xl font-bold text-[#001A3D] transition-colors group-hover:text-[#F99D1C]">
                         {blog.title}
