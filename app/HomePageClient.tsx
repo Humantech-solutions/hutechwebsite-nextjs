@@ -29,6 +29,8 @@ import {
   Star
 } from "lucide-react";
 import Slider from "react-slick";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
 import useEmblaCarousel from "embla-carousel-react";
 import AutoScroll from "embla-carousel-auto-scroll";
 import { ImageWithFallback } from "@/components/figma/ImageWithFallback";

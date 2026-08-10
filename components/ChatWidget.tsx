@@ -4,7 +4,6 @@ import React, { useState, useEffect, useRef } from "react";
 import { motion as Motion, AnimatePresence } from "framer-motion";
 import { MessageCircle, X } from "lucide-react";
 import dynamic from "next/dynamic";
-import lottie from "lottie-web";
 
 const LottieAvatar = () => {
   const containerRef = useRef<HTMLDivElement | null>(null);
@@ -13,11 +12,13 @@ const LottieAvatar = () => {
     let anim: any = null;
     let cancelled = false;
     
-    fetch('/husqy-avatar.json')
-      .then(res => res.json())
-      .then(data => {
-        if (cancelled || !containerRef.current || !data.v) return;
-        anim = lottie.loadAnimation({
+    Promise.all([
+      import("lottie-web").then(m => m.default || m),
+      fetch('/husqy-avatar.json').then(res => res.json())
+    ])
+      .then(([lottieInstance, data]) => {
+        if (cancelled || !containerRef.current || !data?.v) return;
+        anim = lottieInstance.loadAnimation({
           container: containerRef.current,
           renderer: 'svg',
           loop: true,

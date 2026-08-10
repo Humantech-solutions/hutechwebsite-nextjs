@@ -3272,6 +3272,7 @@ const NEWS_LIST_QUERY = `
           newsDate
           newsAuthor
           newsRole
+          newsSource
         }
       }
     }
@@ -3304,6 +3305,7 @@ const NEWS_DETAIL_QUERY = `
         newsDate
         newsAuthor
         newsRole
+        newsSource
       }
     }
   }
@@ -3318,6 +3320,7 @@ export interface NewsItem {
   desc?: string;
   author: string;
   role: string;
+  source?: string;
   image?: string;
   contentHtml?: string;
   tags: string[];
@@ -3357,8 +3360,9 @@ function transformNewsNode(node: any): NewsItem {
     category,
     readTime,
     desc: desc || undefined,
-    author: f.newsAuthor || "Elena Vance",
-    role: f.newsRole || "Corporate Communications",
+    author: f.newsAuthor || "",
+    role: f.newsRole || "",
+    source: f.newsSource || f.newsAuthor || "",
     image: imgUrl(node.featuredImage) || undefined,
     contentHtml: rawContent || undefined,
     tags: tags.length > 0 ? tags : ["News"],
