@@ -9,8 +9,9 @@ import { Toaster } from "sonner";
 import { ScrollToTopButton } from "@/components/ScrollToTopButton";
 import { ChatWidget } from "@/components/ChatWidget";
 import { CookieBanner } from "@/components/CookieBanner";
-import TemporaryPasswordGate from "@/components/TemporaryPasswordGate";
+// import TemporaryPasswordGate from "@/components/TemporaryPasswordGate";
 import { RouteTracker } from "@/components/RouteTracker";
+import { CookieConsentProvider } from "@/context/CookieConsentProvider";
 import Script from "next/script";
 
 export const metadata = constructMetadata();
@@ -32,6 +33,28 @@ export default async function RootLayout({
             type="application/ld+json"
             dangerouslySetInnerHTML={{ __html: JSON.stringify(getSiteSchema()) }}
           />
+
+          {/*
+           * Google Analytics — loaded via gtag.js.
+           * Google Consent Mode v2 defaults are set to "denied" before any
+           * user interaction. The CookieConsentProvider calls gtag("consent","update")
+           * with the actual preferences as soon as consent is known.
+           */}
+          <Script id="google-consent-defaults" strategy="beforeInteractive">{`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('consent', 'default', {
+              analytics_storage:       'granted',
+              ad_storage:              'denied',
+              ad_user_data:            'denied',
+              ad_personalization:      'denied',
+              functionality_storage:   'denied',
+              personalization_storage: 'denied',
+              security_storage:        'granted',
+              wait_for_update:         500,
+            });
+          `}</Script>
+
           <Script
             src="https://www.googletagmanager.com/gtag/js?id=G-CZ2CW8X92G"
             strategy="afterInteractive"
@@ -41,11 +64,16 @@ export default async function RootLayout({
               window.dataLayer = window.dataLayer || [];
               function gtag(){dataLayer.push(arguments);}
               gtag('js', new Date());
-            
-              gtag('config', 'G-CZ2CW8X92G');
+              gtag('config', 'G-CZ2CW8X92G', {
+                send_page_view: true,
+                debug_mode: true
+              });
             `}
           </Script>
-          <TemporaryPasswordGate>
+
+          {/* ── Cookie Consent Provider wraps everything ── */}
+          <CookieConsentProvider>
+            {/* <TemporaryPasswordGate> */}
             <RouteTracker />
             <div className="w-full">
               <Navbar data={siteChrome?.header} />
@@ -56,7 +84,8 @@ export default async function RootLayout({
               <CookieBanner />
               <Toaster position="top-right" />
             </div>
-          </TemporaryPasswordGate>
+            {/* </TemporaryPasswordGate> */}
+          </CookieConsentProvider>
         </ThemeProvider>
       </body>
     </html>

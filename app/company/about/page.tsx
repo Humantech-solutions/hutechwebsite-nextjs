@@ -1,3 +1,5 @@
+import { getAboutPageData } from "@/lib/wordpress";
+import AboutClient from "@/app/about/AboutClient";
 import { constructMetadata } from "@/lib/seo";
 
 export const metadata = constructMetadata({
@@ -6,4 +8,7 @@ export const metadata = constructMetadata({
   path: "/company/about/",
 });
 
-export { default } from "./PageClient";
+export default async function AboutCompanyPage() {
+  const wpData = await getAboutPageData("/company/about/");
+  return <AboutClient {...(wpData ?? {})} />;
+}

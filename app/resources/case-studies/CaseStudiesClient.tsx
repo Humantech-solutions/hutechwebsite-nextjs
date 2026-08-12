@@ -157,7 +157,7 @@ export default function CaseStudiesClient({
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
                     transition={{ delay: i * 0.1 }}
-                    className="group flex h-full flex-col overflow-hidden rounded-[2.5rem] bg-gray-50 transition-all duration-500 hover:bg-[#001A3D]"
+                    className="group flex h-full flex-col overflow-hidden rounded-[15px] md:rounded-[2.5rem] bg-gray-50 transition-all duration-500 hover:bg-[#001A3D]"
                   >
                     <Link
                       href={`/resources/case-studies/${study.slug}`}
@@ -207,7 +207,7 @@ export default function CaseStudiesClient({
                 ))}
               </div>
             ) : (
-              <div className="rounded-[4rem] border border-gray-100 bg-white py-40 text-center shadow-sm">
+              <div className="rounded-[15px] md:rounded-[4rem] border border-gray-100 bg-white py-40 text-center shadow-sm">
                 <div className="mx-auto mb-8 flex h-24 w-24 items-center justify-center rounded-full bg-gray-50">
                   <Search size={40} className="text-gray-200" />
                 </div>

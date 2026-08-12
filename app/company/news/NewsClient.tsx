@@ -129,7 +129,7 @@ export default function NewsClient({
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ delay: i * 0.1, duration: 0.6 }}
-                  className="group relative flex flex-col md:flex-row md:items-center gap-6 md:gap-12 py-12 px-6 md:px-12 bg-transparent hover:bg-white hover:shadow-[0_20px_50px_rgba(0,0,0,0.03)] rounded-3xl transition-all duration-500 border-b border-gray-200/80 last:border-b-0 -mx-6 md:-mx-12"
+                  className="group relative flex flex-col md:flex-row md:items-center gap-6 md:gap-12 py-12 px-6 md:px-12 bg-transparent hover:bg-white hover:shadow-[0_20px_50px_rgba(0,0,0,0.03)] rounded-[15px] md:rounded-3xl transition-all duration-500 border-b border-gray-200/80 last:border-b-0 -mx-6 md:-mx-12"
                 >
                   {/* Left Column */}
                   <div className="w-full md:w-[260px] md:shrink-0 flex flex-col gap-1 md:gap-2">
@@ -173,7 +173,7 @@ export default function NewsClient({
       {/* Corporate Communications CTA */}
       <section className="pb-24">
         <div className="mx-auto max-w-[1280px] px-6 lg:px-20">
-          <div className="relative space-y-8 overflow-hidden rounded-[3rem] bg-[#001A3D] p-12 text-center md:p-20">
+          <div className="relative space-y-8 overflow-hidden rounded-[15px] md:rounded-[3rem] bg-[#001A3D] p-12 text-center md:p-20">
             <div className="absolute top-0 right-0 -mt-32 -mr-32 h-64 w-64 rounded-full bg-[#0171c1]/20 blur-[100px]"></div>
             <div className="relative z-10 mx-auto max-w-3xl space-y-6">
               <h2 className="display-font text-3xl font-bold text-white md:text-5xl">

@@ -83,7 +83,9 @@ export async function fetchGraphQL(query: string, variables = {}) {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ query, variables }),
-      next: { revalidate: 60 },
+      ...(process.env.NODE_ENV === "development"
+        ? { cache: "no-store" }
+        : { next: { revalidate: 60 } }),
       signal: controller.signal,
     });
 
@@ -336,8 +338,8 @@ const ACCORDION_FIELDS = `
 `;
 
 const HOMEPAGE_QUERY = `
-  query GetHomePage {
-    page(id: "home", idType: URI) {
+  query GetHomePage($uri: String!) {
+    pageBy(uri: $uri) {
       id
       title
       homepageFields {
@@ -371,14 +373,14 @@ const HOMEPAGE_QUERY = `
         capabilities {
           title
           description
-          capability_1 { name image { node { sourceUrl } } color url }
-          capability_2 { name image { node { sourceUrl } } color url }
-          capability_3 { name image { node { sourceUrl } } color url }
-          capability_4 { name image { node { sourceUrl } } color url }
-          capability_5 { name image { node { sourceUrl } } color url }
-          capability_6 { name image { node { sourceUrl } } color url }
-          capability_7 { name image { node { sourceUrl } } color url }
-          capability_8 { name image { node { sourceUrl } } color url }
+          capability_1 { name image { node { sourceUrl } } description url }
+          capability_2 { name image { node { sourceUrl } } description url }
+          capability_3 { name image { node { sourceUrl } } description url }
+          capability_4 { name image { node { sourceUrl } } description url }
+          capability_5 { name image { node { sourceUrl } } description url }
+          capability_6 { name image { node { sourceUrl } } description url }
+          capability_7 { name image { node { sourceUrl } } description url }
+          capability_8 { name image { node { sourceUrl } } description url }
         }
         awards {
           title
@@ -426,6 +428,62 @@ const HOMEPAGE_QUERY = `
         }
         techStack {
           title
+          description
+          category_1 {
+            categoryName
+            technology_1 { name icon { node { sourceUrl } } }
+            technology_2 { name icon { node { sourceUrl } } }
+            technology_3 { name icon { node { sourceUrl } } }
+            technology_4 { name icon { node { sourceUrl } } }
+            technology_5 { name icon { node { sourceUrl } } }
+            technology_6 { name icon { node { sourceUrl } } }
+            technology_7 { name icon { node { sourceUrl } } }
+            technology_8 { name icon { node { sourceUrl } } }
+          }
+          category_2 {
+            categoryName
+            technology_1 { name icon { node { sourceUrl } } }
+            technology_2 { name icon { node { sourceUrl } } }
+            technology_3 { name icon { node { sourceUrl } } }
+            technology_4 { name icon { node { sourceUrl } } }
+            technology_5 { name icon { node { sourceUrl } } }
+            technology_6 { name icon { node { sourceUrl } } }
+            technology_7 { name icon { node { sourceUrl } } }
+            technology_8 { name icon { node { sourceUrl } } }
+          }
+          category_3 {
+            categoryName
+            technology_1 { name icon { node { sourceUrl } } }
+            technology_2 { name icon { node { sourceUrl } } }
+            technology_3 { name icon { node { sourceUrl } } }
+            technology_4 { name icon { node { sourceUrl } } }
+            technology_5 { name icon { node { sourceUrl } } }
+            technology_6 { name icon { node { sourceUrl } } }
+            technology_7 { name icon { node { sourceUrl } } }
+            technology_8 { name icon { node { sourceUrl } } }
+          }
+          category_4 {
+            categoryName
+            technology_1 { name icon { node { sourceUrl } } }
+            technology_2 { name icon { node { sourceUrl } } }
+            technology_3 { name icon { node { sourceUrl } } }
+            technology_4 { name icon { node { sourceUrl } } }
+            technology_5 { name icon { node { sourceUrl } } }
+            technology_6 { name icon { node { sourceUrl } } }
+            technology_7 { name icon { node { sourceUrl } } }
+            technology_8 { name icon { node { sourceUrl } } }
+          }
+          category_5 {
+            categoryName
+            technology_1 { name icon { node { sourceUrl } } }
+            technology_2 { name icon { node { sourceUrl } } }
+            technology_3 { name icon { node { sourceUrl } } }
+            technology_4 { name icon { node { sourceUrl } } }
+            technology_5 { name icon { node { sourceUrl } } }
+            technology_6 { name icon { node { sourceUrl } } }
+            technology_7 { name icon { node { sourceUrl } } }
+            technology_8 { name icon { node { sourceUrl } } }
+          }
         }
         whyHutech {
           title
@@ -475,6 +533,8 @@ export interface WpNewsItem {
   title?: string;
   date?: string;
   image?: any;
+  slug?: string;
+  imageUrl?: string;
 }
 
 export interface WpAccordionItem {
@@ -485,6 +545,7 @@ export interface WpAccordionItem {
 export interface WpCapability {
   name?: string;
   image?: any;
+  description?: string;
   color?: string;
   url?: string;
 }
@@ -554,6 +615,14 @@ export interface HomepageData {
   };
   techStack?: {
     title?: string;
+    description?: string;
+    categories?: {
+      categoryName?: string;
+      technologies?: {
+        name?: string;
+        iconUrl?: string;
+      }[];
+    }[];
   };
 }
 
@@ -565,7 +634,7 @@ function transformHomePage(
   dynamicTestimonials: any[] = [],
   dynamicBlogs: any[] = []
 ): HomepageData | null {
-  const f = raw?.data?.page?.homepageFields;
+  const f = raw?.data?.pageBy?.homepageFields || raw?.data?.page?.homepageFields;
   if (!f) return null;
 
   // Returns true only if the group object has at least one non-blank string value.
@@ -616,7 +685,7 @@ function transformHomePage(
   const cap = f.capabilities || {};
   const capList: WpCapability[] = collectGroups(cap, "capability", 8)
     .filter((c: any) => c?.name?.trim())
-    .map((c: any) => ({ name: c?.name, imageUrl: imgUrl(c?.image), color: c?.color, url: c?.url || "" }));
+    .map((c: any) => ({ name: c?.name, imageUrl: imgUrl(c?.image), description: c?.description, color: c?.color, url: c?.url || "" }));
 
   // Awards — only include awards with a label
   const aw = f.awards || {};
@@ -656,6 +725,7 @@ function transformHomePage(
   if (dynamicBlogs.length > 0) {
     newsItems = dynamicBlogs.map((b: any) => ({
       title: b.title,
+      slug: b.slug,
       date: new Date(b.date).toLocaleDateString("en-US", {
         year: "numeric",
         month: "long",
@@ -676,6 +746,28 @@ function transformHomePage(
 
   // Tech Stack
   const ts = f.techStack || {};
+  const tsCategories: any[] = [];
+  for (let i = 1; i <= 5; i++) {
+    const cat = ts[`category_${i}`];
+    if (cat && cat.categoryName?.trim()) {
+      const techs: any[] = [];
+      for (let j = 1; j <= 8; j++) {
+        const tech = cat[`technology_${j}`];
+        if (tech && tech.name?.trim()) {
+          techs.push({
+            name: tech.name,
+            iconUrl: imgUrl(tech.icon)
+          });
+        }
+      }
+      if (techs.length > 0) {
+        tsCategories.push({
+          categoryName: cat.categoryName,
+          technologies: techs
+        });
+      }
+    }
+  }
 
   return {
     heroSlides,
@@ -714,6 +806,8 @@ function transformHomePage(
     },
     techStack: {
       title: ts.title,
+      description: ts.description,
+      categories: tsCategories.length > 0 ? tsCategories : undefined,
     },
   };
 }
@@ -793,15 +887,16 @@ const BLOGS_BY_CATEGORY_FOR_HOME_QUERY = `
   }
 `;
 
-export async function getHomePage(): Promise<HomepageData | null> {
+export async function getHomePage(uri: string = "/"): Promise<HomepageData | null> {
   try {
-    const raw = await fetchGraphQL(HOMEPAGE_QUERY);
-    if (raw?.errors || !raw?.data?.page) {
+    const queryUri = uri === "/" ? "home" : uri;
+    const raw = await fetchGraphQL(HOMEPAGE_QUERY, { uri: queryUri });
+    if (raw?.errors || !raw?.data?.pageBy) {
       console.warn("[WP] Could not fetch homepage data. Using static fallback.");
       return null;
     }
 
-    const acf = raw?.data?.page?.homepageFields || {};
+    const acf = raw?.data?.pageBy?.homepageFields || {};
     const exp = acf.expertise || {};
     const ss  = acf.successStories || {};
     const wn  = acf.whatsNew || {};
@@ -1445,9 +1540,65 @@ const CASE_STUDY_FAQ_QUERY = `
         clientDomain
         platform
         geography
+        downloadBtnText
+        caseStudyPdf {
+          node {
+            sourceUrl
+          }
+        }
         overviewQuote
+        projectOverviewTitle
         overviewText1
         overviewText2
+        screensTopTitle
+        screensTitle
+        screensDesc
+        challengesTopTitle
+        challengesSectionTitle
+        challengesDesc
+        challengesTitle
+        solutionsTitle
+        processTopTitle
+        processTitle
+        techTopTitle
+        techTitle
+        techDesc
+        techCard1Title
+        techCard1Desc
+        techCard1Icon
+        techCard1Gradient
+        techCard2Title
+        techCard2Desc
+        techCard2Icon
+        techCard2Gradient
+        techCard3Title
+        techCard3Desc
+        techCard3Icon
+        techCard3Gradient
+        techCard4Title
+        techCard4Desc
+        techCard4Icon
+        techCard4Gradient
+        techStackTopTitle
+        techStackTitle
+        techStackDesc
+        techItem1Name
+        techItem1Logo { node { sourceUrl } }
+        techItem2Name
+        techItem2Logo { node { sourceUrl } }
+        techItem3Name
+        techItem3Logo { node { sourceUrl } }
+        techItem4Name
+        techItem4Logo { node { sourceUrl } }
+        techItem5Name
+        techItem5Logo { node { sourceUrl } }
+        techItem6Name
+        techItem6Logo { node { sourceUrl } }
+        techItem7Name
+        techItem7Logo { node { sourceUrl } }
+        techItem8Name
+        techItem8Logo { node { sourceUrl } }
+        resultsTitle
         challenge1Title
         challenge1Desc
         challenge1Icon
@@ -1457,6 +1608,21 @@ const CASE_STUDY_FAQ_QUERY = `
         challenge3Title
         challenge3Desc
         challenge3Icon
+        challenge4Title
+        challenge4Desc
+        challenge4Icon
+        challenge5Title
+        challenge5Desc
+        challenge5Icon
+        challenge6Title
+        challenge6Desc
+        challenge6Icon
+        challenge7Title
+        challenge7Desc
+        challenge7Icon
+        challenge8Title
+        challenge8Desc
+        challenge8Icon
         solution1Title
         solution1Desc
         solution1Icon
@@ -1469,6 +1635,18 @@ const CASE_STUDY_FAQ_QUERY = `
         solution4Title
         solution4Desc
         solution4Icon
+        solution5Title
+        solution5Desc
+        solution5Icon
+        solution6Title
+        solution6Desc
+        solution6Icon
+        solution7Title
+        solution7Desc
+        solution7Icon
+        solution8Title
+        solution8Desc
+        solution8Icon
         process1Number
         process1Title
         process1Desc
@@ -1484,6 +1662,15 @@ const CASE_STUDY_FAQ_QUERY = `
         process5Number
         process5Title
         process5Desc
+        process6Number
+        process6Title
+        process6Desc
+        process7Number
+        process7Title
+        process7Desc
+        process8Number
+        process8Title
+        process8Desc
         result1Title
         result1Desc
         result2Title
@@ -1492,18 +1679,59 @@ const CASE_STUDY_FAQ_QUERY = `
         result3Desc
         result4Title
         result4Desc
-        faqTitle
-        faqSubtitle
-        faq1Question
-        faq1Answer
-        faq2Question
-        faq2Answer
-        faq3Question
-        faq3Answer
-        faq4Question
-        faq4Answer
-        faq5Question
-        faq5Answer
+        ctaTitle
+        ctaDesc
+        ctaBtnText
+        ctaBtnLink
+      }
+    }
+  }
+`;
+
+const CASE_STUDY_SCREENS_QUERY = `
+  query GetCaseStudyScreens($slug: ID!) {
+    caseStudy(id: $slug, idType: SLUG) {
+      caseStudyPostFields {
+        img1 { node { sourceUrl } }
+        img1Device
+        img1TopTitle
+        img1Title
+        img1Desc
+        img2 { node { sourceUrl } }
+        img2Device
+        img2TopTitle
+        img2Title
+        img2Desc
+        img3 { node { sourceUrl } }
+        img3Device
+        img3TopTitle
+        img3Title
+        img3Desc
+        img4 { node { sourceUrl } }
+        img4Device
+        img4TopTitle
+        img4Title
+        img4Desc
+        img5 { node { sourceUrl } }
+        img5Device
+        img5TopTitle
+        img5Title
+        img5Desc
+        img6 { node { sourceUrl } }
+        img6Device
+        img6TopTitle
+        img6Title
+        img6Desc
+        img7 { node { sourceUrl } }
+        img7Device
+        img7TopTitle
+        img7Title
+        img7Desc
+        img8 { node { sourceUrl } }
+        img8Device
+        img8TopTitle
+        img8Title
+        img8Desc
       }
     }
   }
@@ -1541,7 +1769,7 @@ function transformCaseStudyNode(node: any): CaseStudy {
   if (pf.overviewText2) overviewText.push(pf.overviewText2);
 
   const challenges = [];
-  for (let i = 1; i <= 3; i++) {
+  for (let i = 1; i <= 8; i++) {
     if (pf[`challenge${i}Title`]) {
       challenges.push({
         title: pf[`challenge${i}Title`],
@@ -1552,7 +1780,7 @@ function transformCaseStudyNode(node: any): CaseStudy {
   }
 
   const solutions = [];
-  for (let i = 1; i <= 4; i++) {
+  for (let i = 1; i <= 8; i++) {
     if (pf[`solution${i}Title`]) {
       solutions.push({
         title: pf[`solution${i}Title`],
@@ -1563,7 +1791,7 @@ function transformCaseStudyNode(node: any): CaseStudy {
   }
 
   const process = [];
-  for (let i = 1; i <= 5; i++) {
+  for (let i = 1; i <= 8; i++) {
     if (pf[`process${i}Title`]) {
       process.push({
         number: pf[`process${i}Number`] || `0${i}`,
@@ -1583,12 +1811,40 @@ function transformCaseStudyNode(node: any): CaseStudy {
     }
   }
 
-  const faqs = [];
-  for (let i = 1; i <= 5; i++) {
-    if (pf[`faq${i}Question`] && pf[`faq${i}Answer`]) {
-      faqs.push({
-        question: pf[`faq${i}Question`],
-        answer: pf[`faq${i}Answer`],
+
+
+  const screens = [];
+  for (let i = 1; i <= 8; i++) {
+    const screenImg = pf[`img${i}`]?.node?.sourceUrl;
+    if (screenImg) {
+      screens.push({
+        image: screenImg,
+        device: pf[`img${i}Device`] || "laptop",
+        topTitle: pf[`img${i}TopTitle`] || "",
+        title: pf[`img${i}Title`] || "",
+        desc: pf[`img${i}Desc`] || "",
+      });
+    }
+  }
+
+  const techCards = [];
+  for (let i = 1; i <= 4; i++) {
+    if (pf[`techCard${i}Title`]) {
+      techCards.push({
+        title: pf[`techCard${i}Title`],
+        desc: pf[`techCard${i}Desc`] || "",
+        icon: pf[`techCard${i}Icon`] || "Layers",
+        gradient: pf[`techCard${i}Gradient`] || "from-blue-500 to-blue-700",
+      });
+    }
+  }
+
+  const techStackItems = [];
+  for (let i = 1; i <= 8; i++) {
+    if (pf[`techItem${i}Name`]) {
+      techStackItems.push({
+        name: pf[`techItem${i}Name`],
+        logo: pf[`techItem${i}Logo`]?.node?.sourceUrl ?? "",
       });
     }
   }
@@ -1609,14 +1865,41 @@ function transformCaseStudyNode(node: any): CaseStudy {
     platform: pf.platform ?? "",
     geography: pf.geography ?? "",
     overviewQuote: pf.overviewQuote ?? "",
+    projectOverviewTitle: pf.projectOverviewTitle ?? "",
+    projectOverview: pf.projectOverview ?? "",
     overviewText,
+    img1: pf.img1?.node?.sourceUrl ?? "",
+    img2: pf.img2?.node?.sourceUrl ?? "",
+    challengesTopTitle: pf.challengesTopTitle ?? "",
+    challengesSectionTitle: pf.challengesSectionTitle ?? "",
+    challengesDesc: pf.challengesDesc ?? "",
+    challengesTitle: pf.challengesTitle ?? "",
+    solutionsTitle: pf.solutionsTitle ?? "",
     challenges,
     solutions,
+    processTopTitle: pf.processTopTitle ?? "",
+    processTitle: pf.processTitle ?? "",
     process,
+    techTopTitle: pf.techTopTitle ?? "",
+    techTitle: pf.techTitle ?? "",
+    techDesc: pf.techDesc ?? "",
+    techCards,
+    techStackTopTitle: pf.techStackTopTitle ?? "",
+    techStackTitle: pf.techStackTitle ?? "",
+    techStackDesc: pf.techStackDesc ?? "",
+    techStackItems,
+    resultsTitle: pf.resultsTitle ?? "",
     results,
-    faqs,
-    faqTitle: pf.faqTitle,
-    faqSubtitle: pf.faqSubtitle,
+    ctaTitle: pf.ctaTitle ?? "",
+    ctaDesc: pf.ctaDesc ?? "",
+    ctaBtnText: pf.ctaBtnText ?? "",
+    ctaBtnLink: pf.ctaBtnLink ?? "",
+    screensTopTitle: pf.screensTopTitle ?? "",
+    screensTitle: pf.screensTitle ?? "",
+    screensDesc: pf.screensDesc ?? "",
+    screens,
+    downloadBtnText: pf.downloadBtnText ?? "",
+    caseStudyPdf: pf.caseStudyPdf?.node?.sourceUrl ?? "",
   } as any;
 }
 
@@ -1655,6 +1938,16 @@ export async function getCaseStudyBySlug(slug: string): Promise<CaseStudy | null
       console.warn("[WP] Could not fetch FAQs for case study:", slug);
     }
 
+    try {
+      const screensRaw = await fetchGraphQL(CASE_STUDY_SCREENS_QUERY, { slug });
+      if (!screensRaw?.errors && screensRaw?.data?.caseStudy?.caseStudyPostFields) {
+        if (!postNode.caseStudyPostFields) postNode.caseStudyPostFields = {};
+        Object.assign(postNode.caseStudyPostFields, screensRaw.data.caseStudy.caseStudyPostFields);
+      }
+    } catch (err) {
+      console.warn("[WP] Could not fetch screens for case study:", slug);
+    }
+
     return transformCaseStudyNode(postNode);
   } catch (err) {
     console.error("[WP] getCaseStudyBySlug() failed:", err);
@@ -1681,10 +1974,9 @@ export async function getCaseStudyPageData(): Promise<BlogPageData | null> {
 // ─── About Page GraphQL Query ─────────────────────────────────────────────────
 
 const ABOUT_PAGE_QUERY = `
-  query GetAboutPageData {
-    pages(where: { title: "About" }) {
-      nodes {
-        aboutPageFields {
+  query GetAboutPageData($uri: String!) {
+    pageBy(uri: $uri) {
+      aboutPageFields {
           heroTagline
           heroTitle
           heroDescription
@@ -1725,7 +2017,6 @@ const ABOUT_PAGE_QUERY = `
           ctaTitle ctaDescription
           ctaButton1Text ctaButton1Url
           ctaButton2Text ctaButton2Url
-        }
       }
     }
   }
@@ -1749,69 +2040,80 @@ function transformAboutPageData(f: any) {
   const features = [1, 2, 3, 4].map(i => ({
     title: f[`overviewFeature${i}Title`] || "",
     desc:  f[`overviewFeature${i}Desc`] || "",
-    icon:  "" // Icons are static in AboutClient
+    icon:  ["Code2", "Cpu", "Fingerprint", "ShieldCheck"][i - 1] || "Code2"
   })).filter(feat => feat.title);
 
   const offices = [1, 2, 3, 4, 5].map(i => ({
-    id: f[`location${i}Name`]?.toLowerCase().replace(/\s+/g, '-') || `office-${i}`,
-    name: f[`location${i}Name`] || "",
+    id: (f[`location${i}Name`] || f[`location${i}City`] || `office-${i}`).toLowerCase().replace(/\s+/g, '-'),
+    name: f[`location${i}Name`] || f[`location${i}City`] || "",
     city: f[`location${i}City`] || "",
     type: f[`location${i}Type`] || "",
     details: f[`location${i}Details`] || "",
     lat: f[`location${i}Lat`] || "",
     lng: f[`location${i}Lng`] || ""
-  })).filter(loc => loc.name);
+  })).filter(loc => loc.city || loc.name);
 
   return {
-    heroTagline:    f.heroTagline    || "Corporate Profile",
-    heroTitle:      f.heroTitle      || "Architecting |Business Value.",
-    heroDescription:f.heroDescription|| "",
+    heroTagline:    f.heroTagline    || undefined,
+    heroTitle:      f.heroTitle      || undefined,
+    heroDescription:f.heroDescription|| undefined,
     heroBgImage:    imgUrl(f.heroBgImage) || undefined,
-    stats,
-    overviewTitle:  f.overviewTitle  || "Providing The Finest |Digital Experiences.",
-    overviewQuote:  f.overviewDescription || "",
-    features,
-    whatWeDoTitle:  f.whatWeDoTitle  || "What We Do",
-    whatWeDoDesc:   f.whatWeDoDesc   || "",
-    whatWeDoItems,
-    whoWeHelpTitle: f.whoWeHelpTitle || "Who We Help?",
-    whoWeHelpDesc:  f.whoWeHelpDesc  || "",
-    whoWeHelpItems,
-    whyChooseTitle: f.whyChooseUsTitle || "Why Choose Us",
-    whyChooseDesc:  f.whyChooseUsDesc  || "",
-    synergyTitle:   f.globalSynergyTitle || "Global |Synergy.",
-    synergyDesc:    f.globalSynergyDesc || "",
-    synergyStat1:   f.synergyStat1Label || "4 Global Offices",
-    synergyStat2:   f.synergyStat2Label || "90+ Member Team",
+    stats:          stats.length > 0 ? stats : undefined,
+    overviewTitle:  f.overviewTitle  || undefined,
+    overviewQuote:  f.overviewDescription || undefined,
+    features:       features.length > 0 ? features : undefined,
+    whatWeDoTitle:  f.whatWeDoTitle  || undefined,
+    whatWeDoDesc:   f.whatWeDoDesc   || undefined,
+    whatWeDoItems:  whatWeDoItems.length > 0 ? whatWeDoItems : undefined,
+    whoWeHelpTitle: f.whoWeHelpTitle || undefined,
+    whoWeHelpDesc:  f.whoWeHelpDesc  || undefined,
+    whoWeHelpItems: whoWeHelpItems.length > 0 ? whoWeHelpItems : undefined,
+    whyChooseTitle: f.whyChooseUsTitle || undefined,
+    whyChooseDesc:  f.whyChooseUsDesc  || undefined,
+    synergyTitle:   f.globalSynergyTitle || undefined,
+    synergyDesc:    f.globalSynergyDesc || undefined,
+    synergyStat1:   f.synergyStat1Label || undefined,
+    synergyStat2:   f.synergyStat2Label || undefined,
     // Map stats
-    mapTitle:       f.globalFootprintTitle || "Global Footprint, |Local Expertise.",
-    mapDescription: f.globalFootprintDesc || "",
-    mapStat1Value:  f.globalStat1Value  || "24/7",
-    mapStat1Label:  f.globalStat1Label  || "Operations",
-    mapStat2Value:  f.globalStat2Value  || "3",
-    mapStat2Label:  f.globalStat2Label  || "Continents",
-    offices,
-    historySubtitle:f.historySubtitle || "Corporate Evolution",
-    historyTitle:   f.historyTitle   || "Our |History.",
-    milestones,
+    mapTitle:       f.globalFootprintTitle || undefined,
+    mapDescription: f.globalFootprintDesc || undefined,
+    mapStat1Value:  f.globalStat1Value  || undefined,
+    mapStat1Label:  f.globalStat1Label  || undefined,
+    mapStat2Value:  f.globalStat2Value  || undefined,
+    mapStat2Label:  f.globalStat2Label  || undefined,
+    offices:        offices.length > 0 ? offices : undefined,
+    historySubtitle:f.historySubtitle || undefined,
+    historyTitle:   f.historyTitle   || undefined,
+    milestones:     milestones.length > 0 ? milestones : undefined,
     ctaBgImage:     imgUrl(f.ctaBgImage) || undefined,
-    ctaTitle:       f.ctaTitle       || "Join the Next |Digital Revolution.",
-    ctaDescription: f.ctaDescription || "",
-    ctaBtn1Text:    f.ctaButton1Text || "Start Your Project",
-    ctaBtn1Url:     f.ctaButton1Url  || "/contact",
-    ctaBtn2Text:    f.ctaButton2Text || "Executive Careers",
-    ctaBtn2Url:     f.ctaButton2Url  || "/careers",
+    ctaTitle:       f.ctaTitle       || undefined,
+    ctaDescription: f.ctaDescription || undefined,
+    ctaBtn1Text:    f.ctaButton1Text || undefined,
+    ctaBtn1Url:     f.ctaButton1Url  || undefined,
+    ctaBtn2Text:    f.ctaButton2Text || undefined,
+    ctaBtn2Url:     f.ctaButton2Url  || undefined,
   };
 }
 
-export async function getAboutPageData(): Promise<ReturnType<typeof transformAboutPageData> | null> {
+export async function getAboutPageData(uri: string = "/about/"): Promise<ReturnType<typeof transformAboutPageData> | null> {
   try {
-    const raw = await fetchGraphQL(ABOUT_PAGE_QUERY);
-    const f = raw?.data?.pages?.nodes?.[0]?.aboutPageFields;
+    let raw = await fetchGraphQL(ABOUT_PAGE_QUERY, { uri });
+    let f = raw?.data?.pageBy?.aboutPageFields;
+
+    if (!f && uri !== "/about/") {
+      raw = await fetchGraphQL(ABOUT_PAGE_QUERY, { uri: "/about/" });
+      f = raw?.data?.pageBy?.aboutPageFields;
+    }
+
+    if (!f && uri !== "about") {
+      raw = await fetchGraphQL(ABOUT_PAGE_QUERY, { uri: "about" });
+      f = raw?.data?.pageBy?.aboutPageFields;
+    }
+
     if (!f) return null;
     return transformAboutPageData(f);
   } catch (err) {
-    console.warn("[WP] getAboutPageData() failed:", err);
+    console.warn(`[WP] getAboutPageData(${uri}) failed:`, err);
     return null;
   }
 }
@@ -1819,9 +2121,8 @@ export async function getAboutPageData(): Promise<ReturnType<typeof transformAbo
 // ─── Awards Page ─────────────────────────────────────────────────────────────
 
 const AWARDS_PAGE_QUERY = `
-  query GetAwardsPageData {
-    pages(where: { name: "awards" }) {
-      nodes {
+  query GetAwardsPageData($uri: String!) {
+    pageBy(uri: $uri) {
         awardsPageFields {
           awardsHeroTagline
           awardsHeroTitle
@@ -1858,7 +2159,6 @@ const AWARDS_PAGE_QUERY = `
           awardsCtaBtn1Text awardsCtaBtn1Url
           awardsCtaBtn2Text awardsCtaBtn2Url
         }
-      }
     }
   }
 `;
@@ -1908,10 +2208,10 @@ function transformAwardsPageData(f: any) {
   };
 }
 
-export async function getAwardsPageData(): Promise<ReturnType<typeof transformAwardsPageData> | null> {
+export async function getAwardsPageData(uri: string = "/awards/"): Promise<ReturnType<typeof transformAwardsPageData> | null> {
   try {
-    const raw = await fetchGraphQL(AWARDS_PAGE_QUERY);
-    const f = raw?.data?.pages?.nodes?.[0]?.awardsPageFields;
+    const raw = await fetchGraphQL(AWARDS_PAGE_QUERY, { uri });
+    const f = raw?.data?.pageBy?.awardsPageFields;
     if (!f) return null;
     return transformAwardsPageData(f);
   } catch (err) {
@@ -1923,9 +2223,8 @@ export async function getAwardsPageData(): Promise<ReturnType<typeof transformAw
 // ─── Vision Mission & Values Page ────────────────────────────────────────────
 
 const VMV_PAGE_QUERY = `
-  query GetVMVPageData {
-    pages(where: { title: "Vision Mission Values" }) {
-      nodes {
+  query GetVMVPageData($uri: String!) {
+    pageBy(uri: $uri) {
         visionMissionValuesPageFields {
           vmvHeroTagline
           vmvHeroTitle
@@ -1947,9 +2246,8 @@ const VMV_PAGE_QUERY = `
           vmvCtaDescription
           vmvCtaBtn1Text vmvCtaBtn1Url
           vmvCtaBtn2Text vmvCtaBtn2Url
-        }
-      }
     }
+  }
   }
 `;
 
@@ -1980,10 +2278,10 @@ function transformVMVPageData(f: any) {
   };
 }
 
-export async function getVMVPageData(): Promise<ReturnType<typeof transformVMVPageData> | null> {
+export async function getVMVPageData(uri: string = "/vision-mission-values/"): Promise<ReturnType<typeof transformVMVPageData> | null> {
   try {
-    const raw = await fetchGraphQL(VMV_PAGE_QUERY);
-    const f = raw?.data?.pages?.nodes?.[0]?.visionMissionValuesPageFields;
+    const raw = await fetchGraphQL(VMV_PAGE_QUERY, { uri });
+    const f = raw?.data?.pageBy?.visionMissionValuesPageFields;
     if (!f) return null;
     return transformVMVPageData(f);
   } catch (err) {
@@ -1995,9 +2293,8 @@ export async function getVMVPageData(): Promise<ReturnType<typeof transformVMVPa
 // ─── Leadership Page ─────────────────────────────────────────────────────────
 
 const LEADERSHIP_PAGE_QUERY = `
-  query GetLeadershipPageData {
-    pages(where: { title: "Leadership" }) {
-      nodes {
+  query GetLeadershipPageData($uri: String!) {
+    pageBy(uri: $uri) {
         leadershipPageFields {
           leadHeroTagline
           leadHeroTitle
@@ -2026,7 +2323,6 @@ const LEADERSHIP_PAGE_QUERY = `
           leadCtaBtn1Text leadCtaBtn1Url
           leadCtaBtn2Text leadCtaBtn2Url
         }
-      }
     }
   }
 `;
@@ -2069,10 +2365,10 @@ function transformLeadershipPageData(f: any) {
   };
 }
 
-export async function getLeadershipPageData(): Promise<ReturnType<typeof transformLeadershipPageData> | null> {
+export async function getLeadershipPageData(uri: string = "/leadership/"): Promise<ReturnType<typeof transformLeadershipPageData> | null> {
   try {
-    const raw = await fetchGraphQL(LEADERSHIP_PAGE_QUERY);
-    const f = raw?.data?.pages?.nodes?.[0]?.leadershipPageFields;
+    const raw = await fetchGraphQL(LEADERSHIP_PAGE_QUERY, { uri });
+    const f = raw?.data?.pageBy?.leadershipPageFields;
     if (!f) return null;
     return transformLeadershipPageData(f);
   } catch (err) {
@@ -2084,10 +2380,9 @@ export async function getLeadershipPageData(): Promise<ReturnType<typeof transfo
 // ─── Partnership Page ────────────────────────────────────────────────────────
 
 const PARTNERSHIP_PAGE_QUERY = `
-  query GetPartnershipPageData {
-    pages(where: { title: "Partnership" }) {
-      nodes {
-        partnershipPageFields {
+  query GetPartnershipPageData($uri: String!) {
+    pageBy(uri: $uri) {
+      partnershipPageFields {
           partHeroTagline
           partHeroTitle
           partHeroDescription
@@ -2145,7 +2440,6 @@ const PARTNERSHIP_PAGE_QUERY = `
           partCtaDescription
           partCtaEmail
         }
-      }
     }
   }
 `;
@@ -2211,14 +2505,14 @@ function transformPartnershipPageData(f: any) {
   };
 }
 
-export async function getPartnershipPageData(): Promise<ReturnType<typeof transformPartnershipPageData> | null> {
+export async function getPartnershipPageData(uri: string = "/partnership/"): Promise<ReturnType<typeof transformPartnershipPageData> | null> {
   try {
-    const raw = await fetchGraphQL(PARTNERSHIP_PAGE_QUERY);
-    const f = raw?.data?.pages?.nodes?.[0]?.partnershipPageFields;
+    const raw = await fetchGraphQL(PARTNERSHIP_PAGE_QUERY, { uri });
+    const f = raw?.data?.pageBy?.partnershipPageFields;
     if (!f) return null;
     return transformPartnershipPageData(f);
   } catch (err) {
-    console.warn("[WP] getPartnershipPageData() failed:", err);
+    console.warn(`[WP] getPartnershipPageData(${uri}) failed:`, err);
     return null;
   }
 }
@@ -2314,7 +2608,14 @@ function transformContactPageData(f: any) {
     supportLabel: f.contactSupportLabel || "Customer Support",
     supportDescription: f.contactSupportDescription || "",
     supportBtnText: f.contactSupportBtnText || "Support Portal",
-    supportBtnUrl: f.contactSupportBtnUrl || "/contact",
+    supportBtnUrl: (() => {
+      const raw = f.contactSupportBtnUrl;
+      if (!raw) return "";
+      // If already an absolute URL, hash, or root-relative path, use as-is
+      if (raw.startsWith("http") || raw.startsWith("//") || raw.startsWith("/") || raw.startsWith("#")) return raw;
+      // Otherwise it's a bare slug like "contact" — prepend slash
+      return `/${raw}`;
+    })(),
 
     officesTitle: f.contactOfficesTitle || "Our Offices",
     officesDescription: f.contactOfficesDescription || "",
@@ -3883,8 +4184,8 @@ export async function getIndustriesList(): Promise<IndustryItem[]> {
 // ─── Life at Hutech Query ────────────────────────────────────────────────────────
 
 const LIFE_AT_HUTECH_QUERY = `
-  query GetLifeAtHutechPage {
-    page(id: "life-at-hutech", idType: URI) {
+  query GetLifeAtHutechPage($uri: String!) {
+    page: pageBy(uri: $uri) {
       title
       lifeAtHutechSettings {
         heroEyebrow
@@ -3939,9 +4240,9 @@ export interface LifeAtHutechData {
   galleries: LifeGalleryPost[];
 }
 
-export async function getLifeAtHutechPage(): Promise<LifeAtHutechData | null> {
+export async function getLifeAtHutechPage(uri: string = "/life-at-hutech/"): Promise<LifeAtHutechData | null> {
   try {
-    const raw = await fetchGraphQL(LIFE_AT_HUTECH_QUERY);
+    const raw = await fetchGraphQL(LIFE_AT_HUTECH_QUERY, { uri });
     if (!raw?.data?.page) return null;
     
     const settings = raw.data.page.lifeAtHutechSettings || {};
@@ -3998,6 +4299,378 @@ export async function getLifeAtHutechPage(): Promise<LifeAtHutechData | null> {
   } catch (err) {
     console.warn("[WP] getLifeAtHutechPage failed:", err);
     return null;
+  }
+}
+
+// ─── Standard Pages ────────────────────────────────────────────────────────────
+
+export type WpPage = {
+  title: string;
+  content: string | null;
+  date: string;
+  slug: string;
+  uri: string;
+  templateName?: string;
+  pageRoutingSettings?: {
+    nextjsTemplate?: string[] | string;
+  };
+};
+
+const PAGE_BY_URI_QUERY = `
+  query GetPageByUri($uri: String!) {
+    pageBy(uri: $uri) {
+      title
+      content
+      date
+      uri
+      slug
+      template {
+        templateName
+      }
+      pageRoutingSettings {
+        nextjsTemplate
+      }
+    }
+  }
+`;
+
+export async function getPageByUri(uri: string): Promise<WpPage | null> {
+  try {
+    const raw = await fetchGraphQL(PAGE_BY_URI_QUERY, { uri });
+    const pageNode = raw?.data?.pageBy;
+    if (!pageNode) return null;
+    
+    return {
+      title: pageNode.title,
+      content: pageNode.content,
+      date: new Date(pageNode.date).toLocaleDateString("en-US", {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+      }),
+      slug: pageNode.slug,
+      uri: pageNode.uri,
+      templateName: pageNode.template?.templateName,
+      pageRoutingSettings: pageNode.pageRoutingSettings,
+    };
+  } catch (err) {
+    console.warn(`[WP] getPageByUri(${uri}) failed:`, err);
+    return null;
+  }
+}
+
+const ALL_PAGE_URIS_QUERY = `
+  query GetAllPageUris {
+    pages(first: 100) {
+      nodes {
+        uri
+        slug
+      }
+    }
+  }
+`;
+
+export async function getAllPageUris(): Promise<{ uri: string, slug: string }[]> {
+  try {
+    const raw = await fetchGraphQL(ALL_PAGE_URIS_QUERY);
+    const nodes = raw?.data?.pages?.nodes || [];
+    return nodes.map((node: any) => ({ uri: node.uri, slug: node.slug }));
+  } catch (err) {
+    console.warn("[WP] getAllPageUris failed:", err);
+    return [];
+  }
+}
+
+// ─── Sitemap Dynamic Query & Types ─────────────────────────────────────────────
+
+export type SitemapLink = {
+  name: string;
+  path: string;
+};
+
+export type SitemapSection = {
+  title: string;
+  links: SitemapLink[];
+};
+
+const SITEMAP_GRAPHQL_QUERY = `
+  query GetSitemapData {
+    menus {
+      nodes {
+        id
+        name
+        slug
+        locations
+        menuItems(first: 100) {
+          nodes {
+            id
+            label
+            url
+            path
+            parentId
+          }
+        }
+      }
+    }
+    pages(first: 100) {
+      nodes {
+        id
+        title
+        slug
+        uri
+      }
+    }
+    hutechServices(first: 100) {
+      nodes {
+        title
+        slug
+        serviceCategories {
+          nodes {
+            slug
+          }
+        }
+      }
+    }
+    posts(first: 50) {
+      nodes {
+        title
+        slug
+      }
+    }
+    caseStudies(first: 50) {
+      nodes {
+        title
+        slug
+      }
+    }
+    hutechEvents(first: 50) {
+      nodes {
+        title
+        slug
+      }
+    }
+    hutechDocuments(first: 50) {
+      nodes {
+        title
+        slug
+      }
+    }
+  }
+`;
+
+function cleanSitemapTitle(title: string): string {
+  return (title || "").replace(/\^/g, "").replace(/\|/g, "").trim();
+}
+
+function normalizeSitemapPath(rawPath: string): string {
+  if (!rawPath) return "#";
+  if (rawPath.startsWith("http")) {
+    try {
+      const parsed = new URL(rawPath);
+      return parsed.pathname.replace(/^\/hutech-website/, "") || "/";
+    } catch {
+      return rawPath;
+    }
+  }
+  return rawPath.replace(/^\/hutech-website/, "") || "/";
+}
+
+export async function getSitemapData(pageUri: string = "/legal/sitemap/"): Promise<SitemapSection[]> {
+  try {
+    const raw = await fetchGraphQL(SITEMAP_GRAPHQL_QUERY);
+    const data = raw?.data || {};
+    const menus = data.menus?.nodes || [];
+
+    // 1. Check for dedicated WordPress Sitemap menu
+    const sitemapMenu = menus.find(
+      (m: any) =>
+        m.slug?.toLowerCase().includes("sitemap") ||
+        m.name?.toLowerCase().includes("sitemap")
+    );
+
+    if (sitemapMenu && sitemapMenu.menuItems?.nodes?.length > 0) {
+      const items: any[] = sitemapMenu.menuItems.nodes;
+      const topLevel = items.filter((i) => !i.parentId);
+      const hasChildren = items.some((i) => i.parentId);
+
+      if (hasChildren && topLevel.length > 0) {
+        const sections: SitemapSection[] = topLevel
+          .map((parent) => {
+            const children = items.filter((i) => i.parentId === parent.id);
+            return {
+              title: cleanSitemapTitle(parent.label),
+              links: children.map((c) => ({
+                name: cleanSitemapTitle(c.label),
+                path: normalizeSitemapPath(c.path || c.url),
+              })),
+            };
+          })
+          .filter((s) => s.links.length > 0);
+
+        if (sections.length > 0) return sections;
+      } else {
+        return [
+          {
+            title: cleanSitemapTitle(sitemapMenu.name || "Sitemap"),
+            links: items.map((i) => ({
+              name: cleanSitemapTitle(i.label),
+              path: normalizeSitemapPath(i.path || i.url),
+            })),
+          },
+        ];
+      }
+    }
+
+    // 2. Check for ACF sitemap fields on the page via REST if configured
+    if (WORDPRESS_BASE_URL) {
+      try {
+        const restRes = await fetch(`${WORDPRESS_BASE_URL}/wp-json/wp/v2/pages?slug=sitemap`, {
+          next: { revalidate: 60 },
+        });
+        if (restRes.ok) {
+          const pageJson = await restRes.json();
+          const acf = pageJson?.[0]?.acf;
+          
+          // ACF Repeater: sitemap_sections or sections
+          const acfSections = acf?.sitemap_sections || acf?.sitemapSections || acf?.sections;
+          if (Array.isArray(acfSections) && acfSections.length > 0) {
+            const parsedAcfSections: SitemapSection[] = acfSections.map((sec: any) => ({
+              title: cleanSitemapTitle(sec.title || sec.section_title || sec.sectionTitle || "Section"),
+              links: (sec.links || sec.items || []).map((lnk: any) => ({
+                name: cleanSitemapTitle(lnk.name || lnk.label || lnk.title || "Link"),
+                path: normalizeSitemapPath(lnk.path || lnk.url || lnk.link || "#"),
+              })),
+            })).filter((s) => s.links.length > 0);
+
+            if (parsedAcfSections.length > 0) return parsedAcfSections;
+          }
+
+          // ACF Menu selector: sitemap_menu
+          const selectedMenuSlug = acf?.sitemap_menu || acf?.sitemapMenu || acf?.menu;
+          if (selectedMenuSlug) {
+            const matchedMenu = menus.find((m: any) => m.slug === selectedMenuSlug || m.name === selectedMenuSlug || m.id === selectedMenuSlug);
+            if (matchedMenu && matchedMenu.menuItems?.nodes?.length > 0) {
+              const items: any[] = matchedMenu.menuItems.nodes;
+              const topLevel = items.filter((i) => !i.parentId);
+              if (topLevel.length > 0 && items.some((i) => i.parentId)) {
+                return topLevel.map((parent) => ({
+                  title: cleanSitemapTitle(parent.label),
+                  links: items.filter((i) => i.parentId === parent.id).map((c) => ({
+                    name: cleanSitemapTitle(c.label),
+                    path: normalizeSitemapPath(c.path || c.url),
+                  })),
+                })).filter((s) => s.links.length > 0);
+              }
+            }
+          }
+        }
+      } catch (e) {
+        // Continue to dynamic fallback
+      }
+    }
+
+    // 3. Dynamic Fallback: Query ONLY live content from WordPress
+    const pages: any[] = data.pages?.nodes || [];
+    const services: any[] = data.hutechServices?.nodes || [];
+    const posts: any[] = data.posts?.nodes || [];
+    const caseStudies: any[] = data.caseStudies?.nodes || [];
+    const events: any[] = data.hutechEvents?.nodes || [];
+    const documents: any[] = data.hutechDocuments?.nodes || [];
+
+    // Company pages (ordered logically)
+    const companyOrder = [
+      "/about/",
+      "/vision-mission-values/",
+      "/leadership/",
+      "/partnership/",
+      "/life-at-hutech/",
+      "/news/",
+      "/press-release/",
+      "/awards/",
+      "/careers/",
+      "/graduates/",
+      "/contact/",
+    ];
+
+    const companyPages = pages
+      .filter((p) => {
+        const u = p.uri || "";
+        return u.startsWith("/company/") || companyOrder.includes(u);
+      })
+      .sort((a, b) => {
+        const indexA = companyOrder.indexOf(a.uri);
+        const indexB = companyOrder.indexOf(b.uri);
+        if (indexA !== -1 && indexB !== -1) return indexA - indexB;
+        if (indexA !== -1) return -1;
+        if (indexB !== -1) return 1;
+        return a.title.localeCompare(b.title);
+      })
+      .map((p) => ({
+        name: cleanSitemapTitle(p.title),
+        path: p.uri,
+      }));
+
+    // Services vs Industries
+    const liveServices: SitemapLink[] = [];
+    const liveIndustries: SitemapLink[] = [];
+
+    services.forEach((s) => {
+      const cats = s.serviceCategories?.nodes?.map((c: any) => c.slug?.toLowerCase()) || [];
+      if (cats.includes("industries") || cats.includes("industry")) {
+        liveIndustries.push({
+          name: cleanSitemapTitle(s.title),
+          path: `/industries/${s.slug}`,
+        });
+      } else {
+        liveServices.push({
+          name: cleanSitemapTitle(s.title),
+          path: `/services/${s.slug}`,
+        });
+      }
+    });
+
+    // Resources
+    const liveResources: SitemapLink[] = [];
+    const hasBlogsPage = pages.some((p) => p.uri === "/blogs/" || p.uri === "/resources/blogs/");
+    if (hasBlogsPage || posts.length > 0) {
+      liveResources.push({ name: "Blogs", path: "/blogs" });
+    }
+    const hasCsPage = pages.some((p) => p.uri === "/case-studies/" || p.uri === "/resources/case-studies/");
+    if (hasCsPage || caseStudies.length > 0) {
+      liveResources.push({ name: "Case Studies", path: "/resources/case-studies" });
+    }
+    const hasEventsPage = pages.some((p) => p.uri === "/events/" || p.uri === "/resources/events/");
+    if (hasEventsPage || events.length > 0) {
+      liveResources.push({ name: "Events", path: "/events" });
+    }
+    const hasDocsPage = pages.some((p) => p.uri === "/hutech-documents/" || p.uri === "/resources/hutech-documents/");
+    if (hasDocsPage || documents.length > 0) {
+      liveResources.push({ name: "Hutech Documents", path: "/hutech-documents" });
+    }
+
+    // Legal Pages
+    const legalPages = pages
+      .filter((p) => {
+        const u = p.uri || "";
+        return u.startsWith("/legal/") || ["/legal/terms/", "/legal/privacy/", "/legal/sitemap/"].includes(u);
+      })
+      .map((p) => ({
+        name: cleanSitemapTitle(p.title),
+        path: p.uri,
+      }));
+
+    const sections: SitemapSection[] = [
+      { title: "Company", links: companyPages },
+      { title: "Services", links: liveServices },
+      { title: "Industries", links: liveIndustries },
+      { title: "Resources", links: liveResources },
+      { title: "Legal & Policies", links: legalPages },
+    ].filter((s) => s.links && s.links.length > 0);
+
+    return sections;
+  } catch (err) {
+    console.warn("[WP] getSitemapData failed:", err);
+    return [];
   }
 }
 

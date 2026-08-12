@@ -3,89 +3,94 @@
 import { useState } from "react";
 import { motion as Motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
-import { toast } from "sonner";
-import { renderTitle } from "@/lib/utils";
-import {
-  Brain,
-  TrendingUp,
-  MessageSquare,
-  Eye,
-  Cpu,
-  Zap,
-  BarChart3,
-  MoveRight,
-  ArrowRight,
-  ChevronRight,
-  Workflow,
-  Smartphone,
-  Globe,
-  Database,
-  Network,
-  Lock,
-  Sparkles,
-  Settings,
-  ShieldCheck,
-  RefreshCw,
+import { 
+  Building2,
   Users,
-  FileText,
+  Database,
+  Globe,
+  Workflow,
+  Monitor,
+  Zap,
+  Lock,
+  MessageSquare,
+  ArrowRight,
+  Sparkles,
+  ChevronRight,
+  Target,
+  Smartphone,
+  Cpu,
   Cloud,
+  FileText,
+  LayoutGrid,
+  ShieldCheck,
+  ShoppingBag,
+  Truck,
+  Heart,
+  Activity,
+  Factory,
+  BatteryCharging,
+  MoveRight,
+  Brain
 } from "lucide-react";
 import { Breadcrumbs } from "@/components/Breadcrumbs";
 import { Meta } from "@/components/Meta";
 import { ImageWithFallback } from "@/components/figma/ImageWithFallback";
 import { submitContactForm } from "@/lib/api";
-import { HutechService } from "@/lib/wordpress";
+import { HutechService, WpBlog } from "@/lib/wordpress";
+import { renderTitle } from "@/lib/utils";
+import { toast } from "sonner";
+
+interface IndustryDetailClientProps {
+  service: HutechService;
+  blogs: WpBlog[];
+}
 
 const FALLBACK_ICONS = [
-  Brain,
-  TrendingUp,
-  MessageSquare,
-  Eye,
-  Cpu,
-  BarChart3,
-  Lock,
-  Workflow,
-  ShieldCheck,
-  Settings,
-  Sparkles,
-  Smartphone,
-  Globe,
+  Building2,
+  Users,
   Database,
-  Network,
+  Globe,
+  Workflow,
+  Monitor,
   Zap,
+  Lock,
+  ShieldCheck,
+  Factory,
+  Truck,
+  Heart,
+  Activity,
+  BatteryCharging,
+  Cloud,
+  Cpu,
+  Smartphone,
+  Target,
 ];
 
 function FAQItem({ question, answer }: { question: string; answer: string }) {
   const [isOpen, setIsOpen] = useState(false);
   return (
     <div className="border-b border-gray-100 last:border-0">
-      <button
+      <button 
         onClick={() => setIsOpen(!isOpen)}
-        className="group flex w-full items-center justify-between py-6 text-left"
+        className="flex w-full items-center justify-between py-6 text-left group"
       >
-        <span
-          className={`text-lg font-bold transition-colors md:text-xl ${isOpen ? "text-[#0171c1]" : "text-[#001A3D] group-hover:text-[#0171c1]"}`}
-        >
+        <span className={`text-lg md:text-xl font-bold transition-colors ${isOpen ? "text-[#0171c1]" : "text-[#001A3D] group-hover:text-[#0171c1]"}`}>
           {question}
         </span>
-        <div
-          className={`flex h-8 w-8 items-center justify-center transition-all ${isOpen ? "text-[#0171c1]" : "text-gray-400"}`}
-        >
-          <ChevronRight
-            className={`transition-transform duration-300 ${isOpen ? "rotate-90" : ""}`}
-          />
+        <div className={`flex h-8 w-8 items-center justify-center transition-all ${isOpen ? "text-[#0171c1]" : "text-gray-400"}`}>
+          <ChevronRight className={`transition-transform duration-300 ${isOpen ? "rotate-90" : ""}`} />
         </div>
       </button>
       <AnimatePresence>
         {isOpen && (
-          <Motion.div
+          <Motion.div 
             initial={{ height: 0, opacity: 0 }}
             animate={{ height: "auto", opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
             transition={{ duration: 0.3 }}
             className="overflow-hidden"
           >
-            <p className="pb-8 text-lg leading-relaxed text-gray-500">{answer}</p>
+            <p className="pb-8 text-lg leading-relaxed font-medium text-gray-500">{answer}</p>
           </Motion.div>
         )}
       </AnimatePresence>
@@ -93,78 +98,78 @@ function FAQItem({ question, answer }: { question: string; answer: string }) {
   );
 }
 
-export default function ServiceDetailClient({ service, blogs = [] }: { service: HutechService, blogs?: any[] }) {
+export default function IndustryDetailClient({ service, blogs }: IndustryDetailClientProps) {
   const [isContactSubmitting, setIsContactSubmitting] = useState(false);
-  
-  const heroTitleText = service.heroTitle || service.title || "";
+
+  const heroTitleText = service.heroTitle || service.title || "Industry Solutions";
 
   const statsToRender = service.stats && service.stats.length > 0 ? service.stats : [
-    { value: "200+", label: "Models Deployed" },
-    { value: "95%", label: "Avg Accuracy Rate" },
-    { value: "3x", label: "Avg ROI Increase" },
+    { value: "25+", label: "Years Experience" },
+    { value: "150+", label: "Projects Delivered" },
+    { value: "100%", label: "Client Satisfaction" },
   ];
 
   const servicesToRender = service.services && service.services.length > 0 ? service.services : [
-    { title: "AI Application Development", description: "Design and deploy custom AI-powered applications that automate complex workflows, optimize business processes, and unlock the full potential of artificial intelligence across your enterprise.", btnname: "Learn More", btnurl: "/contact" },
-    { title: "Machine Learning Solutions", description: "Build production-grade ML models tailored to your industry. From predictive analytics to recommendation engines, we develop data-driven systems that evolve and improve over time.", btnname: "Learn More", btnurl: "/contact" },
-    { title: "Natural Language Processing", description: "Extract actionable insights from unstructured text at scale. Our NLP services cover sentiment analysis, entity recognition, document summarization, and intelligent chatbot development.", btnname: "Learn More", btnurl: "/contact" },
-    { title: "Computer Vision Solutions", description: "Teach machines to see and understand. We build visual recognition systems for object detection, facial recognition, quality inspection, and real-time video analytics.", btnname: "Learn More", btnurl: "/contact" },
-    { title: "Generative AI & LLM Integration", description: "Harness the power of large language models. We integrate GPT-4, Claude, and Gemini into your products, building RAG pipelines, AI agents, and custom fine-tuned models.", btnname: "Learn More", btnurl: "/contact" },
-    { title: "Predictive Analytics & Forecasting", description: "Turn historical data into future intelligence. Our predictive models help you forecast demand, detect churn, identify fraud, and anticipate market shifts with high accuracy.", btnname: "Learn More", btnurl: "/contact" },
+    { title: `${service.title || "Industry"} Strategy & Consulting`, description: `Tailored digital roadmaps and architecture consulting designed to accelerate transformation for ${service.title || "enterprise"} leaders.`, btnname: "Learn More", btnurl: "/contact" },
+    { title: "Core Platform Modernization", description: `Migrate legacy infrastructure into cloud-native, highly available architectures built for high transaction throughput and zero downtime.`, btnname: "Learn More", btnurl: "/contact" },
+    { title: "Data & Advanced Analytics", description: `Transform enterprise data into real-time business intelligence with automated analytics and machine learning forecasting models.`, btnname: "Learn More", btnurl: "/contact" },
+    { title: "Regulatory Compliance & Security", description: `Incorporate robust governance, audit logging, and industry compliance standards into the foundation of your digital ecosystem.`, btnname: "Learn More", btnurl: "/contact" },
+    { title: "Process Automation & RPA", description: `Streamline repetitive back-office and customer-facing workflows to enhance operational speed, precision, and efficiency.`, btnname: "Learn More", btnurl: "/contact" },
+    { title: "Omnichannel Customer Experience", description: `Deliver frictionless, unified customer touchpoints across mobile, web, and internal enterprise platforms.`, btnname: "Learn More", btnurl: "/contact" },
   ];
 
   const solutionsToRender = service.solutions && service.solutions.length > 0 ? service.solutions : [
-    { title: "Data Privacy & Governance", description: "Protect your AI systems from the ground up. We implement robust data governance frameworks, access controls, and model explainability tools to ensure regulatory compliance.", btnname: "", btnurl: "" },
-    { title: "MLOps & Model Lifecycle Management", description: "Accelerate your AI delivery cycles. We automate model training, versioning, deployment, and monitoring so your teams can ship reliable models faster and with confidence.", btnname: "", btnurl: "" },
-    { title: "Real-Time Data Pipelines", description: "Power your AI with live data. We architect low-latency streaming pipelines using Kafka and Spark, ensuring your models always operate on the most current information.", btnname: "", btnurl: "" },
-    { title: "Responsible AI & Bias Mitigation", description: "Build AI your users can trust. We apply fairness audits, bias detection, and interpretability techniques to ensure your models are transparent, equitable, and defensible.", btnname: "", btnurl: "" },
-    { title: "Feature Engineering & Data Prep", description: "Great models start with great data. We transform raw datasets into powerful feature sets, handling missing values, normalization, and domain-specific transformations at scale.", btnname: "", btnurl: "" },
-    { title: "Continuous Model Optimization", description: "Keep your AI performing at its peak. We implement automated retraining triggers, A/B model testing, and performance monitoring to prevent model drift and maintain accuracy.", btnname: "", btnurl: "" },
+    { title: "Regulatory Compliance", description: "Custom software built with industry standards to ensure full compliance with regional and global regulations, reducing operational risk.", btnname: "", btnurl: "" },
+    { title: "Enhanced Security", description: "Multi-layered encryption, identity access management, and threat prevention safeguarding mission-critical organizational data.", btnname: "", btnurl: "" },
+    { title: "Operational Efficiency", description: "Automated workflows and centralized management tools that reduce overhead and increase workforce productivity.", btnname: "", btnurl: "" },
+    { title: "Enterprise Scalability", description: "Modular microservices and elastic cloud infrastructure engineered to scale effortlessly with your growing business demand.", btnname: "", btnurl: "" },
+    { title: "Domain-Specific Workflows", description: "Custom built features addressing the specific operational requirements and integration points of your industry.", btnname: "", btnurl: "" },
+    { title: "Data-Driven Insights", description: "Real-time dashboards and predictive analytics that empower leadership to make confident, strategic decisions.", btnname: "", btnurl: "" },
   ];
 
   const innovationsToRender = service.innovations && service.innovations.length > 0 ? service.innovations : [
-    { title: "Agentic AI Systems", description: "Deploy autonomous AI agents that plan, reason, and act. We build multi-agent workflows that handle complex, multi-step tasks without constant human supervision.", btnname: "", btnurl: "" },
-    { title: "On-Device AI & Edge Inference", description: "Run intelligence at the edge. We optimize and deploy ML models directly on mobile and IoT devices, enabling real-time AI without cloud dependency or latency.", btnname: "", btnurl: "" },
-    { title: "Multimodal AI Architectures", description: "Go beyond text. We build multimodal systems combining vision, audio, and language models to create richer, more context-aware AI experiences for your users.", btnname: "", btnurl: "" },
-    { title: "Vector Search & RAG Pipelines", description: "Give your LLMs a memory. We build retrieval-augmented generation systems that ground AI responses in your proprietary data, dramatically improving accuracy and relevance.", btnname: "", btnurl: "" },
-    { title: "Federated Learning", description: "Train AI without centralizing sensitive data. Our federated learning frameworks enable collaborative model training across distributed nodes while preserving full data privacy.", btnname: "", btnurl: "" },
-    { title: "AI Security & Adversarial Defense", description: "Protect your models from attacks. We implement adversarial robustness testing, prompt injection defenses, and model hardening techniques to keep your AI systems secure.", btnname: "", btnurl: "" },
+    { title: "AI & Machine Learning", description: `Enhance decision-making, automate complex tasks, and deliver hyper-personalized experiences with purpose-built AI models.` },
+    { title: "Cloud-Native Architectures", description: `Scale infrastructure dynamically with resilient, highly available cloud systems built for low-latency performance.` },
+    { title: "Intelligent Automation (RPA)", description: `Free your workforce for high-value tasks by automating high-volume, rules-based business operations.` },
+    { title: "Distributed Ledger & Blockchain", description: `Ensure transparency, provenance, and tamper-proof verification across multi-party transactions and supply networks.` },
+    { title: "Edge Computing & IoT Integration", description: `Gather and process telemetry data at the source for instantaneous alerts, preventive maintenance, and real-time control.` },
+    { title: "Big Data & Real-Time Analytics", description: `Harness high-velocity streaming data to extract actionable intelligence and predict market trends.` },
   ];
 
   const techStackToRender = service.techStack && service.techStack.length > 0 ? service.techStack : [
-    { name: "OPENAI", cat: "GENERATIVE AI" },
-    { name: "LANGCHAIN", cat: "ORCHESTRATION" },
-    { name: "HUGGING FACE", cat: "MODELS" },
-    { name: "PYTORCH", cat: "DEEP LEARNING" },
-    { name: "TENSORFLOW", cat: "ML FRAMEWORK" },
-    { name: "PINECONE", cat: "VECTOR DB" },
-    { name: "AWS SAGEMAKER", cat: "CLOUD AI" },
-    { name: "AZURE AI", cat: "COGNITIVE SERVICES" },
-    { name: "VERTEX AI", cat: "GOOGLE CLOUD" },
-    { name: "NVIDIA CUDA", cat: "ACCELERATION" },
-    { name: "KUBEFLOW", cat: "MLOPS" },
-    { name: "PYTHON", cat: "LANGUAGE" },
+    { name: "AWS / AZURE", cat: "CLOUD INFRA" },
+    { name: "KUBERNETES", cat: "CONTAINERS" },
+    { name: "TERRAFORM", cat: "IAC" },
+    { name: "POSTGRESQL", cat: "DATABASE" },
+    { name: "APACHE KAFKA", cat: "STREAMING" },
+    { name: "PYTHON / FASTAPI", cat: "BACKEND" },
+    { name: "REACT / NEXT.JS", cat: "FRONTEND" },
+    { name: "SNOWFLAKE", cat: "DATA WAREHOUSE" },
+    { name: "DATABRICKS", cat: "ANALYTICS" },
+    { name: "DOCKER", cat: "VIRTUALIZATION" },
+    { name: "OPENAI / LLM", cat: "AI MODELS" },
+    { name: "GRAPHQL", cat: "API GATEWAY" },
   ];
 
   const whyChooseToRender = service.whyChoose && service.whyChoose.length > 0 ? service.whyChoose : [
-    { title: "Deep AI Research Foundation", description: "Our team includes researchers and engineers with backgrounds in top AI labs. We bring academic rigor and production pragmatism to every model we build." },
-    { title: "End-to-End ML Ownership", description: "We don't just build models — we own the full lifecycle from data ingestion to production deployment, monitoring, and continuous improvement." },
-    { title: "Business-Outcome Obsessed", description: "We measure success in business metrics, not model metrics. Every AI system we build is tied directly to a measurable impact on revenue, efficiency, or risk." },
-    { title: "Rapid Proof-of-Value Delivery", description: "We use sprint-based delivery to put working AI prototypes in your hands within weeks, validating business value before committing to full-scale development." },
+    { title: "Deep Domain Expertise", description: `We bring extensive experience working on high-impact projects tailored to the regulatory and operational demands of the ${service.title || "industry"} sector.` },
+    { title: "Bespoke Engineering", description: "We design tailored architectures that integrate seamlessly with your legacy ecosystems and proprietary workflows." },
+    { title: "Full Lifecycle Ownership", description: "From strategic discovery and solution architecture to deployment and 24/7 managed support, we own the complete journey." },
+    { title: "Future-Proof Innovation", description: "We harness the modern tech stack—AI, cloud, automation, and data analytics—to build resilient, scalable solutions." },
   ];
 
   const faqsToRender = service.faqs && service.faqs.length > 0 ? service.faqs : [
-    { question: "What industries do you serve with AI/ML solutions?", answer: "We have delivered AI/ML projects across healthcare, financial services, retail, manufacturing, logistics, and technology. Our team adapts models and architectures to the unique data and regulatory requirements of each industry." },
-    { question: "How long does it take to build and deploy an AI model?", answer: "A focused proof-of-concept typically takes 4–8 weeks. A production-grade ML system with full MLOps pipelines ranges from 3–6 months depending on data readiness, integration complexity, and model requirements." },
-    { question: "How do you ensure our data remains private and secure?", answer: "We operate with a security-first mindset — using encrypted data pipelines, role-based access, and on-premises or private cloud deployments where required. We are compliant with GDPR, HIPAA, and SOC 2 standards." },
-    { question: "Can you integrate AI into our existing software systems?", answer: "Absolutely. We design AI solutions as modular APIs and microservices that integrate seamlessly with your existing ERP, CRM, data warehouse, or custom applications with minimal disruption." },
-    { question: "Do you offer post-deployment support and model maintenance?", answer: "Yes. We offer managed AI services including 24/7 monitoring, drift detection, automated retraining pipelines, and dedicated support to ensure your models continue to perform at their best." },
+    { question: `What types of businesses benefit from our ${service.title || "industry"} solutions?`, answer: `We partner with enterprises, mid-market organizations, and innovative startups across the ${service.title || "industry"} sector, delivering customized digital platforms that solve complex operational challenges.` },
+    { question: "How do you ensure industry regulatory compliance?", answer: "Compliance and security are embedded into our architecture from day one. We adhere strictly to regional data privacy, governance, and security standards relevant to your domain." },
+    { question: "Can you modernize our existing legacy platforms?", answer: "Yes, we specialize in incremental and complete legacy modernization, migrating monolithic systems to cloud-native microservices with zero operational disruption." },
+    { question: "How quickly can we begin seeing results?", answer: "We leverage agile sprints to deliver functional MVPs and proof-of-value deliverables within 4–8 weeks, validating business impact early." },
+    { question: "What post-launch support and maintenance do you provide?", answer: "We provide comprehensive 24/7 SLA-backed managed services, performance monitoring, proactive security updates, and ongoing feature enhancements." },
   ];
 
   const nextStepsToRender = service.nextSteps && service.nextSteps.length > 0 ? service.nextSteps : [
-    { title: "An AI/ML consultant will review your request and contact you within a few business hours." },
-    { title: "We will schedule a deep-dive session to understand your data landscape, use cases, and AI goals." },
-    { title: "You will receive a detailed proposal including model architecture, implementation roadmap, and ROI analysis." },
+    { title: `An industry consultant will review your requirements and connect with you within a few business hours.` },
+    { title: `We will schedule a strategic discovery session to evaluate your current technology stack and business goals.` },
+    { title: `You will receive a comprehensive transformation roadmap, architecture proposal, and timeline.` },
   ];
   
   const stepIcons = [MessageSquare, FileText, Sparkles, Zap, Brain];
@@ -178,7 +183,7 @@ export default function ServiceDetailClient({ service, blogs = [] }: { service: 
     const email = formData.get("email") as string;
     const phone = formData.get("phone") as string;
     const message = formData.get("message") as string;
-    const serviceName = service.title || service.slug || "Service";
+    const industryName = service.title || service.slug || "Industry";
 
     setIsContactSubmitting(true);
 
@@ -187,9 +192,9 @@ export default function ServiceDetailClient({ service, blogs = [] }: { service: 
         name,
         email,
         phone,
-        subject: `Service Inquiry: ${serviceName}`,
+        subject: `Industry Inquiry: ${industryName}`,
         message,
-        category: `Service Consultation: ${serviceName}`,
+        category: `Industry Consultation: ${industryName}`,
       });
       toast.success("Thank you! Your project request has been submitted successfully.");
       form.reset();
@@ -203,8 +208,8 @@ export default function ServiceDetailClient({ service, blogs = [] }: { service: 
   return (
     <div className="flex flex-col overflow-hidden bg-white">
       <Meta
-        title={service.title ? `${service.title} | Hutech Solutions` : "AI & ML Solutions | Hutech Solutions"}
-        description={service.heroDescription || "Transform your business with Hutech's AI & ML solutions. Expert AI application development, NLP, computer vision, generative AI, and predictive analytics services."}
+        title={service.title ? `${service.title} | Hutech Solutions` : "Industry Solutions | Hutech Solutions"}
+        description={service.heroDescription || `Empower your ${service.title || "industry"} operations with smart, scalable, AI-driven technology solutions from Hutech Solutions.`}
       />
 
       <Breadcrumbs variant="light" />
@@ -213,7 +218,7 @@ export default function ServiceDetailClient({ service, blogs = [] }: { service: 
       <section className="relative flex h-[450px] items-center overflow-hidden bg-[#001A3D] text-white">
         <div className="absolute inset-0 z-0">
           <ImageWithFallback
-            src={service.heroBgImage || "https://images.unsplash.com/photo-1677442136019-21780ecad995?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1920"}
+            src={service.heroBgImage || "https://images.unsplash.com/photo-1597088794600-3a8fd990dd7e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1920"}
             alt={service.heroTitle || service.title}
             className="h-full w-full scale-105 object-cover opacity-20"
           />
@@ -230,14 +235,14 @@ export default function ServiceDetailClient({ service, blogs = [] }: { service: 
             <div className="mb-6 flex items-center gap-3">
               <span className="h-[1px] w-12 bg-[#F99D1C]"></span>
               <span className="text-[10px] font-bold tracking-[0.3em] text-[#F99D1C] uppercase">
-                {service.heroTagline || "Intelligence Redefined"}
+                {service.heroTagline || "Industry Excellence"}
               </span>
             </div>
             <h1 className="display-font mb-8 text-3xl leading-[1.1] font-semibold tracking-tight text-white sm:text-4xl md:text-5xl md:leading-[1.05] lg:text-6xl">
               {renderTitle(heroTitleText, "text-inherit", "text-[#F99D1C]", "text-[#0171c1]")}
             </h1>
             <p className="max-w-2xl text-lg leading-relaxed font-medium text-gray-300 md:text-xl">
-              {service.heroDescription || "We craft intelligent data-driven experiences through cutting-edge AI/ML models and expert consulting for global enterprise leaders."}
+              {service.heroDescription || `We craft next-generation ${service.title || "enterprise"} experiences through cutting-edge technology solutions and expert consulting.`}
             </p>
           </Motion.div>
         </div>
@@ -250,13 +255,13 @@ export default function ServiceDetailClient({ service, blogs = [] }: { service: 
             <div className="space-y-10">
               <div className="space-y-6">
                 <h2 className="display-font text-3xl leading-tight font-semibold text-[#001A3D] md:text-5xl">
-                  {renderTitle(service.introHeading || `Empowering Organizations with Smart, Scalable ${service.title || "Enterprise"} Solutions`, "text-[#001A3D]", "text-[#0171c1]", "text-[#F99D1C]")}
+                  {renderTitle(service.introHeading || `Empowering ${service.title || "Enterprises"} with Smart, Scalable Solutions`, "text-[#001A3D]", "text-[#0171c1]", "text-[#F99D1C]")}
                 </h2>
                 <div className="h-1 w-20 bg-[#0171c1]"></div>
               </div>
               <div className="space-y-6">
                 <p className="text-lg leading-relaxed font-medium text-gray-500">
-                  {service.introText1 || `At Hutech Solutions, we bring deep expertise in implementing, supporting, and managing integrated enterprise platforms. Our end-to-end solutions include architecture development, robust engineering pipelines, performance optimization, and seamless integrations.`}
+                  {service.introText1 || `At Hutech Solutions, we bring deep domain expertise in implementing, supporting, and managing industry platforms. Our end-to-end solutions include system architecture, modernization, performance optimization, and seamless enterprise integrations.`}
                 </p>
                 {service.introText2 && (
                   <p className="text-lg leading-relaxed font-medium text-gray-500">
@@ -265,7 +270,7 @@ export default function ServiceDetailClient({ service, blogs = [] }: { service: 
                 )}
                 {!service.introText1 && !service.introText2 && (
                    <p className="text-lg leading-relaxed font-medium text-gray-500">
-                     We ensure our clients can operate with intelligence, security, and efficiency, enabling them to expand operations and integrate fresh digital solutions to meet specific business and market needs.
+                     We ensure our clients operate with agility, security, and compliance, enabling them to expand operations and integrate resilient digital solutions to meet market needs.
                    </p>
                 )}
               </div>
@@ -288,17 +293,17 @@ export default function ServiceDetailClient({ service, blogs = [] }: { service: 
             <div className="relative">
               <div className="aspect-square overflow-hidden rounded-sm shadow-2xl">
                 <ImageWithFallback
-                  src={service.introImage || "https://images.unsplash.com/photo-1620712943543-bcc4688e7485?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080"}
-                  alt={service.introImageTitle || "Intro"}
+                  src={service.introImage || "https://images.unsplash.com/photo-1507679799987-c73779587ccf?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080"}
+                  alt={service.introImageTitle || "Industry Transformation"}
                   className="h-full w-full object-cover"
                 />
               </div>
-              {(service.introImageTitle || "Intelligent Automation") && (
+              {(service.introImageTitle || "Digital Transformation") && (
                 <div className="absolute -bottom-10 -left-10 hidden max-w-xs space-y-4 bg-[#0171c1] p-10 text-white shadow-2xl md:block">
                   <Brain size={32} strokeWidth={1.5} />
-                  <h3 className="display-font text-xl font-bold">{service.introImageTitle || "Intelligent Automation"}</h3>
+                  <h3 className="display-font text-xl font-bold">{service.introImageTitle || "Domain Innovation"}</h3>
                   <p className="text-sm leading-relaxed font-medium opacity-80">
-                    {service.introImageDesc || "Integrating cutting-edge AI and machine learning across enterprise platforms to automate tasks and enhance decision intelligence."}
+                    {service.introImageDesc || `Integrating advanced software engineering across enterprise platforms to accelerate business agility and operational excellence.`}
                   </p>
                 </div>
               )}
@@ -307,15 +312,15 @@ export default function ServiceDetailClient({ service, blogs = [] }: { service: 
         </div>
       </section>
 
-      {/* Services Section */}
+      {/* Services / Capabilities Section */}
       <section className="bg-gray-50 py-24">
         <div className="mx-auto max-w-[1280px] px-6 lg:px-20">
           <div className="mb-20 space-y-6 text-center">
             <h2 className="display-font text-3xl font-semibold text-[#001A3D] md:text-5xl">
-              {renderTitle(service.servicesSectionTitle || `Our ${service.title || "Enterprise"} Services`, "text-[#001A3D]", "text-[#0171c1]", "text-[#F99D1C]")}
+              {renderTitle(service.servicesSectionTitle || `Our ${service.title || "Industry"} Capabilities`, "text-[#001A3D]", "text-[#0171c1]", "text-[#F99D1C]")}
             </h2>
             <p className="mx-auto max-w-4xl text-lg leading-relaxed font-medium text-gray-500">
-              {service.servicesSectionDesc || `At Hutech Solutions, we specialize in delivering cutting-edge software and technology solutions tailored for the global enterprise landscape.`}
+              {service.servicesSectionDesc || `At Hutech Solutions, we specialize in delivering high-impact technology solutions tailored to the unique complexities of ${service.title || "your sector"}.`}
             </p>
           </div>
 
@@ -365,11 +370,11 @@ export default function ServiceDetailClient({ service, blogs = [] }: { service: 
         <div className="mx-auto max-w-[1280px] px-6 lg:px-20">
           <div className="mb-20 space-y-6 text-center">
             <h2 className="display-font mx-auto max-w-4xl text-3xl leading-tight font-semibold md:text-5xl">
-              {renderTitle(service.solutionsSectionTitle || `What Makes Custom ${service.title || "Enterprise"} Solutions Essential for Your Business?`, "text-white", "text-[#F99D1C]", "text-[#0171c1]")}
+              {renderTitle(service.solutionsSectionTitle || `What Makes Custom ${service.title || "Industry"} Solutions Essential for Your Business?`, "text-white", "text-[#F99D1C]", "text-[#0171c1]")}
             </h2>
             <div className="mx-auto h-1 w-20 bg-[#0171c1]"></div>
             <p className="mx-auto max-w-3xl text-lg leading-relaxed font-medium text-gray-400">
-              {service.solutionsSectionDesc || `In the modern digital landscape, tailored technology and enterprise solutions are key to staying competitive and ensuring operational excellence.`}
+              {service.solutionsSectionDesc || `In the modern digital landscape, tailored technology solutions are key to staying competitive, maintaining compliance, and ensuring operational excellence.`}
             </p>
           </div>
 
@@ -406,10 +411,10 @@ export default function ServiceDetailClient({ service, blogs = [] }: { service: 
         <div className="mx-auto max-w-[1280px] px-6 lg:px-20">
           <div className="mb-20 space-y-6 text-center">
             <h2 className="display-font text-3xl font-semibold text-[#001A3D] md:text-5xl">
-              {renderTitle(service.innovationsSectionTitle || `Which Innovations Can Transform Your ${service.title || "Digital"} Capabilities?`, "text-[#001A3D]", "text-[#0171c1]", "text-[#F99D1C]")}
+              {renderTitle(service.innovationsSectionTitle || `Which Innovations Can Transform Your ${service.title || "Industry"} Capabilities?`, "text-[#001A3D]", "text-[#0171c1]", "text-[#F99D1C]")}
             </h2>
             <p className="mx-auto max-w-3xl text-lg leading-relaxed font-medium text-gray-500">
-              {service.innovationsSectionDesc || `Incorporating advanced digital technologies and engineering practices can significantly enhance your business capabilities.`}
+              {service.innovationsSectionDesc || `Incorporating advanced technologies and modern engineering practices will significantly elevate your market positioning.`}
             </p>
           </div>
 
@@ -450,11 +455,11 @@ export default function ServiceDetailClient({ service, blogs = [] }: { service: 
             <div className="flex-1 space-y-10">
               <div className="space-y-6">
                 <h2 className="display-font text-3xl leading-[1.2] font-semibold text-[#001A3D] md:text-5xl">
-                  {renderTitle(service.ctaTitle || `Discover Your ${service.title || "Enterprise"} Transformation Strategy With Us`, "text-[#001A3D]", "text-[#0171c1]", "text-[#F99D1C]")}
+                  {renderTitle(service.ctaTitle || `Discover Your ${service.title || "Industry"} Transformation Strategy With Us`, "text-[#001A3D]", "text-[#0171c1]", "text-[#F99D1C]")}
                 </h2>
                 <div className="h-1 w-20 bg-[#0171c1]"></div>
                 <p className="text-lg leading-relaxed font-medium text-gray-500">
-                  {service.ctaDescription || `Schedule a consultation with our expert team and take the first step towards a future-ready, digital-first business transformation.`}
+                  {service.ctaDescription || `Schedule a strategic consultation with our domain experts and take the first step towards a resilient, digital-first business.`}
                 </p>
               </div>
               <div>
@@ -469,8 +474,8 @@ export default function ServiceDetailClient({ service, blogs = [] }: { service: 
             <div className="relative flex-1">
               <div className="relative z-10 aspect-video rounded-sm bg-white p-2 shadow-2xl">
                 <ImageWithFallback
-                  src={service.ctaImage || "https://images.unsplash.com/photo-1551288049-bebda4e38f71?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080"}
-                  alt="Enterprise Dashboard"
+                  src={service.ctaImage || "https://images.unsplash.com/photo-1460925895917-afdab827c52f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080"}
+                  alt="Enterprise Strategy"
                   className="h-full w-full object-cover"
                 />
               </div>
@@ -495,7 +500,7 @@ export default function ServiceDetailClient({ service, blogs = [] }: { service: 
             </div>
 
             <h2 className="mt-4 display-font text-3xl font-bold tracking-wider text-white sm:text-4xl md:text-5xl uppercase">
-              {renderTitle(service.techStackTitle || `MODERN ${service.title ? service.title.toUpperCase() : "ENTERPRISE"} STACK`, "text-white", "text-[#F99D1C]", "text-[#0171c1]")}
+              {renderTitle(service.techStackTitle || `MODERN ${service.title ? service.title.toUpperCase() : "TECHNOLOGY"} STACK`, "text-white", "text-[#F99D1C]", "text-[#0171c1]")}
             </h2>
 
             <div className="mx-auto mt-4 h-[3px] w-14 bg-[#F99D1C]" />
@@ -534,10 +539,10 @@ export default function ServiceDetailClient({ service, blogs = [] }: { service: 
         <div className="mx-auto max-w-[1280px] px-6 lg:px-20">
           <div className="mb-20 space-y-6 text-center">
             <h2 className="display-font text-3xl font-semibold text-[#001A3D] md:text-5xl">
-              {renderTitle(service.whyChooseSectionTitle || `Why Choose Hutech Solutions for Your ${service.title || "Project"}?`, "text-[#001A3D]", "text-[#0171c1]", "text-[#F99D1C]")}
+              {renderTitle(service.whyChooseSectionTitle || `Why Choose Hutech Solutions for Your ${service.title || "Industry"} Needs?`, "text-[#001A3D]", "text-[#0171c1]", "text-[#F99D1C]")}
             </h2>
             <p className="mx-auto max-w-4xl text-lg leading-relaxed font-medium text-gray-500">
-              {service.whyChooseSectionDesc || `At Hutech Solutions, we specialize in delivering enterprise solutions tailored to your unique organizational needs.`}
+              {service.whyChooseSectionDesc || `At Hutech Solutions, we specialize in delivering enterprise solutions tailored to your unique industry requirements.`}
             </p>
           </div>
 
@@ -573,7 +578,7 @@ export default function ServiceDetailClient({ service, blogs = [] }: { service: 
           <div className="grid grid-cols-1 gap-20 lg:grid-cols-12">
             <div className="rounded-sm border border-gray-100 bg-white p-10 shadow-2xl md:p-14 lg:col-span-7">
               <h2 className="display-font mb-10 text-3xl font-bold text-[#001A3D]">
-                {renderTitle(service.contactFormTitle || `Share Your ${service.title || "Enterprise"} Project With Us`, "text-[#001A3D]", "text-[#0171c1]", "text-[#F99D1C]")}
+                {renderTitle(service.contactFormTitle || `Share Your ${service.title || "Industry"} Project With Us`, "text-[#001A3D]", "text-[#0171c1]", "text-[#F99D1C]")}
               </h2>
               <form onSubmit={handleContactSubmit} className="grid grid-cols-1 gap-6 md:grid-cols-2">
                 <input
@@ -687,7 +692,7 @@ export default function ServiceDetailClient({ service, blogs = [] }: { service: 
                 >
                   <div className="relative aspect-[16/10] overflow-hidden">
                     <ImageWithFallback
-                      src={post.featuredImage?.node?.sourceUrl || "https://images.unsplash.com/photo-1677442136019-21780ecad995?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080"}
+                      src={post.featuredImage?.node?.sourceUrl || "https://images.unsplash.com/photo-1597088794600-3a8fd990dd7e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080"}
                       alt={post.title}
                       className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110"
                     />

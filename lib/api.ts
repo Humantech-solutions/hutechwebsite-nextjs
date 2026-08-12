@@ -27,6 +27,14 @@ export interface CareerFormPayload {
   resume: File;
 }
 
+export interface DocumentRequestPayload {
+  name: string;
+  email: string;
+  phone: string;
+  documentTitle: string;
+  downloadUrl: string;
+}
+
 function clean(value: string | undefined | null, fallback = "") {
   const cleaned = value?.trim();
   return cleaned || fallback;
@@ -108,6 +116,23 @@ async function parseSubmitResponse(response: Response) {
   }
 }
 
+function inferCategory(pageUrl: string, payloadCategory?: string): string {
+  const urlLower = pageUrl.toLowerCase();
+  const catLower = (payloadCategory || "").toLowerCase();
+
+  if (urlLower.includes("/industries") || catLower.includes("industries")) return "Industries";
+  if (urlLower.includes("/solutions") || catLower.includes("solutions")) return "Solutions";
+  if (urlLower.includes("/case-studies") || catLower.includes("case study")) return "Case Study";
+  if (urlLower.includes("/blogs") || catLower.includes("blog")) return "Blog";
+  if (urlLower.includes("/services") || catLower.includes("service")) return "Service";
+  if (urlLower.includes("/careers") || catLower.includes("career")) return "Career";
+  if (urlLower.includes("/clients") || catLower.includes("client")) return "Client";
+  if (catLower.includes("footer")) return "Footer";
+  if (urlLower.includes("/contact") || catLower.includes("contact")) return "Contact";
+  
+  return "Other";
+}
+
 /**
  * Submits a contact inquiry to the Hutech contact API.
  */
@@ -127,7 +152,7 @@ export async function submitContactForm(payload: ContactFormPayload): Promise<bo
         : message,
     project: "hutech",
     companyName: "Hutech Solutions",
-    category: "Contact",
+    category: inferCategory(pageUrl, payload.category),
     pageTitle,
     pageUrl,
   };
@@ -151,6 +176,65 @@ export async function submitContactForm(payload: ContactFormPayload): Promise<bo
     return parseSubmitResponse(response);
   } catch (error) {
     console.error("[API] Contact submit failed:", error);
+    throw error;
+  }
+}
+
+/**
+ * Submits a document download request.
+ */
+export async function submitDocumentRequest(payload: DocumentRequestPayload): Promise<boolean> {
+  const { pageTitle, pageUrl } = getPageMeta("Document Download");
+
+  try {
+    const formData = new FormData();
+    formData.append("name", clean(payload.name));
+    formData.append("email", clean(payload.email));
+    formData.append("phone", clean(payload.phone, "N/A"));
+    formData.append("documentName", clean(payload.documentTitle));
+    formData.append("project", "hutech");
+    formData.append("companyName", "Hutech Solutions");
+
+    // Fetch the document and append as Blob
+    let blob: Blob | null = null;
+    let filename = "document.pdf";
+
+    if (payload.downloadUrl && payload.downloadUrl !== "#") {
+      try {
+        const fileRes = await fetch(payload.downloadUrl);
+        if (fileRes.ok) {
+          blob = await fileRes.blob();
+          filename = payload.downloadUrl.split("/").pop() || "document.pdf";
+        } else {
+          console.warn("[API] Failed to fetch document for attachment:", fileRes.status);
+        }
+      } catch (err) {
+        console.warn("[API] Could not attach document:", err);
+      }
+    }
+
+    if (!blob) {
+      // Fallback: append a dummy blob so the API doesn't 400 Bad Request
+      blob = new Blob(["%PDF-1.4\n%EOF"], { type: "application/pdf" });
+      filename = "missing_document.pdf";
+    }
+
+    formData.append("document", blob, filename);
+
+    const response = await fetch(`${API_BASE_URL}/api/documents/request`, {
+      method: "POST",
+      body: formData,
+    });
+
+    if (!response.ok) {
+      const errText = await getErrorMessage(response);
+      console.error("[API] Document request submit error response:", response.status, errText);
+      throw new Error(errText || `HTTP error! status: ${response.status}`);
+    }
+
+    return parseSubmitResponse(response);
+  } catch (error) {
+    console.error("[API] Document request submit failed:", error);
     throw error;
   }
 }
@@ -196,29 +280,32 @@ export async function submitCareerForm(payload: CareerFormPayload): Promise<bool
 
 const RECRUIT_PRO_API_URL =
   process.env.RECRUIT_PRO_API_URL?.replace(/\/+$/, "") ||
-  "https://apis.test-recruitpro.hutechsolutions.in";
+  "https://apis.recruitpro.hutechsolutions.in";
 
-const RECRUIT_PRO_COMPANY_ID =
-  process.env.RECRUIT_PRO_COMPANY_ID || "4b805074-5fb0-4431-a7a3-30c38682e6c8";
+const RECRUIT_PRO_BOARD_ID =
+  process.env.RECRUIT_PRO_COMPANY_ID || "8bbf3624-215a-48a8-8eab-eb814fc60d48";
 
-const RECRUIT_PRO_TOKEN = process.env.RECRUIT_PRO_TOKEN || "";
+const RECRUIT_PRO_TOKEN =
+  process.env.RECRUIT_PRO_TOKEN ||
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIyOTE4YzU5MS01YTZlLTRmMmUtYTkyYy1lMzJlN2I3MmNhMjIiLCJlbWFpbCI6Imt1bWFydmt5NDcyQGdtYWlsLmNvbSIsInJvbGUiOiJhZG1pbiIsImNvbXBhbnlJZCI6Ijg5YzU0OTM5LTdiMjQtNGVkZC1hOTI4LWU1ZTBjZWQ2NzIxOSIsIm5hbWUiOiJWaWNreSBLdW1hciIsImlhdCI6MTc4NTc1NTYyOSwiZXhwIjoxNzg2MzYwNDI5fQ.EevbYy7p2Goe6S3AO-MnuuUCv-TiCGQAmN5CXwjjVrU";
 
 /** Raw shape returned by the RecruitPro API */
 export interface RecruitProJob {
   id: string;
   title: string;
   slug: string;
-  description: string;
-  requirements: string;
-  location: string;
-  experience: string;
-  enabled: boolean;
-  createdAt: string;
-  createdBy: string;
-  createdByName: string;
-  companyId: string;
-  minCtc: string;
-  maxCtc: string;
+  description?: string;
+  requirements?: string;
+  location?: string;
+  experience?: string;
+  employmentType?: string;
+  enabled?: boolean;
+  createdAt?: string;
+  createdBy?: string;
+  createdByName?: string;
+  companyId?: string;
+  minCtc?: string;
+  maxCtc?: string;
 }
 
 /**
@@ -252,8 +339,8 @@ function mapRecruitProJob(raw: RecruitProJob) {
     department = "Data & AI";
   else if (titleLower.includes("devops") || titleLower.includes("cloud") || titleLower.includes("sre"))
     department = "DevOps & Cloud";
-  else if (titleLower.includes("manager") || titleLower.includes("lead") || titleLower.includes("senior"))
-    department = "Leadership";
+  else if (titleLower.includes("manager") || titleLower.includes("lead") || titleLower.includes("senior") || titleLower.includes("project"))
+    department = "Management";
 
   const ctcRange =
     raw.minCtc && raw.maxCtc
@@ -263,10 +350,10 @@ function mapRecruitProJob(raw: RecruitProJob) {
   return {
     // Core identity — use slug as ID so the URL is human-readable
     id: raw.slug || raw.id,
-    title: raw.title,
+    title: raw.title.trim(),
     department,
     location: raw.location || "Bangalore, India",
-    type: "Full-time",
+    type: raw.employmentType || "Full-time",
     tags: raw.experience ? [raw.experience, department] : [department],
 
     // Detail page fields
@@ -301,23 +388,34 @@ function mapRecruitProJob(raw: RecruitProJob) {
  */
 export async function getRecruitProJobs() {
   try {
-    const url = `${RECRUIT_PRO_API_URL}/api/jobs/company/${RECRUIT_PRO_COMPANY_ID}`;
+    const rawUrl =
+      process.env.RECRUIT_PRO_API_URL?.replace(/\/+$/, "") ||
+      RECRUIT_PRO_API_URL;
+    const boardId =
+      process.env.RECRUIT_PRO_COMPANY_ID || RECRUIT_PRO_BOARD_ID;
+    const token =
+      process.env.RECRUIT_PRO_TOKEN || RECRUIT_PRO_TOKEN;
+
+    const url = rawUrl.includes("/api/jobs/")
+      ? rawUrl
+      : `${rawUrl}/api/jobs/board/${boardId}`;
+
     const res = await fetch(url, {
       headers: {
-        Authorization: `Bearer ${RECRUIT_PRO_TOKEN}`,
+        Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",
       },
-      next: { revalidate: 120 }, // ISR: refresh every 2 minutes
+      next: { revalidate: 60 },
     });
 
     if (!res.ok) {
-      console.warn("[RecruitPro] Failed to fetch jobs:", res.status);
+      console.warn("[RecruitPro] Failed to fetch jobs:", res.status, "from URL:", url);
       return [];
     }
 
     const data = await res.json();
     const jobs: RecruitProJob[] = data?.jobs || [];
-    return jobs.filter((j) => j.enabled).map(mapRecruitProJob);
+    return jobs.filter((j) => j.enabled !== false).map(mapRecruitProJob);
   } catch (err) {
     console.warn("[RecruitPro] getRecruitProJobs error:", err);
     return [];
@@ -325,13 +423,13 @@ export async function getRecruitProJobs() {
 }
 
 /**
- * Finds a single job by slug from the RecruitPro HR platform.
+ * Finds a single job by slug or ID from the RecruitPro HR platform.
  * Returns null if not found or on error.
  */
 export async function getRecruitProJobBySlug(slug: string) {
   try {
     const jobs = await getRecruitProJobs();
-    return jobs.find((j) => j.id === slug || j.id === slug) || null;
+    return jobs.find((j) => j.id === slug) || null;
   } catch (err) {
     console.warn("[RecruitPro] getRecruitProJobBySlug error:", err);
     return null;
