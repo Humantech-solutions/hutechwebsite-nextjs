@@ -463,25 +463,32 @@ function App() {
 
     let attemptNotes: string[] | undefined;
     try {
-      // Determine API endpoint; support multiple env var names and avoid localhost default in production
+      // Determine API endpoint; support NEXT_PUBLIC_ env vars, local backend on port 3001, and production URL
       const envCandidates = [
+        process.env.NEXT_PUBLIC_CHATBOT_API_URL,
+        process.env.NEXT_PUBLIC_API_ENDPOINT,
         process.env.REACT_APP_API_ENDPOINT,
         (process.env as any).REACT_APP_APIENDPOINT,
-        (process.env as any).REACT_APP_APPENDPOINT,
         (process.env as any).REACT_APP_ENDPOINT
       ].map((s: any) => (s || '').toString().trim()).filter(Boolean);
-      const host = window.location.hostname;
-      const filteredEnv = envCandidates.filter((u) => {
-        try {
-          const x = new URL(u, window.location.href);
-          if (host !== 'localhost' && /^(?:http|https):\/\/localhost(?::\d+)?\//i.test(x.href)) return false;
-          return true;
-        } catch { return false; }
-      });
-      const defaultCandidates = (filteredEnv.length || window.location.hostname === 'localhost')
-        ? (filteredEnv.length ? filteredEnv : ['https://apis.hutechbot.hutechsolutions.in/query', '/api/query', '/query', '/api/chat', '/chat', '/api/ask', '/ask'])
-        : ['https://https//apis.hutechbot.hutechsolutions.in/query', '/api/query', '/query', '/api/chat', '/chat', '/api/ask', '/ask'];
-      const candidates: string[] = (filteredEnv.length ? filteredEnv : defaultCandidates).filter(Boolean);
+
+      const protocol = typeof window !== 'undefined' ? window.location.protocol : 'http:';
+      const hostname = typeof window !== 'undefined' ? window.location.hostname : 'localhost';
+
+      // Dynamic endpoint matching current host IP/domain on port 3001 (e.g., http://192.168.0.15:3001/query)
+      const dynamicLocalBackend = `${protocol}//${hostname}:3001/query`;
+
+      const allCandidates = [
+        ...envCandidates,
+        dynamicLocalBackend,
+        'http://localhost:3001/query',
+        'http://127.0.0.1:3001/query',
+        'https://apis.hutechbot.hutechsolutions.in/query',
+        '/api/query',
+        '/query'
+      ];
+
+      const candidates: string[] = Array.from(new Set(allCandidates)).filter(Boolean);
 
       let finalResponse: Response | null = null;
       let lastResponse: Response | null = null;
