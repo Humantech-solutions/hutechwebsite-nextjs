@@ -93,7 +93,7 @@ function FAQItem({ question, answer }: { question: string; answer: string }) {
   );
 }
 
-export default function ServiceDetailClient({ service, blogs = [] }: { service: HutechService, blogs?: any[] }) {
+export default function ServiceDetailClient({ service, blogs = [] }: { service: any, blogs?: any[] }) {
   const [isContactSubmitting, setIsContactSubmitting] = useState(false);
   
   const heroTitleText = service.heroTitle || service.title || "";
@@ -295,7 +295,11 @@ export default function ServiceDetailClient({ service, blogs = [] }: { service: 
               </div>
               {(service.introImageTitle || "Intelligent Automation") && (
                 <div className="absolute -bottom-10 -left-10 hidden max-w-xs space-y-4 bg-[#0171c1] p-10 text-white shadow-2xl md:block">
-                  <Brain size={32} strokeWidth={1.5} />
+                  {service.introImageIcon ? (
+                    <img src={service.introImageIcon} alt={service.introImageTitle || "Icon"} className="h-8 w-8 object-contain brightness-0 invert" />
+                  ) : (
+                    <Brain size={32} strokeWidth={1.5} />
+                  )}
                   <h3 className="display-font text-xl font-bold">{service.introImageTitle || "Intelligent Automation"}</h3>
                   <p className="text-sm leading-relaxed font-medium opacity-80">
                     {service.introImageDesc || "Integrating cutting-edge AI and machine learning across enterprise platforms to automate tasks and enhance decision intelligence."}
@@ -332,10 +336,18 @@ export default function ServiceDetailClient({ service, blogs = [] }: { service: 
                   className="group relative flex flex-col space-y-6 overflow-hidden border border-gray-100 bg-white p-12 shadow-sm transition-all duration-500 hover:shadow-2xl"
                 >
                   <div className="absolute top-0 right-0 p-8 opacity-5 transition-opacity group-hover:opacity-10">
-                    <Icon size={80} strokeWidth={1} />
+                    {item.icon ? (
+                      <img src={item.icon} alt={item.title} className="h-20 w-20 object-contain" />
+                    ) : (
+                      <Icon size={80} strokeWidth={1} />
+                    )}
                   </div>
                   <div className="flex h-16 w-16 items-center justify-center rounded-sm bg-gray-50 text-[#0171c1] transition-all duration-500 group-hover:bg-[#0171c1] group-hover:text-white">
-                    <Icon size={32} strokeWidth={1.5} />
+                    {item.icon ? (
+                      <img src={item.icon} alt={item.title} className="h-8 w-8 object-contain transition-all duration-500 group-hover:brightness-0 group-hover:invert" />
+                    ) : (
+                      <Icon size={32} strokeWidth={1.5} />
+                    )}
                   </div>
                   <h3 className="display-font text-xl leading-tight font-bold text-[#001A3D]">
                     {item.title}
@@ -386,7 +398,11 @@ export default function ServiceDetailClient({ service, blogs = [] }: { service: 
                   className="group space-y-6 rounded-sm border border-white/5 p-8 transition-colors hover:bg-white/5"
                 >
                   <div className="flex h-14 w-14 items-center justify-center rounded-sm bg-white/10 text-[#0171c1] transition-transform group-hover:scale-110">
-                    <Icon size={28} strokeWidth={1.5} />
+                    {item.icon ? (
+                      <img src={item.icon} alt={item.title} className="h-7 w-7 object-contain" />
+                    ) : (
+                      <Icon size={28} strokeWidth={1.5} />
+                    )}
                   </div>
                   <div className="space-y-4">
                     <h3 className="display-font text-xl font-bold tracking-tight">{item.title}</h3>
@@ -426,7 +442,11 @@ export default function ServiceDetailClient({ service, blogs = [] }: { service: 
                   className="group flex flex-col items-center space-y-6 text-center"
                 >
                   <div className="text-[#0171c1] transition-transform duration-500 group-hover:scale-110">
-                    <Icon size={56} strokeWidth={1} />
+                    {item.icon ? (
+                      <img src={item.icon} alt={item.title} className="h-14 w-14 object-contain" />
+                    ) : (
+                      <Icon size={56} strokeWidth={1} />
+                    )}
                   </div>
                   <div className="space-y-4">
                     <h3 className="display-font text-xl font-bold tracking-tight text-[#001A3D]">
@@ -551,7 +571,11 @@ export default function ServiceDetailClient({ service, blogs = [] }: { service: 
                 className="group flex items-start gap-8"
               >
                 <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-sm bg-[#0171c1]/5 text-[#0171c1] transition-all duration-500 group-hover:bg-[#0171c1] group-hover:text-white">
-                  <Zap size={24} strokeWidth={1.5} />
+                  {item.icon ? (
+                    <img src={item.icon} alt={item.title} className="h-6 w-6 object-contain transition-all duration-500 group-hover:brightness-0 group-hover:invert" />
+                  ) : (
+                    <Zap size={24} strokeWidth={1.5} />
+                  )}
                 </div>
                 <div className="space-y-4">
                   <h3 className="display-font text-xl font-bold tracking-tight text-[#001A3D]">
