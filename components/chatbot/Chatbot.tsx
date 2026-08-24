@@ -4,8 +4,6 @@ import { createPortal } from 'react-dom';
 import { marked } from 'marked';
 import './styles/index.css';
 import './styles/App.css';
-import { jsPDF } from 'jspdf';
-import { Document as DocxDocument, Packer, Paragraph, Table as DocxTable, TableRow, TableCell, WidthType, HeadingLevel, TextRun, ImageRun } from 'docx';
 import { User, Building, Settings, Briefcase, BarChart, Trophy, Laptop, Phone } from "lucide-react";
 import gifOverrides, { GifOverridesMap, GifOverride } from './gif-overrides';
 import lottie from 'lottie-web';
@@ -1059,6 +1057,7 @@ const MessageActions: React.FC<{
   const generatePDF = async () => {
     if (!ENABLE_PDF_EXPORT) { alert('PDF export is temporarily disabled.'); return; }
     try {
+      const { jsPDF } = await import('jspdf');
       const doc = new jsPDF('p', 'pt', 'a4');
       const margin = 36;
       const pageWidth = doc.internal.pageSize.getWidth();
@@ -1266,7 +1265,20 @@ const MessageActions: React.FC<{
 
   const generateDOCX = async () => {
     try {
-      const children: (Paragraph | DocxTable)[] = [];
+      const {
+        Document: DocxDocument,
+        Packer,
+        Paragraph,
+        Table: DocxTable,
+        TableRow,
+        TableCell,
+        WidthType,
+        HeadingLevel,
+        TextRun,
+        ImageRun
+      } = await import('docx');
+
+      const children: any[] = [];
 
       const logoUrl = 'https://cdn.builder.io/api/v1/image/assets%2Fdc4265ec2f2449c79371971938c19898%2F496df066ecdc418c994b8726633ae9a3?format=png&width=800';
       try {
@@ -1304,7 +1316,7 @@ const MessageActions: React.FC<{
         if (tbl.title) {
           children.push(new Paragraph({ spacing: { after: 120 }, children: [new TextRun({ text: tbl.title, bold: true })] }));
         }
-        const rows: TableRow[] = [];
+        const rows: any[] = [];
         if (tbl.headers && tbl.headers.length) {
           rows.push(new TableRow({ children: tbl.headers.map(h => new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: h, bold: true })] })] })) }));
         }

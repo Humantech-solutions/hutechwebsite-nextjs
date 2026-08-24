@@ -29,6 +29,8 @@ import {
   Star
 } from "lucide-react";
 import Slider from "react-slick";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
 import useEmblaCarousel from "embla-carousel-react";
 import AutoScroll from "embla-carousel-auto-scroll";
 import { ImageWithFallback } from "@/components/figma/ImageWithFallback";
@@ -43,7 +45,7 @@ interface HomePageClientProps {
 
 // Asset paths
 const samAltmanImg = "/assets/22febdba9948fa49e4211b0c440830215a31d096.png";
-const heroImg = "/assets/310f3ecce35af7049868ea8c5fbb79881cc4acde.png";
+const heroImg = "/assets/310f3ecce35af7049868ea8c5fbb79881cc4acde.webp";
 const linePattern = "/assets/c70f0c069be641e3c4679e15a1f46e98bd813e34.png";
 const kotakLogo = "/assets/7864b46c9929cf2e5a24585f95cf2482dc8190ba.png";
 const serkoLogo = "/assets/adf5bc4ee0b9144881c1a1c79a3c359ab494a4ae.png";
@@ -618,6 +620,7 @@ export default function HomePageClient({ data }: HomePageClientProps) {
               <ImageWithFallback
                 src={slide.image}
                 alt={slide.alt}
+                loading={idx === 0 ? "eager" : "lazy"}
                 className="w-full h-full object-cover brightness-[0.6]"
               />
               {/* Overlay gradient */}
@@ -1130,7 +1133,7 @@ export default function HomePageClient({ data }: HomePageClientProps) {
                  <div key={i} className="flex flex-col items-center text-center space-y-3 group">
                     <div className="w-16 h-16 rounded-2xl bg-gray-50 flex items-center justify-center text-[#0171c1] group-hover:bg-[#0171c1] group-hover:text-white transition-all duration-500 shadow-sm group-hover:shadow-lg">
                        {item.iconUrl ? (
-                         <img src={item.iconUrl} alt={item.label} className="w-8 h-8 object-contain" />
+                         <img src={item.iconUrl} alt={item.label} width={32} height={32} className="w-8 h-8 object-contain" />
                        ) : (
                          item.icon
                        )}
@@ -1200,7 +1203,7 @@ export default function HomePageClient({ data }: HomePageClientProps) {
                       <div key={techIdx} className="flex flex-col items-center gap-2 group cursor-pointer">
                         <div className="w-14 h-14 flex items-center justify-center">
                           {tech.iconUrl ? (
-                            <img src={tech.iconUrl} alt={tech.name} className="w-12 h-12 object-contain" />
+                            <img src={tech.iconUrl} alt={tech.name} width={48} height={48} className="w-12 h-12 object-contain" />
                           ) : (
                             <div className="w-12 h-12 bg-gray-100 rounded-lg flex items-center justify-center text-[10px] text-gray-400 font-bold uppercase">{(tech.name ?? "").slice(0, 2)}</div>
                           )}

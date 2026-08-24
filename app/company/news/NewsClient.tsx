@@ -29,7 +29,7 @@ const DEFAULT_NEWS_ITEMS: NewsItem[] = [
     category: "Corporate",
     readTime: "6 min read",
     desc: "Our commitment to engineering excellence and rapid expansion across international markets recognized by the Global Tech Index.",
-    author: "Elena Vance",
+    author: "BLOOMBERG TECHNOLOGY",
     role: "Corporate Communications",
     tags: ["Excellence", "Global Reach", "Engineering", "Awards"],
   },
@@ -40,7 +40,7 @@ const DEFAULT_NEWS_ITEMS: NewsItem[] = [
     category: "Growth",
     readTime: "4 min read",
     desc: "Strategic EMEA headquarters opened in London's financial district to support our expanding Fintech and Cybersecurity practices.",
-    author: "David Thorne",
+    author: "FINANCIAL TIMES",
     role: "Head of Operations EMEA",
     tags: ["EMEA", "London", "Fintech", "Global Headquarter"],
   },
@@ -51,7 +51,7 @@ const DEFAULT_NEWS_ITEMS: NewsItem[] = [
     category: "Technology",
     readTime: "8 min read",
     desc: "Launching 'Hutech Vision ML' - a revolutionary framework designed for real-time edge computing in industrial automation.",
-    author: "Dr. Sarah Chen",
+    author: "BUSINESS INSIDER",
     role: "Chief AI Officer",
     tags: ["AI", "ML", "Edge Computing", "Innovation"],
   },
@@ -118,9 +118,11 @@ export default function NewsClient({
           <div className="flex flex-col">
             {displayItems.map((item, i) => {
               const sourceName = 
-                item.category === "Corporate" ? "BLOOMBERG TECHNOLOGY" :
-                item.category === "Growth" ? "FINANCIAL TIMES" :
-                "BUSINESS INSIDER";
+                item.source?.trim() ||
+                item.author?.trim() ||
+                (item.category === "Corporate" ? "BLOOMBERG TECHNOLOGY" :
+                 item.category === "Growth" ? "FINANCIAL TIMES" :
+                 "BUSINESS INSIDER");
 
               return (
                 <Motion.div
