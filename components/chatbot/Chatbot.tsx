@@ -4,8 +4,6 @@ import { createPortal } from 'react-dom';
 import { marked } from 'marked';
 import './styles/index.css';
 import './styles/App.css';
-import { jsPDF } from 'jspdf';
-import { Document as DocxDocument, Packer, Paragraph, Table as DocxTable, TableRow, TableCell, WidthType, HeadingLevel, TextRun, ImageRun } from 'docx';
 import { User, Building, Settings, Briefcase, BarChart, Trophy, Laptop, Phone } from "lucide-react";
 import gifOverrides, { GifOverridesMap, GifOverride } from './gif-overrides';
 import lottie from 'lottie-web';
@@ -276,7 +274,8 @@ function App() {
         : undefined,
       file_links: Array.isArray(response.file_links)
         ? response.file_links.filter(item =>
-          item && typeof item.title === 'string' && typeof item.url === 'string'
+          item && typeof item.title === 'string' && typeof item.url === 'string' &&
+          (/\.(pdf|docx|xlsx|pptx|zip)(\?|#|$)/i.test(item.url) || /\/(download|files?|documents?|pdf)\//i.test(item.url))
         )
         : undefined,
       tables: Array.isArray(response.tables)
@@ -463,25 +462,32 @@ function App() {
 
     let attemptNotes: string[] | undefined;
     try {
-      // Determine API endpoint; support multiple env var names and avoid localhost default in production
+      // Determine API endpoint; support NEXT_PUBLIC_ env vars, local backend on port 3001, and production URL
       const envCandidates = [
+        process.env.NEXT_PUBLIC_CHATBOT_API_URL,
+        process.env.NEXT_PUBLIC_API_ENDPOINT,
         process.env.REACT_APP_API_ENDPOINT,
         (process.env as any).REACT_APP_APIENDPOINT,
-        (process.env as any).REACT_APP_APPENDPOINT,
         (process.env as any).REACT_APP_ENDPOINT
       ].map((s: any) => (s || '').toString().trim()).filter(Boolean);
-      const host = window.location.hostname;
-      const filteredEnv = envCandidates.filter((u) => {
-        try {
-          const x = new URL(u, window.location.href);
-          if (host !== 'localhost' && /^(?:http|https):\/\/localhost(?::\d+)?\//i.test(x.href)) return false;
-          return true;
-        } catch { return false; }
-      });
-      const defaultCandidates = (filteredEnv.length || window.location.hostname === 'localhost')
-        ? (filteredEnv.length ? filteredEnv : ['https://apis.hutechbot.hutechsolutions.in/query', '/api/query', '/query', '/api/chat', '/chat', '/api/ask', '/ask'])
-        : ['https://https//apis.hutechbot.hutechsolutions.in/query', '/api/query', '/query', '/api/chat', '/chat', '/api/ask', '/ask'];
-      const candidates: string[] = (filteredEnv.length ? filteredEnv : defaultCandidates).filter(Boolean);
+
+      const protocol = typeof window !== 'undefined' ? window.location.protocol : 'http:';
+      const hostname = typeof window !== 'undefined' ? window.location.hostname : 'localhost';
+
+      // Dynamic endpoint matching current host IP/domain on port 3001 (e.g., http://192.168.0.15:3001/query)
+      const dynamicLocalBackend = `${protocol}//${hostname}:3001/query`;
+
+      const allCandidates = [
+        ...envCandidates,
+        dynamicLocalBackend,
+        'http://localhost:3001/query',
+        'http://127.0.0.1:3001/query',
+        'https://apis.hutechbot.hutechsolutions.in/query',
+        '/api/query',
+        '/query'
+      ];
+
+      const candidates: string[] = Array.from(new Set(allCandidates)).filter(Boolean);
 
       let finalResponse: Response | null = null;
       let lastResponse: Response | null = null;
@@ -491,7 +497,10 @@ function App() {
           const res = await fetch(url, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ query: messageText }),
+            body: JSON.stringify({
+              query: messageText,
+              history: messages.slice(-6).map(m => ({ isUser: m.isUser, text: m.text }))
+            }),
           });
           lastResponse = res;
           attemptNotes.push(`${url} -> ${res.status}`);
@@ -1048,6 +1057,7 @@ const MessageActions: React.FC<{
   const generatePDF = async () => {
     if (!ENABLE_PDF_EXPORT) { alert('PDF export is temporarily disabled.'); return; }
     try {
+      const { jsPDF } = await import('jspdf');
       const doc = new jsPDF('p', 'pt', 'a4');
       const margin = 36;
       const pageWidth = doc.internal.pageSize.getWidth();
@@ -1255,7 +1265,20 @@ const MessageActions: React.FC<{
 
   const generateDOCX = async () => {
     try {
-      const children: (Paragraph | DocxTable)[] = [];
+      const {
+        Document: DocxDocument,
+        Packer,
+        Paragraph,
+        Table: DocxTable,
+        TableRow,
+        TableCell,
+        WidthType,
+        HeadingLevel,
+        TextRun,
+        ImageRun
+      } = await import('docx');
+
+      const children: any[] = [];
 
       const logoUrl = 'https://cdn.builder.io/api/v1/image/assets%2Fdc4265ec2f2449c79371971938c19898%2F496df066ecdc418c994b8726633ae9a3?format=png&width=800';
       try {
@@ -1293,7 +1316,7 @@ const MessageActions: React.FC<{
         if (tbl.title) {
           children.push(new Paragraph({ spacing: { after: 120 }, children: [new TextRun({ text: tbl.title, bold: true })] }));
         }
-        const rows: TableRow[] = [];
+        const rows: any[] = [];
         if (tbl.headers && tbl.headers.length) {
           rows.push(new TableRow({ children: tbl.headers.map(h => new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: h, bold: true })] })] })) }));
         }
@@ -1719,7 +1742,7 @@ const RelatedContentCarousel: React.FC<{ items: RelatedContent[] }> = ({ items }
                   }}
                 />
                 <div className="favicon-fallback" style={{ display: 'none' }}>
-                  ����
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-4 h-4 text-gray-400"><path d="M12 2a10 10 0 100 20 10 10 0 000-20zm6.93 6h-2.95a15.65 15.65 0 00-1.38-3.56A8.03 8.03 0 0118.93 8zM12 4.04c.83 1.2 1.48 2.59 1.91 3.96h-3.82c.43-1.37 1.08-2.76 1.91-3.96zM4.26 14a7.82 7.82 0 010-4h3.38c-.08.66-.14 1.32-.14 2s.06 1.34.14 2H4.26zm.81 2h2.95c.32 1.3.8 2.51 1.38 3.56A8.03 8.03 0 015.07 16zm2.95-8H5.07a8.03 8.03 0 013.84-3.56C8.33 5.49 7.85 6.7 7.53 8zM12 19.96c-.83-1.2-1.48-2.59-1.91-3.96h3.82c-.43 1.37-1.08 2.76-1.91 3.96zM14.34 14H9.66c-.09-.65-.16-1.32-.16-2s.07-1.35.16-2h4.68c.09.65.16 1.32.16 2s-.07 1.35-.16 2zm1.13 5.56c.58-1.05 1.06-2.26 1.38-3.56h2.95a8.03 8.03 0 01-3.84 3.56zM16.36 14c.08-.66.14-1.32.14-2s-.06-1.34-.14-2h3.38a7.82 7.82 0 010 4h-3.38z"/></svg>
                 </div>
               </div>
               <div className="mini-card-content">

@@ -52,6 +52,7 @@
     "framer-motion": "^12.38.0",
     "html2canvas": "^1.4.1",
     "input-otp": "^1.4.2",
+    "jsonwebtoken": "^9.0.3",
     "jspdf": "^4.2.1",
     "lottie-web": "^5.13.0",
     "lucide-react": "^0.577.0",
@@ -86,5 +87,11 @@
     "prettier-plugin-tailwindcss": "^0.7.2",
     "tailwindcss": "^3.4.19",
     "typescript": "^5"
-  }
+  },
+  "browserslist": [
+    ">0.3%",
+    "not dead",
+    "not op_mini all",
+    "not IE 11"
+  ]
 }

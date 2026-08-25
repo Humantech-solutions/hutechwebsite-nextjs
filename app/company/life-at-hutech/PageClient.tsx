@@ -136,23 +136,38 @@ export default function LifeAtHutech({ data }: { data: LifeAtHutechData | null }
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [lightboxOpen, closeLightbox, nextImage, prevImage]);
 
-  const benefits = [
-    {
-      icon: <Users className="h-7 w-7" />,
-      title: "Great Place Great Culture",
-      desc: "At Hutech Solutions, we foster a culture of collaboration, innovation, and growth, where every team member is valued and supported. It’s a great place to thrive both personally and professionally."
-    },
-    {
-      icon: <Cpu className="h-7 w-7" />,
-      title: "Cutting Edge Tech Work",
-      desc: "At our company, we are at the forefront of leveraging the latest technologies like AI ML, IoT, and more, while solving complex tech challenges. Our team thrives on innovation, pushing boundaries to deliver impactful solutions that drive real-world results."
-    },
-    {
-      icon: <Trophy className="h-7 w-7" />,
-      title: "Work Hard, Claim Reward",
-      desc: "Work hard and you’ll be rewarded. We promote a culture where commitment results in measurable accomplishment because we think that hard work merits acknowledgment."
-    }
-  ];
+  const benefits = [];
+  
+  if (settings.benefit1?.title || settings.benefit2?.title) {
+    // Use WordPress data
+    const wpBenefits = [settings.benefit1, settings.benefit2, settings.benefit3, settings.benefit4].filter(b => b?.title);
+    wpBenefits.forEach(b => {
+      benefits.push({
+        icon: getIcon(b.icon, <Star className="h-7 w-7" />),
+        title: b.title,
+        desc: b.description
+      });
+    });
+  } else {
+    // Fallback
+    benefits.push(
+      {
+        icon: <Users className="h-7 w-7" />,
+        title: "Great Place Great Culture",
+        desc: "At Hutech Solutions, we foster a culture of collaboration, innovation, and growth, where every team member is valued and supported. It’s a great place to thrive both personally and professionally."
+      },
+      {
+        icon: <Cpu className="h-7 w-7" />,
+        title: "Cutting Edge Tech Work",
+        desc: "At our company, we are at the forefront of leveraging the latest technologies like AI ML, IoT, and more, while solving complex tech challenges. Our team thrives on innovation, pushing boundaries to deliver impactful solutions that drive real-world results."
+      },
+      {
+        icon: <Trophy className="h-7 w-7" />,
+        title: "Work Hard, Claim Reward",
+        desc: "Work hard and you’ll be rewarded. We promote a culture where commitment results in measurable accomplishment because we think that hard work merits acknowledgment."
+      }
+    );
+  }
 
   // Filter workplace slides by selected workplaceCategories if any
   const workplaceSlides = (data?.galleries || []).filter(g => {

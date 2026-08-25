@@ -8,8 +8,7 @@ const API_BASE_URL =
   "https://apis.admin.hutechsolutions.in";
 
 const SITE_BASE_URL =
-  process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/+$/, "") ||
-  "https://hutechsolutions.ai";
+  process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/+$/, "") || "https://hutechsolutions.ai";
 
 export interface ContactFormPayload {
   name: string;
@@ -60,9 +59,9 @@ function getPageMeta(defaultTitle: string) {
   let pageUrlStr = currentUrl.toString();
 
   // If we are currently on the contact page, grab the previous page info
-  if (currentUrl.pathname.includes('/contact')) {
-    const prevUrl = sessionStorage.getItem('hutech_prev_url');
-    const prevTitle = sessionStorage.getItem('hutech_prev_title');
+  if (currentUrl.pathname.includes("/contact")) {
+    const prevUrl = sessionStorage.getItem("hutech_prev_url");
+    const prevTitle = sessionStorage.getItem("hutech_prev_title");
     if (prevUrl) pageUrlStr = prevUrl;
     if (prevTitle) pageTitle = prevTitle;
   }
@@ -129,7 +128,7 @@ function inferCategory(pageUrl: string, payloadCategory?: string): string {
   if (urlLower.includes("/clients") || catLower.includes("client")) return "Client";
   if (catLower.includes("footer")) return "Footer";
   if (urlLower.includes("/contact") || catLower.includes("contact")) return "Contact";
-  
+
   return "Other";
 }
 
@@ -201,12 +200,18 @@ export async function submitDocumentRequest(payload: DocumentRequestPayload): Pr
 
     if (payload.downloadUrl && payload.downloadUrl !== "#") {
       try {
-        const fileRes = await fetch(payload.downloadUrl);
+        // Proxy through our own API to bypass CORS and auto-convert Google Docs links
+        const proxyUrl = `/api/proxy-download?url=${encodeURIComponent(payload.downloadUrl)}`;
+        
+        const fileRes = await fetch(proxyUrl);
         if (fileRes.ok) {
           blob = await fileRes.blob();
+          
           filename = payload.downloadUrl.split("/").pop() || "document.pdf";
+          if (filename.includes('?')) filename = filename.split('?')[0];
+          if (!filename.includes('.')) filename += '.pdf';
         } else {
-          console.warn("[API] Failed to fetch document for attachment:", fileRes.status);
+          console.warn("[API] Failed to fetch document for attachment via proxy:", fileRes.status);
         }
       } catch (err) {
         console.warn("[API] Could not attach document:", err);
@@ -280,29 +285,36 @@ export async function submitCareerForm(payload: CareerFormPayload): Promise<bool
 
 const RECRUIT_PRO_API_URL =
   process.env.RECRUIT_PRO_API_URL?.replace(/\/+$/, "") ||
-  "https://apis.test-recruitpro.hutechsolutions.in";
+  "https://apis.recruitpro.hutechsolutions.in";
 
-const RECRUIT_PRO_COMPANY_ID =
-  process.env.RECRUIT_PRO_COMPANY_ID || "4b805074-5fb0-4431-a7a3-30c38682e6c8";
+const RECRUIT_PRO_BOARD_ID =
+  process.env.RECRUIT_PRO_COMPANY_ID || "8bbf3624-215a-48a8-8eab-eb814fc60d48";
 
-const RECRUIT_PRO_TOKEN = process.env.RECRUIT_PRO_TOKEN || "";
+// const RECRUIT_PRO_TOKEN =
+//   process.env.RECRUIT_PRO_TOKEN ||
+//   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIyOTE4YzU5MS01YTZlLTRmMmUtYTkyYy1lMzJlN2I3MmNhMjIiLCJlbWFpbCI6Imt1bWFydmt5NDcyQGdtYWlsLmNvbSIsInJvbGUiOiJhZG1pbiIsImNvbXBhbnlJZCI6Ijg5YzU0OTM5LTdiMjQtNGVkZC1hOTI4LWU1ZTBjZWQ2NzIxOSIsIm5hbWUiOiJWaWNreSBLdW1hciIsImlhdCI6MTc4NTc1NTYyOSwiZXhwIjoxNzg2MzYwNDI5fQ.EevbYy7p2Goe6S3AO-MnuuUCv-TiCGQAmN5CXwjjVrU";
 
 /** Raw shape returned by the RecruitPro API */
 export interface RecruitProJob {
   id: string;
   title: string;
   slug: string;
-  description: string;
-  requirements: string;
-  location: string;
-  experience: string;
-  enabled: boolean;
-  createdAt: string;
-  createdBy: string;
-  createdByName: string;
-  companyId: string;
-  minCtc: string;
-  maxCtc: string;
+  description?: string;
+  requirements?: string;
+  roleOverview?: string;
+  superpowers?: string;
+  benefits?: string;
+  department?: string;
+  location?: string;
+  experience?: string;
+  employmentType?: string;
+  enabled?: boolean;
+  createdAt?: string;
+  createdBy?: string;
+  createdByName?: string;
+  companyId?: string;
+  minCtc?: string;
+  maxCtc?: string;
 }
 
 /**
@@ -334,42 +346,60 @@ function mapRecruitProJob(raw: RecruitProJob) {
     department = "Sales & Business";
   else if (titleLower.includes("data") || titleLower.includes("ai") || titleLower.includes("ml"))
     department = "Data & AI";
-  else if (titleLower.includes("devops") || titleLower.includes("cloud") || titleLower.includes("sre"))
+  else if (
+    titleLower.includes("devops") ||
+    titleLower.includes("cloud") ||
+    titleLower.includes("sre")
+  )
     department = "DevOps & Cloud";
-  else if (titleLower.includes("manager") || titleLower.includes("lead") || titleLower.includes("senior"))
-    department = "Leadership";
+  else if (
+    titleLower.includes("manager") ||
+    titleLower.includes("lead") ||
+    titleLower.includes("senior") ||
+    titleLower.includes("project")
+  )
+    department = "Management";
 
-  const ctcRange =
-    raw.minCtc && raw.maxCtc
-      ? `₹${raw.minCtc}L – ₹${raw.maxCtc}L`
-      : "";
+  const ctcRange = raw.minCtc && raw.maxCtc ? `₹${raw.minCtc}L – ₹${raw.maxCtc}L` : "";
 
   return {
     // Core identity — use slug as ID so the URL is human-readable
     id: raw.slug || raw.id,
-    title: raw.title,
+    title: raw.title.trim(),
     department,
     location: raw.location || "Bangalore, India",
-    type: "Full-time",
+    type: raw.employmentType || "Full-time",
     tags: raw.experience ? [raw.experience, department] : [department],
 
     // Detail page fields
-    desc: raw.description || "",
+    desc: raw.roleOverview || raw.description || "",
     roleOverviewTitle: "Role Overview",
     whatYoullDoTitle: "What You'll Do",
     whatYoullDo: descBullets,
     requirementsTitle: "Requirements",
     requirements: reqBullets,
     superpowersTitle: "Your Superpowers",
-    superpowers: raw.experience ? [`${raw.experience} of relevant experience`] : [],
+    superpowers: raw.superpowers
+      ? raw.superpowers
+          .split(/\n+/)
+          .map((s) => s.trim())
+          .filter(Boolean)
+      : raw.experience
+        ? [`${raw.experience} of relevant experience`]
+        : [],
     benefitsTitle: "Benefits",
-    benefits: [
-      "Health Insurance",
-      "Provident Fund + Performance Bonus",
-      "Maternity + Paternity Leave",
-      "Flexible work environment",
-      ctcRange ? `CTC Range: ${ctcRange}` : "Competitive compensation",
-    ].filter(Boolean),
+    benefits: raw.benefits
+      ? raw.benefits
+          .split(/\n+/)
+          .map((s) => s.trim())
+          .filter(Boolean)
+      : [
+          "Health Insurance",
+          "Provident Fund + Performance Bonus",
+          "Maternity + Paternity Leave",
+          "Flexible work environment",
+          ctcRange ? `CTC Range: ${ctcRange}` : "Competitive compensation",
+        ].filter(Boolean),
     hiringTimelineTitle: "Hiring Timeline",
     hiringTimelineText:
       "Our typical hiring process takes 7–14 business days from the first interview to offer letter.",
@@ -385,37 +415,48 @@ function mapRecruitProJob(raw: RecruitProJob) {
  */
 export async function getRecruitProJobs() {
   try {
-    const url = `${RECRUIT_PRO_API_URL}/api/jobs/company/${RECRUIT_PRO_COMPANY_ID}`;
+    const url =
+      "https://apis.recruitpro.hutechsolutions.in/api/jobs/company/89c54939-7b24-4edd-a928-e5e0ced67219";
+    // const token =
+    //   process.env.RECRUIT_PRO_TOKEN ||
+    //   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI3MmZiNDcyMC0wOWI2LTQ5ZjUtOGI4MS1jZWQxYmYzOTcyZGMiLCJlbWFpbCI6ImdsYWRzdG9uQGh1dGVjaHNvbHV0aW9ucy5jb20iLCJyb2xlIjoicmVjcnVpdGVyIiwiY29tcGFueUlkIjoiODljNTQ5MzktN2IyNC00ZWRkLWE5MjgtZTVlMGNlZDY3MjE5IiwibmFtZSI6IlphbWVlciIsImlhdCI6MTc4NjM1ODI2MiwiZXhwIjoxNzg2OTYzMDYyfQ.TalHIz05g8iwdrhiY01wwJvojVtndqNENzJbGLq9SuM";
+
     const res = await fetch(url, {
       headers: {
-        Authorization: `Bearer ${RECRUIT_PRO_TOKEN}`,
+        // Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",
       },
-      next: { revalidate: 120 }, // ISR: refresh every 2 minutes
+      next: { revalidate: 60 },
     });
 
     if (!res.ok) {
-      console.warn("[RecruitPro] Failed to fetch jobs:", res.status);
+      console.warn(
+        "[RecruitPro] Failed to fetch jobs:",
+        res.status,
+        "from URL:",
+        url,
+        "- Returning empty array."
+      );
       return [];
     }
 
     const data = await res.json();
     const jobs: RecruitProJob[] = data?.jobs || [];
-    return jobs.filter((j) => j.enabled).map(mapRecruitProJob);
+    return jobs.filter((j) => j.enabled !== false).map(mapRecruitProJob);
   } catch (err) {
-    console.warn("[RecruitPro] getRecruitProJobs error:", err);
+    console.warn("[RecruitPro] getRecruitProJobs error:", err, "- Returning empty array.");
     return [];
   }
 }
 
 /**
- * Finds a single job by slug from the RecruitPro HR platform.
+ * Finds a single job by slug or ID from the RecruitPro HR platform.
  * Returns null if not found or on error.
  */
 export async function getRecruitProJobBySlug(slug: string) {
   try {
     const jobs = await getRecruitProJobs();
-    return jobs.find((j) => j.id === slug || j.id === slug) || null;
+    return jobs.find((j: any) => j.id === slug) || null;
   } catch (err) {
     console.warn("[RecruitPro] getRecruitProJobBySlug error:", err);
     return null;

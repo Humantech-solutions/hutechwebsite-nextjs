@@ -32,46 +32,46 @@ export default function BlogsClient({ blogs, pageTitle, pageDescription, bgImage
   };
 
   return (
-    <div className="flex flex-col bg-white min-h-screen">
+    <div className="flex min-h-screen flex-col bg-white">
       <Meta
         title="Blogs | Hutech Solutions"
         description="Latest insights and thought leadership from Hutech Solutions experts."
       />
       <Breadcrumbs variant="light" />
 
-      <section className="bg-[#001A3D] text-white h-[450px] relative overflow-hidden flex items-center">
+      <section className="relative flex h-[450px] items-center overflow-hidden bg-[#001A3D] text-white">
         {bgImageUrl && (
           <div className="absolute inset-0 z-0">
             <ImageWithFallback
               src={bgImageUrl}
               alt={pageTitle}
-              className="w-full h-full object-cover opacity-20"
+              className="h-full w-full object-cover opacity-20"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-[#001A3D] via-transparent to-transparent"></div>
           </div>
         )}
-        <div className="max-w-[1280px] mx-auto px-6 lg:px-20 relative z-10 w-full">
+        <div className="relative z-10 mx-auto w-full max-w-[1280px] px-6 lg:px-20">
           <Motion.h1
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="text-5xl md:text-7xl font-semibold mb-6 display-font"
+            className="display-font mb-6 text-5xl font-semibold md:text-7xl"
           >
             {renderTitle(pageTitle)}
           </Motion.h1>
-          <p className="text-xl text-gray-400 max-w-2xl leading-relaxed font-medium">
+          <p className="max-w-2xl text-xl font-medium leading-relaxed text-gray-400">
             {pageDescription}
           </p>
         </div>
       </section>
 
       <section className="py-20">
-        <div className="max-w-[1280px] mx-auto px-6 lg:px-20">
+        <div className="mx-auto max-w-[1280px] px-6 lg:px-20">
           {blogs.length === 0 ? (
-            <p className="text-center text-gray-400 py-20 text-lg">
+            <p className="py-20 text-center text-lg text-gray-400">
               No articles found. Check back soon!
             </p>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
+            <div className="grid grid-cols-1 gap-12 md:grid-cols-3">
               {currentBlogs.map((blog, i) => (
                 <Motion.article
                   key={blog.slug}
@@ -79,40 +79,62 @@ export default function BlogsClient({ blogs, pageTitle, pageDescription, bgImage
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ delay: i * 0.1 }}
-                  className="group flex flex-col h-full bg-white border border-gray-100 rounded-[15px] md:rounded-3xl overflow-hidden hover:shadow-2xl transition-all"
+                  className="group flex h-full flex-col overflow-hidden rounded-[15px] border border-gray-100 bg-white transition-all hover:shadow-2xl md:rounded-3xl"
                 >
-                  <div className="relative h-64 overflow-hidden">
-                    <ImageWithFallback
-                      src={blog.imageUrl || undefined}
-                      alt={blog.title}
-                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
-                    />
-                    <div className="absolute top-6 left-6 px-4 py-1 bg-[#F99D1C] text-[#001A3D] font-bold text-xs rounded-full uppercase tracking-widest">
-                      {blog.category}
+                  <Link
+                    href={blog.isIPublish ? `/resources/blogs/ipublish/${blog.slug}` : `/resources/blogs/${blog.slug}`}
+                    className="items-center gap-2 font-bold text-[#001A3D] transition-all group-hover:gap-4"
+                  >
+                    <div className="relative h-64 overflow-hidden">
+                      {blog.isIPublish && !blog.imageUrl && blog.ipublishMeta ? (
+                        <div 
+                          className="h-full w-full flex items-center justify-center p-6 text-center transition-transform duration-700 group-hover:scale-105"
+                          style={{
+                            background: `linear-gradient(${blog.ipublishMeta.gradientDirection || '135deg'}, ${blog.ipublishMeta.gradientFrom || '#6d5ef8'}, ${blog.ipublishMeta.gradientTo || '#ec4899'})`
+                          }}
+                        >
+                          {blog.ipublishMeta.pattern === "vertical-lines" && (
+                            <div 
+                              className="absolute inset-0 pointer-events-none"
+                              style={{
+                                backgroundImage: `linear-gradient(90deg, #ffffff 10%, transparent 1%)`,
+                                backgroundSize: '20px 100%'
+                              }}
+                            />
+                          )}
+                          <h4 className="relative z-10 text-white font-bold text-xl drop-shadow-md display-font">
+                            {blog.title}
+                          </h4>
+                        </div>
+                      ) : (
+                        <ImageWithFallback
+                          src={blog.imageUrl || undefined}
+                          alt={blog.title}
+                          className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110"
+                        />
+                      )}
+                      <div className="absolute left-6 top-6 rounded-full bg-[#F99D1C] px-4 py-1 text-xs font-bold uppercase tracking-widest text-[#001A3D]">
+                        {blog.category}
+                      </div>
                     </div>
-                  </div>
-                  <div className="p-10 flex flex-col flex-grow space-y-4">
-                    <div className="flex items-center gap-4 text-xs text-gray-500 font-medium">
-                      <span className="flex items-center gap-1">
-                        <Calendar size={14} /> {blog.date}
-                      </span>
-                      <span className="flex items-center gap-1">
-                        <User size={14} /> {blog.author}
-                      </span>
+                    <div className="flex flex-grow flex-col space-y-4 p-10">
+                      <div className="flex items-center gap-4 text-xs font-medium text-gray-500">
+                        <span className="flex items-center gap-1">
+                          <Calendar size={14} /> {blog.date}
+                        </span>
+                        {/* <span className="flex items-center gap-1">
+                          <User size={14} /> {blog.author}
+                        </span> */}
+                      </div>
+                      <h3 className="display-font text-2xl font-bold text-[#001A3D] transition-colors group-hover:text-[#F99D1C]">
+                        {blog.title}
+                      </h3>
+                      <p className="flex-grow leading-relaxed text-gray-500">{blog.excerpt}</p>
+                      <p className="inline-flex items-center gap-2 font-bold text-[#001A3D] transition-all group-hover:gap-4">
+                        Read Article <ArrowRight size={18} className="text-[#F99D1C]" />
+                      </p>
                     </div>
-                    <h3 className="text-2xl font-bold text-[#001A3D] display-font group-hover:text-[#F99D1C] transition-colors">
-                      {blog.title}
-                    </h3>
-                    <p className="text-gray-500 leading-relaxed flex-grow">
-                      {blog.excerpt}
-                    </p>
-                    <Link
-                      href={`/resources/blogs/${blog.slug}`}
-                      className="inline-flex items-center gap-2 text-[#001A3D] font-bold group-hover:gap-4 transition-all"
-                    >
-                      Read Article <ArrowRight size={18} className="text-[#F99D1C]" />
-                    </Link>
-                  </div>
+                  </Link>
                 </Motion.article>
               ))}
             </div>
@@ -120,11 +142,11 @@ export default function BlogsClient({ blogs, pageTitle, pageDescription, bgImage
 
           {/* Pagination */}
           {totalPages > 1 && (
-            <div className="flex items-center justify-center gap-4 mt-16">
+            <div className="mt-16 flex items-center justify-center gap-4">
               <button
                 onClick={() => handlePageChange(currentPage - 1)}
                 disabled={currentPage === 1}
-                className="p-3 rounded-full border border-gray-200 text-gray-400 hover:border-[#0171c1] hover:text-[#0171c1] hover:bg-[#0171c1]/5 transition-all disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:border-gray-200 disabled:hover:text-gray-400 disabled:hover:bg-transparent"
+                className="rounded-full border border-gray-200 p-3 text-gray-400 transition-all hover:border-[#0171c1] hover:bg-[#0171c1]/5 hover:text-[#0171c1] disabled:cursor-not-allowed disabled:opacity-30 disabled:hover:border-gray-200 disabled:hover:bg-transparent disabled:hover:text-gray-400"
               >
                 <ChevronLeft size={20} />
               </button>
@@ -134,10 +156,10 @@ export default function BlogsClient({ blogs, pageTitle, pageDescription, bgImage
                   <button
                     key={page}
                     onClick={() => handlePageChange(page)}
-                    className={`w-12 h-12 rounded-full font-bold text-sm transition-all ${
+                    className={`h-12 w-12 rounded-full text-sm font-bold transition-all ${
                       currentPage === page
                         ? "bg-[#0171c1] text-white"
-                        : "border border-gray-200 text-gray-600 hover:border-[#0171c1] hover:text-[#0171c1] hover:bg-[#0171c1]/5"
+                        : "border border-gray-200 text-gray-600 hover:border-[#0171c1] hover:bg-[#0171c1]/5 hover:text-[#0171c1]"
                     }`}
                   >
                     {page}
@@ -148,7 +170,7 @@ export default function BlogsClient({ blogs, pageTitle, pageDescription, bgImage
               <button
                 onClick={() => handlePageChange(currentPage + 1)}
                 disabled={currentPage === totalPages}
-                className="p-3 rounded-full border border-gray-200 text-gray-400 hover:border-[#0171c1] hover:text-[#0171c1] hover:bg-[#0171c1]/5 transition-all disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:border-gray-200 disabled:hover:text-gray-400 disabled:hover:bg-transparent"
+                className="rounded-full border border-gray-200 p-3 text-gray-400 transition-all hover:border-[#0171c1] hover:bg-[#0171c1]/5 hover:text-[#0171c1] disabled:cursor-not-allowed disabled:opacity-30 disabled:hover:border-gray-200 disabled:hover:bg-transparent disabled:hover:text-gray-400"
               >
                 <ChevronRight size={20} />
               </button>

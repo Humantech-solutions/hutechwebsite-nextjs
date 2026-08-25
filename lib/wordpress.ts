@@ -83,7 +83,9 @@ export async function fetchGraphQL(query: string, variables = {}) {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ query, variables }),
-      next: { revalidate: 60 },
+      ...(process.env.NODE_ENV === "development"
+        ? { cache: "no-store" }
+        : { next: { revalidate: 60 } }),
       signal: controller.signal,
     });
 
@@ -336,8 +338,8 @@ const ACCORDION_FIELDS = `
 `;
 
 const HOMEPAGE_QUERY = `
-  query GetHomePage {
-    page(id: "home", idType: URI) {
+  query GetHomePage($uri: String!) {
+    pageBy(uri: $uri) {
       id
       title
       homepageFields {
@@ -531,6 +533,8 @@ export interface WpNewsItem {
   title?: string;
   date?: string;
   image?: any;
+  slug?: string;
+  imageUrl?: string;
 }
 
 export interface WpAccordionItem {
@@ -630,7 +634,7 @@ function transformHomePage(
   dynamicTestimonials: any[] = [],
   dynamicBlogs: any[] = []
 ): HomepageData | null {
-  const f = raw?.data?.page?.homepageFields;
+  const f = raw?.data?.pageBy?.homepageFields || raw?.data?.page?.homepageFields;
   if (!f) return null;
 
   // Returns true only if the group object has at least one non-blank string value.
@@ -721,6 +725,7 @@ function transformHomePage(
   if (dynamicBlogs.length > 0) {
     newsItems = dynamicBlogs.map((b: any) => ({
       title: b.title,
+      slug: b.slug,
       date: new Date(b.date).toLocaleDateString("en-US", {
         year: "numeric",
         month: "long",
@@ -882,15 +887,16 @@ const BLOGS_BY_CATEGORY_FOR_HOME_QUERY = `
   }
 `;
 
-export async function getHomePage(): Promise<HomepageData | null> {
+export async function getHomePage(uri: string = "/"): Promise<HomepageData | null> {
   try {
-    const raw = await fetchGraphQL(HOMEPAGE_QUERY);
-    if (raw?.errors || !raw?.data?.page) {
+    const queryUri = uri === "/" ? "home" : uri;
+    const raw = await fetchGraphQL(HOMEPAGE_QUERY, { uri: queryUri });
+    if (raw?.errors || !raw?.data?.pageBy) {
       console.warn("[WP] Could not fetch homepage data. Using static fallback.");
       return null;
     }
 
-    const acf = raw?.data?.page?.homepageFields || {};
+    const acf = raw?.data?.pageBy?.homepageFields || {};
     const exp = acf.expertise || {};
     const ss  = acf.successStories || {};
     const wn  = acf.whatsNew || {};
@@ -956,6 +962,13 @@ export type WpBlog = {
   imageUrl?: string;
   readTime: string;
   tags: string[];
+  isIPublish?: boolean;
+  ipublishMeta?: {
+    gradientFrom?: string;
+    gradientTo?: string;
+    gradientDirection?: string;
+    pattern?: string;
+  };
   faqs?: {
     question: string;
     answer: string;
@@ -1618,27 +1631,35 @@ const CASE_STUDY_FAQ_QUERY = `
         challenge8Desc
         challenge8Icon
         solution1Title
+        solution1Icon { node { sourceUrl } }
         solution1Desc
         solution1Icon
         solution2Title
+        solution2Icon { node { sourceUrl } }
         solution2Desc
         solution2Icon
         solution3Title
+        solution3Icon { node { sourceUrl } }
         solution3Desc
         solution3Icon
         solution4Title
+        solution4Icon { node { sourceUrl } }
         solution4Desc
         solution4Icon
         solution5Title
+        solution5Icon { node { sourceUrl } }
         solution5Desc
         solution5Icon
         solution6Title
+        solution6Icon { node { sourceUrl } }
         solution6Desc
         solution6Icon
         solution7Title
+        solution7Icon { node { sourceUrl } }
         solution7Desc
         solution7Icon
         solution8Title
+        solution8Icon { node { sourceUrl } }
         solution8Desc
         solution8Icon
         process1Number
@@ -1968,10 +1989,9 @@ export async function getCaseStudyPageData(): Promise<BlogPageData | null> {
 // ─── About Page GraphQL Query ─────────────────────────────────────────────────
 
 const ABOUT_PAGE_QUERY = `
-  query GetAboutPageData {
-    pages(where: { title: "About" }) {
-      nodes {
-        aboutPageFields {
+  query GetAboutPageData($uri: String!) {
+    pageBy(uri: $uri) {
+      aboutPageFields {
           heroTagline
           heroTitle
           heroDescription
@@ -2012,7 +2032,6 @@ const ABOUT_PAGE_QUERY = `
           ctaTitle ctaDescription
           ctaButton1Text ctaButton1Url
           ctaButton2Text ctaButton2Url
-        }
       }
     }
   }
@@ -2036,69 +2055,80 @@ function transformAboutPageData(f: any) {
   const features = [1, 2, 3, 4].map(i => ({
     title: f[`overviewFeature${i}Title`] || "",
     desc:  f[`overviewFeature${i}Desc`] || "",
-    icon:  "" // Icons are static in AboutClient
+    icon:  ["Code2", "Cpu", "Fingerprint", "ShieldCheck"][i - 1] || "Code2"
   })).filter(feat => feat.title);
 
   const offices = [1, 2, 3, 4, 5].map(i => ({
-    id: f[`location${i}Name`]?.toLowerCase().replace(/\s+/g, '-') || `office-${i}`,
-    name: f[`location${i}Name`] || "",
+    id: (f[`location${i}Name`] || f[`location${i}City`] || `office-${i}`).toLowerCase().replace(/\s+/g, '-'),
+    name: f[`location${i}Name`] || f[`location${i}City`] || "",
     city: f[`location${i}City`] || "",
     type: f[`location${i}Type`] || "",
     details: f[`location${i}Details`] || "",
     lat: f[`location${i}Lat`] || "",
     lng: f[`location${i}Lng`] || ""
-  })).filter(loc => loc.name);
+  })).filter(loc => loc.city || loc.name);
 
   return {
-    heroTagline:    f.heroTagline    || "Corporate Profile",
-    heroTitle:      f.heroTitle      || "Architecting |Business Value.",
-    heroDescription:f.heroDescription|| "",
+    heroTagline:    f.heroTagline    || undefined,
+    heroTitle:      f.heroTitle      || undefined,
+    heroDescription:f.heroDescription|| undefined,
     heroBgImage:    imgUrl(f.heroBgImage) || undefined,
-    stats,
-    overviewTitle:  f.overviewTitle  || "Providing The Finest |Digital Experiences.",
-    overviewQuote:  f.overviewDescription || "",
-    features,
-    whatWeDoTitle:  f.whatWeDoTitle  || "What We Do",
-    whatWeDoDesc:   f.whatWeDoDesc   || "",
-    whatWeDoItems,
-    whoWeHelpTitle: f.whoWeHelpTitle || "Who We Help?",
-    whoWeHelpDesc:  f.whoWeHelpDesc  || "",
-    whoWeHelpItems,
-    whyChooseTitle: f.whyChooseUsTitle || "Why Choose Us",
-    whyChooseDesc:  f.whyChooseUsDesc  || "",
-    synergyTitle:   f.globalSynergyTitle || "Global |Synergy.",
-    synergyDesc:    f.globalSynergyDesc || "",
-    synergyStat1:   f.synergyStat1Label || "4 Global Offices",
-    synergyStat2:   f.synergyStat2Label || "90+ Member Team",
+    stats:          stats.length > 0 ? stats : undefined,
+    overviewTitle:  f.overviewTitle  || undefined,
+    overviewQuote:  f.overviewDescription || undefined,
+    features:       features.length > 0 ? features : undefined,
+    whatWeDoTitle:  f.whatWeDoTitle  || undefined,
+    whatWeDoDesc:   f.whatWeDoDesc   || undefined,
+    whatWeDoItems:  whatWeDoItems.length > 0 ? whatWeDoItems : undefined,
+    whoWeHelpTitle: f.whoWeHelpTitle || undefined,
+    whoWeHelpDesc:  f.whoWeHelpDesc  || undefined,
+    whoWeHelpItems: whoWeHelpItems.length > 0 ? whoWeHelpItems : undefined,
+    whyChooseTitle: f.whyChooseUsTitle || undefined,
+    whyChooseDesc:  f.whyChooseUsDesc  || undefined,
+    synergyTitle:   f.globalSynergyTitle || undefined,
+    synergyDesc:    f.globalSynergyDesc || undefined,
+    synergyStat1:   f.synergyStat1Label || undefined,
+    synergyStat2:   f.synergyStat2Label || undefined,
     // Map stats
-    mapTitle:       f.globalFootprintTitle || "Global Footprint, |Local Expertise.",
-    mapDescription: f.globalFootprintDesc || "",
-    mapStat1Value:  f.globalStat1Value  || "24/7",
-    mapStat1Label:  f.globalStat1Label  || "Operations",
-    mapStat2Value:  f.globalStat2Value  || "3",
-    mapStat2Label:  f.globalStat2Label  || "Continents",
-    offices,
-    historySubtitle:f.historySubtitle || "Corporate Evolution",
-    historyTitle:   f.historyTitle   || "Our |History.",
-    milestones,
+    mapTitle:       f.globalFootprintTitle || undefined,
+    mapDescription: f.globalFootprintDesc || undefined,
+    mapStat1Value:  f.globalStat1Value  || undefined,
+    mapStat1Label:  f.globalStat1Label  || undefined,
+    mapStat2Value:  f.globalStat2Value  || undefined,
+    mapStat2Label:  f.globalStat2Label  || undefined,
+    offices:        offices.length > 0 ? offices : undefined,
+    historySubtitle:f.historySubtitle || undefined,
+    historyTitle:   f.historyTitle   || undefined,
+    milestones:     milestones.length > 0 ? milestones : undefined,
     ctaBgImage:     imgUrl(f.ctaBgImage) || undefined,
-    ctaTitle:       f.ctaTitle       || "Join the Next |Digital Revolution.",
-    ctaDescription: f.ctaDescription || "",
-    ctaBtn1Text:    f.ctaButton1Text || "Start Your Project",
-    ctaBtn1Url:     f.ctaButton1Url  || "/contact",
-    ctaBtn2Text:    f.ctaButton2Text || "Executive Careers",
-    ctaBtn2Url:     f.ctaButton2Url  || "/careers",
+    ctaTitle:       f.ctaTitle       || undefined,
+    ctaDescription: f.ctaDescription || undefined,
+    ctaBtn1Text:    f.ctaButton1Text || undefined,
+    ctaBtn1Url:     f.ctaButton1Url  || undefined,
+    ctaBtn2Text:    f.ctaButton2Text || undefined,
+    ctaBtn2Url:     f.ctaButton2Url  || undefined,
   };
 }
 
-export async function getAboutPageData(): Promise<ReturnType<typeof transformAboutPageData> | null> {
+export async function getAboutPageData(uri: string = "/about/"): Promise<ReturnType<typeof transformAboutPageData> | null> {
   try {
-    const raw = await fetchGraphQL(ABOUT_PAGE_QUERY);
-    const f = raw?.data?.pages?.nodes?.[0]?.aboutPageFields;
+    let raw = await fetchGraphQL(ABOUT_PAGE_QUERY, { uri });
+    let f = raw?.data?.pageBy?.aboutPageFields;
+
+    if (!f && uri !== "/about/") {
+      raw = await fetchGraphQL(ABOUT_PAGE_QUERY, { uri: "/about/" });
+      f = raw?.data?.pageBy?.aboutPageFields;
+    }
+
+    if (!f && uri !== "about") {
+      raw = await fetchGraphQL(ABOUT_PAGE_QUERY, { uri: "about" });
+      f = raw?.data?.pageBy?.aboutPageFields;
+    }
+
     if (!f) return null;
     return transformAboutPageData(f);
   } catch (err) {
-    console.warn("[WP] getAboutPageData() failed:", err);
+    console.warn(`[WP] getAboutPageData(${uri}) failed:`, err);
     return null;
   }
 }
@@ -2106,9 +2136,8 @@ export async function getAboutPageData(): Promise<ReturnType<typeof transformAbo
 // ─── Awards Page ─────────────────────────────────────────────────────────────
 
 const AWARDS_PAGE_QUERY = `
-  query GetAwardsPageData {
-    pages(where: { name: "awards" }) {
-      nodes {
+  query GetAwardsPageData($uri: String!) {
+    pageBy(uri: $uri) {
         awardsPageFields {
           awardsHeroTagline
           awardsHeroTitle
@@ -2145,7 +2174,6 @@ const AWARDS_PAGE_QUERY = `
           awardsCtaBtn1Text awardsCtaBtn1Url
           awardsCtaBtn2Text awardsCtaBtn2Url
         }
-      }
     }
   }
 `;
@@ -2195,10 +2223,10 @@ function transformAwardsPageData(f: any) {
   };
 }
 
-export async function getAwardsPageData(): Promise<ReturnType<typeof transformAwardsPageData> | null> {
+export async function getAwardsPageData(uri: string = "/awards/"): Promise<ReturnType<typeof transformAwardsPageData> | null> {
   try {
-    const raw = await fetchGraphQL(AWARDS_PAGE_QUERY);
-    const f = raw?.data?.pages?.nodes?.[0]?.awardsPageFields;
+    const raw = await fetchGraphQL(AWARDS_PAGE_QUERY, { uri });
+    const f = raw?.data?.pageBy?.awardsPageFields;
     if (!f) return null;
     return transformAwardsPageData(f);
   } catch (err) {
@@ -2210,9 +2238,8 @@ export async function getAwardsPageData(): Promise<ReturnType<typeof transformAw
 // ─── Vision Mission & Values Page ────────────────────────────────────────────
 
 const VMV_PAGE_QUERY = `
-  query GetVMVPageData {
-    pages(where: { title: "Vision Mission Values" }) {
-      nodes {
+  query GetVMVPageData($uri: String!) {
+    pageBy(uri: $uri) {
         visionMissionValuesPageFields {
           vmvHeroTagline
           vmvHeroTitle
@@ -2234,9 +2261,8 @@ const VMV_PAGE_QUERY = `
           vmvCtaDescription
           vmvCtaBtn1Text vmvCtaBtn1Url
           vmvCtaBtn2Text vmvCtaBtn2Url
-        }
-      }
     }
+  }
   }
 `;
 
@@ -2267,10 +2293,10 @@ function transformVMVPageData(f: any) {
   };
 }
 
-export async function getVMVPageData(): Promise<ReturnType<typeof transformVMVPageData> | null> {
+export async function getVMVPageData(uri: string = "/vision-mission-values/"): Promise<ReturnType<typeof transformVMVPageData> | null> {
   try {
-    const raw = await fetchGraphQL(VMV_PAGE_QUERY);
-    const f = raw?.data?.pages?.nodes?.[0]?.visionMissionValuesPageFields;
+    const raw = await fetchGraphQL(VMV_PAGE_QUERY, { uri });
+    const f = raw?.data?.pageBy?.visionMissionValuesPageFields;
     if (!f) return null;
     return transformVMVPageData(f);
   } catch (err) {
@@ -2282,9 +2308,8 @@ export async function getVMVPageData(): Promise<ReturnType<typeof transformVMVPa
 // ─── Leadership Page ─────────────────────────────────────────────────────────
 
 const LEADERSHIP_PAGE_QUERY = `
-  query GetLeadershipPageData {
-    pages(where: { title: "Leadership" }) {
-      nodes {
+  query GetLeadershipPageData($uri: String!) {
+    pageBy(uri: $uri) {
         leadershipPageFields {
           leadHeroTagline
           leadHeroTitle
@@ -2313,7 +2338,6 @@ const LEADERSHIP_PAGE_QUERY = `
           leadCtaBtn1Text leadCtaBtn1Url
           leadCtaBtn2Text leadCtaBtn2Url
         }
-      }
     }
   }
 `;
@@ -2356,10 +2380,10 @@ function transformLeadershipPageData(f: any) {
   };
 }
 
-export async function getLeadershipPageData(): Promise<ReturnType<typeof transformLeadershipPageData> | null> {
+export async function getLeadershipPageData(uri: string = "/leadership/"): Promise<ReturnType<typeof transformLeadershipPageData> | null> {
   try {
-    const raw = await fetchGraphQL(LEADERSHIP_PAGE_QUERY);
-    const f = raw?.data?.pages?.nodes?.[0]?.leadershipPageFields;
+    const raw = await fetchGraphQL(LEADERSHIP_PAGE_QUERY, { uri });
+    const f = raw?.data?.pageBy?.leadershipPageFields;
     if (!f) return null;
     return transformLeadershipPageData(f);
   } catch (err) {
@@ -2371,10 +2395,9 @@ export async function getLeadershipPageData(): Promise<ReturnType<typeof transfo
 // ─── Partnership Page ────────────────────────────────────────────────────────
 
 const PARTNERSHIP_PAGE_QUERY = `
-  query GetPartnershipPageData {
-    pages(where: { title: "Partnership" }) {
-      nodes {
-        partnershipPageFields {
+  query GetPartnershipPageData($uri: String!) {
+    pageBy(uri: $uri) {
+      partnershipPageFields {
           partHeroTagline
           partHeroTitle
           partHeroDescription
@@ -2432,7 +2455,6 @@ const PARTNERSHIP_PAGE_QUERY = `
           partCtaDescription
           partCtaEmail
         }
-      }
     }
   }
 `;
@@ -2498,14 +2520,14 @@ function transformPartnershipPageData(f: any) {
   };
 }
 
-export async function getPartnershipPageData(): Promise<ReturnType<typeof transformPartnershipPageData> | null> {
+export async function getPartnershipPageData(uri: string = "/partnership/"): Promise<ReturnType<typeof transformPartnershipPageData> | null> {
   try {
-    const raw = await fetchGraphQL(PARTNERSHIP_PAGE_QUERY);
-    const f = raw?.data?.pages?.nodes?.[0]?.partnershipPageFields;
+    const raw = await fetchGraphQL(PARTNERSHIP_PAGE_QUERY, { uri });
+    const f = raw?.data?.pageBy?.partnershipPageFields;
     if (!f) return null;
     return transformPartnershipPageData(f);
   } catch (err) {
-    console.warn("[WP] getPartnershipPageData() failed:", err);
+    console.warn(`[WP] getPartnershipPageData(${uri}) failed:`, err);
     return null;
   }
 }
@@ -3265,6 +3287,7 @@ const NEWS_LIST_QUERY = `
           newsDate
           newsAuthor
           newsRole
+          newsSource
         }
       }
     }
@@ -3297,6 +3320,7 @@ const NEWS_DETAIL_QUERY = `
         newsDate
         newsAuthor
         newsRole
+        newsSource
       }
     }
   }
@@ -3311,6 +3335,7 @@ export interface NewsItem {
   desc?: string;
   author: string;
   role: string;
+  source?: string;
   image?: string;
   contentHtml?: string;
   tags: string[];
@@ -3350,8 +3375,9 @@ function transformNewsNode(node: any): NewsItem {
     category,
     readTime,
     desc: desc || undefined,
-    author: f.newsAuthor || "Elena Vance",
-    role: f.newsRole || "Corporate Communications",
+    author: f.newsAuthor || "",
+    role: f.newsRole || "",
+    source: f.newsSource || f.newsAuthor || "",
     image: imgUrl(node.featuredImage) || undefined,
     contentHtml: rawContent || undefined,
     tags: tags.length > 0 ? tags : ["News"],
@@ -3420,6 +3446,7 @@ export interface HutechService {
   introText2?: string;
   introImage?: string;
   introImageTitle?: string;
+  introImageIcon?: string;
   introImageDesc?: string;
   stats?: { label: string; value: string }[];
   
@@ -3493,6 +3520,7 @@ const SERVICE_BY_SLUG_QUERY = `
         introText2
         introImage { node { sourceUrl } }
         introImageTitle
+        introImageIcon { node { sourceUrl } }
         introImageDesc
         
         stat1Value
@@ -3505,42 +3533,52 @@ const SERVICE_BY_SLUG_QUERY = `
         servicesSectionTitle
         servicesSectionDesc
         service1Title
+        service1Icon { node { sourceUrl } }
         service1Description
         service1BtnName
         service1BtnUrl { url title target }
         service2Title
+        service2Icon { node { sourceUrl } }
         service2Description
         service2BtnName
         service2BtnUrl { url title target }
         service3Title
+        service3Icon { node { sourceUrl } }
         service3Description
         service3BtnName
         service3BtnUrl { url title target }
         service4Title
+        service4Icon { node { sourceUrl } }
         service4Description
         service4BtnName
         service4BtnUrl { url title target }
         service5Title
+        service5Icon { node { sourceUrl } }
         service5Description
         service5BtnName
         service5BtnUrl { url title target }
         service6Title
+        service6Icon { node { sourceUrl } }
         service6Description
         service6BtnName
         service6BtnUrl { url title target }
         service7Title
+        service7Icon { node { sourceUrl } }
         service7Description
         service7BtnName
         service7BtnUrl { url title target }
         service8Title
+        service8Icon { node { sourceUrl } }
         service8Description
         service8BtnName
         service8BtnUrl { url title target }
         service9Title
+        service9Icon { node { sourceUrl } }
         service9Description
         service9BtnName
         service9BtnUrl { url title target }
         service10Title
+        service10Icon { node { sourceUrl } }
         service10Description
         service10BtnName
         service10BtnUrl { url title target }
@@ -3548,42 +3586,52 @@ const SERVICE_BY_SLUG_QUERY = `
         solutionsSectionTitle
         solutionsSectionDesc
         solution1Title
+        solution1Icon { node { sourceUrl } }
         solution1Description
         solution1BtnName
         solution1BtnUrl { url title target }
         solution2Title
+        solution2Icon { node { sourceUrl } }
         solution2Description
         solution2BtnName
         solution2BtnUrl { url title target }
         solution3Title
+        solution3Icon { node { sourceUrl } }
         solution3Description
         solution3BtnName
         solution3BtnUrl { url title target }
         solution4Title
+        solution4Icon { node { sourceUrl } }
         solution4Description
         solution4BtnName
         solution4BtnUrl { url title target }
         solution5Title
+        solution5Icon { node { sourceUrl } }
         solution5Description
         solution5BtnName
         solution5BtnUrl { url title target }
         solution6Title
+        solution6Icon { node { sourceUrl } }
         solution6Description
         solution6BtnName
         solution6BtnUrl { url title target }
         solution7Title
+        solution7Icon { node { sourceUrl } }
         solution7Description
         solution7BtnName
         solution7BtnUrl { url title target }
         solution8Title
+        solution8Icon { node { sourceUrl } }
         solution8Description
         solution8BtnName
         solution8BtnUrl { url title target }
         solution9Title
+        solution9Icon { node { sourceUrl } }
         solution9Description
         solution9BtnName
         solution9BtnUrl { url title target }
         solution10Title
+        solution10Icon { node { sourceUrl } }
         solution10Description
         solution10BtnName
         solution10BtnUrl { url title target }
@@ -3591,42 +3639,52 @@ const SERVICE_BY_SLUG_QUERY = `
         innovationsSectionTitle
         innovationsSectionDesc
         innovation1Title
+        innovation1Icon { node { sourceUrl } }
         innovation1Description
         innovation1BtnName
         innovation1BtnUrl { url title target }
         innovation2Title
+        innovation2Icon { node { sourceUrl } }
         innovation2Description
         innovation2BtnName
         innovation2BtnUrl { url title target }
         innovation3Title
+        innovation3Icon { node { sourceUrl } }
         innovation3Description
         innovation3BtnName
         innovation3BtnUrl { url title target }
         innovation4Title
+        innovation4Icon { node { sourceUrl } }
         innovation4Description
         innovation4BtnName
         innovation4BtnUrl { url title target }
         innovation5Title
+        innovation5Icon { node { sourceUrl } }
         innovation5Description
         innovation5BtnName
         innovation5BtnUrl { url title target }
         innovation6Title
+        innovation6Icon { node { sourceUrl } }
         innovation6Description
         innovation6BtnName
         innovation6BtnUrl { url title target }
         innovation7Title
+        innovation7Icon { node { sourceUrl } }
         innovation7Description
         innovation7BtnName
         innovation7BtnUrl { url title target }
         innovation8Title
+        innovation8Icon { node { sourceUrl } }
         innovation8Description
         innovation8BtnName
         innovation8BtnUrl { url title target }
         innovation9Title
+        innovation9Icon { node { sourceUrl } }
         innovation9Description
         innovation9BtnName
         innovation9BtnUrl { url title target }
         innovation10Title
+        innovation10Icon { node { sourceUrl } }
         innovation10Description
         innovation10BtnName
         innovation10BtnUrl { url title target }
@@ -3674,20 +3732,28 @@ const SERVICE_BY_SLUG_QUERY = `
         whyChooseSectionTitle
         whyChooseSectionDesc
         whyChoose1Title
+        whyChoose1Icon { node { sourceUrl } }
         whyChoose1Description
         whyChoose2Title
+        whyChoose2Icon { node { sourceUrl } }
         whyChoose2Description
         whyChoose3Title
+        whyChoose3Icon { node { sourceUrl } }
         whyChoose3Description
         whyChoose4Title
+        whyChoose4Icon { node { sourceUrl } }
         whyChoose4Description
         whyChoose5Title
+        whyChoose5Icon { node { sourceUrl } }
         whyChoose5Description
         whyChoose6Title
+        whyChoose6Icon { node { sourceUrl } }
         whyChoose6Description
         whyChoose7Title
+        whyChoose7Icon { node { sourceUrl } }
         whyChoose7Description
         whyChoose8Title
+        whyChoose8Icon { node { sourceUrl } }
         whyChoose8Description
         
         contactFormTitle
@@ -3784,7 +3850,15 @@ function transformServiceNode(node: any): HutechService {
       for (const field of fields) {
         const val = f[`${prefix}${i}${field}`];
         if (val) hasData = true;
-        item[field.toLowerCase()] = typeof val === 'object' && val !== null && val.url ? val.url : (val || "");
+        let finalVal = val || "";
+        if (typeof val === 'object' && val !== null) {
+          if (val.node && val.node.sourceUrl) {
+            finalVal = val.node.sourceUrl;
+          } else if (val.url) {
+            finalVal = val.url;
+          }
+        }
+        item[field.toLowerCase()] = finalVal;
       }
       if (hasData) items.push(item);
     }
@@ -3805,20 +3879,21 @@ function transformServiceNode(node: any): HutechService {
     introText2: f.introText2,
     introImage: imgUrl(f.introImage) || undefined,
     introImageTitle: f.introImageTitle,
+    introImageIcon: imgUrl(f.introImageIcon) || undefined,
     introImageDesc: f.introImageDesc,
     stats: parseRepeater('stat', 3, ['Value', 'Label']),
     
     servicesSectionTitle: f.servicesSectionTitle,
     servicesSectionDesc: f.servicesSectionDesc,
-    services: parseRepeater('service', 10, ['Title', 'Description', 'BtnName', 'BtnUrl']),
+    services: parseRepeater('service', 10, ['Title', 'Icon', 'Description', 'BtnName', 'BtnUrl']),
     
     solutionsSectionTitle: f.solutionsSectionTitle,
     solutionsSectionDesc: f.solutionsSectionDesc,
-    solutions: parseRepeater('solution', 10, ['Title', 'Description', 'BtnName', 'BtnUrl']),
+    solutions: parseRepeater('solution', 10, ['Title', 'Icon', 'Description', 'BtnName', 'BtnUrl']),
     
     innovationsSectionTitle: f.innovationsSectionTitle,
     innovationsSectionDesc: f.innovationsSectionDesc,
-    innovations: parseRepeater('innovation', 10, ['Title', 'Description', 'BtnName', 'BtnUrl']),
+    innovations: parseRepeater('innovation', 10, ['Title', 'Icon', 'Description', 'BtnName', 'BtnUrl']),
     
     ctaTitle: f.ctaTitle,
     ctaDescription: f.ctaDescription,
@@ -3833,7 +3908,7 @@ function transformServiceNode(node: any): HutechService {
     
     whyChooseSectionTitle: f.whyChooseSectionTitle,
     whyChooseSectionDesc: f.whyChooseSectionDesc,
-    whyChoose: parseRepeater('whyChoose', 8, ['Title', 'Description']),
+    whyChoose: parseRepeater('whyChoose', 8, ['Title', 'Icon', 'Description']),
     
     contactFormTitle: f.contactFormTitle,
     contactFormBtnName: f.contactFormBtnName,
@@ -4080,8 +4155,11 @@ const ALL_INDUSTRIES_QUERY = `
           stat3Value
           stat3Label
           solution1Title
+        solution1Icon { node { sourceUrl } }
           solution2Title
+        solution2Icon { node { sourceUrl } }
           solution3Title
+        solution3Icon { node { sourceUrl } }
         }
         serviceCategories {
           nodes {
@@ -4177,8 +4255,8 @@ export async function getIndustriesList(): Promise<IndustryItem[]> {
 // ─── Life at Hutech Query ────────────────────────────────────────────────────────
 
 const LIFE_AT_HUTECH_QUERY = `
-  query GetLifeAtHutechPage {
-    page(id: "life-at-hutech", idType: URI) {
+  query GetLifeAtHutechPage($uri: String!) {
+    page: pageBy(uri: $uri) {
       title
       lifeAtHutechSettings {
         heroEyebrow
@@ -4233,9 +4311,9 @@ export interface LifeAtHutechData {
   galleries: LifeGalleryPost[];
 }
 
-export async function getLifeAtHutechPage(): Promise<LifeAtHutechData | null> {
+export async function getLifeAtHutechPage(uri: string = "/life-at-hutech/"): Promise<LifeAtHutechData | null> {
   try {
-    const raw = await fetchGraphQL(LIFE_AT_HUTECH_QUERY);
+    const raw = await fetchGraphQL(LIFE_AT_HUTECH_QUERY, { uri });
     if (!raw?.data?.page) return null;
     
     const settings = raw.data.page.lifeAtHutechSettings || {};
@@ -4292,6 +4370,378 @@ export async function getLifeAtHutechPage(): Promise<LifeAtHutechData | null> {
   } catch (err) {
     console.warn("[WP] getLifeAtHutechPage failed:", err);
     return null;
+  }
+}
+
+// ─── Standard Pages ────────────────────────────────────────────────────────────
+
+export type WpPage = {
+  title: string;
+  content: string | null;
+  date: string;
+  slug: string;
+  uri: string;
+  templateName?: string;
+  pageRoutingSettings?: {
+    nextjsTemplate?: string[] | string;
+  };
+};
+
+const PAGE_BY_URI_QUERY = `
+  query GetPageByUri($uri: String!) {
+    pageBy(uri: $uri) {
+      title
+      content
+      date
+      uri
+      slug
+      template {
+        templateName
+      }
+      pageRoutingSettings {
+        nextjsTemplate
+      }
+    }
+  }
+`;
+
+export async function getPageByUri(uri: string): Promise<WpPage | null> {
+  try {
+    const raw = await fetchGraphQL(PAGE_BY_URI_QUERY, { uri });
+    const pageNode = raw?.data?.pageBy;
+    if (!pageNode) return null;
+    
+    return {
+      title: pageNode.title,
+      content: pageNode.content,
+      date: new Date(pageNode.date).toLocaleDateString("en-US", {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+      }),
+      slug: pageNode.slug,
+      uri: pageNode.uri,
+      templateName: pageNode.template?.templateName,
+      pageRoutingSettings: pageNode.pageRoutingSettings,
+    };
+  } catch (err) {
+    console.warn(`[WP] getPageByUri(${uri}) failed:`, err);
+    return null;
+  }
+}
+
+const ALL_PAGE_URIS_QUERY = `
+  query GetAllPageUris {
+    pages(first: 100) {
+      nodes {
+        uri
+        slug
+      }
+    }
+  }
+`;
+
+export async function getAllPageUris(): Promise<{ uri: string, slug: string }[]> {
+  try {
+    const raw = await fetchGraphQL(ALL_PAGE_URIS_QUERY);
+    const nodes = raw?.data?.pages?.nodes || [];
+    return nodes.map((node: any) => ({ uri: node.uri, slug: node.slug }));
+  } catch (err) {
+    console.warn("[WP] getAllPageUris failed:", err);
+    return [];
+  }
+}
+
+// ─── Sitemap Dynamic Query & Types ─────────────────────────────────────────────
+
+export type SitemapLink = {
+  name: string;
+  path: string;
+};
+
+export type SitemapSection = {
+  title: string;
+  links: SitemapLink[];
+};
+
+const SITEMAP_GRAPHQL_QUERY = `
+  query GetSitemapData {
+    menus {
+      nodes {
+        id
+        name
+        slug
+        locations
+        menuItems(first: 100) {
+          nodes {
+            id
+            label
+            url
+            path
+            parentId
+          }
+        }
+      }
+    }
+    pages(first: 100) {
+      nodes {
+        id
+        title
+        slug
+        uri
+      }
+    }
+    hutechServices(first: 100) {
+      nodes {
+        title
+        slug
+        serviceCategories {
+          nodes {
+            slug
+          }
+        }
+      }
+    }
+    posts(first: 50) {
+      nodes {
+        title
+        slug
+      }
+    }
+    caseStudies(first: 50) {
+      nodes {
+        title
+        slug
+      }
+    }
+    hutechEvents(first: 50) {
+      nodes {
+        title
+        slug
+      }
+    }
+    hutechDocuments(first: 50) {
+      nodes {
+        title
+        slug
+      }
+    }
+  }
+`;
+
+function cleanSitemapTitle(title: string): string {
+  return (title || "").replace(/\^/g, "").replace(/\|/g, "").trim();
+}
+
+function normalizeSitemapPath(rawPath: string): string {
+  if (!rawPath) return "#";
+  if (rawPath.startsWith("http")) {
+    try {
+      const parsed = new URL(rawPath);
+      return parsed.pathname.replace(/^\/hutech-website/, "") || "/";
+    } catch {
+      return rawPath;
+    }
+  }
+  return rawPath.replace(/^\/hutech-website/, "") || "/";
+}
+
+export async function getSitemapData(pageUri: string = "/legal/sitemap/"): Promise<SitemapSection[]> {
+  try {
+    const raw = await fetchGraphQL(SITEMAP_GRAPHQL_QUERY);
+    const data = raw?.data || {};
+    const menus = data.menus?.nodes || [];
+
+    // 1. Check for dedicated WordPress Sitemap menu
+    const sitemapMenu = menus.find(
+      (m: any) =>
+        m.slug?.toLowerCase().includes("sitemap") ||
+        m.name?.toLowerCase().includes("sitemap")
+    );
+
+    if (sitemapMenu && sitemapMenu.menuItems?.nodes?.length > 0) {
+      const items: any[] = sitemapMenu.menuItems.nodes;
+      const topLevel = items.filter((i) => !i.parentId);
+      const hasChildren = items.some((i) => i.parentId);
+
+      if (hasChildren && topLevel.length > 0) {
+        const sections: SitemapSection[] = topLevel
+          .map((parent) => {
+            const children = items.filter((i) => i.parentId === parent.id);
+            return {
+              title: cleanSitemapTitle(parent.label),
+              links: children.map((c) => ({
+                name: cleanSitemapTitle(c.label),
+                path: normalizeSitemapPath(c.path || c.url),
+              })),
+            };
+          })
+          .filter((s) => s.links.length > 0);
+
+        if (sections.length > 0) return sections;
+      } else {
+        return [
+          {
+            title: cleanSitemapTitle(sitemapMenu.name || "Sitemap"),
+            links: items.map((i) => ({
+              name: cleanSitemapTitle(i.label),
+              path: normalizeSitemapPath(i.path || i.url),
+            })),
+          },
+        ];
+      }
+    }
+
+    // 2. Check for ACF sitemap fields on the page via REST if configured
+    if (WORDPRESS_BASE_URL) {
+      try {
+        const restRes = await fetch(`${WORDPRESS_BASE_URL}/wp-json/wp/v2/pages?slug=sitemap`, {
+          next: { revalidate: 60 },
+        });
+        if (restRes.ok) {
+          const pageJson = await restRes.json();
+          const acf = pageJson?.[0]?.acf;
+          
+          // ACF Repeater: sitemap_sections or sections
+          const acfSections = acf?.sitemap_sections || acf?.sitemapSections || acf?.sections;
+          if (Array.isArray(acfSections) && acfSections.length > 0) {
+            const parsedAcfSections: SitemapSection[] = acfSections.map((sec: any) => ({
+              title: cleanSitemapTitle(sec.title || sec.section_title || sec.sectionTitle || "Section"),
+              links: (sec.links || sec.items || []).map((lnk: any) => ({
+                name: cleanSitemapTitle(lnk.name || lnk.label || lnk.title || "Link"),
+                path: normalizeSitemapPath(lnk.path || lnk.url || lnk.link || "#"),
+              })),
+            })).filter((s) => s.links.length > 0);
+
+            if (parsedAcfSections.length > 0) return parsedAcfSections;
+          }
+
+          // ACF Menu selector: sitemap_menu
+          const selectedMenuSlug = acf?.sitemap_menu || acf?.sitemapMenu || acf?.menu;
+          if (selectedMenuSlug) {
+            const matchedMenu = menus.find((m: any) => m.slug === selectedMenuSlug || m.name === selectedMenuSlug || m.id === selectedMenuSlug);
+            if (matchedMenu && matchedMenu.menuItems?.nodes?.length > 0) {
+              const items: any[] = matchedMenu.menuItems.nodes;
+              const topLevel = items.filter((i) => !i.parentId);
+              if (topLevel.length > 0 && items.some((i) => i.parentId)) {
+                return topLevel.map((parent) => ({
+                  title: cleanSitemapTitle(parent.label),
+                  links: items.filter((i) => i.parentId === parent.id).map((c) => ({
+                    name: cleanSitemapTitle(c.label),
+                    path: normalizeSitemapPath(c.path || c.url),
+                  })),
+                })).filter((s) => s.links.length > 0);
+              }
+            }
+          }
+        }
+      } catch (e) {
+        // Continue to dynamic fallback
+      }
+    }
+
+    // 3. Dynamic Fallback: Query ONLY live content from WordPress
+    const pages: any[] = data.pages?.nodes || [];
+    const services: any[] = data.hutechServices?.nodes || [];
+    const posts: any[] = data.posts?.nodes || [];
+    const caseStudies: any[] = data.caseStudies?.nodes || [];
+    const events: any[] = data.hutechEvents?.nodes || [];
+    const documents: any[] = data.hutechDocuments?.nodes || [];
+
+    // Company pages (ordered logically)
+    const companyOrder = [
+      "/about/",
+      "/vision-mission-values/",
+      "/leadership/",
+      "/partnership/",
+      "/life-at-hutech/",
+      "/news/",
+      "/press-release/",
+      "/awards/",
+      "/careers/",
+      "/graduates/",
+      "/contact/",
+    ];
+
+    const companyPages = pages
+      .filter((p) => {
+        const u = p.uri || "";
+        return u.startsWith("/company/") || companyOrder.includes(u);
+      })
+      .sort((a, b) => {
+        const indexA = companyOrder.indexOf(a.uri);
+        const indexB = companyOrder.indexOf(b.uri);
+        if (indexA !== -1 && indexB !== -1) return indexA - indexB;
+        if (indexA !== -1) return -1;
+        if (indexB !== -1) return 1;
+        return a.title.localeCompare(b.title);
+      })
+      .map((p) => ({
+        name: cleanSitemapTitle(p.title),
+        path: p.uri,
+      }));
+
+    // Services vs Industries
+    const liveServices: SitemapLink[] = [];
+    const liveIndustries: SitemapLink[] = [];
+
+    services.forEach((s) => {
+      const cats = s.serviceCategories?.nodes?.map((c: any) => c.slug?.toLowerCase()) || [];
+      if (cats.includes("industries") || cats.includes("industry")) {
+        liveIndustries.push({
+          name: cleanSitemapTitle(s.title),
+          path: `/industries/${s.slug}`,
+        });
+      } else {
+        liveServices.push({
+          name: cleanSitemapTitle(s.title),
+          path: `/services/${s.slug}`,
+        });
+      }
+    });
+
+    // Resources
+    const liveResources: SitemapLink[] = [];
+    const hasBlogsPage = pages.some((p) => p.uri === "/blogs/" || p.uri === "/resources/blogs/");
+    if (hasBlogsPage || posts.length > 0) {
+      liveResources.push({ name: "Blogs", path: "/blogs" });
+    }
+    const hasCsPage = pages.some((p) => p.uri === "/case-studies/" || p.uri === "/resources/case-studies/");
+    if (hasCsPage || caseStudies.length > 0) {
+      liveResources.push({ name: "Case Studies", path: "/resources/case-studies" });
+    }
+    const hasEventsPage = pages.some((p) => p.uri === "/events/" || p.uri === "/resources/events/");
+    if (hasEventsPage || events.length > 0) {
+      liveResources.push({ name: "Events", path: "/events" });
+    }
+    const hasDocsPage = pages.some((p) => p.uri === "/hutech-documents/" || p.uri === "/resources/hutech-documents/");
+    if (hasDocsPage || documents.length > 0) {
+      liveResources.push({ name: "Hutech Documents", path: "/hutech-documents" });
+    }
+
+    // Legal Pages
+    const legalPages = pages
+      .filter((p) => {
+        const u = p.uri || "";
+        return u.startsWith("/legal/") || ["/legal/terms/", "/legal/privacy/", "/legal/sitemap/"].includes(u);
+      })
+      .map((p) => ({
+        name: cleanSitemapTitle(p.title),
+        path: p.uri,
+      }));
+
+    const sections: SitemapSection[] = [
+      { title: "Company", links: companyPages },
+      { title: "Services", links: liveServices },
+      { title: "Industries", links: liveIndustries },
+      { title: "Resources", links: liveResources },
+      { title: "Legal & Policies", links: legalPages },
+    ].filter((s) => s.links && s.links.length > 0);
+
+    return sections;
+  } catch (err) {
+    console.warn("[WP] getSitemapData failed:", err);
+    return [];
   }
 }
 
