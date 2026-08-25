@@ -82,15 +82,37 @@ export default function BlogsClient({ blogs, pageTitle, pageDescription, bgImage
                   className="group flex h-full flex-col overflow-hidden rounded-[15px] border border-gray-100 bg-white transition-all hover:shadow-2xl md:rounded-3xl"
                 >
                   <Link
-                    href={`/resources/blogs/${blog.slug}`}
+                    href={blog.isIPublish ? `/resources/blogs/ipublish/${blog.slug}` : `/resources/blogs/${blog.slug}`}
                     className="items-center gap-2 font-bold text-[#001A3D] transition-all group-hover:gap-4"
                   >
                     <div className="relative h-64 overflow-hidden">
-                      <ImageWithFallback
-                        src={blog.imageUrl || undefined}
-                        alt={blog.title}
-                        className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110"
-                      />
+                      {blog.isIPublish && !blog.imageUrl && blog.ipublishMeta ? (
+                        <div 
+                          className="h-full w-full flex items-center justify-center p-6 text-center transition-transform duration-700 group-hover:scale-105"
+                          style={{
+                            background: `linear-gradient(${blog.ipublishMeta.gradientDirection || '135deg'}, ${blog.ipublishMeta.gradientFrom || '#6d5ef8'}, ${blog.ipublishMeta.gradientTo || '#ec4899'})`
+                          }}
+                        >
+                          {blog.ipublishMeta.pattern === "vertical-lines" && (
+                            <div 
+                              className="absolute inset-0 pointer-events-none"
+                              style={{
+                                backgroundImage: `linear-gradient(90deg, #ffffff 10%, transparent 1%)`,
+                                backgroundSize: '20px 100%'
+                              }}
+                            />
+                          )}
+                          <h4 className="relative z-10 text-white font-bold text-xl drop-shadow-md display-font">
+                            {blog.title}
+                          </h4>
+                        </div>
+                      ) : (
+                        <ImageWithFallback
+                          src={blog.imageUrl || undefined}
+                          alt={blog.title}
+                          className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110"
+                        />
+                      )}
                       <div className="absolute left-6 top-6 rounded-full bg-[#F99D1C] px-4 py-1 text-xs font-bold uppercase tracking-widest text-[#001A3D]">
                         {blog.category}
                       </div>

@@ -962,6 +962,13 @@ export type WpBlog = {
   imageUrl?: string;
   readTime: string;
   tags: string[];
+  isIPublish?: boolean;
+  ipublishMeta?: {
+    gradientFrom?: string;
+    gradientTo?: string;
+    gradientDirection?: string;
+    pattern?: string;
+  };
   faqs?: {
     question: string;
     answer: string;
