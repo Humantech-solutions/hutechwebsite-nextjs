@@ -200,18 +200,20 @@ export async function submitDocumentRequest(payload: DocumentRequestPayload): Pr
 
     if (payload.downloadUrl && payload.downloadUrl !== "#") {
       try {
-        // Proxy through our own API to bypass CORS and auto-convert Google Docs links
-        const proxyUrl = `/api/proxy-download?url=${encodeURIComponent(payload.downloadUrl)}`;
-        
-        const fileRes = await fetch(proxyUrl);
+        let fetchUrl = payload.downloadUrl;
+        if (fetchUrl.includes("docs.google.com/document/d/") && fetchUrl.includes("/edit")) {
+          fetchUrl = fetchUrl.replace(/\/edit.*$/, "/export?format=pdf");
+        }
+
+        const fileRes = await fetch(fetchUrl);
         if (fileRes.ok) {
           blob = await fileRes.blob();
-          
+
           filename = payload.downloadUrl.split("/").pop() || "document.pdf";
-          if (filename.includes('?')) filename = filename.split('?')[0];
-          if (!filename.includes('.')) filename += '.pdf';
+          if (filename.includes("?")) filename = filename.split("?")[0];
+          if (!filename.includes(".")) filename += ".pdf";
         } else {
-          console.warn("[API] Failed to fetch document for attachment via proxy:", fileRes.status);
+          console.warn("[API] Failed to fetch document for attachment:", fileRes.status);
         }
       } catch (err) {
         console.warn("[API] Could not attach document:", err);
