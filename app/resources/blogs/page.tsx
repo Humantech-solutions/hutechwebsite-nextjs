@@ -1,6 +1,7 @@
 import { Suspense } from "react";
 import BlogsClient from "./BlogsClient";
 import { getBlogs, getBlogPageData } from "@/lib/wordpress";
+import { getIPublishAllBlogs, getIPublishImageUrl } from "@/lib/ipublish";
 import { constructMetadata } from "@/lib/seo";
 
 export const metadata = constructMetadata({
@@ -9,50 +10,57 @@ export const metadata = constructMetadata({
   path: "/resources/blogs/",
 });
 
-
 export const revalidate = 60;
 
 export default async function BlogsPage() {
-  // Fetch WP data in parallel
+  // Fetch WP data and iPublish data in parallel
   const [wpBlogs, wpPageData, ipublishData] = await Promise.all([
     getBlogs(),
     getBlogPageData(),
-    import("@/lib/ipublish").then(m => m.getIPublishContents())
+    getIPublishAllBlogs(),
   ]);
 
-  const ipublishBlogs = ipublishData
-    .filter((item: any) => item.content_type === "blog")
-    .map((item: any) => ({
-      id: item.id,
-      slug: item.id, // Use ID as slug for routing to our dynamic page
+  const ipublishBlogs = ipublishData.map((item) => {
+    const rawDate = item.updated_at || item.published_at || item.created_at;
+    const formattedDate = rawDate
+      ? new Date(rawDate).toLocaleDateString("en-US", {
+          month: "long",
+          day: "numeric",
+          year: "numeric",
+        })
+      : "Recent";
+
+    const wordCount = item.word_count || 500;
+    const readTimeMinutes = Math.max(1, Math.ceil(wordCount / 200));
+
+    return {
+      id: item.slug || item.id || "",
+      slug: item.slug || item.id || "",
       title: item.title,
-      date: new Date(item.published_at).toLocaleDateString('en-US', {
-        month: 'long',
-        day: 'numeric',
-        year: 'numeric'
-      }),
+      date: formattedDate,
       excerpt: item.excerpt || "",
-      content: "", // Content will be fetched on the detail page
+      content: "",
       author: "Hutech Solutions",
-      category: "iPublish",
-      imageUrl: item.featured_image_url || undefined,
-      readTime: "3 min read",
-      tags: [],
+      category: item.content_type
+        ? item.content_type.charAt(0).toUpperCase() + item.content_type.slice(1)
+        : "iPublish",
+      imageUrl: getIPublishImageUrl(item.featured_image_url),
+      readTime: `${readTimeMinutes} min read`,
+      tags: item.tags || [],
       isIPublish: true,
       ipublishMeta: {
         gradientFrom: item.banner_gradient_from,
         gradientTo: item.banner_gradient_to,
         gradientDirection: item.banner_gradient_direction,
-        pattern: item.banner_pattern
-      }
-    }));
+        pattern: item.banner_pattern,
+      },
+    };
+  });
 
   const allBlogs = [...ipublishBlogs, ...wpBlogs];
 
   // Page title/description: WP ACF if available, else defaults
-  const pageTitle =
-    wpPageData?.title ||
-    "Insights &|Perspectives.";
+  const pageTitle = wpPageData?.title || "Insights &|Perspectives.";
   const pageDescription =
     wpPageData?.description ||
     "Stay ahead of the curve with the latest trends, expert analyses, and technological innovations curated by our global team.";

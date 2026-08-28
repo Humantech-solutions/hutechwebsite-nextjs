@@ -416,7 +416,7 @@ function mapRecruitProJob(raw: RecruitProJob) {
 export async function getRecruitProJobs() {
   try {
     const url =
-      "https://apis.recruitpro.hutechsolutions.in/api/jobs/company/89c54939-7b24-4edd-a928-e5e0ced67219";
+      "https://apis.recruitpro.hutechsolutions.in/api/jobs/board/8bbf3624-215a-48a8-8eab-eb814fc60d48";
     // const token =
     //   process.env.RECRUIT_PRO_TOKEN ||
     //   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI3MmZiNDcyMC0wOWI2LTQ5ZjUtOGI4MS1jZWQxYmYzOTcyZGMiLCJlbWFpbCI6ImdsYWRzdG9uQGh1dGVjaHNvbHV0aW9ucy5jb20iLCJyb2xlIjoicmVjcnVpdGVyIiwiY29tcGFueUlkIjoiODljNTQ5MzktN2IyNC00ZWRkLWE5MjgtZTVlMGNlZDY3MjE5IiwibmFtZSI6IlphbWVlciIsImlhdCI6MTc4NjM1ODI2MiwiZXhwIjoxNzg2OTYzMDYyfQ.TalHIz05g8iwdrhiY01wwJvojVtndqNENzJbGLq9SuM";
