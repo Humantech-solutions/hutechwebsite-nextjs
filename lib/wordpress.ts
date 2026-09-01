@@ -968,6 +968,24 @@ export type WpBlog = {
     gradientTo?: string;
     gradientDirection?: string;
     pattern?: string;
+    patternColor?: string;
+    patternOpacity?: number;
+    overlayColor?: string;
+    overlayOpacity?: number;
+    titlePosition?: string;
+    titleColor?: string;
+    titleColorMode?: string;
+    titleGradientTo?: string;
+    titleGradientDirection?: string;
+    titleFont?: string;
+    titleWeight?: number;
+    titleItalic?: boolean;
+    titleScale?: number;
+    titleLineHeight?: number;
+    titleShadow?: string;
+    titlePadding?: number;
+    titleMarginX?: number;
+    titleMarginY?: number;
   };
   faqs?: {
     question: string;
