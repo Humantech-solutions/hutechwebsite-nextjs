@@ -9,7 +9,7 @@ export const metadata = constructMetadata({
   path: "/industries/",
 });
 
-export const revalidate = 60;
+export const revalidate = 0;
 
 export default async function IndustriesPage() {
   const [pageData, industriesList] = await Promise.all([

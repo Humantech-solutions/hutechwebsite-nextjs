@@ -10,7 +10,7 @@ export const metadata = constructMetadata({
   path: "/resources/blogs/",
 });
 
-export const revalidate = 60;
+export const revalidate = 0;
 
 export default async function BlogsPage() {
   // Fetch WP data and iPublish data in parallel

@@ -2,7 +2,7 @@ import { getServiceBySlug, getBlogsByCategory, getIndustriesList } from "@/lib/w
 import IndustryDetailClient from "./IndustryDetailClient";
 import { constructMetadata } from "@/lib/seo";
 
-export const revalidate = 60;
+export const revalidate = 0;
 
 export async function generateStaticParams() {
   const industries = await getIndustriesList();

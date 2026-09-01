@@ -428,7 +428,7 @@ export async function getRecruitProJobs() {
         // Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",
       },
-      next: { revalidate: 60 },
+      next: { revalidate: 0 },
     });
 
     if (!res.ok) {

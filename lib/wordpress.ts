@@ -85,7 +85,7 @@ export async function fetchGraphQL(query: string, variables = {}) {
       body: JSON.stringify({ query, variables }),
       ...(process.env.NODE_ENV === "development"
         ? { cache: "no-store" }
-        : { next: { revalidate: 60 } }),
+        : { next: { revalidate: 0 } }),
       signal: controller.signal,
     });
 
@@ -267,7 +267,7 @@ export async function getSiteChrome(): Promise<SiteChromeData | null> {
 
   try {
     const res = await fetch(`${WORDPRESS_BASE_URL}/wp-json/hutech/v1/site-chrome`, {
-      next: { revalidate: 60 },
+      next: { revalidate: 0 },
     });
 
     if (!res.ok) {
@@ -4614,7 +4614,7 @@ export async function getSitemapData(pageUri: string = "/legal/sitemap/"): Promi
     if (WORDPRESS_BASE_URL) {
       try {
         const restRes = await fetch(`${WORDPRESS_BASE_URL}/wp-json/wp/v2/pages?slug=sitemap`, {
-          next: { revalidate: 60 },
+          next: { revalidate: 0 },
         });
         if (restRes.ok) {
           const pageJson = await restRes.json();
