@@ -80,7 +80,7 @@ export function getIPublishImageUrl(path?: string | null): string | undefined {
 export async function getIPublishPages(): Promise<IPublishPageListItem[]> {
   try {
     const res = await fetch(`${IPUBLISH_BASE_URL}/api/v1/public/v1/pages`, {
-      next: { revalidate: 60 },
+      next: { revalidate: 0 },
     });
 
     if (!res.ok) {
@@ -108,7 +108,7 @@ export async function getIPublishPageBySlug(
     const res = await fetch(
       `${IPUBLISH_BASE_URL}/api/v1/public/v1/page/${encodeURIComponent(orgSlug)}/${encodeURIComponent(slug)}`,
       {
-        next: { revalidate: 60 },
+        next: { revalidate: 0 },
       }
     );
 
@@ -140,7 +140,9 @@ export async function getIPublishPageBySlug(
 /**
  * Fetches all published blogs with complete content and dynamic styling.
  */
-export async function getIPublishAllBlogs(orgSlug: string = DEFAULT_ORG_SLUG): Promise<IPublishPageData[]> {
+export async function getIPublishAllBlogs(
+  orgSlug: string = DEFAULT_ORG_SLUG
+): Promise<IPublishPageData[]> {
   try {
     const pages = await getIPublishPages();
     const targetPages = pages.filter((p) => !orgSlug || p.org === orgSlug);

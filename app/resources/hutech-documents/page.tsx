@@ -9,7 +9,7 @@ export const metadata = constructMetadata({
 });
 
 
-export const revalidate = 60; // ISR revalidation every 60 seconds
+export const revalidate = 0;
 
 export default async function HutechDocumentsPage() {
   const [documents, pageData] = await Promise.all([

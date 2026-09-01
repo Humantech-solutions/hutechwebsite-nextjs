@@ -5,7 +5,7 @@ import { notFound } from "next/navigation";
 import { constructMetadata } from "@/lib/seo";
 import { getRecruitProJobs, getRecruitProJobBySlug } from "@/lib/api";
 
-export const revalidate = 120; // ISR — refresh every 2 minutes
+export const revalidate = 0;
 
 export async function generateStaticParams() {
   const [recruitProJobs, wpJobs] = await Promise.all([

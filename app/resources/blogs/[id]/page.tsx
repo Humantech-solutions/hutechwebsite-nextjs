@@ -11,7 +11,7 @@ import {
 } from "@/lib/ipublish";
 import { IPublishDetailClient } from "@/components/ipublish/IPublishDetailClient";
 
-export const revalidate = 60;
+export const revalidate = 0;
 
 export async function generateStaticParams() {
   const [wpBlogs, ipublishPages] = await Promise.all([

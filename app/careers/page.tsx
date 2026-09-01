@@ -3,7 +3,7 @@ import { getCareers, getCareerPageData } from "@/lib/wordpress";
 import { JOBS } from "@/lib/data/careers";
 import { getRecruitProJobs } from "@/lib/api";
 
-export const revalidate = 120; // ISR — refresh every 2 minutes to pick up new HR postings
+export const revalidate = 0;
 
 export async function generateMetadata() {
   const pageData = await getCareerPageData();

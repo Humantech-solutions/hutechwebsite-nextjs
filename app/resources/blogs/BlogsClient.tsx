@@ -19,13 +19,14 @@ type Props = {
 };
 
 export default function BlogsClient({ blogs, pageTitle, pageDescription, bgImageUrl }: Props) {
+  const blogsList = blogs;
   const [currentPage, setCurrentPage] = useState(1);
   const blogsPerPage = 9;
 
-  const totalPages = Math.ceil(blogs.length / blogsPerPage);
+  const totalPages = Math.ceil(blogsList.length / blogsPerPage);
   const startIndex = (currentPage - 1) * blogsPerPage;
   const endIndex = startIndex + blogsPerPage;
-  const currentBlogs = blogs.slice(startIndex, endIndex);
+  const currentBlogs = blogsList.slice(startIndex, endIndex);
 
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
@@ -67,7 +68,7 @@ export default function BlogsClient({ blogs, pageTitle, pageDescription, bgImage
 
       <section className="py-20">
         <div className="mx-auto max-w-[1280px] px-6 lg:px-20">
-          {blogs.length === 0 ? (
+          {blogsList.length === 0 ? (
             <p className="py-20 text-center text-lg text-gray-400">
               No articles found. Check back soon!
             </p>
