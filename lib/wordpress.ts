@@ -3550,7 +3550,6 @@ const SERVICE_BY_SLUG_QUERY = `
         introText2
         introImage { node { sourceUrl } }
         introImageTitle
-        introImageIcon { node { sourceUrl } }
         introImageDesc
         
         stat1Value
@@ -3563,52 +3562,42 @@ const SERVICE_BY_SLUG_QUERY = `
         servicesSectionTitle
         servicesSectionDesc
         service1Title
-        service1Icon { node { sourceUrl } }
         service1Description
         service1BtnName
         service1BtnUrl { url title target }
         service2Title
-        service2Icon { node { sourceUrl } }
         service2Description
         service2BtnName
         service2BtnUrl { url title target }
         service3Title
-        service3Icon { node { sourceUrl } }
         service3Description
         service3BtnName
         service3BtnUrl { url title target }
         service4Title
-        service4Icon { node { sourceUrl } }
         service4Description
         service4BtnName
         service4BtnUrl { url title target }
         service5Title
-        service5Icon { node { sourceUrl } }
         service5Description
         service5BtnName
         service5BtnUrl { url title target }
         service6Title
-        service6Icon { node { sourceUrl } }
         service6Description
         service6BtnName
         service6BtnUrl { url title target }
         service7Title
-        service7Icon { node { sourceUrl } }
         service7Description
         service7BtnName
         service7BtnUrl { url title target }
         service8Title
-        service8Icon { node { sourceUrl } }
         service8Description
         service8BtnName
         service8BtnUrl { url title target }
         service9Title
-        service9Icon { node { sourceUrl } }
         service9Description
         service9BtnName
         service9BtnUrl { url title target }
         service10Title
-        service10Icon { node { sourceUrl } }
         service10Description
         service10BtnName
         service10BtnUrl { url title target }
@@ -3616,52 +3605,42 @@ const SERVICE_BY_SLUG_QUERY = `
         solutionsSectionTitle
         solutionsSectionDesc
         solution1Title
-        solution1Icon { node { sourceUrl } }
         solution1Description
         solution1BtnName
         solution1BtnUrl { url title target }
         solution2Title
-        solution2Icon { node { sourceUrl } }
         solution2Description
         solution2BtnName
         solution2BtnUrl { url title target }
         solution3Title
-        solution3Icon { node { sourceUrl } }
         solution3Description
         solution3BtnName
         solution3BtnUrl { url title target }
         solution4Title
-        solution4Icon { node { sourceUrl } }
         solution4Description
         solution4BtnName
         solution4BtnUrl { url title target }
         solution5Title
-        solution5Icon { node { sourceUrl } }
         solution5Description
         solution5BtnName
         solution5BtnUrl { url title target }
         solution6Title
-        solution6Icon { node { sourceUrl } }
         solution6Description
         solution6BtnName
         solution6BtnUrl { url title target }
         solution7Title
-        solution7Icon { node { sourceUrl } }
         solution7Description
         solution7BtnName
         solution7BtnUrl { url title target }
         solution8Title
-        solution8Icon { node { sourceUrl } }
         solution8Description
         solution8BtnName
         solution8BtnUrl { url title target }
         solution9Title
-        solution9Icon { node { sourceUrl } }
         solution9Description
         solution9BtnName
         solution9BtnUrl { url title target }
         solution10Title
-        solution10Icon { node { sourceUrl } }
         solution10Description
         solution10BtnName
         solution10BtnUrl { url title target }
@@ -3669,52 +3648,42 @@ const SERVICE_BY_SLUG_QUERY = `
         innovationsSectionTitle
         innovationsSectionDesc
         innovation1Title
-        innovation1Icon { node { sourceUrl } }
         innovation1Description
         innovation1BtnName
         innovation1BtnUrl { url title target }
         innovation2Title
-        innovation2Icon { node { sourceUrl } }
         innovation2Description
         innovation2BtnName
         innovation2BtnUrl { url title target }
         innovation3Title
-        innovation3Icon { node { sourceUrl } }
         innovation3Description
         innovation3BtnName
         innovation3BtnUrl { url title target }
         innovation4Title
-        innovation4Icon { node { sourceUrl } }
         innovation4Description
         innovation4BtnName
         innovation4BtnUrl { url title target }
         innovation5Title
-        innovation5Icon { node { sourceUrl } }
         innovation5Description
         innovation5BtnName
         innovation5BtnUrl { url title target }
         innovation6Title
-        innovation6Icon { node { sourceUrl } }
         innovation6Description
         innovation6BtnName
         innovation6BtnUrl { url title target }
         innovation7Title
-        innovation7Icon { node { sourceUrl } }
         innovation7Description
         innovation7BtnName
         innovation7BtnUrl { url title target }
         innovation8Title
-        innovation8Icon { node { sourceUrl } }
         innovation8Description
         innovation8BtnName
         innovation8BtnUrl { url title target }
         innovation9Title
-        innovation9Icon { node { sourceUrl } }
         innovation9Description
         innovation9BtnName
         innovation9BtnUrl { url title target }
         innovation10Title
-        innovation10Icon { node { sourceUrl } }
         innovation10Description
         innovation10BtnName
         innovation10BtnUrl { url title target }
@@ -3762,28 +3731,20 @@ const SERVICE_BY_SLUG_QUERY = `
         whyChooseSectionTitle
         whyChooseSectionDesc
         whyChoose1Title
-        whyChoose1Icon { node { sourceUrl } }
         whyChoose1Description
         whyChoose2Title
-        whyChoose2Icon { node { sourceUrl } }
         whyChoose2Description
         whyChoose3Title
-        whyChoose3Icon { node { sourceUrl } }
         whyChoose3Description
         whyChoose4Title
-        whyChoose4Icon { node { sourceUrl } }
         whyChoose4Description
         whyChoose5Title
-        whyChoose5Icon { node { sourceUrl } }
         whyChoose5Description
         whyChoose6Title
-        whyChoose6Icon { node { sourceUrl } }
         whyChoose6Description
         whyChoose7Title
-        whyChoose7Icon { node { sourceUrl } }
         whyChoose7Description
         whyChoose8Title
-        whyChoose8Icon { node { sourceUrl } }
         whyChoose8Description
         
         contactFormTitle
@@ -3823,10 +3784,8 @@ const SERVICE_BY_SLUG_QUERY = `
         blogLinkUrl { url title target }
         blogCategory {
           nodes {
-            ... on Category {
-              slug
-              name
-            }
+            slug
+            name
           }
         }
       }
@@ -3895,6 +3854,17 @@ function transformServiceNode(node: any): HutechService {
     return items;
   };
 
+  const blogCatObj = f.blogCategory;
+  const blogCatName =
+    blogCatObj?.name ||
+    blogCatObj?.nodes?.[0]?.name ||
+    (typeof blogCatObj === "string" ? blogCatObj : "") ||
+    "AI/ML";
+  const blogCatSlug =
+    blogCatObj?.slug ||
+    blogCatObj?.nodes?.[0]?.slug ||
+    (typeof blogCatObj === "string" ? blogCatObj.toLowerCase().replace(/[^a-z0-9]+/g, "-") : "");
+
   return {
     id: node.id,
     slug: node.slug,
@@ -3909,26 +3879,25 @@ function transformServiceNode(node: any): HutechService {
     introText2: f.introText2,
     introImage: imgUrl(f.introImage) || undefined,
     introImageTitle: f.introImageTitle,
-    introImageIcon: imgUrl(f.introImageIcon) || undefined,
     introImageDesc: f.introImageDesc,
     stats: parseRepeater('stat', 3, ['Value', 'Label']),
     
     servicesSectionTitle: f.servicesSectionTitle,
     servicesSectionDesc: f.servicesSectionDesc,
-    services: parseRepeater('service', 10, ['Title', 'Icon', 'Description', 'BtnName', 'BtnUrl']),
+    services: parseRepeater('service', 10, ['Title', 'Description', 'BtnName', 'BtnUrl']),
     
     solutionsSectionTitle: f.solutionsSectionTitle,
     solutionsSectionDesc: f.solutionsSectionDesc,
-    solutions: parseRepeater('solution', 10, ['Title', 'Icon', 'Description', 'BtnName', 'BtnUrl']),
+    solutions: parseRepeater('solution', 10, ['Title', 'Description', 'BtnName', 'BtnUrl']),
     
     innovationsSectionTitle: f.innovationsSectionTitle,
     innovationsSectionDesc: f.innovationsSectionDesc,
-    innovations: parseRepeater('innovation', 10, ['Title', 'Icon', 'Description', 'BtnName', 'BtnUrl']),
+    innovations: parseRepeater('innovation', 10, ['Title', 'Description', 'BtnName', 'BtnUrl']),
     
     ctaTitle: f.ctaTitle,
     ctaDescription: f.ctaDescription,
     ctaBtnName: f.ctaBtnName,
-    ctaBtnUrl: f.ctaBtnUrl?.url || "",
+    ctaBtnUrl: f.ctaBtnUrl?.url || (typeof f.ctaBtnUrl === 'string' ? f.ctaBtnUrl : ""),
     ctaImage: imgUrl(f.ctaImage) || undefined,
     
     techStackTagline: f.techStackTagline,
@@ -3938,7 +3907,7 @@ function transformServiceNode(node: any): HutechService {
     
     whyChooseSectionTitle: f.whyChooseSectionTitle,
     whyChooseSectionDesc: f.whyChooseSectionDesc,
-    whyChoose: parseRepeater('whyChoose', 8, ['Title', 'Icon', 'Description']),
+    whyChoose: parseRepeater('whyChoose', 8, ['Title', 'Description']),
     
     contactFormTitle: f.contactFormTitle,
     contactFormBtnName: f.contactFormBtnName,
@@ -3951,9 +3920,9 @@ function transformServiceNode(node: any): HutechService {
     blogSectionTitle: f.blogSectionTitle,
     blogSectionDesc: f.blogSectionDesc,
     blogLinkName: f.blogLinkName,
-    blogLinkUrl: f.blogLinkUrl?.url || "",
-    blogCategory: f.blogCategory?.nodes?.[0]?.name || "AI/ML",
-    blogCategorySlug: f.blogCategory?.nodes?.[0]?.slug || "",
+    blogLinkUrl: f.blogLinkUrl?.url || (typeof f.blogLinkUrl === 'string' ? f.blogLinkUrl : ""),
+    blogCategory: blogCatName,
+    blogCategorySlug: blogCatSlug,
   };
 }
 
@@ -4185,11 +4154,8 @@ const ALL_INDUSTRIES_QUERY = `
           stat3Value
           stat3Label
           solution1Title
-        solution1Icon { node { sourceUrl } }
           solution2Title
-        solution2Icon { node { sourceUrl } }
           solution3Title
-        solution3Icon { node { sourceUrl } }
         }
         serviceCategories {
           nodes {
