@@ -144,9 +144,18 @@ export type HeaderNavItem = {
   }[];
 };
 
+export type TopNavChromeData = {
+  backgroundColor?: string;
+  textColor?: string;
+  phones?: { text?: string; url?: string }[];
+  emails?: { text?: string; url?: string }[];
+  socials?: { id?: number; icon?: string; url?: string }[];
+};
+
 export type HeaderChromeData = {
   logoUrl?: string;
   logoAlt?: string;
+  topNav?: TopNavChromeData;
   navItems?: HeaderNavItem[];
   megaCard?: {
     title?: string;
@@ -209,6 +218,7 @@ export type FooterChromeData = {
 };
 
 export type SiteChromeData = {
+  topNav?: TopNavChromeData;
   header: HeaderChromeData;
   footer: FooterChromeData;
 };
@@ -279,8 +289,10 @@ export async function getSiteChrome(): Promise<SiteChromeData | null> {
     const menus = raw?.menus || {};
 
     return {
+      topNav: raw?.topNav,
       header: {
         ...raw.header,
+        topNav: raw?.topNav,
         navItems: transformPrimaryMenu(menus.primary),
         megaBottomLinks: flattenMenuItems(menus.megaBottom),
       },
