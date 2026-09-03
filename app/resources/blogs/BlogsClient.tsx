@@ -29,54 +29,26 @@ type Props = {
 
 export default function BlogsClient({ blogs, pageTitle, pageDescription, bgImageUrl }: Props) {
   const [searchQuery, setSearchQuery] = useState("");
-  const [selectedCategory, setSelectedCategory] = useState<string>("All");
-  const [currentPage, setCurrentPage] = useState(1);
-  const blogsPerPage = 6;
-
-  // Extract unique categories and counts
-  const categoryCounts = useMemo(() => {
-    const counts: Record<string, number> = { All: blogs.length };
-    blogs.forEach((b) => {
-      const cat = b.category ? b.category.trim() : "General";
-      counts[cat] = (counts[cat] || 0) + 1;
-    });
-    return counts;
-  }, [blogs]);
-
-  const categories = useMemo(() => Object.keys(categoryCounts), [categoryCounts]);
+  const [visibleCount, setVisibleCount] = useState(12);
+  const maxPosts = 60;
 
   // Filter blogs
   const filteredBlogs = useMemo(() => {
     return blogs.filter((blog) => {
-      const cat = blog.category ? blog.category.trim() : "General";
-      const matchesCategory =
-        selectedCategory === "All" || cat.toLowerCase() === selectedCategory.toLowerCase();
       const matchesSearch =
         !searchQuery ||
         blog.title?.toLowerCase().includes(searchQuery.toLowerCase()) ||
         blog.excerpt?.toLowerCase().includes(searchQuery.toLowerCase()) ||
         blog.tags?.some((t) => t.toLowerCase().includes(searchQuery.toLowerCase()));
-      return matchesCategory && matchesSearch;
-    });
-  }, [blogs, selectedCategory, searchQuery]);
+      return matchesSearch;
+    }).sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+  }, [blogs, searchQuery]);
 
-  const totalPages = Math.ceil(filteredBlogs.length / blogsPerPage);
-  const startIndex = (currentPage - 1) * blogsPerPage;
-  const currentBlogs = filteredBlogs.slice(startIndex, startIndex + blogsPerPage);
+  const limitedBlogs = filteredBlogs.slice(0, maxPosts);
+  const currentBlogs = limitedBlogs.slice(0, visibleCount);
 
-  const handleCategoryChange = (category: string) => {
-    setSelectedCategory(category);
-    setCurrentPage(1);
-  };
-
-  const handlePageChange = (page: number) => {
-    setCurrentPage(page);
-    const contentElem = document.getElementById("blog-content-area");
-    if (contentElem) {
-      contentElem.scrollIntoView({ behavior: "smooth", block: "start" });
-    } else {
-      window.scrollTo({ top: 400, behavior: "smooth" });
-    }
+  const handleLoadMore = () => {
+    setVisibleCount((prev) => prev + 12);
   };
 
   return (
@@ -116,7 +88,7 @@ export default function BlogsClient({ blogs, pageTitle, pageDescription, bgImage
       {/* MAIN CONTENT: SIDEBAR + CARDS PATTERN */}
       <section
         id="blog-content-area"
-        className="relative overflow-hidden bg-[#f8fafc] py-16 md:py-24"
+        className="relative overflow-hidden bg-[#f8fafc] py-16 md:py-16"
       >
         {/* ── DECORATIVE BACKGROUND ── */}
         {/* Crisp grid lines */}
@@ -138,140 +110,14 @@ export default function BlogsClient({ blogs, pageTitle, pageDescription, bgImage
         <div className="pointer-events-none absolute bottom-0 left-0 right-0 z-0 h-px bg-gradient-to-r from-transparent via-[#001A3D]/20 to-transparent" />
 
         <div className="relative z-10 mx-auto max-w-[1280px] px-6 lg:px-20">
-          <div className="grid grid-cols-1 gap-10 lg:grid-cols-12 lg:gap-14">
-            {/* LEFT SIDEBAR / MOBILE FILTER NAVIGATION */}
-            <aside className="lg:col-span-3">
-              <div className="space-y-4 lg:sticky lg:space-y-6 lg:border lg:border-slate-200/90 lg:bg-white/95 lg:p-6 lg:shadow-sm lg:backdrop-blur-md">
-                {/* Search Box */}
-                <div>
-                  <div className="mb-2 hidden items-center justify-between lg:flex">
-                    <label
-                      htmlFor="blog-search"
-                      className="text-xs font-bold uppercase tracking-wider text-slate-500"
-                    >
-                      Search
-                    </label>
-                    {searchQuery && (
-                      <span className="text-[10px] font-semibold text-[#0171c1]">Filtering</span>
-                    )}
-                  </div>
-                  <div className="relative">
-                    <Search className="absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
-                    <input
-                      id="blog-search"
-                      type="text"
-                      placeholder="Search articles..."
-                      value={searchQuery}
-                      onChange={(e) => {
-                        setSearchQuery(e.target.value);
-                        setCurrentPage(1);
-                      }}
-                      className="focus:outline-hidden shadow-xs w-full border border-slate-200 bg-white py-2.5 pl-9 pr-9 text-xs font-medium text-slate-800 placeholder-slate-400 transition-all focus:border-[#0171c1] focus:ring-1 focus:ring-[#0171c1] lg:bg-slate-50/70 lg:focus:bg-white"
-                    />
-                    {searchQuery && (
-                      <button
-                        onClick={() => setSearchQuery("")}
-                        className="absolute right-3 top-1/2 -translate-y-1/2 text-xs font-bold text-slate-400 hover:text-slate-700"
-                        aria-label="Clear search"
-                      >
-                        ✕
-                      </button>
-                    )}
-                  </div>
-                </div>
-
-                <div className="hidden h-px w-full bg-slate-100 lg:block" />
-
-                {/* Categories Navigation */}
-                <div>
-                  <h3 className="mb-2.5 text-xs font-bold uppercase tracking-wider text-slate-500 lg:mb-3">
-                    Categories
-                  </h3>
-
-                  {/* MOBILE VIEW: Edge-to-Edge Horizontally Scrollable Bar (No Scrollbar) */}
-                  <div className="-mx-6 flex gap-2 overflow-x-auto px-6 pb-1 [-ms-overflow-style:none] [scrollbar-width:none] lg:hidden [&::-webkit-scrollbar]:hidden">
-                    {categories.map((category) => {
-                      const isSelected = selectedCategory === category;
-                      const count = categoryCounts[category];
-                      return (
-                        <button
-                          key={category}
-                          onClick={() => handleCategoryChange(category)}
-                          className={`shadow-xs relative shrink-0 border px-3.5 py-2 text-xs font-medium transition-all ${
-                            isSelected
-                              ? "border-[#001A3D] bg-[#001A3D] font-bold text-white"
-                              : "border-slate-200 bg-white text-slate-700 hover:border-slate-300 hover:bg-slate-50"
-                          }`}
-                        >
-                          <span className="flex items-center gap-1.5 whitespace-nowrap">
-                            <span>{category}</span>
-                            <span
-                              className={`text-[10px] font-semibold ${
-                                isSelected ? "text-[#F99D1C]" : "text-slate-400"
-                              }`}
-                            >
-                              ({count})
-                            </span>
-                          </span>
-                        </button>
-                      );
-                    })}
-                  </div>
-
-                  {/* DESKTOP VIEW: Vertical List with Smooth Sliding Indicator */}
-                  <ul className="m-0 hidden list-none space-y-1 p-0 lg:block">
-                    {categories.map((category) => {
-                      const isSelected = selectedCategory === category;
-                      const count = categoryCounts[category];
-                      return (
-                        <li key={category} className="relative">
-                          {isSelected && (
-                            <Motion.div
-                              layoutId="activeCategorySidebarIndicator"
-                              className="shadow-xs absolute inset-0 border-l-[3px] border-[#001A3D] bg-slate-50"
-                              transition={{ type: "spring", stiffness: 450, damping: 35 }}
-                            />
-                          )}
-                          <button
-                            onClick={() => handleCategoryChange(category)}
-                            className={`relative z-10 flex w-full items-center justify-between px-3.5 py-2.5 text-left text-sm font-medium transition-colors ${
-                              isSelected
-                                ? "font-bold text-[#001A3D]"
-                                : "text-slate-500 hover:text-[#001A3D]"
-                            }`}
-                          >
-                            <span className={isSelected ? "font-bold text-[#001A3D]" : ""}>
-                              {category}
-                            </span>
-                            <span
-                              className={`text-xs font-semibold transition-colors ${
-                                isSelected ? "text-[#0171c1]" : "text-slate-400"
-                              }`}
-                            >
-                              {count}
-                            </span>
-                          </button>
-                        </li>
-                      );
-                    })}
-                  </ul>
-                </div>
-              </div>
-            </aside>
-
-            {/* RIGHT SIDE: BLOG CARDS GRID */}
-            <main className="lg:col-span-9">
+          <div className="flex flex-col gap-10">
+            {/* MAIN BLOG CARDS GRID */}
+            <main>
               {/* Filter Status Bar */}
               <div className="mb-6 flex flex-wrap items-center justify-between gap-4 border-b border-slate-200 pb-4">
-                <div className="text-xs font-medium text-slate-500">
-                  Showing <span className="font-bold text-[#001A3D]">{filteredBlogs.length}</span>{" "}
-                  {filteredBlogs.length === 1 ? "article" : "articles"}
-                  {selectedCategory !== "All" && (
-                    <>
-                      {" "}
-                      in <span className="font-bold text-[#0171c1]">"{selectedCategory}"</span>
-                    </>
-                  )}
+                <div className="self-end text-xs font-medium text-slate-500">
+                  Showing <span className="font-bold text-[#001A3D]">{limitedBlogs.length}</span>{" "}
+                  {limitedBlogs.length === 1 ? "article" : "articles"}
                   {searchQuery && (
                     <>
                       {" "}
@@ -280,39 +126,51 @@ export default function BlogsClient({ blogs, pageTitle, pageDescription, bgImage
                   )}
                 </div>
 
-                {(selectedCategory !== "All" || searchQuery) && (
-                  <button
-                    onClick={() => {
-                      setSearchQuery("");
-                      setSelectedCategory("All");
-                      setCurrentPage(1);
+                <div className="relative w-full sm:w-64 md:w-80">
+                  <Search className="absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
+                  <input
+                    id="blog-search"
+                    type="text"
+                    placeholder="Search articles..."
+                    value={searchQuery}
+                    onChange={(e) => {
+                      setSearchQuery(e.target.value);
+                      setVisibleCount(12);
                     }}
-                    className="text-xs font-bold text-[#0171c1] hover:underline"
-                  >
-                    Reset filters
-                  </button>
-                )}
+                    className="focus:outline-hidden shadow-xs h-[40px] w-full rounded-full border border-slate-200 bg-white py-2 pl-9 pr-9 text-xs font-medium text-slate-800 placeholder-slate-400 transition-all focus:border-[#0171c1] focus:ring-1 focus:ring-[#0171c1]"
+                  />
+                  {searchQuery && (
+                    <button
+                      onClick={() => {
+                        setSearchQuery("");
+                        setVisibleCount(12);
+                      }}
+                      className="absolute right-3 top-1/2 -translate-y-1/2 text-xs font-bold text-slate-400 hover:text-slate-700"
+                      aria-label="Clear search"
+                    >
+                      ✕
+                    </button>
+                  )}
+                </div>
               </div>
-              {filteredBlogs.length === 0 ? (
-                <div className="shadow-xs border border-slate-200 bg-white py-20 text-center">
+              {limitedBlogs.length === 0 ? (
+                <div className="shadow-xs rounded-xl border border-slate-200 bg-white py-20 text-center">
                   <Search size={32} className="mx-auto text-slate-300" />
                   <h4 className="mt-3 text-base font-bold text-[#001A3D]">No articles found</h4>
-                  <p className="mt-1 text-xs text-slate-500">
-                    Try searching with another keyword or select another category.
-                  </p>
+                  <p className="mt-1 text-xs text-slate-500">Try searching with another keyword.</p>
                   <button
                     onClick={() => {
                       setSearchQuery("");
-                      setSelectedCategory("All");
+                      setVisibleCount(12);
                     }}
-                    className="mt-5 bg-[#001A3D] px-4 py-2 text-xs font-bold text-white transition-all hover:bg-[#0171c1]"
+                    className="mt-5 rounded-lg bg-[#001A3D] px-4 py-2 text-xs font-bold text-white transition-all hover:bg-[#0171c1]"
                   >
-                    Clear Filter
+                    Clear Search
                   </button>
                 </div>
               ) : (
                 <>
-                  <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2">
+                  <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
                     {currentBlogs.map((blog, i) => (
                       <Motion.article
                         key={blog.slug}
@@ -384,69 +242,16 @@ export default function BlogsClient({ blogs, pageTitle, pageDescription, bgImage
                     ))}
                   </div>
 
-                  {/* MODERN PAGINATION DOCK */}
-                  {totalPages > 1 && (
-                    <nav
-                      aria-label="Blog pagination"
-                      className="mt-14 flex flex-col items-center justify-between gap-4 border-t border-slate-200/80 pt-8 sm:flex-row"
-                    >
-                      {/* Page Counter Info */}
-                      <p className="text-xs font-medium text-slate-500">
-                        Page <span className="font-bold text-[#001A3D]">{currentPage}</span> of{" "}
-                        <span className="font-bold text-[#001A3D]">{totalPages}</span>
-                      </p>
-
-                      {/* Controls */}
-                      <div className="flex items-center gap-1.5">
-                        {/* Prev Button with Border & Radius */}
-                        <button
-                          onClick={() => handlePageChange(currentPage - 1)}
-                          disabled={currentPage === 1}
-                          aria-label="Previous page"
-                          className="flex h-9 w-9 items-center justify-center rounded-md border border-slate-200 bg-white text-slate-700 shadow-xs transition-colors hover:border-[#0171c1] hover:bg-slate-50 hover:text-[#0171c1] disabled:cursor-not-allowed disabled:border-slate-200 disabled:bg-slate-100/90 disabled:text-slate-400 disabled:shadow-none"
-                        >
-                          <ChevronLeft size={16} />
-                        </button>
-
-                        {/* Page Numbers with Radius */}
-                        <div className="flex items-center gap-1">
-                          {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => {
-                            const isCurrent = currentPage === page;
-                            return (
-                              <button
-                                key={page}
-                                onClick={() => handlePageChange(page)}
-                                aria-current={isCurrent ? "page" : undefined}
-                                className={`relative flex h-9 w-9 items-center justify-center rounded-md text-xs font-bold transition-colors ${
-                                  isCurrent
-                                    ? "text-white"
-                                    : "text-slate-600 hover:bg-white hover:text-[#001A3D]"
-                                }`}
-                              >
-                                {isCurrent && (
-                                  <Motion.div
-                                    layoutId="activePageIndicator"
-                                    className="shadow-xs absolute inset-0 rounded-md bg-[#001A3D]"
-                                    transition={{ type: "spring", stiffness: 450, damping: 35 }}
-                                  />
-                                )}
-                                <span className="relative z-10">{page}</span>
-                              </button>
-                            );
-                          })}
-                        </div>
-
-                        {/* Next Button with Border & Radius */}
-                        <button
-                          onClick={() => handlePageChange(currentPage + 1)}
-                          disabled={currentPage === totalPages}
-                          aria-label="Next page"
-                          className="flex h-9 w-9 items-center justify-center rounded-md border border-slate-200 bg-white text-slate-700 shadow-xs transition-colors hover:border-[#0171c1] hover:bg-slate-50 hover:text-[#0171c1] disabled:cursor-not-allowed disabled:border-slate-200 disabled:bg-slate-100/90 disabled:text-slate-400 disabled:shadow-none"
-                        >
-                          <ChevronRight size={16} />
-                        </button>
-                      </div>
-                    </nav>
+                  {/* LOAD MORE BUTTON */}
+                  {visibleCount < limitedBlogs.length && (
+                    <div className="mt-14 flex justify-center border-t border-slate-200/80 pt-8">
+                      <button
+                        onClick={handleLoadMore}
+                        className="rounded-full bg-[#001A3D] px-8 py-3 text-sm font-bold text-white transition-all hover:bg-[#0171c1] hover:shadow-lg"
+                      >
+                        Load More
+                      </button>
+                    </div>
                   )}
                 </>
               )}
