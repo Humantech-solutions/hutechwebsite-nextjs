@@ -980,8 +980,14 @@ export type WpBlog = {
     gradientTo?: string;
     gradientDirection?: string;
     pattern?: string;
+    rawPattern?: string;
     patternColor?: string;
     patternOpacity?: number;
+    customPatternStyle?: {
+      backgroundImage: string;
+      backgroundSize?: string;
+      opacity?: number;
+    };
     overlayColor?: string;
     overlayOpacity?: number;
     titlePosition?: string;

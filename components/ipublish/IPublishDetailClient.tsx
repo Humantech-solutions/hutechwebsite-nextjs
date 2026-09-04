@@ -2,6 +2,7 @@
 
 import { useMemo } from "react";
 import { IPublishPageData, getIPublishImageUrl } from "@/lib/ipublish";
+import { getIPublishPatternStyle, extractPatternFromBody } from "@/lib/ipublish-pattern";
 import { Linkedin, Twitter, Facebook, Share2 } from "lucide-react";
 
 interface IPublishDetailClientProps {
@@ -61,40 +62,41 @@ export function IPublishDetailClient({ content }: IPublishDetailClientProps) {
     return "0 2px 8px rgba(0,0,0,0.45)";
   }, [content.title_shadow]);
 
-  // Dynamic Banner Pattern
+  // Dynamic Banner Pattern matching iPublish CMS inner pages
   const patternStyle = useMemo(() => {
-    if (!content.banner_pattern) return null;
-    const color = content.banner_pattern_color || "#ffffff";
-    const opacity = (content.banner_pattern_opacity ?? 10) / 100;
-
-    let backgroundImage = "";
-    let backgroundSize: string | undefined = undefined;
-
-    switch (content.banner_pattern) {
-      case "vertical-lines":
-        backgroundImage = `repeating-linear-gradient(90deg, ${color} 0 2px, transparent 2px 14px)`;
-        break;
-      case "dots":
-        backgroundImage = `radial-gradient(${color} 1.5px, transparent 1.5px)`;
-        backgroundSize = "16px 16px";
-        break;
-      case "grid":
-        backgroundImage = `linear-gradient(${color} 1px, transparent 1px), linear-gradient(90deg, ${color} 1px, transparent 1px)`;
-        backgroundSize = "24px 24px";
-        break;
-      case "diagonal-stripes":
-        backgroundImage = `repeating-linear-gradient(45deg, ${color} 0 2px, transparent 2px 14px)`;
-        break;
-      default:
-        backgroundImage = `repeating-linear-gradient(90deg, ${color} 0 2px, transparent 2px 14px)`;
+    const extracted = extractPatternFromBody(content.body || content.current_body);
+    if (extracted?.backgroundImage) {
+      return {
+        backgroundImage: extracted.backgroundImage,
+        backgroundSize: extracted.backgroundSize,
+        opacity:
+          extracted.opacity ??
+          (content.banner_pattern_opacity !== undefined
+            ? content.banner_pattern_opacity / 100
+            : 0.2),
+      };
     }
 
-    return {
-      backgroundImage,
-      backgroundSize,
-      opacity,
-    };
-  }, [content.banner_pattern, content.banner_pattern_color, content.banner_pattern_opacity]);
+    if (!content.banner_pattern && !content.raw_banner_pattern) return null;
+    if (content.banner_pattern === "none" && !content.raw_banner_pattern) return null;
+
+    const color = content.banner_pattern_color || "#ffffff";
+    const opacity = (content.banner_pattern_opacity ?? 20) / 100;
+
+    return getIPublishPatternStyle(
+      content.banner_pattern,
+      content.raw_banner_pattern,
+      color,
+      opacity
+    );
+  }, [
+    content.body,
+    content.current_body,
+    content.banner_pattern,
+    content.raw_banner_pattern,
+    content.banner_pattern_color,
+    content.banner_pattern_opacity,
+  ]);
 
   // Dynamic Featured Image
   const featuredImageUrl = getIPublishImageUrl(content.featured_image_url);
