@@ -170,32 +170,28 @@ export default function Blogs() {
                 transition={{ delay: i * 0.1 }}
                 className="group flex h-full flex-col overflow-hidden rounded-3xl border border-gray-100 bg-white transition-all hover:shadow-2xl"
               >
-                <div className="relative h-64 overflow-hidden">
-                  <ImageWithFallback
-                    src={blog.image}
-                    alt={blog.title}
-                    className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110"
-                  />
-                  <div className="absolute top-6 left-6 px-4 py-1 bg-[#F99D1C] text-[#001A3D] font-bold text-xs rounded-full uppercase tracking-widest">
-                    {blog.category}
+                <Link href={`/resources/blogs/${blog.id}`} className="flex h-full flex-col">
+                  <div className="relative h-64 overflow-hidden">
+                    <ImageWithFallback
+                      src={blog.image}
+                      alt={blog.title}
+                      className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110"
+                    />
+                    <div className="absolute top-6 left-6 px-4 py-1 bg-[#F99D1C] text-[#001A3D] font-bold text-xs rounded-full uppercase tracking-widest">
+                      {blog.category}
+                    </div>
                   </div>
-                </div>
-                <div className="flex flex-grow flex-col space-y-4 p-10">
-                  <div className="flex items-center gap-4 text-xs text-gray-500 font-medium">
-                    <span className="flex items-center gap-1"><Calendar size={14} /> {blog.date}</span>
-                    <span className="flex items-center gap-1"><User size={14} /> {blog.author}</span>
+                  <div className="flex flex-grow flex-col space-y-4 p-10">
+                    <div className="flex items-center gap-4 text-xs text-gray-500 font-medium">
+                      <span className="flex items-center gap-1"><Calendar size={14} /> {blog.date}</span>
+                      <span className="flex items-center gap-1"><User size={14} /> {blog.author}</span>
+                    </div>
+                    <h3 className="display-font text-2xl font-bold text-[#001A3D] transition-colors group-hover:text-[#F99D1C]">
+                      {blog.title}
+                    </h3>
+                    <p className="text-gray-500 leading-relaxed flex-grow">{blog.excerpt}</p>
                   </div>
-                  <h3 className="display-font text-2xl font-bold text-[#001A3D] transition-colors group-hover:text-[#F99D1C]">
-                    {blog.title}
-                  </h3>
-                  <p className="text-gray-500 leading-relaxed flex-grow">{blog.excerpt}</p>
-                  <Link
-                    href={`/resources/blogs/${blog.id}`}
-                    className="inline-flex items-center gap-2 text-[#001A3D] font-bold group-hover:gap-4 transition-all"
-                  >
-                    Read Article <ArrowRight size={18} className="text-[#F99D1C]" />
-                  </Link>
-                </div>
+                </Link>
               </Motion.article>
             ))}
           </div>
