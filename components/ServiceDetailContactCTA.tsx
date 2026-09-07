@@ -191,6 +191,7 @@ export function ServiceDetailContactCTA() {
         subject: `Inquiry for ${config.serviceName}`,
         message: formData.requirements,
         category: `Service Consultation: ${config.serviceName}`,
+        gtmEventName: "service_cta_submit",
       });
       toast.success("Thank you! Your project request has been submitted successfully. A consultant will contact you shortly.");
       setFormData({

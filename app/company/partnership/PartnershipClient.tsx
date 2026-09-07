@@ -170,6 +170,7 @@ export default function PartnershipClient({
         subject: `Partnership Proposal: ${type}`,
         message: `Partnership Type: ${type}\nCompany: ${company}\nProposal: ${proposal}`,
         category: "Partnership Proposal",
+        gtmEventName: "partnership_request_submit",
       });
       toast.success("Thank you! Your partnership request has been submitted successfully.");
       form.reset();
