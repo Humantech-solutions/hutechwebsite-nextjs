@@ -1,8 +1,10 @@
 "use client";
 
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
+import Link from "next/link";
+import Image from "next/image";
 import { IPublishPageData, getIPublishImageUrl } from "@/lib/ipublish";
-import { Linkedin, Twitter, Facebook, Share2 } from "lucide-react";
+import { Linkedin, Twitter, Facebook, Share2, Calendar, Check } from "lucide-react";
 
 interface IPublishDetailClientProps {
   content: IPublishPageData;
@@ -285,158 +287,279 @@ export function IPublishDetailClient({ content }: IPublishDetailClientProps) {
           </div>
         </div>
 
-        {/* Dynamic Content Body with Sticky Share Sidebar */}
-        <div className="mx-auto px-6 pb-16 sm:px-12 max-w-[1280px]">
-          <div className="flex flex-col lg:flex-row items-start justify-center gap-8 lg:gap-16">
-            {/* Share Sidebar matching website blog template */}
-            <div className="hidden lg:block shrink-0">
-              <div className="sticky top-32 space-y-8">
-                <div className="text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] [writing-mode:vertical-rl] flex items-center gap-4 rotate-180 mb-8 mx-auto">
-                  Share Article <span className="w-12 h-[1px] bg-white/10"></span>
-                </div>
-                <div className="flex flex-col items-center gap-4">
-                  <button
-                    onClick={() =>
-                      window.open(
-                        `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(shareUrl)}`,
-                        "_blank"
-                      )
-                    }
-                    className="p-3 rounded-full bg-white/5 text-gray-400 hover:bg-[#0171c1] hover:text-white transition-all"
-                    aria-label="Share on LinkedIn"
-                  >
-                    <Linkedin size={18} />
-                  </button>
-                  <button
-                    onClick={() =>
-                      window.open(
-                        `https://twitter.com/intent/tweet?url=${encodeURIComponent(shareUrl)}&text=${encodeURIComponent(content.title)}`,
-                        "_blank"
-                      )
-                    }
-                    className="p-3 rounded-full bg-white/5 text-gray-400 hover:bg-[#0171c1] hover:text-white transition-all"
-                    aria-label="Share on Twitter"
-                  >
-                    <Twitter size={18} />
-                  </button>
-                  <button
-                    onClick={() =>
-                      window.open(
-                        `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}`,
-                        "_blank"
-                      )
-                    }
-                    className="p-3 rounded-full bg-white/5 text-gray-400 hover:bg-[#0171c1] hover:text-white transition-all"
-                    aria-label="Share on Facebook"
-                  >
-                    <Facebook size={18} />
-                  </button>
-                  <button
-                    onClick={async () => {
-                      if (navigator.share) {
-                        try {
-                          await navigator.share({
-                            title: content.title,
-                            text: content.excerpt || content.title,
-                            url: shareUrl,
-                          });
-                        } catch (err) {
-                          console.log("Error sharing", err);
+        {/* ========================================================================= */}
+        {/* 2. BREADCRUMB (AFTER HERO BANNER & BEFORE ARTICLE CONTENT) */}
+        {/* ========================================================================= */}
+        <div className="bg-[#F7F7F8] border-b border-gray-200/70 py-3.5">
+          <div className="max-w-[1240px] mx-auto px-4 sm:px-6 lg:px-8">
+            <nav aria-label="Breadcrumb">
+              <ol className="flex items-center flex-wrap gap-2 text-xs sm:text-[13px] text-[#5A6270]">
+                <li>
+                  <Link href="/" className="hover:text-[#0754C6] transition-colors font-medium">
+                    Home
+                  </Link>
+                </li>
+                <li className="text-gray-400 select-none">/</li>
+                <li>
+                  <Link href="/resources/blogs" className="hover:text-[#0754C6] transition-colors font-medium">
+                    Blog
+                  </Link>
+                </li>
+                {content.content_type && (
+                  <>
+                    <li className="text-gray-400 select-none">/</li>
+                    <li>
+                      <span className="text-[#5A6270] font-medium">
+                        {content.content_type}
+                      </span>
+                    </li>
+                  </>
+                )}
+                <li className="text-gray-400 select-none">/</li>
+                <li
+                  className="text-[#172033] font-semibold truncate max-w-[240px] sm:max-w-[400px] md:max-w-[500px]"
+                  aria-current="page"
+                  title={content.title}
+                >
+                  {content.title}
+                </li>
+              </ol>
+            </nav>
+          </div>
+        </div>
+
+        {/* ========================================================================= */}
+        {/* 3. TWO-COLUMN ARTICLE CONTENT + STICKY RIGHT SIDEBAR */}
+        {/* ========================================================================= */}
+        <div className="bg-[#F7F7F8] py-10 lg:py-16">
+          <div className="max-w-[1240px] mx-auto px-4 sm:px-6 lg:px-8">
+            
+            <div className="grid grid-cols-1 lg:grid-cols-[1fr_300px] xl:grid-cols-[1fr_320px] gap-10 lg:gap-12 xl:gap-14 items-start">
+              
+              {/* --------------------------------------------------------------------- */}
+              {/* LEFT COLUMN: MAIN ARTICLE CONTENT */}
+              {/* --------------------------------------------------------------------- */}
+              <main className="w-full min-w-0">
+                <article className="space-y-8">
+                  
+                  {/* Social Share Row */}
+                  <div className="flex items-center justify-between pb-6 border-b border-gray-200">
+                    <span className="text-xs uppercase tracking-wider font-semibold text-[#8A919D]">
+                      Share Article
+                    </span>
+                    <div className="flex items-center gap-3">
+                      <button
+                        onClick={() =>
+                          window.open(
+                            `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(shareUrl)}`,
+                            "_blank"
+                          )
                         }
-                      } else {
-                        navigator.clipboard.writeText(shareUrl);
-                        alert("Link copied to clipboard!");
-                      }
-                    }}
-                    className="p-3 rounded-full bg-white/5 text-gray-400 hover:bg-[#F99D1C] hover:text-white transition-all"
-                    aria-label="Share Article"
+                        className="p-2 rounded-full bg-white border border-gray-200 text-[#8A919D] hover:text-[#0A66C2] hover:border-[#0A66C2] transition-colors shadow-sm"
+                        aria-label="Share on LinkedIn"
+                      >
+                        <Linkedin className="w-4 h-4" />
+                      </button>
+                      <button
+                        onClick={() =>
+                          window.open(
+                            `https://twitter.com/intent/tweet?url=${encodeURIComponent(shareUrl)}&text=${encodeURIComponent(content.title)}`,
+                            "_blank"
+                          )
+                        }
+                        className="p-2 rounded-full bg-white border border-gray-200 text-[#8A919D] hover:text-black hover:border-black transition-colors shadow-sm"
+                        aria-label="Share on X"
+                      >
+                        <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24">
+                          <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+                        </svg>
+                      </button>
+                      <button
+                        onClick={() =>
+                          window.open(
+                            `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}`,
+                            "_blank"
+                          )
+                        }
+                        className="p-2 rounded-full bg-white border border-gray-200 text-[#8A919D] hover:text-[#1877F2] hover:border-[#1877F2] transition-colors shadow-sm"
+                        aria-label="Share on Facebook"
+                      >
+                        <Facebook className="w-4 h-4" />
+                      </button>
+                      <button
+                        onClick={async () => {
+                          if (navigator.clipboard) {
+                            await navigator.clipboard.writeText(shareUrl);
+                            alert("Link copied to clipboard!");
+                          }
+                        }}
+                        className="p-2 rounded-full bg-white border border-gray-200 text-[#8A919D] hover:text-[#172033] hover:border-[#172033] transition-colors shadow-sm"
+                        aria-label="Copy Link"
+                      >
+                        <Share2 className="w-4 h-4" />
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* Prose Content */}
+                  <div
+                    className="prose-content text-[15.5px] leading-[1.78] text-[#4E5665]"
+                    data-font={bodyFont || undefined}
+                    dangerouslySetInnerHTML={{ __html: contentBodyHtml }}
+                  />
+
+                  {/* ========================================================================= */}
+                  {/* 4. ARTICLE-BOTTOM IMAGE / CTA SECTION (MATCHING article-bottom.png) */}
+                  {/* ========================================================================= */}
+                  <div className="mt-12 bg-[#0754C6] text-white p-6 sm:p-8 rounded-[4px] shadow-md">
+                    <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
+                      <div className="space-y-2.5 max-w-[480px]">
+                        <div className="text-[11px] font-bold uppercase tracking-[0.14em] text-blue-100/90">
+                          NEW HIRES BURIED ON DAY TWO?
+                        </div>
+                        <p className="font-serif text-[18px] sm:text-[20px] font-normal leading-[1.35] text-white">
+                          See how realfast does it — every tool your team runs on, pulled into one connected page the moment a new hire needs it.
+                        </p>
+                      </div>
+
+                      <Link
+                        href="/contact"
+                        className="inline-flex items-center justify-center bg-white text-[#172033] text-sm font-bold px-6 py-3 rounded-[3px] hover:bg-blue-50 transition-all shadow-sm hover:shadow active:scale-[0.98] whitespace-nowrap self-start sm:self-center"
+                      >
+                        Book a Demo
+                      </Link>
+                    </div>
+                  </div>
+
+                </article>
+              </main>
+
+              {/* --------------------------------------------------------------------- */}
+              {/* RIGHT COLUMN: STICKY SIDEBAR (MATCHING right-side(1).png) */}
+              {/* --------------------------------------------------------------------- */}
+              <aside className="w-full lg:sticky lg:top-[100px] lg:self-start">
+                <div className="bg-[#0754C6] p-7 text-white rounded-[4px] shadow-md">
+                  {/* Small Top Label */}
+                  <div className="text-sm font-medium text-blue-100/95 tracking-wide mb-3">
+                    Hutech Solutions
+                  </div>
+
+                  {/* Large Serif Headline */}
+                  <h3 className="font-serif text-[28px] sm:text-[30px] font-normal leading-[1.18] text-white mb-3.5">
+                    From strategy to shipped
+                  </h3>
+
+                  {/* Supporting Copy */}
+                  <p className="text-[13.5px] text-blue-100/90 leading-[1.55] mb-7 font-normal">
+                    Tell us what you want built. We come back with a plan and a timeline.
+                  </p>
+
+                  {/* White Action Button */}
+                  <Link
+                    href="/contact"
+                    className="w-full bg-white text-[#172033] font-bold text-sm py-3.5 rounded-[3px] hover:bg-blue-50 transition-all flex items-center justify-center text-center shadow-sm hover:shadow active:scale-[0.99]"
                   >
-                    <Share2 size={18} />
-                  </button>
+                    Book Meeting
+                  </Link>
                 </div>
-              </div>
+              </aside>
+
             </div>
 
-            {/* Dynamic Content Body */}
-            <div
-              className="flex-1 w-full max-w-full"
-              style={{
-                maxWidth: content.content_width
-                  ? `${content.content_width}px`
-                  : "816px",
-              }}
-            >
-              <div
-                className="prose-content"
-                data-font={bodyFont || undefined}
-                dangerouslySetInnerHTML={{ __html: contentBodyHtml }}
-              />
-
-              {/* Mobile Share Row */}
-              <div className="mt-12 pt-8 border-t border-white/10 lg:hidden flex items-center justify-center gap-4">
-                <span className="text-[10px] uppercase font-bold tracking-widest text-gray-400 mr-2">
-                  Share:
-                </span>
-                <button
-                  onClick={() =>
-                    window.open(
-                      `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(shareUrl)}`,
-                      "_blank"
-                    )
-                  }
-                  className="p-3 rounded-full bg-white/5 text-gray-400 hover:bg-[#0171c1] hover:text-white transition-all"
-                  aria-label="Share on LinkedIn"
+            {/* ========================================================================= */}
+            {/* 5. RELATED ARTICLES / RELATED READING (MATCHING related-article.png) */}
+            {/* ========================================================================= */}
+            <section aria-labelledby="related-reading-heading" className="mt-16 lg:mt-20 pt-10 border-t border-gray-300">
+              {/* Header with Title and All posts Link */}
+              <div className="flex items-center justify-between mb-8">
+                <h2 id="related-reading-heading" className="text-xl sm:text-2xl font-bold text-[#172033]">
+                  Related reading
+                </h2>
+                <Link
+                  href="/resources/blogs"
+                  className="text-sm font-semibold text-[#172033] hover:text-[#0754C6] transition-colors flex items-center gap-1"
                 >
-                  <Linkedin size={16} />
-                </button>
-                <button
-                  onClick={() =>
-                    window.open(
-                      `https://twitter.com/intent/tweet?url=${encodeURIComponent(shareUrl)}&text=${encodeURIComponent(content.title)}`,
-                      "_blank"
-                    )
-                  }
-                  className="p-3 rounded-full bg-white/5 text-gray-400 hover:bg-[#0171c1] hover:text-white transition-all"
-                  aria-label="Share on Twitter"
-                >
-                  <Twitter size={16} />
-                </button>
-                <button
-                  onClick={() =>
-                    window.open(
-                      `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}`,
-                      "_blank"
-                    )
-                  }
-                  className="p-3 rounded-full bg-white/5 text-gray-400 hover:bg-[#0171c1] hover:text-white transition-all"
-                  aria-label="Share on Facebook"
-                >
-                  <Facebook size={16} />
-                </button>
-                <button
-                  onClick={async () => {
-                    if (navigator.share) {
-                      try {
-                        await navigator.share({
-                          title: content.title,
-                          text: content.excerpt || content.title,
-                          url: shareUrl,
-                        });
-                      } catch (err) {
-                        console.log("Error sharing", err);
-                      }
-                    } else {
-                      navigator.clipboard.writeText(shareUrl);
-                      alert("Link copied to clipboard!");
-                    }
-                  }}
-                  className="p-3 rounded-full bg-white/5 text-gray-400 hover:bg-[#F99D1C] hover:text-white transition-all"
-                  aria-label="Share Article"
-                >
-                  <Share2 size={16} />
-                </button>
+                  All posts
+                </Link>
               </div>
-            </div>
+
+              {/* 3-Column Responsive Cards Grid */}
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-7">
+                {[
+                  {
+                    slug: "small-models-big-impact",
+                    title: "Small Models, Big Impact: Why Domain-Specific AI Is...",
+                    category: "ARTIFICIAL INTELLIGENCE",
+                    date: "July 28, 2026",
+                    excerpt: "Introduction For years, the AI conversation was dominated by scale. Bigger models, more...",
+                    image: "https://images.unsplash.com/photo-1677442136019-21780ecad995?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=800",
+                  },
+                  {
+                    slug: "agentic-ai-autonomous-operators",
+                    title: "Agentic AI: From Chatbots to Autonomous Business Operators",
+                    category: "ARTIFICIAL INTELLIGENCE",
+                    date: "July 28, 2026",
+                    excerpt: "Introduction For years, AI in the enterprise meant chatbots — tools that answered questions,...",
+                    image: "https://images.unsplash.com/photo-1485827404703-89b55fcc595e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=800",
+                  },
+                  {
+                    slug: "blockchain-supply-chain-revolution",
+                    title: "Blockchain: The Supply Chain Revolution",
+                    category: "BLOCKCHAIN",
+                    date: "June 26, 2026",
+                    excerpt: "Supply chains are among the most complex systems in modern commerce, involving countless...",
+                    image: "https://images.unsplash.com/photo-1639762681485-074b7f938ba0?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=800",
+                  },
+                ].map((article, idx) => (
+                  <article
+                    key={article.slug || idx}
+                    className="group bg-white border border-[#E5E7EB] rounded-[4px] overflow-hidden flex flex-col transition-all duration-300 hover:shadow-md hover:border-gray-300"
+                  >
+                    {/* 16:9 Thumbnail with Category Badge */}
+                    <div className="relative aspect-[16/9] w-full overflow-hidden bg-gray-100">
+                      <Image
+                        src={article.image}
+                        alt={article.title}
+                        fill
+                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 33vw, 380px"
+                        className="object-cover transition-transform duration-500 ease-out group-hover:scale-105"
+                      />
+                      
+                      {/* Category Pill Badge */}
+                      <div className="absolute top-3 left-3 z-10">
+                        <span className="inline-block bg-[#001A3D]/75 backdrop-blur-[2px] text-white text-[9.5px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-[2px] border border-white/15 shadow-sm">
+                          {article.category}
+                        </span>
+                      </div>
+                    </div>
+
+                    {/* Card Content Area */}
+                    <div className="p-5 flex-1 flex flex-col justify-between">
+                      <div>
+                        {/* Date with Calendar Icon */}
+                        <div className="flex items-center gap-1.5 text-[11.5px] text-[#8A919D] font-medium mb-2.5">
+                          <Calendar className="w-3.5 h-3.5 text-[#8A919D]" />
+                          <time dateTime={article.date}>{article.date}</time>
+                        </div>
+
+                        {/* Article Title */}
+                        <h3 className="text-[15.5px] font-bold text-[#172033] leading-[1.35] mb-2.5 group-hover:text-[#0754C6] transition-colors line-clamp-2">
+                          <Link href={`/resources/blogs/${article.slug}`}>
+                            {article.title}
+                          </Link>
+                        </h3>
+
+                        {/* Excerpt / Description */}
+                        <p className="text-[12.5px] text-[#5A6270] leading-[1.58] line-clamp-2">
+                          {article.excerpt}
+                        </p>
+                      </div>
+                    </div>
+                  </article>
+                ))}
+              </div>
+            </section>
+
           </div>
         </div>
       </article>

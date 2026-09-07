@@ -154,30 +154,30 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
     const imageUrl = getIPublishImageUrl(ipublishContent.featured_image_url);
     const schemaJsonData = ipublishContent.schema_json
       ? {
-          ...ipublishContent.schema_json,
-          ...(imageUrl && !ipublishContent.schema_json.image ? { image: imageUrl } : {}),
-        }
+        ...ipublishContent.schema_json,
+        ...(imageUrl && !ipublishContent.schema_json.image ? { image: imageUrl } : {}),
+      }
       : {
-          "@context": "https://schema.org",
-          "@type": "BlogPosting",
-          headline: ipublishContent.seo_title || ipublishContent.title,
-          description:
-            ipublishContent.meta_description ||
-            ipublishContent.og_description ||
-            ipublishContent.excerpt ||
-            "",
-          image: imageUrl,
-          dateModified:
-            ipublishContent.updated_at ||
-            ipublishContent.published_at ||
-            ipublishContent.created_at,
-          keywords: [
-            ipublishContent.focus_keyword,
-            ...(ipublishContent.secondary_keywords || []),
-          ]
-            .filter(Boolean)
-            .join(", "),
-        };
+        "@context": "https://schema.org",
+        "@type": "BlogPosting",
+        headline: ipublishContent.seo_title || ipublishContent.title,
+        description:
+          ipublishContent.meta_description ||
+          ipublishContent.og_description ||
+          ipublishContent.excerpt ||
+          "",
+        image: imageUrl,
+        dateModified:
+          ipublishContent.updated_at ||
+          ipublishContent.published_at ||
+          ipublishContent.created_at,
+        keywords: [
+          ipublishContent.focus_keyword,
+          ...(ipublishContent.secondary_keywords || []),
+        ]
+          .filter(Boolean)
+          .join(", "),
+      };
 
     return (
       <>
