@@ -29,8 +29,21 @@ type Props = {
 
 export default function BlogsClient({ blogs, pageTitle, pageDescription, bgImageUrl }: Props) {
   const [searchQuery, setSearchQuery] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState("All");
   const [visibleCount, setVisibleCount] = useState(12);
   const maxPosts = 60;
+
+  const categories = useMemo(() => {
+    const cats = new Set<string>();
+    blogs.forEach((b) => {
+      if (b.category) cats.add(b.category);
+    });
+    return ["All", ...Array.from(cats)].sort((a, b) => {
+      if (a === "All") return -1;
+      if (b === "All") return 1;
+      return a.localeCompare(b);
+    });
+  }, [blogs]);
 
   // Filter blogs
   const filteredBlogs = useMemo(() => {
@@ -40,9 +53,10 @@ export default function BlogsClient({ blogs, pageTitle, pageDescription, bgImage
         blog.title?.toLowerCase().includes(searchQuery.toLowerCase()) ||
         blog.excerpt?.toLowerCase().includes(searchQuery.toLowerCase()) ||
         blog.tags?.some((t) => t.toLowerCase().includes(searchQuery.toLowerCase()));
-      return matchesSearch;
+      const matchesCategory = selectedCategory === "All" || blog.category === selectedCategory;
+      return matchesSearch && matchesCategory;
     }).sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
-  }, [blogs, searchQuery]);
+  }, [blogs, searchQuery, selectedCategory]);
 
   const limitedBlogs = filteredBlogs.slice(0, maxPosts);
   const currentBlogs = limitedBlogs.slice(0, visibleCount);
@@ -114,19 +128,20 @@ export default function BlogsClient({ blogs, pageTitle, pageDescription, bgImage
             {/* MAIN BLOG CARDS GRID */}
             <main>
               {/* Filter Status Bar */}
-              <div className="mb-6 flex flex-wrap items-center justify-between gap-4 border-b border-slate-200 pb-4">
-                <div className="self-end text-xs font-medium text-slate-500">
+              <div className="mb-6 flex flex-wrap items-center justify-between gap-y-4 border-b border-slate-200 pb-4 lg:flex-nowrap lg:gap-x-6">
+                <div className="order-1 shrink-0 text-xs font-medium text-slate-500">
                   Showing <span className="font-bold text-[#001A3D]">{limitedBlogs.length}</span>{" "}
                   {limitedBlogs.length === 1 ? "article" : "articles"}
                   {searchQuery && (
-                    <>
+                    <span className="hidden sm:inline">
                       {" "}
                       matching <span className="font-bold text-[#001A3D]">"{searchQuery}"</span>
-                    </>
+                    </span>
                   )}
                 </div>
 
-                <div className="relative w-full sm:w-64 md:w-80">
+                {/* Search Bar - sits on right for mobile, far right for desktop */}
+                <div className="order-2 relative w-[160px] shrink-0 sm:w-64 md:w-72 lg:order-3 lg:w-80">
                   <Search className="absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
                   <input
                     id="blog-search"
@@ -151,6 +166,28 @@ export default function BlogsClient({ blogs, pageTitle, pageDescription, bgImage
                       ✕
                     </button>
                   )}
+                </div>
+
+                {/* Category Pills Container - wraps to full width on mobile, sits in middle on desktop */}
+                <div className="order-3 mt-2 w-full overflow-x-auto [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden lg:order-2 lg:mt-0 lg:w-auto lg:flex-1 lg:px-2">
+                  <div className="flex items-center gap-2 pb-1">
+                    {categories.map((cat) => (
+                      <button
+                        key={cat}
+                        onClick={() => {
+                          setSelectedCategory(cat);
+                          setVisibleCount(12);
+                        }}
+                        className={`shrink-0 rounded-full px-4 py-1.5 text-xs font-bold transition-all ${
+                          selectedCategory === cat
+                            ? "bg-[#001A3D] text-[#F99D1C]"
+                            : "bg-slate-100 text-slate-500 hover:bg-slate-200"
+                        }`}
+                      >
+                        {cat}
+                      </button>
+                    ))}
+                  </div>
                 </div>
               </div>
               {limitedBlogs.length === 0 ? (
@@ -227,16 +264,7 @@ export default function BlogsClient({ blogs, pageTitle, pageDescription, bgImage
                             </div>
                           </div>
 
-                          {/* Bottom Action Strip (inspired by the reference UI) */}
-                          <div className="flex items-center justify-center border-t border-slate-100 bg-slate-50/50 py-3.5 text-xs font-bold text-slate-600 transition-all duration-300 group-hover:bg-[#001A3D] group-hover:text-[#F99D1C]">
-                            <span className="flex items-center gap-1.5">
-                              <span>Read article</span>
-                              <ArrowRight
-                                size={13}
-                                className="transition-transform duration-300 group-hover:translate-x-1"
-                              />
-                            </span>
-                          </div>
+
                         </Link>
                       </Motion.article>
                     ))}
