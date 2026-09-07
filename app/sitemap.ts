@@ -13,6 +13,7 @@ import {
   getAllPageUris,
 } from "@/lib/wordpress";
 import { getRecruitProJobs } from "@/lib/api";
+import { getIPublishAllBlogs } from "@/lib/ipublish";
 
 // Required for Next.js static export (output: "export") mode.
 export const dynamic = "force-static";
@@ -38,6 +39,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     pressReleases,
     documents,
     allWpPages,
+    ipublishBlogs,
   ] = await Promise.all([
     getBlogs().catch(() => []),
     getCaseStudies().catch(() => []),
@@ -50,6 +52,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     getPressReleases().catch(() => []),
     getHutechDocuments().catch(() => []),
     getAllPageUris().catch(() => []),
+    getIPublishAllBlogs().catch(() => []),
   ]);
 
   // Root & section hub paths that exist
@@ -78,6 +81,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ...services.map((item) => `/services/${item.slug}/`),
     ...industries.map((item) => `/industries/${item.slug}/`),
     ...blogs.map((item) => `/resources/blogs/${item.slug}/`),
+    ...ipublishBlogs.map((item) => `/resources/blogs/ipublish/${item.slug || item.id}/`),
     ...caseStudies.map((item) => `/resources/case-studies/${item.slug}/`),
     ...events.map((item) => `/resources/events/${item.slug || item.id}/`),
     ...events.map((item) => `/events/${item.slug || item.id}/`),

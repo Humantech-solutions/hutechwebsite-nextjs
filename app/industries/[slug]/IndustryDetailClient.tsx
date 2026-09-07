@@ -195,6 +195,7 @@ export default function IndustryDetailClient({ service, blogs }: IndustryDetailC
         subject: `Industry Inquiry: ${industryName}`,
         message,
         category: `Industry Consultation: ${industryName}`,
+        gtmEventName: "industry_inquiry_submit",
       });
       toast.success("Thank you! Your project request has been submitted successfully.");
       form.reset();

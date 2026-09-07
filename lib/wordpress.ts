@@ -1,4 +1,5 @@
 import { CaseStudy } from "@/lib/data/case-studies";
+import { getIPublishAllBlogs } from "@/lib/ipublish";
 // WordPress GraphQL API integration for Hutech Solutions
 // Replace NEXT_PUBLIC_WORDPRESS_API_URL in .env.local with your WordPress site's GraphQL endpoint
 
@@ -4559,6 +4560,7 @@ export async function getSitemapData(pageUri: string = "/legal/sitemap/"): Promi
     const documents: any[] = data.hutechDocuments?.nodes || [];
 
     const blogs = await getBlogs().catch(() => []);
+    const ipublishBlogsData = await getIPublishAllBlogs().catch(() => []);
 
     // Company pages (ordered logically)
     const companyOrder = [
@@ -4613,8 +4615,23 @@ export async function getSitemapData(pageUri: string = "/legal/sitemap/"): Promi
     });
 
     // Blogs
-    const liveBlogs = blogs.map((b) => ({
-      name: cleanSitemapTitle(b.title),
+    const combinedBlogs = [
+      ...blogs.map((b) => ({
+        title: b.title,
+        slug: b.slug,
+        isIPublish: b.isIPublish,
+        date: new Date(b.date).getTime(),
+      })),
+      ...ipublishBlogsData.map((b) => ({
+        title: b.title,
+        slug: b.slug || b.id,
+        isIPublish: true,
+        date: new Date(b.updated_at || b.published_at || b.created_at || 0).getTime(),
+      })),
+    ].sort((a, b) => b.date - a.date);
+
+    const liveBlogs = combinedBlogs.map((b) => ({
+      name: cleanSitemapTitle(b.title || ""),
       path: b.isIPublish ? `/resources/blogs/ipublish/${b.slug}` : `/resources/blogs/${b.slug}`,
     }));
 

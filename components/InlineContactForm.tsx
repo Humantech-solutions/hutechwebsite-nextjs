@@ -36,6 +36,7 @@ export function InlineContactForm({
         subject: `Project Request: ${category}`,
         message,
         category,
+        gtmEventName: "inline_contact_submit",
       });
       toast.success("Thank you! Your project request has been submitted successfully.");
       form.reset();

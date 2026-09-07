@@ -190,6 +190,7 @@ export default function ServiceDetailClient({ service, blogs = [] }: { service: 
         subject: `Service Inquiry: ${serviceName}`,
         message,
         category: `Service Consultation: ${serviceName}`,
+        gtmEventName: "service_inquiry_submit",
       });
       toast.success("Thank you! Your project request has been submitted successfully.");
       form.reset();
