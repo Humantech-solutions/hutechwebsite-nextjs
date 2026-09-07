@@ -44,6 +44,7 @@ export function RegisterEventModal({ isOpen, onClose, eventTitle }: RegisterEven
         subject: `Event Registration: ${eventTitle}`,
         message: `Registered for event. Company: ${organization}, Title: ${jobTitleVal}`,
         category: "Event Registration",
+        gtmEventName: "event_registration_submit",
       });
       setIsSuccess(true);
       form.reset();

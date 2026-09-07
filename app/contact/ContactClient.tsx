@@ -161,6 +161,7 @@ export default function ContactClient({
         subject,
         message,
         category: "Contact Us Form",
+        gtmEventName: "contact_page_submit",
       });
       toast.success(
         "Thank you! Your inquiry has been received. Our team will contact you shortly."

@@ -16,6 +16,34 @@ bun dev
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
+## 🚀 Hostinger Deployment Guide
+
+To deploy this project to Hostinger, you need to upload the source code (excluding the large `node_modules` and `.next` folders) so that Hostinger can build it natively on their Linux servers.
+
+### Step 1: Create the Zip File (Run in PowerShell)
+
+Open your terminal (PowerShell) inside the project folder and run this exact command to generate `deploy.zip`:
+
+```powershell
+$exclude = @("node_modules", "out", ".git", ".next"); $items = Get-ChildItem -Force | Where-Object { $_.Name -notin $exclude }; Compress-Archive -Path ($items.FullName) -DestinationPath "deploy.zip" -Force; Write-Host "✅ Created deploy.zip"
+```
+
+### Step 2: Upload to Hostinger
+
+1. Go to Hostinger **File Manager** and open the root folder for your Web App.
+2. Delete the existing files to start with a clean slate.
+3. Upload `deploy.zip` and extract it.
+
+### Step 3: Configure Hostinger Web App
+
+In your Hostinger Node.js / Web App settings, ensure:
+
+- **Build command**: `npm run build`
+- **Start command**: `npm start`
+- **Output directory**: `.next`
+
+Click **Deploy / Restart**. Hostinger will run the build natively and your site will be live!
+
 You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
 This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.

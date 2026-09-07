@@ -114,6 +114,7 @@ export default function MediaListing() {
         subject: "Media Newsletter Subscription",
         message: "User subscribed to media / podcast newsletter",
         category: "Media Newsletter Subscription",
+        gtmEventName: "newsletter_subscribe_submit",
       });
       toast.success("Subscribed successfully!");
       form.reset();

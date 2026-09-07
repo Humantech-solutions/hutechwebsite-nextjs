@@ -2,6 +2,7 @@
 
 import { useMemo } from "react";
 import { WpBlog } from "@/lib/wordpress";
+import { getIPublishPatternStyle } from "@/lib/ipublish-pattern";
 
 interface IPublishCardBannerProps {
   blog: WpBlog;
@@ -15,40 +16,32 @@ export function IPublishCardBanner({ blog }: IPublishCardBannerProps) {
   const gradientTo = meta?.gradientTo || "#ec4899";
   const gradientDirection = meta?.gradientDirection || "135deg";
 
-  // Dynamic Pattern Overlay
+  // Dynamic Pattern Overlay matching iPublish CMS inner pages
   const patternStyle = useMemo(() => {
-    if (!meta?.pattern) return null;
-    const color = meta.patternColor || "#ffffff";
-    const opacity = (meta.patternOpacity ?? 10) / 100;
-
-    let backgroundImage = "";
-    let backgroundSize: string | undefined = undefined;
-
-    switch (meta.pattern) {
-      case "vertical-lines":
-        backgroundImage = `repeating-linear-gradient(90deg, ${color} 0 2px, transparent 2px 14px)`;
-        break;
-      case "dots":
-        backgroundImage = `radial-gradient(${color} 1.5px, transparent 1.5px)`;
-        backgroundSize = "16px 16px";
-        break;
-      case "grid":
-        backgroundImage = `linear-gradient(${color} 1px, transparent 1px), linear-gradient(90deg, ${color} 1px, transparent 1px)`;
-        backgroundSize = "24px 24px";
-        break;
-      case "diagonal-stripes":
-        backgroundImage = `repeating-linear-gradient(45deg, ${color} 0 2px, transparent 2px 14px)`;
-        break;
-      default:
-        backgroundImage = `repeating-linear-gradient(90deg, ${color} 0 2px, transparent 2px 14px)`;
+    if (meta?.customPatternStyle?.backgroundImage) {
+      return {
+        backgroundImage: meta.customPatternStyle.backgroundImage,
+        backgroundSize: meta.customPatternStyle.backgroundSize,
+        opacity:
+          meta.customPatternStyle.opacity ??
+          (meta.patternOpacity !== undefined ? meta.patternOpacity / 100 : 0.2),
+      };
     }
 
-    return {
-      backgroundImage,
-      backgroundSize,
-      opacity,
-    };
-  }, [meta?.pattern, meta?.patternColor, meta?.patternOpacity]);
+    if (!meta?.pattern && !meta?.rawPattern) return null;
+    if (meta.pattern === "none" && !meta.rawPattern) return null;
+
+    const color = meta.patternColor || "#ffffff";
+    const opacity = (meta.patternOpacity ?? 20) / 100;
+
+    return getIPublishPatternStyle(meta.pattern, meta.rawPattern, color, opacity);
+  }, [
+    meta?.customPatternStyle,
+    meta?.pattern,
+    meta?.rawPattern,
+    meta?.patternColor,
+    meta?.patternOpacity,
+  ]);
 
   // Dynamic Title Positioning
   const positionClass = useMemo(() => {

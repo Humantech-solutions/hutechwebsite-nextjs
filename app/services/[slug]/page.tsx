@@ -2,7 +2,7 @@ import { getServiceBySlug, getBlogsByCategory, getServicesList } from "@/lib/wor
 import ServiceDetailClient from "./ServiceDetailClient";
 import { constructMetadata } from "@/lib/seo";
 
-export const revalidate = 60;
+export const revalidate = 0;
 
 export async function generateStaticParams() {
   const services = await getServicesList();

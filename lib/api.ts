@@ -17,6 +17,7 @@ export interface ContactFormPayload {
   subject: string;
   message: string;
   category?: string;
+  gtmEventName?: string;
 }
 
 export interface CareerFormPayload {
@@ -172,7 +173,16 @@ export async function submitContactForm(payload: ContactFormPayload): Promise<bo
       throw new Error(errText || `HTTP error! status: ${response.status}`);
     }
 
-    return parseSubmitResponse(response);
+    const isSuccess = await parseSubmitResponse(response);
+
+    if (isSuccess && typeof window !== "undefined") {
+      (window as any).dataLayer = (window as any).dataLayer || [];
+      (window as any).dataLayer.push({
+        event: payload.gtmEventName || "contact_form_submit",
+      });
+    }
+
+    return isSuccess;
   } catch (error) {
     console.error("[API] Contact submit failed:", error);
     throw error;
@@ -239,7 +249,16 @@ export async function submitDocumentRequest(payload: DocumentRequestPayload): Pr
       throw new Error(errText || `HTTP error! status: ${response.status}`);
     }
 
-    return parseSubmitResponse(response);
+    const isSuccess = await parseSubmitResponse(response);
+    
+    if (isSuccess && typeof window !== "undefined") {
+      (window as any).dataLayer = (window as any).dataLayer || [];
+      (window as any).dataLayer.push({
+        event: 'document_request_submit'
+      });
+    }
+
+    return isSuccess;
   } catch (error) {
     console.error("[API] Document request submit failed:", error);
     throw error;
@@ -274,7 +293,16 @@ export async function submitCareerForm(payload: CareerFormPayload): Promise<bool
       throw new Error(errText || `HTTP error! status: ${response.status}`);
     }
 
-    return parseSubmitResponse(response);
+    const isSuccess = await parseSubmitResponse(response);
+    
+    if (isSuccess && typeof window !== "undefined") {
+      (window as any).dataLayer = (window as any).dataLayer || [];
+      (window as any).dataLayer.push({
+        event: 'career_form_submit'
+      });
+    }
+
+    return isSuccess;
   } catch (error) {
     console.error("[API] Career submit failed:", error);
     throw error;
@@ -428,7 +456,7 @@ export async function getRecruitProJobs() {
         // Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",
       },
-      next: { revalidate: 60 },
+      next: { revalidate: 0 },
     });
 
     if (!res.ok) {

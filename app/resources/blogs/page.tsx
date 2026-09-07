@@ -2,6 +2,7 @@ import { Suspense } from "react";
 import BlogsClient from "./BlogsClient";
 import { getBlogs, getBlogPageData } from "@/lib/wordpress";
 import { getIPublishAllBlogs, getIPublishImageUrl } from "@/lib/ipublish";
+import { extractPatternFromBody } from "@/lib/ipublish-pattern";
 import { constructMetadata } from "@/lib/seo";
 
 export const metadata = constructMetadata({
@@ -10,7 +11,7 @@ export const metadata = constructMetadata({
   path: "/resources/blogs/",
 });
 
-export const revalidate = 60;
+export const revalidate = 0;
 
 export default async function BlogsPage() {
   // Fetch WP data and iPublish data in parallel
@@ -32,6 +33,7 @@ export default async function BlogsPage() {
 
     const wordCount = item.word_count || 500;
     const readTimeMinutes = Math.max(1, Math.ceil(wordCount / 200));
+    const extractedPattern = extractPatternFromBody(item.body || item.current_body);
 
     return {
       id: item.slug || item.id || "",
@@ -53,8 +55,10 @@ export default async function BlogsPage() {
         gradientTo: item.banner_gradient_to,
         gradientDirection: item.banner_gradient_direction,
         pattern: item.banner_pattern,
+        rawPattern: item.raw_banner_pattern,
         patternColor: item.banner_pattern_color,
         patternOpacity: item.banner_pattern_opacity,
+        customPatternStyle: extractedPattern || undefined,
         overlayColor: item.overlay_color,
         overlayOpacity: item.featured_image_overlay,
         titlePosition: item.featured_title_position,

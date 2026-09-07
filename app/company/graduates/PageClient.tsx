@@ -45,6 +45,7 @@ export default function Graduates() {
         subject: `Graduate Cohort Application: ${data.interest}`,
         message: `Graduation Year: ${data.gradYear}\nSpecialization Interest: ${data.interest}`,
         category: "Graduate Cohort Application",
+        gtmEventName: "graduate_application_submit",
       });
       toast.success("Application submitted successfully! Our team will contact you soon.");
       reset();
@@ -72,6 +73,7 @@ export default function Graduates() {
         subject: `Academic Partnership: ${collabType}`,
         message: `Institution: ${instName}\nCollaboration Type: ${collabType}`,
         category: "Academic Partnership",
+        gtmEventName: "academic_partnership_submit",
       });
       toast.success("Partnership request sent. Our Academic Liaison will contact you.");
       form.reset();

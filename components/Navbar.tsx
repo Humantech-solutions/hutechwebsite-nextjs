@@ -3,10 +3,10 @@
 import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { Search, Globe, Menu, X, ChevronDown, MoveRight, Phone, Mail, Linkedin } from "lucide-react";
+import { Search, Globe, Menu, X, ChevronDown, MoveRight, Phone, Mail, Linkedin, Facebook, Instagram, Youtube, Twitter } from "lucide-react";
 import { motion as Motion, AnimatePresence, useScroll, useTransform } from "framer-motion";
 import { ImageWithFallback } from "./figma/ImageWithFallback";
-import type { HeaderChromeData } from "@/lib/wordpress";
+import type { HeaderChromeData, TopNavChromeData } from "@/lib/wordpress";
 const logoImg = "/assets/c57ecabe59306129194824425137d2ccde6918ce.png";
 
 const NAV_ITEMS = [
@@ -180,6 +180,48 @@ export default function Navbar({ data }: { data?: HeaderChromeData }) {
     );
   };
 
+  // Dynamic Top Nav Data
+  const topNav = data?.topNav;
+  const topNavBg = topNav?.backgroundColor || "#00142D";
+  const topNavTextColor = topNav?.textColor || "#ffffff";
+
+  const phones = (
+    topNav?.phones && topNav.phones.length > 0
+      ? topNav.phones
+      : [{ text: "IN (+91) 90351 80487", url: "+919035180487" }]
+  ).filter((p) => p?.text && p.text.trim() !== "");
+
+  const emails = (
+    topNav?.emails && topNav.emails.length > 0
+      ? topNav.emails
+      : [{ text: "sales@hutechsolutions.com", url: "sales@hutechsolutions.com" }]
+  ).filter((e) => e?.text && e.text.trim() !== "");
+
+  const socials = (
+    topNav?.socials && topNav.socials.length > 0
+      ? topNav.socials
+      : [{ id: 1, icon: "", url: "https://www.linkedin.com/company/hutechsolutions" }]
+  ).filter((s) => s?.url && s.url.trim() !== "" && s.url !== "#");
+
+  const renderSocialIcon = (s: { id?: number; icon?: string; url?: string }) => {
+    if (s.icon) {
+      return (
+        <img
+          src={s.icon}
+          alt="Social Icon"
+          className="h-3.5 w-3.5 object-contain"
+        />
+      );
+    }
+    const url = (s.url || "").toLowerCase();
+    if (url.includes("linkedin")) return <Linkedin className="h-3 w-3 sm:h-3.5 sm:w-3.5 md:h-4 md:w-4" fill="currentColor" />;
+    if (url.includes("facebook")) return <Facebook className="h-3 w-3 sm:h-3.5 sm:w-3.5 md:h-4 md:w-4" fill="currentColor" />;
+    if (url.includes("instagram")) return <Instagram className="h-3 w-3 sm:h-3.5 sm:w-3.5 md:h-4 md:w-4" />;
+    if (url.includes("youtube")) return <Youtube className="h-3 w-3 sm:h-3.5 sm:w-3.5 md:h-4 md:w-4" fill="currentColor" />;
+    if (url.includes("twitter") || url.includes("x.com")) return <Twitter className="h-3 w-3 sm:h-3.5 sm:w-3.5 md:h-4 md:w-4" fill="currentColor" />;
+    return <Globe className="h-3 w-3 sm:h-3.5 sm:w-3.5 md:h-4 md:w-4" />;
+  };
+
   // Disable height animation when mobile menu is open
   const navHeight = useTransform(scrollY, [0, 50], ["80px", "64px"]);
   const logoScale = useTransform(scrollY, [0, 50], [1, 0.85]);
@@ -224,22 +266,63 @@ export default function Navbar({ data }: { data?: HeaderChromeData }) {
   return (
     <>
       <header className="sticky top-[-40px] md:top-[-38px] left-0 z-50 w-full flex flex-col pointer-events-none">
-        <div className="pointer-events-auto bg-[#00142D] w-full h-[40px] md:h-[38px] text-white text-[10px] sm:text-xs md:text-sm font-medium">
+        <div
+          style={{ backgroundColor: topNavBg, color: topNavTextColor }}
+          className="pointer-events-auto w-full h-[40px] md:h-[38px] text-[10px] sm:text-xs md:text-sm font-medium transition-colors"
+        >
           <div className="mx-auto flex h-full w-full max-w-[1280px] items-center justify-end px-6 lg:px-20">
             <div className="flex items-center space-x-2 sm:space-x-3 md:space-x-4">
-              <a href="tel:+919035180487" className="flex items-center space-x-1 sm:space-x-1.5 md:space-x-2 hover:text-[#0171c1] transition-colors">
-                <Phone className="w-3 h-3 sm:w-3.5 sm:h-3.5 md:w-4 md:h-4" />
-                <span className="whitespace-nowrap">IN (+91) 90351 80487</span>
-              </a>
-              <div className="h-3 md:h-4 w-[1px] bg-white/20"></div>
-              <a href="mailto:sales@hutechsolutions.com" className="flex items-center space-x-1 sm:space-x-1.5 md:space-x-2 hover:text-[#0171c1] transition-colors">
-                <Mail className="w-3 h-3 sm:w-3.5 sm:h-3.5 md:w-4 md:h-4" />
-                <span className="whitespace-nowrap">sales@hutechsolutions.com</span>
-              </a>
-              <div className="h-3 md:h-4 w-[1px] bg-white/20"></div>
-              <a href="https://www.linkedin.com/company/hutechsolutions" target="_blank" rel="noopener noreferrer" className="flex items-center hover:text-[#0171c1] transition-colors">
-                <Linkedin className="w-3 h-3 sm:w-3.5 sm:h-3.5 md:w-4 md:h-4" fill="currentColor" />
-              </a>
+              {/* Dynamic Phone Numbers */}
+              {phones.map((phone, idx) => (
+                <div key={`phone-${idx}`} className="flex items-center space-x-2 sm:space-x-3 md:space-x-4">
+                  {idx > 0 && <div className="h-3 md:h-4 w-[1px] bg-current opacity-20" />}
+                  <a
+                    href={`tel:${(phone.url || phone.text || "").replace(/[^0-9+]/g, "")}`}
+                    className="flex items-center space-x-1 sm:space-x-1.5 md:space-x-2 opacity-90 transition-all hover:opacity-100 hover:text-[#0171c1]"
+                  >
+                    <Phone className="h-3 w-3 sm:h-3.5 sm:w-3.5 md:h-4 md:w-4 shrink-0" />
+                    <span className="whitespace-nowrap">{phone.text}</span>
+                  </a>
+                </div>
+              ))}
+
+              {/* Dynamic Emails */}
+              {emails.map((email, idx) => (
+                <div key={`email-${idx}`} className="flex items-center space-x-2 sm:space-x-3 md:space-x-4">
+                  {(phones.length > 0 || idx > 0) && (
+                    <div className="h-3 md:h-4 w-[1px] bg-current opacity-20" />
+                  )}
+                  <a
+                    href={`mailto:${email.url || email.text}`}
+                    className="flex items-center space-x-1 sm:space-x-1.5 md:space-x-2 opacity-90 transition-all hover:opacity-100 hover:text-[#0171c1]"
+                  >
+                    <Mail className="h-3 w-3 sm:h-3.5 sm:w-3.5 md:h-4 md:w-4 shrink-0" />
+                    <span className="whitespace-nowrap">{email.text}</span>
+                  </a>
+                </div>
+              ))}
+
+              {/* Dynamic Social Icons */}
+              {socials.length > 0 && (
+                <>
+                  {(phones.length > 0 || emails.length > 0) && (
+                    <div className="h-3 md:h-4 w-[1px] bg-current opacity-20" />
+                  )}
+                  <div className="flex items-center space-x-2 sm:space-x-2.5">
+                    {socials.map((social, idx) => (
+                      <a
+                        key={`social-${social.id || idx}`}
+                        href={social.url || "#"}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex items-center opacity-85 transition-all hover:opacity-100 hover:text-[#0171c1]"
+                      >
+                        {renderSocialIcon(social)}
+                      </a>
+                    ))}
+                  </div>
+                </>
+              )}
             </div>
           </div>
         </div>

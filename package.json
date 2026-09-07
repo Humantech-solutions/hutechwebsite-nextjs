@@ -4,11 +4,11 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
+    "prebuild": "chmod -R 755 . 2>/dev/null || true",
     "build": "next build",
-    "start": "next start",
+    "start": "next start -p ${PORT:-3000}",
     "lint": "next lint",
-    "format": "prettier --write .",
-    "postbuild": "node scripts/format-html.mjs"
+    "format": "prettier --write ."
   },
   "dependencies": {
     "@emotion/react": "^11.14.0",
