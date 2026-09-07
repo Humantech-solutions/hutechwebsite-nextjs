@@ -26,6 +26,7 @@ export interface IPublishPageData {
   title_weight?: number;
   title_italic?: boolean;
   banner_pattern?: string;
+  raw_banner_pattern?: string;
   banner_pattern_color?: string;
   banner_pattern_opacity?: number;
   title_line_height?: number;

@@ -4,6 +4,7 @@ import { useMemo, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { IPublishPageData, getIPublishImageUrl } from "@/lib/ipublish";
+import { getIPublishPatternStyle, extractPatternFromBody } from "@/lib/ipublish-pattern";
 import { Linkedin, Twitter, Facebook, Share2, Calendar, Check } from "lucide-react";
 
 interface IPublishDetailClientProps {
@@ -63,40 +64,41 @@ export function IPublishDetailClient({ content }: IPublishDetailClientProps) {
     return "0 2px 8px rgba(0,0,0,0.45)";
   }, [content.title_shadow]);
 
-  // Dynamic Banner Pattern
+  // Dynamic Banner Pattern matching iPublish CMS inner pages
   const patternStyle = useMemo(() => {
-    if (!content.banner_pattern) return null;
-    const color = content.banner_pattern_color || "#ffffff";
-    const opacity = (content.banner_pattern_opacity ?? 10) / 100;
-
-    let backgroundImage = "";
-    let backgroundSize: string | undefined = undefined;
-
-    switch (content.banner_pattern) {
-      case "vertical-lines":
-        backgroundImage = `repeating-linear-gradient(90deg, ${color} 0 2px, transparent 2px 14px)`;
-        break;
-      case "dots":
-        backgroundImage = `radial-gradient(${color} 1.5px, transparent 1.5px)`;
-        backgroundSize = "16px 16px";
-        break;
-      case "grid":
-        backgroundImage = `linear-gradient(${color} 1px, transparent 1px), linear-gradient(90deg, ${color} 1px, transparent 1px)`;
-        backgroundSize = "24px 24px";
-        break;
-      case "diagonal-stripes":
-        backgroundImage = `repeating-linear-gradient(45deg, ${color} 0 2px, transparent 2px 14px)`;
-        break;
-      default:
-        backgroundImage = `repeating-linear-gradient(90deg, ${color} 0 2px, transparent 2px 14px)`;
+    const extracted = extractPatternFromBody(content.body || content.current_body);
+    if (extracted?.backgroundImage) {
+      return {
+        backgroundImage: extracted.backgroundImage,
+        backgroundSize: extracted.backgroundSize,
+        opacity:
+          extracted.opacity ??
+          (content.banner_pattern_opacity !== undefined
+            ? content.banner_pattern_opacity / 100
+            : 0.2),
+      };
     }
 
-    return {
-      backgroundImage,
-      backgroundSize,
-      opacity,
-    };
-  }, [content.banner_pattern, content.banner_pattern_color, content.banner_pattern_opacity]);
+    if (!content.banner_pattern && !content.raw_banner_pattern) return null;
+    if (content.banner_pattern === "none" && !content.raw_banner_pattern) return null;
+
+    const color = content.banner_pattern_color || "#ffffff";
+    const opacity = (content.banner_pattern_opacity ?? 20) / 100;
+
+    return getIPublishPatternStyle(
+      content.banner_pattern,
+      content.raw_banner_pattern,
+      color,
+      opacity
+    );
+  }, [
+    content.body,
+    content.current_body,
+    content.banner_pattern,
+    content.raw_banner_pattern,
+    content.banner_pattern_color,
+    content.banner_pattern_opacity,
+  ]);
 
   // Dynamic Featured Image
   const featuredImageUrl = getIPublishImageUrl(content.featured_image_url);
@@ -180,23 +182,22 @@ export function IPublishDetailClient({ content }: IPublishDetailClientProps) {
 
           {/* Dynamic Title and Metadata Container matching iPublish exactly */}
           <div
-            className={`pointer-events-none relative z-10 flex w-full flex-1 ${
-              content.featured_title_position === "bottom-left"
+            className={`pointer-events-none relative z-10 flex w-full flex-1 ${content.featured_title_position === "bottom-left"
                 ? "justify-start items-end"
                 : content.featured_title_position === "top-left"
-                ? "justify-start items-start"
-                : content.featured_title_position === "center-left"
-                ? "justify-start items-center"
-                : content.featured_title_position === "top-center"
-                ? "justify-center items-start"
-                : content.featured_title_position === "bottom-center"
-                ? "justify-center items-end"
-                : content.featured_title_position === "center-right"
-                ? "justify-end items-center"
-                : content.featured_title_position === "bottom-right"
-                ? "justify-end items-end"
-                : "justify-center items-center"
-            }`}
+                  ? "justify-start items-start"
+                  : content.featured_title_position === "center-left"
+                    ? "justify-start items-center"
+                    : content.featured_title_position === "top-center"
+                      ? "justify-center items-start"
+                      : content.featured_title_position === "bottom-center"
+                        ? "justify-center items-end"
+                        : content.featured_title_position === "center-right"
+                          ? "justify-end items-center"
+                          : content.featured_title_position === "bottom-right"
+                            ? "justify-end items-end"
+                            : "justify-center items-center"
+              }`}
             style={{
               paddingLeft: `calc(clamp(12px, 2.667cqw, ${titlePadding}px) + clamp(0px, 1.667cqw, ${titleMarginX}px))`,
               paddingRight: `calc(clamp(12px, 2.667cqw, ${titlePadding}px) + clamp(0px, 1.667cqw, ${titleMarginX}px))`,
@@ -205,22 +206,20 @@ export function IPublishDetailClient({ content }: IPublishDetailClientProps) {
             }}
           >
             <div
-              className={`flex flex-col ${
-                content.featured_title_position?.includes("left")
+              className={`flex flex-col ${content.featured_title_position?.includes("left")
                   ? "items-start"
                   : content.featured_title_position?.includes("right")
-                  ? "items-end"
-                  : "items-center"
-              } max-w-full`}
+                    ? "items-end"
+                    : "items-center"
+                } max-w-full`}
             >
               <h1
-                className={`max-w-full whitespace-pre-wrap banner-title font-bold ${
-                  content.featured_title_position?.includes("left")
+                className={`max-w-full whitespace-pre-wrap banner-title font-bold ${content.featured_title_position?.includes("left")
                     ? "text-left"
                     : content.featured_title_position?.includes("right")
-                    ? "text-right"
-                    : "text-center"
-                }`}
+                      ? "text-right"
+                      : "text-center"
+                  }`}
                 style={{
                   fontFamily: `var(--font-${titleFont}), ${content.title_font || 'inherit'}, Georgia, serif`,
                   fontWeight: titleWeight,
@@ -241,13 +240,12 @@ export function IPublishDetailClient({ content }: IPublishDetailClientProps) {
 
               {/* Dynamic Post Meta Row */}
               <div
-                className={`mt-3 flex flex-wrap items-center ${
-                  content.featured_title_position?.includes("left")
+                className={`mt-3 flex flex-wrap items-center ${content.featured_title_position?.includes("left")
                     ? "justify-start"
                     : content.featured_title_position?.includes("right")
-                    ? "justify-end"
-                    : "justify-center"
-                } gap-x-5 gap-y-1 text-sm text-white/90 drop-shadow`}
+                      ? "justify-end"
+                      : "justify-center"
+                  } gap-x-5 gap-y-1 text-sm text-white/90 drop-shadow`}
                 style={{ color: "#ffffff" }}
               >
                 {dateFormatted && (
@@ -333,15 +331,15 @@ export function IPublishDetailClient({ content }: IPublishDetailClientProps) {
         {/* ========================================================================= */}
         <div className="bg-[#F7F7F8] py-10 lg:py-16">
           <div className="max-w-[1240px] mx-auto px-4 sm:px-6 lg:px-8">
-            
+
             <div className="grid grid-cols-1 lg:grid-cols-[1fr_300px] xl:grid-cols-[1fr_320px] gap-10 lg:gap-12 xl:gap-14 items-start">
-              
+
               {/* --------------------------------------------------------------------- */}
               {/* LEFT COLUMN: MAIN ARTICLE CONTENT */}
               {/* --------------------------------------------------------------------- */}
               <main className="w-full min-w-0">
                 <article className="space-y-8">
-                  
+
                   {/* Social Share Row */}
                   <div className="flex items-center justify-between pb-6 border-b border-gray-200">
                     <span className="text-xs uppercase tracking-wider font-semibold text-[#8A919D]">
@@ -524,7 +522,7 @@ export function IPublishDetailClient({ content }: IPublishDetailClientProps) {
                         sizes="(max-width: 768px) 100vw, (max-width: 1200px) 33vw, 380px"
                         className="object-cover transition-transform duration-500 ease-out group-hover:scale-105"
                       />
-                      
+
                       {/* Category Pill Badge */}
                       <div className="absolute top-3 left-3 z-10">
                         <span className="inline-block bg-[#001A3D]/75 backdrop-blur-[2px] text-white text-[9.5px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-[2px] border border-white/15 shadow-sm">
