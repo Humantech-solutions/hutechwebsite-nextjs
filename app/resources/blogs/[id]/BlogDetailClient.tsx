@@ -255,15 +255,17 @@ export default function BlogDetailClient({
                   Blog
                 </Link>
               </li>
-              {blog.category && (
-                <>
-                  <li className="text-gray-400 select-none">/</li>
-                  <li>
-                    <span className="text-[#5A6270] font-medium">
-                      {blog.category}
-                    </span>
-                  </li>
-                </>
+              {blog.category &&
+                blog.category.trim().toLowerCase() !== "blog" &&
+                blog.category.trim().toLowerCase() !== "blogs" && (
+                  <>
+                    <li className="text-gray-400 select-none">/</li>
+                    <li>
+                      <span className="text-[#5A6270] font-medium">
+                        {blog.category}
+                      </span>
+                    </li>
+                  </>
               )}
               <li className="text-gray-400 select-none">/</li>
               <li
@@ -287,175 +289,242 @@ export default function BlogDetailClient({
           <div className="grid grid-cols-1 lg:grid-cols-[1fr_300px] xl:grid-cols-[1fr_320px] gap-10 lg:gap-12 xl:gap-14 items-start">
             
             {/* --------------------------------------------------------------------- */}
-            {/* LEFT COLUMN: MAIN ARTICLE CONTENT */}
+            {/* LEFT COLUMN: MAIN ARTICLE CONTENT WITH STICKY SOCIAL SHARING */}
             {/* --------------------------------------------------------------------- */}
-            <main className="w-full min-w-0">
-              <article className="space-y-8">
-                
-                {/* Social Share Row */}
-                <div className="flex items-center justify-between pb-6 border-b border-gray-200">
-                  <span className="text-xs uppercase tracking-wider font-semibold text-[#8A919D]">
-                    Share Article
-                  </span>
-                  <div className="flex items-center gap-3">
-                    <a
-                      href={getShareUrl("linkedin")}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="p-2 rounded-full bg-white border border-gray-200 text-[#8A919D] hover:text-[#0A66C2] hover:border-[#0A66C2] transition-colors shadow-sm"
-                      aria-label="Share on LinkedIn"
-                    >
-                      <Linkedin className="w-4 h-4" />
-                    </a>
-                    <a
-                      href={getShareUrl("twitter")}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="p-2 rounded-full bg-white border border-gray-200 text-[#8A919D] hover:text-black hover:border-black transition-colors shadow-sm"
-                      aria-label="Share on X"
-                    >
-                      <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24">
-                        <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
-                      </svg>
-                    </a>
-                    <a
-                      href={getShareUrl("facebook")}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="p-2 rounded-full bg-white border border-gray-200 text-[#8A919D] hover:text-[#1877F2] hover:border-[#1877F2] transition-colors shadow-sm"
-                      aria-label="Share on Facebook"
-                    >
-                      <Facebook className="w-4 h-4" />
-                    </a>
-                    <button
-                      onClick={handleCopyLink}
-                      className="p-2 rounded-full bg-white border border-gray-200 text-[#8A919D] hover:text-[#172033] hover:border-[#172033] transition-colors shadow-sm relative group"
-                      aria-label="Copy article link"
-                      title="Copy link"
-                    >
-                      {copied ? <Check className="w-4 h-4 text-emerald-600" /> : <Share2 className="w-4 h-4" />}
-                      {copied && (
-                        <span className="absolute -top-8 left-1/2 -translate-x-1/2 bg-[#172033] text-white text-[10px] font-medium py-1 px-2 rounded whitespace-nowrap shadow-md pointer-events-none">
-                          Copied!
-                        </span>
-                      )}
-                    </button>
-                  </div>
-                </div>
+            <main className="w-full min-w-0 flex items-start gap-6 lg:gap-8 xl:gap-10">
+              
+              {/* Sticky Left Social Media Bar (Matching Reference Image) */}
+              <div className="hidden md:flex flex-col items-center sticky top-[100px] self-start shrink-0 pt-1 select-none">
+                {/* SHARE ARTICLE Vertical Label */}
+                <span
+                  className="text-[10.5px] font-semibold text-[#8A919D] uppercase tracking-[0.22em] mb-7 select-none"
+                  style={{
+                    writingMode: "vertical-rl",
+                    transform: "rotate(180deg)",
+                  }}
+                >
+                  Share Article
+                </span>
 
-                {/* Main Article Body Text & Headings */}
-                <div className="prose prose-slate max-w-none">
-                  {(blog as any).contentHtml ? (
-                    <div
-                      className="wp-content text-[15.5px] leading-[1.78] text-[#4E5665] font-normal [&_h2]:text-2xl [&_h2]:md:text-3xl [&_h2]:font-bold [&_h2]:text-[#172033] [&_h2]:mt-10 [&_h2]:mb-4 [&_h3]:text-xl [&_h3]:font-bold [&_h3]:text-[#172033] [&_h3]:mt-8 [&_h3]:mb-3 [&_p]:mb-6 [&_ul]:list-disc [&_ul]:pl-6 [&_ul]:mb-6 [&_ol]:list-decimal [&_ol]:pl-6 [&_ol]:mb-6 [&_li]:mb-2 [&_a]:text-[#0754C6] [&_a]:underline"
-                      dangerouslySetInnerHTML={{ __html: (blog as any).contentHtml }}
-                    />
-                  ) : (
-                    blog.content.map((block, idx) => {
-                      if (block.type === "paragraph") {
-                        return (
-                          <p
-                            key={idx}
-                            className="text-[15px] sm:text-[15.5px] leading-[1.75] text-[#4E5665] font-normal mb-6"
-                          >
-                            {block.text}
-                          </p>
-                        );
-                      }
-                      if (block.type === "heading") {
-                        return (
-                          <h2
-                            key={idx}
-                            className="text-[19px] sm:text-[22px] font-bold text-[#172033] leading-snug mt-10 mb-4"
-                          >
-                            {block.text}
-                          </h2>
-                        );
-                      }
-                      if (block.type === "quote") {
-                        return (
-                          <div
-                            key={idx}
-                            className="my-10 relative p-8 sm:p-10 bg-white rounded-[4px] border-l-4 border-[#0754C6] shadow-sm"
-                          >
-                            <Quote className="absolute top-6 right-6 w-10 h-10 text-[#0754C6]/15" />
-                            <blockquote className="space-y-4">
-                              <p className="text-lg sm:text-xl font-normal text-[#172033] font-serif italic leading-relaxed">
-                                &ldquo;{block.text}&rdquo;
-                              </p>
-                              <footer className="pt-2">
-                                <div className="font-bold text-[#172033] text-sm">{block.author}</div>
-                                <div className="text-xs text-[#8A919D] font-medium tracking-wide">
-                                  {block.designation}
-                                </div>
-                              </footer>
-                            </blockquote>
-                          </div>
-                        );
-                      }
-                      return null;
-                    })
-                  )}
-                </div>
-
-                {/* Tags Section */}
-                {blog.tags && blog.tags.length > 0 && (
-                  <div className="pt-8 border-t border-gray-200 flex flex-wrap items-center gap-3">
-                    <div className="flex items-center gap-2 text-xs font-bold text-gray-500 uppercase tracking-wider mr-2">
-                      <Tag size={14} /> Tags:
-                    </div>
-                    {blog.tags.map((tag, idx) => (
-                      <span
-                        key={idx}
-                        className="px-3.5 py-1.5 bg-white border border-gray-200 text-gray-600 rounded-[2px] text-xs font-semibold hover:border-[#0754C6] hover:text-[#0754C6] transition-colors"
-                      >
-                        #{tag}
+                {/* Social Share Icons */}
+                <div className="flex flex-col items-center gap-5">
+                  <a
+                    href={getShareUrl("linkedin")}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-[#8A919D] hover:text-[#0A66C2] transition-colors p-1 flex items-center justify-center"
+                    aria-label="Share on LinkedIn"
+                    title="Share on LinkedIn"
+                  >
+                    <Linkedin className="w-4 h-4" />
+                  </a>
+                  <a
+                    href={getShareUrl("twitter")}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-[#8A919D] hover:text-black transition-colors p-1 flex items-center justify-center"
+                    aria-label="Share on X"
+                    title="Share on X"
+                  >
+                    <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24">
+                      <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+                    </svg>
+                  </a>
+                  <a
+                    href={getShareUrl("facebook")}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-[#8A919D] hover:text-[#1877F2] transition-colors p-1 flex items-center justify-center"
+                    aria-label="Share on Facebook"
+                    title="Share on Facebook"
+                  >
+                    <Facebook className="w-4 h-4" />
+                  </a>
+                  <button
+                    onClick={handleCopyLink}
+                    className="text-[#8A919D] hover:text-[#172033] transition-colors p-1 relative group flex items-center justify-center"
+                    aria-label="Copy article link"
+                    title="Copy link"
+                  >
+                    {copied ? <Check className="w-4 h-4 text-emerald-600" /> : <Share2 className="w-4 h-4" />}
+                    {copied && (
+                      <span className="absolute left-7 top-1/2 -translate-y-1/2 bg-[#172033] text-white text-[10px] font-medium py-1 px-2 rounded whitespace-nowrap shadow-md pointer-events-none z-20">
+                        Copied!
                       </span>
-                    ))}
-                  </div>
-                )}
-
-                {/* FAQ Section */}
-                {blog.faqs && blog.faqs.length > 0 && (
-                  <div className="pt-12 space-y-6">
-                    <div>
-                      <h3 className="text-2xl font-bold text-[#172033]">
-                        {blog.faqTitle ? renderTitle(blog.faqTitle) : "Frequently Asked Questions"}
-                      </h3>
-                      {blog.faqSubtitle && (
-                        <p className="text-sm text-gray-500 mt-1">
-                          {renderTitle(blog.faqSubtitle)}
-                        </p>
-                      )}
-                    </div>
-                    <FAQAccordion faqs={blog.faqs} />
-                  </div>
-                )}
-
-                {/* ========================================================================= */}
-                {/* 4. ARTICLE-BOTTOM IMAGE / CTA SECTION (MATCHING article-bottom.png) */}
-                {/* ========================================================================= */}
-                <div className="mt-12 bg-[#0754C6] text-white p-6 sm:p-8 rounded-[4px] shadow-md">
-                  <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
-                    <div className="space-y-2.5 max-w-[480px]">
-                      <div className="text-[11px] font-bold uppercase tracking-[0.14em] text-blue-100/90">
-                        NEW HIRES BURIED ON DAY TWO?
-                      </div>
-                      <p className="font-serif text-[18px] sm:text-[20px] font-normal leading-[1.35] text-white">
-                        See how realfast does it — every tool your team runs on, pulled into one connected page the moment a new hire needs it.
-                      </p>
-                    </div>
-
-                    <Link
-                      href="/contact"
-                      className="inline-flex items-center justify-center bg-white text-[#172033] text-sm font-bold px-6 py-3 rounded-[3px] hover:bg-blue-50 transition-all shadow-sm hover:shadow active:scale-[0.98] whitespace-nowrap self-start sm:self-center"
-                    >
-                      Book a Demo
-                    </Link>
-                  </div>
+                    )}
+                  </button>
                 </div>
+              </div>
 
-              </article>
+              {/* Main Article Content Container */}
+              <div className="w-full min-w-0 flex-1">
+                <article className="space-y-8">
+                  
+                  {/* Mobile/Tablet Fallback Share Row (< md) */}
+                  <div className="flex md:hidden items-center justify-between pb-6 border-b border-gray-200">
+                    <span className="text-xs uppercase tracking-wider font-semibold text-[#8A919D]">
+                      Share Article
+                    </span>
+                    <div className="flex items-center gap-3">
+                      <a
+                        href={getShareUrl("linkedin")}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="p-2 rounded-full bg-white border border-gray-200 text-[#8A919D] hover:text-[#0A66C2] hover:border-[#0A66C2] transition-colors shadow-sm"
+                        aria-label="Share on LinkedIn"
+                      >
+                        <Linkedin className="w-4 h-4" />
+                      </a>
+                      <a
+                        href={getShareUrl("twitter")}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="p-2 rounded-full bg-white border border-gray-200 text-[#8A919D] hover:text-black hover:border-black transition-colors shadow-sm"
+                        aria-label="Share on X"
+                      >
+                        <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24">
+                          <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+                        </svg>
+                      </a>
+                      <a
+                        href={getShareUrl("facebook")}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="p-2 rounded-full bg-white border border-gray-200 text-[#8A919D] hover:text-[#1877F2] hover:border-[#1877F2] transition-colors shadow-sm"
+                        aria-label="Share on Facebook"
+                      >
+                        <Facebook className="w-4 h-4" />
+                      </a>
+                      <button
+                        onClick={handleCopyLink}
+                        className="p-2 rounded-full bg-white border border-gray-200 text-[#8A919D] hover:text-[#172033] hover:border-[#172033] transition-colors shadow-sm relative group"
+                        aria-label="Copy article link"
+                        title="Copy link"
+                      >
+                        {copied ? <Check className="w-4 h-4 text-emerald-600" /> : <Share2 className="w-4 h-4" />}
+                        {copied && (
+                          <span className="absolute -top-8 left-1/2 -translate-x-1/2 bg-[#172033] text-white text-[10px] font-medium py-1 px-2 rounded whitespace-nowrap shadow-md pointer-events-none">
+                            Copied!
+                          </span>
+                        )}
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* Main Article Body Text & Headings */}
+                  <div className="prose prose-slate max-w-none">
+                    {(blog as any).contentHtml ? (
+                      <div
+                        className="wp-content text-[15.5px] leading-[1.78] text-[#4E5665] font-normal [&_h2]:text-2xl [&_h2]:md:text-3xl [&_h2]:font-bold [&_h2]:text-[#172033] [&_h2]:mt-10 [&_h2]:mb-4 [&_h3]:text-xl [&_h3]:font-bold [&_h3]:text-[#172033] [&_h3]:mt-8 [&_h3]:mb-3 [&_p]:mb-6 [&_ul]:list-disc [&_ul]:pl-6 [&_ul]:mb-6 [&_ol]:list-decimal [&_ol]:pl-6 [&_ol]:mb-6 [&_li]:mb-2 [&_a]:text-[#0754C6] [&_a]:underline"
+                        dangerouslySetInnerHTML={{ __html: (blog as any).contentHtml }}
+                      />
+                    ) : (
+                      blog.content.map((block, idx) => {
+                        if (block.type === "paragraph") {
+                          return (
+                            <p
+                              key={idx}
+                              className="text-[15px] sm:text-[15.5px] leading-[1.75] text-[#4E5665] font-normal mb-6"
+                            >
+                              {block.text}
+                            </p>
+                          );
+                        }
+                        if (block.type === "heading") {
+                          return (
+                            <h2
+                              key={idx}
+                              className="text-[19px] sm:text-[22px] font-bold text-[#172033] leading-snug mt-10 mb-4"
+                            >
+                              {block.text}
+                            </h2>
+                          );
+                        }
+                        if (block.type === "quote") {
+                          return (
+                            <div
+                              key={idx}
+                              className="my-10 relative p-8 sm:p-10 bg-white rounded-[4px] border-l-4 border-[#0754C6] shadow-sm"
+                            >
+                              <Quote className="absolute top-6 right-6 w-10 h-10 text-[#0754C6]/15" />
+                              <blockquote className="space-y-4">
+                                <p className="text-lg sm:text-xl font-normal text-[#172033] font-serif italic leading-relaxed">
+                                  &ldquo;{block.text}&rdquo;
+                                </p>
+                                <footer className="pt-2">
+                                  <div className="font-bold text-[#172033] text-sm">{block.author}</div>
+                                  <div className="text-xs text-[#8A919D] font-medium tracking-wide">
+                                    {block.designation}
+                                  </div>
+                                </footer>
+                              </blockquote>
+                            </div>
+                          );
+                        }
+                        return null;
+                      })
+                    )}
+                  </div>
+
+                  {/* Tags Section */}
+                  {blog.tags && blog.tags.length > 0 && (
+                    <div className="pt-8 border-t border-gray-200 flex flex-wrap items-center gap-3">
+                      <div className="flex items-center gap-2 text-xs font-bold text-gray-500 uppercase tracking-wider mr-2">
+                        <Tag size={14} /> Tags:
+                      </div>
+                      {blog.tags.map((tag, idx) => (
+                        <span
+                          key={idx}
+                          className="px-3.5 py-1.5 bg-white border border-gray-200 text-gray-600 rounded-[2px] text-xs font-semibold hover:border-[#0754C6] hover:text-[#0754C6] transition-colors"
+                        >
+                          #{tag}
+                        </span>
+                      ))}
+                    </div>
+                  )}
+
+                  {/* FAQ Section */}
+                  {blog.faqs && blog.faqs.length > 0 && (
+                    <div className="pt-12 space-y-6">
+                      <div>
+                        <h3 className="text-2xl font-bold text-[#172033]">
+                          {blog.faqTitle ? renderTitle(blog.faqTitle) : "Frequently Asked Questions"}
+                        </h3>
+                        {blog.faqSubtitle && (
+                          <p className="text-sm text-gray-500 mt-1">
+                            {renderTitle(blog.faqSubtitle)}
+                          </p>
+                        )}
+                      </div>
+                      <FAQAccordion faqs={blog.faqs} />
+                    </div>
+                  )}
+
+                  {/* ========================================================================= */}
+                  {/* 4. ARTICLE-BOTTOM IMAGE / CTA SECTION (MATCHING article-bottom.png) */}
+                  {/* ========================================================================= */}
+                  <div className="mt-12 bg-[#0754C6] text-white p-6 sm:p-8 rounded-[4px] shadow-md">
+                    <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
+                      <div className="space-y-2.5 max-w-[480px]">
+                        <div className="text-[11px] font-bold uppercase tracking-[0.14em] text-blue-100/90">
+                          NEW HIRES BURIED ON DAY TWO?
+                        </div>
+                        <p className="font-serif text-[18px] sm:text-[20px] font-normal leading-[1.35] text-white">
+                          See how realfast does it — every tool your team runs on, pulled into one connected page the moment a new hire needs it.
+                        </p>
+                      </div>
+
+                      <Link
+                        href="/contact"
+                        className="inline-flex items-center justify-center bg-white text-[#172033] text-sm font-bold px-6 py-3 rounded-[3px] hover:bg-blue-50 transition-all shadow-sm hover:shadow active:scale-[0.98] whitespace-nowrap self-start sm:self-center"
+                      >
+                        Book a Demo
+                      </Link>
+                    </div>
+                  </div>
+
+                </article>
+              </div>
             </main>
 
             {/* --------------------------------------------------------------------- */}
