@@ -86,7 +86,7 @@ export async function fetchGraphQL(query: string, variables = {}) {
       body: JSON.stringify({ query, variables }),
       ...(process.env.NODE_ENV === "development"
         ? { cache: "no-store" }
-        : { next: { revalidate: 0 } }),
+        : { next: { revalidate: 60 } }),
       signal: controller.signal,
     });
 
@@ -278,7 +278,7 @@ export async function getSiteChrome(): Promise<SiteChromeData | null> {
 
   try {
     const res = await fetch(`${WORDPRESS_BASE_URL}/wp-json/hutech/v1/site-chrome`, {
-      next: { revalidate: 0 },
+      next: { revalidate: 60 },
     });
 
     if (!res.ok) {

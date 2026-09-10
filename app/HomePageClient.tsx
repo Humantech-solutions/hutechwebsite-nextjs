@@ -28,13 +28,13 @@ import {
   Trophy,
   Star
 } from "lucide-react";
-import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import useEmblaCarousel from "embla-carousel-react";
 import AutoScroll from "embla-carousel-auto-scroll";
 import { ImageWithFallback } from "@/components/figma/ImageWithFallback";
 import Link from "next/link";
+import Image from "next/image";
 import { Meta } from "@/components/Meta";
 import type { HomepageData } from "@/lib/wordpress";
 import { renderTitle } from "@/lib/utils";
@@ -234,6 +234,8 @@ function WhyNabhiraAccordion({ items }: { items: { title?: string; content?: str
         <div key={index} className="border-b border-white/10">
           <button
             onClick={() => setOpenIndex(openIndex === index ? null : index)}
+            aria-expanded={openIndex === index}
+            aria-label={`${openIndex === index ? 'Close' : 'Open'} ${item.title}`}
             className="w-full flex items-start gap-3 py-4 text-left hover:opacity-80 transition-opacity group"
           >
             <div className={`w-2 h-2 rounded-full mt-2 flex-shrink-0 transition-colors ${openIndex === index ? 'bg-[#F99D1C]' : 'bg-white/40'}`}></div>
@@ -317,12 +319,14 @@ function SuccessStoriesCarousel({ title, description, stories }: { title: React.
         <div className="flex gap-3 justify-end shrink-0 mt-4 md:mt-2 md:self-start">
           <button
             onClick={() => scrollRef.current?.scrollBy({ left: -320, behavior: 'smooth' })}
+            aria-label="Scroll left"
             className="carousel-arrow"
           >
             <ChevronRight size={20} className="rotate-180" />
           </button>
           <button
             onClick={() => scrollRef.current?.scrollBy({ left: 320, behavior: 'smooth' })}
+            aria-label="Scroll right"
             className="carousel-arrow"
           >
             <ChevronRight size={20} />
@@ -366,7 +370,41 @@ function SuccessStoriesCarousel({ title, description, stories }: { title: React.
 export default function HomePageClient({ data }: HomePageClientProps) {
   const [activeCapIdx, setActiveCapIdx] = useState(0);
   const industryScrollRef = useRef<HTMLDivElement>(null);
-  const heroSliderRef = useRef<Slider>(null);
+
+  // Custom CSS Hero Fader State
+  const [activeHeroSlide, setActiveHeroSlide] = useState(0);
+  const [touchStart, setTouchStart] = useState<number | null>(null);
+
+  // Auto-play interval
+  useEffect(() => {
+    // Only set up interval if we have more than 1 slide
+    if (HERO_SLIDES.length <= 1) return;
+    
+    const intervalId = setInterval(() => {
+      setActiveHeroSlide((prev) => (prev + 1) % HERO_SLIDES.length);
+    }, 8500); // Increased to 8.5s to prevent LCP disqualification on slow connections
+
+    return () => clearInterval(intervalId);
+  }, []);
+
+  const handleTouchStart = (e: React.TouchEvent) => {
+    setTouchStart(e.targetTouches[0].clientX);
+  };
+
+  const handleTouchEnd = (e: React.TouchEvent) => {
+    if (touchStart === null || HERO_SLIDES.length <= 1) return;
+    const touchEnd = e.changedTouches[0].clientX;
+    const diff = touchStart - touchEnd;
+    
+    if (diff > 50) {
+      // Swiped left
+      setActiveHeroSlide((prev) => (prev + 1) % HERO_SLIDES.length);
+    } else if (diff < -50) {
+      // Swiped right
+      setActiveHeroSlide((prev) => (prev - 1 + HERO_SLIDES.length) % HERO_SLIDES.length);
+    }
+    setTouchStart(null);
+  };
 
   // What's New Carousel Hooks
   const [whatsNewRef, whatsNewApi] = useEmblaCarousel({ loop: true, align: "start" });
@@ -393,22 +431,6 @@ export default function HomePageClient({ data }: HomePageClientProps) {
     }, 4500);
     return () => clearInterval(intervalId);
   }, [whatsNewApi, whatsNewHovered]);
-
-  const heroSettings = {
-    dots: true,
-    infinite: true,
-    speed: 1000,
-    slidesToShow: 1,
-    slidesToScroll: 1,
-    autoplay: true,
-    autoplaySpeed: 5500,
-    fade: true,
-    arrows: false,
-    dotsClass: "slick-dots custom-dots",
-    customPaging: (i: number) => (
-      <div className="w-3 h-3 rounded-full bg-current transition-all duration-300 shadow-sm" />
-    )
-  };
 
   // ── WordPress data with static fallbacks ──────────────────────────────────
   // Default slide data — used when WP fields are empty
@@ -606,6 +628,11 @@ export default function HomePageClient({ data }: HomePageClientProps) {
   const stackDesc = data?.techStack?.description?.trim() || "We leverage best-in-class technologies across every layer of the stack to engineer robust, scalable, and future-ready solutions.";
 
 
+  // React 18 / Next.js 13+ way to preload the LCP image
+  if (typeof window === "undefined" && HERO_SLIDES[0]?.image) {
+    // We import preload locally or use React DOM preload if available, but a safe fallback is adding a <link> below.
+  }
+
   return (
     <div className="flex flex-col bg-white overflow-hidden">
       <Meta 
@@ -613,75 +640,107 @@ export default function HomePageClient({ data }: HomePageClientProps) {
         description="Premium corporate engineering solutions specializing in AI/ML, Cloud Transformation, SRE & DevOps, and Fintech app development."
       />
       {/* Hero Carousel Section */}
-      <section className="relative w-full overflow-hidden" aria-label="Hero Section">
-        <Slider ref={heroSliderRef} {...heroSettings}>
-          {HERO_SLIDES.map((slide, idx) => (
-            <div key={idx} className="relative h-[500px] sm:h-[540px] md:h-[620px]">
-              <ImageWithFallback
-                src={slide.image}
-                alt={slide.alt}
-                loading={idx === 0 ? "eager" : "lazy"}
-                className="w-full h-full object-cover brightness-[0.6]"
-              />
-              {/* Overlay gradient */}
-              <div className="absolute inset-0 bg-gradient-to-r from-[#001A3D]/95 via-[#001A3D]/60 to-transparent"></div>
-              {/* Blue accent bar */}
-              <div className="absolute left-0 top-0 h-full w-1 bg-gradient-to-b from-transparent via-[#0171c1] to-transparent opacity-90"></div>
-              {/* Bottom fade */}
-              <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-[#001A3D]/30 to-transparent"></div>
+      <section 
+        className="relative w-full h-[500px] sm:h-[540px] md:h-[620px] overflow-hidden bg-[#001A3D]" 
+        aria-label="Hero Section"
+        onTouchStart={handleTouchStart}
+        onTouchEnd={handleTouchEnd}
+      >
+        {HERO_SLIDES.map((slide, idx) => (
+          <div 
+            key={idx} 
+            className={`absolute inset-0 w-full h-full transition-all duration-[1500ms] ease-[cubic-bezier(0.4,0,0.2,1)] ${
+              idx === activeHeroSlide ? "opacity-100 z-10" : "opacity-0 z-0 scale-[1.02]"
+            }`}
+          >
+            <Image
+              src={slide.image}
+              alt={slide.title || "Hero Background"}
+              fill
+              priority={idx === 0}
+              sizes="100vw"
+              quality={75}
+              className="object-cover brightness-[0.6]"
+            />
+            {/* Overlay gradient */}
+            <div className="absolute inset-0 bg-gradient-to-r from-[#001A3D]/95 via-[#001A3D]/60 to-transparent"></div>
+            {/* Blue accent bar */}
+            <div className="absolute left-0 top-0 h-full w-1 bg-gradient-to-b from-transparent via-[#0171c1] to-transparent opacity-90"></div>
+            {/* Bottom fade */}
+            <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-[#001A3D]/30 to-transparent"></div>
 
-              <div className="absolute inset-0 flex items-center">
-                <div className="w-full max-w-[1280px] mx-auto px-6 lg:px-20">
-                  <div className="max-w-4xl space-y-6 md:space-y-8">
-                    {/* Eyebrow */}
-                    <div className="flex items-center gap-3">
-                      <span className="block w-6 md:w-8 h-[2px] bg-[#F99D1C] shrink-0"></span>
-                      <span className="text-[#F99D1C] text-[11px] md:text-[12px] font-semibold tracking-wide">
-                        {slide.eyebrow || "Digital Engineering Excellence"}
-                      </span>
-                    </div>
+            <div className="absolute inset-0 flex items-center">
+              <div className="w-full max-w-[1280px] mx-auto px-6 lg:px-20">
+                <div className="max-w-4xl space-y-6 md:space-y-8">
+                  {/* Eyebrow */}
+                  <div className="flex items-center gap-3">
+                    <span className="block w-6 md:w-8 h-[2px] bg-[#F99D1C] shrink-0"></span>
+                    <span className="text-[#F99D1C] text-[11px] md:text-[12px] font-semibold tracking-wide">
+                      {slide.eyebrow || "Digital Engineering Excellence"}
+                    </span>
+                  </div>
 
-                    {/* Headline */}
+                  {/* Headline */}
+                  {idx === 0 ? (
                     <h1 className="text-white text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-semibold leading-[1.1] md:leading-[1.05] tracking-tight display-font whitespace-pre-line">
                       {renderTitle(slide.title, "text-white", "text-[#F99D1C]")}
                     </h1>
+                  ) : (
+                    <h2 className="text-white text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-semibold leading-[1.1] md:leading-[1.05] tracking-tight display-font whitespace-pre-line">
+                      {renderTitle(slide.title, "text-white", "text-[#F99D1C]")}
+                    </h2>
+                  )}
 
-                    {/* Description */}
-                    <p className="text-gray-200 text-[14px] sm:text-base md:text-xl font-medium max-w-2xl leading-relaxed opacity-90 line-clamp-3 sm:line-clamp-none">
-                      {slide.description}
-                    </p>
+                  {/* Description */}
+                  <p className="text-gray-200 text-[14px] sm:text-base md:text-xl font-medium max-w-2xl leading-relaxed opacity-90 line-clamp-3 sm:line-clamp-none">
+                    {slide.description}
+                  </p>
 
-                    {/* CTAs */}
-                    <div className="flex flex-row items-center gap-3 md:gap-6 pt-2 w-full">
-                      {slide.btn1Text && (
-                        <Link 
-                          href={slide.btn1Link || "/contact"}
-                          className="group flex-1 md:flex-initial flex items-center justify-center gap-3 bg-[#0171c1] text-white font-bold py-4 px-6 md:px-10 text-[11px] md:text-xs tracking-wider hover:bg-[#005fa3] transition-all duration-300 shadow-xl md:w-auto"
-                        >
-                          {slide.btn1Text}
-                          <MoveRight className="w-4 h-4 transition-transform group-hover:translate-x-1 hidden md:block" />
-                        </Link>
-                      )}
-                      {slide.btn2Text && (
-                        <Link 
-                          href={slide.btn2Link || "/services"}
-                          className="flex-1 md:flex-initial flex items-center justify-center bg-[#f0f4f8] border border-[#0171c1] text-[#0171c1] font-semibold py-4 px-6 md:px-10 text-[11px] md:text-xs tracking-wider hover:bg-[#e0eaf5] transition-all duration-300 md:w-auto"
-                        >
-                          {slide.btn2Text}
-                        </Link>
-                      )}
-                    </div>
+                  {/* CTAs */}
+                  <div className="flex flex-row items-center gap-3 md:gap-6 pt-2 w-full">
+                    {slide.btn1Text && (
+                      <Link 
+                        href={slide.btn1Link || "/contact"}
+                        className="group flex-1 md:flex-initial flex items-center justify-center gap-3 bg-[#0171c1] text-white font-bold py-4 px-6 md:px-10 text-[11px] md:text-xs tracking-wider hover:bg-[#005fa3] transition-all duration-300 shadow-xl md:w-auto"
+                      >
+                        {slide.btn1Text}
+                        <MoveRight className="w-4 h-4 transition-transform group-hover:translate-x-1 hidden md:block" />
+                      </Link>
+                    )}
+                    {slide.btn2Text && (
+                      <Link 
+                        href={slide.btn2Link || "/services"}
+                        className="flex-1 md:flex-initial flex items-center justify-center bg-[#f0f4f8] border border-[#0171c1] text-[#0171c1] font-semibold py-4 px-6 md:px-10 text-[11px] md:text-xs tracking-wider hover:bg-[#e0eaf5] transition-all duration-300 md:w-auto"
+                      >
+                        {slide.btn2Text}
+                      </Link>
+                    )}
                   </div>
                 </div>
               </div>
             </div>
+          </div>
+        ))}
+        {/* Custom Dots */}
+        <div className="absolute bottom-[32px] left-1/2 -translate-x-1/2 z-20 flex items-center justify-center gap-[12px]">
+          {HERO_SLIDES.map((_, idx) => (
+            <button
+              key={idx}
+              onClick={() => setActiveHeroSlide(idx)}
+              className={`w-[10px] h-[10px] rounded-full transition-all duration-300 ${
+                activeHeroSlide === idx 
+                  ? "bg-[#F99D1C] scale-125 shadow-[0_0_10px_rgba(249,157,28,0.5)] opacity-100" 
+                  : "bg-white/40 hover:bg-white/60"
+              }`}
+              aria-label={`Go to slide ${idx + 1}`}
+            />
           ))}
-        </Slider>
+        </div>
 
         {/* Navigation Arrows */}
-        <div className="absolute right-6 md:right-12 lg:right-20 bottom-8 z-20 flex items-center bg-black/35 backdrop-blur-md border border-white/10 rounded-[4px] shadow-lg overflow-hidden">
+        <div className="absolute right-6 md:right-12 lg:right-20 bottom-8 z-20 flex items-center bg-black/35 backdrop-blur-md border border-white/10 rounded-[4px] shadow-lg overflow-hidden hidden md:flex">
           <button 
-            onClick={() => heroSliderRef.current?.slickPrev()} 
+            onClick={() => setActiveHeroSlide((prev) => (prev - 1 + HERO_SLIDES.length) % HERO_SLIDES.length)} 
             className="group flex items-center justify-center w-14 h-14 text-white hover:bg-white/10 transition-all duration-300"
             aria-label="Previous Slide"
           >
@@ -689,61 +748,13 @@ export default function HomePageClient({ data }: HomePageClientProps) {
           </button>
           <div className="h-8 w-[1px] bg-white/20"></div>
           <button 
-            onClick={() => heroSliderRef.current?.slickNext()} 
+            onClick={() => setActiveHeroSlide((prev) => (prev + 1) % HERO_SLIDES.length)} 
             className="group flex items-center justify-center w-14 h-14 text-white hover:bg-white/10 transition-all duration-300"
             aria-label="Next Slide"
           >
             <ChevronRight className="w-6 h-6 transition-transform duration-300 group-hover:translate-x-0.5" />
           </button>
         </div>
-
-        <style>{`
-          .custom-dots {
-            bottom: 32px !important;
-            left: 50% !important;
-            transform: translateX(-50%) !important;
-            text-align: center !important;
-            width: auto !important;
-            display: flex !important;
-            align-items: center !important;
-            justify-content: center !important;
-            margin: 0 !important;
-            padding: 0 !important;
-            list-style: none !important;
-            z-index: 20;
-          }
-          .custom-dots li {
-            margin: 0 6px !important;
-            width: 10px !important;
-            height: 10px !important;
-            display: flex !important;
-            align-items: center !important;
-            justify-content: center !important;
-          }
-          .custom-dots li button {
-            padding: 0 !important;
-            width: 10px !important;
-            height: 10px !important;
-            display: block !important;
-          }
-          .custom-dots li button:before {
-            display: none !important;
-          }
-          .custom-dots li div {
-            background-color: rgba(255, 255, 255, 0.4) !important;
-            border: none !important;
-            width: 10px !important;
-            height: 10px !important;
-            border-radius: 50% !important;
-            transition: all 0.3s ease !important;
-          }
-          .custom-dots li.slick-active div {
-            background-color: #F99D1C !important;
-            opacity: 1 !important;
-            transform: scale(1.25) !important;
-            box-shadow: 0 0 10px rgba(249, 157, 28, 0.5) !important;
-          }
-        `}</style>
       </section>
 
       {/* "with Hutech Solutions" section */}
@@ -757,10 +768,12 @@ export default function HomePageClient({ data }: HomePageClientProps) {
             {withHutechDesc}
           </p>
           <div className="relative w-full aspect-[16/10] rounded-lg overflow-hidden shadow-lg">
-            <ImageWithFallback 
+            <Image
               src={withHutechImg}
               alt="Digital engineering excellence at Hutech Solutions"
-              className="w-full h-full object-cover"
+              fill
+              sizes="(max-width: 768px) 100vw, 50vw"
+              className="object-cover"
             />
           </div>
           <div className="flex items-center gap-4 pt-2">
@@ -798,10 +811,12 @@ export default function HomePageClient({ data }: HomePageClientProps) {
             </div>
           </div>
           <div className="flex-1 relative w-full">
-            <div className="aspect-[16/9] rounded-sm overflow-hidden shadow-2xl rotate-2">
-              <ImageWithFallback 
+            <div className="relative aspect-[16/9] rounded-sm overflow-hidden shadow-2xl rotate-2">
+              <Image 
                 src={withHutechImg}
                 alt="Digital engineering excellence at Hutech Solutions"
+                fill
+                sizes="(max-width: 768px) 100vw, 500px"
                 className="w-full h-full object-cover"
               />
             </div>
@@ -829,10 +844,12 @@ export default function HomePageClient({ data }: HomePageClientProps) {
             </div>
           </div>
           <div className="flex-1 relative h-[350px] md:h-[500px] w-full group/thinker cursor-pointer">
-            <ImageWithFallback 
+            <Image
               src={btImage}
-              alt={btAuthorName}
-              className="w-full h-full object-contain object-bottom relative z-10 grayscale-[0.6] group-hover/thinker:grayscale-0 transition-all duration-700"
+              alt={`${btAuthorName} - ${btAuthorTitle}`}
+              fill
+              sizes="(max-width: 768px) 100vw, 500px"
+              className="object-contain object-bottom relative z-10 grayscale-[0.6] transition-all duration-700 group-hover/thinker:grayscale-0 group-hover/thinker:scale-105"
             />
             {/* Abstract glow */}
             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[150%] h-[150%] bg-[#0171c1]/10 blur-[120px] rounded-full group-hover/thinker:bg-[#0171c1]/20 transition-all duration-700"></div>
@@ -857,12 +874,14 @@ export default function HomePageClient({ data }: HomePageClientProps) {
             <div className="flex gap-3 justify-end shrink-0 mt-4 md:mt-2 md:self-start">
               <button 
                 onClick={() => industryScrollRef.current?.scrollBy({ left: -320, behavior: 'smooth' })}
+                aria-label="Scroll industries left"
                 className="carousel-arrow"
               >
                 <ArrowRight className="w-4 h-4 md:w-5 md:h-5 rotate-180" />
               </button>
               <button 
                 onClick={() => industryScrollRef.current?.scrollBy({ left: 320, behavior: 'smooth' })}
+                aria-label="Scroll industries right"
                 className="carousel-arrow"
               >
                 <ArrowRight className="w-4 h-4 md:w-5 md:h-5" />
@@ -956,6 +975,8 @@ export default function HomePageClient({ data }: HomePageClientProps) {
                   <img
                     src={cap.image}
                     alt=""
+                    width={800}
+                    height={600}
                     className="w-full h-full object-cover"
                   />
                   {/* 65-70% dark overlay for readability */}
@@ -991,6 +1012,8 @@ export default function HomePageClient({ data }: HomePageClientProps) {
                   {/* Row trigger */}
                   <button
                     onClick={() => setActiveCapIdx(isOpen ? -1 : idx)}
+                    aria-expanded={isOpen}
+                    aria-label={`${isOpen ? 'Collapse' : 'Expand'} ${cap.name}`}
                     className="flex items-center justify-between w-full px-6 py-5 text-left transition-colors duration-200"
                   >
                     <span className={`text-base font-semibold tracking-tight transition-colors duration-200 ${
@@ -1072,6 +1095,7 @@ export default function HomePageClient({ data }: HomePageClientProps) {
                         key={idx} 
                         onMouseEnter={() => setActiveCapIdx(idx)}
                         onClick={() => setActiveCapIdx(idx)}
+                        aria-label={`View ${cap.name} capability`}
                         className={`flex items-center justify-between w-full group py-4 md:py-6 border-b border-white/10 text-left transition-all duration-300 ${activeCapIdx === idx ? "text-[#F99D1C] pl-2 md:pl-4" : "hover:text-[#F99D1C] hover:pl-1 md:hover:pl-2"}`}
                       >
                         <span className={`text-lg md:text-xl font-medium tracking-tight ${activeCapIdx === idx ? "font-semibold" : "font-normal"}`}>{cap.name}</span>

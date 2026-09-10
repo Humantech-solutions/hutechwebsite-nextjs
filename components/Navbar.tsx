@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { Search, Globe, Menu, X, ChevronDown, MoveRight, Phone, Mail, Linkedin, Facebook, Instagram, Youtube, Twitter } from "lucide-react";
 import { motion as Motion, AnimatePresence, useScroll, useTransform } from "framer-motion";
 import { ImageWithFallback } from "./figma/ImageWithFallback";
+import Image from "next/image";
 import type { HeaderChromeData, TopNavChromeData } from "@/lib/wordpress";
 const logoImg = "/assets/c57ecabe59306129194824425137d2ccde6918ce.png";
 
@@ -347,9 +348,13 @@ export default function Navbar({ data }: { data?: HeaderChromeData }) {
               <Link href="/" className="flex items-center" onClick={() => setActiveDropdown(null)}>
                 <Motion.div style={{ scale: logoScale }}>
                   <div className="h-16 py-2 md:h-20">
-                    <ImageWithFallback
+                    <Image
                       src={logoSrc}
                       alt={logoAlt}
+                      width={200}
+                      height={60}
+                      sizes="(max-width: 768px) 175px, 200px"
+                      priority
                       className="h-full w-auto object-contain"
                     />
                   </div>
@@ -376,6 +381,8 @@ export default function Navbar({ data }: { data?: HeaderChromeData }) {
                       <>
                         <button
                           onClick={() => toggleDropdown(idx)}
+                          aria-expanded={activeDropdown === idx}
+                          aria-haspopup="true"
                           className="flex items-center py-2 text-[14px] font-semibold tracking-wide text-[#001A3D] transition-colors duration-300 hover:text-[#0171c1]"
                           style={{ color: activeDropdown === idx ? BRAND_BLUE : undefined }}
                         >
@@ -541,9 +548,12 @@ export default function Navbar({ data }: { data?: HeaderChromeData }) {
                   onClick={() => setMobileMenuOpen(false)}
                 >
                   <div className="h-14 rounded-md bg-white px-3 py-1.5 shadow-md">
-                    <ImageWithFallback
+                    <Image
                       src={logoSrc}
                       alt={logoAlt}
+                      width={200}
+                      height={60}
+                      sizes="175px"
                       className="h-full w-auto object-contain"
                     />
                   </div>
