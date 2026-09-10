@@ -58,8 +58,26 @@ interface PageProps {
   params: Promise<{ slug: string[] }>;
 }
 
+const DEDICATED_COMPANY_SLUGS = new Set([
+  "leadership",
+  "awards",
+  "vision-mission-values",
+  "partnership",
+  "life-at-hutech",
+  "news",
+  "press-release",
+  "graduates",
+  "open-positions",
+  "case-studies",
+  "hutech-documents",
+]);
+
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { slug } = await params;
+  if (slug.length === 1 && (DEDICATED_COMPANY_SLUGS.has(slug[0]) || slug[0] === "home")) {
+    return constructMetadata({ title: "Page Not Found | Hutech Solutions" });
+  }
+
   const uri = "/" + slug.join("/") + "/";
   const page = await getPageByUri(uri);
   if (!page) {
@@ -85,7 +103,8 @@ export async function generateStaticParams() {
       const slugArray = page.uri.split("/").filter(Boolean);
       return { slug: slugArray };
     })
-    .filter((p) => p.slug.length > 0);
+    .filter((p) => p.slug.length > 0)
+    .filter((p) => !(p.slug.length === 1 && (DEDICATED_COMPANY_SLUGS.has(p.slug[0]) || p.slug[0] === "home")));
 
   if (params.length === 0) {
     return [
@@ -99,6 +118,13 @@ export async function generateStaticParams() {
 
 export default async function DynamicPage({ params }: PageProps) {
   const { slug } = await params;
+
+  // Pages under company or resources belong exclusively under /company/... or /resources/...
+  // Entering root URLs like /leadership must show 404
+  if (slug.length === 1 && (DEDICATED_COMPANY_SLUGS.has(slug[0]) || slug[0] === "home")) {
+    notFound();
+  }
+
   const uri = "/" + slug.join("/") + "/";
   const page = await getPageByUri(uri);
 
@@ -298,6 +324,11 @@ export default async function DynamicPage({ params }: PageProps) {
     return <PageClient page={page} sitemapSections={sitemapSections} />;
   }
 
-  // ── Fallback: generic text/legal content page ─────────────────────────────────
-  return <PageClient page={page} />;
+  // ── Fallback: only render if page has actual text/legal content ───────────────
+  if (page.content && page.content.replace(/<[^>]+>/g, "").trim().length > 0) {
+    return <PageClient page={page} />;
+  }
+
+  // If page has no matching template and no content exists, trigger 404
+  notFound();
 }

@@ -241,6 +241,8 @@ export default function Footer({ data }: { data?: FooterChromeData }) {
                 <img
                   src="/assets/c57ecabe59306129194824425137d2ccde6918ce.png"
                   alt="Hutech Solutions Logo"
+                  width={400}
+                  height={120}
                   className="h-10 w-auto object-contain"
                 />
               </div>
@@ -273,6 +275,8 @@ export default function Footer({ data }: { data?: FooterChromeData }) {
                   <img
                     src={socialIcons.facebook}
                     alt="Facebook"
+                    width={22}
+                    height={22}
                     className="h-[22px] w-[22px] object-contain opacity-70 transition-opacity hover:opacity-100"
                   />
                 ) : (
@@ -288,6 +292,8 @@ export default function Footer({ data }: { data?: FooterChromeData }) {
                   <img
                     src={socialIcons.linkedin}
                     alt="Linkedin"
+                    width={22}
+                    height={22}
                     className="h-[22px] w-[22px] object-contain opacity-70 transition-opacity hover:opacity-100"
                   />
                 ) : (
@@ -303,6 +309,8 @@ export default function Footer({ data }: { data?: FooterChromeData }) {
                   <img
                     src={socialIcons.instagram}
                     alt="Instagram"
+                    width={22}
+                    height={22}
                     className="h-[22px] w-[22px] object-contain opacity-70 transition-opacity hover:opacity-100"
                   />
                 ) : (
@@ -318,6 +326,8 @@ export default function Footer({ data }: { data?: FooterChromeData }) {
                   <img
                     src={socialIcons.youtube}
                     alt="Youtube"
+                    width={24}
+                    height={24}
                     className="h-6 w-6 object-contain opacity-70 transition-opacity hover:opacity-100"
                   />
                 ) : (
@@ -421,7 +431,9 @@ export default function Footer({ data }: { data?: FooterChromeData }) {
                 <img
                   src={badge.src}
                   alt={badge.alt}
-                  className="h-8 w-auto object-contain opacity-70 hover:opacity-100 transition-opacity"
+                  width={150}
+                  height={40}
+                  className="h-8 md:h-10 w-auto object-contain opacity-70 hover:opacity-100 transition-opacity"
                   loading="lazy"
                 />
               );
@@ -549,6 +561,8 @@ export default function Footer({ data }: { data?: FooterChromeData }) {
                     <img
                       src={badge.src}
                       alt={badge.alt}
+                      width={150}
+                      height={40}
                       className="h-8 md:h-10 w-auto object-contain opacity-70 hover:opacity-100 transition-opacity"
                       loading="lazy"
                     />
@@ -580,6 +594,8 @@ export default function Footer({ data }: { data?: FooterChromeData }) {
                     <img
                       src={socialIcons.facebook}
                       alt="Facebook"
+                      width={22}
+                      height={22}
                       className="h-[22px] w-[22px] object-contain opacity-70 transition-opacity hover:opacity-100"
                       loading="lazy"
                     />
@@ -596,6 +612,8 @@ export default function Footer({ data }: { data?: FooterChromeData }) {
                     <img
                       src={socialIcons.instagram}
                       alt="Instagram"
+                      width={22}
+                      height={22}
                       className="h-[22px] w-[22px] object-contain opacity-70 transition-opacity hover:opacity-100"
                       loading="lazy"
                     />
@@ -612,6 +630,8 @@ export default function Footer({ data }: { data?: FooterChromeData }) {
                     <img
                       src={socialIcons.youtube}
                       alt="Youtube"
+                      width={24}
+                      height={24}
                       className="h-6 w-6 object-contain opacity-70 transition-opacity hover:opacity-100"
                       loading="lazy"
                     />
@@ -628,6 +648,8 @@ export default function Footer({ data }: { data?: FooterChromeData }) {
                     <img
                       src={socialIcons.linkedin}
                       alt="Linkedin"
+                      width={22}
+                      height={22}
                       className="h-[22px] w-[22px] object-contain opacity-70 transition-opacity hover:opacity-100"
                       loading="lazy"
                     />
@@ -644,7 +666,7 @@ export default function Footer({ data }: { data?: FooterChromeData }) {
       {/* Bottom Bar */}
       <div className="bg-[#00080F] py-8 md:py-10">
         <div className="max-w-[1280px] mx-auto px-6 lg:px-12 flex flex-col lg:flex-row items-center justify-between gap-8">
-          <div className="flex flex-col lg:flex-row items-center justify-between gap-6 md:gap-8 text-[12px] md:text-[13px] text-gray-500 w-full">
+          <div className="flex flex-col lg:flex-row items-center justify-between gap-6 md:gap-8 text-[12px] md:text-[13px] text-gray-400 w-full">
             <p className="text-center lg:text-left leading-relaxed">{copyright}</p>
 
             <div className="flex flex-wrap items-center justify-center lg:justify-end gap-x-2 gap-y-1.5 lg:border-l lg:border-white/10 lg:pl-8 leading-[20px]">
