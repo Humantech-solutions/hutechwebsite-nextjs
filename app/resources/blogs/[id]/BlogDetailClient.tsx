@@ -42,8 +42,10 @@ const DEFAULT_RELATED: LatestThinkingBlog[] = [
     title: "Small Models, Big Impact: Why Domain-Specific AI Is...",
     category: "ARTIFICIAL INTELLIGENCE",
     date: "July 28, 2026",
-    excerpt: "Introduction For years, the AI conversation was dominated by scale. Bigger models, more...",
-    image: "https://images.unsplash.com/photo-1677442136019-21780ecad995?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=800",
+    excerpt:
+      "Introduction For years, the AI conversation was dominated by scale. Bigger models, more...",
+    image:
+      "https://images.unsplash.com/photo-1677442136019-21780ecad995?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=800",
   },
   {
     id: "agentic-ai-autonomous-operators",
@@ -51,8 +53,10 @@ const DEFAULT_RELATED: LatestThinkingBlog[] = [
     title: "Agentic AI: From Chatbots to Autonomous Business Operators",
     category: "ARTIFICIAL INTELLIGENCE",
     date: "July 28, 2026",
-    excerpt: "Introduction For years, AI in the enterprise meant chatbots — tools that answered questions,...",
-    image: "https://images.unsplash.com/photo-1485827404703-89b55fcc595e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=800",
+    excerpt:
+      "Introduction For years, AI in the enterprise meant chatbots — tools that answered questions,...",
+    image:
+      "https://images.unsplash.com/photo-1485827404703-89b55fcc595e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=800",
   },
   {
     id: "blockchain-supply-chain-revolution",
@@ -60,8 +64,10 @@ const DEFAULT_RELATED: LatestThinkingBlog[] = [
     title: "Blockchain: The Supply Chain Revolution",
     category: "BLOCKCHAIN",
     date: "June 26, 2026",
-    excerpt: "Supply chains are among the most complex systems in modern commerce, involving countless...",
-    image: "https://images.unsplash.com/photo-1639762681485-074b7f938ba0?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=800",
+    excerpt:
+      "Supply chains are among the most complex systems in modern commerce, involving countless...",
+    image:
+      "https://images.unsplash.com/photo-1639762681485-074b7f938ba0?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=800",
   },
 ];
 
@@ -76,11 +82,16 @@ export default function BlogDetailClient({
 
   if (!blog) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-white p-6">
-        <div className="text-center space-y-6">
+      <div className="flex min-h-screen items-center justify-center bg-white p-6">
+        <div className="space-y-6 text-center">
           <h2 className="display-font text-4xl font-bold text-[#001A3D]">Article Not Found</h2>
-          <p className="text-gray-500">The article you&apos;re looking for might have been moved or the link is incorrect.</p>
-          <Link href="/resources/blogs" className="inline-block bg-[#001A3D] text-white px-8 py-4 rounded-sm font-bold text-xs tracking-wide">
+          <p className="text-gray-500">
+            The article you&apos;re looking for might have been moved or the link is incorrect.
+          </p>
+          <Link
+            href="/resources/blogs"
+            className="inline-block rounded-sm bg-[#001A3D] px-8 py-4 text-xs font-bold tracking-wide text-white"
+          >
             Back to Blogs
           </Link>
         </div>
@@ -88,7 +99,10 @@ export default function BlogDetailClient({
     );
   }
 
-  const shareUrl = typeof window !== "undefined" ? window.location.href.replace(window.location.origin, "https://hutechsolutions.ai") : "";
+  const shareUrl =
+    typeof window !== "undefined"
+      ? window.location.href.replace(window.location.origin, "https://hutechsolutions.ai")
+      : "";
 
   const handleCopyLink = async () => {
     if (typeof window !== "undefined") {
@@ -123,9 +137,7 @@ export default function BlogDetailClient({
   const currentSlugOrId = (blog as any).slug || blog.id || "";
   const dynamicFiltered = (latestBlogs || []).filter(
     (item) =>
-      item.slug !== currentSlugOrId &&
-      item.id !== currentSlugOrId &&
-      item.title !== blog.title
+      item.slug !== currentSlugOrId && item.id !== currentSlugOrId && item.title !== blog.title
   );
 
   // Fallback to static items if latestBlogs has fewer than 3 items
@@ -155,31 +167,31 @@ export default function BlogDetailClient({
   const relatedReadingItems = combinedRelated.slice(0, 3);
 
   return (
-    <div className="flex flex-col bg-white min-h-screen text-[#172033] font-sans antialiased selection:bg-[#0754C6]/20 selection:text-[#0754C6]">
+    <div className="flex min-h-screen flex-col bg-white font-sans text-[#172033] antialiased selection:bg-[#0754C6]/20 selection:text-[#0754C6]">
       <Meta
         title={`${blog.title} | Blogs | Hutech Solutions`}
-        description={blog.excerpt ?? (blog.content?.[0]?.text ?? "")}
+        description={blog.excerpt ?? blog.content?.[0]?.text ?? ""}
       />
 
       {/* ========================================================================= */}
       {/* 1. HERO BANNER SECTION */}
       {/* ========================================================================= */}
-      <section className="bg-[#001A3D] text-white min-h-[440px] lg:min-h-[480px] relative overflow-hidden flex items-center">
+      <section className="relative flex min-h-[440px] items-center overflow-hidden bg-[#001A3D] text-white lg:min-h-[480px]">
         {/* Background Image with Gradient Overlay */}
         <div className="absolute inset-0 z-0">
           {blog.image ? (
             <ImageWithFallback
               src={blog.image}
               alt={blog.title}
-              className="w-full h-full object-cover opacity-25"
+              className="h-full w-full object-cover opacity-25"
             />
           ) : (
-            <div className="w-full h-full bg-[#001430] opacity-40" />
+            <div className="h-full w-full bg-[#001430] opacity-40" />
           )}
           <div className="absolute inset-0 bg-gradient-to-t from-[#001A3D] via-[#001A3D]/80 to-transparent" />
         </div>
 
-        <div className="relative max-w-[1240px] mx-auto px-4 sm:px-6 lg:px-8 z-10 w-full py-16 lg:py-20">
+        <div className="relative z-10 mx-auto w-full max-w-[1240px] px-4 py-16 sm:px-6 lg:px-8 lg:py-20">
           <Motion.div
             initial={{ opacity: 0, y: 25 }}
             animate={{ opacity: 1, y: 0 }}
@@ -189,45 +201,47 @@ export default function BlogDetailClient({
             {/* Back to All Blogs Link */}
             <Link
               href="/resources/blogs"
-              className="inline-flex items-center gap-2 text-[#F99D1C] font-bold text-xs uppercase tracking-widest hover:text-white transition-colors"
+              className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-[#F99D1C] transition-colors hover:text-white"
             >
               <ArrowLeft size={16} /> All Blogs
             </Link>
 
             {/* Category Badge & Reading Time */}
             <div className="flex items-center gap-4">
-              <span className="px-3.5 py-1 bg-[#F99D1C]/15 text-[#F99D1C] text-[10px] font-black uppercase tracking-widest rounded-full border border-[#F99D1C]/30">
+              <span className="rounded-full border border-[#F99D1C]/30 bg-[#F99D1C]/15 px-3.5 py-1 text-[10px] font-black uppercase tracking-widest text-[#F99D1C]">
                 {blog.category || "Fintech"}
               </span>
-              <span className="flex items-center gap-2 text-white/70 text-xs font-bold uppercase tracking-widest">
+              <span className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-white/70">
                 <Clock size={14} className="text-[#F99D1C]" /> {blog.readTime || "5 min read"}
               </span>
             </div>
 
             {/* Hero Main Headline */}
-            <h1 className="text-3xl sm:text-5xl md:text-6xl font-bold display-font leading-[1.12] max-w-4xl text-white">
+            <h1 className="display-font max-w-4xl text-3xl font-bold leading-[1.12] text-white sm:text-5xl md:text-6xl">
               {renderTitle(blog.title)}
             </h1>
 
             {/* Author & Published Date Metadata */}
-            <div className="flex flex-wrap items-center gap-8 pt-4 border-t border-white/10 w-fit">
+            <div className="flex w-fit flex-wrap items-center gap-8 border-t border-white/10 pt-4">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-full bg-[#0171c1]/30 border border-white/10 flex items-center justify-center text-[#F99D1C]">
+                <div className="flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-[#0171c1]/30 text-[#F99D1C]">
                   <User size={18} />
                 </div>
                 <div>
-                  <div className="text-sm font-bold text-white">{blog.author || "Hutech Solutions"}</div>
-                  <div className="text-[10.5px] text-white/50 font-medium uppercase tracking-wider">
+                  <div className="text-sm font-bold text-white">
+                    {blog.author || "Hutech Solutions"}
+                  </div>
+                  <div className="text-[10.5px] font-medium uppercase tracking-wider text-white/50">
                     {blog.role || "Technology Practice Lead"}
                   </div>
                 </div>
               </div>
 
               <div className="flex items-center gap-3 border-l border-white/10 pl-8">
-                <Calendar className="text-[#F99D1C] w-5 h-5" />
+                <Calendar className="h-5 w-5 text-[#F99D1C]" />
                 <div>
                   <div className="text-sm font-bold text-white">{blog.date}</div>
-                  <div className="text-[10.5px] text-white/50 font-medium uppercase tracking-wider">
+                  <div className="text-[10.5px] font-medium uppercase tracking-wider text-white/50">
                     Published Date
                   </div>
                 </div>
@@ -240,18 +254,21 @@ export default function BlogDetailClient({
       {/* ========================================================================= */}
       {/* 2. BREADCRUMB (AFTER HERO BANNER & BEFORE ARTICLE CONTENT) */}
       {/* ========================================================================= */}
-      <div className="bg-[#F7F7F8] border-b border-gray-200/70 py-3.5">
-        <div className="max-w-[1240px] mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="border-b border-gray-200/70 bg-[#F7F7F8] py-3.5">
+        <div className="mx-auto max-w-[1240px] px-4 sm:px-6 lg:px-8">
           <nav aria-label="Breadcrumb">
-            <ol className="flex items-center flex-wrap gap-2 text-xs sm:text-[13px] text-[#5A6270]">
+            <ol className="flex flex-wrap items-center gap-2 text-xs text-[#5A6270] sm:text-[13px]">
               <li>
-                <Link href="/" className="hover:text-[#0754C6] transition-colors font-medium">
+                <Link href="/" className="font-medium transition-colors hover:text-[#0754C6]">
                   Home
                 </Link>
               </li>
-              <li className="text-gray-400 select-none">/</li>
+              <li className="select-none text-gray-400">/</li>
               <li>
-                <Link href="/resources/blogs" className="hover:text-[#0754C6] transition-colors font-medium">
+                <Link
+                  href="/resources/blogs"
+                  className="font-medium transition-colors hover:text-[#0754C6]"
+                >
                   Blog
                 </Link>
               </li>
@@ -259,17 +276,15 @@ export default function BlogDetailClient({
                 blog.category.trim().toLowerCase() !== "blog" &&
                 blog.category.trim().toLowerCase() !== "blogs" && (
                   <>
-                    <li className="text-gray-400 select-none">/</li>
+                    <li className="select-none text-gray-400">/</li>
                     <li>
-                      <span className="text-[#5A6270] font-medium">
-                        {blog.category}
-                      </span>
+                      <span className="font-medium text-[#5A6270]">{blog.category}</span>
                     </li>
                   </>
-              )}
-              <li className="text-gray-400 select-none">/</li>
+                )}
+              <li className="select-none text-gray-400">/</li>
               <li
-                className="text-[#172033] font-semibold truncate max-w-[240px] sm:max-w-[400px] md:max-w-[500px]"
+                className="max-w-[240px] truncate font-semibold text-[#172033] sm:max-w-[400px] md:max-w-[500px]"
                 aria-current="page"
                 title={blog.title}
               >
@@ -283,21 +298,18 @@ export default function BlogDetailClient({
       {/* ========================================================================= */}
       {/* 3. TWO-COLUMN ARTICLE CONTENT + STICKY RIGHT SIDEBAR */}
       {/* ========================================================================= */}
-      <div className="bg-[#F7F7F8] py-10 lg:py-16">
-        <div className="max-w-[1240px] mx-auto px-4 sm:px-6 lg:px-8">
-          
-          <div className="grid grid-cols-1 lg:grid-cols-[1fr_300px] xl:grid-cols-[1fr_320px] gap-10 lg:gap-12 xl:gap-14 items-start">
-            
+      <div className="bg-[#F7F7F8] py-10 lg:pb-16 lg:pt-8">
+        <div className="mx-auto max-w-[1240px] px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 items-start gap-10 lg:grid-cols-[1fr_300px] lg:gap-12 xl:grid-cols-[1fr_320px] xl:gap-14">
             {/* --------------------------------------------------------------------- */}
             {/* LEFT COLUMN: MAIN ARTICLE CONTENT WITH STICKY SOCIAL SHARING */}
             {/* --------------------------------------------------------------------- */}
-            <main className="w-full min-w-0 flex items-start gap-6 lg:gap-8 xl:gap-10">
-              
+            <main className="flex w-full min-w-0 items-start gap-6 lg:gap-8 xl:gap-10">
               {/* Sticky Left Social Media Bar (Matching Reference Image) */}
-              <div className="hidden md:flex flex-col items-center sticky top-[100px] self-start shrink-0 pt-1 select-none">
+              <div className="sticky top-[100px] hidden shrink-0 select-none flex-col items-center self-start pt-1 md:flex">
                 {/* SHARE ARTICLE Vertical Label */}
                 <span
-                  className="text-[10.5px] font-semibold text-[#8A919D] uppercase tracking-[0.22em] mb-7 select-none"
+                  className="mb-7 select-none text-[10.5px] font-semibold uppercase tracking-[0.22em] text-[#8A919D]"
                   style={{
                     writingMode: "vertical-rl",
                     transform: "rotate(180deg)",
@@ -312,21 +324,21 @@ export default function BlogDetailClient({
                     href={getShareUrl("linkedin")}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-[#8A919D] hover:text-[#0A66C2] transition-colors p-1 flex items-center justify-center"
+                    className="flex items-center justify-center p-1 text-[#8A919D] transition-colors hover:text-[#0A66C2]"
                     aria-label="Share on LinkedIn"
                     title="Share on LinkedIn"
                   >
-                    <Linkedin className="w-4 h-4" />
+                    <Linkedin className="h-4 w-4" />
                   </a>
                   <a
                     href={getShareUrl("twitter")}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-[#8A919D] hover:text-black transition-colors p-1 flex items-center justify-center"
+                    className="flex items-center justify-center p-1 text-[#8A919D] transition-colors hover:text-black"
                     aria-label="Share on X"
                     title="Share on X"
                   >
-                    <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24">
+                    <svg className="h-4 w-4 fill-current" viewBox="0 0 24 24">
                       <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
                     </svg>
                   </a>
@@ -334,21 +346,25 @@ export default function BlogDetailClient({
                     href={getShareUrl("facebook")}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-[#8A919D] hover:text-[#1877F2] transition-colors p-1 flex items-center justify-center"
+                    className="flex items-center justify-center p-1 text-[#8A919D] transition-colors hover:text-[#1877F2]"
                     aria-label="Share on Facebook"
                     title="Share on Facebook"
                   >
-                    <Facebook className="w-4 h-4" />
+                    <Facebook className="h-4 w-4" />
                   </a>
                   <button
                     onClick={handleCopyLink}
-                    className="text-[#8A919D] hover:text-[#172033] transition-colors p-1 relative group flex items-center justify-center"
+                    className="group relative flex items-center justify-center p-1 text-[#8A919D] transition-colors hover:text-[#172033]"
                     aria-label="Copy article link"
                     title="Copy link"
                   >
-                    {copied ? <Check className="w-4 h-4 text-emerald-600" /> : <Share2 className="w-4 h-4" />}
+                    {copied ? (
+                      <Check className="h-4 w-4 text-emerald-600" />
+                    ) : (
+                      <Share2 className="h-4 w-4" />
+                    )}
                     {copied && (
-                      <span className="absolute left-7 top-1/2 -translate-y-1/2 bg-[#172033] text-white text-[10px] font-medium py-1 px-2 rounded whitespace-nowrap shadow-md pointer-events-none z-20">
+                      <span className="pointer-events-none absolute left-7 top-1/2 z-20 -translate-y-1/2 whitespace-nowrap rounded bg-[#172033] px-2 py-1 text-[10px] font-medium text-white shadow-md">
                         Copied!
                       </span>
                     )}
@@ -358,11 +374,10 @@ export default function BlogDetailClient({
 
               {/* Main Article Content Container */}
               <div className="w-full min-w-0 flex-1">
-                <article className="space-y-8">
-                  
+                <article className="">
                   {/* Mobile/Tablet Fallback Share Row (< md) */}
-                  <div className="flex md:hidden items-center justify-between pb-6 border-b border-gray-200">
-                    <span className="text-xs uppercase tracking-wider font-semibold text-[#8A919D]">
+                  <div className="flex items-center justify-between border-b border-gray-200 pb-6 md:hidden">
+                    <span className="text-xs font-semibold uppercase tracking-wider text-[#8A919D]">
                       Share Article
                     </span>
                     <div className="flex items-center gap-3">
@@ -370,19 +385,19 @@ export default function BlogDetailClient({
                         href={getShareUrl("linkedin")}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="p-2 rounded-full bg-white border border-gray-200 text-[#8A919D] hover:text-[#0A66C2] hover:border-[#0A66C2] transition-colors shadow-sm"
+                        className="rounded-full border border-gray-200 bg-white p-2 text-[#8A919D] shadow-sm transition-colors hover:border-[#0A66C2] hover:text-[#0A66C2]"
                         aria-label="Share on LinkedIn"
                       >
-                        <Linkedin className="w-4 h-4" />
+                        <Linkedin className="h-4 w-4" />
                       </a>
                       <a
                         href={getShareUrl("twitter")}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="p-2 rounded-full bg-white border border-gray-200 text-[#8A919D] hover:text-black hover:border-black transition-colors shadow-sm"
+                        className="rounded-full border border-gray-200 bg-white p-2 text-[#8A919D] shadow-sm transition-colors hover:border-black hover:text-black"
                         aria-label="Share on X"
                       >
-                        <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24">
+                        <svg className="h-4 w-4 fill-current" viewBox="0 0 24 24">
                           <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
                         </svg>
                       </a>
@@ -390,20 +405,24 @@ export default function BlogDetailClient({
                         href={getShareUrl("facebook")}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="p-2 rounded-full bg-white border border-gray-200 text-[#8A919D] hover:text-[#1877F2] hover:border-[#1877F2] transition-colors shadow-sm"
+                        className="rounded-full border border-gray-200 bg-white p-2 text-[#8A919D] shadow-sm transition-colors hover:border-[#1877F2] hover:text-[#1877F2]"
                         aria-label="Share on Facebook"
                       >
-                        <Facebook className="w-4 h-4" />
+                        <Facebook className="h-4 w-4" />
                       </a>
                       <button
                         onClick={handleCopyLink}
-                        className="p-2 rounded-full bg-white border border-gray-200 text-[#8A919D] hover:text-[#172033] hover:border-[#172033] transition-colors shadow-sm relative group"
+                        className="group relative rounded-full border border-gray-200 bg-white p-2 text-[#8A919D] shadow-sm transition-colors hover:border-[#172033] hover:text-[#172033]"
                         aria-label="Copy article link"
                         title="Copy link"
                       >
-                        {copied ? <Check className="w-4 h-4 text-emerald-600" /> : <Share2 className="w-4 h-4" />}
+                        {copied ? (
+                          <Check className="h-4 w-4 text-emerald-600" />
+                        ) : (
+                          <Share2 className="h-4 w-4" />
+                        )}
                         {copied && (
-                          <span className="absolute -top-8 left-1/2 -translate-x-1/2 bg-[#172033] text-white text-[10px] font-medium py-1 px-2 rounded whitespace-nowrap shadow-md pointer-events-none">
+                          <span className="pointer-events-none absolute -top-8 left-1/2 -translate-x-1/2 whitespace-nowrap rounded bg-[#172033] px-2 py-1 text-[10px] font-medium text-white shadow-md">
                             Copied!
                           </span>
                         )}
@@ -415,7 +434,7 @@ export default function BlogDetailClient({
                   <div className="prose prose-slate max-w-none">
                     {(blog as any).contentHtml ? (
                       <div
-                        className="wp-content text-[15.5px] leading-[1.78] text-[#4E5665] font-normal [&_h2]:text-2xl [&_h2]:md:text-3xl [&_h2]:font-bold [&_h2]:text-[#172033] [&_h2]:mt-10 [&_h2]:mb-4 [&_h3]:text-xl [&_h3]:font-bold [&_h3]:text-[#172033] [&_h3]:mt-8 [&_h3]:mb-3 [&_p]:mb-6 [&_ul]:list-disc [&_ul]:pl-6 [&_ul]:mb-6 [&_ol]:list-decimal [&_ol]:pl-6 [&_ol]:mb-6 [&_li]:mb-2 [&_a]:text-[#0754C6] [&_a]:underline"
+                        className="wp-content text-[15.5px] font-normal leading-[1.78] text-[#4E5665] [&_a]:text-[#0754C6] [&_a]:underline [&_h2]:mb-4 [&_h2]:mt-10 [&_h2]:text-2xl [&_h2]:font-bold [&_h2]:text-[#172033] [&_h2]:md:text-3xl [&_h3]:mb-3 [&_h3]:mt-8 [&_h3]:text-xl [&_h3]:font-bold [&_h3]:text-[#172033] [&_li]:mb-2 [&_ol]:mb-6 [&_ol]:list-decimal [&_ol]:pl-6 [&_p]:mb-6 [&_ul]:mb-6 [&_ul]:list-disc [&_ul]:pl-6"
                         dangerouslySetInnerHTML={{ __html: (blog as any).contentHtml }}
                       />
                     ) : (
@@ -424,7 +443,7 @@ export default function BlogDetailClient({
                           return (
                             <p
                               key={idx}
-                              className="text-[15px] sm:text-[15.5px] leading-[1.75] text-[#4E5665] font-normal mb-6"
+                              className="mb-6 text-[15px] font-normal leading-[1.75] text-[#4E5665] sm:text-[15.5px]"
                             >
                               {block.text}
                             </p>
@@ -434,7 +453,7 @@ export default function BlogDetailClient({
                           return (
                             <h2
                               key={idx}
-                              className="text-[19px] sm:text-[22px] font-bold text-[#172033] leading-snug mt-10 mb-4"
+                              className="mb-4 mt-10 text-[19px] font-bold leading-snug text-[#172033] sm:text-[22px]"
                             >
                               {block.text}
                             </h2>
@@ -444,16 +463,18 @@ export default function BlogDetailClient({
                           return (
                             <div
                               key={idx}
-                              className="my-10 relative p-8 sm:p-10 bg-white rounded-[4px] border-l-4 border-[#0754C6] shadow-sm"
+                              className="relative my-10 rounded-[4px] border-l-4 border-[#0754C6] bg-white p-8 shadow-sm sm:p-10"
                             >
-                              <Quote className="absolute top-6 right-6 w-10 h-10 text-[#0754C6]/15" />
+                              <Quote className="absolute right-6 top-6 h-10 w-10 text-[#0754C6]/15" />
                               <blockquote className="space-y-4">
-                                <p className="text-lg sm:text-xl font-normal text-[#172033] font-serif italic leading-relaxed">
+                                <p className="font-serif text-lg font-normal italic leading-relaxed text-[#172033] sm:text-xl">
                                   &ldquo;{block.text}&rdquo;
                                 </p>
                                 <footer className="pt-2">
-                                  <div className="font-bold text-[#172033] text-sm">{block.author}</div>
-                                  <div className="text-xs text-[#8A919D] font-medium tracking-wide">
+                                  <div className="text-sm font-bold text-[#172033]">
+                                    {block.author}
+                                  </div>
+                                  <div className="text-xs font-medium tracking-wide text-[#8A919D]">
                                     {block.designation}
                                   </div>
                                 </footer>
@@ -468,14 +489,14 @@ export default function BlogDetailClient({
 
                   {/* Tags Section */}
                   {blog.tags && blog.tags.length > 0 && (
-                    <div className="pt-8 border-t border-gray-200 flex flex-wrap items-center gap-3">
-                      <div className="flex items-center gap-2 text-xs font-bold text-gray-500 uppercase tracking-wider mr-2">
+                    <div className="flex flex-wrap items-center gap-3 border-t border-gray-200 pt-8">
+                      <div className="mr-2 flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-gray-500">
                         <Tag size={14} /> Tags:
                       </div>
                       {blog.tags.map((tag, idx) => (
                         <span
                           key={idx}
-                          className="px-3.5 py-1.5 bg-white border border-gray-200 text-gray-600 rounded-[2px] text-xs font-semibold hover:border-[#0754C6] hover:text-[#0754C6] transition-colors"
+                          className="rounded-[2px] border border-gray-200 bg-white px-3.5 py-1.5 text-xs font-semibold text-gray-600 transition-colors hover:border-[#0754C6] hover:text-[#0754C6]"
                         >
                           #{tag}
                         </span>
@@ -485,13 +506,15 @@ export default function BlogDetailClient({
 
                   {/* FAQ Section */}
                   {blog.faqs && blog.faqs.length > 0 && (
-                    <div className="pt-12 space-y-6">
+                    <div className="space-y-6 pt-12">
                       <div>
                         <h3 className="text-2xl font-bold text-[#172033]">
-                          {blog.faqTitle ? renderTitle(blog.faqTitle) : "Frequently Asked Questions"}
+                          {blog.faqTitle
+                            ? renderTitle(blog.faqTitle)
+                            : "Frequently Asked Questions"}
                         </h3>
                         {blog.faqSubtitle && (
-                          <p className="text-sm text-gray-500 mt-1">
+                          <p className="mt-1 text-sm text-gray-500">
                             {renderTitle(blog.faqSubtitle)}
                           </p>
                         )}
@@ -503,26 +526,26 @@ export default function BlogDetailClient({
                   {/* ========================================================================= */}
                   {/* 4. ARTICLE-BOTTOM IMAGE / CTA SECTION (MATCHING article-bottom.png) */}
                   {/* ========================================================================= */}
-                  <div className="mt-12 bg-[#0754C6] text-white p-6 sm:p-8 rounded-[4px] shadow-md">
-                    <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
-                      <div className="space-y-2.5 max-w-[480px]">
+                  <div className="mt-12 rounded-[4px] bg-[#0754C6] p-6 text-white shadow-md sm:p-8">
+                    <div className="flex flex-col items-start justify-between gap-6 sm:flex-row sm:items-center">
+                      <div className="max-w-[480px] space-y-2.5">
                         <div className="text-[11px] font-bold uppercase tracking-[0.14em] text-blue-100/90">
                           NEW HIRES BURIED ON DAY TWO?
                         </div>
-                        <p className="font-serif text-[18px] sm:text-[20px] font-normal leading-[1.35] text-white">
-                          See how realfast does it — every tool your team runs on, pulled into one connected page the moment a new hire needs it.
+                        <p className="font-serif text-[18px] font-normal leading-[1.35] text-white sm:text-[20px]">
+                          See how realfast does it — every tool your team runs on, pulled into one
+                          connected page the moment a new hire needs it.
                         </p>
                       </div>
 
                       <Link
                         href="/contact"
-                        className="inline-flex items-center justify-center bg-white text-[#172033] text-sm font-bold px-6 py-3 rounded-[3px] hover:bg-blue-50 transition-all shadow-sm hover:shadow active:scale-[0.98] whitespace-nowrap self-start sm:self-center"
+                        className="inline-flex items-center justify-center self-start whitespace-nowrap rounded-[3px] bg-white px-6 py-3 text-sm font-bold text-[#172033] shadow-sm transition-all hover:bg-blue-50 hover:shadow active:scale-[0.98] sm:self-center"
                       >
                         Book a Demo
                       </Link>
                     </div>
                   </div>
-
                 </article>
               </div>
             </main>
@@ -531,57 +554,62 @@ export default function BlogDetailClient({
             {/* RIGHT COLUMN: STICKY SIDEBAR (MATCHING right-side(1).png) */}
             {/* --------------------------------------------------------------------- */}
             <aside className="w-full lg:sticky lg:top-[100px] lg:self-start">
-              <div className="bg-[#0754C6] p-7 text-white rounded-[4px] shadow-md">
+              <div className="rounded-[4px] bg-[#0754C6] p-7 text-white shadow-md">
                 {/* Small Top Label */}
-                <div className="text-sm font-medium text-blue-100/95 tracking-wide mb-3">
+                <div className="mb-3 text-sm font-medium tracking-wide text-blue-100/95">
                   Hutech Solutions
                 </div>
 
                 {/* Large Serif Headline */}
-                <h3 className="font-serif text-[28px] sm:text-[30px] font-normal leading-[1.18] text-white mb-3.5">
+                <h3 className="mb-3.5 font-serif text-[28px] font-normal leading-[1.18] text-white sm:text-[30px]">
                   From strategy to shipped
                 </h3>
 
                 {/* Supporting Copy */}
-                <p className="text-[13.5px] text-blue-100/90 leading-[1.55] mb-7 font-normal">
+                <p className="mb-7 text-[13.5px] font-normal leading-[1.55] text-blue-100/90">
                   Tell us what you want built. We come back with a plan and a timeline.
                 </p>
 
                 {/* White Action Button */}
                 <Link
                   href="/contact"
-                  className="w-full bg-white text-[#172033] font-bold text-sm py-3.5 rounded-[3px] hover:bg-blue-50 transition-all flex items-center justify-center text-center shadow-sm hover:shadow active:scale-[0.99]"
+                  className="flex w-full items-center justify-center rounded-[3px] bg-white py-3.5 text-center text-sm font-bold text-[#172033] shadow-sm transition-all hover:bg-blue-50 hover:shadow active:scale-[0.99]"
                 >
                   Book Meeting
                 </Link>
               </div>
             </aside>
-
           </div>
 
           {/* ========================================================================= */}
           {/* 5. RELATED ARTICLES / RELATED READING (MATCHING related-article.png) */}
           {/* ========================================================================= */}
-          <section aria-labelledby="related-reading-heading" className="mt-16 lg:mt-20 pt-10 border-t border-gray-300">
+          <section
+            aria-labelledby="related-reading-heading"
+            className="mt-16 border-t border-gray-300 pt-10 lg:mt-20"
+          >
             {/* Header with Title and All posts Link */}
-            <div className="flex items-center justify-between mb-8">
-              <h2 id="related-reading-heading" className="text-xl sm:text-2xl font-bold text-[#172033]">
+            <div className="mb-8 flex items-center justify-between">
+              <h2
+                id="related-reading-heading"
+                className="text-xl font-bold text-[#172033] sm:text-2xl"
+              >
                 Related reading
               </h2>
               <Link
                 href="/resources/blogs"
-                className="text-sm font-semibold text-[#172033] hover:text-[#0754C6] transition-colors flex items-center gap-1"
+                className="flex items-center gap-1 text-sm font-semibold text-[#172033] transition-colors hover:text-[#0754C6]"
               >
                 All posts
               </Link>
             </div>
 
             {/* 3-Column Responsive Cards Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-7">
+            <div className="grid grid-cols-1 gap-6 md:grid-cols-3 lg:gap-7">
               {relatedReadingItems.map((article, idx) => (
                 <article
                   key={article.slug || article.id || idx}
-                  className="group bg-white border border-[#E5E7EB] rounded-[4px] overflow-hidden flex flex-col transition-all duration-300 hover:shadow-md hover:border-gray-300"
+                  className="group flex flex-col overflow-hidden rounded-[4px] border border-[#E5E7EB] bg-white transition-all duration-300 hover:border-gray-300 hover:shadow-md"
                 >
                   {/* 16:9 Thumbnail with Category Badge */}
                   <div className="relative aspect-[16/9] w-full overflow-hidden bg-gray-100">
@@ -595,33 +623,35 @@ export default function BlogDetailClient({
                       sizes="(max-width: 768px) 100vw, (max-width: 1200px) 33vw, 380px"
                       className="object-cover transition-transform duration-500 ease-out group-hover:scale-105"
                     />
-                    
+
                     {/* Category Pill Badge */}
-                    <div className="absolute top-3 left-3 z-10">
-                      <span className="inline-block bg-[#001A3D]/75 backdrop-blur-[2px] text-white text-[9.5px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-[2px] border border-white/15 shadow-sm">
+                    <div className="absolute left-3 top-3 z-10">
+                      <span className="inline-block rounded-[2px] border border-white/15 bg-[#001A3D]/75 px-2.5 py-1 text-[9.5px] font-bold uppercase tracking-wider text-white shadow-sm backdrop-blur-[2px]">
                         {article.category || "ARTIFICIAL INTELLIGENCE"}
                       </span>
                     </div>
                   </div>
 
                   {/* Card Content Area */}
-                  <div className="p-5 flex-1 flex flex-col justify-between">
+                  <div className="flex flex-1 flex-col justify-between p-5">
                     <div>
                       {/* Date with Calendar Icon */}
-                      <div className="flex items-center gap-1.5 text-[11.5px] text-[#8A919D] font-medium mb-2.5">
-                        <Calendar className="w-3.5 h-3.5 text-[#8A919D]" />
+                      <div className="mb-2.5 flex items-center gap-1.5 text-[11.5px] font-medium text-[#8A919D]">
+                        <Calendar className="h-3.5 w-3.5 text-[#8A919D]" />
                         <time dateTime={article.date}>{article.date}</time>
                       </div>
 
                       {/* Article Title */}
-                      <h3 className="text-[15.5px] font-bold text-[#172033] leading-[1.35] mb-2.5 group-hover:text-[#0754C6] transition-colors line-clamp-2">
-                        <Link href={article.path || `/resources/blogs/${article.slug || article.id}/`}>
+                      <h3 className="mb-2.5 line-clamp-2 text-[15.5px] font-bold leading-[1.35] text-[#172033] transition-colors group-hover:text-[#0754C6]">
+                        <Link
+                          href={article.path || `/resources/blogs/${article.slug || article.id}/`}
+                        >
                           {renderTitle(article.title)}
                         </Link>
                       </h3>
 
                       {/* Excerpt / Description */}
-                      <p className="text-[12.5px] text-[#5A6270] leading-[1.58] line-clamp-2">
+                      <p className="line-clamp-2 text-[12.5px] leading-[1.58] text-[#5A6270]">
                         {article.excerpt}
                       </p>
                     </div>
@@ -630,7 +660,6 @@ export default function BlogDetailClient({
               ))}
             </div>
           </section>
-
         </div>
       </div>
     </div>
