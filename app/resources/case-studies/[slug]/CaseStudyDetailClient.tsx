@@ -339,13 +339,13 @@ interface ScreenSlide {
 }
 
 function CarouselCard({ slide, onZoom }: { slide: ScreenSlide; onZoom: () => void }) {
-  const deviceString = Array.isArray(slide.device) ? slide.device[0] : (slide.device || "laptop");
+  const deviceString = Array.isArray(slide.device) ? slide.device[0] : slide.device || "laptop";
   const deviceTypeLower = typeof deviceString === "string" ? deviceString.toLowerCase() : "laptop";
 
   return (
     <div className="group/card relative flex h-[540px] flex-col justify-between overflow-hidden rounded-[2rem] border border-white/5 bg-[#090b11] p-8 shadow-2xl transition-all duration-300 hover:shadow-black/40">
       {/* Top text content */}
-      <div className="space-y-3 shrink-0">
+      <div className="shrink-0 space-y-3">
         <span className="inline-block text-[10px] font-bold uppercase tracking-widest text-[#F99D1C]">
           {slide.tag}
         </span>
@@ -358,26 +358,26 @@ function CarouselCard({ slide, onZoom }: { slide: ScreenSlide; onZoom: () => voi
       </div>
 
       {/* Image Centered (No Shapes) */}
-      <div className="flex-1 flex items-center justify-center py-4">
+      <div className="flex flex-1 items-center justify-center py-4">
         <div
-          className={`relative overflow-hidden rounded-xl shadow-2xl group/img shrink-0 bg-[#141824] ${
+          className={`group/img relative shrink-0 overflow-hidden rounded-xl bg-[#141824] shadow-2xl ${
             deviceTypeLower === "mobile"
               ? "aspect-[9/16] w-[140px]"
               : deviceTypeLower === "tablet"
-              ? "aspect-[4/3] w-full max-w-[260px]"
-              : "aspect-[16/10] w-full max-w-[310px]"
+                ? "aspect-[4/3] w-full max-w-[260px]"
+                : "aspect-[16/10] w-full max-w-[310px]"
           }`}
         >
           <img src={slide.image} alt={slide.title} className="h-full w-full object-cover" />
 
           {/* Zoom Hover Overlay */}
-          <div className="absolute inset-0 flex items-center justify-center bg-black/40 opacity-0 group-hover/img:opacity-100 transition-opacity duration-300">
+          <div className="absolute inset-0 flex items-center justify-center bg-black/40 opacity-0 transition-opacity duration-300 group-hover/img:opacity-100">
             <button
               onClick={(e) => {
                 e.stopPropagation();
                 onZoom();
               }}
-              className="flex h-11 w-11 cursor-pointer items-center justify-center rounded-full bg-white text-[#0171c1] shadow-lg scale-90 group-hover/img:scale-100 transition-all duration-300"
+              className="flex h-11 w-11 scale-90 cursor-pointer items-center justify-center rounded-full bg-white text-[#0171c1] shadow-lg transition-all duration-300 group-hover/img:scale-100"
             >
               <Search size={18} className="stroke-[2.5]" />
             </button>
@@ -386,7 +386,7 @@ function CarouselCard({ slide, onZoom }: { slide: ScreenSlide; onZoom: () => voi
       </div>
 
       {/* Bottom Footer Section */}
-      <div className="mt-4 flex items-center justify-between border-t border-white/5 pt-4 shrink-0">
+      <div className="mt-4 flex shrink-0 items-center justify-between border-t border-white/5 pt-4">
         <span className="text-[10px] font-bold uppercase tracking-widest text-gray-500">
           Device: {deviceTypeLower}
         </span>
@@ -519,11 +519,13 @@ export default function CaseStudyDetailClient({ study }: { study: CaseStudy }) {
           const imageUrl = isString ? s : s.image;
           let device = isString ? "laptop" : s.device || "laptop";
           if (device === "desktop") device = "laptop";
-          
+
           return {
             device,
             title: isString ? `Screen ${i + 1}` : s.title || `Screen ${i + 1}`,
-            tag: isString ? (study.client || "Application Screen") : (s.topTitle || study.client || "Application Screen"),
+            tag: isString
+              ? study.client || "Application Screen"
+              : s.topTitle || study.client || "Application Screen",
             desc: isString ? "" : s.desc || "",
             image: imageUrl,
             color: device === "mobile" ? "#0171c1" : device === "tablet" ? "#F99D1C" : "#27c93f",
@@ -1032,11 +1034,11 @@ export default function CaseStudyDetailClient({ study }: { study: CaseStudy }) {
             {activeProcess.map((step, i) => (
               <div
                 key={i}
-                className="relative rounded-2xl border border-gray-100 bg-white p-6 transition-all duration-300 hover:shadow-xl break-words overflow-hidden"
+                className="relative overflow-hidden break-words rounded-2xl border border-gray-100 bg-white p-6 transition-all duration-300 hover:shadow-xl"
               >
                 <div className="mb-6 text-5xl font-bold text-gray-100">{step.number}</div>
-                <h4 className="mb-2 text-lg font-bold text-[#001A3D] break-words">{step.title}</h4>
-                <p className="text-sm leading-relaxed text-gray-500 break-words">{step.desc}</p>
+                <h4 className="mb-2 break-words text-lg font-bold text-[#001A3D]">{step.title}</h4>
+                <p className="break-words text-sm leading-relaxed text-gray-500">{step.desc}</p>
               </div>
             ))}
           </div>
@@ -1124,7 +1126,7 @@ export default function CaseStudyDetailClient({ study }: { study: CaseStudy }) {
             <div className="pointer-events-none absolute bottom-0 left-0 top-0 z-10 w-16 bg-gradient-to-r from-white to-transparent" />
             <div className="pointer-events-none absolute bottom-0 right-0 top-0 z-10 w-16 bg-gradient-to-l from-white to-transparent" />
 
-            <div className="animate-marquee flex items-start gap-5">
+            <div className="flex animate-marquee items-start gap-5">
               {activeTechStack.map((tech, ti) => (
                 <Motion.div
                   key={ti}
@@ -1206,14 +1208,17 @@ export default function CaseStudyDetailClient({ study }: { study: CaseStudy }) {
               className="group inline-flex shrink-0 items-center justify-center gap-3 rounded-[5px] bg-[#001A3D] px-8 py-5 text-center text-[11px] font-bold uppercase tracking-widest text-white shadow-lg transition-all duration-300 hover:bg-[#F99D1C] hover:text-[#001A3D] md:text-xs"
             >
               <span>{study.ctaBtnText || "DISCUSS YOUR PROJECT"}</span>
-              <ArrowRight size={14} className="text-white group-hover:text-[#001A3D] transition-colors duration-300" />
+              <ArrowRight
+                size={14}
+                className="text-white transition-colors duration-300 group-hover:text-[#001A3D]"
+              />
             </Link>
           </div>
         </div>
       </section>
 
       {/* ── 7. CTA SECTION (existing layout kept) ───────────────────────────── */}
-      <section className="bg-white py-[50px] md:py-24">
+      <section className="bg-white pb-[50px] md:pb-24">
         <div className="mx-auto max-w-[1280px] px-6 text-center lg:px-20">
           <Motion.button
             onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}

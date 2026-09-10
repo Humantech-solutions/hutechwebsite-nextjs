@@ -1568,13 +1568,6 @@ const CASE_STUDY_BY_SLUG_QUERY = `
           name
         }
       }
-    }
-  }
-`;
-
-const CASE_STUDY_FAQ_QUERY = `
-  query GetCaseStudyFaq($slug: ID!) {
-    caseStudy(id: $slug, idType: SLUG) {
       caseStudyPostFields {
         client
         impact
@@ -1597,6 +1590,46 @@ const CASE_STUDY_FAQ_QUERY = `
         screensTopTitle
         screensTitle
         screensDesc
+        img1 { node { sourceUrl } }
+        img1Device
+        img1TopTitle
+        img1Title
+        img1Desc
+        img2 { node { sourceUrl } }
+        img2Device
+        img2TopTitle
+        img2Title
+        img2Desc
+        img3 { node { sourceUrl } }
+        img3Device
+        img3TopTitle
+        img3Title
+        img3Desc
+        img4 { node { sourceUrl } }
+        img4Device
+        img4TopTitle
+        img4Title
+        img4Desc
+        img5 { node { sourceUrl } }
+        img5Device
+        img5TopTitle
+        img5Title
+        img5Desc
+        img6 { node { sourceUrl } }
+        img6Device
+        img6TopTitle
+        img6Title
+        img6Desc
+        img7 { node { sourceUrl } }
+        img7Device
+        img7TopTitle
+        img7Title
+        img7Desc
+        img8 { node { sourceUrl } }
+        img8Device
+        img8TopTitle
+        img8Title
+        img8Desc
         challengesTopTitle
         challengesSectionTitle
         challengesDesc
@@ -1668,35 +1701,27 @@ const CASE_STUDY_FAQ_QUERY = `
         challenge8Desc
         challenge8Icon
         solution1Title
-        solution1Icon { node { sourceUrl } }
         solution1Desc
         solution1Icon
         solution2Title
-        solution2Icon { node { sourceUrl } }
         solution2Desc
         solution2Icon
         solution3Title
-        solution3Icon { node { sourceUrl } }
         solution3Desc
         solution3Icon
         solution4Title
-        solution4Icon { node { sourceUrl } }
         solution4Desc
         solution4Icon
         solution5Title
-        solution5Icon { node { sourceUrl } }
         solution5Desc
         solution5Icon
         solution6Title
-        solution6Icon { node { sourceUrl } }
         solution6Desc
         solution6Icon
         solution7Title
-        solution7Icon { node { sourceUrl } }
         solution7Desc
         solution7Icon
         solution8Title
-        solution8Icon { node { sourceUrl } }
         solution8Desc
         solution8Icon
         process1Number
@@ -1735,55 +1760,6 @@ const CASE_STUDY_FAQ_QUERY = `
         ctaDesc
         ctaBtnText
         ctaBtnLink
-      }
-    }
-  }
-`;
-
-const CASE_STUDY_SCREENS_QUERY = `
-  query GetCaseStudyScreens($slug: ID!) {
-    caseStudy(id: $slug, idType: SLUG) {
-      caseStudyPostFields {
-        img1 { node { sourceUrl } }
-        img1Device
-        img1TopTitle
-        img1Title
-        img1Desc
-        img2 { node { sourceUrl } }
-        img2Device
-        img2TopTitle
-        img2Title
-        img2Desc
-        img3 { node { sourceUrl } }
-        img3Device
-        img3TopTitle
-        img3Title
-        img3Desc
-        img4 { node { sourceUrl } }
-        img4Device
-        img4TopTitle
-        img4Title
-        img4Desc
-        img5 { node { sourceUrl } }
-        img5Device
-        img5TopTitle
-        img5Title
-        img5Desc
-        img6 { node { sourceUrl } }
-        img6Device
-        img6TopTitle
-        img6Title
-        img6Desc
-        img7 { node { sourceUrl } }
-        img7Device
-        img7TopTitle
-        img7Title
-        img7Desc
-        img8 { node { sourceUrl } }
-        img8Device
-        img8TopTitle
-        img8Title
-        img8Desc
       }
     }
   }
@@ -1871,7 +1847,7 @@ function transformCaseStudyNode(node: any): CaseStudy {
     if (screenImg) {
       screens.push({
         image: screenImg,
-        device: pf[`img${i}Device`] || "laptop",
+        device: Array.isArray(pf[`img${i}Device`]) ? pf[`img${i}Device`][0] : (pf[`img${i}Device`] || "laptop"),
         topTitle: pf[`img${i}TopTitle`] || "",
         title: pf[`img${i}Title`] || "",
         desc: pf[`img${i}Desc`] || "",
@@ -1979,28 +1955,7 @@ export async function getCaseStudyBySlug(slug: string): Promise<CaseStudy | null
       return null;
     }
 
-    const postNode = raw.data.caseStudy;
-
-    try {
-      const faqRaw = await fetchGraphQL(CASE_STUDY_FAQ_QUERY, { slug });
-      if (!faqRaw?.errors && faqRaw?.data?.caseStudy?.caseStudyPostFields) {
-        postNode.caseStudyPostFields = faqRaw.data.caseStudy.caseStudyPostFields;
-      }
-    } catch (err) {
-      console.warn("[WP] Could not fetch FAQs for case study:", slug);
-    }
-
-    try {
-      const screensRaw = await fetchGraphQL(CASE_STUDY_SCREENS_QUERY, { slug });
-      if (!screensRaw?.errors && screensRaw?.data?.caseStudy?.caseStudyPostFields) {
-        if (!postNode.caseStudyPostFields) postNode.caseStudyPostFields = {};
-        Object.assign(postNode.caseStudyPostFields, screensRaw.data.caseStudy.caseStudyPostFields);
-      }
-    } catch (err) {
-      console.warn("[WP] Could not fetch screens for case study:", slug);
-    }
-
-    return transformCaseStudyNode(postNode);
+    return transformCaseStudyNode(raw.data.caseStudy);
   } catch (err) {
     console.error("[WP] getCaseStudyBySlug() failed:", err);
     return null;
