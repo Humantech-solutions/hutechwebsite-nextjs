@@ -26,6 +26,9 @@ import { Job } from "@/lib/data/careers";
 import { ApplicationModal } from "@/components/ApplicationModal";
 import { renderTitle } from "@/lib/utils";
 
+const cleanBullet = (text: string) =>
+  (text || "").replace(/^[\s●•◦▪*–—\-\u2022\u25CF\u25CB\u25AA\u25AB\u2023\u2043\u00B7]+\s*/, "").trim();
+
 export default function JobDetailsClient({ job, source }: { job: Job; source?: 'recruitpro' | 'wordpress' }) {
   const [isApplicationModalOpen, setIsApplicationModalOpen] = useState(false);
   const [isShareOpen, setIsShareOpen] = useState(false);
@@ -217,7 +220,7 @@ export default function JobDetailsClient({ job, source }: { job: Job; source?: '
                         <div className="shrink-0 mt-1">
                           <CheckCircle2 size={20} className="text-[#F99D1C]" />
                         </div>
-                        <span className="text-gray-500 font-medium leading-relaxed">{item}</span>
+                        <span className="text-gray-500 font-medium leading-relaxed">{cleanBullet(item)}</span>
                       </li>
                     ))}
                   </ul>
@@ -235,7 +238,7 @@ export default function JobDetailsClient({ job, source }: { job: Job; source?: '
                         <div className="shrink-0 mt-1">
                           <CheckCircle2 size={20} className="text-[#F99D1C]" />
                         </div>
-                        <span className="text-gray-500 font-medium leading-relaxed">{req}</span>
+                        <span className="text-gray-500 font-medium leading-relaxed">{cleanBullet(req)}</span>
                       </li>
                     ))}
                   </ul>
@@ -253,7 +256,7 @@ export default function JobDetailsClient({ job, source }: { job: Job; source?: '
                         <div className="shrink-0 mt-1">
                           <Zap size={20} className="text-[#F99D1C]" />
                         </div>
-                        <span className="text-gray-500 font-medium leading-relaxed">{power}</span>
+                        <span className="text-gray-500 font-medium leading-relaxed">{cleanBullet(power)}</span>
                       </li>
                     ))}
                   </ul>
@@ -271,7 +274,7 @@ export default function JobDetailsClient({ job, source }: { job: Job; source?: '
                         <div className="p-2 bg-white rounded-lg shadow-sm">
                           <ShieldCheck size={18} className="text-[#F99D1C]" />
                         </div>
-                        <p className="text-sm text-gray-600 font-semibold leading-relaxed">{benefit}</p>
+                        <p className="text-sm text-gray-600 font-semibold leading-relaxed">{cleanBullet(benefit)}</p>
                       </div>
                     ))}
                   </div>

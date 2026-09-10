@@ -370,7 +370,7 @@ export default function Footer({ data }: { data?: FooterChromeData }) {
                 className={index === 0 ? "space-y-4" : "space-y-4 pt-2"}
               >
                 {office.title && (
-                  <h5 className="text-sm font-bold text-[#0171c1] tracking-wide uppercase">
+                  <h5 className="text-sm font-bold text-[#38bdf8] tracking-wide uppercase">
                     {office.title}
                   </h5>
                 )}
@@ -412,7 +412,7 @@ export default function Footer({ data }: { data?: FooterChromeData }) {
                       {office.email && (
                         <a
                           href={`mailto:${office.email}`}
-                          className="text-[#0171c1] font-semibold hover:text-[#F99D1C] transition-colors"
+                          className="text-[#38bdf8] font-semibold hover:text-[#F99D1C] transition-colors"
                         >
                           {office.email}
                         </a>
@@ -444,6 +444,7 @@ export default function Footer({ data }: { data?: FooterChromeData }) {
                   href={badge.href}
                   target="_blank"
                   rel="noreferrer"
+                  aria-label={badge.alt || "Certification badge"}
                 >
                   {image}
                 </a>
@@ -481,7 +482,7 @@ export default function Footer({ data }: { data?: FooterChromeData }) {
                 className={index === 0 ? "space-y-4" : "space-y-4 pt-2"}
               >
                 {office.title && (
-                  <h5 className="text-sm font-bold text-[#0171c1] tracking-wide uppercase">
+                  <h5 className="text-sm font-bold text-[#38bdf8] tracking-wide uppercase">
                     {office.title}
                   </h5>
                 )}
@@ -523,7 +524,7 @@ export default function Footer({ data }: { data?: FooterChromeData }) {
                       {office.email && (
                         <a
                           href={`mailto:${office.email}`}
-                          className="text-[#0171c1] font-semibold hover:text-[#F99D1C] transition-colors"
+                          className="text-[#38bdf8] font-semibold hover:text-[#F99D1C] transition-colors"
                         >
                           {office.email}
                         </a>
@@ -574,6 +575,7 @@ export default function Footer({ data }: { data?: FooterChromeData }) {
                       href={badge.href}
                       target="_blank"
                       rel="noreferrer"
+                      aria-label={badge.alt || "Certification badge"}
                     >
                       {image}
                     </a>

@@ -12,6 +12,7 @@ import {
   getHomePage,
   getContactPageData,
   getCareerPageData,
+  getCareers,
   getServicePageData,
   getServiceCategoriesWithServices,
   getIndustryPageData,
@@ -53,6 +54,9 @@ import HutechDocumentsClient from "@/app/resources/hutech-documents/HutechDocume
 import ProductsClient from "@/app/products/PageClient";
 import InsightsClient from "@/app/resources/insights/PageClient";
 import { constructMetadata } from "@/lib/seo";
+import { getRecruitProJobs } from "@/lib/api";
+import { JOBS } from "@/lib/data/careers";
+import { fallbackCareerPageData } from "@/app/careers/page";
 
 interface PageProps {
   params: Promise<{ slug: string[] }>;
@@ -72,10 +76,36 @@ const DEDICATED_COMPANY_SLUGS = new Set([
   "hutech-documents",
 ]);
 
+const TOP_LEVEL_DEDICATED_SLUGS = new Set([
+  "home",
+  "about",
+  "careers",
+  "contact",
+  "services",
+  "industries",
+  "products",
+  "blogs",
+  "events",
+  "resources",
+  "company",
+  "legal",
+]);
+
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { slug } = await params;
   if (slug.length === 1 && (DEDICATED_COMPANY_SLUGS.has(slug[0]) || slug[0] === "home")) {
     return constructMetadata({ title: "Page Not Found | Hutech Solutions" });
+  }
+
+  if (slug.length === 1 && slug[0] === "careers") {
+    const pageData = await getCareerPageData();
+    return constructMetadata({
+      title: "Careers | Hutech Solutions",
+      description:
+        pageData?.heroDesc ||
+        "Join our talent ecosystem. We're recruiting pioneers to solve complex engineering puzzles and architect the future of digital solutions.",
+      path: "/careers/",
+    });
   }
 
   const uri = "/" + slug.join("/") + "/";
@@ -104,7 +134,13 @@ export async function generateStaticParams() {
       return { slug: slugArray };
     })
     .filter((p) => p.slug.length > 0)
-    .filter((p) => !(p.slug.length === 1 && (DEDICATED_COMPANY_SLUGS.has(p.slug[0]) || p.slug[0] === "home")));
+    .filter(
+      (p) =>
+        !(
+          p.slug.length === 1 &&
+          (DEDICATED_COMPANY_SLUGS.has(p.slug[0]) || TOP_LEVEL_DEDICATED_SLUGS.has(p.slug[0]))
+        )
+    );
 
   if (params.length === 0) {
     return [
@@ -224,10 +260,20 @@ export default async function DynamicPage({ params }: PageProps) {
   }
 
   // ── Careers ───────────────────────────────────────────────────────────────────
-  if (activeTemplate === "careers" || activeTemplate === "career") {
-    const pageData = await getCareerPageData();
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    return <CareersClient pageData={pageData as any} jobs={[]} />;
+  if (
+    activeTemplate === "careers" ||
+    activeTemplate === "career" ||
+    page.slug === "careers" ||
+    (slug.length === 1 && slug[0] === "careers")
+  ) {
+    const [recruitProJobs, wpJobs, pageData] = await Promise.all([
+      getRecruitProJobs(),
+      getCareers(),
+      getCareerPageData(),
+    ]);
+    const mergedJobs = [...recruitProJobs, ...wpJobs];
+    const jobs = mergedJobs.length > 0 ? mergedJobs : JOBS;
+    return <CareersClient pageData={pageData || fallbackCareerPageData} jobs={jobs} />;
   }
 
   // ── Services ──────────────────────────────────────────────────────────────────
