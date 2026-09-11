@@ -3,7 +3,7 @@
 import { useMemo, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { IPublishPageData, getIPublishImageUrl } from "@/lib/ipublish";
+import { IPublishPageData, getIPublishImageUrl, normalizeIPublishHtml } from "@/lib/ipublish";
 import { getIPublishPatternStyle, extractPatternFromBody } from "@/lib/ipublish-pattern";
 import { Linkedin, Twitter, Facebook, Share2, Calendar, Check } from "lucide-react";
 
@@ -280,7 +280,10 @@ export function IPublishDetailClient({
   }, [content.word_count]);
 
   const bodyFont = (content.body_font || "").toLowerCase().replace(/\s+/g, "-");
-  const contentBodyHtml = content.body || content.current_body || "";
+  const rawBodyHtml = content.body || content.current_body || "";
+  const contentBodyHtml = useMemo(() => {
+    return normalizeIPublishHtml(rawBodyHtml);
+  }, [rawBodyHtml]);
   const [contentPart1, contentPart2] = useMemo(() => {
     return splitHtmlContent(contentBodyHtml);
   }, [contentBodyHtml]);

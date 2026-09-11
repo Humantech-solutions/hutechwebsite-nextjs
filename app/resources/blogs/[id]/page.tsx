@@ -8,6 +8,7 @@ import {
   getIPublishPages,
   getIPublishImageUrl,
   getIPublishContentById,
+  normalizeIPublishHtml,
 } from "@/lib/ipublish";
 import { IPublishDetailClient } from "@/components/ipublish/IPublishDetailClient";
 
@@ -181,6 +182,13 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
           .join(", "),
       };
 
+    const normalizedContent = {
+      ...ipublishContent,
+      featured_image_url: imageUrl || null,
+      body: normalizeIPublishHtml(ipublishContent.body),
+      current_body: normalizeIPublishHtml(ipublishContent.current_body),
+    };
+
     return (
       <>
         <script
@@ -189,7 +197,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
             __html: JSON.stringify(schemaJsonData),
           }}
         />
-        <IPublishDetailClient content={ipublishContent} slug={id} latestBlogs={latestBlogs} />
+        <IPublishDetailClient content={normalizedContent} slug={id} latestBlogs={latestBlogs} />
       </>
     );
   }
