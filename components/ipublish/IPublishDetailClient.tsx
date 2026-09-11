@@ -3,7 +3,7 @@
 import { useMemo, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { IPublishPageData, getIPublishImageUrl } from "@/lib/ipublish";
+import { IPublishPageData, getIPublishImageUrl, normalizeIPublishHtml } from "@/lib/ipublish";
 import { getIPublishPatternStyle, extractPatternFromBody } from "@/lib/ipublish-pattern";
 import { Linkedin, Twitter, Facebook, Share2, Calendar, Check } from "lucide-react";
 
@@ -280,7 +280,10 @@ export function IPublishDetailClient({
   }, [content.word_count]);
 
   const bodyFont = (content.body_font || "").toLowerCase().replace(/\s+/g, "-");
-  const contentBodyHtml = content.body || content.current_body || "";
+  const rawBodyHtml = content.body || content.current_body || "";
+  const contentBodyHtml = useMemo(() => {
+    return normalizeIPublishHtml(rawBodyHtml);
+  }, [rawBodyHtml]);
   const [contentPart1, contentPart2] = useMemo(() => {
     return splitHtmlContent(contentBodyHtml);
   }, [contentBodyHtml]);
@@ -469,18 +472,19 @@ export function IPublishDetailClient({
                     Blog
                   </Link>
                 </li>
-                {content.content_type &&
-                  content.content_type.trim().toLowerCase() !== "blog" &&
-                  content.content_type.trim().toLowerCase() !== "blogs" && (
-                    <>
-                      <li className="select-none text-gray-400">/</li>
-                      <li>
-                        <span className="font-medium capitalize text-[#5A6270]">
-                          {content.content_type}
-                        </span>
-                      </li>
-                    </>
-                  )}
+                {(content.subcategory?.trim() ||
+                  (content.content_type &&
+                    content.content_type.trim().toLowerCase() !== "blog" &&
+                    content.content_type.trim().toLowerCase() !== "blogs")) && (
+                  <>
+                    <li className="select-none text-gray-400">/</li>
+                    <li>
+                      <span className="font-medium text-[#5A6270]">
+                        {content.subcategory?.trim() || content.content_type}
+                      </span>
+                    </li>
+                  </>
+                )}
                 <li className="select-none text-gray-400">/</li>
                 <li
                   className="max-w-[240px] truncate font-semibold text-[#172033] sm:max-w-[400px] md:max-w-[500px]"

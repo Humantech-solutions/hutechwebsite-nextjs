@@ -4623,11 +4623,11 @@ export async function getSitemapData(pageUri: string = "/legal/sitemap/"): Promi
       { title: "Company", links: companyPages },
       { title: "Services", links: liveServices },
       { title: "Industries", links: liveIndustries },
+      { title: "Documents", links: liveDocs },
+      { title: "Legal & Policies", links: legalPages },
       { title: "Blogs", links: liveBlogs },
       { title: "Case Studies", links: liveCaseStudies },
       { title: "Events", links: liveEvents },
-      { title: "Documents", links: liveDocs },
-      { title: "Legal & Policies", links: legalPages },
     ].filter((s) => s.links && s.links.length > 0);
 
     return sections;

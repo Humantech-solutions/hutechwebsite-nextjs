@@ -39,6 +39,7 @@ export interface IPublishPageData {
   contact_email?: string | null;
   contact_phone?: string | null;
   seo_title?: string;
+  subcategory?: string;
   focus_keyword?: string;
   secondary_keywords?: string[];
   og_title?: string;
@@ -63,15 +64,38 @@ const DEFAULT_ORG_SLUG = process.env.NEXT_PUBLIC_IPUBLISH_ORG_SLUG || "hutech-so
 
 /**
  * Normalize image URL from iPublish API to absolute URL.
+ * Automatically rewrites localhost/127.0.0.1 development server URLs from iPublish CMS exports
+ * to the production iPublish API endpoint.
  */
 export function getIPublishImageUrl(path?: string | null): string | undefined {
-  if (!path) return undefined;
-  if (path.startsWith("http://") || path.startsWith("https://")) {
-    return path;
-  }
+  if (!path || typeof path !== "string" || path.trim() === "") return undefined;
   const cleanBase = IPUBLISH_BASE_URL.replace(/\/$/, "");
-  const cleanPath = path.startsWith("/") ? path : `/${path}`;
+  const trimmed = path.trim();
+
+  // Rewrite localhost / 127.0.0.1 URLs (e.g., http://localhost:8004/media/...) to IPUBLISH_BASE_URL
+  if (/^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?(\/.*)?$/i.test(trimmed)) {
+    const relativePath = trimmed.replace(/^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?/i, "");
+    return `${cleanBase}${relativePath.startsWith("/") ? relativePath : `/${relativePath}`}`;
+  }
+
+  if (trimmed.startsWith("http://") || trimmed.startsWith("https://")) {
+    return trimmed;
+  }
+
+  const cleanPath = trimmed.startsWith("/") ? trimmed : `/${trimmed}`;
   return `${cleanBase}${cleanPath}`;
+}
+
+/**
+ * Rewrites any localhost / 127.0.0.1 media URLs within HTML strings to the production iPublish API.
+ */
+export function normalizeIPublishHtml(html?: string | null): string {
+  if (!html) return "";
+  const cleanBase = IPUBLISH_BASE_URL.replace(/\/$/, "");
+  return html.replace(
+    /https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?(\/media\/[^\s"'>]+)/gi,
+    `${cleanBase}$3`
+  );
 }
 
 /**
@@ -81,7 +105,7 @@ export function getIPublishImageUrl(path?: string | null): string | undefined {
 export async function getIPublishPages(): Promise<IPublishPageListItem[]> {
   try {
     const res = await fetch(`${IPUBLISH_BASE_URL}/api/v1/public/v1/pages`, {
-      next: { revalidate: 0 },
+      cache: "no-store",
     });
 
     if (!res.ok) {
@@ -109,7 +133,7 @@ export async function getIPublishPageBySlug(
     const res = await fetch(
       `${IPUBLISH_BASE_URL}/api/v1/public/v1/page/${encodeURIComponent(orgSlug)}/${encodeURIComponent(slug)}`,
       {
-        next: { revalidate: 0 },
+        cache: "no-store",
       }
     );
 
@@ -129,6 +153,9 @@ export async function getIPublishPageBySlug(
     const data: IPublishPageData = await res.json();
     return {
       ...data,
+      featured_image_url: getIPublishImageUrl(data.featured_image_url) || null,
+      body: normalizeIPublishHtml(data.body),
+      current_body: normalizeIPublishHtml(data.current_body),
       slug,
       org: orgSlug,
     };
