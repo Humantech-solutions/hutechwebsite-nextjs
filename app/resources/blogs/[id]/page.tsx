@@ -117,6 +117,8 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
     title: b.title,
     category: b.category,
     date: b.date,
+    image: b.imageUrl,
+    excerpt: b.excerpt,
     path: `/resources/blogs/${b.slug}/`,
   }));
 
@@ -187,7 +189,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
             __html: JSON.stringify(schemaJsonData),
           }}
         />
-        <IPublishDetailClient content={ipublishContent} slug={id} />
+        <IPublishDetailClient content={ipublishContent} slug={id} latestBlogs={latestBlogs} />
       </>
     );
   }
