@@ -16,6 +16,17 @@ export default function GenericLegalPageClient({ page, sitemapSections }: Props)
   const isSitemap = page.slug === "sitemap";
   const sectionsToRender = sitemapSections && sitemapSections.length > 0 ? sitemapSections : [];
 
+  // Order sections: core site sections first, dynamic content sections (Blogs, Case Studies, Events) at the end
+  const END_SECTION_TITLES = ["Blogs", "Case Studies", "Events"];
+  const mainSections = sectionsToRender.filter(
+    (s) => !END_SECTION_TITLES.some((t) => t.toLowerCase() === s.title.toLowerCase())
+  );
+  const endSections = END_SECTION_TITLES.map((title) =>
+    sectionsToRender.find((s) => s.title.toLowerCase() === title.toLowerCase())
+  ).filter((s): s is SitemapSection => Boolean(s && s.links && s.links.length > 0));
+
+  const allOrderedSections = [...mainSections, ...endSections];
+
   return (
     <div className="flex flex-col bg-white">
       <Meta
@@ -55,22 +66,32 @@ export default function GenericLegalPageClient({ page, sitemapSections }: Props)
             />
           )}
 
-          {isSitemap && sectionsToRender.length > 0 && (
-            <div className="grid grid-cols-1 gap-12 sm:grid-cols-2 lg:grid-cols-3">
-              {sectionsToRender.map((section) => (
-                <div key={section.title} className="space-y-6">
-                  <h2 className="border-b border-gray-100 pb-4 text-xl font-bold text-[#001A3D]">
-                    {section.title}
-                  </h2>
-                  <ul className="space-y-3">
+          {isSitemap && allOrderedSections.length > 0 && (
+            <div className="space-y-12 sm:space-y-14">
+              {allOrderedSections.map((section, idx) => (
+                <div
+                  key={section.title}
+                  className={`space-y-6 ${idx !== 0 ? "border-t border-gray-200/80 pt-12 sm:pt-14" : ""}`}
+                >
+                  <div className="flex items-center justify-between border-b border-gray-200 pb-4">
+                    <h2 className="text-xl font-bold text-[#001A3D]">
+                      {section.title}
+                    </h2>
+                    <span className="rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-500">
+                      {section.links.length} {section.links.length === 1 ? "page" : "pages"}
+                    </span>
+                  </div>
+                  <ul className="grid grid-cols-1 gap-x-8 gap-y-3.5 sm:grid-cols-2 lg:grid-cols-3">
                     {section.links.map((link) => (
                       <li key={`${section.title}-${link.name}-${link.path}`}>
                         <Link
                           href={link.path}
-                          className="group flex items-center text-sm font-medium text-gray-500 transition-colors hover:text-[#0171c1]"
+                          className="group flex items-start text-sm font-medium text-gray-500 transition-colors hover:text-[#0171c1]"
                         >
-                          <span className="mr-0 h-[1px] w-0 bg-[#0171c1] transition-all group-hover:mr-2 group-hover:w-3"></span>
-                          {link.name}
+                          <span className="mr-2 mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-slate-300 transition-colors group-hover:bg-[#0171c1]"></span>
+                          <span className="line-clamp-2 leading-relaxed">
+                            {link.name}
+                          </span>
                         </Link>
                       </li>
                     ))}

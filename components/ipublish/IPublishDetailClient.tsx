@@ -472,18 +472,19 @@ export function IPublishDetailClient({
                     Blog
                   </Link>
                 </li>
-                {content.content_type &&
-                  content.content_type.trim().toLowerCase() !== "blog" &&
-                  content.content_type.trim().toLowerCase() !== "blogs" && (
-                    <>
-                      <li className="select-none text-gray-400">/</li>
-                      <li>
-                        <span className="font-medium capitalize text-[#5A6270]">
-                          {content.content_type}
-                        </span>
-                      </li>
-                    </>
-                  )}
+                {(content.subcategory?.trim() ||
+                  (content.content_type &&
+                    content.content_type.trim().toLowerCase() !== "blog" &&
+                    content.content_type.trim().toLowerCase() !== "blogs")) && (
+                  <>
+                    <li className="select-none text-gray-400">/</li>
+                    <li>
+                      <span className="font-medium text-[#5A6270]">
+                        {content.subcategory?.trim() || content.content_type}
+                      </span>
+                    </li>
+                  </>
+                )}
                 <li className="select-none text-gray-400">/</li>
                 <li
                   className="max-w-[240px] truncate font-semibold text-[#172033] sm:max-w-[400px] md:max-w-[500px]"

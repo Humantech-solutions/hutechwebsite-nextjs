@@ -39,6 +39,7 @@ export interface IPublishPageData {
   contact_email?: string | null;
   contact_phone?: string | null;
   seo_title?: string;
+  subcategory?: string;
   focus_keyword?: string;
   secondary_keywords?: string[];
   og_title?: string;
