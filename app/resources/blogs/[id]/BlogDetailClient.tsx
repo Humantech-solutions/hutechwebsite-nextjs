@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useMemo, Fragment } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { motion as Motion } from "framer-motion";
@@ -38,42 +38,99 @@ export type LatestThinkingBlog = {
 const DEFAULT_RELATED: LatestThinkingBlog[] = [
   {
     id: "small-models-big-impact",
-    slug: "small-models-big-impact",
-    title: "Small Models, Big Impact: Why Domain-Specific AI Is...",
+    slug: "small-models-big-impact-why-domain-specific-ai-is-outperforming-giant-llms",
+    title: "Small Models, Big Impact: Why Domain-Specific AI Is the Future of Healthcare & Life Sciences",
     category: "ARTIFICIAL INTELLIGENCE",
     date: "July 28, 2026",
     excerpt:
-      "Introduction For years, the AI conversation was dominated by scale. Bigger models, more...",
+      "Introduction For years, the AI conversation was dominated by scale. Bigger models, more parameters, broader general-purpose capabilities...",
     image:
-      "https://images.unsplash.com/photo-1677442136019-21780ecad995?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=800",
+      "https://cms.hutechsolutions.ai/wp-content/uploads/2026/08/LLM.webp",
   },
   {
     id: "agentic-ai-autonomous-operators",
-    slug: "agentic-ai-autonomous-operators",
+    slug: "agentic-ai-from-chatbots-to-autonomous-business-operators",
     title: "Agentic AI: From Chatbots to Autonomous Business Operators",
     category: "ARTIFICIAL INTELLIGENCE",
     date: "July 28, 2026",
     excerpt:
-      "Introduction For years, AI in the enterprise meant chatbots — tools that answered questions,...",
+      "Introduction For years, AI in the enterprise meant chatbots — tools that answered questions, generated drafts, or routed customer tickets...",
     image:
-      "https://images.unsplash.com/photo-1485827404703-89b55fcc595e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=800",
+      "https://cms.hutechsolutions.ai/wp-content/uploads/2026/08/agentic-ai.webp",
   },
   {
     id: "blockchain-supply-chain-revolution",
-    slug: "blockchain-supply-chain-revolution",
+    slug: "blockchain-the-supply-chain-revolution",
     title: "Blockchain: The Supply Chain Revolution",
     category: "BLOCKCHAIN",
     date: "June 26, 2026",
     excerpt:
-      "Supply chains are among the most complex systems in modern commerce, involving countless...",
+      "Supply chains are among the most complex systems in modern commerce, involving countless participants, transactions, and handoffs across global networks...",
     image:
-      "https://images.unsplash.com/photo-1639762681485-074b7f938ba0?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=800",
+      "https://cms.hutechsolutions.ai/wp-content/uploads/2026/08/blockchain.webp",
   },
 ];
 
+const FALLBACK_THUMBNAILS = [
+  "https://cms.hutechsolutions.ai/wp-content/uploads/2026/08/LLM.webp",
+  "https://cms.hutechsolutions.ai/wp-content/uploads/2026/08/agentic-ai.webp",
+  "https://cms.hutechsolutions.ai/wp-content/uploads/2026/08/blockchain.webp",
+  "https://cms.hutechsolutions.ai/wp-content/uploads/2026/08/future-ai.webp",
+  "https://cms.hutechsolutions.ai/wp-content/uploads/2026/08/healthcare.webp",
+  "https://cms.hutechsolutions.ai/wp-content/uploads/2026/08/fintech.webp",
+  "https://cms.hutechsolutions.ai/wp-content/uploads/2026/08/IoT-future.webp",
+  "https://cms.hutechsolutions.ai/wp-content/uploads/2026/08/ai-shopping.webp",
+  "https://cms.hutechsolutions.ai/wp-content/uploads/2026/06/devops.jpg",
+];
+
+function isBalanced(html: string) {
+  const tags = ["div", "blockquote", "table", "ul", "ol"];
+  for (const tag of tags) {
+    const openMatches = html.match(new RegExp("<" + tag + "(\\s|>|$)", "gi")) || [];
+    const closeMatches = html.match(new RegExp("</" + tag + ">", "gi")) || [];
+    if (openMatches.length !== closeMatches.length) return false;
+  }
+  return true;
+}
+
+function splitHtmlContent(html: string): [string, string] {
+  if (!html) return ["", ""];
+  const pRegex = /<\/p>/gi;
+  const matches: number[] = [];
+  let match: RegExpExecArray | null;
+  while ((match = pRegex.exec(html)) !== null) {
+    matches.push(match.index + match[0].length);
+  }
+  if (matches.length <= 1) {
+    return [html, ""];
+  }
+  const idealIndex =
+    matches.length >= 6
+      ? Math.min(4, Math.round(matches.length * 0.35))
+      : matches.length >= 4
+        ? 2
+        : 1;
+
+  for (let offset = 0; offset < matches.length; offset++) {
+    for (const sign of [0, 1, -1]) {
+      const idx = idealIndex + offset * sign;
+      if (idx >= 1 && idx < matches.length) {
+        const splitPos = matches[idx - 1];
+        const part1 = html.slice(0, splitPos);
+        if (isBalanced(part1)) {
+          return [part1, html.slice(splitPos)];
+        }
+      }
+    }
+  }
+
+  const splitPos = matches[idealIndex - 1];
+  return [html.slice(0, splitPos), html.slice(splitPos)];
+}
+
 export default function BlogDetailClient({
   blog,
-  latestBlogs,
+  latestBlogs = [],
 }: {
   blog: Blog;
   latestBlogs?: LatestThinkingBlog[];
@@ -165,6 +222,20 @@ export default function BlogDetailClient({
   );
 
   const relatedReadingItems = combinedRelated.slice(0, 3);
+
+  const contentHtml = (blog as any).contentHtml as string | undefined;
+
+  const [contentPart1, contentPart2] = useMemo(() => {
+    if (!contentHtml) return ["", ""];
+    return splitHtmlContent(contentHtml);
+  }, [contentHtml]);
+
+  const mobileCtaIndex = useMemo(() => {
+    if (contentHtml || !blog.content || blog.content.length <= 1) return -1;
+    return blog.content.length >= 5
+      ? Math.min(3, Math.floor(blog.content.length / 3))
+      : 0;
+  }, [contentHtml, blog.content]);
 
   return (
     <div className="flex min-h-screen flex-col bg-white font-sans text-[#172033] antialiased selection:bg-[#0754C6]/20 selection:text-[#0754C6]">
@@ -432,15 +503,46 @@ export default function BlogDetailClient({
 
                   {/* Main Article Body Text & Headings */}
                   <div className="prose prose-slate max-w-none">
-                    {(blog as any).contentHtml ? (
-                      <div
-                        className="wp-content text-[15.5px] font-normal leading-[1.78] text-[#4E5665] [&_a]:text-[#0754C6] [&_a]:underline [&_h2]:mb-4 [&_h2]:mt-10 [&_h2]:text-2xl [&_h2]:font-bold [&_h2]:text-[#172033] [&_h2]:md:text-3xl [&_h3]:mb-3 [&_h3]:mt-8 [&_h3]:text-xl [&_h3]:font-bold [&_h3]:text-[#172033] [&_li]:mb-2 [&_ol]:mb-6 [&_ol]:list-decimal [&_ol]:pl-6 [&_p]:mb-6 [&_ul]:mb-6 [&_ul]:list-disc [&_ul]:pl-6"
-                        dangerouslySetInnerHTML={{ __html: (blog as any).contentHtml }}
-                      />
+                    {contentHtml ? (
+                      <>
+                        <div
+                          className="wp-content text-[15.5px] font-normal leading-[1.78] text-[#4E5665] [&_a]:text-[#0754C6] [&_a]:underline [&_h2]:mb-4 [&_h2]:mt-10 [&_h2]:text-2xl [&_h2]:font-bold [&_h2]:text-[#172033] [&_h2]:md:text-3xl [&_h3]:mb-3 [&_h3]:mt-8 [&_h3]:text-xl [&_h3]:font-bold [&_h3]:text-[#172033] [&_li]:mb-2 [&_ol]:mb-6 [&_ol]:list-decimal [&_ol]:pl-6 [&_p]:mb-6 [&_ul]:mb-6 [&_ul]:list-disc [&_ul]:pl-6"
+                          dangerouslySetInnerHTML={{ __html: contentPart1 }}
+                        />
+
+                        {contentPart2 ? (
+                          <div className="not-prose my-8 rounded-[4px] bg-[#0754C6] p-6 text-white shadow-md sm:p-7 lg:hidden">
+                            <div className="mb-2 text-xs font-semibold uppercase tracking-wider text-blue-100/90">
+                              Hutech Solutions
+                            </div>
+                            <h3 className="mb-2.5 font-serif text-[22px] font-normal leading-[1.25] text-white sm:text-[26px]">
+                              From Idea to Impact
+                            </h3>
+                            <p className="mb-5 text-[14px] font-normal leading-[1.6] text-blue-100/90">
+                              Tell us what you want to build. We’ll bring the right strategy, team,
+                              and technology.
+                            </p>
+                            <Link
+                              href="/contact"
+                              className="inline-flex w-full items-center justify-center rounded-[3px] bg-white py-3.5 text-center text-sm font-bold text-[#172033] shadow-sm transition-all hover:bg-blue-50 hover:shadow active:scale-[0.99] sm:w-auto sm:px-6"
+                            >
+                              Book Meeting
+                            </Link>
+                          </div>
+                        ) : null}
+
+                        {contentPart2 ? (
+                          <div
+                            className="wp-content text-[15.5px] font-normal leading-[1.78] text-[#4E5665] [&_a]:text-[#0754C6] [&_a]:underline [&_h2]:mb-4 [&_h2]:mt-10 [&_h2]:text-2xl [&_h2]:font-bold [&_h2]:text-[#172033] [&_h2]:md:text-3xl [&_h3]:mb-3 [&_h3]:mt-8 [&_h3]:text-xl [&_h3]:font-bold [&_h3]:text-[#172033] [&_li]:mb-2 [&_ol]:mb-6 [&_ol]:list-decimal [&_ol]:pl-6 [&_p]:mb-6 [&_ul]:mb-6 [&_ul]:list-disc [&_ul]:pl-6"
+                            dangerouslySetInnerHTML={{ __html: contentPart2 }}
+                          />
+                        ) : null}
+                      </>
                     ) : (
                       blog.content.map((block, idx) => {
+                        let blockElement = null;
                         if (block.type === "paragraph") {
-                          return (
+                          blockElement = (
                             <p
                               key={idx}
                               className="mb-6 text-[15px] font-normal leading-[1.75] text-[#4E5665] sm:text-[15.5px]"
@@ -448,9 +550,8 @@ export default function BlogDetailClient({
                               {block.text}
                             </p>
                           );
-                        }
-                        if (block.type === "heading") {
-                          return (
+                        } else if (block.type === "heading") {
+                          blockElement = (
                             <h2
                               key={idx}
                               className="mb-4 mt-10 text-[19px] font-bold leading-snug text-[#172033] sm:text-[22px]"
@@ -458,9 +559,8 @@ export default function BlogDetailClient({
                               {block.text}
                             </h2>
                           );
-                        }
-                        if (block.type === "quote") {
-                          return (
+                        } else if (block.type === "quote") {
+                          blockElement = (
                             <div
                               key={idx}
                               className="relative my-10 rounded-[4px] border-l-4 border-[#0754C6] bg-white p-8 shadow-sm sm:p-10"
@@ -482,7 +582,32 @@ export default function BlogDetailClient({
                             </div>
                           );
                         }
-                        return null;
+
+                        return (
+                          <Fragment key={idx}>
+                            {blockElement}
+                            {idx === mobileCtaIndex && (
+                              <div className="not-prose my-8 rounded-[4px] bg-[#0754C6] p-6 text-white shadow-md sm:p-7 lg:hidden">
+                                <div className="mb-2 text-xs font-semibold uppercase tracking-wider text-blue-100/90">
+                                  Hutech Solutions
+                                </div>
+                                <h3 className="mb-2.5 font-serif text-[22px] font-normal leading-[1.25] text-white sm:text-[26px]">
+                                  From Idea to Impact
+                                </h3>
+                                <p className="mb-5 text-[14px] font-normal leading-[1.6] text-blue-100/90">
+                                  Tell us what you want to build. We’ll bring the right strategy, team,
+                                  and technology.
+                                </p>
+                                <Link
+                                  href="/contact"
+                                  className="inline-flex w-full items-center justify-center rounded-[3px] bg-white py-3.5 text-center text-sm font-bold text-[#172033] shadow-sm transition-all hover:bg-blue-50 hover:shadow active:scale-[0.99] sm:w-auto sm:px-6"
+                                >
+                                  Book Meeting
+                                </Link>
+                              </div>
+                            )}
+                          </Fragment>
+                        );
                       })
                     )}
                   </div>
@@ -530,11 +655,12 @@ export default function BlogDetailClient({
                     <div className="flex flex-col items-start justify-between gap-6 sm:flex-row sm:items-center">
                       <div className="max-w-[480px] space-y-2.5">
                         <div className="text-[11px] font-bold uppercase tracking-[0.14em] text-blue-100/90">
-                          NEW HIRES BURIED ON DAY TWO?
+                          Turn Your Ideas into Real Impact
                         </div>
                         <p className="font-serif text-[18px] font-normal leading-[1.35] text-white sm:text-[20px]">
-                          See how realfast does it — every tool your team runs on, pulled into one
-                          connected page the moment a new hire needs it.
+                          Partner with Hutech Solutions for Cloud, Data & AI-driven transformation.
+                          From strategy to execution, we help you build smarter, faster and for a
+                          better tomorrow.
                         </p>
                       </div>
 
@@ -542,7 +668,7 @@ export default function BlogDetailClient({
                         href="/contact"
                         className="inline-flex items-center justify-center self-start whitespace-nowrap rounded-[3px] bg-white px-6 py-3 text-sm font-bold text-[#172033] shadow-sm transition-all hover:bg-blue-50 hover:shadow active:scale-[0.98] sm:self-center"
                       >
-                        Book a Demo
+                        Engage Hutech Solutions
                       </Link>
                     </div>
                   </div>
@@ -553,7 +679,7 @@ export default function BlogDetailClient({
             {/* --------------------------------------------------------------------- */}
             {/* RIGHT COLUMN: STICKY SIDEBAR (MATCHING right-side(1).png) */}
             {/* --------------------------------------------------------------------- */}
-            <aside className="w-full lg:sticky lg:top-[100px] lg:self-start">
+            <aside className="hidden w-full lg:sticky lg:top-[100px] lg:block lg:self-start">
               <div className="rounded-[4px] bg-[#0754C6] p-7 text-white shadow-md">
                 {/* Small Top Label */}
                 <div className="mb-3 text-sm font-medium tracking-wide text-blue-100/95">
@@ -562,12 +688,13 @@ export default function BlogDetailClient({
 
                 {/* Large Serif Headline */}
                 <h3 className="mb-3.5 font-serif text-[28px] font-normal leading-[1.18] text-white sm:text-[30px]">
-                  From strategy to shipped
+                  From Idea to Impact
                 </h3>
 
                 {/* Supporting Copy */}
                 <p className="mb-7 text-[13.5px] font-normal leading-[1.55] text-blue-100/90">
-                  Tell us what you want built. We come back with a plan and a timeline.
+                  Tell us what you want to build. We’ll bring the right strategy, team, and
+                  technology.
                 </p>
 
                 {/* White Action Button */}
@@ -616,7 +743,7 @@ export default function BlogDetailClient({
                     <Image
                       src={
                         article.image ||
-                        "https://images.unsplash.com/photo-1677442136019-21780ecad995?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=800"
+                        FALLBACK_THUMBNAILS[idx % FALLBACK_THUMBNAILS.length]
                       }
                       alt={article.title}
                       fill
@@ -660,6 +787,28 @@ export default function BlogDetailClient({
               ))}
             </div>
           </section>
+
+          {/* Mobile Fallback CTA if content was too short to split */}
+          {!contentPart2 && mobileCtaIndex === -1 && (
+            <div className="mt-12 rounded-[4px] bg-[#0754C6] p-6 text-white shadow-md sm:p-7 lg:hidden">
+              <div className="mb-2 text-xs font-semibold uppercase tracking-wider text-blue-100/90">
+                Hutech Solutions
+              </div>
+              <h3 className="mb-2.5 font-serif text-[22px] font-normal leading-[1.25] text-white sm:text-[26px]">
+                From Idea to Impact
+              </h3>
+              <p className="mb-5 text-[14px] font-normal leading-[1.6] text-blue-100/90">
+                Tell us what you want to build. We’ll bring the right strategy, team, and
+                technology.
+              </p>
+              <Link
+                href="/contact"
+                className="inline-flex w-full items-center justify-center rounded-[3px] bg-white py-3.5 text-center text-sm font-bold text-[#172033] shadow-sm transition-all hover:bg-blue-50 hover:shadow active:scale-[0.99] sm:w-auto sm:px-6"
+              >
+                Book Meeting
+              </Link>
+            </div>
+          )}
         </div>
       </div>
     </div>
