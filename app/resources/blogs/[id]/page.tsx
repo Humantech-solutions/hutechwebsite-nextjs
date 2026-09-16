@@ -9,6 +9,7 @@ import {
   getIPublishImageUrl,
   getIPublishContentById,
   normalizeIPublishHtml,
+  isIPublishBlogSlugAllowed,
 } from "@/lib/ipublish";
 import { IPublishDetailClient } from "@/components/ipublish/IPublishDetailClient";
 
@@ -50,7 +51,7 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
   // Check iPublish
   const ipublishContent =
     (await getIPublishPageBySlug(id)) || (await getIPublishContentById(id));
-  if (ipublishContent) {
+  if (ipublishContent && (await isIPublishBlogSlugAllowed(id))) {
     const title = ipublishContent.seo_title || ipublishContent.title;
     const description =
       ipublishContent.meta_description ||

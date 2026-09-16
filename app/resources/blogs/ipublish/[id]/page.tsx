@@ -6,6 +6,7 @@ import {
   getIPublishImageUrl,
   getIPublishContentById,
   normalizeIPublishHtml,
+  isIPublishBlogSlugAllowed,
 } from "@/lib/ipublish";
 import { IPublishDetailClient } from "@/components/ipublish/IPublishDetailClient";
 
@@ -26,7 +27,7 @@ export async function generateMetadata({
   const { id } = await params;
   const content = (await getIPublishPageBySlug(id)) || (await getIPublishContentById(id));
 
-  if (!content) {
+  if (!content || !(await isIPublishBlogSlugAllowed(id))) {
     return {
       title: {
         absolute: "Article Not Found | Hutech Solutions",
@@ -91,7 +92,7 @@ export default async function IPublishPage({
     (await getIPublishPageBySlug(resolvedParams.id)) ||
     (await getIPublishContentById(resolvedParams.id));
 
-  if (!content) {
+  if (!content || !(await isIPublishBlogSlugAllowed(resolvedParams.id))) {
     notFound();
   }
 

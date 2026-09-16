@@ -50,6 +50,11 @@ export interface IPublishPageData {
   org?: string;
   id?: string;
   current_body?: string;
+  destinations?: {
+    name?: string;
+    domain?: string;
+    site_id?: string;
+  }[] | null;
 }
 
 export interface IPublishPageListItem {
@@ -58,9 +63,18 @@ export interface IPublishPageListItem {
   updated_at: string;
 }
 
+export interface PublicContentItem {
+  id: string;
+  title: string;
+  slug: string;
+  destinations?: { name: string; domain: string; site_id: string }[];
+  [key: string]: any;
+}
+
 const IPUBLISH_BASE_URL =
   process.env.NEXT_PUBLIC_IPUBLISH_API_URL || "https://apis.ipublish.hutechsolutions.ai";
 const DEFAULT_ORG_SLUG = process.env.NEXT_PUBLIC_IPUBLISH_ORG_SLUG || "hutech-solutions";
+const IPUBLISH_STATIC_TOKEN = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI3NzUwYmFlYy1lOTllLTRkYzAtOTM5Yy1hYTVjMWQ1MGFhNWYiLCJvcmdfaWQiOiI0ZjdlYmE4YS05OGZjLTQyODEtODJjZi1jYmM4YzIwZmY0NWUifQ.nkv7ZboCMX2BzwTt_r1F2t_IGAiFi1bcwpexyPBDxfQ";
 
 /**
  * Normalize image URL from iPublish API to absolute URL.
@@ -96,6 +110,56 @@ export function normalizeIPublishHtml(html?: string | null): string {
     /https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?(\/media\/[^\s"'>]+)/gi,
     `${cleanBase}$3`
   );
+}
+
+/**
+ * Validates if the content should be displayed on the current domain (.ai website).
+ */
+/**
+ * Strictly checks if a specific blog slug is allowed for the current domain
+ * by verifying it against the authenticated published content list.
+ */
+export async function isIPublishBlogSlugAllowed(slug: string): Promise<boolean> {
+  const publishedContent = await getIPublishPublishedContent();
+  if (!publishedContent) return true; // Fallback: allow all if authenticated API is down
+  
+  const item = publishedContent.find(c => c.slug === slug);
+  if (!item) return false; // Not found in published list at all
+  
+  if (!Array.isArray(item.destinations) || item.destinations.length === 0) {
+    return false;
+  }
+  
+  return item.destinations.some(d => 
+    d.domain && (d.domain.toLowerCase().includes('.ai') || d.domain.toLowerCase().includes('hutechsolutions.ai'))
+  );
+}
+
+/**
+ * Fetches the authenticated list of published content, which includes the destinations array.
+ * Swagger: GET /api/v1/content/published
+ */
+export async function getIPublishPublishedContent(): Promise<PublicContentItem[] | null> {
+  try {
+    const res = await fetch(`${IPUBLISH_BASE_URL}/api/v1/content/published`, {
+      headers: {
+        "Authorization": `Bearer ${IPUBLISH_STATIC_TOKEN}`,
+        "Content-Type": "application/json"
+      },
+      cache: "no-store",
+    });
+    
+    if (!res.ok) {
+      console.warn("[iPublish] Failed to fetch /content/published:", res.status);
+      return null;
+    }
+    
+    const data = await res.json();
+    return Array.isArray(data) ? data : null;
+  } catch (error) {
+    console.error("[iPublish] Error fetching published content:", error);
+    return null;
+  }
 }
 
 /**
@@ -172,17 +236,42 @@ export async function getIPublishAllBlogs(
   orgSlug: string = DEFAULT_ORG_SLUG
 ): Promise<IPublishPageData[]> {
   try {
-    const pages = await getIPublishPages();
-    const targetPages = pages.filter((p) => !orgSlug || p.org === orgSlug);
+    const publishedContent = await getIPublishPublishedContent();
+    
+    if (publishedContent) {
+      // Use authenticated endpoint for strict domain filtering
+      const filteredContent = publishedContent.filter(item => {
+        if (!Array.isArray(item.destinations) || item.destinations.length === 0) {
+          return false;
+        }
+        return item.destinations.some(d => 
+          d.domain && (d.domain.toLowerCase().includes('.ai') || d.domain.toLowerCase().includes('hutechsolutions.ai'))
+        );
+      });
+      
+      // We map this directly to IPublishPageData to avoid N extra API calls!
+      // The listing page doesn't need the HTML 'body' field because it natively uses the banner_pattern fields
+      return filteredContent.map(item => ({
+        ...item,
+        body: "", 
+        current_body: "",
+        slug: item.slug,
+        org: orgSlug,
+      })) as IPublishPageData[];
+    } else {
+      // Fallback to unauthenticated endpoint if authenticated one fails
+      const pages = await getIPublishPages();
+      const targetPages = pages.filter((p) => !orgSlug || p.org === orgSlug);
 
-    const detailedPages = await Promise.all(
-      targetPages.map(async (p) => {
-        const detail = await getIPublishPageBySlug(p.slug, p.org);
-        return detail;
-      })
-    );
+      const detailedPages = await Promise.all(
+        targetPages.map(async (p) => {
+          const detail = await getIPublishPageBySlug(p.slug, p.org);
+          return detail;
+        })
+      );
 
-    return detailedPages.filter((item): item is IPublishPageData => item !== null);
+      return detailedPages.filter((item): item is IPublishPageData => item !== null);
+    }
   } catch (error) {
     console.error("[iPublish] Error fetching all blogs:", error);
     return [];
