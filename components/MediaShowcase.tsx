@@ -105,12 +105,14 @@ export function MediaShowcase() {
             <div className="flex items-center gap-2">
               <button 
                 onClick={() => sliderRef.current?.slickPrev()}
+                aria-label="Previous podcast"
                 className="w-10 h-10 rounded-full border border-gray-200 flex items-center justify-center text-gray-400 hover:text-[#001A3D] hover:border-[#001A3D] transition-all cursor-pointer"
               >
                 <ChevronLeft size={20} />
               </button>
               <button 
                 onClick={() => sliderRef.current?.slickNext()}
+                aria-label="Next podcast"
                 className="w-10 h-10 rounded-full border border-gray-200 flex items-center justify-center text-gray-400 hover:text-[#001A3D] hover:border-[#001A3D] transition-all cursor-pointer"
               >
                 <ChevronRight size={20} />
@@ -177,6 +179,7 @@ export function MediaShowcase() {
               >
                 <button 
                   onClick={() => setSelectedVideo(null)}
+                  aria-label="Close video player"
                   className="absolute top-6 right-6 z-10 w-12 h-12 rounded-full bg-white/10 text-white flex items-center justify-center hover:bg-white/20 transition-all border border-white/10 backdrop-blur-md"
                 >
                   <X size={24} />

@@ -5,6 +5,8 @@ import {
   getIPublishPages,
   getIPublishImageUrl,
   getIPublishContentById,
+  normalizeIPublishHtml,
+  isIPublishBlogSlugAllowed,
 } from "@/lib/ipublish";
 import { IPublishDetailClient } from "@/components/ipublish/IPublishDetailClient";
 
@@ -25,7 +27,7 @@ export async function generateMetadata({
   const { id } = await params;
   const content = (await getIPublishPageBySlug(id)) || (await getIPublishContentById(id));
 
-  if (!content) {
+  if (!content || !(await isIPublishBlogSlugAllowed(id))) {
     return {
       title: {
         absolute: "Article Not Found | Hutech Solutions",
@@ -90,7 +92,7 @@ export default async function IPublishPage({
     (await getIPublishPageBySlug(resolvedParams.id)) ||
     (await getIPublishContentById(resolvedParams.id));
 
-  if (!content) {
+  if (!content || !(await isIPublishBlogSlugAllowed(resolvedParams.id))) {
     notFound();
   }
 
@@ -119,15 +121,22 @@ export default async function IPublishPage({
           .join(", "),
       };
 
-  return (
-    <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify(schemaJsonData),
-        }}
-      />
-      <IPublishDetailClient content={content} slug={resolvedParams.id} />
-    </>
-  );
+    const normalizedContent = {
+      ...content,
+      featured_image_url: imageUrl || null,
+      body: normalizeIPublishHtml(content.body),
+      current_body: normalizeIPublishHtml(content.current_body),
+    };
+
+    return (
+      <>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(schemaJsonData),
+          }}
+        />
+        <IPublishDetailClient content={normalizedContent} slug={resolvedParams.id} />
+      </>
+    );
 }

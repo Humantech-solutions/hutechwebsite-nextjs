@@ -90,35 +90,41 @@ export function IPublishCardBanner({ blog }: IPublishCardBannerProps) {
         background: `linear-gradient(${gradientDirection}, ${gradientFrom}, ${gradientTo})`,
       }}
     >
-      {/* Dynamic Featured Background Image */}
-      {blog.imageUrl && (
-        <img
-          src={blog.imageUrl}
-          alt={blog.title}
-          className="absolute inset-0 h-full w-full object-cover"
-        />
-      )}
-
-      {/* Dynamic Pattern Overlay */}
-      {patternStyle && (
+      {/* Dynamic Pattern Overlay (Only displayed when there is no featured image, matching iPublish) */}
+      {!blog.imageUrl && patternStyle && (
         <div
-          className="pointer-events-none absolute inset-0"
+          className="banner-pattern-layer pointer-events-none absolute inset-0"
           style={{
             backgroundImage: patternStyle.backgroundImage,
             backgroundSize: patternStyle.backgroundSize,
             opacity: patternStyle.opacity,
+            zIndex: 0,
+          }}
+        />
+      )}
+
+      {/* Dynamic Featured Background Image matching iPublish */}
+      {blog.imageUrl && (
+        <div
+          className="banner-image-layer pointer-events-none absolute inset-0"
+          style={{
+            backgroundImage: `url("${blog.imageUrl}")`,
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+            zIndex: 1,
           }}
         />
       )}
 
       {/* Dynamic Dark Gradient Overlay / Bottom Fade */}
       <div
-        className="pointer-events-none absolute inset-0"
+        className="banner-overlay-layer pointer-events-none absolute inset-0"
         style={{
           background: meta?.overlayColor
             ? `linear-gradient(to top, ${meta.overlayColor} 0%, rgba(0,0,0,0.14) 60%, transparent 100%)`
             : "linear-gradient(to top, rgba(0,0,0,0.75) 0%, rgba(0,0,0,0.14) 60%, transparent 100%)",
           opacity: (meta?.overlayOpacity ?? 80) / 100,
+          zIndex: 2,
         }}
       />
 

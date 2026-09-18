@@ -10,12 +10,12 @@ import Link from "next/link";
 import { CaseStudy } from "@/lib/data/case-studies";
 import { renderTitle } from "@/lib/utils";
 
-export default function CaseStudiesClient({ 
+export default function CaseStudiesClient({
   caseStudies,
   pageTitle,
   pageDescription,
   bgImageUrl,
-}: { 
+}: {
   caseStudies: CaseStudy[];
   pageTitle?: string;
   pageDescription?: string;
@@ -24,17 +24,22 @@ export default function CaseStudiesClient({
   const [activeTab, setActiveTab] = useState("All");
   const [searchQuery, setSearchQuery] = useState("");
 
-  const dynamicCategories = ["All", ...Array.from(new Set(caseStudies.map(s => s.category).filter(c => c && c !== "Case Study")))];
+  const dynamicCategories = [
+    "All",
+    ...Array.from(
+      new Set(caseStudies.map((s) => s.category).filter((c) => c && c !== "Case Study"))
+    ),
+  ];
 
   const filteredStudies = caseStudies.filter((study) => {
     const matchesTab = activeTab === "All" || study.category === activeTab;
-    
+
     if (!searchQuery.trim()) {
       return matchesTab;
     }
 
     const keywords = searchQuery.toLowerCase().split(/\s+/).filter(Boolean);
-    
+
     // Combine all searchable text into one string for easy keyword matching
     const searchableText = [
       study.title,
@@ -42,12 +47,14 @@ export default function CaseStudiesClient({
       study.listClient || "",
       study.shortDesc || "",
       study.listDesc || "",
-      ...(study.tags || [])
-    ].join(" ").toLowerCase();
+      ...(study.tags || []),
+    ]
+      .join(" ")
+      .toLowerCase();
 
     // Ensure EVERY keyword entered by the user is found somewhere in the case study
-    const matchesSearch = keywords.every(keyword => searchableText.includes(keyword));
-    
+    const matchesSearch = keywords.every((keyword) => searchableText.includes(keyword));
+
     return matchesTab && matchesSearch;
   });
 
@@ -69,11 +76,11 @@ export default function CaseStudiesClient({
           >
             <div className="flex items-center gap-3">
               <span className="block h-[2px] w-8 bg-[#F99D1C]"></span>
-              <span className="text-xs font-semibold tracking-widest text-[#F99D1C] uppercase">
+              <span className="text-xs font-semibold uppercase tracking-widest text-[#F99D1C]">
                 Global Impact
               </span>
             </div>
-            <h1 className="display-font mb-6 text-5xl leading-tight font-semibold tracking-tight md:text-7xl">
+            <h1 className="display-font mb-6 text-5xl font-semibold leading-tight tracking-tight md:text-7xl">
               {pageTitle ? (
                 renderTitle(pageTitle, "text-inherit", "text-[#F99D1C]", "text-[#0171c1]")
               ) : (
@@ -83,8 +90,9 @@ export default function CaseStudiesClient({
                 </>
               )}
             </h1>
-            <p className="max-w-2xl text-xl leading-relaxed font-medium text-gray-400">
-              {pageDescription || "Discover how we've partnered with industry leaders to solve complex challenges and achieve measurable results through technological excellence."}
+            <p className="max-w-2xl text-xl font-medium leading-relaxed text-gray-400">
+              {pageDescription ||
+                "Discover how we've partnered with industry leaders to solve complex challenges and achieve measurable results through technological excellence."}
             </p>
           </Motion.div>
         </div>
@@ -97,7 +105,7 @@ export default function CaseStudiesClient({
             />
           </div>
         )}
-        <div className="pointer-events-none absolute top-0 right-0 h-full w-1/2 bg-linear-to-l from-[#0171c1]/10 to-transparent z-10"></div>
+        <div className="bg-linear-to-l pointer-events-none absolute right-0 top-0 z-10 h-full w-1/2 from-[#0171c1]/10 to-transparent"></div>
       </section>
 
       {/* Sticky Search & Filter Bar */}
@@ -108,7 +116,7 @@ export default function CaseStudiesClient({
               <button
                 key={cat}
                 onClick={() => setActiveTab(cat)}
-                className={`rounded-full px-6 py-2.5 text-[10px] font-black tracking-[0.2em] whitespace-nowrap uppercase transition-all ${
+                className={`whitespace-nowrap rounded-full px-6 py-2.5 text-[10px] font-black uppercase tracking-[0.2em] transition-all ${
                   activeTab === cat
                     ? "bg-[#0171c1] text-white shadow-xl"
                     : "bg-gray-50 text-gray-400 hover:bg-gray-100 hover:text-[#001A3D]"
@@ -121,7 +129,7 @@ export default function CaseStudiesClient({
 
           <div className="group relative w-full md:w-96">
             <Search
-              className="absolute top-1/2 left-5 -translate-y-1/2 text-gray-400 transition-colors group-focus-within:text-[#0171c1]"
+              className="absolute left-5 top-1/2 -translate-y-1/2 text-gray-400 transition-colors group-focus-within:text-[#0171c1]"
               size={20}
             />
             <input
@@ -129,12 +137,12 @@ export default function CaseStudiesClient({
               placeholder="Search case studies..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full text-[#001A3D] rounded-2xl border border-gray-100 bg-gray-50 py-4 pr-12 pl-14 text-sm font-medium shadow-sm transition-all focus:ring-2 focus:ring-[#0171c1]/20 focus:outline-none"
+              className="w-full rounded-2xl border border-gray-100 bg-gray-50 py-4 pl-14 pr-12 text-sm font-medium text-[#001A3D] shadow-sm transition-all focus:outline-none focus:ring-2 focus:ring-[#0171c1]/20"
             />
             {searchQuery && (
               <button
                 onClick={() => setSearchQuery("")}
-                className="absolute top-1/2 right-5 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                className="absolute right-5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
               >
                 <X size={16} />
               </button>
@@ -157,7 +165,7 @@ export default function CaseStudiesClient({
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
                     transition={{ delay: i * 0.1 }}
-                    className="group flex h-full flex-col overflow-hidden rounded-[15px] md:rounded-[2.5rem] bg-gray-50 transition-all duration-500 hover:bg-[#001A3D]"
+                    className="group flex h-full flex-col overflow-hidden rounded-[15px] bg-gray-50 transition-all duration-500 hover:bg-[#001A3D] md:rounded-[2.5rem]"
                   >
                     <Link
                       href={`/resources/case-studies/${study.slug}`}
@@ -174,7 +182,7 @@ export default function CaseStudiesClient({
                           {study.tags.map((tag, j) => (
                             <span
                               key={j}
-                              className="rounded-full border border-white/20 bg-white/10 px-4 py-1.5 text-[10px] font-bold tracking-widest text-white uppercase backdrop-blur-md"
+                              className="rounded-full border border-white/20 bg-white/10 px-4 py-1.5 text-[10px] font-bold uppercase tracking-widest text-white backdrop-blur-md"
                             >
                               {tag}
                             </span>
@@ -183,22 +191,25 @@ export default function CaseStudiesClient({
                       </div>
                       <div className="flex flex-grow flex-col justify-between space-y-8 p-10 lg:p-12">
                         <div className="space-y-4">
-                          <span className="block text-sm font-bold tracking-widest text-[#F99D1C] uppercase">
+                          <span className="block text-sm font-bold uppercase tracking-widest text-[#F99D1C]">
                             {study.listClient || study.client}
                           </span>
-                          <h3 className="display-font text-2xl leading-tight font-bold text-[#001A3D] transition-colors group-hover:text-white md:text-3xl">
+                          <h3 className="display-font text-2xl font-bold leading-tight text-[#001A3D] transition-colors group-hover:text-white md:text-3xl">
                             {study.title}
                           </h3>
                         </div>
-                        <div className="mt-auto flex items-center justify-between border-t border-gray-200 pt-8 group-hover:border-white/20">
-                          <div className="flex items-center gap-3">
-                            <CheckCircle2 size={24} className="text-[#F99D1C] min-w-[24px]" />
-                            <span className="text-lg leading-snug font-bold text-[#001A3D] group-hover:text-white line-clamp-2">
+                        <div className="mt-auto flex items-center justify-between gap-4 border-t border-gray-200 pt-8 group-hover:border-white/20">
+                          <div className="flex min-w-0 flex-1 items-center gap-3">
+                            <CheckCircle2
+                              size={24}
+                              className="min-w-[24px] shrink-0 text-[#F99D1C]"
+                            />
+                            <span className="line-clamp-2 text-lg font-bold leading-snug text-[#001A3D] group-hover:text-white">
                               {study.listDesc || study.shortDesc}
                             </span>
                           </div>
-                          <div className="flex h-14 w-14 transform items-center justify-center rounded-full bg-white text-[#001A3D] shadow-sm transition-all group-hover:rotate-45 group-hover:bg-[#F99D1C] group-hover:text-[#001A3D]">
-                            <ArrowUpRight size={28} />
+                          <div className="flex aspect-square h-16 w-12 shrink-0 transform items-center justify-center rounded-full bg-white text-[#001A3D] shadow-sm transition-all group-hover:rotate-45 group-hover:bg-[#F99D1C] group-hover:text-[#001A3D]">
+                            <ArrowUpRight size={28} className="shrink-0" />
                           </div>
                         </div>
                       </div>
@@ -207,7 +218,7 @@ export default function CaseStudiesClient({
                 ))}
               </div>
             ) : (
-              <div className="rounded-[15px] md:rounded-[4rem] border border-gray-100 bg-white py-40 text-center shadow-sm">
+              <div className="rounded-[15px] border border-gray-100 bg-white py-40 text-center shadow-sm md:rounded-[4rem]">
                 <div className="mx-auto mb-8 flex h-24 w-24 items-center justify-center rounded-full bg-gray-50">
                   <Search size={40} className="text-gray-200" />
                 </div>
@@ -215,15 +226,15 @@ export default function CaseStudiesClient({
                   No case studies found
                 </h3>
                 <p className="mx-auto mb-10 max-w-sm font-medium text-gray-500">
-                  We couldn&apos;t find any success stories matching your requirements. Try adjusting
-                  your search or filters.
+                  We couldn&apos;t find any success stories matching your requirements. Try
+                  adjusting your search or filters.
                 </p>
                 <button
                   onClick={() => {
                     setActiveTab("All");
                     setSearchQuery("");
                   }}
-                  className="text-xs font-black tracking-widest text-[#0171c1] uppercase hover:underline"
+                  className="text-xs font-black uppercase tracking-widest text-[#0171c1] hover:underline"
                 >
                   Reset all filters
                 </button>

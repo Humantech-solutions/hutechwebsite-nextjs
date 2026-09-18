@@ -8,6 +8,8 @@ import {
   getIPublishPages,
   getIPublishImageUrl,
   getIPublishContentById,
+  normalizeIPublishHtml,
+  isIPublishBlogSlugAllowed,
 } from "@/lib/ipublish";
 import { IPublishDetailClient } from "@/components/ipublish/IPublishDetailClient";
 
@@ -49,7 +51,7 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
   // Check iPublish
   const ipublishContent =
     (await getIPublishPageBySlug(id)) || (await getIPublishContentById(id));
-  if (ipublishContent) {
+  if (ipublishContent && (await isIPublishBlogSlugAllowed(id))) {
     const title = ipublishContent.seo_title || ipublishContent.title;
     const description =
       ipublishContent.meta_description ||
@@ -117,6 +119,8 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
     title: b.title,
     category: b.category,
     date: b.date,
+    image: b.imageUrl,
+    excerpt: b.excerpt,
     path: `/resources/blogs/${b.slug}/`,
   }));
 
@@ -179,6 +183,13 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
           .join(", "),
       };
 
+    const normalizedContent = {
+      ...ipublishContent,
+      featured_image_url: imageUrl || null,
+      body: normalizeIPublishHtml(ipublishContent.body),
+      current_body: normalizeIPublishHtml(ipublishContent.current_body),
+    };
+
     return (
       <>
         <script
@@ -187,7 +198,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
             __html: JSON.stringify(schemaJsonData),
           }}
         />
-        <IPublishDetailClient content={ipublishContent} slug={id} />
+        <IPublishDetailClient content={normalizedContent} slug={id} latestBlogs={latestBlogs} />
       </>
     );
   }

@@ -396,3 +396,12 @@ input, textarea{
   background: none;
 }
 
+/* Fix for react-slick LCP issue: Show the first slide immediately before JS hydration */
+.slick-slider:not(.slick-initialized) .slick-slide:first-of-type {
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+}
+.slick-slider:not(.slick-initialized) .slick-slide {
+  display: none !important;
+}

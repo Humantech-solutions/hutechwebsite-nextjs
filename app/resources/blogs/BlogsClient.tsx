@@ -11,14 +11,21 @@ import {
   Clock,
   Sparkles,
   Filter,
+  Mail,
+  CheckCircle2,
+  ShieldCheck,
+  Bell,
+  Loader2,
 } from "lucide-react";
 import { Meta } from "@/components/Meta";
 import { ImageWithFallback } from "@/components/figma/ImageWithFallback";
 import Link from "next/link";
-import { useState, useMemo } from "react";
+import { useState, useMemo, Fragment } from "react";
 import { WpBlog } from "@/lib/wordpress";
 import { renderTitle } from "@/lib/utils";
 import { IPublishCardBanner } from "@/components/ipublish/IPublishCardBanner";
+import { toast } from "sonner";
+import { submitContactForm } from "@/lib/api";
 
 type Props = {
   blogs: WpBlog[];
@@ -47,15 +54,17 @@ export default function BlogsClient({ blogs, pageTitle, pageDescription, bgImage
 
   // Filter blogs
   const filteredBlogs = useMemo(() => {
-    return blogs.filter((blog) => {
-      const matchesSearch =
-        !searchQuery ||
-        blog.title?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        blog.excerpt?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        blog.tags?.some((t) => t.toLowerCase().includes(searchQuery.toLowerCase()));
-      const matchesCategory = selectedCategory === "All" || blog.category === selectedCategory;
-      return matchesSearch && matchesCategory;
-    }).sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+    return blogs
+      .filter((blog) => {
+        const matchesSearch =
+          !searchQuery ||
+          blog.title?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          blog.excerpt?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          blog.tags?.some((t) => t.toLowerCase().includes(searchQuery.toLowerCase()));
+        const matchesCategory = selectedCategory === "All" || blog.category === selectedCategory;
+        return matchesSearch && matchesCategory;
+      })
+      .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
   }, [blogs, searchQuery, selectedCategory]);
 
   const limitedBlogs = filteredBlogs.slice(0, maxPosts);
@@ -63,6 +72,39 @@ export default function BlogsClient({ blogs, pageTitle, pageDescription, bgImage
 
   const handleLoadMore = () => {
     setVisibleCount((prev) => prev + 12);
+  };
+
+  const [subscriberEmail, setSubscriberEmail] = useState("");
+  const [isSubmittingSubscribe, setIsSubmittingSubscribe] = useState(false);
+  const [isSubscribed, setIsSubscribed] = useState(false);
+
+  const handleSubscribe = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (!subscriberEmail || !subscriberEmail.includes("@")) {
+      toast.error("Please enter a valid email address.");
+      return;
+    }
+    setIsSubmittingSubscribe(true);
+    try {
+      await submitContactForm({
+        name: "Blog Subscriber",
+        email: subscriberEmail.trim(),
+        phone: "N/A",
+        subject: "Blog Newsletter Subscription",
+        message: "User subscribed to newsletter from blog listing page",
+        category: "Blog Newsletter Subscription",
+        gtmEventName: "newsletter_subscribe_submit",
+      });
+      setIsSubscribed(true);
+      toast.success("Subscribed successfully! Welcome to Hutech Tech Dispatch.");
+      setSubscriberEmail("");
+    } catch (error) {
+      toast.error(
+        error instanceof Error ? error.message : "Failed to subscribe. Please try again."
+      );
+    } finally {
+      setIsSubmittingSubscribe(false);
+    }
   };
 
   return (
@@ -74,7 +116,7 @@ export default function BlogsClient({ blogs, pageTitle, pageDescription, bgImage
       <Breadcrumbs variant="light" />
 
       {/* ORIGINAL HERO BANNER (Height & Image fully preserved) */}
-      <section className="relative flex h-[450px] items-center overflow-hidden bg-[#001A3D] text-white">
+      <section className="relative flex min-h-[450px] items-center overflow-hidden bg-[#001A3D] py-14 text-white">
         {bgImageUrl && (
           <div className="absolute inset-0 z-0">
             <ImageWithFallback
@@ -86,16 +128,79 @@ export default function BlogsClient({ blogs, pageTitle, pageDescription, bgImage
           </div>
         )}
         <div className="relative z-10 mx-auto w-full max-w-[1280px] px-6 lg:px-20">
-          <Motion.h1
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="display-font mb-6 text-5xl font-semibold md:text-7xl"
-          >
-            {renderTitle(pageTitle)}
-          </Motion.h1>
-          <p className="max-w-2xl text-xl font-medium leading-relaxed text-gray-400">
-            {pageDescription}
-          </p>
+          <div className="flex flex-col gap-8 lg:flex-row lg:items-center lg:justify-between lg:gap-12">
+            {/* Left side: Heading & Description */}
+            <div className="max-w-2xl">
+              <Motion.h1
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="display-font mb-4 text-5xl font-semibold md:text-7xl"
+              >
+                {renderTitle(pageTitle)}
+              </Motion.h1>
+              <p className="text-lg font-medium leading-relaxed text-gray-400 sm:text-xl">
+                {pageDescription}
+              </p>
+            </div>
+
+            {/* Right side: Subscription Card */}
+            <div className="w-full max-w-md shrink-0 lg:ml-auto">
+              <div className="rounded-2xl border border-white/15 bg-white/[0.07] p-5 shadow-2xl backdrop-blur-md transition-all hover:border-white/25 sm:p-6">
+                <div className="mb-3.5">
+                  <div className="flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-wider text-[#F99D1C]">
+                    <Sparkles className="h-3.5 w-3.5" />
+                    <span>HUTECH INSIGHTS</span>
+                  </div>
+                  <h3 className="mt-1 text-base font-bold text-white sm:text-lg">
+                    Subscribe to our Newsletter
+                  </h3>
+                  <p className="mt-1 text-xs leading-relaxed text-slate-300">
+                    Get bi-weekly engineering deep-dives, industry trends, and curated insights
+                    directly to your inbox.
+                  </p>
+                </div>
+
+                {isSubscribed ? (
+                  <div className="flex items-center gap-2 rounded-xl border border-emerald-500/30 bg-emerald-500/15 p-3.5 text-xs text-emerald-300">
+                    <CheckCircle2 className="h-4 w-4 shrink-0 text-emerald-400" />
+                    <span>You’re in! Welcome to Hutech Insights.</span>
+                  </div>
+                ) : (
+                  <form onSubmit={handleSubscribe} className="space-y-2.5">
+                    <div className="flex items-center rounded-full border border-white/20 bg-white/10 p-1 backdrop-blur-md transition-all focus-within:border-[#F99D1C] focus-within:bg-white/15 focus-within:ring-2 focus-within:ring-[#F99D1C]/25">
+                      <div className="relative flex flex-1 items-center pl-3">
+                        <Mail className="h-4 w-4 shrink-0 text-slate-400" />
+                        <input
+                          type="email"
+                          required
+                          value={subscriberEmail}
+                          onChange={(e) => setSubscriberEmail(e.target.value)}
+                          placeholder="Enter your work email..."
+                          className="w-full bg-transparent px-2.5 py-1.5 text-xs font-medium text-white placeholder-slate-400 focus:outline-none"
+                        />
+                      </div>
+                      <button
+                        type="submit"
+                        disabled={isSubmittingSubscribe}
+                        className="flex h-9 shrink-0 cursor-pointer items-center justify-center gap-1.5 rounded-full bg-[#F99D1C] px-5 text-xs font-bold uppercase tracking-wider text-[#001A3D] shadow-md transition-all hover:bg-white active:scale-95 disabled:opacity-60"
+                      >
+                        {isSubmittingSubscribe ? (
+                          <Loader2 className="h-3.5 w-3.5 animate-spin text-[#001A3D]" />
+                        ) : (
+                          <span>Subscribe</span>
+                        )}
+                      </button>
+                    </div>
+                    <div className="flex items-center justify-between px-1 text-[11px] text-slate-400">
+                      <span>✓ Bi-weekly digest</span>
+                      <span>✓ Zero spam</span>
+                      <span>✓ 1-click unsubscribe</span>
+                    </div>
+                  </form>
+                )}
+              </div>
+            </div>
+          </div>
         </div>
       </section>
 
@@ -127,21 +232,16 @@ export default function BlogsClient({ blogs, pageTitle, pageDescription, bgImage
           <div className="flex flex-col gap-10">
             {/* MAIN BLOG CARDS GRID */}
             <main>
-              {/* Filter Status Bar */}
-              <div className="mb-6 flex flex-wrap items-center justify-between gap-y-4 border-b border-slate-200 pb-4 lg:flex-nowrap lg:gap-x-6">
-                <div className="order-1 shrink-0 text-xs font-medium text-slate-500">
+              {/* Filter Status Bar - 1 line on desktop, category carousel on next line on mobile */}
+              <div className="mb-6 flex flex-wrap items-center justify-between gap-y-3 border-b border-slate-200 pb-4 md:flex-nowrap md:gap-x-6">
+                {/* 1. Article count */}
+                <div className="order-1 shrink-0 whitespace-nowrap text-xs font-medium text-slate-500">
                   Showing <span className="font-bold text-[#001A3D]">{limitedBlogs.length}</span>{" "}
                   {limitedBlogs.length === 1 ? "article" : "articles"}
-                  {searchQuery && (
-                    <span className="hidden sm:inline">
-                      {" "}
-                      matching <span className="font-bold text-[#001A3D]">"{searchQuery}"</span>
-                    </span>
-                  )}
                 </div>
 
-                {/* Search Bar - sits on right for mobile, far right for desktop */}
-                <div className="order-2 relative w-[160px] shrink-0 sm:w-64 md:w-72 lg:order-3 lg:w-80">
+                {/* 2. Search Bar - right-aligned on mobile (next to count), far right on desktop */}
+                <div className="order-2 relative w-40 shrink-0 sm:w-56 md:order-3 md:w-64 lg:w-72">
                   <Search className="absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
                   <input
                     id="blog-search"
@@ -152,7 +252,7 @@ export default function BlogsClient({ blogs, pageTitle, pageDescription, bgImage
                       setSearchQuery(e.target.value);
                       setVisibleCount(12);
                     }}
-                    className="focus:outline-hidden shadow-xs h-[40px] w-full rounded-full border border-slate-200 bg-white py-2 pl-9 pr-9 text-xs font-medium text-slate-800 placeholder-slate-400 transition-all focus:border-[#0171c1] focus:ring-1 focus:ring-[#0171c1]"
+                    className="focus:outline-hidden shadow-xs h-[38px] w-full rounded-full border border-slate-200 bg-white py-2 pl-9 pr-9 text-xs font-medium text-slate-800 placeholder-slate-400 transition-all focus:border-[#0171c1] focus:ring-1 focus:ring-[#0171c1]"
                   />
                   {searchQuery && (
                     <button
@@ -168,9 +268,9 @@ export default function BlogsClient({ blogs, pageTitle, pageDescription, bgImage
                   )}
                 </div>
 
-                {/* Category Pills Container - wraps to full width on mobile, sits in middle on desktop */}
-                <div className="order-3 mt-2 w-full overflow-x-auto [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden lg:order-2 lg:mt-0 lg:w-auto lg:flex-1 lg:px-2">
-                  <div className="flex items-center gap-2 pb-1">
+                {/* 3. Category Carousel Container - 2nd line full-width on mobile, middle on desktop */}
+                <div className="order-3 w-full min-w-0 overflow-x-auto py-1 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden md:order-2 md:w-auto md:flex-1">
+                  <div className="flex items-center gap-2">
                     {categories.map((cat) => (
                       <button
                         key={cat}
@@ -190,6 +290,7 @@ export default function BlogsClient({ blogs, pageTitle, pageDescription, bgImage
                   </div>
                 </div>
               </div>
+
               {limitedBlogs.length === 0 ? (
                 <div className="shadow-xs rounded-xl border border-slate-200 bg-white py-20 text-center">
                   <Search size={32} className="mx-auto text-slate-300" />
@@ -214,7 +315,7 @@ export default function BlogsClient({ blogs, pageTitle, pageDescription, bgImage
                         initial={{ opacity: 0, y: 15 }}
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
-                        transition={{ delay: i * 0.05, duration: 0.3 }}
+                        transition={{ delay: (i % 3) * 0.05, duration: 0.3 }}
                         className="group relative flex flex-col justify-between border border-slate-100 bg-white shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-slate-300 hover:shadow-xl"
                       >
                         <Link
@@ -263,8 +364,6 @@ export default function BlogsClient({ blogs, pageTitle, pageDescription, bgImage
                               )}
                             </div>
                           </div>
-
-
                         </Link>
                       </Motion.article>
                     ))}
@@ -275,7 +374,7 @@ export default function BlogsClient({ blogs, pageTitle, pageDescription, bgImage
                     <div className="mt-14 flex justify-center border-t border-slate-200/80 pt-8">
                       <button
                         onClick={handleLoadMore}
-                        className="rounded-full bg-[#001A3D] px-8 py-3 text-sm font-bold text-white transition-all hover:bg-[#0171c1] hover:shadow-lg"
+                        className="cursor-pointer rounded-full bg-[#001A3D] px-8 py-3 text-sm font-bold text-white transition-all hover:bg-[#0171c1] hover:shadow-lg"
                       >
                         Load More
                       </button>

@@ -43,9 +43,12 @@ export default async function BlogsPage() {
       excerpt: item.excerpt || "",
       content: "",
       author: "Hutech Solutions",
-      category: item.content_type
-        ? item.content_type.charAt(0).toUpperCase() + item.content_type.slice(1)
-        : "iPublish",
+      category:
+        item.subcategory && item.subcategory.trim()
+          ? item.subcategory.trim()
+          : item.content_type
+            ? item.content_type.charAt(0).toUpperCase() + item.content_type.slice(1)
+            : "Blog",
       imageUrl: getIPublishImageUrl(item.featured_image_url),
       readTime: `${readTimeMinutes} min read`,
       tags: item.tags || [],

@@ -161,6 +161,7 @@ export default function LanguageSelector() {
         className="w-full sm:w-[280px] flex items-center justify-between gap-3 bg-white/5 hover:bg-white/10 text-white px-4 py-3 rounded-lg border border-white/10 transition-all duration-200 group focus:outline-none focus:ring-2 focus:ring-[#0171c1]"
         aria-expanded={isOpen}
         aria-haspopup="listbox"
+        aria-label="Select Language"
       >
         <div className="flex items-center gap-3 overflow-hidden">
           <img

@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { Search, Globe, Menu, X, ChevronDown, MoveRight, Phone, Mail, Linkedin, Facebook, Instagram, Youtube, Twitter } from "lucide-react";
 import { motion as Motion, AnimatePresence, useScroll, useTransform } from "framer-motion";
 import { ImageWithFallback } from "./figma/ImageWithFallback";
+import Image from "next/image";
 import type { HeaderChromeData, TopNavChromeData } from "@/lib/wordpress";
 const logoImg = "/assets/c57ecabe59306129194824425137d2ccde6918ce.png";
 
@@ -222,6 +223,18 @@ export default function Navbar({ data }: { data?: HeaderChromeData }) {
     return <Globe className="h-3 w-3 sm:h-3.5 sm:w-3.5 md:h-4 md:w-4" />;
   };
 
+  const getSocialAriaLabel = (s: { id?: number; icon?: string; url?: string; label?: string; name?: string }) => {
+    if (s.label) return s.label;
+    if (s.name) return s.name;
+    const url = (s.url || "").toLowerCase();
+    if (url.includes("linkedin")) return "LinkedIn";
+    if (url.includes("facebook")) return "Facebook";
+    if (url.includes("instagram")) return "Instagram";
+    if (url.includes("youtube")) return "YouTube";
+    if (url.includes("twitter") || url.includes("x.com")) return "X (formerly Twitter)";
+    return "Social Media";
+  };
+
   // Disable height animation when mobile menu is open
   const navHeight = useTransform(scrollY, [0, 50], ["80px", "64px"]);
   const logoScale = useTransform(scrollY, [0, 50], [1, 0.85]);
@@ -315,6 +328,7 @@ export default function Navbar({ data }: { data?: HeaderChromeData }) {
                         href={social.url || "#"}
                         target="_blank"
                         rel="noopener noreferrer"
+                        aria-label={getSocialAriaLabel(social as any)}
                         className="flex items-center opacity-85 transition-all hover:opacity-100 hover:text-[#0171c1]"
                       >
                         {renderSocialIcon(social)}
@@ -344,12 +358,16 @@ export default function Navbar({ data }: { data?: HeaderChromeData }) {
         <div className="mx-auto h-full max-w-[1280px] px-6 lg:px-20">
           <div className="flex h-full items-center justify-between">
             <div className="flex items-center">
-              <Link href="/" className="flex items-center" onClick={() => setActiveDropdown(null)}>
+              <Link href="/" className="flex items-center" onClick={() => setActiveDropdown(null)} aria-label="Hutech Solutions Home">
                 <Motion.div style={{ scale: logoScale }}>
                   <div className="h-16 py-2 md:h-20">
-                    <ImageWithFallback
+                    <Image
                       src={logoSrc}
                       alt={logoAlt}
+                      width={200}
+                      height={60}
+                      sizes="(max-width: 768px) 175px, 200px"
+                      priority
                       className="h-full w-auto object-contain"
                     />
                   </div>
@@ -376,6 +394,8 @@ export default function Navbar({ data }: { data?: HeaderChromeData }) {
                       <>
                         <button
                           onClick={() => toggleDropdown(idx)}
+                          aria-expanded={activeDropdown === idx}
+                          aria-haspopup="true"
                           className="flex items-center py-2 text-[14px] font-semibold tracking-wide text-[#001A3D] transition-colors duration-300 hover:text-[#0171c1]"
                           style={{ color: activeDropdown === idx ? BRAND_BLUE : undefined }}
                         >
@@ -539,11 +559,15 @@ export default function Navbar({ data }: { data?: HeaderChromeData }) {
                   href="/"
                   className="flex items-center"
                   onClick={() => setMobileMenuOpen(false)}
+                  aria-label="Hutech Solutions Home"
                 >
                   <div className="h-14 rounded-md bg-white px-3 py-1.5 shadow-md">
-                    <ImageWithFallback
+                    <Image
                       src={logoSrc}
                       alt={logoAlt}
+                      width={200}
+                      height={60}
+                      sizes="175px"
                       className="h-full w-auto object-contain"
                     />
                   </div>

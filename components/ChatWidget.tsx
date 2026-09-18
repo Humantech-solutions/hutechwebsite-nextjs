@@ -92,6 +92,7 @@ export function ChatWidget() {
               <button
                 onClick={() => setIsOpen(false)}
                 className="rounded-full bg-black/5 p-1.5 text-gray-500 transition-colors hover:bg-black/10 hover:text-gray-800"
+                aria-label="Close chat window"
               >
                 <X size={18} />
               </button>
@@ -114,6 +115,7 @@ export function ChatWidget() {
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             onClick={() => setIsOpen(!isOpen)}
+            aria-label={isOpen ? "Close chat assistant" : "Open chat assistant"}
             className="relative flex h-16 w-16 items-center justify-center rounded-full border-2 border-white/10 bg-[#001A3D] text-white shadow-2xl shadow-[#001A3D]/30"
           >
             <AnimatePresence mode="wait">

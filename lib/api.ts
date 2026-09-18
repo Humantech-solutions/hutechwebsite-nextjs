@@ -348,24 +348,87 @@ export interface RecruitProJob {
 }
 
 /**
+ * Cleans leading bullet characters and trailing section titles from text.
+ */
+export function cleanBulletText(item: string): string {
+  if (!item) return "";
+  return item
+    .replace(/^[\s●•◦▪*–—\-\u2022\u25CF\u25CB\u25AA\u25AB\u2023\u2043\u00B7]+\s*/, "")
+    .replace(/(Preferred Qualifications|Required Skills|Key Responsibilities):\s*$/i, "")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+/**
+ * Parses bullet points from unstructured or semi-structured job text,
+ * stripping leading bullet characters and preserving wrapped lines.
+ */
+export function parseBulletPoints(text?: string): string[] {
+  if (!text) return [];
+  const trimmed = text.trim();
+  if (!trimmed) return [];
+
+  // If text has bullet symbols (●, •, etc.)
+  if (/[●•◦▪\u2022\u25CF]/.test(trimmed)) {
+    return trimmed
+      .split(/(?=[●•◦▪\u2022\u25CF])/)
+      .map(cleanBulletText)
+      .filter((s) => {
+        if (!s) return false;
+        const lower = s.toLowerCase();
+        if (
+          lower === "required skills:" ||
+          lower === "preferred qualifications:" ||
+          lower === "key responsibilities:"
+        ) {
+          return false;
+        }
+        return true;
+      });
+  }
+
+  // If lines start with -, *, or numbers
+  const lines = trimmed.split(/\r?\n+/);
+  const result: string[] = [];
+  let current = "";
+
+  for (const line of lines) {
+    const isNewBullet = /^\s*([●•◦▪*\-–—]|\d+[.)])\s+/.test(line);
+    if (isNewBullet) {
+      if (current) result.push(cleanBulletText(current));
+      current = line;
+    } else if (current) {
+      current += " " + line;
+    } else if (line.trim()) {
+      current = line;
+    }
+  }
+  if (current) result.push(cleanBulletText(current));
+
+  if (result.length > 1) {
+    return result.filter(Boolean);
+  }
+
+  // Fallback: split on sentences or lines, cleaning each
+  return lines
+    .flatMap((l) => l.split(/(?<=[.!?])\s+(?=[A-Z])/))
+    .map(cleanBulletText)
+    .filter(Boolean);
+}
+
+/**
  * Maps a raw RecruitPro job into the site's Job type so no UI changes are needed.
  */
 function mapRecruitProJob(raw: RecruitProJob) {
-  // Parse description bullets (split on ". " or newlines)
-  const descBullets = raw.description
-    ? raw.description
-        .split(/(?<=[.!?])\s+(?=[A-Z])|\n+/)
-        .map((s) => s.trim())
-        .filter(Boolean)
-    : [];
+  // Parse description bullets
+  const descBullets = parseBulletPoints(raw.description);
 
   // Parse requirements bullets
-  const reqBullets = raw.requirements
-    ? raw.requirements
-        .split(/\.\s+(?=[A-Z])|\n+/)
-        .map((s) => s.trim())
-        .filter(Boolean)
-    : [];
+  const reqBullets = parseBulletPoints(raw.requirements);
+
+  // Parse superpowers & benefits bullets
+  const superpowersBullets = parseBulletPoints(raw.superpowers);
+  const benefitsBullets = parseBulletPoints(raw.benefits);
 
   // Derive department from title keywords
   const titleLower = raw.title.toLowerCase();
@@ -409,20 +472,14 @@ function mapRecruitProJob(raw: RecruitProJob) {
     requirementsTitle: "Requirements",
     requirements: reqBullets,
     superpowersTitle: "Your Superpowers",
-    superpowers: raw.superpowers
-      ? raw.superpowers
-          .split(/\n+/)
-          .map((s) => s.trim())
-          .filter(Boolean)
+    superpowers: superpowersBullets.length > 0
+      ? superpowersBullets
       : raw.experience
         ? [`${raw.experience} of relevant experience`]
         : [],
     benefitsTitle: "Benefits",
-    benefits: raw.benefits
-      ? raw.benefits
-          .split(/\n+/)
-          .map((s) => s.trim())
-          .filter(Boolean)
+    benefits: benefitsBullets.length > 0
+      ? benefitsBullets
       : [
           "Health Insurance",
           "Provident Fund + Performance Bonus",

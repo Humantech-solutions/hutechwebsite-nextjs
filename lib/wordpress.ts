@@ -86,7 +86,7 @@ export async function fetchGraphQL(query: string, variables = {}) {
       body: JSON.stringify({ query, variables }),
       ...(process.env.NODE_ENV === "development"
         ? { cache: "no-store" }
-        : { next: { revalidate: 0 } }),
+        : { next: { revalidate: 60 } }),
       signal: controller.signal,
     });
 
@@ -121,10 +121,7 @@ function imgUrl(field: any): string | undefined {
   if (!field) return undefined;
   if (typeof field === "string") return nonBlank(field);
   const url =
-    field?.node?.sourceUrl ||
-    field?.node?.mediaItemUrl ||
-    field?.sourceUrl ||
-    field?.mediaItemUrl;
+    field?.node?.sourceUrl || field?.node?.mediaItemUrl || field?.sourceUrl || field?.mediaItemUrl;
   return nonBlank(url);
 }
 
@@ -228,9 +225,12 @@ function applyParentSlug(parentPath: string | undefined, childPath: string | und
   const p = parentPath || "#";
   let c = childPath || "#";
   if (c === "#" || c.startsWith("http") || p === "#" || p === "/") return c;
-  
+
   // Remove the default CPT slugs if they exist so we can cleanly append to the parent
-  c = c.replace(/^\/(hutech_service|case_study|hutech_event|hutech_news|hutech_career|hutech_press_release|hutech_document)\//, "/");
+  c = c.replace(
+    /^\/(hutech_service|case_study|hutech_event|hutech_news|hutech_career|hutech_press_release|hutech_document)\//,
+    "/"
+  );
 
   const cleanP = p.replace(/\/$/, "");
   if (!c.startsWith(cleanP + "/") && c !== cleanP) {
@@ -240,19 +240,23 @@ function applyParentSlug(parentPath: string | undefined, childPath: string | und
   return c;
 }
 
-function flattenMenuItems(items?: ChromeMenuItem[], parentPath?: string): { name: string; path: string }[] {
+function flattenMenuItems(
+  items?: ChromeMenuItem[],
+  parentPath?: string
+): { name: string; path: string }[] {
   return (items || []).map((item) => ({
     name: item.label,
-    path: parentPath ? applyParentSlug(parentPath, item.path) : (item.path || "#"),
+    path: parentPath ? applyParentSlug(parentPath, item.path) : item.path || "#",
   }));
 }
 
 function transformPrimaryMenu(items?: ChromeMenuItem[]): HeaderNavItem[] {
   return (items || []).map((item) => {
     // Infer a parent path if the top-level item uses '#' or '/'
-    const parentPath = item.path && item.path !== "#" && item.path !== "/"
-      ? item.path
-      : `/${item.label.toLowerCase().replace(/[^a-z0-9]+/g, "-")}`;
+    const parentPath =
+      item.path && item.path !== "#" && item.path !== "/"
+        ? item.path
+        : `/${item.label.toLowerCase().replace(/[^a-z0-9]+/g, "-")}`;
 
     const dropdown = item.children?.length
       ? item.children.map((section) => ({
@@ -278,7 +282,7 @@ export async function getSiteChrome(): Promise<SiteChromeData | null> {
 
   try {
     const res = await fetch(`${WORDPRESS_BASE_URL}/wp-json/hutech/v1/site-chrome`, {
-      next: { revalidate: 0 },
+      next: { revalidate: 60 },
     });
 
     if (!res.ok) {
@@ -664,8 +668,9 @@ function transformHomePage(
   // Helper to collect numbered group fields into an array,
   // filtering out null/undefined AND empty ACF group slots.
   const collectGroups = (parent: any, prefix: string, count: number) =>
-    Array.from({ length: count }, (_, i) => parent?.[`${prefix}_${i + 1}`])
-      .filter((item) => Boolean(item) && hasContent(item));
+    Array.from({ length: count }, (_, i) => parent?.[`${prefix}_${i + 1}`]).filter(
+      (item) => Boolean(item) && hasContent(item)
+    );
 
   // Slides — only include slides where at least a title or image is filled in
   const heroSlides: WpSlide[] = collectGroups(f.heroSlides, "slide", 5)
@@ -698,7 +703,13 @@ function transformHomePage(
   const cap = f.capabilities || {};
   const capList: WpCapability[] = collectGroups(cap, "capability", 8)
     .filter((c: any) => c?.name?.trim())
-    .map((c: any) => ({ name: c?.name, imageUrl: imgUrl(c?.image), description: c?.description, color: c?.color, url: c?.url || "" }));
+    .map((c: any) => ({
+      name: c?.name,
+      imageUrl: imgUrl(c?.image),
+      description: c?.description,
+      color: c?.color,
+      url: c?.url || "",
+    }));
 
   // Awards — only include awards with a label
   const aw = f.awards || {};
@@ -721,8 +732,10 @@ function transformHomePage(
   if (dynamicTestimonials.length > 0) {
     stories = dynamicTestimonials.map((t: any) => ({
       name: t.title,
-      title: [t.testimonialFields?.designation, t.testimonialFields?.company]
-        .filter(Boolean).join(", ") || "Client",
+      title:
+        [t.testimonialFields?.designation, t.testimonialFields?.company]
+          .filter(Boolean)
+          .join(", ") || "Client",
       text: t.testimonialFields?.description || "",
       imageUrl: imgUrl(t.featuredImage),
     }));
@@ -756,7 +769,6 @@ function transformHomePage(
     .filter((a: any) => a?.title?.trim())
     .map((a: any) => ({ title: a?.title, content: a?.content }));
 
-
   // Tech Stack
   const ts = f.techStack || {};
   const tsCategories: any[] = [];
@@ -769,14 +781,14 @@ function transformHomePage(
         if (tech && tech.name?.trim()) {
           techs.push({
             name: tech.name,
-            iconUrl: imgUrl(tech.icon)
+            iconUrl: imgUrl(tech.icon),
           });
         }
       }
       if (techs.length > 0) {
         tsCategories.push({
           categoryName: cat.categoryName,
-          technologies: techs
+          technologies: techs,
         });
       }
     }
@@ -873,7 +885,6 @@ const TESTIMONIALS_FOR_HOME_QUERY = `
   }
 `;
 
-
 const BLOGS_FOR_HOME_QUERY = `
   query GetBlogsForHome($limit: Int!) {
     posts(first: $limit, where: { orderby: { field: DATE, order: DESC } }) {
@@ -911,12 +922,12 @@ export async function getHomePage(uri: string = "/"): Promise<HomepageData | nul
 
     const acf = raw?.data?.pageBy?.homepageFields || {};
     const exp = acf.expertise || {};
-    const ss  = acf.successStories || {};
-    const wn  = acf.whatsNew || {};
+    const ss = acf.successStories || {};
+    const wn = acf.whatsNew || {};
 
     // ── Expertise / Industries ──────────────────────────────────────────────
     const serviceCategory = exp.category?.nodes?.[0]?.slug || "";
-    const servicesLimit   = exp.postsCount ? Math.max(1, parseInt(exp.postsCount, 10)) : 100;
+    const servicesLimit = exp.postsCount ? Math.max(1, parseInt(exp.postsCount, 10)) : 100;
 
     let dynamicServices: any[] = [];
     if (serviceCategory) {
@@ -924,8 +935,7 @@ export async function getHomePage(uri: string = "/"): Promise<HomepageData | nul
         categorySlug: [serviceCategory],
         limit: servicesLimit,
       });
-      dynamicServices =
-        svcRaw?.data?.serviceCategories?.nodes?.[0]?.hutechServices?.nodes || [];
+      dynamicServices = svcRaw?.data?.serviceCategories?.nodes?.[0]?.hutechServices?.nodes || [];
     } else {
       const svcRaw = await fetchGraphQL(ALL_SERVICES_QUERY, { limit: servicesLimit });
       dynamicServices = svcRaw?.data?.hutechServices?.nodes || [];
@@ -940,7 +950,7 @@ export async function getHomePage(uri: string = "/"): Promise<HomepageData | nul
 
     // ── Blog Posts / What's New ─────────────────────────────────────────────
     const blogCategory = wn.category?.nodes?.[0]?.slug || "";
-    const blogsLimit   = wn.postsCount ? Math.max(1, parseInt(wn.postsCount, 10)) : 100;
+    const blogsLimit = wn.postsCount ? Math.max(1, parseInt(wn.postsCount, 10)) : 100;
 
     let dynamicBlogs: any[] = [];
     if (blogCategory) {
@@ -1373,9 +1383,9 @@ function formatEventDateString(dateStr: string): string {
     } else {
       d = new Date(dateStr);
     }
-    
+
     if (!isNaN(d.getTime())) {
-      return d.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+      return d.toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" });
     }
   } catch (e) {
     // ignore
@@ -1403,9 +1413,7 @@ function transformEventNode(node: any) {
   const { date, time } = formatEventDateTime(pf, node.date);
   const imageUrl = imgUrl(node.featuredImage) || DEFAULT_EVENT_IMAGE;
 
-  const highlights: string[] = [1, 2, 3, 4, 5, 6]
-    .map((i) => pf[`highlight${i}`])
-    .filter(Boolean);
+  const highlights: string[] = [1, 2, 3, 4, 5, 6].map((i) => pf[`highlight${i}`]).filter(Boolean);
 
   const agenda: { time: string; event: string }[] = [1, 2, 3, 4, 5, 6, 7, 8]
     .map((i) => ({ time: pf[`agenda${i}Time`] || "", event: pf[`agenda${i}Title`] || "" }))
@@ -1427,18 +1435,22 @@ function transformEventNode(node: any) {
     date,
     time,
     location: pf.location ?? "",
-    type: Array.isArray(pf.eventType) ? (pf.eventType[0] || "In-Person") : (pf.eventType || "In-Person"),
-    category: Array.isArray(pf.eventCategoryLabel) ? (pf.eventCategoryLabel[0] || "Event") : (pf.eventCategoryLabel || node.eventCategories?.nodes?.[0]?.name || "Event"),
+    type: Array.isArray(pf.eventType)
+      ? pf.eventType[0] || "In-Person"
+      : pf.eventType || "In-Person",
+    category: Array.isArray(pf.eventCategoryLabel)
+      ? pf.eventCategoryLabel[0] || "Event"
+      : pf.eventCategoryLabel || node.eventCategories?.nodes?.[0]?.name || "Event",
     image: imageUrl,
     description: pf.description ?? "",
     highlights,
     agenda,
     speakers,
-    
+
     titleAbout: pf.titleAbout || "About the Event",
     titleAgenda: pf.titleAgenda || "Event Agenda",
     titleSpeakers: pf.titleSpeakers || "Featured Speakers",
-    
+
     helpfulLinksTitle: pf.helpfulLinksTitle || "Helpful Links",
     linkShareLabel: pf.linkShareLabel || "Share with colleagues",
     linkCalendarLabel: pf.linkCalendarLabel || "Add to Calendar",
@@ -1446,7 +1458,9 @@ function transformEventNode(node: any) {
     linkContactUrl: pf.linkContactUrl || "/contact",
 
     ctaTitle: pf.ctaTitle ?? "Can't make it to this |Event?",
-    ctaDescription: pf.ctaDescription ?? "Subscribe to our tech newsletter to receive event summaries, recording links, and early-bird notifications for our upcoming summits.",
+    ctaDescription:
+      pf.ctaDescription ??
+      "Subscribe to our tech newsletter to receive event summaries, recording links, and early-bird notifications for our upcoming summits.",
     ctaImage: imgUrl(pf.ctaImage) || DEFAULT_EVENT_CTA_IMAGE,
     ctaVideoUrl: pf.ctaVideoUrl ?? "",
   };
@@ -1480,7 +1494,11 @@ export async function getEventBySlug(slug: string): Promise<any | null> {
   }
 }
 
-export async function getEventPageData(): Promise<{ title: string; description: string; bgImageUrl?: string } | null> {
+export async function getEventPageData(): Promise<{
+  title: string;
+  description: string;
+  bgImageUrl?: string;
+} | null> {
   try {
     const raw = await fetchGraphQL(EVENT_PAGE_QUERY);
     const node = raw?.data?.pages?.nodes?.[0]?.eventPageFields;
@@ -1568,13 +1586,6 @@ const CASE_STUDY_BY_SLUG_QUERY = `
           name
         }
       }
-    }
-  }
-`;
-
-const CASE_STUDY_FAQ_QUERY = `
-  query GetCaseStudyFaq($slug: ID!) {
-    caseStudy(id: $slug, idType: SLUG) {
       caseStudyPostFields {
         client
         impact
@@ -1597,6 +1608,46 @@ const CASE_STUDY_FAQ_QUERY = `
         screensTopTitle
         screensTitle
         screensDesc
+        img1 { node { sourceUrl } }
+        img1Device
+        img1TopTitle
+        img1Title
+        img1Desc
+        img2 { node { sourceUrl } }
+        img2Device
+        img2TopTitle
+        img2Title
+        img2Desc
+        img3 { node { sourceUrl } }
+        img3Device
+        img3TopTitle
+        img3Title
+        img3Desc
+        img4 { node { sourceUrl } }
+        img4Device
+        img4TopTitle
+        img4Title
+        img4Desc
+        img5 { node { sourceUrl } }
+        img5Device
+        img5TopTitle
+        img5Title
+        img5Desc
+        img6 { node { sourceUrl } }
+        img6Device
+        img6TopTitle
+        img6Title
+        img6Desc
+        img7 { node { sourceUrl } }
+        img7Device
+        img7TopTitle
+        img7Title
+        img7Desc
+        img8 { node { sourceUrl } }
+        img8Device
+        img8TopTitle
+        img8Title
+        img8Desc
         challengesTopTitle
         challengesSectionTitle
         challengesDesc
@@ -1668,35 +1719,27 @@ const CASE_STUDY_FAQ_QUERY = `
         challenge8Desc
         challenge8Icon
         solution1Title
-        solution1Icon { node { sourceUrl } }
         solution1Desc
         solution1Icon
         solution2Title
-        solution2Icon { node { sourceUrl } }
         solution2Desc
         solution2Icon
         solution3Title
-        solution3Icon { node { sourceUrl } }
         solution3Desc
         solution3Icon
         solution4Title
-        solution4Icon { node { sourceUrl } }
         solution4Desc
         solution4Icon
         solution5Title
-        solution5Icon { node { sourceUrl } }
         solution5Desc
         solution5Icon
         solution6Title
-        solution6Icon { node { sourceUrl } }
         solution6Desc
         solution6Icon
         solution7Title
-        solution7Icon { node { sourceUrl } }
         solution7Desc
         solution7Icon
         solution8Title
-        solution8Icon { node { sourceUrl } }
         solution8Desc
         solution8Icon
         process1Number
@@ -1740,55 +1783,6 @@ const CASE_STUDY_FAQ_QUERY = `
   }
 `;
 
-const CASE_STUDY_SCREENS_QUERY = `
-  query GetCaseStudyScreens($slug: ID!) {
-    caseStudy(id: $slug, idType: SLUG) {
-      caseStudyPostFields {
-        img1 { node { sourceUrl } }
-        img1Device
-        img1TopTitle
-        img1Title
-        img1Desc
-        img2 { node { sourceUrl } }
-        img2Device
-        img2TopTitle
-        img2Title
-        img2Desc
-        img3 { node { sourceUrl } }
-        img3Device
-        img3TopTitle
-        img3Title
-        img3Desc
-        img4 { node { sourceUrl } }
-        img4Device
-        img4TopTitle
-        img4Title
-        img4Desc
-        img5 { node { sourceUrl } }
-        img5Device
-        img5TopTitle
-        img5Title
-        img5Desc
-        img6 { node { sourceUrl } }
-        img6Device
-        img6TopTitle
-        img6Title
-        img6Desc
-        img7 { node { sourceUrl } }
-        img7Device
-        img7TopTitle
-        img7Title
-        img7Desc
-        img8 { node { sourceUrl } }
-        img8Device
-        img8TopTitle
-        img8Title
-        img8Desc
-      }
-    }
-  }
-`;
-
 const CASE_STUDY_PAGE_QUERY = `
   query GetCaseStudyPageData {
     pages(where: { name: "Case Studies" }) {
@@ -1811,9 +1805,12 @@ const CASE_STUDY_PAGE_QUERY = `
 
 function transformCaseStudyNode(node: any): CaseStudy {
   const pf = node.caseStudyPostFields || {};
-  
+
   const category = node.caseStudyCategories?.nodes?.[0]?.name ?? "Case Study";
-  const tags = node.caseStudyTags?.nodes?.map((t: any) => t.name) ?? node.tags?.nodes?.map((t: any) => t.name) ?? [];
+  const tags =
+    node.caseStudyTags?.nodes?.map((t: any) => t.name) ??
+    node.tags?.nodes?.map((t: any) => t.name) ??
+    [];
   const imageUrl = imgUrl(node.featuredImage) || DEFAULT_CASE_STUDY_IMAGE;
 
   const overviewText = [];
@@ -1863,15 +1860,15 @@ function transformCaseStudyNode(node: any): CaseStudy {
     }
   }
 
-
-
   const screens = [];
   for (let i = 1; i <= 8; i++) {
     const screenImg = pf[`img${i}`]?.node?.sourceUrl;
     if (screenImg) {
       screens.push({
         image: screenImg,
-        device: pf[`img${i}Device`] || "laptop",
+        device: Array.isArray(pf[`img${i}Device`])
+          ? pf[`img${i}Device`][0]
+          : pf[`img${i}Device`] || "laptop",
         topTitle: pf[`img${i}TopTitle`] || "",
         title: pf[`img${i}Title`] || "",
         desc: pf[`img${i}Desc`] || "",
@@ -1979,28 +1976,7 @@ export async function getCaseStudyBySlug(slug: string): Promise<CaseStudy | null
       return null;
     }
 
-    const postNode = raw.data.caseStudy;
-
-    try {
-      const faqRaw = await fetchGraphQL(CASE_STUDY_FAQ_QUERY, { slug });
-      if (!faqRaw?.errors && faqRaw?.data?.caseStudy?.caseStudyPostFields) {
-        postNode.caseStudyPostFields = faqRaw.data.caseStudy.caseStudyPostFields;
-      }
-    } catch (err) {
-      console.warn("[WP] Could not fetch FAQs for case study:", slug);
-    }
-
-    try {
-      const screensRaw = await fetchGraphQL(CASE_STUDY_SCREENS_QUERY, { slug });
-      if (!screensRaw?.errors && screensRaw?.data?.caseStudy?.caseStudyPostFields) {
-        if (!postNode.caseStudyPostFields) postNode.caseStudyPostFields = {};
-        Object.assign(postNode.caseStudyPostFields, screensRaw.data.caseStudy.caseStudyPostFields);
-      }
-    } catch (err) {
-      console.warn("[WP] Could not fetch screens for case study:", slug);
-    }
-
-    return transformCaseStudyNode(postNode);
+    return transformCaseStudyNode(raw.data.caseStudy);
   } catch (err) {
     console.error("[WP] getCaseStudyBySlug() failed:", err);
     return null;
@@ -2075,79 +2051,91 @@ const ABOUT_PAGE_QUERY = `
 `;
 
 function transformAboutPageData(f: any) {
-  const stats = [1, 2, 3, 4, 5, 6].map(i => ({
-    value: f[`heroStat${i}Value`] || "",
-    label: f[`heroStat${i}Label`] || "",
-  })).filter(s => s.value);
+  const stats = [1, 2, 3, 4, 5, 6]
+    .map((i) => ({
+      value: f[`heroStat${i}Value`] || "",
+      label: f[`heroStat${i}Label`] || "",
+    }))
+    .filter((s) => s.value);
 
-  const whatWeDoItems = [1, 2, 3, 4].map(i => f[`whatWeDoBullet${i}`] || "").filter(Boolean);
-  const whoWeHelpItems = [1, 2, 3, 4].map(i => f[`whoWeHelpBullet${i}`] || "").filter(Boolean);
+  const whatWeDoItems = [1, 2, 3, 4].map((i) => f[`whatWeDoBullet${i}`] || "").filter(Boolean);
+  const whoWeHelpItems = [1, 2, 3, 4].map((i) => f[`whoWeHelpBullet${i}`] || "").filter(Boolean);
 
-  const milestones = [1, 2, 3, 4, 5, 6].map(i => ({
-    year:  f[`milestone${i}Year`]  || "",
-    title: f[`milestone${i}Title`] || "",
-    desc:  f[`milestone${i}Desc`]  || "",
-  })).filter(m => m.year);
+  const milestones = [1, 2, 3, 4, 5, 6]
+    .map((i) => ({
+      year: f[`milestone${i}Year`] || "",
+      title: f[`milestone${i}Title`] || "",
+      desc: f[`milestone${i}Desc`] || "",
+    }))
+    .filter((m) => m.year);
 
-  const features = [1, 2, 3, 4].map(i => ({
-    title: f[`overviewFeature${i}Title`] || "",
-    desc:  f[`overviewFeature${i}Desc`] || "",
-    icon:  ["Code2", "Cpu", "Fingerprint", "ShieldCheck"][i - 1] || "Code2"
-  })).filter(feat => feat.title);
+  const features = [1, 2, 3, 4]
+    .map((i) => ({
+      title: f[`overviewFeature${i}Title`] || "",
+      desc: f[`overviewFeature${i}Desc`] || "",
+      icon: ["Code2", "Cpu", "Fingerprint", "ShieldCheck"][i - 1] || "Code2",
+    }))
+    .filter((feat) => feat.title);
 
-  const offices = [1, 2, 3, 4, 5].map(i => ({
-    id: (f[`location${i}Name`] || f[`location${i}City`] || `office-${i}`).toLowerCase().replace(/\s+/g, '-'),
-    name: f[`location${i}Name`] || f[`location${i}City`] || "",
-    city: f[`location${i}City`] || "",
-    type: f[`location${i}Type`] || "",
-    details: f[`location${i}Details`] || "",
-    lat: f[`location${i}Lat`] || "",
-    lng: f[`location${i}Lng`] || ""
-  })).filter(loc => loc.city || loc.name);
+  const offices = [1, 2, 3, 4, 5]
+    .map((i) => ({
+      id: (f[`location${i}Name`] || f[`location${i}City`] || `office-${i}`)
+        .toLowerCase()
+        .replace(/\s+/g, "-"),
+      name: f[`location${i}Name`] || f[`location${i}City`] || "",
+      city: f[`location${i}City`] || "",
+      type: f[`location${i}Type`] || "",
+      details: f[`location${i}Details`] || "",
+      lat: f[`location${i}Lat`] || "",
+      lng: f[`location${i}Lng`] || "",
+    }))
+    .filter((loc) => loc.city || loc.name);
 
   return {
-    heroTagline:    f.heroTagline    || undefined,
-    heroTitle:      f.heroTitle      || undefined,
-    heroDescription:f.heroDescription|| undefined,
-    heroBgImage:    imgUrl(f.heroBgImage) || undefined,
-    stats:          stats.length > 0 ? stats : undefined,
-    overviewTitle:  f.overviewTitle  || undefined,
-    overviewQuote:  f.overviewDescription || undefined,
-    features:       features.length > 0 ? features : undefined,
-    whatWeDoTitle:  f.whatWeDoTitle  || undefined,
-    whatWeDoDesc:   f.whatWeDoDesc   || undefined,
-    whatWeDoItems:  whatWeDoItems.length > 0 ? whatWeDoItems : undefined,
+    heroTagline: f.heroTagline || undefined,
+    heroTitle: f.heroTitle || undefined,
+    heroDescription: f.heroDescription || undefined,
+    heroBgImage: imgUrl(f.heroBgImage) || undefined,
+    stats: stats.length > 0 ? stats : undefined,
+    overviewTitle: f.overviewTitle || undefined,
+    overviewQuote: f.overviewDescription || undefined,
+    features: features.length > 0 ? features : undefined,
+    whatWeDoTitle: f.whatWeDoTitle || undefined,
+    whatWeDoDesc: f.whatWeDoDesc || undefined,
+    whatWeDoItems: whatWeDoItems.length > 0 ? whatWeDoItems : undefined,
     whoWeHelpTitle: f.whoWeHelpTitle || undefined,
-    whoWeHelpDesc:  f.whoWeHelpDesc  || undefined,
+    whoWeHelpDesc: f.whoWeHelpDesc || undefined,
     whoWeHelpItems: whoWeHelpItems.length > 0 ? whoWeHelpItems : undefined,
     whyChooseTitle: f.whyChooseUsTitle || undefined,
-    whyChooseDesc:  f.whyChooseUsDesc  || undefined,
-    synergyTitle:   f.globalSynergyTitle || undefined,
-    synergyDesc:    f.globalSynergyDesc || undefined,
-    synergyStat1:   f.synergyStat1Label || undefined,
-    synergyStat2:   f.synergyStat2Label || undefined,
+    whyChooseDesc: f.whyChooseUsDesc || undefined,
+    synergyTitle: f.globalSynergyTitle || undefined,
+    synergyDesc: f.globalSynergyDesc || undefined,
+    synergyStat1: f.synergyStat1Label || undefined,
+    synergyStat2: f.synergyStat2Label || undefined,
     // Map stats
-    mapTitle:       f.globalFootprintTitle || undefined,
+    mapTitle: f.globalFootprintTitle || undefined,
     mapDescription: f.globalFootprintDesc || undefined,
-    mapStat1Value:  f.globalStat1Value  || undefined,
-    mapStat1Label:  f.globalStat1Label  || undefined,
-    mapStat2Value:  f.globalStat2Value  || undefined,
-    mapStat2Label:  f.globalStat2Label  || undefined,
-    offices:        offices.length > 0 ? offices : undefined,
-    historySubtitle:f.historySubtitle || undefined,
-    historyTitle:   f.historyTitle   || undefined,
-    milestones:     milestones.length > 0 ? milestones : undefined,
-    ctaBgImage:     imgUrl(f.ctaBgImage) || undefined,
-    ctaTitle:       f.ctaTitle       || undefined,
+    mapStat1Value: f.globalStat1Value || undefined,
+    mapStat1Label: f.globalStat1Label || undefined,
+    mapStat2Value: f.globalStat2Value || undefined,
+    mapStat2Label: f.globalStat2Label || undefined,
+    offices: offices.length > 0 ? offices : undefined,
+    historySubtitle: f.historySubtitle || undefined,
+    historyTitle: f.historyTitle || undefined,
+    milestones: milestones.length > 0 ? milestones : undefined,
+    ctaBgImage: imgUrl(f.ctaBgImage) || undefined,
+    ctaTitle: f.ctaTitle || undefined,
     ctaDescription: f.ctaDescription || undefined,
-    ctaBtn1Text:    f.ctaButton1Text || undefined,
-    ctaBtn1Url:     f.ctaButton1Url  || undefined,
-    ctaBtn2Text:    f.ctaButton2Text || undefined,
-    ctaBtn2Url:     f.ctaButton2Url  || undefined,
+    ctaBtn1Text: f.ctaButton1Text || undefined,
+    ctaBtn1Url: f.ctaButton1Url || undefined,
+    ctaBtn2Text: f.ctaButton2Text || undefined,
+    ctaBtn2Url: f.ctaButton2Url || undefined,
   };
 }
 
-export async function getAboutPageData(uri: string = "/about/"): Promise<ReturnType<typeof transformAboutPageData> | null> {
+export async function getAboutPageData(
+  uri: string = "/about/"
+): Promise<ReturnType<typeof transformAboutPageData> | null> {
   try {
     let raw = await fetchGraphQL(ABOUT_PAGE_QUERY, { uri });
     let f = raw?.data?.pageBy?.aboutPageFields;
@@ -2224,43 +2212,45 @@ function transformAwardsPageData(f: any) {
       issuer: f[`awardsAward${idx}Issuer`] || "",
       desc: f[`awardsAward${idx}Desc`] || "",
       iconName: f[`awardsAward${idx}Icon`] || "Trophy",
-      link: f[`awardsAward${idx}Link`] || ""
+      link: f[`awardsAward${idx}Link`] || "",
     };
-  }).filter(a => a.title);
+  }).filter((a) => a.title);
 
   const stats = Array.from({ length: 4 }, (_, i) => {
     const idx = i + 1;
     return {
       label: f[`awardsStat${idx}Label`] || "",
-      value: f[`awardsStat${idx}Value`] || ""
+      value: f[`awardsStat${idx}Value`] || "",
     };
-  }).filter(s => s.value);
+  }).filter((s) => s.value);
 
   return {
     heroTagline: f.awardsHeroTagline || "Our Milestones",
     heroTitle: f.awardsHeroTitle || "Awards & |Recognition.",
     heroDescription: f.awardsHeroDescription || "",
     heroBgImage: imgUrl(f.awardsHeroBgImage),
-    
+
     journeyTagline: f.awardsJourneyTagline || "Milestones",
     journeyTitle: f.awardsJourneyTitle || "A Journey of Distinction",
     journeyDescription: f.awardsJourneyDescription || "",
     awardsList: awardsList.length > 0 ? awardsList : undefined,
-    
+
     featuredTitle: f.awardsFeaturedTitle || "Recognized for |Global Excellence.",
     featuredDescription: f.awardsFeaturedDescription || "",
     featuredImage: imgUrl(f.awardsFeaturedImage),
     stats: stats.length > 0 ? stats : undefined,
-    
+
     ctaTitle: f.awardsCtaTitle || "Join our award-winning |journey.",
     ctaBtn1Text: f.awardsCtaBtn1Text || "Explore Case Studies",
     ctaBtn1Url: f.awardsCtaBtn1Url || "/resources/case-studies",
     ctaBtn2Text: f.awardsCtaBtn2Text || "Partner With Us",
-    ctaBtn2Url: f.awardsCtaBtn2Url || "/contact"
+    ctaBtn2Url: f.awardsCtaBtn2Url || "/contact",
   };
 }
 
-export async function getAwardsPageData(uri: string = "/awards/"): Promise<ReturnType<typeof transformAwardsPageData> | null> {
+export async function getAwardsPageData(
+  uri: string = "/awards/"
+): Promise<ReturnType<typeof transformAwardsPageData> | null> {
   try {
     const raw = await fetchGraphQL(AWARDS_PAGE_QUERY, { uri });
     const f = raw?.data?.pageBy?.awardsPageFields;
@@ -2304,33 +2294,37 @@ const VMV_PAGE_QUERY = `
 `;
 
 function transformVMVPageData(f: any) {
-  const values = [1, 2, 3, 4, 5, 6].map(i => ({
-    title: f[`vmvValue${i}Title`] || "",
-    desc:  f[`vmvValue${i}Desc`]  || "",
-  })).filter(v => v.title);
+  const values = [1, 2, 3, 4, 5, 6]
+    .map((i) => ({
+      title: f[`vmvValue${i}Title`] || "",
+      desc: f[`vmvValue${i}Desc`] || "",
+    }))
+    .filter((v) => v.title);
 
   return {
-    heroTagline:        f.vmvHeroTagline        || "Our Purpose",
-    heroTitle:          f.vmvHeroTitle          || "Our Vision, |Mission & ^Values.",
-    heroDescription:    f.vmvHeroDescription    || "",
-    visionTitle:        f.vmvVisionTitle        || "Our Vision",
-    visionDescription:  f.vmvVisionDescription  || "",
-    missionTitle:       f.vmvMissionTitle       || "Our Mission",
+    heroTagline: f.vmvHeroTagline || "Our Purpose",
+    heroTitle: f.vmvHeroTitle || "Our Vision, |Mission & ^Values.",
+    heroDescription: f.vmvHeroDescription || "",
+    visionTitle: f.vmvVisionTitle || "Our Vision",
+    visionDescription: f.vmvVisionDescription || "",
+    missionTitle: f.vmvMissionTitle || "Our Mission",
     missionDescription: f.vmvMissionDescription || "",
-    valuesTagline:      f.vmvValuesTagline      || "The Pillars of Hutech",
-    valuesTitle:        f.vmvValuesTitle        || "Our Core Values",
-    valuesDescription:  f.vmvValuesDescription  || "",
+    valuesTagline: f.vmvValuesTagline || "The Pillars of Hutech",
+    valuesTitle: f.vmvValuesTitle || "Our Core Values",
+    valuesDescription: f.vmvValuesDescription || "",
     values: values.length > 0 ? values : undefined,
-    ctaTitle:           f.vmvCtaTitle           || "Join Us in Shaping the Future of Technology.",
-    ctaDescription:     f.vmvCtaDescription     || "",
-    ctaBtn1Text:        f.vmvCtaBtn1Text        || "Partner With Us",
-    ctaBtn1Url:         f.vmvCtaBtn1Url         || "/contact",
-    ctaBtn2Text:        f.vmvCtaBtn2Text        || "View Careers",
-    ctaBtn2Url:         f.vmvCtaBtn2Url         || "/careers",
+    ctaTitle: f.vmvCtaTitle || "Join Us in Shaping the Future of Technology.",
+    ctaDescription: f.vmvCtaDescription || "",
+    ctaBtn1Text: f.vmvCtaBtn1Text || "Partner With Us",
+    ctaBtn1Url: f.vmvCtaBtn1Url || "/contact",
+    ctaBtn2Text: f.vmvCtaBtn2Text || "View Careers",
+    ctaBtn2Url: f.vmvCtaBtn2Url || "/careers",
   };
 }
 
-export async function getVMVPageData(uri: string = "/vision-mission-values/"): Promise<ReturnType<typeof transformVMVPageData> | null> {
+export async function getVMVPageData(
+  uri: string = "/vision-mission-values/"
+): Promise<ReturnType<typeof transformVMVPageData> | null> {
   try {
     const raw = await fetchGraphQL(VMV_PAGE_QUERY, { uri });
     const f = raw?.data?.pageBy?.visionMissionValuesPageFields;
@@ -2380,44 +2374,53 @@ const LEADERSHIP_PAGE_QUERY = `
 `;
 
 function transformLeadershipPageData(f: any) {
-  const leaders = [1, 2, 3, 4, 5, 6, 7, 8, 9].map(i => ({
-    name:         f[`leadLeader${i}Name`] || "",
-    role:         f[`leadLeader${i}Role`] || "",
-    img:          imgUrl(f[`leadLeader${i}Img`]) || DEFAULT_LEADER_IMAGES[i - 1] || DEFAULT_LEADER_IMAGES[0],
-    bio:          f[`leadLeader${i}Bio`]  || "",
-    linkedin:     f[`leadLeader${i}Linkedin`] || "",
-    linkedinIcon: imgUrl(f[`leadLeader${i}LinkedinIcon`]) || "",
-    twitter:      f[`leadLeader${i}Twitter`] || "",
-    twitterIcon:  imgUrl(f[`leadLeader${i}TwitterIcon`]) || "",
-  })).filter(l => l.name);
+  const leaders = [1, 2, 3, 4, 5, 6, 7, 8, 9]
+    .map((i) => ({
+      name: f[`leadLeader${i}Name`] || "",
+      role: f[`leadLeader${i}Role`] || "",
+      img:
+        imgUrl(f[`leadLeader${i}Img`]) || DEFAULT_LEADER_IMAGES[i - 1] || DEFAULT_LEADER_IMAGES[0],
+      bio: f[`leadLeader${i}Bio`] || "",
+      linkedin: f[`leadLeader${i}Linkedin`] || "",
+      linkedinIcon: imgUrl(f[`leadLeader${i}LinkedinIcon`]) || "",
+      twitter: f[`leadLeader${i}Twitter`] || "",
+      twitterIcon: imgUrl(f[`leadLeader${i}TwitterIcon`]) || "",
+    }))
+    .filter((l) => l.name);
 
-  const advisors = [1, 2, 3, 4, 5, 6].map(i => ({
-    name:   f[`leadAdvisor${i}Name`]   || "",
-    firm:   f[`leadAdvisor${i}Firm`]   || "",
-    region: f[`leadAdvisor${i}Region`] || "",
-  })).filter(a => a.name);
+  const advisors = [1, 2, 3, 4, 5, 6]
+    .map((i) => ({
+      name: f[`leadAdvisor${i}Name`] || "",
+      firm: f[`leadAdvisor${i}Firm`] || "",
+      region: f[`leadAdvisor${i}Region`] || "",
+    }))
+    .filter((a) => a.name);
 
   return {
-    heroTagline:         f.leadHeroTagline         || "The Executive Bench",
-    heroTitle:           f.leadHeroTitle           || "The ^Visionaries.",
-    heroDescription:     f.leadHeroDescription     || "",
-    heroBgImage:         imgUrl(f.leadHeroBgImage) || "https://images.unsplash.com/photo-1497366216548-37526070297c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1920",
-    leaders:             leaders.length > 0 ? leaders : undefined,
-    advisoryTitle:       f.leadAdvisoryTitle       || "Board of |~Advisors.",
+    heroTagline: f.leadHeroTagline || "The Executive Bench",
+    heroTitle: f.leadHeroTitle || "The ^Visionaries.",
+    heroDescription: f.leadHeroDescription || "",
+    heroBgImage:
+      imgUrl(f.leadHeroBgImage) ||
+      "https://images.unsplash.com/photo-1497366216548-37526070297c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1920",
+    leaders: leaders.length > 0 ? leaders : undefined,
+    advisoryTitle: f.leadAdvisoryTitle || "Board of |~Advisors.",
     advisoryDescription: f.leadAdvisoryDescription || "",
-    advisoryBtnText:     f.leadAdvisoryBtnText     || "Engage with Us",
-    advisoryBtnUrl:      f.leadAdvisoryBtnUrl      || "/contact",
-    advisors:            advisors.length > 0 ? advisors : undefined,
-    ctaTitle:            f.leadCtaTitle            || "Lead the Next |^Digital Frontier.",
-    ctaDescription:      f.leadCtaDescription      || "",
-    ctaBtn1Text:         f.leadCtaBtn1Text         || "Partner With Us",
-    ctaBtn1Url:          f.leadCtaBtn1Url          || "/contact",
-    ctaBtn2Text:         f.leadCtaBtn2Text         || "Executive Careers",
-    ctaBtn2Url:          f.leadCtaBtn2Url          || "/careers",
+    advisoryBtnText: f.leadAdvisoryBtnText || "Engage with Us",
+    advisoryBtnUrl: f.leadAdvisoryBtnUrl || "/contact",
+    advisors: advisors.length > 0 ? advisors : undefined,
+    ctaTitle: f.leadCtaTitle || "Lead the Next |^Digital Frontier.",
+    ctaDescription: f.leadCtaDescription || "",
+    ctaBtn1Text: f.leadCtaBtn1Text || "Partner With Us",
+    ctaBtn1Url: f.leadCtaBtn1Url || "/contact",
+    ctaBtn2Text: f.leadCtaBtn2Text || "Executive Careers",
+    ctaBtn2Url: f.leadCtaBtn2Url || "/careers",
   };
 }
 
-export async function getLeadershipPageData(uri: string = "/leadership/"): Promise<ReturnType<typeof transformLeadershipPageData> | null> {
+export async function getLeadershipPageData(
+  uri: string = "/leadership/"
+): Promise<ReturnType<typeof transformLeadershipPageData> | null> {
   try {
     const raw = await fetchGraphQL(LEADERSHIP_PAGE_QUERY, { uri });
     const f = raw?.data?.pageBy?.leadershipPageFields;
@@ -2497,67 +2500,83 @@ const PARTNERSHIP_PAGE_QUERY = `
 `;
 
 function transformPartnershipPageData(f: any) {
-  const introBullets = [1, 2, 3, 4].map(i => f[`partIntroBullet${i}`] || "").filter(Boolean);
-  
-  const categories = [1, 2, 3].map(i => ({
-    title:    f[`partCat${i}Title`] || "",
-    desc:     f[`partCat${i}Desc`] || "",
-    partners: f[`partCat${i}Partners`] || ""
-  })).filter(c => c.title);
+  const introBullets = [1, 2, 3, 4].map((i) => f[`partIntroBullet${i}`] || "").filter(Boolean);
 
-  const meetImages = [1, 2, 3, 4, 5, 6, 7, 8, 9].map(i => ({
-    src: imgUrl(f[`partMeetImg${i}`]) || DEFAULT_PARTNER_MEET_IMAGES[i - 1] || "",
-    alt: f[`partMeetAlt${i}`] || ""
-  })).filter(m => m.src);
+  const categories = [1, 2, 3]
+    .map((i) => ({
+      title: f[`partCat${i}Title`] || "",
+      desc: f[`partCat${i}Desc`] || "",
+      partners: f[`partCat${i}Partners`] || "",
+    }))
+    .filter((c) => c.title);
 
-  const logos = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16].map(i => {
-    const name = f[`partLogo${i}Name`] || "";
-    const logo = imgUrl(f[`partLogo${i}Img`]);
-    return {
-      name,
-      logo: logo || (name ? DEFAULT_PARTNER_LOGOS[i - 1] || DEFAULT_PARTNER_LOGOS[0] : "")
-    };
-  }).filter(l => l.name || l.logo);
+  const meetImages = [1, 2, 3, 4, 5, 6, 7, 8, 9]
+    .map((i) => ({
+      src: imgUrl(f[`partMeetImg${i}`]) || DEFAULT_PARTNER_MEET_IMAGES[i - 1] || "",
+      alt: f[`partMeetAlt${i}`] || "",
+    }))
+    .filter((m) => m.src);
 
-  const benefits = [1, 2, 3, 4].map(i => ({
-    title: f[`partBen${i}Title`] || "",
-    desc:  f[`partBen${i}Desc`] || ""
-  })).filter(b => b.title);
+  const logos = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]
+    .map((i) => {
+      const name = f[`partLogo${i}Name`] || "";
+      const logo = imgUrl(f[`partLogo${i}Img`]);
+      return {
+        name,
+        logo: logo || (name ? DEFAULT_PARTNER_LOGOS[i - 1] || DEFAULT_PARTNER_LOGOS[0] : ""),
+      };
+    })
+    .filter((l) => l.name || l.logo);
+
+  const benefits = [1, 2, 3, 4]
+    .map((i) => ({
+      title: f[`partBen${i}Title`] || "",
+      desc: f[`partBen${i}Desc`] || "",
+    }))
+    .filter((b) => b.title);
 
   return {
-    heroTagline:    f.partHeroTagline || "Ecosystem of Excellence",
-    heroTitle:      f.partHeroTitle || "Strategic |Technology ^Alliances.",
-    heroDescription:f.partHeroDescription || "",
-    heroBgImage:    imgUrl(f.partHeroBgImage) || "https://images.unsplash.com/photo-1591453214154-c95db71dbd83?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1280",
-    
-    introTitle:       f.partIntroTitle || "Architecting |Shared ^Success.",
+    heroTagline: f.partHeroTagline || "Ecosystem of Excellence",
+    heroTitle: f.partHeroTitle || "Strategic |Technology ^Alliances.",
+    heroDescription: f.partHeroDescription || "",
+    heroBgImage:
+      imgUrl(f.partHeroBgImage) ||
+      "https://images.unsplash.com/photo-1591453214154-c95db71dbd83?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1280",
+
+    introTitle: f.partIntroTitle || "Architecting |Shared ^Success.",
     introDescription: f.partIntroDescription || "",
-    introBullets:     introBullets.length > 0 ? introBullets : undefined,
-    introImage:       imgUrl(f.partIntroImg) || "https://images.unsplash.com/photo-1610702876884-0f8473590287?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080",
-    
-    categoriesTitle:  f.partCategoriesTitle || "Partner Ecosystem",
+    introBullets: introBullets.length > 0 ? introBullets : undefined,
+    introImage:
+      imgUrl(f.partIntroImg) ||
+      "https://images.unsplash.com/photo-1610702876884-0f8473590287?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080",
+
+    categoriesTitle: f.partCategoriesTitle || "Partner Ecosystem",
     categoriesDescription: f.partCategoriesDescription || "",
-    categories:       categories.length > 0 ? categories : undefined,
-    
-    meetTitle:        f.partMeetTitle || "Meet Our Partners",
-    meetDescription:  f.partMeetDescription || "",
-    meetBtnText:      f.partMeetBtnText || "Find What You Need",
-    meetBtnUrl:       f.partMeetBtnUrl || "/services",
-    meetImages:       meetImages.length > 0 ? meetImages : undefined,
-    
-    logos:            logos.length > 0 ? logos : undefined,
-    
-    benefitsTitle:    f.partBenTitle || "Value of |^Association.",
-    benefitsImage:    imgUrl(f.partBenImg) || "https://images.unsplash.com/photo-1744868562210-fffb7fa882d9?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080",
-    benefits:         benefits.length > 0 ? benefits : undefined,
-    
-    ctaTitle:         f.partCtaTitle || "Become a |^Strategic Partner.",
-    ctaDescription:   f.partCtaDescription || "",
-    ctaEmail:         f.partCtaEmail || "alliances@hutechsolutions.com",
+    categories: categories.length > 0 ? categories : undefined,
+
+    meetTitle: f.partMeetTitle || "Meet Our Partners",
+    meetDescription: f.partMeetDescription || "",
+    meetBtnText: f.partMeetBtnText || "Find What You Need",
+    meetBtnUrl: f.partMeetBtnUrl || "/services",
+    meetImages: meetImages.length > 0 ? meetImages : undefined,
+
+    logos: logos.length > 0 ? logos : undefined,
+
+    benefitsTitle: f.partBenTitle || "Value of |^Association.",
+    benefitsImage:
+      imgUrl(f.partBenImg) ||
+      "https://images.unsplash.com/photo-1744868562210-fffb7fa882d9?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080",
+    benefits: benefits.length > 0 ? benefits : undefined,
+
+    ctaTitle: f.partCtaTitle || "Become a |^Strategic Partner.",
+    ctaDescription: f.partCtaDescription || "",
+    ctaEmail: f.partCtaEmail || "alliances@hutechsolutions.com",
   };
 }
 
-export async function getPartnershipPageData(uri: string = "/partnership/"): Promise<ReturnType<typeof transformPartnershipPageData> | null> {
+export async function getPartnershipPageData(
+  uri: string = "/partnership/"
+): Promise<ReturnType<typeof transformPartnershipPageData> | null> {
   try {
     const raw = await fetchGraphQL(PARTNERSHIP_PAGE_QUERY, { uri });
     const f = raw?.data?.pageBy?.partnershipPageFields;
@@ -2624,24 +2643,33 @@ const CONTACT_PAGE_QUERY = `
 `;
 
 function transformContactPageData(f: any) {
-  const offices = [1, 2, 3, 4, 5, 6].map(i => ({
-    city: f[`contactOffice${i}City`] || "",
-    country: f[`contactOffice${i}Country`] || "",
-    phone: f[`contactOffice${i}Phone`] || "",
-    address: f[`contactOffice${i}Address`] || "",
-    image: imgUrl(f[`contactOffice${i}Img`]) || DEFAULT_CONTACT_OFFICE_IMAGES[i - 1] || DEFAULT_CONTACT_OFFICE_IMAGES[0]
-  })).filter(o => o.city);
+  const offices = [1, 2, 3, 4, 5, 6]
+    .map((i) => ({
+      city: f[`contactOffice${i}City`] || "",
+      country: f[`contactOffice${i}Country`] || "",
+      phone: f[`contactOffice${i}Phone`] || "",
+      address: f[`contactOffice${i}Address`] || "",
+      image:
+        imgUrl(f[`contactOffice${i}Img`]) ||
+        DEFAULT_CONTACT_OFFICE_IMAGES[i - 1] ||
+        DEFAULT_CONTACT_OFFICE_IMAGES[0],
+    }))
+    .filter((o) => o.city);
 
-  const trustBuilders = [1, 2, 3].map(i => ({
-    title: f[`contactTrust${i}Title`] || "",
-    sub: f[`contactTrust${i}Sub`] || ""
-  })).filter(t => t.title);
+  const trustBuilders = [1, 2, 3]
+    .map((i) => ({
+      title: f[`contactTrust${i}Title`] || "",
+      sub: f[`contactTrust${i}Sub`] || "",
+    }))
+    .filter((t) => t.title);
 
   return {
     heroTagline: f.contactHeroTagline || "Get in Touch",
     heroTitle: f.contactHeroTitle || "Let's Engineer Your |Next ^Success.",
     heroDescription: f.contactHeroDescription || "",
-    heroBgImage: imgUrl(f.contactHeroBgImage) || "https://images.unsplash.com/photo-1771964427867-1b734fc7f5a7?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1920",
+    heroBgImage:
+      imgUrl(f.contactHeroBgImage) ||
+      "https://images.unsplash.com/photo-1771964427867-1b734fc7f5a7?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1920",
 
     formTitle: f.contactFormTitle || "Send a Message",
     formDescription: f.contactFormDescription || "",
@@ -2664,7 +2692,13 @@ function transformContactPageData(f: any) {
       const raw = f.contactSupportBtnUrl;
       if (!raw) return "";
       // If already an absolute URL, hash, or root-relative path, use as-is
-      if (raw.startsWith("http") || raw.startsWith("//") || raw.startsWith("/") || raw.startsWith("#")) return raw;
+      if (
+        raw.startsWith("http") ||
+        raw.startsWith("//") ||
+        raw.startsWith("/") ||
+        raw.startsWith("#")
+      )
+        return raw;
       // Otherwise it's a bare slug like "contact" — prepend slash
       return `/${raw}`;
     })(),
@@ -2675,13 +2709,17 @@ function transformContactPageData(f: any) {
 
     mapTitle: f.contactMapTitle || "Worldwide Delivery.",
     mapDescription: f.contactMapDescription || "",
-    mapBgImage: imgUrl(f.contactMapBgImage) || "https://images.unsplash.com/photo-1731700128691-16fcc9043d11?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1920",
+    mapBgImage:
+      imgUrl(f.contactMapBgImage) ||
+      "https://images.unsplash.com/photo-1731700128691-16fcc9043d11?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1920",
 
     trustBuilders: trustBuilders.length > 0 ? trustBuilders : undefined,
   };
 }
 
-export async function getContactPageData(): Promise<ReturnType<typeof transformContactPageData> | null> {
+export async function getContactPageData(): Promise<ReturnType<
+  typeof transformContactPageData
+> | null> {
   try {
     const raw = await fetchGraphQL(CONTACT_PAGE_QUERY);
     const f = raw?.data?.pages?.nodes?.[0]?.contactPageFields;
@@ -2751,10 +2789,10 @@ export interface HutechDocument {
 }
 
 function formatBytes(bytes: number, decimals = 1) {
-  if (!+bytes) return '0 Bytes';
+  if (!+bytes) return "0 Bytes";
   const k = 1024;
   const dm = decimals < 0 ? 0 : decimals;
-  const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
+  const sizes = ["Bytes", "KB", "MB", "GB", "TB"];
   const i = Math.floor(Math.log(bytes) / Math.log(k));
   return `${parseFloat((bytes / Math.pow(k, i)).toFixed(dm))} ${sizes[i]}`;
 }
@@ -2767,9 +2805,13 @@ export async function getDocumentPageData() {
     return {
       heroTagline: f.docPageHeroTagline || "Resource Library",
       heroTitle: f.docPageHeroTitle || "Hutech Documents.",
-      heroDesc: f.docPageHeroDesc || "Access official publications, corporate reports, and technical whitepapers.",
+      heroDesc:
+        f.docPageHeroDesc ||
+        "Access official publications, corporate reports, and technical whitepapers.",
       ctaTitle: f.docPageCtaTitle || "Need custom documentation?",
-      ctaDesc: f.docPageCtaDesc || "Our specialized teams can provide tailored technical whitepapers and architecture documentation for your enterprise needs.",
+      ctaDesc:
+        f.docPageCtaDesc ||
+        "Our specialized teams can provide tailored technical whitepapers and architecture documentation for your enterprise needs.",
       ctaBtnText: f.docPageCtaBtnText || "REQUEST ACCESS",
       ctaBtnUrl: f.docPageCtaBtnUrl || "/contact",
     };
@@ -2786,13 +2828,17 @@ export async function getHutechDocuments(): Promise<HutechDocument[]> {
     return nodes.map((node: any, idx: number) => {
       const f = node.documentPostFields || {};
       const fileNode = f.documentFile?.node;
-      
+
       const computedSize = fileNode?.fileSize ? formatBytes(fileNode.fileSize) : undefined;
-      
+
       return {
         id: `doc-${idx}`,
         title: node.title,
-        date: new Date(node.date).toLocaleDateString('en-US', { month: 'short', day: '2-digit', year: 'numeric' }),
+        date: new Date(node.date).toLocaleDateString("en-US", {
+          month: "short",
+          day: "2-digit",
+          year: "numeric",
+        }),
         category: node.documentCategories?.nodes?.[0]?.name || "Uncategorized",
         fileUrl: fileNode?.mediaItemUrl || undefined,
         mimeType: fileNode?.mimeType || undefined,
@@ -3009,22 +3055,32 @@ export async function getCareerPageData() {
     const raw = await fetchGraphQL(CAREERS_PAGE_QUERY);
     const node = raw?.data?.pages?.nodes?.[0];
     const f = node?.careerPageFields;
-    const heroBgImg = imgUrl(node?.featuredImage) || "https://images.unsplash.com/photo-1760611656615-db3fad24a314?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1920";
+    const heroBgImg =
+      imgUrl(node?.featuredImage) ||
+      "https://images.unsplash.com/photo-1760611656615-db3fad24a314?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1920";
     if (!f) return null;
     return {
       heroBgImg,
       heroTagline: f.careerPageHeroTagline || "Join our Talent Ecosystem",
       heroTitle: f.careerPageHeroTitle || "Build your ^Legacy. with us.",
-      heroDesc: f.careerPageHeroDesc || "Recruiting pioneers to solve complex engineering puzzles and architect the future.",
+      heroDesc:
+        f.careerPageHeroDesc ||
+        "Recruiting pioneers to solve complex engineering puzzles and architect the future.",
       openingsTagline: f.careerOpeningsTagline || "Open Opportunities",
       openingsTitle: f.careerOpeningsTitle || "Join the \n Excellence Hub.",
       openingsNoJobsTitle: f.careerOpeningsNoJobsTitle || "No relevant opening for your skill set?",
-      openingsNoJobsDesc: f.careerOpeningsNoJobsDesc || "We're always looking for exceptional talent. Drop your resume in our talent pool.",
+      openingsNoJobsDesc:
+        f.careerOpeningsNoJobsDesc ||
+        "We're always looking for exceptional talent. Drop your resume in our talent pool.",
       openingsGenBtn: f.careerOpeningsGenBtn || "General Application",
       cultureTagline: f.careerCultureTagline || "The Hutech Spirit",
       cultureTitle: f.careerCultureTitle || "Innovation is \n our ^North Star.",
-      cultureDesc: f.careerCultureDesc || "We foster a culture of radical transparency and extreme ownership. Here, your ideas aren't just heard—they are engineered into reality. We believe in high-performance agility balanced with empathy.",
-      cultureImg: imgUrl(f.careerCultureImg) || "https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&q=80",
+      cultureDesc:
+        f.careerCultureDesc ||
+        "We foster a culture of radical transparency and extreme ownership. Here, your ideas aren't just heard—they are engineered into reality. We believe in high-performance agility balanced with empathy.",
+      cultureImg:
+        imgUrl(f.careerCultureImg) ||
+        "https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&q=80",
       cultureStat1Val: f.careerCultureStat1Val || "92%",
       cultureStat1Label: f.careerCultureStat1Label || "Engineering Ratio",
       cultureStat2Val: f.careerCultureStat2Val || "15+",
@@ -3032,31 +3088,79 @@ export async function getCareerPageData() {
       cultureBadge1: f.careerCultureBadge1 || "Great Place",
       cultureBadge2: f.careerCultureBadge2 || "To Work Certified",
       hiringTagline: f.careerHiringTagline || "Our Selection DNA",
-      hiringDesc: f.careerHiringDesc || "We look for clarity of thought, passion for problem-solving, and a commitment to excellence.",
+      hiringDesc:
+        f.careerHiringDesc ||
+        "We look for clarity of thought, passion for problem-solving, and a commitment to excellence.",
       hiringSteps: [
-        { stepNumber: f.careerHiringStep1Num || "01", stepTitle: f.careerHiringStep1Title || "Application", stepDesc: f.careerHiringStep1Desc || "Submit your profile." },
-        { stepNumber: f.careerHiringStep2Num || "02", stepTitle: f.careerHiringStep2Title || "Screening", stepDesc: f.careerHiringStep2Desc || "Initial HR screening." },
-        { stepNumber: f.careerHiringStep3Num || "03", stepTitle: f.careerHiringStep3Title || "Technical", stepDesc: f.careerHiringStep3Desc || "Technical interview." },
-        { stepNumber: f.careerHiringStep4Num || "04", stepTitle: f.careerHiringStep4Title || "Culture Fit", stepDesc: f.careerHiringStep4Desc || "Meeting the team." },
-        { stepNumber: f.careerHiringStep5Num || "05", stepTitle: f.careerHiringStep5Title || "Offer", stepDesc: f.careerHiringStep5Desc || "Welcome aboard!" },
-      ].filter(s => s.stepTitle),
+        {
+          stepNumber: f.careerHiringStep1Num || "01",
+          stepTitle: f.careerHiringStep1Title || "Application",
+          stepDesc: f.careerHiringStep1Desc || "Submit your profile.",
+        },
+        {
+          stepNumber: f.careerHiringStep2Num || "02",
+          stepTitle: f.careerHiringStep2Title || "Screening",
+          stepDesc: f.careerHiringStep2Desc || "Initial HR screening.",
+        },
+        {
+          stepNumber: f.careerHiringStep3Num || "03",
+          stepTitle: f.careerHiringStep3Title || "Technical",
+          stepDesc: f.careerHiringStep3Desc || "Technical interview.",
+        },
+        {
+          stepNumber: f.careerHiringStep4Num || "04",
+          stepTitle: f.careerHiringStep4Title || "Culture Fit",
+          stepDesc: f.careerHiringStep4Desc || "Meeting the team.",
+        },
+        {
+          stepNumber: f.careerHiringStep5Num || "05",
+          stepTitle: f.careerHiringStep5Title || "Offer",
+          stepDesc: f.careerHiringStep5Desc || "Welcome aboard!",
+        },
+      ].filter((s) => s.stepTitle),
       benefitsTagline: f.careerBenefitsTagline || "Perks & Benefits",
       benefitsTitle: f.careerBenefitsTitle || "Investing \n in your \n ^Success.",
-      benefitsDesc: f.careerBenefitsDesc || "We provide the resources, environment, and support you need to do the best work of your life.",
+      benefitsDesc:
+        f.careerBenefitsDesc ||
+        "We provide the resources, environment, and support you need to do the best work of your life.",
       benefitsMainTitle: f.careerBenefitsMainTitle || "Learning Budget",
-      benefitsMainDesc: f.careerBenefitsMainDesc || "$5,000 annual allowance for certifications, conferences, and courses.",
+      benefitsMainDesc:
+        f.careerBenefitsMainDesc ||
+        "$5,000 annual allowance for certifications, conferences, and courses.",
       benefitsGrid: [
-        { benefitTitle: f.careerBenefit1Title || "Premium Health", benefitDesc: f.careerBenefit1Desc || "Comprehensive insurance." },
-        { benefitTitle: f.careerBenefit2Title || "Performance Bonus", benefitDesc: f.careerBenefit2Desc || "Quarterly rewards." },
-        { benefitTitle: f.careerBenefit3Title || "Flexible Work", benefitDesc: f.careerBenefit3Desc || "Remote & Hybrid support." },
-        { benefitTitle: f.careerBenefit4Title || "Time to Recharge", benefitDesc: f.careerBenefit4Desc || "Generous PTO." },
-        { benefitTitle: f.careerBenefit5Title || "Modern Stack", benefitDesc: f.careerBenefit5Desc || "Access the latest tools." },
-        { benefitTitle: f.careerBenefit6Title || "Global Mobility", benefitDesc: f.careerBenefit6Desc || "Transfer opportunities." },
-      ].filter(b => b.benefitTitle),
+        {
+          benefitTitle: f.careerBenefit1Title || "Premium Health",
+          benefitDesc: f.careerBenefit1Desc || "Comprehensive insurance.",
+        },
+        {
+          benefitTitle: f.careerBenefit2Title || "Performance Bonus",
+          benefitDesc: f.careerBenefit2Desc || "Quarterly rewards.",
+        },
+        {
+          benefitTitle: f.careerBenefit3Title || "Flexible Work",
+          benefitDesc: f.careerBenefit3Desc || "Remote & Hybrid support.",
+        },
+        {
+          benefitTitle: f.careerBenefit4Title || "Time to Recharge",
+          benefitDesc: f.careerBenefit4Desc || "Generous PTO.",
+        },
+        {
+          benefitTitle: f.careerBenefit5Title || "Modern Stack",
+          benefitDesc: f.careerBenefit5Desc || "Access the latest tools.",
+        },
+        {
+          benefitTitle: f.careerBenefit6Title || "Global Mobility",
+          benefitDesc: f.careerBenefit6Desc || "Transfer opportunities.",
+        },
+      ].filter((b) => b.benefitTitle),
       internshipTagline: f.careerInternshipTagline || "Internship Programme",
       internshipTitle: f.careerInternshipTitle || "Launch Your Career ^at Nabhira",
-      internshipDesc: f.careerInternshipDesc || "The Nabhira Emerging Talent Programme is a structured 12-week immersion into enterprise technology...",
-      internshipImg: imgUrl(f.careerInternshipImg) || "https://images.unsplash.com/photo-1541339907198-e08756dedf3f?q=80&w=1200&auto=format&fit=crop",
+      internshipDesc:
+        f.careerInternshipDesc ||
+        "The Nabhira Emerging Talent Programme is a structured 12-week immersion into enterprise technology...",
+      internshipImg:
+        imgUrl(f.careerInternshipImg) ||
+        "https://images.unsplash.com/photo-1541339907198-e08756dedf3f?q=80&w=1200&auto=format&fit=crop",
       internshipBadge1: f.careerInternshipBadge1 || "Applications Open",
       internshipBadge2: f.careerInternshipBadge2 || "2026 Cohort",
       internshipBtn1: f.careerInternshipBtn1 || "Apply Now",
@@ -3064,23 +3168,55 @@ export async function getCareerPageData() {
       internshipBtn2: f.careerInternshipBtn2 || "Download Brochure",
       internshipBtn2File: imgUrl(f.careerInternshipBtn2File) || "#",
       internshipPrograms: [
-        { programTitle: f.careerProgram1Title || "AI & Data Engineering", programDuration: f.careerProgram1Duration || "12 Weeks" },
-        { programTitle: f.careerProgram2Title || "Cloud Architecture", programDuration: f.careerProgram2Duration || "12 Weeks" },
-        { programTitle: f.careerProgram3Title || "Digital Strategy", programDuration: f.careerProgram3Duration || "10 Weeks" },
-        { programTitle: f.careerProgram4Title || "Product & UX Design", programDuration: f.careerProgram4Duration || "10 Weeks" },
-      ].filter(p => p.programTitle),
+        {
+          programTitle: f.careerProgram1Title || "AI & Data Engineering",
+          programDuration: f.careerProgram1Duration || "12 Weeks",
+        },
+        {
+          programTitle: f.careerProgram2Title || "Cloud Architecture",
+          programDuration: f.careerProgram2Duration || "12 Weeks",
+        },
+        {
+          programTitle: f.careerProgram3Title || "Digital Strategy",
+          programDuration: f.careerProgram3Duration || "10 Weeks",
+        },
+        {
+          programTitle: f.careerProgram4Title || "Product & UX Design",
+          programDuration: f.careerProgram4Duration || "10 Weeks",
+        },
+      ].filter((p) => p.programTitle),
       whyTagline: f.careerWhyTagline || "Career Advantage",
       whyTitle: f.careerWhyTitle || "Why Nabhira is ^Different",
       whyPoints: [
-        { pointNumber: f.careerWhyPoint1Num || "01", pointTitle: f.careerWhyPoint1Title || "Global Exposure" },
-        { pointNumber: f.careerWhyPoint2Num || "02", pointTitle: f.careerWhyPoint2Title || "Accelerated Growth" },
-        { pointNumber: f.careerWhyPoint3Num || "03", pointTitle: f.careerWhyPoint3Title || "World-Class Mentorship" },
-        { pointNumber: f.careerWhyPoint4Num || "04", pointTitle: f.careerWhyPoint4Title || "Certified Excellence" },
-        { pointNumber: f.careerWhyPoint5Num || "05", pointTitle: f.careerWhyPoint5Title || "Inclusive Culture" },
-        { pointNumber: f.careerWhyPoint6Num || "06", pointTitle: f.careerWhyPoint6Title || "Innovation Time" },
-      ].filter(p => p.pointTitle),
+        {
+          pointNumber: f.careerWhyPoint1Num || "01",
+          pointTitle: f.careerWhyPoint1Title || "Global Exposure",
+        },
+        {
+          pointNumber: f.careerWhyPoint2Num || "02",
+          pointTitle: f.careerWhyPoint2Title || "Accelerated Growth",
+        },
+        {
+          pointNumber: f.careerWhyPoint3Num || "03",
+          pointTitle: f.careerWhyPoint3Title || "World-Class Mentorship",
+        },
+        {
+          pointNumber: f.careerWhyPoint4Num || "04",
+          pointTitle: f.careerWhyPoint4Title || "Certified Excellence",
+        },
+        {
+          pointNumber: f.careerWhyPoint5Num || "05",
+          pointTitle: f.careerWhyPoint5Title || "Inclusive Culture",
+        },
+        {
+          pointNumber: f.careerWhyPoint6Num || "06",
+          pointTitle: f.careerWhyPoint6Title || "Innovation Time",
+        },
+      ].filter((p) => p.pointTitle),
       ctaTitle: f.careerCtaTitle || "Your Next Chapter \n starts ^now.",
-      ctaDesc: f.careerCtaDesc || "Join a global team of visionaries, engineers, and creatives working together to build a more agile and innovative future.",
+      ctaDesc:
+        f.careerCtaDesc ||
+        "Join a global team of visionaries, engineers, and creatives working together to build a more agile and innovative future.",
       ctaCard1Title: f.careerCtaCard1Title || "Interview Ready?",
       ctaCard1Desc: f.careerCtaCard1Desc || "Get tips for success",
       ctaCard2Title: f.careerCtaCard2Title || "Fast-Track",
@@ -3094,7 +3230,10 @@ export async function getCareerPageData() {
 
 function parseTextareaList(text?: string): string[] {
   if (!text) return [];
-  return text.split('\n').map(line => line.trim()).filter(Boolean);
+  return text
+    .split("\n")
+    .map((line) => line.trim())
+    .filter(Boolean);
 }
 
 export async function getCareers(): Promise<Job[]> {
@@ -3165,9 +3304,13 @@ export async function getCareerBySlug(slug: string): Promise<Job | null> {
       benefits: benefitsParsed.length > 0 ? benefitsParsed : defaultBenefits,
       benefitsTitle: details.careerBenefitsTitle || "What's In It ^For You?",
       hiringTimelineTitle: details.careerHiringTimelineTitle || "Hiring Timeline",
-      hiringTimelineText: details.careerHiringTimelineText || "This is an active opening. Our team typically responds to qualified applicants within 48-72 business hours.",
+      hiringTimelineText:
+        details.careerHiringTimelineText ||
+        "This is an active opening. Our team typically responds to qualified applicants within 48-72 business hours.",
       aboutTitle: details.careerAboutTitle || "About ^Hutech Solutions",
-      aboutText: details.careerAboutText || "Hutech Solutions is a global software powerhouse at the forefront of the AI revolution. As a leading innovator in Artificial Intelligence, Agentic AI, and Deep Learning technologies, we design and deliver next-generation solutions that empower businesses to unlock transformative intelligence and automation.\n\nWe are actively partnering with large enterprises and business houses to reimagine and transform enterprise software applications. Our mission is to develop innovative software utilities that accelerate business performance by leveraging cutting-edge AI and Generative AI tools and techniques.\n\nFrom streamlining operations in logistics, enhancing customer experiences in eCommerce, to driving intelligent automation in the BFSI sector, Hutech Solutions is a trusted force in modern digital transformation.",
+      aboutText:
+        details.careerAboutText ||
+        "Hutech Solutions is a global software powerhouse at the forefront of the AI revolution. As a leading innovator in Artificial Intelligence, Agentic AI, and Deep Learning technologies, we design and deliver next-generation solutions that empower businesses to unlock transformative intelligence and automation.\n\nWe are actively partnering with large enterprises and business houses to reimagine and transform enterprise software applications. Our mission is to develop innovative software utilities that accelerate business performance by leveraging cutting-edge AI and Generative AI tools and techniques.\n\nFrom streamlining operations in logistics, enhancing customer experiences in eCommerce, to driving intelligent automation in the BFSI sector, Hutech Solutions is a trusted force in modern digital transformation.",
     };
   } catch (err) {
     console.warn("[WP] getCareerBySlug failed:", err);
@@ -3243,15 +3386,15 @@ export async function getPressReleases(): Promise<PressReleaseItem[]> {
     const nodes = raw?.data?.hutechPressReleases?.nodes || [];
     return nodes.map((node: any) => {
       const f = node.pressReleaseFields || {};
-      
+
       const dateVal = f.pressReleaseDate || node.date;
       let formattedDate = "";
       try {
         if (dateVal) {
-          formattedDate = new Date(dateVal).toLocaleDateString('en-US', {
-            month: 'short',
-            day: '2-digit',
-            year: 'numeric'
+          formattedDate = new Date(dateVal).toLocaleDateString("en-US", {
+            month: "short",
+            day: "2-digit",
+            year: "numeric",
           });
         }
       } catch (e) {
@@ -3379,28 +3522,34 @@ export interface NewsItem {
 }
 function transformNewsNode(node: any): NewsItem {
   const f = node.newsFields || {};
-  
+
   const dateVal = f.newsDate || node.date;
   let formattedDate = "";
   try {
     if (dateVal) {
-      formattedDate = new Date(dateVal).toLocaleDateString('en-US', {
-        month: 'short',
-        day: '2-digit',
-        year: 'numeric'
+      formattedDate = new Date(dateVal).toLocaleDateString("en-US", {
+        month: "short",
+        day: "2-digit",
+        year: "numeric",
       });
     }
   } catch (e) {
     formattedDate = dateVal || "";
   }
 
-  const category = node.newsCategories?.nodes?.[0]?.name || node.categories?.nodes?.[0]?.name || "Corporate";
-  const tags = node.newsTags?.nodes?.map((t: any) => t.name) || node.tags?.nodes?.map((t: any) => t.name) || ["News"];
+  const category =
+    node.newsCategories?.nodes?.[0]?.name || node.categories?.nodes?.[0]?.name || "Corporate";
+  const tags = node.newsTags?.nodes?.map((t: any) => t.name) ||
+    node.tags?.nodes?.map((t: any) => t.name) || ["News"];
 
   const rawContent = node.content || "";
   let desc = "";
   if (rawContent) {
-    desc = rawContent.replace(/<[^>]*>/g, '').trim().substring(0, 160) + "...";
+    desc =
+      rawContent
+        .replace(/<[^>]*>/g, "")
+        .trim()
+        .substring(0, 160) + "...";
   }
 
   const readTime = estimateReadTime(rawContent);
@@ -3466,7 +3615,6 @@ export async function getNewsPageData() {
   }
 }
 
-
 // ─── Service Custom Post Type GraphQL ──────────────────────────────────────────
 
 export interface HutechService {
@@ -3477,7 +3625,7 @@ export interface HutechService {
   heroTitle?: string;
   heroDescription?: string;
   heroBgImage?: string;
-  
+
   introHeading?: string;
   introText1?: string;
   introText2?: string;
@@ -3486,42 +3634,42 @@ export interface HutechService {
   introImageIcon?: string;
   introImageDesc?: string;
   stats?: { label: string; value: string }[];
-  
+
   servicesSectionTitle?: string;
   servicesSectionDesc?: string;
   services?: { title: string; description: string; btnname: string; btnurl: string }[];
-  
+
   solutionsSectionTitle?: string;
   solutionsSectionDesc?: string;
   solutions?: { title: string; description: string; btnname: string; btnurl: string }[];
-  
+
   innovationsSectionTitle?: string;
   innovationsSectionDesc?: string;
   innovations?: { title: string; description: string; btnname: string; btnurl: string }[];
-  
+
   ctaTitle?: string;
   ctaDescription?: string;
   ctaBtnName?: string;
   ctaBtnUrl?: string;
   ctaImage?: string;
-  
+
   techStackTagline?: string;
   techStackTitle?: string;
   techStackDesc?: string;
   techStack?: { name: string; cat: string }[];
-  
+
   whyChooseSectionTitle?: string;
   whyChooseSectionDesc?: string;
   whyChoose?: { title: string; description: string }[];
-  
+
   contactFormTitle?: string;
   contactFormBtnName?: string;
   nextStepSectionTitle?: string;
   nextSteps?: { title: string }[];
-  
+
   faqSectionTitle?: string;
   faqs?: { question: string; answer: string }[];
-  
+
   blogSectionTitle?: string;
   blogSectionDesc?: string;
   blogLinkName?: string;
@@ -3834,7 +3982,6 @@ const BLOGS_BY_CATEGORY_QUERY = `
   }
 `;
 
-
 function transformServiceNode(node: any): HutechService {
   const f = node.serviceFields || {};
 
@@ -3847,7 +3994,7 @@ function transformServiceNode(node: any): HutechService {
         const val = f[`${prefix}${i}${field}`];
         if (val) hasData = true;
         let finalVal = val || "";
-        if (typeof val === 'object' && val !== null) {
+        if (typeof val === "object" && val !== null) {
           if (val.node && val.node.sourceUrl) {
             finalVal = val.node.sourceUrl;
           } else if (val.url) {
@@ -3880,54 +4027,54 @@ function transformServiceNode(node: any): HutechService {
     heroTitle: f.heroTitle,
     heroDescription: f.heroDescription,
     heroBgImage: imgUrl(f.heroBgImage) || undefined,
-    
+
     introHeading: f.introHeading,
     introText1: f.introText1,
     introText2: f.introText2,
     introImage: imgUrl(f.introImage) || undefined,
     introImageTitle: f.introImageTitle,
     introImageDesc: f.introImageDesc,
-    stats: parseRepeater('stat', 3, ['Value', 'Label']),
-    
+    stats: parseRepeater("stat", 3, ["Value", "Label"]),
+
     servicesSectionTitle: f.servicesSectionTitle,
     servicesSectionDesc: f.servicesSectionDesc,
-    services: parseRepeater('service', 10, ['Title', 'Description', 'BtnName', 'BtnUrl']),
-    
+    services: parseRepeater("service", 10, ["Title", "Description", "BtnName", "BtnUrl"]),
+
     solutionsSectionTitle: f.solutionsSectionTitle,
     solutionsSectionDesc: f.solutionsSectionDesc,
-    solutions: parseRepeater('solution', 10, ['Title', 'Description', 'BtnName', 'BtnUrl']),
-    
+    solutions: parseRepeater("solution", 10, ["Title", "Description", "BtnName", "BtnUrl"]),
+
     innovationsSectionTitle: f.innovationsSectionTitle,
     innovationsSectionDesc: f.innovationsSectionDesc,
-    innovations: parseRepeater('innovation', 10, ['Title', 'Description', 'BtnName', 'BtnUrl']),
-    
+    innovations: parseRepeater("innovation", 10, ["Title", "Description", "BtnName", "BtnUrl"]),
+
     ctaTitle: f.ctaTitle,
     ctaDescription: f.ctaDescription,
     ctaBtnName: f.ctaBtnName,
-    ctaBtnUrl: f.ctaBtnUrl?.url || (typeof f.ctaBtnUrl === 'string' ? f.ctaBtnUrl : ""),
+    ctaBtnUrl: f.ctaBtnUrl?.url || (typeof f.ctaBtnUrl === "string" ? f.ctaBtnUrl : ""),
     ctaImage: imgUrl(f.ctaImage) || undefined,
-    
+
     techStackTagline: f.techStackTagline,
     techStackTitle: f.techStackTitle,
     techStackDesc: f.techStackDesc,
-    techStack: parseRepeater('techStack', 15, ['Name', 'Cat']),
-    
+    techStack: parseRepeater("techStack", 15, ["Name", "Cat"]),
+
     whyChooseSectionTitle: f.whyChooseSectionTitle,
     whyChooseSectionDesc: f.whyChooseSectionDesc,
-    whyChoose: parseRepeater('whyChoose', 8, ['Title', 'Description']),
-    
+    whyChoose: parseRepeater("whyChoose", 8, ["Title", "Description"]),
+
     contactFormTitle: f.contactFormTitle,
     contactFormBtnName: f.contactFormBtnName,
     nextStepSectionTitle: f.nextStepSectionTitle,
-    nextSteps: parseRepeater('nextStep', 5, ['Title']),
-    
+    nextSteps: parseRepeater("nextStep", 5, ["Title"]),
+
     faqSectionTitle: f.faqSectionTitle,
-    faqs: parseRepeater('faq', 10, ['Question', 'Answer']),
-    
+    faqs: parseRepeater("faq", 10, ["Question", "Answer"]),
+
     blogSectionTitle: f.blogSectionTitle,
     blogSectionDesc: f.blogSectionDesc,
     blogLinkName: f.blogLinkName,
-    blogLinkUrl: f.blogLinkUrl?.url || (typeof f.blogLinkUrl === 'string' ? f.blogLinkUrl : ""),
+    blogLinkUrl: f.blogLinkUrl?.url || (typeof f.blogLinkUrl === "string" ? f.blogLinkUrl : ""),
     blogCategory: blogCatName,
     blogCategorySlug: blogCatSlug,
   };
@@ -4066,21 +4213,21 @@ export async function getServiceCategoriesWithServices(): Promise<ServiceCategor
   try {
     const raw = await fetchGraphQL(ALL_SERVICES_WITH_CATEGORIES_QUERY);
     const nodes = raw?.data?.hutechServices?.nodes || [];
-    
+
     // Grouping structure: Map<CategoryName, Map<SubcategoryName, items[]>>
     const groupMap = new Map<string, Map<string, any[]>>();
 
     nodes.forEach((svc: any) => {
       const catNodes = svc.serviceCategories?.nodes || [];
       const subCatNodes = svc.serviceSubCategories?.nodes || [];
-      
+
       const catName = catNodes.length > 0 ? catNodes[0].name : "General Services";
       const subCatName = subCatNodes.length > 0 ? subCatNodes[0].name : ""; // Empty string for no subcategory
 
       if (!groupMap.has(catName)) {
         groupMap.set(catName, new Map<string, any[]>());
       }
-      
+
       const subMap = groupMap.get(catName)!;
       if (!subMap.has(subCatName)) {
         subMap.set(subCatName, []);
@@ -4203,7 +4350,9 @@ export async function getIndustryPageData(): Promise<IndustryPageData | null> {
     return {
       label: node.industryVerticalLabel || "Industry Verticals",
       title: node.pageTitle || "Domain Expertise. |Universal Impact.",
-      description: node.pageDescription || "We specialize in vertical-specific technology solutions that address the unique complexities and compliance requirements of global markets.",
+      description:
+        node.pageDescription ||
+        "We specialize in vertical-specific technology solutions that address the unique complexities and compliance requirements of global markets.",
       ctaTitle: node.ctaTitle || "Scale Your Industry Dominance Today.",
       ctaBtnText: node.ctaBtn1Text || "Request Consultation",
       ctaBtnLink: node.ctaBtn1Link || "/contact",
@@ -4220,19 +4369,22 @@ export async function getIndustriesList(): Promise<IndustryItem[]> {
   try {
     const raw = await fetchGraphQL(ALL_INDUSTRIES_QUERY);
     const allNodes = raw?.data?.hutechServices?.nodes || [];
-    
+
     // Filter to only include items in the "industries" category
     const nodes = allNodes.filter((item: any) => {
       const cats = item.serviceCategories?.nodes || [];
-      return cats.some((cat: any) => cat.slug === 'industries' || cat.slug === 'industry');
+      return cats.some((cat: any) => cat.slug === "industries" || cat.slug === "industry");
     });
 
     return nodes.map((item: any) => {
       const sf = item.serviceFields || {};
       const stats = [];
-      if (sf.stat1Value || sf.stat1Label) stats.push({ value: sf.stat1Value || "", label: sf.stat1Label || "" });
-      if (sf.stat2Value || sf.stat2Label) stats.push({ value: sf.stat2Value || "", label: sf.stat2Label || "" });
-      if (sf.stat3Value || sf.stat3Label) stats.push({ value: sf.stat3Value || "", label: sf.stat3Label || "" });
+      if (sf.stat1Value || sf.stat1Label)
+        stats.push({ value: sf.stat1Value || "", label: sf.stat1Label || "" });
+      if (sf.stat2Value || sf.stat2Label)
+        stats.push({ value: sf.stat2Value || "", label: sf.stat2Label || "" });
+      if (sf.stat3Value || sf.stat3Label)
+        stats.push({ value: sf.stat3Value || "", label: sf.stat3Label || "" });
 
       const topSolutions = [];
       if (sf.solution1Title) topSolutions.push(sf.solution1Title);
@@ -4314,14 +4466,16 @@ export interface LifeAtHutechData {
   galleries: LifeGalleryPost[];
 }
 
-export async function getLifeAtHutechPage(uri: string = "/life-at-hutech/"): Promise<LifeAtHutechData | null> {
+export async function getLifeAtHutechPage(
+  uri: string = "/life-at-hutech/"
+): Promise<LifeAtHutechData | null> {
   try {
     const raw = await fetchGraphQL(LIFE_AT_HUTECH_QUERY, { uri });
     if (!raw?.data?.page) return null;
-    
+
     const settings = raw.data.page.lifeAtHutechSettings || {};
     const galleriesNodes = raw.data.lifeGalleries?.nodes || [];
-    
+
     const galleries = galleriesNodes.map((n: any) => {
       const content = n.content || "";
       const imgRegex = /<img[^>]+src=["']([^"']+)["']/gi;
@@ -4330,7 +4484,7 @@ export async function getLifeAtHutechPage(uri: string = "/life-at-hutech/"): Pro
       while ((match = imgRegex.exec(content)) !== null) {
         images.push(match[1]);
       }
-      
+
       return {
         title: n.title,
         imageUrl: n.featuredImage?.node?.sourceUrl || images[0] || "",
@@ -4339,7 +4493,7 @@ export async function getLifeAtHutechPage(uri: string = "/life-at-hutech/"): Pro
         imagesFromContent: images,
       };
     });
-    
+
     return {
       title: raw.data.page.title,
       settings: {
@@ -4388,6 +4542,11 @@ export type WpPage = {
   pageRoutingSettings?: {
     nextjsTemplate?: string[] | string;
   };
+  hubHeroSettings?: {
+    heroEyebrow?: string;
+    heroTitle?: string;
+    heroDescription?: string;
+  };
 };
 
 const PAGE_BY_URI_QUERY = `
@@ -4404,6 +4563,11 @@ const PAGE_BY_URI_QUERY = `
       pageRoutingSettings {
         nextjsTemplate
       }
+      hubHeroSettings {
+        heroEyebrow
+        heroTitle
+        heroDescription
+      }
     }
   }
 `;
@@ -4413,7 +4577,7 @@ export async function getPageByUri(uri: string): Promise<WpPage | null> {
     const raw = await fetchGraphQL(PAGE_BY_URI_QUERY, { uri });
     const pageNode = raw?.data?.pageBy;
     if (!pageNode) return null;
-    
+
     return {
       title: pageNode.title,
       content: pageNode.content,
@@ -4426,6 +4590,7 @@ export async function getPageByUri(uri: string): Promise<WpPage | null> {
       uri: pageNode.uri,
       templateName: pageNode.template?.templateName,
       pageRoutingSettings: pageNode.pageRoutingSettings,
+      hubHeroSettings: pageNode.hubHeroSettings,
     };
   } catch (err) {
     console.warn(`[WP] getPageByUri(${uri}) failed:`, err);
@@ -4444,7 +4609,7 @@ const ALL_PAGE_URIS_QUERY = `
   }
 `;
 
-export async function getAllPageUris(): Promise<{ uri: string, slug: string }[]> {
+export async function getAllPageUris(): Promise<{ uri: string; slug: string }[]> {
   try {
     const raw = await fetchGraphQL(ALL_PAGE_URIS_QUERY);
     const nodes = raw?.data?.pages?.nodes || [];
@@ -4549,7 +4714,9 @@ function normalizeSitemapPath(rawPath: string): string {
   return rawPath.replace(/^\/hutech-website/, "") || "/";
 }
 
-export async function getSitemapData(pageUri: string = "/legal/sitemap/"): Promise<SitemapSection[]> {
+export async function getSitemapData(
+  pageUri: string = "/legal/sitemap/"
+): Promise<SitemapSection[]> {
   try {
     const raw = await fetchGraphQL(SITEMAP_GRAPHQL_QUERY);
     const data = raw?.data || {};
@@ -4580,7 +4747,7 @@ export async function getSitemapData(pageUri: string = "/legal/sitemap/"): Promi
     const companyPages = pages
       .filter((p) => {
         const u = p.uri || "";
-        return u.startsWith("/company/") || companyOrder.includes(u);
+        return (u.startsWith("/company/") || companyOrder.includes(u)) && u !== "/company/";
       })
       .sort((a, b) => {
         const indexA = companyOrder.indexOf(a.uri);
@@ -4657,7 +4824,27 @@ export async function getSitemapData(pageUri: string = "/legal/sitemap/"): Promi
     const legalPages = pages
       .filter((p) => {
         const u = p.uri || "";
-        return u.startsWith("/legal/") || ["/legal/terms/", "/legal/privacy/", "/legal/sitemap/"].includes(u);
+        return (
+          (u.startsWith("/legal/") ||
+            ["/legal/terms/", "/legal/privacy/", "/legal/sitemap/"].includes(u)) &&
+          u !== "/legal/"
+        );
+      })
+      .map((p) => ({
+        name: cleanSitemapTitle(p.title),
+        path: p.uri,
+      }));
+
+    // Resources Hub Pages
+    const resourcesPages = pages
+      .filter((p) => {
+        const u = p.uri || "";
+        return (
+          u.startsWith("/resources/") &&
+          !u.startsWith("/resources/blogs/") &&
+          !u.startsWith("/resources/case-studies/") &&
+          u !== "/resources/"
+        );
       })
       .map((p) => ({
         name: cleanSitemapTitle(p.title),
@@ -4668,11 +4855,12 @@ export async function getSitemapData(pageUri: string = "/legal/sitemap/"): Promi
       { title: "Company", links: companyPages },
       { title: "Services", links: liveServices },
       { title: "Industries", links: liveIndustries },
+      { title: "Documents", links: liveDocs },
+      { title: "Legal & Policies", links: legalPages },
+      { title: "Resources Hub", links: resourcesPages },
       { title: "Blogs", links: liveBlogs },
       { title: "Case Studies", links: liveCaseStudies },
       { title: "Events", links: liveEvents },
-      { title: "Documents", links: liveDocs },
-      { title: "Legal & Policies", links: legalPages },
     ].filter((s) => s.links && s.links.length > 0);
 
     return sections;
@@ -4681,4 +4869,3 @@ export async function getSitemapData(pageUri: string = "/legal/sitemap/"): Promi
     return [];
   }
 }
-

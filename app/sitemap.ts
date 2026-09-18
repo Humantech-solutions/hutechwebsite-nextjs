@@ -1,23 +1,11 @@
 import type { MetadataRoute } from "next";
 import { siteConfig } from "@/config/site";
-import {
-  getBlogs,
-  getCareers,
-  getCaseStudies,
-  getEvents,
-  getServicesList,
-  getIndustriesList,
-  getNewsItems,
-  getPressReleases,
-  getHutechDocuments,
-  getAllPageUris,
-} from "@/lib/wordpress";
+import { getSitemapData, getCareers } from "@/lib/wordpress";
 import { getRecruitProJobs } from "@/lib/api";
-import { getIPublishAllBlogs } from "@/lib/ipublish";
 
-// Required for Next.js static export (output: "export") mode.
-export const dynamic = "force-static";
-export const revalidate = false;
+// Enable dynamic rendering so new CMS pages and posts appear automatically without rebuilding
+export const dynamic = "force-dynamic";
+export const revalidate = 60;
 
 function url(path: string) {
   const cleanPath = path.startsWith("/") ? path : `/${path}`;
@@ -27,72 +15,76 @@ function url(path: string) {
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const now = new Date();
-  const [
-    blogs,
-    caseStudies,
-    events,
-    wpJobs,
-    recruitProJobs,
-    services,
-    industries,
-    newsItems,
-    pressReleases,
-    documents,
-    allWpPages,
-    ipublishBlogs,
-  ] = await Promise.all([
-    getBlogs().catch(() => []),
-    getCaseStudies().catch(() => []),
-    getEvents().catch(() => []),
+
+  // Dynamically load all sections from the existing CMS sitemap generator (pages, services, industries, blogs, case studies, events, docs, legal)
+  const [sitemapSections, wpJobs, recruitProJobs] = await Promise.all([
+    getSitemapData().catch(() => []),
     getCareers().catch(() => []),
     getRecruitProJobs().catch(() => []),
-    getServicesList().catch(() => []),
-    getIndustriesList().catch(() => []),
-    getNewsItems().catch(() => []),
-    getPressReleases().catch(() => []),
-    getHutechDocuments().catch(() => []),
-    getAllPageUris().catch(() => []),
-    getIPublishAllBlogs().catch(() => []),
   ]);
 
-  // Root & section hub paths that exist
-  const basePaths = [
+  // Extract all page and post paths generated automatically by getSitemapData()
+  const sitemapPaths = sitemapSections.flatMap((section) =>
+    section.links.map((link) => link.path)
+  );
+
+  // Extract careers / job listing paths
+  const jobPaths = [
+    ...wpJobs.filter((j) => j.id && j.id !== "careers").map((j) => `/careers/${j.id}/`),
+    ...recruitProJobs.filter((j) => j.id && j.id !== "careers").map((j) => `/careers/${j.id}/`),
+  ];
+
+  // Primary hubs
+  const baseHubs = [
     "/",
-    "/about/",
-    "/careers/",
-    "/contact/",
     "/services/",
     "/industries/",
     "/resources/",
     "/blogs/",
     "/events/",
-    "/legal/sitemap/",
   ];
 
-  // Live WordPress pages from getAllPageUris()
-  const wpPagePaths = allWpPages
-    .map((p) => p.uri)
-    .filter((uri) => uri && uri !== "/" && !uri.startsWith("/wp-"));
+  const COMPANY_SLUGS = new Set([
+    "leadership",
+    "awards",
+    "vision-mission-values",
+    "partnership",
+    "life-at-hutech",
+    "news",
+    "press-release",
+    "graduates",
+    "open-positions",
+  ]);
 
-  // Live dynamic paths only
-  const dynamicPaths = [
-    ...basePaths,
-    ...wpPagePaths,
-    ...services.map((item) => `/services/${item.slug}/`),
-    ...industries.map((item) => `/industries/${item.slug}/`),
-    ...blogs.map((item) => `/resources/blogs/${item.slug}/`),
-    ...ipublishBlogs.map((item) => `/resources/blogs/ipublish/${item.slug || item.id}/`),
-    ...caseStudies.map((item) => `/resources/case-studies/${item.slug}/`),
-    ...events.map((item) => `/resources/events/${item.slug || item.id}/`),
-    ...events.map((item) => `/events/${item.slug || item.id}/`),
-    ...newsItems.map((item) => `/company/news/${item.id}/`),
-    ...recruitProJobs.map((j) => `/careers/${j.id}/`),
-    ...wpJobs.map((j) => `/careers/${j.id}/`),
-  ].filter(Boolean);
+  const RESOURCE_SLUGS = new Set([
+    "case-studies",
+    "hutech-documents",
+  ]);
 
-  const allUniquePaths = Array.from(new Set(dynamicPaths));
+  const allPaths = [
+    ...baseHubs,
+    ...sitemapPaths,
+    ...jobPaths,
+  ]
+    .filter((path) => path && path !== "#" && !path.startsWith("http"))
+    .map((path) => {
+      const clean = path.startsWith("/") ? path : `/${path}`;
+      const normalized = clean.endsWith("/") ? clean : `${clean}/`;
+      const segments = normalized.split("/").filter(Boolean);
 
-  return allUniquePaths.map((path) => ({
+      // Company dropdown pages canonically live under /company/...
+      if (segments.length === 1) {
+        if (COMPANY_SLUGS.has(segments[0])) return `/company/${segments[0]}/`;
+        if (RESOURCE_SLUGS.has(segments[0])) return `/resources/${segments[0]}/`;
+      }
+
+      return normalized;
+    })
+    .filter((path) => path !== "/home/" && path !== "/legal/");
+
+  const uniquePaths = Array.from(new Set(allPaths));
+
+  return uniquePaths.map((path) => ({
     url: url(path),
     lastModified: now,
     changeFrequency: path === "/" ? "weekly" : "monthly",
