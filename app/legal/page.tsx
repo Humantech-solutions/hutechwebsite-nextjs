@@ -1,6 +1,6 @@
 import { Suspense } from "react";
 import LegalClient from "./PageClient";
-import { constructMetadata } from "@/lib/seo";
+import { constructMetadata, getWebPageSchema } from "@/lib/seo";
 import { getSitemapData, getPageByUri } from "@/lib/wordpress";
 
 export const metadata = constructMetadata({
@@ -19,6 +19,18 @@ export default async function LegalPage() {
 
   return (
     <Suspense>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(
+            getWebPageSchema({
+              title: "Legal & Compliance",
+              description: "View our terms and conditions, privacy policy, cookie policy, and code of conduct.",
+              path: "/legal/",
+            })
+          ),
+        }}
+      />
       <LegalClient dynamicLinks={dynamicLinks} heroSettings={pageData?.hubHeroSettings} />
     </Suspense>
   );

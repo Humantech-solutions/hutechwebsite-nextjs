@@ -1,6 +1,6 @@
 import { Suspense } from "react";
 import ResourcesClient from "./PageClient";
-import { constructMetadata } from "@/lib/seo";
+import { constructMetadata, getWebPageSchema } from "@/lib/seo";
 import { getSitemapData, getPageByUri } from "@/lib/wordpress";
 
 export const metadata = constructMetadata({
@@ -23,6 +23,18 @@ export default async function ResourcesPage() {
 
   return (
     <Suspense>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(
+            getWebPageSchema({
+              title: "Resources",
+              description: "Explore our latest articles, case studies, and insights on technology and digital transformation.",
+              path: "/resources/",
+            })
+          ),
+        }}
+      />
       <ResourcesClient dynamicLinks={dynamicLinks} heroSettings={pageData?.hubHeroSettings} />
     </Suspense>
   );

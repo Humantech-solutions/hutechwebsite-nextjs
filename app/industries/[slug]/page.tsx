@@ -1,6 +1,6 @@
 import { getServiceBySlug, getBlogsByCategory, getIndustriesList } from "@/lib/wordpress";
 import IndustryDetailClient from "./IndustryDetailClient";
-import { constructMetadata } from "@/lib/seo";
+import { constructMetadata, getWebPageSchema } from "@/lib/seo";
 
 export const revalidate = 0;
 
@@ -43,7 +43,19 @@ export default async function IndustryPage({ params }: { params: Promise<{ slug:
   const categoryName = service.blogCategorySlug || service.blogCategory || "Industry";
   const blogs = await getBlogsByCategory(categoryName);
 
-  return <IndustryDetailClient service={service} blogs={blogs} />;
+  const schemaJsonData = getWebPageSchema({
+    title: (service as any)?.heroTitle || (service as any)?.title || titleFromSlug(slug),
+    description: (service as any)?.heroDescription || `Explore ${(service as any)?.title || titleFromSlug(slug)} technology and digital transformation solutions from Hutech Solutions.`,
+    path: `/industries/${slug}/`,
+    image: (service as any)?.heroBgImage
+  });
+
+  return (
+    <>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schemaJsonData) }} />
+      <IndustryDetailClient service={service} blogs={blogs} />
+    </>
+  );
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {

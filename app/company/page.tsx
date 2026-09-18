@@ -1,6 +1,6 @@
 import { Suspense } from "react";
 import CompanyClient from "./PageClient";
-import { constructMetadata } from "@/lib/seo";
+import { constructMetadata, getWebPageSchema } from "@/lib/seo";
 import { getSitemapData, getPageByUri } from "@/lib/wordpress";
 
 export const metadata = constructMetadata({
@@ -20,6 +20,18 @@ export default async function CompanyPage() {
 
   return (
     <Suspense>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(
+            getWebPageSchema({
+              title: "Company",
+              description: "Discover Hutech Solutions: our journey, leadership, culture, news, and career opportunities.",
+              path: "/company/",
+            })
+          ),
+        }}
+      />
       <CompanyClient dynamicLinks={dynamicLinks} heroSettings={pageData?.hubHeroSettings} />
     </Suspense>
   );
