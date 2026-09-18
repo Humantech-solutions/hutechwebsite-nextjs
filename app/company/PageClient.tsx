@@ -1,44 +1,103 @@
 "use client";
 
-import { FileText, Newspaper, BookOpen, Calendar, MoveRight } from "lucide-react";
+import {
+  Info,
+  Compass,
+  Users,
+  Handshake,
+  Heart,
+  Newspaper,
+  Mic,
+  Award,
+  Briefcase,
+  GraduationCap,
+  MoveRight,
+  FileText,
+} from "lucide-react";
 import Link from "next/link";
 import { motion as Motion } from "framer-motion";
 import { Breadcrumbs } from "@/components/Breadcrumbs";
 import { Meta } from "@/components/Meta";
 
-const RESOURCES_CATEGORIES = [
+const COMPANY_CATEGORIES = [
   {
-    category: "Knowledge & Resources",
+    category: "Discover Hutech",
     items: [
       {
-        title: "Blogs",
-        href: "/resources/blogs",
+        title: "About Hutech",
+        href: "/about",
+        icon: <Info className="h-8 w-8 text-[#F99D1C]" />,
+        desc: "Learn about our journey, expertise, and commitment to innovation.",
+      },
+      {
+        title: "Vision, Mission & Values",
+        href: "/company/vision-mission-values",
+        icon: <Compass className="h-8 w-8 text-[#F99D1C]" />,
+        desc: "The guiding principles that drive our growth and success.",
+      },
+      {
+        title: "Leadership Team",
+        href: "/company/leadership",
+        icon: <Users className="h-8 w-8 text-[#F99D1C]" />,
+        desc: "Meet the experts leading Hutech Solutions into the future.",
+      },
+      {
+        title: "Partnership",
+        href: "/company/partnership",
+        icon: <Handshake className="h-8 w-8 text-[#F99D1C]" />,
+        desc: "Collaborating with industry leaders to deliver exceptional value.",
+      },
+      {
+        title: "Life At Hutech Solutions",
+        href: "/company/life-at-hutech",
+        icon: <Heart className="h-8 w-8 text-[#F99D1C]" />,
+        desc: "Explore our vibrant culture and dynamic work environment.",
+      },
+    ],
+  },
+  {
+    category: "News & Recognition",
+    items: [
+      {
+        title: "In The News",
+        href: "/company/news",
         icon: <Newspaper className="h-8 w-8 text-[#F99D1C]" />,
-        desc: "Latest tech trends, engineering deep-dives, and company news.",
+        desc: "Latest updates, media coverage, and announcements.",
       },
       {
-        title: "Case Studies",
-        href: "/resources/case-studies",
-        icon: <FileText className="h-8 w-8 text-[#F99D1C]" />,
-        desc: "Real-world success stories of our digital transformations.",
+        title: "Press Release",
+        href: "/company/press-release",
+        icon: <Mic className="h-8 w-8 text-[#F99D1C]" />,
+        desc: "Official statements and major corporate milestones.",
       },
       {
-        title: "Events",
-        href: "/resources/events",
-        icon: <Calendar className="h-8 w-8 text-[#F99D1C]" />,
-        desc: "Upcoming webinars, tech meetups, and corporate events.",
+        title: "Awards and Recognition",
+        href: "/company/awards",
+        icon: <Award className="h-8 w-8 text-[#F99D1C]" />,
+        desc: "Celebrating our achievements and industry accolades.",
+      },
+    ],
+  },
+  {
+    category: "Careers",
+    items: [
+      {
+        title: "Open Positions",
+        href: "/company/open-positions",
+        icon: <Briefcase className="h-8 w-8 text-[#F99D1C]" />,
+        desc: "Join our team and build the future of technology.",
       },
       {
-        title: "Hutech Documents",
-        href: "/resources/hutech-documents",
-        icon: <BookOpen className="h-8 w-8 text-[#F99D1C]" />,
-        desc: "Whitepapers, brochures, and technical documentation.",
+        title: "Graduates",
+        href: "/company/graduates",
+        icon: <GraduationCap className="h-8 w-8 text-[#F99D1C]" />,
+        desc: "Kickstart your career with our graduate programs.",
       },
     ],
   },
 ];
 
-const ResourceCard = ({ item, itemIdx }: { item: any; itemIdx: number }) => (
+const CompanyCard = ({ item, itemIdx }: { item: any; itemIdx: number }) => (
   <Link href={item.href}>
     <Motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -68,18 +127,18 @@ type HeroSettings = {
   heroDescription?: string;
 };
 
-export default function ResourcesClient({
+export default function CompanyClient({
   dynamicLinks,
   heroSettings,
 }: {
   dynamicLinks?: { name: string; path: string }[] | null;
   heroSettings?: HeroSettings;
 }) {
-  const displayEyebrow = heroSettings?.heroEyebrow || "Knowledge Hub";
-  const displayTitle = heroSettings?.heroTitle || "Resources & |Insights.";
+  const displayEyebrow = heroSettings?.heroEyebrow || "Our Company";
+  const displayTitle = heroSettings?.heroTitle || "Empowering Businesses Through |Innovation.";
   const displayDescription =
     heroSettings?.heroDescription ||
-    "Deep dives into the technologies and strategies shaping the future of digital engineering.";
+    "Discover who we are, what we stand for, and how we are driving digital transformation globally.";
 
   const renderTitle = (title: string) => {
     return title
@@ -92,10 +151,10 @@ export default function ResourcesClient({
   };
 
   const getRenderCategories = () => {
-    if (!dynamicLinks || dynamicLinks.length === 0) return RESOURCES_CATEGORIES;
+    if (!dynamicLinks || dynamicLinks.length === 0) return COMPANY_CATEGORIES;
 
     // Deep copy to allow mutation of items
-    const renderCats = RESOURCES_CATEGORIES.map((cat) => ({
+    const renderCats = COMPANY_CATEGORIES.map((cat) => ({
       ...cat,
       items: cat.items.map((item) => ({ ...item })),
     }));
@@ -129,14 +188,14 @@ export default function ResourcesClient({
           title: dLink.name,
           href: dLink.path,
           icon: <FileText className="h-8 w-8 text-[#F99D1C]" />,
-          desc: "Explore this resource.",
+          desc: "Explore more about our company.",
         });
       }
     });
 
     if (unmappedLinks.length > 0) {
       renderCats.push({
-        category: "More Resources",
+        category: "Additional Information",
         items: unmappedLinks,
       });
     }
@@ -149,8 +208,8 @@ export default function ResourcesClient({
   return (
     <div className="bg-white">
       <Meta
-        title="Resources & Insights | Hutech Solutions"
-        description="Explore the latest technology trends, case studies, and digital transformation insights from Hutech Solutions."
+        title="Company | Hutech Solutions"
+        description="Discover Hutech Solutions: our journey, leadership, culture, news, and career opportunities."
       />
       <Breadcrumbs variant="light" />
       <section className="relative flex h-[450px] items-center overflow-hidden border-b border-gray-200 bg-gray-50">
@@ -182,7 +241,7 @@ export default function ResourcesClient({
               </div>
               <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
                 {cat.items.map((item, itemIdx) => (
-                  <ResourceCard key={item.href} item={item} itemIdx={itemIdx} />
+                  <CompanyCard key={item.href} item={item} itemIdx={itemIdx} />
                 ))}
               </div>
             </div>

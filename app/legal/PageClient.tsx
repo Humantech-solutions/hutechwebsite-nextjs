@@ -1,44 +1,50 @@
 "use client";
 
-import { FileText, Newspaper, BookOpen, Calendar, MoveRight } from "lucide-react";
+import { FileText, ShieldCheck, CheckCircle, Gavel, Map, MoveRight } from "lucide-react";
 import Link from "next/link";
 import { motion as Motion } from "framer-motion";
 import { Breadcrumbs } from "@/components/Breadcrumbs";
 import { Meta } from "@/components/Meta";
 
-const RESOURCES_CATEGORIES = [
+const LEGAL_CATEGORIES = [
   {
-    category: "Knowledge & Resources",
+    category: "Legal & Compliance",
     items: [
       {
-        title: "Blogs",
-        href: "/resources/blogs",
-        icon: <Newspaper className="h-8 w-8 text-[#F99D1C]" />,
-        desc: "Latest tech trends, engineering deep-dives, and company news.",
+        title: "Terms and Condition",
+        href: "/legal/terms",
+        icon: <Gavel className="h-8 w-8 text-[#F99D1C]" />,
+        desc: "Rules and guidelines for using our services.",
       },
       {
-        title: "Case Studies",
-        href: "/resources/case-studies",
+        title: "Privacy Policy",
+        href: "/legal/privacy",
+        icon: <ShieldCheck className="h-8 w-8 text-[#F99D1C]" />,
+        desc: "How we collect, use, and protect your data.",
+      },
+      {
+        title: "Cookie Policy",
+        href: "/legal/cookie-policy",
+        icon: <CheckCircle className="h-8 w-8 text-[#F99D1C]" />,
+        desc: "Information about how we use cookies.",
+      },
+      {
+        title: "Code of Conduct",
+        href: "/legal/code-of-conduct",
         icon: <FileText className="h-8 w-8 text-[#F99D1C]" />,
-        desc: "Real-world success stories of our digital transformations.",
+        desc: "Our expectations for ethical behavior and business practices.",
       },
       {
-        title: "Events",
-        href: "/resources/events",
-        icon: <Calendar className="h-8 w-8 text-[#F99D1C]" />,
-        desc: "Upcoming webinars, tech meetups, and corporate events.",
-      },
-      {
-        title: "Hutech Documents",
-        href: "/resources/hutech-documents",
-        icon: <BookOpen className="h-8 w-8 text-[#F99D1C]" />,
-        desc: "Whitepapers, brochures, and technical documentation.",
+        title: "Sitemap",
+        href: "/legal/sitemap",
+        icon: <Map className="h-8 w-8 text-[#F99D1C]" />,
+        desc: "Navigate through all the pages on our website.",
       },
     ],
   },
 ];
 
-const ResourceCard = ({ item, itemIdx }: { item: any; itemIdx: number }) => (
+const LegalCard = ({ item, itemIdx }: { item: any; itemIdx: number }) => (
   <Link href={item.href}>
     <Motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -55,7 +61,7 @@ const ResourceCard = ({ item, itemIdx }: { item: any; itemIdx: number }) => (
       </h3>
       <p className="mb-10 text-base font-medium leading-relaxed text-gray-500">{item.desc}</p>
       <div className="mt-auto flex items-center text-[11px] font-semibold tracking-wide text-[#001A3D]">
-        Explore{" "}
+        Read More{" "}
         <MoveRight className="ml-3 h-4 w-4 transition-transform group-hover:translate-x-2" />
       </div>
     </Motion.div>
@@ -68,18 +74,18 @@ type HeroSettings = {
   heroDescription?: string;
 };
 
-export default function ResourcesClient({
+export default function LegalClient({
   dynamicLinks,
   heroSettings,
 }: {
   dynamicLinks?: { name: string; path: string }[] | null;
   heroSettings?: HeroSettings;
 }) {
-  const displayEyebrow = heroSettings?.heroEyebrow || "Knowledge Hub";
-  const displayTitle = heroSettings?.heroTitle || "Resources & |Insights.";
+  const displayEyebrow = heroSettings?.heroEyebrow || "Policies";
+  const displayTitle = heroSettings?.heroTitle || "Legal & |Compliance.";
   const displayDescription =
     heroSettings?.heroDescription ||
-    "Deep dives into the technologies and strategies shaping the future of digital engineering.";
+    "Transparency, trust, and the policies that guide our digital engineering practices.";
 
   const renderTitle = (title: string) => {
     return title
@@ -92,56 +98,39 @@ export default function ResourcesClient({
   };
 
   const getRenderCategories = () => {
-    if (!dynamicLinks || dynamicLinks.length === 0) return RESOURCES_CATEGORIES;
+    if (!dynamicLinks || dynamicLinks.length === 0) return LEGAL_CATEGORIES;
 
-    // Deep copy to allow mutation of items
-    const renderCats = RESOURCES_CATEGORIES.map((cat) => ({
-      ...cat,
-      items: cat.items.map((item) => ({ ...item })),
-    }));
-
-    const unmappedLinks: { title: string; href: string; icon: React.ReactNode; desc: string }[] =
-      [];
-
-    dynamicLinks.forEach((dLink) => {
+    const baseItems = LEGAL_CATEGORIES[0].items;
+    const resolvedItems = dynamicLinks.map((dLink) => {
+      // Clean path to compare (remove trailing slashes)
       const cleanPath = dLink.path.replace(/\/$/, "");
-      let foundMatch = false;
-
       // Check if this dynamic link matches any hardcoded item
-      for (const cat of renderCats) {
-        const match = cat.items.find((item) => {
-          const cleanItemPath = item.href.replace(/\/$/, "");
-          return (
-            cleanItemPath === cleanPath ||
-            cleanItemPath.endsWith(cleanPath) ||
-            cleanPath.endsWith(cleanItemPath)
-          );
-        });
-        if (match) {
-          match.title = dLink.name; // Update title from WordPress
-          foundMatch = true;
-          break;
-        }
-      }
+      const match = baseItems.find((item) => {
+        const cleanItemPath = item.href.replace(/\/$/, "");
+        return (
+          cleanItemPath === cleanPath ||
+          cleanItemPath.endsWith(cleanPath) ||
+          cleanPath.endsWith(cleanItemPath)
+        );
+      });
 
-      if (!foundMatch) {
-        unmappedLinks.push({
-          title: dLink.name,
-          href: dLink.path,
-          icon: <FileText className="h-8 w-8 text-[#F99D1C]" />,
-          desc: "Explore this resource.",
-        });
+      if (match) {
+        return { ...match, title: dLink.name }; // Use WP title but our custom icon/desc
       }
+      return {
+        title: dLink.name,
+        href: dLink.path,
+        icon: <FileText className="h-8 w-8 text-[#F99D1C]" />,
+        desc: "View legal documentation.",
+      };
     });
 
-    if (unmappedLinks.length > 0) {
-      renderCats.push({
-        category: "More Resources",
-        items: unmappedLinks,
-      });
-    }
-
-    return renderCats;
+    return [
+      {
+        category: "Legal & Compliance",
+        items: resolvedItems,
+      },
+    ];
   };
 
   const categories = getRenderCategories();
@@ -149,8 +138,8 @@ export default function ResourcesClient({
   return (
     <div className="bg-white">
       <Meta
-        title="Resources & Insights | Hutech Solutions"
-        description="Explore the latest technology trends, case studies, and digital transformation insights from Hutech Solutions."
+        title="Legal | Hutech Solutions"
+        description="View our terms and conditions, privacy policy, cookie policy, and code of conduct."
       />
       <Breadcrumbs variant="light" />
       <section className="relative flex h-[450px] items-center overflow-hidden border-b border-gray-200 bg-gray-50">
@@ -182,7 +171,7 @@ export default function ResourcesClient({
               </div>
               <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
                 {cat.items.map((item, itemIdx) => (
-                  <ResourceCard key={item.href} item={item} itemIdx={itemIdx} />
+                  <LegalCard key={item.href} item={item} itemIdx={itemIdx} />
                 ))}
               </div>
             </div>
@@ -199,13 +188,13 @@ export default function ResourcesClient({
         </div>
         <div className="relative z-10 mx-auto flex max-w-[1280px] flex-col items-center justify-between gap-12 px-6 md:flex-row lg:px-20">
           <div className="display-font max-w-2xl text-3xl font-semibold leading-tight tracking-tight">
-            Ready to engineer your next <span className="text-[#F99D1C]">breakthrough?</span>
+            Have questions about our <span className="text-[#F99D1C]">policies?</span>
           </div>
           <Link
             href="/contact"
             className="rounded-sm bg-[#F99D1C] px-12 py-5 text-xs font-bold tracking-wide text-[#001A3D] shadow-xl shadow-[#F99D1C]/20 transition-all hover:bg-[#ff9d00]"
           >
-            Start a Project
+            Contact Us
           </Link>
         </div>
       </section>
