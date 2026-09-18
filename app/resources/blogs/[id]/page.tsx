@@ -2,7 +2,7 @@ import BlogDetailClient from "./BlogDetailClient";
 import { getBlogBySlug, getBlogs } from "@/lib/wordpress";
 import { BLOG_DATA } from "@/lib/data/blogs";
 import { notFound } from "next/navigation";
-import { constructMetadata } from "@/lib/seo";
+import { constructMetadata, getArticleSchema } from "@/lib/seo";
 import {
   getIPublishPageBySlug,
   getIPublishPages,
@@ -143,12 +143,38 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
       faqTitle: wpBlog.faqTitle,
       faqSubtitle: wpBlog.faqSubtitle,
     };
-    return <BlogDetailClient blog={blog as any} latestBlogs={latestBlogs} />;
+    const schemaJsonData = getArticleSchema({
+      title: blog.title,
+      description: blog.excerpt,
+      image: blog.image || "",
+      datePublished: blog.date,
+      authorName: blog.author || "Hutech Team",
+      url: `/resources/blogs/${blog.slug}/`
+    });
+    return (
+      <>
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schemaJsonData) }} />
+        <BlogDetailClient blog={blog as any} latestBlogs={latestBlogs} />
+      </>
+    );
   }
 
   const staticBlog = BLOG_DATA[id];
   if (staticBlog) {
-    return <BlogDetailClient blog={staticBlog} latestBlogs={latestBlogs} />;
+    const schemaJsonData = getArticleSchema({
+      title: staticBlog.title,
+      description: staticBlog.excerpt || staticBlog.content?.[0]?.text || "",
+      image: staticBlog.image || "",
+      datePublished: staticBlog.date,
+      authorName: staticBlog.author || "Hutech Team",
+      url: `/resources/blogs/${id}/`
+    });
+    return (
+      <>
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schemaJsonData) }} />
+        <BlogDetailClient blog={staticBlog} latestBlogs={latestBlogs} />
+      </>
+    );
   }
 
   // Check iPublish

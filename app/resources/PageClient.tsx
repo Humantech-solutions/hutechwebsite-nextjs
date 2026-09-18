@@ -100,7 +100,7 @@ export default function ResourcesClient({
       items: cat.items.map((item) => ({ ...item })),
     }));
 
-    const unmappedLinks: { title: string; href: string; icon: React.ReactNode; desc: string }[] =
+    const unmappedLinks: { title: string; href: string; icon: any; desc: string }[] =
       [];
 
     dynamicLinks.forEach((dLink) => {
@@ -137,7 +137,7 @@ export default function ResourcesClient({
     if (unmappedLinks.length > 0) {
       renderCats.push({
         category: "More Resources",
-        items: unmappedLinks,
+        items: unmappedLinks as any,
       });
     }
 
