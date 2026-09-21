@@ -6,6 +6,45 @@ import { getIPublishAllBlogs } from "@/lib/ipublish";
 const WORDPRESS_API_URL = process.env.NEXT_PUBLIC_WORDPRESS_API_URL;
 const WORDPRESS_BASE_URL = WORDPRESS_API_URL?.replace(/\/graphql\/?$/i, "");
 
+/**
+ * Normalize a raw WordPress URL from ACF link fields into a clean Next.js path.
+ * - Strips the WordPress CMS base domain (e.g. cms.hutechsolutions.ai)
+ * - Rewrites WordPress CPT permalink slugs to their Next.js equivalents:
+ *     /blog/hutech_service/<slug> → /services/<slug>/
+ *     /blog/hutech_event/<slug>   → /resources/events/<slug>/
+ *     /blog/case_study/<slug>     → /resources/case-studies/<slug>/
+ *     /blog/hutech_news/<slug>    → /company/news/<slug>/
+ *     /blog/hutech_career/<slug>  → /careers/<slug>/
+ *     /blog/hutech_document/<slug>→ /resources/hutech-documents/<slug>/
+ *     /blog/hutech_press_release/<slug> → /company/press-release/<slug>/
+ */
+function normalizeWpUrl(url?: string | null): string {
+  if (!url) return "";
+  let path = url;
+  // Strip the WP CMS base URL to get a relative path
+  if (WORDPRESS_BASE_URL && path.startsWith(WORDPRESS_BASE_URL)) {
+    path = path.slice(WORDPRESS_BASE_URL.length);
+  } else if (/^https?:\/\//i.test(path)) {
+    // Strip any other absolute domain, keeping only the path
+    try { path = new URL(path).pathname; } catch { /* keep as is */ }
+  }
+  // Rewrite WP CPT slugs
+  path = path
+    .replace(/^\/blog\/hutech_service\//, "/services/")
+    .replace(/^\/blog\/hutech_event\//, "/resources/events/")
+    .replace(/^\/blog\/case_study\//, "/resources/case-studies/")
+    .replace(/^\/blog\/hutech_news\//, "/company/news/")
+    .replace(/^\/blog\/hutech_career\//, "/careers/")
+    .replace(/^\/blog\/hutech_press_release\//, "/company/press-release/")
+    .replace(/^\/blog\/hutech_document\//, "/resources/hutech-documents/");
+  // Ensure trailing slash
+  if (path && !path.endsWith("/") && !path.includes("#") && !path.includes("?")) {
+    path = path + "/";
+  }
+  return path || "#";
+}
+
+
 const DEFAULT_BLOG_IMAGE =
   "https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=800";
 const DEFAULT_EVENT_IMAGE =
@@ -227,8 +266,9 @@ function applyParentSlug(parentPath: string | undefined, childPath: string | und
   if (c === "#" || c.startsWith("http") || p === "#" || p === "/") return c;
 
   // Remove the default CPT slugs if they exist so we can cleanly append to the parent
+  // WordPress sometimes prefixes CPT slugs with /blog/ — handle both patterns
   c = c.replace(
-    /^\/(hutech_service|case_study|hutech_event|hutech_news|hutech_career|hutech_press_release|hutech_document)\//,
+    /^\/(blog\/)?(hutech_service|case_study|hutech_event|hutech_news|hutech_career|hutech_press_release|hutech_document)\//,
     "/"
   );
 
@@ -3998,7 +4038,8 @@ function transformServiceNode(node: any): HutechService {
           if (val.node && val.node.sourceUrl) {
             finalVal = val.node.sourceUrl;
           } else if (val.url) {
-            finalVal = val.url;
+            // Normalize WP button URLs — strip CMS domain and rewrite CPT slugs
+            finalVal = field.toLowerCase().includes("url") ? normalizeWpUrl(val.url) : val.url;
           }
         }
         item[field.toLowerCase()] = finalVal;
@@ -4051,7 +4092,7 @@ function transformServiceNode(node: any): HutechService {
     ctaTitle: f.ctaTitle,
     ctaDescription: f.ctaDescription,
     ctaBtnName: f.ctaBtnName,
-    ctaBtnUrl: f.ctaBtnUrl?.url || (typeof f.ctaBtnUrl === "string" ? f.ctaBtnUrl : ""),
+    ctaBtnUrl: normalizeWpUrl(f.ctaBtnUrl?.url || (typeof f.ctaBtnUrl === "string" ? f.ctaBtnUrl : "")),
     ctaImage: imgUrl(f.ctaImage) || undefined,
 
     techStackTagline: f.techStackTagline,
@@ -4074,7 +4115,7 @@ function transformServiceNode(node: any): HutechService {
     blogSectionTitle: f.blogSectionTitle,
     blogSectionDesc: f.blogSectionDesc,
     blogLinkName: f.blogLinkName,
-    blogLinkUrl: f.blogLinkUrl?.url || (typeof f.blogLinkUrl === "string" ? f.blogLinkUrl : ""),
+    blogLinkUrl: normalizeWpUrl(f.blogLinkUrl?.url || (typeof f.blogLinkUrl === "string" ? f.blogLinkUrl : "")),
     blogCategory: blogCatName,
     blogCategorySlug: blogCatSlug,
   };
