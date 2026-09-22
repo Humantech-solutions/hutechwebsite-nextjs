@@ -43,6 +43,7 @@ export default async function BlogsPage() {
       excerpt: item.excerpt || "",
       content: "",
       author: "Hutech Solutions",
+      authorName: item.author_name,
       category:
         item.subcategory && item.subcategory.trim()
           ? item.subcategory.trim()

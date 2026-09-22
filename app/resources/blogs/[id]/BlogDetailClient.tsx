@@ -39,13 +39,13 @@ const DEFAULT_RELATED: LatestThinkingBlog[] = [
   {
     id: "small-models-big-impact",
     slug: "small-models-big-impact-why-domain-specific-ai-is-outperforming-giant-llms",
-    title: "Small Models, Big Impact: Why Domain-Specific AI Is the Future of Healthcare & Life Sciences",
+    title:
+      "Small Models, Big Impact: Why Domain-Specific AI Is the Future of Healthcare & Life Sciences",
     category: "ARTIFICIAL INTELLIGENCE",
     date: "July 28, 2026",
     excerpt:
       "Introduction For years, the AI conversation was dominated by scale. Bigger models, more parameters, broader general-purpose capabilities...",
-    image:
-      "https://cms.hutechsolutions.ai/wp-content/uploads/2026/08/LLM.webp",
+    image: "https://cms.hutechsolutions.ai/wp-content/uploads/2026/08/LLM.webp",
   },
   {
     id: "agentic-ai-autonomous-operators",
@@ -55,8 +55,7 @@ const DEFAULT_RELATED: LatestThinkingBlog[] = [
     date: "July 28, 2026",
     excerpt:
       "Introduction For years, AI in the enterprise meant chatbots — tools that answered questions, generated drafts, or routed customer tickets...",
-    image:
-      "https://cms.hutechsolutions.ai/wp-content/uploads/2026/08/agentic-ai.webp",
+    image: "https://cms.hutechsolutions.ai/wp-content/uploads/2026/08/agentic-ai.webp",
   },
   {
     id: "blockchain-supply-chain-revolution",
@@ -66,8 +65,7 @@ const DEFAULT_RELATED: LatestThinkingBlog[] = [
     date: "June 26, 2026",
     excerpt:
       "Supply chains are among the most complex systems in modern commerce, involving countless participants, transactions, and handoffs across global networks...",
-    image:
-      "https://cms.hutechsolutions.ai/wp-content/uploads/2026/08/blockchain.webp",
+    image: "https://cms.hutechsolutions.ai/wp-content/uploads/2026/08/blockchain.webp",
   },
 ];
 
@@ -232,9 +230,7 @@ export default function BlogDetailClient({
 
   const mobileCtaIndex = useMemo(() => {
     if (contentHtml || !blog.content || blog.content.length <= 1) return -1;
-    return blog.content.length >= 5
-      ? Math.min(3, Math.floor(blog.content.length / 3))
-      : 0;
+    return blog.content.length >= 5 ? Math.min(3, Math.floor(blog.content.length / 3)) : 0;
   }, [contentHtml, blog.content]);
 
   return (
@@ -595,8 +591,8 @@ export default function BlogDetailClient({
                                   From Idea to Impact
                                 </h3>
                                 <p className="mb-5 text-[14px] font-normal leading-[1.6] text-blue-100/90">
-                                  Tell us what you want to build. We’ll bring the right strategy, team,
-                                  and technology.
+                                  Tell us what you want to build. We’ll bring the right strategy,
+                                  team, and technology.
                                 </p>
                                 <Link
                                   href="/contact"
@@ -741,10 +737,7 @@ export default function BlogDetailClient({
                   {/* 16:9 Thumbnail with Category Badge */}
                   <div className="relative aspect-[16/9] w-full overflow-hidden bg-gray-100">
                     <Image
-                      src={
-                        article.image ||
-                        FALLBACK_THUMBNAILS[idx % FALLBACK_THUMBNAILS.length]
-                      }
+                      src={article.image || FALLBACK_THUMBNAILS[idx % FALLBACK_THUMBNAILS.length]}
                       alt={article.title}
                       fill
                       sizes="(max-width: 768px) 100vw, (max-width: 1200px) 33vw, 380px"

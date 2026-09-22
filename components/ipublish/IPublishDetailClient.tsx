@@ -32,8 +32,7 @@ const DEFAULT_RELATED_IPUBLISH: RelatedBlogItem[] = [
     date: "July 28, 2026",
     excerpt:
       "Introduction For years, the AI conversation was dominated by scale. Bigger models, more parameters, broader general-purpose capabilities...",
-    image:
-      "https://cms.hutechsolutions.ai/wp-content/uploads/2026/08/LLM.webp",
+    image: "https://cms.hutechsolutions.ai/wp-content/uploads/2026/08/LLM.webp",
   },
   {
     slug: "agentic-ai-from-chatbots-to-autonomous-business-operators",
@@ -42,8 +41,7 @@ const DEFAULT_RELATED_IPUBLISH: RelatedBlogItem[] = [
     date: "July 28, 2026",
     excerpt:
       "Introduction For years, AI in the enterprise meant chatbots — tools that answered questions, generated drafts, or routed customer tickets...",
-    image:
-      "https://cms.hutechsolutions.ai/wp-content/uploads/2026/08/agentic-ai.webp",
+    image: "https://cms.hutechsolutions.ai/wp-content/uploads/2026/08/agentic-ai.webp",
   },
   {
     slug: "blockchain-the-supply-chain-revolution",
@@ -52,8 +50,7 @@ const DEFAULT_RELATED_IPUBLISH: RelatedBlogItem[] = [
     date: "June 26, 2026",
     excerpt:
       "Supply chains are among the most complex systems in modern commerce, involving countless participants, transactions, and handoffs across global networks...",
-    image:
-      "https://cms.hutechsolutions.ai/wp-content/uploads/2026/08/blockchain.webp",
+    image: "https://cms.hutechsolutions.ai/wp-content/uploads/2026/08/blockchain.webp",
   },
 ];
 
@@ -418,6 +415,21 @@ export function IPublishDetailClient({
                 } gap-x-5 gap-y-1 text-sm text-white/90 drop-shadow`}
                 style={{ color: "#ffffff" }}
               >
+                {content.author_name && (
+                  <span className="flex items-center gap-1.5">
+                    <svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="1.8"
+                      className="h-4 w-4 text-amber-400"
+                    >
+                      <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" strokeLinecap="round" strokeLinejoin="round" />
+                      <circle cx="12" cy="7" r="4" strokeLinecap="round" strokeLinejoin="round" />
+                    </svg>
+                    {content.author_name}
+                  </span>
+                )}
                 {dateFormatted && (
                   <span className="flex items-center gap-1.5">
                     <svg
@@ -764,10 +776,7 @@ export function IPublishDetailClient({
                     {/* 16:9 Thumbnail with Category Badge */}
                     <div className="relative aspect-[16/9] w-full overflow-hidden bg-gray-100">
                       <Image
-                        src={
-                          article.image ||
-                          FALLBACK_THUMBNAILS[idx % FALLBACK_THUMBNAILS.length]
-                        }
+                        src={article.image || FALLBACK_THUMBNAILS[idx % FALLBACK_THUMBNAILS.length]}
                         alt={article.title}
                         fill
                         sizes="(max-width: 768px) 100vw, (max-width: 1200px) 33vw, 380px"
