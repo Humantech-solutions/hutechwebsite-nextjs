@@ -131,7 +131,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
       title: wpBlog.title,
       date: wpBlog.date,
       author: wpBlog.author,
-      role: "",
+      role: wpBlog.role,
       category: wpBlog.category,
       readTime: wpBlog.readTime,
       image: wpBlog.imageUrl || undefined,

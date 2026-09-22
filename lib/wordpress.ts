@@ -932,6 +932,10 @@ const BLOGS_FOR_HOME_QUERY = `
         title
         date
         slug
+        postFields {
+          authorName
+          authorRole
+        }
         featuredImage { node { sourceUrl } }
       }
     }
@@ -945,6 +949,10 @@ const BLOGS_BY_CATEGORY_FOR_HOME_QUERY = `
         title
         date
         slug
+        postFields {
+          authorName
+          authorRole
+        }
         featuredImage { node { sourceUrl } }
       }
     }
@@ -1021,6 +1029,8 @@ export type WpBlog = {
   excerpt: string;
   content: string;
   author: string;
+  authorName?: string;
+  role?: string;
   category: string;
   imageUrl?: string;
   readTime: string;
@@ -1080,6 +1090,10 @@ const BLOGS_QUERY = `
         slug
         title
         date
+        postFields {
+          authorName
+          authorRole
+        }
         excerpt(format: RENDERED)
         featuredImage {
           node {
@@ -1113,6 +1127,10 @@ const BLOG_BY_SLUG_QUERY = `
       slug
       title
       date
+      postFields {
+        authorName
+        authorRole
+      }
       content(format: RENDERED)
       excerpt(format: RENDERED)
       featuredImage {
@@ -1193,7 +1211,8 @@ function stripHtml(html: string): string {
 function transformBlogNode(node: any): WpBlog {
   const category = node.categories?.nodes?.[0]?.name ?? "General";
   const tags = node.tags?.nodes?.map((t: any) => t.name) ?? [];
-  const author = node.author?.node?.name ?? "Hutech Team";
+  const author = node.postFields?.authorName || node.author?.node?.name || "Hutech Team";
+  const role = node.postFields?.authorRole || "Technology Practice Lead";
   const imageUrl = imgUrl(node.featuredImage) || DEFAULT_BLOG_IMAGE;
   const rawContent = node.content ?? node.excerpt ?? "";
   const readTime = estimateReadTime(rawContent);
@@ -1224,6 +1243,8 @@ function transformBlogNode(node: any): WpBlog {
     excerpt,
     content: rawContent,
     author,
+    authorName: author,
+    role,
     category,
     imageUrl,
     readTime,
@@ -1266,7 +1287,7 @@ export async function getBlogBySlug(slug: string): Promise<WpBlog | null> {
     try {
       const faqRaw = await fetchGraphQL(BLOG_FAQ_QUERY, { slug });
       if (!faqRaw?.errors && faqRaw?.data?.post?.postFields) {
-        postNode.postFields = faqRaw.data.post.postFields;
+        postNode.postFields = { ...postNode.postFields, ...faqRaw.data.post.postFields };
       }
     } catch (err) {
       console.warn("[WP] Could not fetch FAQs for blog:", slug);
@@ -3996,6 +4017,10 @@ const BLOGS_BY_CATEGORY_QUERY = `
         slug
         title
         date
+        postFields {
+          authorName
+          authorRole
+        }
         excerpt(format: RENDERED)
         featuredImage {
           node {

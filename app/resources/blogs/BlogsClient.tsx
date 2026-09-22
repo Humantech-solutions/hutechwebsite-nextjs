@@ -16,6 +16,7 @@ import {
   ShieldCheck,
   Bell,
   Loader2,
+  User,
 } from "lucide-react";
 import { Meta } from "@/components/Meta";
 import { ImageWithFallback } from "@/components/figma/ImageWithFallback";
@@ -241,7 +242,7 @@ export default function BlogsClient({ blogs, pageTitle, pageDescription, bgImage
                 </div>
 
                 {/* 2. Search Bar - right-aligned on mobile (next to count), far right on desktop */}
-                <div className="order-2 relative w-40 shrink-0 sm:w-56 md:order-3 md:w-64 lg:w-72">
+                <div className="relative order-2 w-40 shrink-0 sm:w-56 md:order-3 md:w-64 lg:w-72">
                   <Search className="absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
                   <input
                     id="blog-search"
@@ -269,7 +270,7 @@ export default function BlogsClient({ blogs, pageTitle, pageDescription, bgImage
                 </div>
 
                 {/* 3. Category Carousel Container - 2nd line full-width on mobile, middle on desktop */}
-                <div className="order-3 w-full min-w-0 overflow-x-auto py-1 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden md:order-2 md:w-auto md:flex-1">
+                <div className="order-3 w-full min-w-0 overflow-x-auto py-1 [-ms-overflow-style:none] [scrollbar-width:none] md:order-2 md:w-auto md:flex-1 [&::-webkit-scrollbar]:hidden">
                   <div className="flex items-center gap-2">
                     {categories.map((cat) => (
                       <button
@@ -358,11 +359,23 @@ export default function BlogsClient({ blogs, pageTitle, pageDescription, bgImage
 
                               {/* Excerpt */}
                               {blog.excerpt && (
-                                <p className="line-clamp-2 text-xs font-normal leading-relaxed text-slate-600">
+                                <p
+                                  className={`text-xs font-normal leading-relaxed text-slate-600 ${
+                                    blog.authorName ? "line-clamp-2" : "line-clamp-4"
+                                  }`}
+                                >
                                   {blog.excerpt}
                                 </p>
                               )}
                             </div>
+
+                            {/* Author Name */}
+                            {blog.authorName && (
+                              <div className="mt-5 flex items-center gap-2 border-t border-slate-100 pt-4 text-xs font-normal text-[#F99D1C]">
+                                <User size={13} />
+                                <span>{blog.authorName}</span>
+                              </div>
+                            )}
                           </div>
                         </Link>
                       </Motion.article>

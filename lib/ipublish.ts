@@ -55,6 +55,7 @@ export interface IPublishPageData {
     domain?: string;
     site_id?: string;
   }[] | null;
+  author_name?: string;
 }
 
 export interface IPublishPageListItem {
@@ -68,6 +69,7 @@ export interface PublicContentItem {
   title: string;
   slug: string;
   destinations?: { name: string; domain: string; site_id: string }[];
+  author_name?: string;
   [key: string]: any;
 }
 
@@ -249,15 +251,15 @@ export async function getIPublishAllBlogs(
         );
       });
       
-      // We map this directly to IPublishPageData to avoid N extra API calls!
-      // The listing page doesn't need the HTML 'body' field because it natively uses the banner_pattern fields
-      return filteredContent.map(item => ({
-        ...item,
-        body: "", 
-        current_body: "",
-        slug: item.slug,
-        org: orgSlug,
-      })) as IPublishPageData[];
+      // Fetch details for each item to get full data including author_name
+      const detailedPages = await Promise.all(
+        filteredContent.map(async (item) => {
+          const detail = await getIPublishPageBySlug(item.slug, orgSlug);
+          return detail ? { ...item, ...detail, body: "", current_body: "" } : null;
+        })
+      );
+      
+      return detailedPages.filter((item) => item !== null) as IPublishPageData[];
     } else {
       // Fallback to unauthenticated endpoint if authenticated one fails
       const pages = await getIPublishPages();
