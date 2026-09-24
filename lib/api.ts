@@ -5,7 +5,7 @@
 
 const API_BASE_URL =
   process.env.NEXT_PUBLIC_HUTECH_API_BASE_URL?.replace(/\/+$/, "") ||
-  "https://apis.admin.hutechsolutions.in";
+  "http://localhost:8001" // Production: "https://apis.admin.hutechsolutions.in";
 
 const SITE_BASE_URL =
   process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/+$/, "") || "https://hutechsolutions.ai";
@@ -215,7 +215,7 @@ export async function submitDocumentRequest(payload: DocumentRequestPayload): Pr
           fetchUrl = fetchUrl.replace(/\/edit.*$/, "/export?format=pdf");
         }
 
-        const fileRes = await fetch(fetchUrl);
+        const fileRes = await fetch("/api/proxy-pdf?url=" + encodeURIComponent(fetchUrl));
         if (fileRes.ok) {
           blob = await fileRes.blob();
 
@@ -510,7 +510,7 @@ export async function getRecruitProJobs() {
 
     const res = await fetch(url, {
       headers: {
-        // Authorization: `Bearer ${token}`,
+
         "Content-Type": "application/json",
       },
       next: { revalidate: 0 },

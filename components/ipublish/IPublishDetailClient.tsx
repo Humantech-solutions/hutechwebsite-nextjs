@@ -6,6 +6,7 @@ import Image from "next/image";
 import { IPublishPageData, getIPublishImageUrl, normalizeIPublishHtml } from "@/lib/ipublish";
 import { getIPublishPatternStyle, extractPatternFromBody } from "@/lib/ipublish-pattern";
 import { Linkedin, Twitter, Facebook, Share2, Calendar, Check } from "lucide-react";
+import { BlogCTAModal } from "@/components/BlogCTAModal";
 
 export interface RelatedBlogItem {
   id?: string;
@@ -138,6 +139,13 @@ export function IPublishDetailClient({
       : content.canonical_url || "";
 
   const [copied, setCopied] = useState(false);
+  const [isCtaModalOpen, setIsCtaModalOpen] = useState(false);
+  const [ctaModalData, setCtaModalData] = useState({ title: "", text: "", event: "" });
+
+  const openModal = (title: string, text: string, event: string) => {
+    setCtaModalData({ title, text, event });
+    setIsCtaModalOpen(true);
+  };
 
   const handleCopyLink = async () => {
     if (typeof window !== "undefined") {
@@ -292,6 +300,14 @@ export function IPublishDetailClient({
         dangerouslySetInnerHTML={{
           __html: `try{var t=window.localStorage.getItem("ipublish_theme")||"dark";document.documentElement.setAttribute("data-theme",t);}catch(e){}`,
         }}
+      />
+
+      <BlogCTAModal
+        isOpen={isCtaModalOpen}
+        onClose={() => setIsCtaModalOpen(false)}
+        ctaTitle={ctaModalData.title}
+        ctaText={ctaModalData.text}
+        gtmEventName={ctaModalData.event}
       />
 
       <article>
@@ -665,12 +681,12 @@ export function IPublishDetailClient({
                           Tell us what you want to build. We’ll bring the right strategy, team, and
                           technology.
                         </p>
-                        <Link
-                          href="/contact"
+                        <button
+                          onClick={() => openModal("From Idea to Impact", "Tell us what you want to build. We’ll bring the right strategy, team, and technology.", "book_meeting_blog_inline")}
                           className="inline-flex w-full items-center justify-center rounded-[3px] bg-white py-3.5 text-center text-sm font-bold text-[#172033] shadow-sm transition-all hover:bg-blue-50 hover:shadow active:scale-[0.99] sm:w-auto sm:px-6"
                         >
                           Book Meeting
-                        </Link>
+                        </button>
                       </div>
                     ) : null}
 
@@ -699,12 +715,12 @@ export function IPublishDetailClient({
                           </p>
                         </div>
 
-                        <Link
-                          href="/contact"
+                        <button
+                          onClick={() => openModal("Turn Your Ideas into Real Impact", "Partner with Hutech Solutions for Cloud, Data & AI-driven transformation. From strategy to execution, we help you build smarter, faster and for a better tomorrow.", "engage_hutech_solutions_blog")}
                           className="inline-flex items-center justify-center self-start whitespace-nowrap rounded-[3px] bg-white px-6 py-3 text-sm font-bold text-[#172033] shadow-sm transition-all hover:bg-blue-50 hover:shadow active:scale-[0.98] sm:self-center"
                         >
                           Engage Hutech Solutions
-                        </Link>
+                        </button>
                       </div>
                     </div>
                   </article>
@@ -733,12 +749,12 @@ export function IPublishDetailClient({
                   </p>
 
                   {/* White Action Button */}
-                  <Link
-                    href="/contact"
+                  <button
+                    onClick={() => openModal("From Idea to Impact", "Tell us what you want to build. We’ll bring the right strategy, team, and technology.", "book_meeting_blog_sidebar")}
                     className="flex w-full items-center justify-center rounded-[3px] bg-white py-3.5 text-center text-sm font-bold text-[#172033] shadow-sm transition-all hover:bg-blue-50 hover:shadow active:scale-[0.99]"
                   >
                     Book Meeting
-                  </Link>
+                  </button>
                 </div>
               </aside>
             </div>
@@ -831,12 +847,12 @@ export function IPublishDetailClient({
                   Tell us what you want to build. We’ll bring the right strategy, team, and
                   technology.
                 </p>
-                <Link
-                  href="/contact"
+                <button
+                  onClick={() => openModal("From Idea to Impact", "Tell us what you want to build. We’ll bring the right strategy, team, and technology.", "book_meeting_blog_mobile")}
                   className="inline-flex w-full items-center justify-center rounded-[3px] bg-white py-3.5 text-center text-sm font-bold text-[#172033] shadow-sm transition-all hover:bg-blue-50 hover:shadow active:scale-[0.99] sm:w-auto sm:px-6"
                 >
                   Book Meeting
-                </Link>
+                </button>
               </div>
             )}
           </div>
