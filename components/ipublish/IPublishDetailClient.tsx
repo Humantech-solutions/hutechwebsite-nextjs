@@ -226,6 +226,7 @@ export function IPublishDetailClient({
   const patternStyle = useMemo(() => {
     const extracted = extractPatternFromBody(content.body || content.current_body);
     if (extracted?.backgroundImage) {
+      if (extracted.backgroundImage === "none") return null;
       return {
         backgroundImage: extracted.backgroundImage,
         backgroundSize: extracted.backgroundSize,

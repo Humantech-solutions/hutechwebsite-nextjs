@@ -19,6 +19,7 @@ export function IPublishCardBanner({ blog }: IPublishCardBannerProps) {
   // Dynamic Pattern Overlay matching iPublish CMS inner pages
   const patternStyle = useMemo(() => {
     if (meta?.customPatternStyle?.backgroundImage) {
+      if (meta.customPatternStyle.backgroundImage === "none") return null;
       return {
         backgroundImage: meta.customPatternStyle.backgroundImage,
         backgroundSize: meta.customPatternStyle.backgroundSize,
