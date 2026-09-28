@@ -15,17 +15,28 @@ export interface IPublishPatternResult {
 export function extractPatternFromBody(body?: string): IPublishPatternResult | null {
   if (!body) return null;
 
+  const hasInjectedStyles = body.includes('id="ipublish-injected-styles"');
   const blockMatch = body.match(/\.banner-title-container[^\{]*\{([^}]+)\}/i);
-  if (!blockMatch) return null;
+
+  if (!blockMatch) {
+    return hasInjectedStyles ? { backgroundImage: "none", opacity: 0 } : null;
+  }
 
   const blockContent = blockMatch[1];
   const bgImageMatch = blockContent.match(/background-image:\s*([^;!]+)(?:!important)?;/i);
-  if (!bgImageMatch) return null;
+  
+  if (!bgImageMatch) {
+    return hasInjectedStyles ? { backgroundImage: "none", opacity: 0 } : null;
+  }
 
   const bgSizeMatch = blockContent.match(/background-size:\s*([^;!]+)(?:!important)?;/i);
   const opacityMatch = blockContent.match(/opacity:\s*([^;!]+)(?:!important)?;/i);
 
   const backgroundImage = bgImageMatch[1].trim();
+  if (backgroundImage === "none" || backgroundImage === "none !important") {
+    return { backgroundImage: "none", opacity: 0 };
+  }
+
   const backgroundSize = bgSizeMatch?.[1]?.trim();
   const opacityStr = opacityMatch?.[1]?.trim();
 

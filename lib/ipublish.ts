@@ -255,7 +255,7 @@ export async function getIPublishAllBlogs(
       const detailedPages = await Promise.all(
         filteredContent.map(async (item) => {
           const detail = await getIPublishPageBySlug(item.slug, orgSlug);
-          return detail ? { ...item, ...detail, body: "", current_body: "" } : null;
+          return detail ? { ...item, ...detail } : null;
         })
       );
       
