@@ -3,7 +3,7 @@
  * Production API base URL: https://apis.admin.hutechsolutions.in/
  */
 
-const API_BASE_URL =
+export const API_BASE_URL =
   process.env.NEXT_PUBLIC_HUTECH_API_BASE_URL?.replace(/\/+$/, "") ||
   "https://apis.admin.hutechsolutions.in"; // Production: "http://localhost:8001";
 
@@ -33,6 +33,17 @@ export interface DocumentRequestPayload {
   phone: string;
   documentTitle: string;
   downloadUrl: string;
+}
+
+export function isValidEmail(email: string): boolean {
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return emailRegex.test(email);
+}
+
+export function isValidPhone(phone: string): boolean {
+  if (!phone || phone === "N/A" || phone.toLowerCase() === "n/a") return true;
+  const phoneRegex = /^\+?[\d\s\-\(\)]{7,20}$/;
+  return phoneRegex.test(phone);
 }
 
 function clean(value: string | undefined | null, fallback = "") {
@@ -157,6 +168,13 @@ export async function submitContactForm(payload: ContactFormPayload): Promise<bo
     pageUrl,
   };
 
+  if (!isValidEmail(body.email)) {
+    throw new Error("Please enter a valid email address (e.g. name@domain.com).");
+  }
+  if (!isValidPhone(body.phone)) {
+    throw new Error("Please enter a valid phone number.");
+  }
+
   try {
     const response = await fetch(`${API_BASE_URL}/api/contact/submit`, {
       method: "POST",
@@ -194,6 +212,13 @@ export async function submitContactForm(payload: ContactFormPayload): Promise<bo
  */
 export async function submitDocumentRequest(payload: DocumentRequestPayload): Promise<boolean> {
   const { pageTitle, pageUrl } = getPageMeta("Document Download");
+
+  if (!isValidEmail(payload.email)) {
+    throw new Error("Please enter a valid email address (e.g. name@domain.com).");
+  }
+  if (!isValidPhone(payload.phone)) {
+    throw new Error("Please enter a valid phone number.");
+  }
 
   try {
     const formData = new FormData();
@@ -270,6 +295,10 @@ export async function submitDocumentRequest(payload: DocumentRequestPayload): Pr
  */
 export async function submitCareerForm(payload: CareerFormPayload): Promise<boolean> {
   const { pageTitle, pageUrl } = getPageMeta("Careers - Hutech Solutions");
+
+  if (!isValidEmail(payload.email)) {
+    throw new Error("Please enter a valid email address (e.g. name@domain.com).");
+  }
 
   const formData = new FormData();
   formData.append("name", clean(payload.name));

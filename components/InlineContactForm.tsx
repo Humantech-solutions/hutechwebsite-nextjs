@@ -16,11 +16,13 @@ export function InlineContactForm({
   submitButtonText = "Submit Project Request",
 }: InlineContactFormProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [formStatus, setFormStatus] = useState<{ type: "success" | "error" | "alert" | null; message: string }>({ type: null, message: "" });
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const form = e.currentTarget;
     setIsSubmitting(true);
+    setFormStatus({ type: null, message: "" });
 
     const formData = new FormData(form);
     const name = formData.get("name") as string;
@@ -36,12 +38,12 @@ export function InlineContactForm({
         subject: `Project Request: ${category}`,
         message,
         category,
-        gtmEventName: "inline_contact_submit",
+        gtmEventName: "contact_form_submit",
       });
-      toast.success("Thank you! Your project request has been submitted successfully.");
+      setFormStatus({ type: "success", message: "Thank you! Your project request has been submitted successfully." });
       form.reset();
     } catch (error) {
-      toast.error(error instanceof Error ? error.message : "Failed to submit request. Please try again later.");
+      setFormStatus({ type: "error", message: error instanceof Error ? error.message : "Failed to submit request. Please try again later." });
     } finally {
       setIsSubmitting(false);
     }
@@ -77,6 +79,17 @@ export function InlineContactForm({
         rows={4}
         className="w-full resize-none border border-gray-200 p-4 text-sm font-medium transition-all outline-none focus:border-[#0171c1] md:col-span-2"
       ></textarea>
+      
+      {formStatus.type && (
+        <div className={`md:col-span-2 p-3 text-sm font-medium rounded ${
+          formStatus.type === "success" ? "bg-green-50 text-green-600 border border-green-200" :
+          formStatus.type === "error" ? "bg-red-50 text-red-600 border border-red-200" :
+          "bg-yellow-50 text-yellow-600 border border-yellow-200"
+        }`}>
+          {formStatus.message}
+        </div>
+      )}
+
       <div className="md:col-span-2">
         <button
           disabled={isSubmitting}

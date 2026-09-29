@@ -28,6 +28,8 @@ import { submitContactForm } from "@/lib/api";
 
 export default function Graduates() {
   const [isInitiating, setIsInitiating] = useState(false);
+  const [formStatusApp, setFormStatusApp] = useState<{ type: "success" | "error" | "alert" | null; message: string }>({ type: null, message: "" });
+  const [formStatusPartnership, setFormStatusPartnership] = useState<{ type: "success" | "error" | "alert" | null; message: string }>({ type: null, message: "" });
 
   const {
     register,
@@ -37,6 +39,7 @@ export default function Graduates() {
   } = useForm();
 
   const onSubmit = async (data: any) => {
+    setFormStatusApp({ type: null, message: "" });
     try {
       await submitContactForm({
         name: data.fullName,
@@ -47,10 +50,10 @@ export default function Graduates() {
         category: "Graduate Cohort Application",
         gtmEventName: "graduate_application_submit",
       });
-      toast.success("Application submitted successfully! Our team will contact you soon.");
+      setFormStatusApp({ type: "success", message: "Application submitted successfully! Our team will contact you soon." });
       reset();
     } catch (error) {
-      toast.error(error instanceof Error ? error.message : "Failed to submit application. Please try again later.");
+      setFormStatusApp({ type: "error", message: error instanceof Error ? error.message : "Failed to submit application. Please try again later." });
     }
   };
 
@@ -58,6 +61,7 @@ export default function Graduates() {
     e.preventDefault();
     const form = e.currentTarget;
     setIsInitiating(true);
+    setFormStatusPartnership({ type: null, message: "" });
     const formData = new FormData(form);
     const instName = formData.get("institutionName") as string;
     const contactPerson = formData.get("contactPerson") as string;
@@ -75,10 +79,10 @@ export default function Graduates() {
         category: "Academic Partnership",
         gtmEventName: "academic_partnership_submit",
       });
-      toast.success("Partnership request sent. Our Academic Liaison will contact you.");
+      setFormStatusPartnership({ type: "success", message: "Partnership request sent. Our Academic Liaison will contact you." });
       form.reset();
     } catch (error) {
-      toast.error(error instanceof Error ? error.message : "Failed to send partnership request. Please try again later.");
+      setFormStatusPartnership({ type: "error", message: error instanceof Error ? error.message : "Failed to send partnership request. Please try again later." });
     } finally {
       setIsInitiating(false);
     }
@@ -441,6 +445,15 @@ export default function Graduates() {
                     <option value="Strategic MOU">Strategic MOU</option>
                   </select>
                 </div>
+                {formStatusPartnership.type && (
+                  <div className={`p-4 text-sm font-medium rounded ${
+                    formStatusPartnership.type === "success" ? "bg-green-50 text-green-600 border border-green-200" :
+                    formStatusPartnership.type === "error" ? "bg-red-50 text-red-600 border border-red-200" :
+                    "bg-yellow-50 text-yellow-600 border border-yellow-200"
+                  }`}>
+                    {formStatusPartnership.message}
+                  </div>
+                )}
                 <button
                   type="submit"
                   disabled={isInitiating}
@@ -591,6 +604,15 @@ export default function Graduates() {
                       <option value="consulting">Business Consulting</option>
                     </select>
                   </div>
+                  {formStatusApp.type && (
+                    <div className={`p-4 text-sm font-medium rounded ${
+                      formStatusApp.type === "success" ? "bg-green-500/20 text-green-300 border border-green-500/30" :
+                      formStatusApp.type === "error" ? "bg-red-500/20 text-red-300 border border-red-500/30" :
+                      "bg-yellow-500/20 text-yellow-300 border border-yellow-500/30"
+                    }`}>
+                      {formStatusApp.message}
+                    </div>
+                  )}
 
                   <div className="pt-4">
                     <button

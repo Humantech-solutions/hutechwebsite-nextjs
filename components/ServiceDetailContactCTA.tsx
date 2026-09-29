@@ -172,6 +172,8 @@ export function ServiceDetailContactCTA() {
 
   const config = getServiceConfig(pathname);
 
+  const [formStatus, setFormStatus] = useState<{ type: "success" | "error" | "alert" | null; message: string }>({ type: null, message: "" });
+
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
@@ -182,6 +184,7 @@ export function ServiceDetailContactCTA() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
+    setFormStatus({ type: null, message: "" });
 
     try {
       await submitContactForm({
@@ -191,9 +194,9 @@ export function ServiceDetailContactCTA() {
         subject: `Inquiry for ${config.serviceName}`,
         message: formData.requirements,
         category: `Service Consultation: ${config.serviceName}`,
-        gtmEventName: "service_cta_submit",
+        gtmEventName: "service_contact_form_submit",
       });
-      toast.success("Thank you! Your project request has been submitted successfully. A consultant will contact you shortly.");
+      setFormStatus({ type: "success", message: "Thank you! Your project request has been submitted successfully. A consultant will contact you shortly." });
       setFormData({
         name: "",
         email: "",
@@ -201,7 +204,7 @@ export function ServiceDetailContactCTA() {
         requirements: "",
       });
     } catch (error) {
-      toast.error(error instanceof Error ? error.message : "Failed to submit request. Please try again later.");
+      setFormStatus({ type: "error", message: error instanceof Error ? error.message : "Failed to submit request. Please try again later." });
     } finally {
       setIsSubmitting(false);
     }
@@ -280,6 +283,16 @@ export function ServiceDetailContactCTA() {
                   className="w-full resize-none rounded-sm border border-gray-200 bg-gray-50/50 px-5 py-3.5 text-sm font-medium text-[#001A3D] placeholder-gray-400 transition-all focus:border-[#F99D1C] focus:bg-white focus:ring-1 focus:ring-[#F99D1C] focus:outline-none h-32"
                 />
               </div>
+
+              {formStatus.type && (
+                <div className={`p-3 text-sm font-medium rounded ${
+                  formStatus.type === "success" ? "bg-green-50 text-green-600 border border-green-200" :
+                  formStatus.type === "error" ? "bg-red-50 text-red-600 border border-red-200" :
+                  "bg-yellow-50 text-yellow-600 border border-yellow-200"
+                }`}>
+                  {formStatus.message}
+                </div>
+              )}
 
               {/* CTA Button */}
               <div className="pt-2">

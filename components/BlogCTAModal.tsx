@@ -29,6 +29,7 @@ export function BlogCTAModal({
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
+  const [formStatus, setFormStatus] = useState<{ type: "success" | "error" | "alert" | null; message: string }>({ type: null, message: "" });
 
   if (!isOpen) return null;
 
@@ -36,12 +37,14 @@ export function BlogCTAModal({
     if (isSubmitting) return;
     setFormData({ name: "", email: "", phone: "", message: "" });
     setIsSuccess(false);
+    setFormStatus({ type: null, message: "" });
     onClose();
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
+    setFormStatus({ type: null, message: "" });
     try {
       await submitContactForm({
         name: formData.name,
@@ -53,10 +56,9 @@ export function BlogCTAModal({
         gtmEventName,
       });
       setIsSuccess(true);
+      setFormStatus({ type: "success", message: "Request submitted successfully." });
     } catch (error) {
-      toast.error(
-        error instanceof Error ? error.message : "Failed to submit request. Please try again later."
-      );
+      setFormStatus({ type: "error", message: error instanceof Error ? error.message : "Failed to submit request. Please try again later." });
     } finally {
       setIsSubmitting(false);
     }
@@ -196,6 +198,14 @@ export function BlogCTAModal({
                   </div>
 
                   <div className="pt-4">
+                    {formStatus.type && formStatus.type !== "success" && (
+                      <div className={`mb-4 p-3 text-sm font-medium rounded ${
+                        formStatus.type === "error" ? "bg-red-50 text-red-600 border border-red-200" :
+                        "bg-yellow-50 text-yellow-600 border border-yellow-200"
+                      }`}>
+                        {formStatus.message}
+                      </div>
+                    )}
                     <button
                       disabled={isSubmitting}
                       type="submit"
