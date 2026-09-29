@@ -16,12 +16,14 @@ export interface RegisterEventModalProps {
 export function RegisterEventModal({ isOpen, onClose, eventTitle }: RegisterEventModalProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
+  const [formStatus, setFormStatus] = useState<{ type: "success" | "error" | "alert" | null; message: string }>({ type: null, message: "" });
 
   if (!isOpen) return null;
 
   const resetAndClose = () => {
     if (isSubmitting) return;
     setIsSuccess(false);
+    setFormStatus({ type: null, message: "" });
     onClose();
   };
 
@@ -29,6 +31,7 @@ export function RegisterEventModal({ isOpen, onClose, eventTitle }: RegisterEven
     e.preventDefault();
     const form = e.currentTarget;
     setIsSubmitting(true);
+    setFormStatus({ type: null, message: "" });
 
     const formData = new FormData(form);
     const name = formData.get("name") as string;
@@ -47,11 +50,10 @@ export function RegisterEventModal({ isOpen, onClose, eventTitle }: RegisterEven
         gtmEventName: "event_registration_submit",
       });
       setIsSuccess(true);
+      setFormStatus({ type: "success", message: "Registration successful!" });
       form.reset();
     } catch (error) {
-      toast.error(
-        error instanceof Error ? error.message : "Registration failed. Please try again."
-      );
+      setFormStatus({ type: "error", message: error instanceof Error ? error.message : "Registration failed. Please try again." });
     } finally {
       setIsSubmitting(false);
     }
@@ -184,6 +186,14 @@ export function RegisterEventModal({ isOpen, onClose, eventTitle }: RegisterEven
                   </div>
 
                   <div className="pt-4">
+                    {formStatus.type && formStatus.type !== "success" && (
+                      <div className={`mb-4 p-3 text-sm font-medium rounded ${
+                        formStatus.type === "error" ? "bg-red-50 text-red-600 border border-red-200" :
+                        "bg-yellow-50 text-yellow-600 border border-yellow-200"
+                      }`}>
+                        {formStatus.message}
+                      </div>
+                    )}
                     <button
                       disabled={isSubmitting}
                       type="submit"

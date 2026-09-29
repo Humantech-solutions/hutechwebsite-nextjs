@@ -26,7 +26,7 @@ import { WpBlog } from "@/lib/wordpress";
 import { renderTitle } from "@/lib/utils";
 import { IPublishCardBanner } from "@/components/ipublish/IPublishCardBanner";
 import { toast } from "sonner";
-import { submitContactForm } from "@/lib/api";
+import { submitContactForm, API_BASE_URL, isValidEmail } from "@/lib/api";
 
 type Props = {
   blogs: WpBlog[];
@@ -78,31 +78,36 @@ export default function BlogsClient({ blogs, pageTitle, pageDescription, bgImage
   const [subscriberEmail, setSubscriberEmail] = useState("");
   const [isSubmittingSubscribe, setIsSubmittingSubscribe] = useState(false);
   const [isSubscribed, setIsSubscribed] = useState(false);
+  const [formStatus, setFormStatus] = useState<{ type: "success" | "error" | "alert" | null; message: string }>({ type: null, message: "" });
 
   const handleSubscribe = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (!subscriberEmail || !subscriberEmail.includes("@")) {
-      toast.error("Please enter a valid email address.");
+    if (!isValidEmail(subscriberEmail)) {
+      setFormStatus({ type: "error", message: "Please enter a valid email address (e.g. name@domain.com)." });
       return;
     }
     setIsSubmittingSubscribe(true);
+    setFormStatus({ type: null, message: "" });
     try {
-      await submitContactForm({
-        name: "Blog Subscriber",
-        email: subscriberEmail.trim(),
-        phone: "N/A",
-        subject: "Blog Newsletter Subscription",
-        message: "User subscribed to newsletter from blog listing page",
-        category: "Blog Newsletter Subscription",
-        gtmEventName: "newsletter_subscribe_submit",
+      const res = await fetch(`${API_BASE_URL}/api/subscriptions/subscribe`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: subscriberEmail.trim(), project: "hutech" }),
       });
+      if (!res.ok) {
+        const errorData = await res.json().catch(() => ({}));
+        throw new Error(errorData.message || "Failed to subscribe.");
+      }
+
+      if (typeof window !== "undefined" && (window as any).dataLayer) {
+        (window as any).dataLayer.push({ event: "newsletter_subscribe_submit" });
+      }
+
       setIsSubscribed(true);
-      toast.success("Subscribed successfully! Welcome to Hutech Tech Dispatch.");
+      setFormStatus({ type: "success", message: "Subscribed successfully! Welcome to Hutech Tech Dispatch." });
       setSubscriberEmail("");
     } catch (error) {
-      toast.error(
-        error instanceof Error ? error.message : "Failed to subscribe. Please try again."
-      );
+      setFormStatus({ type: "error", message: error instanceof Error ? error.message : "Failed to subscribe. Please try again." });
     } finally {
       setIsSubmittingSubscribe(false);
     }
@@ -177,7 +182,7 @@ export default function BlogsClient({ blogs, pageTitle, pageDescription, bgImage
                           value={subscriberEmail}
                           onChange={(e) => setSubscriberEmail(e.target.value)}
                           placeholder="Enter your work email..."
-                          className="w-full bg-transparent px-2.5 py-1.5 text-xs font-medium text-white placeholder-slate-400 focus:outline-none"
+                          className="w-full bg-transparent px-2.5 py-1.5 text-xs font-medium text-white placeholder-slate-400 focus:outline-none [&:-webkit-autofill]:[transition:background-color_9999s_ease-in-out_0s] [&:-webkit-autofill]:[-webkit-text-fill-color:#fff]"
                         />
                       </div>
                       <button
@@ -192,6 +197,14 @@ export default function BlogsClient({ blogs, pageTitle, pageDescription, bgImage
                         )}
                       </button>
                     </div>
+                    {formStatus.type && !isSubscribed && (
+                      <div className={`mt-2 p-2 px-3 text-xs font-medium rounded border ${
+                        formStatus.type === "error" ? "bg-red-500/10 text-red-400 border-red-500/20" :
+                        "bg-yellow-500/10 text-yellow-400 border-yellow-500/20"
+                      }`}>
+                        {formStatus.message}
+                      </div>
+                    )}
                     <div className="flex items-center justify-between px-1 text-[11px] text-slate-400">
                       <span>✓ Bi-weekly digest</span>
                       <span>✓ Zero spam</span>

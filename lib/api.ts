@@ -3,9 +3,9 @@
  * Production API base URL: https://apis.admin.hutechsolutions.in/
  */
 
-const API_BASE_URL =
+export const API_BASE_URL =
   process.env.NEXT_PUBLIC_HUTECH_API_BASE_URL?.replace(/\/+$/, "") ||
-  "http://localhost:8001" // Production: "https://apis.admin.hutechsolutions.in";
+  "https://apis.admin.hutechsolutions.in"; // Production: "http://localhost:8001";
 
 const SITE_BASE_URL =
   process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/+$/, "") || "https://hutechsolutions.ai";
@@ -33,6 +33,17 @@ export interface DocumentRequestPayload {
   phone: string;
   documentTitle: string;
   downloadUrl: string;
+}
+
+export function isValidEmail(email: string): boolean {
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return emailRegex.test(email);
+}
+
+export function isValidPhone(phone: string): boolean {
+  if (!phone || phone === "N/A" || phone.toLowerCase() === "n/a") return true;
+  const phoneRegex = /^\+?[\d\s\-\(\)]{7,20}$/;
+  return phoneRegex.test(phone);
 }
 
 function clean(value: string | undefined | null, fallback = "") {
@@ -157,6 +168,13 @@ export async function submitContactForm(payload: ContactFormPayload): Promise<bo
     pageUrl,
   };
 
+  if (!isValidEmail(body.email)) {
+    throw new Error("Please enter a valid email address (e.g. name@domain.com).");
+  }
+  if (!isValidPhone(body.phone)) {
+    throw new Error("Please enter a valid phone number.");
+  }
+
   try {
     const response = await fetch(`${API_BASE_URL}/api/contact/submit`, {
       method: "POST",
@@ -194,6 +212,13 @@ export async function submitContactForm(payload: ContactFormPayload): Promise<bo
  */
 export async function submitDocumentRequest(payload: DocumentRequestPayload): Promise<boolean> {
   const { pageTitle, pageUrl } = getPageMeta("Document Download");
+
+  if (!isValidEmail(payload.email)) {
+    throw new Error("Please enter a valid email address (e.g. name@domain.com).");
+  }
+  if (!isValidPhone(payload.phone)) {
+    throw new Error("Please enter a valid phone number.");
+  }
 
   try {
     const formData = new FormData();
@@ -250,11 +275,11 @@ export async function submitDocumentRequest(payload: DocumentRequestPayload): Pr
     }
 
     const isSuccess = await parseSubmitResponse(response);
-    
+
     if (isSuccess && typeof window !== "undefined") {
       (window as any).dataLayer = (window as any).dataLayer || [];
       (window as any).dataLayer.push({
-        event: 'document_request_submit'
+        event: "document_request_submit",
       });
     }
 
@@ -270,6 +295,10 @@ export async function submitDocumentRequest(payload: DocumentRequestPayload): Pr
  */
 export async function submitCareerForm(payload: CareerFormPayload): Promise<boolean> {
   const { pageTitle, pageUrl } = getPageMeta("Careers - Hutech Solutions");
+
+  if (!isValidEmail(payload.email)) {
+    throw new Error("Please enter a valid email address (e.g. name@domain.com).");
+  }
 
   const formData = new FormData();
   formData.append("name", clean(payload.name));
@@ -294,11 +323,11 @@ export async function submitCareerForm(payload: CareerFormPayload): Promise<bool
     }
 
     const isSuccess = await parseSubmitResponse(response);
-    
+
     if (isSuccess && typeof window !== "undefined") {
       (window as any).dataLayer = (window as any).dataLayer || [];
       (window as any).dataLayer.push({
-        event: 'career_form_submit'
+        event: "career_form_submit",
       });
     }
 
@@ -472,21 +501,23 @@ function mapRecruitProJob(raw: RecruitProJob) {
     requirementsTitle: "Requirements",
     requirements: reqBullets,
     superpowersTitle: "Your Superpowers",
-    superpowers: superpowersBullets.length > 0
-      ? superpowersBullets
-      : raw.experience
-        ? [`${raw.experience} of relevant experience`]
-        : [],
+    superpowers:
+      superpowersBullets.length > 0
+        ? superpowersBullets
+        : raw.experience
+          ? [`${raw.experience} of relevant experience`]
+          : [],
     benefitsTitle: "Benefits",
-    benefits: benefitsBullets.length > 0
-      ? benefitsBullets
-      : [
-          "Health Insurance",
-          "Provident Fund + Performance Bonus",
-          "Maternity + Paternity Leave",
-          "Flexible work environment",
-          ctcRange ? `CTC Range: ${ctcRange}` : "Competitive compensation",
-        ].filter(Boolean),
+    benefits:
+      benefitsBullets.length > 0
+        ? benefitsBullets
+        : [
+            "Health Insurance",
+            "Provident Fund + Performance Bonus",
+            "Maternity + Paternity Leave",
+            "Flexible work environment",
+            ctcRange ? `CTC Range: ${ctcRange}` : "Competitive compensation",
+          ].filter(Boolean),
     hiringTimelineTitle: "Hiring Timeline",
     hiringTimelineText:
       "Our typical hiring process takes 7–14 business days from the first interview to offer letter.",
@@ -510,7 +541,6 @@ export async function getRecruitProJobs() {
 
     const res = await fetch(url, {
       headers: {
-
         "Content-Type": "application/json",
       },
       next: { revalidate: 0 },

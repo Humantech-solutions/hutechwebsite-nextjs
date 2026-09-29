@@ -98,11 +98,13 @@ export default function MediaListing() {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedVideo, setSelectedVideo] = useState<(typeof MEDIA_DATA)[0] | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [formStatus, setFormStatus] = useState<{ type: "success" | "error" | "alert" | null; message: string }>({ type: null, message: "" });
 
   const handleSubscribe = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const form = e.currentTarget;
     setIsSubmitting(true);
+    setFormStatus({ type: null, message: "" });
     const formData = new FormData(form);
     const emailVal = formData.get("email") as string;
 
@@ -116,10 +118,10 @@ export default function MediaListing() {
         category: "Media Newsletter Subscription",
         gtmEventName: "newsletter_subscribe_submit",
       });
-      toast.success("Subscribed successfully!");
+      setFormStatus({ type: "success", message: "Subscribed successfully!" });
       form.reset();
     } catch (error) {
-      toast.error(error instanceof Error ? error.message : "Failed to subscribe. Please try again.");
+      setFormStatus({ type: "error", message: error instanceof Error ? error.message : "Failed to subscribe. Please try again." });
     } finally {
       setIsSubmitting(false);
     }
@@ -344,6 +346,15 @@ export default function MediaListing() {
               {isSubmitting ? "Subscribing..." : "Subscribe"}
             </button>
           </form>
+          {formStatus.type && (
+            <div className={`w-full max-w-lg mt-4 p-3 text-sm font-medium rounded ${
+              formStatus.type === "success" ? "bg-green-500/20 text-green-300 border border-green-500/30" :
+              formStatus.type === "error" ? "bg-red-500/20 text-red-300 border border-red-500/30" :
+              "bg-yellow-500/20 text-yellow-300 border border-yellow-500/30"
+            }`}>
+              {formStatus.message}
+            </div>
+          )}
         </div>
         {/* Background blobs */}
         <div className="absolute top-0 right-0 h-80 w-80 rounded-full bg-[#0171c1]/10 blur-[100px]"></div>
