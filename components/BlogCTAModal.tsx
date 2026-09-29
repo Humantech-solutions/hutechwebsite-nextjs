@@ -1,19 +1,32 @@
 "use client";
 
-import { motion as Motion, AnimatePresence } from "motion/react";
-import { X, CheckCircle2, Loader2, Send, Calendar } from "lucide-react";
 import { useState } from "react";
-
+import { motion as Motion, AnimatePresence } from "framer-motion";
+import { X, CheckCircle2, Loader2, Send, MessageSquare } from "lucide-react";
 import { toast } from "sonner";
 import { submitContactForm } from "@/lib/api";
 
-export interface RegisterEventModalProps {
+export interface BlogCTAModalProps {
   isOpen: boolean;
   onClose: () => void;
-  eventTitle: string;
+  ctaTitle: string;
+  ctaText: string;
+  gtmEventName?: string;
 }
 
-export function RegisterEventModal({ isOpen, onClose, eventTitle }: RegisterEventModalProps) {
+export function BlogCTAModal({
+  isOpen,
+  onClose,
+  ctaTitle,
+  ctaText,
+  gtmEventName = "blog_cta_submit",
+}: BlogCTAModalProps) {
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    phone: "",
+    message: "",
+  });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [formStatus, setFormStatus] = useState<{ type: "success" | "error" | "alert" | null; message: string }>({ type: null, message: "" });
@@ -22,38 +35,30 @@ export function RegisterEventModal({ isOpen, onClose, eventTitle }: RegisterEven
 
   const resetAndClose = () => {
     if (isSubmitting) return;
+    setFormData({ name: "", email: "", phone: "", message: "" });
     setIsSuccess(false);
     setFormStatus({ type: null, message: "" });
     onClose();
   };
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const form = e.currentTarget;
     setIsSubmitting(true);
     setFormStatus({ type: null, message: "" });
-
-    const formData = new FormData(form);
-    const name = formData.get("name") as string;
-    const emailVal = formData.get("email") as string;
-    const organization = formData.get("organization") as string;
-    const jobTitleVal = formData.get("jobTitle") as string;
-
     try {
       await submitContactForm({
-        name,
-        email: emailVal,
-        phone: "N/A",
-        subject: `Event Registration: ${eventTitle}`,
-        message: `Registered for event. Company: ${organization}, Title: ${jobTitleVal}`,
-        category: "Event Registration",
-        gtmEventName: "event_registration_submit",
+        name: formData.name,
+        email: formData.email,
+        phone: formData.phone,
+        message: formData.message,
+        subject: `Blog CTA: ${ctaTitle}`,
+        category: "Blog",
+        gtmEventName,
       });
       setIsSuccess(true);
-      setFormStatus({ type: "success", message: "Registration successful!" });
-      form.reset();
+      setFormStatus({ type: "success", message: "Request submitted successfully." });
     } catch (error) {
-      setFormStatus({ type: "error", message: error instanceof Error ? error.message : "Registration failed. Please try again." });
+      setFormStatus({ type: "error", message: error instanceof Error ? error.message : "Failed to submit request. Please try again later." });
     } finally {
       setIsSubmitting(false);
     }
@@ -62,7 +67,6 @@ export function RegisterEventModal({ isOpen, onClose, eventTitle }: RegisterEven
   return (
     <AnimatePresence>
       <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 md:p-6">
-        {/* Backdrop */}
         <Motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
@@ -71,7 +75,6 @@ export function RegisterEventModal({ isOpen, onClose, eventTitle }: RegisterEven
           className="absolute inset-0 bg-black/70 backdrop-blur-xl"
         />
 
-        {/* Modal Content */}
         <Motion.div
           initial={{ opacity: 0, scale: 0.95, y: 20 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
@@ -90,41 +93,48 @@ export function RegisterEventModal({ isOpen, onClose, eventTitle }: RegisterEven
           {/* Left Side: Info */}
           <div className="relative hidden flex-col justify-between overflow-hidden bg-[#001A3D] p-10 text-white md:flex md:w-5/12 lg:p-12">
             <img
-              src="/images/registration-banner.avif"
-              alt="Career"
+              src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&q=80&w=1000"
+              alt="Hutech Consulting and Impact"
               className="absolute inset-0 h-full w-full object-cover"
             />
             <div className="absolute inset-0 bg-[#001A3D]/80"></div>
             <div className="absolute -right-16 -top-16 h-64 w-64 rounded-full bg-[#0171c1]/30 blur-3xl"></div>
             <div className="relative z-10 space-y-6">
               <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-[#0171c1] shadow-lg shadow-[#0171c1]/20">
-                <Calendar className="h-6 w-6 text-white" />
+                <MessageSquare className="h-6 w-6 text-white" />
               </div>
-              <h3 className="display-font text-3xl font-bold leading-tight">
-                Join the Conversation.
-              </h3>
+              <h3 className="display-font text-3xl font-bold leading-tight">{ctaTitle}</h3>
               <p className="text-sm font-medium leading-relaxed text-white/60">
-                Secure your spot at Hutech's premier technology event. Network with industry leaders
-                and experts.
+                {ctaText}
               </p>
             </div>
-
             <div className="relative z-10 border-t border-white/20 pt-6">
               <div className="mb-2 text-xs uppercase tracking-[0.2em] text-white/60">
-                Event Selection
+                Contacting
               </div>
-              <div className="text-md font-bold text-[#F99D1C]">{eventTitle}</div>
+              <div className="text-md font-bold text-[#F99D1C]">Hutech Solutions</div>
             </div>
           </div>
 
-          {/* Right Side: Form */}
           <div className="flex-1 overflow-y-auto p-8 [scrollbar-width:none] lg:p-12">
             {!isSuccess ? (
               <div className="space-y-8">
-                <div className="space-y-2">
-                  <h2 className="display-font text-3xl font-bold text-[#001A3D]">Register Now</h2>
+                {/* Mobile Title (hidden on md+) */}
+                <div className="space-y-2 pr-8 md:hidden">
+                  <h2 className="display-font text-2xl font-bold text-[#001A3D]">
+                    {ctaTitle}
+                  </h2>
                   <p className="text-sm font-medium text-gray-500">
-                    Please fill in your details to confirm your attendance.
+                    {ctaText}
+                  </p>
+                </div>
+                {/* Desktop Title */}
+                <div className="hidden space-y-2 pr-8 md:block">
+                  <h2 className="display-font text-3xl font-bold text-[#001A3D]">
+                    Get in touch
+                  </h2>
+                  <p className="text-sm font-medium text-gray-500">
+                    Fill out the form below and we will get back to you shortly.
                   </p>
                 </div>
 
@@ -137,52 +147,54 @@ export function RegisterEventModal({ isOpen, onClose, eventTitle }: RegisterEven
                       <input
                         required
                         type="text"
-                        name="name"
                         className="w-full rounded-xl border border-gray-100 bg-gray-50 px-5 py-3.5 font-medium text-[#001A3D] transition-all focus:border-[#0171c1] focus:bg-white focus:outline-none"
                         placeholder="Full Name"
+                        value={formData.name}
+                        onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                       />
                     </div>
+
                     <div className="space-y-2">
                       <label className="ml-1 text-[10px] font-bold uppercase tracking-widest text-gray-400">
-                        Corporate Email *
+                        Email Address *
                       </label>
                       <input
                         required
                         type="email"
-                        name="email"
                         className="w-full rounded-xl border border-gray-100 bg-gray-50 px-5 py-3.5 font-medium text-[#001A3D] transition-all focus:border-[#0171c1] focus:bg-white focus:outline-none"
-                        placeholder="Corporate Email"
+                        placeholder="Email Address"
+                        value={formData.email}
+                        onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                       />
                     </div>
                   </div>
 
                   <div className="space-y-2">
                     <label className="ml-1 text-[10px] font-bold uppercase tracking-widest text-gray-400">
-                      Organization / Company *
+                      Phone Number *
                     </label>
                     <input
                       required
-                      type="text"
-                      name="organization"
+                      type="tel"
                       className="w-full rounded-xl border border-gray-100 bg-gray-50 px-5 py-3.5 font-medium text-[#001A3D] transition-all focus:border-[#0171c1] focus:bg-white focus:outline-none"
-                      placeholder="Organization"
+                      placeholder="Phone Number"
+                      value={formData.phone}
+                      onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
                     />
                   </div>
 
                   <div className="space-y-2">
                     <label className="ml-1 text-[10px] font-bold uppercase tracking-widest text-gray-400">
-                      Job Title *
+                      Message *
                     </label>
-                    <select
-                      name="jobTitle"
-                      className="w-full cursor-pointer appearance-none rounded-xl border border-gray-100 bg-gray-50 px-5 py-3.5 font-medium text-[#001A3D] transition-all focus:border-[#0171c1] focus:bg-white focus:outline-none"
-                    >
-                      <option>Senior Executive</option>
-                      <option>Engineering Manager</option>
-                      <option>Lead Architect</option>
-                      <option>Product Manager</option>
-                      <option>Other</option>
-                    </select>
+                    <textarea
+                      required
+                      rows={4}
+                      className="w-full resize-none rounded-xl border border-gray-100 bg-gray-50 px-5 py-3.5 font-medium text-[#001A3D] transition-all focus:border-[#0171c1] focus:bg-white focus:outline-none"
+                      placeholder="How can we help you?"
+                      value={formData.message}
+                      onChange={(e) => setFormData({ ...formData, message: e.target.value })}
+                    ></textarea>
                   </div>
 
                   <div className="pt-4">
@@ -205,15 +217,14 @@ export function RegisterEventModal({ isOpen, onClose, eventTitle }: RegisterEven
                         </>
                       ) : (
                         <>
-                          CONFIRM REGISTRATION <Send size={16} />
+                          SUBMIT REQUEST <Send size={16} />
                         </>
                       )}
                     </button>
                   </div>
 
                   <p className="pt-2 text-center text-[10px] font-medium leading-relaxed text-gray-400">
-                    By registering, you agree to Hutech's Privacy Policy and terms of service
-                    regarding event attendance.
+                    We respect your privacy. Your information will not be shared with third parties.
                   </p>
                 </form>
               </div>
@@ -227,12 +238,9 @@ export function RegisterEventModal({ isOpen, onClose, eventTitle }: RegisterEven
                   <CheckCircle2 className="h-12 w-12 text-green-500" />
                 </div>
                 <div className="space-y-3">
-                  <h2 className="display-font text-3xl font-bold text-[#001A3D]">
-                    Registration Successful!
-                  </h2>
+                  <h2 className="display-font text-3xl font-bold text-[#001A3D]">Request Sent!</h2>
                   <p className="mx-auto max-w-sm font-medium leading-relaxed text-gray-500">
-                    A confirmation email with your event pass and calendar invite has been sent to
-                    your inbox.
+                    Thank you for reaching out. We will get back to you shortly.
                   </p>
                 </div>
                 <button

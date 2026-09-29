@@ -149,11 +149,13 @@ export default function PartnershipClient({
   ctaEmail = "alliances@hutechsolutions.com",
 }: PartnershipClientProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [formStatus, setFormStatus] = useState<{ type: "success" | "error" | "alert" | null; message: string }>({ type: null, message: "" });
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const form = e.currentTarget;
     setIsSubmitting(true);
+    setFormStatus({ type: null, message: "" });
 
     const formData = new FormData(form);
     const name = formData.get("name") as string;
@@ -172,10 +174,10 @@ export default function PartnershipClient({
         category: "Partnership Proposal",
         gtmEventName: "partnership_request_submit",
       });
-      toast.success("Thank you! Your partnership request has been submitted successfully.");
+      setFormStatus({ type: "success", message: "Thank you! Your partnership request has been submitted successfully." });
       form.reset();
     } catch (error) {
-      toast.error(error instanceof Error ? error.message : "Failed to submit request. Please try again later.");
+      setFormStatus({ type: "error", message: error instanceof Error ? error.message : "Failed to submit request. Please try again later." });
     } finally {
       setIsSubmitting(false);
     }
@@ -506,6 +508,15 @@ export default function PartnershipClient({
                     rows={4}
                     className="w-full resize-none border-transparent bg-gray-50 p-4 text-sm font-medium transition-all outline-none focus:border-[#0171c1] focus:bg-white"
                   ></textarea>
+                  {formStatus.type && (
+                    <div className={`p-4 text-sm font-medium rounded ${
+                      formStatus.type === "success" ? "bg-green-50 text-green-600 border border-green-200" :
+                      formStatus.type === "error" ? "bg-red-50 text-red-600 border border-red-200" :
+                      "bg-yellow-50 text-yellow-600 border border-yellow-200"
+                    }`}>
+                      {formStatus.message}
+                    </div>
+                  )}
                   <button disabled={isSubmitting} className="flex w-full items-center justify-center gap-3 bg-[#0171c1] py-5 text-xs font-bold tracking-[0.2em] text-white uppercase transition-all hover:bg-[#001A3D] disabled:opacity-50 disabled:cursor-not-allowed">
                     {isSubmitting ? "Submitting..." : <>Submit Proposal <ArrowRight size={16} /></>}
                   </button>

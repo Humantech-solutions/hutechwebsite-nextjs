@@ -140,11 +140,13 @@ export default function ContactClient({
   trustBuilders = STATIC_TRUST_BUILDERS,
 }: ContactClientProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [formStatus, setFormStatus] = useState<{ type: "success" | "error" | "alert" | null; message: string }>({ type: null, message: "" });
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const form = e.currentTarget;
     setIsSubmitting(true);
+    setFormStatus({ type: null, message: "" });
 
     const formData = new FormData(form);
     const name = formData.get("name") as string;
@@ -161,16 +163,12 @@ export default function ContactClient({
         subject,
         message,
         category: "Contact Us Form",
-        gtmEventName: "contact_page_submit",
+        gtmEventName: "contact_form_submit",
       });
-      toast.success(
-        "Thank you! Your inquiry has been received. Our team will contact you shortly."
-      );
+      setFormStatus({ type: "success", message: "Thank you! Your inquiry has been received. Our team will contact you shortly." });
       form.reset();
     } catch (error) {
-      toast.error(
-        error instanceof Error ? error.message : "Failed to submit inquiry. Please try again later."
-      );
+      setFormStatus({ type: "error", message: error instanceof Error ? error.message : "Failed to submit inquiry. Please try again later." });
     } finally {
       setIsSubmitting(false);
     }
@@ -316,6 +314,15 @@ export default function ContactClient({
                       className="w-full resize-none rounded-sm border border-gray-100 bg-gray-50 px-6 py-4 font-medium text-[#001A3D] transition-all focus:border-[#F99D1C] focus:outline-none focus:ring-1 focus:ring-[#F99D1C]"
                     ></textarea>
                   </div>
+                  {formStatus.type && (
+                    <div className={`p-4 text-sm font-medium rounded ${
+                      formStatus.type === "success" ? "bg-green-50 text-green-600 border border-green-200" :
+                      formStatus.type === "error" ? "bg-red-50 text-red-600 border border-red-200" :
+                      "bg-yellow-50 text-yellow-600 border border-yellow-200"
+                    }`}>
+                      {formStatus.message}
+                    </div>
+                  )}
 
                   <Motion.button
                     whileHover={{ scale: 1.02, backgroundColor: "#001A3D", color: "#F99D1C" }}

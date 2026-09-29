@@ -1,7 +1,7 @@
 import EventDetailClient from "./EventDetailClient";
 import { getEvents, getEventBySlug } from "@/lib/wordpress";
 import { notFound } from "next/navigation";
-import { constructMetadata } from "@/lib/seo";
+import { constructMetadata, getWebPageSchema } from "@/lib/seo";
 
 // Static fallback for generateStaticParams when WP is unavailable
 const STATIC_SLUGS = [
@@ -145,12 +145,34 @@ export default async function EventDetailPage({ params }: { params: Promise<{ id
   // Try WordPress first
   const wpEvent = await getEventBySlug(id);
   if (wpEvent) {
-    return <EventDetailClient event={wpEvent} />;
+    const schemaJsonData = getWebPageSchema({
+      title: (wpEvent as any).title ? `${(wpEvent as any).title} | Events` : "Events",
+      description: (wpEvent as any).tagline || (wpEvent as any).description || "",
+      path: `/resources/events/${id}/`,
+      image: (wpEvent as any).image
+    });
+    return (
+      <>
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schemaJsonData) }} />
+        <EventDetailClient event={wpEvent} />
+      </>
+    );
   }
 
   // Fall back to static data
   const staticEvent = STATIC_EVENTS[id];
   if (!staticEvent) notFound();
 
-  return <EventDetailClient event={staticEvent} />;
+  const schemaJsonData = getWebPageSchema({
+    title: (staticEvent as any).title ? `${(staticEvent as any).title} | Events` : "Events",
+    description: (staticEvent as any).tagline || (staticEvent as any).description || "",
+    path: `/resources/events/${id}/`,
+    image: (staticEvent as any).image
+  });
+  return (
+    <>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schemaJsonData) }} />
+      <EventDetailClient event={staticEvent} />
+    </>
+  );
 }

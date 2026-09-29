@@ -100,6 +100,7 @@ function FAQItem({ question, answer }: { question: string; answer: string }) {
 
 export default function IndustryDetailClient({ service, blogs }: IndustryDetailClientProps) {
   const [isContactSubmitting, setIsContactSubmitting] = useState(false);
+  const [formStatus, setFormStatus] = useState<{ type: "success" | "error" | "alert" | null; message: string }>({ type: null, message: "" });
 
   const heroTitleText = service.heroTitle || service.title || "Industry Solutions";
 
@@ -186,6 +187,7 @@ export default function IndustryDetailClient({ service, blogs }: IndustryDetailC
     const industryName = service.title || service.slug || "Industry";
 
     setIsContactSubmitting(true);
+    setFormStatus({ type: null, message: "" });
 
     try {
       await submitContactForm({
@@ -197,10 +199,10 @@ export default function IndustryDetailClient({ service, blogs }: IndustryDetailC
         category: `Industry Consultation: ${industryName}`,
         gtmEventName: "industry_inquiry_submit",
       });
-      toast.success("Thank you! Your project request has been submitted successfully.");
+      setFormStatus({ type: "success", message: "Thank you! Your project request has been submitted successfully." });
       form.reset();
     } catch (error) {
-      toast.error(error instanceof Error ? error.message : "Failed to submit request. Please try again later.");
+      setFormStatus({ type: "error", message: error instanceof Error ? error.message : "Failed to submit request. Please try again later." });
     } finally {
       setIsContactSubmitting(false);
     }
@@ -634,6 +636,15 @@ export default function IndustryDetailClient({ service, blogs }: IndustryDetailC
                   rows={4}
                   className="w-full resize-none border border-gray-200 p-4 text-sm font-medium transition-all outline-none focus:border-[#0171c1] md:col-span-2"
                 ></textarea>
+                {formStatus.type && (
+                  <div className={`md:col-span-2 p-3 text-sm font-medium rounded ${
+                    formStatus.type === "success" ? "bg-green-50 text-green-600 border border-green-200" :
+                    formStatus.type === "error" ? "bg-red-50 text-red-600 border border-red-200" :
+                    "bg-yellow-50 text-yellow-600 border border-yellow-200"
+                  }`}>
+                    {formStatus.message}
+                  </div>
+                )}
                 <div className="md:col-span-2">
                   <button
                     type="submit"

@@ -22,6 +22,7 @@ import { ImageWithFallback } from "@/components/figma/ImageWithFallback";
 import { Blog, BLOG_DATA } from "@/lib/data/blogs";
 import { renderTitle } from "@/lib/utils";
 import { FAQAccordion } from "@/components/FAQAccordion";
+import { BlogCTAModal } from "@/components/BlogCTAModal";
 
 export type LatestThinkingBlog = {
   id?: string;
@@ -39,13 +40,13 @@ const DEFAULT_RELATED: LatestThinkingBlog[] = [
   {
     id: "small-models-big-impact",
     slug: "small-models-big-impact-why-domain-specific-ai-is-outperforming-giant-llms",
-    title: "Small Models, Big Impact: Why Domain-Specific AI Is the Future of Healthcare & Life Sciences",
+    title:
+      "Small Models, Big Impact: Why Domain-Specific AI Is the Future of Healthcare & Life Sciences",
     category: "ARTIFICIAL INTELLIGENCE",
     date: "July 28, 2026",
     excerpt:
       "Introduction For years, the AI conversation was dominated by scale. Bigger models, more parameters, broader general-purpose capabilities...",
-    image:
-      "https://cms.hutechsolutions.ai/wp-content/uploads/2026/08/LLM.webp",
+    image: "https://cms.hutechsolutions.ai/wp-content/uploads/2026/08/LLM.webp",
   },
   {
     id: "agentic-ai-autonomous-operators",
@@ -55,8 +56,7 @@ const DEFAULT_RELATED: LatestThinkingBlog[] = [
     date: "July 28, 2026",
     excerpt:
       "Introduction For years, AI in the enterprise meant chatbots — tools that answered questions, generated drafts, or routed customer tickets...",
-    image:
-      "https://cms.hutechsolutions.ai/wp-content/uploads/2026/08/agentic-ai.webp",
+    image: "https://cms.hutechsolutions.ai/wp-content/uploads/2026/08/agentic-ai.webp",
   },
   {
     id: "blockchain-supply-chain-revolution",
@@ -66,8 +66,7 @@ const DEFAULT_RELATED: LatestThinkingBlog[] = [
     date: "June 26, 2026",
     excerpt:
       "Supply chains are among the most complex systems in modern commerce, involving countless participants, transactions, and handoffs across global networks...",
-    image:
-      "https://cms.hutechsolutions.ai/wp-content/uploads/2026/08/blockchain.webp",
+    image: "https://cms.hutechsolutions.ai/wp-content/uploads/2026/08/blockchain.webp",
   },
 ];
 
@@ -136,6 +135,13 @@ export default function BlogDetailClient({
   latestBlogs?: LatestThinkingBlog[];
 }) {
   const [copied, setCopied] = useState(false);
+  const [isCtaModalOpen, setIsCtaModalOpen] = useState(false);
+  const [ctaModalData, setCtaModalData] = useState({ title: "", text: "", event: "" });
+
+  const openModal = (title: string, text: string, event: string) => {
+    setCtaModalData({ title, text, event });
+    setIsCtaModalOpen(true);
+  };
 
   if (!blog) {
     return (
@@ -232,9 +238,7 @@ export default function BlogDetailClient({
 
   const mobileCtaIndex = useMemo(() => {
     if (contentHtml || !blog.content || blog.content.length <= 1) return -1;
-    return blog.content.length >= 5
-      ? Math.min(3, Math.floor(blog.content.length / 3))
-      : 0;
+    return blog.content.length >= 5 ? Math.min(3, Math.floor(blog.content.length / 3)) : 0;
   }, [contentHtml, blog.content]);
 
   return (
@@ -242,6 +246,13 @@ export default function BlogDetailClient({
       <Meta
         title={`${blog.title} | Blogs | Hutech Solutions`}
         description={blog.excerpt ?? blog.content?.[0]?.text ?? ""}
+      />
+      <BlogCTAModal
+        isOpen={isCtaModalOpen}
+        onClose={() => setIsCtaModalOpen(false)}
+        ctaTitle={ctaModalData.title}
+        ctaText={ctaModalData.text}
+        gtmEventName={ctaModalData.event}
       />
 
       {/* ========================================================================= */}
@@ -522,12 +533,12 @@ export default function BlogDetailClient({
                               Tell us what you want to build. We’ll bring the right strategy, team,
                               and technology.
                             </p>
-                            <Link
-                              href="/contact"
+                            <button
+                              onClick={() => openModal("From Idea to Impact", "Tell us what you want to build. We’ll bring the right strategy, team, and technology.", "book_meeting_blog_inline")}
                               className="inline-flex w-full items-center justify-center rounded-[3px] bg-white py-3.5 text-center text-sm font-bold text-[#172033] shadow-sm transition-all hover:bg-blue-50 hover:shadow active:scale-[0.99] sm:w-auto sm:px-6"
                             >
                               Book Meeting
-                            </Link>
+                            </button>
                           </div>
                         ) : null}
 
@@ -595,15 +606,15 @@ export default function BlogDetailClient({
                                   From Idea to Impact
                                 </h3>
                                 <p className="mb-5 text-[14px] font-normal leading-[1.6] text-blue-100/90">
-                                  Tell us what you want to build. We’ll bring the right strategy, team,
-                                  and technology.
+                                  Tell us what you want to build. We’ll bring the right strategy,
+                                  team, and technology.
                                 </p>
-                                <Link
-                                  href="/contact"
+                                <button
+                                  onClick={() => openModal("From Idea to Impact", "Tell us what you want to build. We’ll bring the right strategy, team, and technology.", "book_meeting_blog_inline")}
                                   className="inline-flex w-full items-center justify-center rounded-[3px] bg-white py-3.5 text-center text-sm font-bold text-[#172033] shadow-sm transition-all hover:bg-blue-50 hover:shadow active:scale-[0.99] sm:w-auto sm:px-6"
                                 >
                                   Book Meeting
-                                </Link>
+                                </button>
                               </div>
                             )}
                           </Fragment>
@@ -664,12 +675,12 @@ export default function BlogDetailClient({
                         </p>
                       </div>
 
-                      <Link
-                        href="/contact"
+                      <button
+                        onClick={() => openModal("Turn Your Ideas into Real Impact", "Partner with Hutech Solutions for Cloud, Data & AI-driven transformation. From strategy to execution, we help you build smarter, faster and for a better tomorrow.", "engage_hutech_solutions_blog")}
                         className="inline-flex items-center justify-center self-start whitespace-nowrap rounded-[3px] bg-white px-6 py-3 text-sm font-bold text-[#172033] shadow-sm transition-all hover:bg-blue-50 hover:shadow active:scale-[0.98] sm:self-center"
                       >
                         Engage Hutech Solutions
-                      </Link>
+                      </button>
                     </div>
                   </div>
                 </article>
@@ -698,12 +709,12 @@ export default function BlogDetailClient({
                 </p>
 
                 {/* White Action Button */}
-                <Link
-                  href="/contact"
+                <button
+                  onClick={() => openModal("From Idea to Impact", "Tell us what you want to build. We’ll bring the right strategy, team, and technology.", "book_meeting_blog_sidebar")}
                   className="flex w-full items-center justify-center rounded-[3px] bg-white py-3.5 text-center text-sm font-bold text-[#172033] shadow-sm transition-all hover:bg-blue-50 hover:shadow active:scale-[0.99]"
                 >
                   Book Meeting
-                </Link>
+                </button>
               </div>
             </aside>
           </div>
@@ -741,10 +752,7 @@ export default function BlogDetailClient({
                   {/* 16:9 Thumbnail with Category Badge */}
                   <div className="relative aspect-[16/9] w-full overflow-hidden bg-gray-100">
                     <Image
-                      src={
-                        article.image ||
-                        FALLBACK_THUMBNAILS[idx % FALLBACK_THUMBNAILS.length]
-                      }
+                      src={article.image || FALLBACK_THUMBNAILS[idx % FALLBACK_THUMBNAILS.length]}
                       alt={article.title}
                       fill
                       sizes="(max-width: 768px) 100vw, (max-width: 1200px) 33vw, 380px"
@@ -801,12 +809,12 @@ export default function BlogDetailClient({
                 Tell us what you want to build. We’ll bring the right strategy, team, and
                 technology.
               </p>
-              <Link
-                href="/contact"
+              <button
+                onClick={() => openModal("From Idea to Impact", "Tell us what you want to build. We’ll bring the right strategy, team, and technology.", "book_meeting_blog_mobile")}
                 className="inline-flex w-full items-center justify-center rounded-[3px] bg-white py-3.5 text-center text-sm font-bold text-[#172033] shadow-sm transition-all hover:bg-blue-50 hover:shadow active:scale-[0.99] sm:w-auto sm:px-6"
               >
                 Book Meeting
-              </Link>
+              </button>
             </div>
           )}
         </div>

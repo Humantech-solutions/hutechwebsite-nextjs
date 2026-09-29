@@ -1,6 +1,6 @@
 import { getNewsBySlug, getNewsItems, getPressReleases } from "@/lib/wordpress";
 import NewsDetailClient from "./NewsDetailClient";
-import { constructMetadata } from "@/lib/seo";
+import { constructMetadata, getArticleSchema } from "@/lib/seo";
 
 const NEWS_DATA = {
   "top-global-tech-firms-2025": {
@@ -49,5 +49,19 @@ export default async function NewsDetailPage({ params }: { params: Promise<{ id:
     getPressReleases()
   ]);
 
-  return <NewsDetailClient news={wpNews || undefined} id={id} latestReleases={latestReleases} />;
+  const schemaJsonData = getArticleSchema({
+    title: (wpNews as any)?.title || "News",
+    description: (wpNews as any)?.desc || "",
+    image: (wpNews as any)?.image || "",
+    datePublished: (wpNews as any)?.date || new Date().toISOString(),
+    authorName: (wpNews as any)?.author || "Hutech Team",
+    url: `/company/news/${id}/`
+  });
+
+  return (
+    <>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schemaJsonData) }} />
+      <NewsDetailClient news={wpNews || undefined} id={id} latestReleases={latestReleases} />
+    </>
+  );
 }

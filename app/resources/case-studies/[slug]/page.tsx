@@ -2,7 +2,7 @@ import CaseStudyDetailClient from "./CaseStudyDetailClient";
 import { getCaseStudies, getCaseStudyBySlug } from "@/lib/wordpress";
 import { CASE_STUDIES } from "@/lib/data/case-studies";
 import { notFound } from "next/navigation";
-import { constructMetadata } from "@/lib/seo";
+import { constructMetadata, getArticleSchema } from "@/lib/seo";
 
 export async function generateStaticParams() {
   const wpCaseStudies = await getCaseStudies().catch(() => []);
@@ -34,7 +34,20 @@ export default async function CaseStudyPage({ params }: { params: Promise<{ slug
   const study = await getCaseStudyBySlug(slug).catch(() => null);
 
   if (study) {
-    return <CaseStudyDetailClient study={study} />;
+    const schemaJsonData = getArticleSchema({
+      title: (study as any).title,
+      description: (study as any).tagline || (study as any).description || "",
+      image: (study as any).image || (study as any).heroImage || (study as any).imageUrl || "",
+      datePublished: (study as any).date || new Date().toISOString(),
+      authorName: (study as any).author || "Hutech Team",
+      url: `/resources/case-studies/${slug}/`
+    });
+    return (
+      <>
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schemaJsonData) }} />
+        <CaseStudyDetailClient study={study} />
+      </>
+    );
   }
 
   const staticStudy = CASE_STUDIES[slug];
@@ -42,5 +55,18 @@ export default async function CaseStudyPage({ params }: { params: Promise<{ slug
     notFound();
   }
 
-  return <CaseStudyDetailClient study={staticStudy} />;
+  const schemaJsonData = getArticleSchema({
+    title: (staticStudy as any).title,
+    description: (staticStudy as any).tagline || (staticStudy as any).description || "",
+    image: (staticStudy as any).image || (staticStudy as any).heroImage || (staticStudy as any).imageUrl || "",
+    datePublished: new Date().toISOString(),
+    authorName: (staticStudy as any).author || "Hutech Team",
+    url: `/resources/case-studies/${slug}/`
+  });
+  return (
+    <>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schemaJsonData) }} />
+      <CaseStudyDetailClient study={staticStudy} />
+    </>
+  );
 }

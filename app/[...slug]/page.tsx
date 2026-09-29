@@ -53,7 +53,7 @@ import PressReleaseClient from "@/app/company/press-release/PressReleaseClient";
 import HutechDocumentsClient from "@/app/resources/hutech-documents/HutechDocumentsClient";
 import ProductsClient from "@/app/products/PageClient";
 import InsightsClient from "@/app/resources/insights/PageClient";
-import { constructMetadata } from "@/lib/seo";
+import { constructMetadata, getWebPageSchema } from "@/lib/seo";
 import { getRecruitProJobs } from "@/lib/api";
 import { JOBS } from "@/lib/data/careers";
 import { fallbackCareerPageData } from "@/app/careers/page";
@@ -176,10 +176,19 @@ export default async function DynamicPage({ params }: PageProps) {
   if (Array.isArray(acfTemplate)) acfTemplate = acfTemplate[0];
   const activeTemplate = (acfTemplate || templateName).toLowerCase().trim();
 
+
+  const schemaJsonData = getWebPageSchema({
+    title: (page as any).title,
+    description: (page as any).content ? (page as any).content.replace(/<[^>]+>/g, "").slice(0, 150) + "..." : `${(page as any).title} | Hutech Solutions`,
+    path: uri,
+  });
+
+  let renderedComponent = null;
+
   // ── Home ─────────────────────────────────────────────────────────────────────
   if (activeTemplate === "home") {
     const data = await getHomePage(uri);
-    return <HomePageClient data={data} />;
+    renderedComponent = <HomePageClient data={data} />;
   }
 
   // ── About ─────────────────────────────────────────────────────────────────────
@@ -189,7 +198,7 @@ export default async function DynamicPage({ params }: PageProps) {
     activeTemplate === "about template"
   ) {
     const data = await getAboutPageData(uri);
-    return <AboutClient {...(data ?? {})} />;
+    renderedComponent = <AboutClient {...(data ?? {})} />;
   }
 
   // ── Partnership ───────────────────────────────────────────────────────────────
@@ -199,7 +208,7 @@ export default async function DynamicPage({ params }: PageProps) {
     activeTemplate === "partnership template"
   ) {
     const data = await getPartnershipPageData(uri);
-    return <PartnershipClient {...(data ?? {})} />;
+    renderedComponent = <PartnershipClient {...(data ?? {})} />;
   }
 
   // ── Life at Hutech ────────────────────────────────────────────────────────────
@@ -210,7 +219,7 @@ export default async function DynamicPage({ params }: PageProps) {
     activeTemplate === "life at hutech template"
   ) {
     const data = await getLifeAtHutechPage(uri);
-    return <LifeAtHutechClient data={data} />;
+    renderedComponent = <LifeAtHutechClient data={data} />;
   }
 
   // ── Leadership ────────────────────────────────────────────────────────────────
@@ -220,7 +229,7 @@ export default async function DynamicPage({ params }: PageProps) {
     activeTemplate === "leadership template"
   ) {
     const data = await getLeadershipPageData(uri);
-    return <LeadershipClient {...(data ?? {})} />;
+    renderedComponent = <LeadershipClient {...(data ?? {})} />;
   }
 
   // ── Awards ────────────────────────────────────────────────────────────────────
@@ -230,7 +239,7 @@ export default async function DynamicPage({ params }: PageProps) {
     activeTemplate === "awards template"
   ) {
     const data = await getAwardsPageData(uri);
-    return <AwardsClient {...(data ?? {})} />;
+    renderedComponent = <AwardsClient {...(data ?? {})} />;
   }
 
   // ── Vision, Mission & Values ──────────────────────────────────────────────────
@@ -241,7 +250,7 @@ export default async function DynamicPage({ params }: PageProps) {
     activeTemplate === "template - vmv"
   ) {
     const data = await getVMVPageData(uri);
-    return <VisionMissionValuesClient {...(data ?? {})} />;
+    renderedComponent = <VisionMissionValuesClient {...(data ?? {})} />;
   }
 
   // ── Graduates ─────────────────────────────────────────────────────────────────
@@ -250,13 +259,13 @@ export default async function DynamicPage({ params }: PageProps) {
     activeTemplate === "graduate" ||
     activeTemplate === "template - graduates"
   ) {
-    return <GraduatesClient />;
+    renderedComponent = <GraduatesClient />;
   }
 
   // ── Contact ───────────────────────────────────────────────────────────────────
   if (activeTemplate === "contact") {
     const data = await getContactPageData();
-    return <ContactClient {...(data ?? {})} />;
+    renderedComponent = <ContactClient {...(data ?? {})} />;
   }
 
   // ── Careers ───────────────────────────────────────────────────────────────────
@@ -273,7 +282,7 @@ export default async function DynamicPage({ params }: PageProps) {
     ]);
     const mergedJobs = [...recruitProJobs, ...wpJobs];
     const jobs = mergedJobs.length > 0 ? mergedJobs : JOBS;
-    return <CareersClient pageData={pageData || fallbackCareerPageData} jobs={jobs} />;
+    renderedComponent = <CareersClient pageData={pageData || fallbackCareerPageData} jobs={jobs} />;
   }
 
   // ── Services ──────────────────────────────────────────────────────────────────
@@ -282,7 +291,7 @@ export default async function DynamicPage({ params }: PageProps) {
       getServicePageData(),
       getServiceCategoriesWithServices(),
     ]);
-    return <ServicesClient pageData={pageData} serviceCategories={categories} pageTitle={pageData?.title} pageDescription={pageData?.description} />;
+    renderedComponent = <ServicesClient pageData={pageData} serviceCategories={categories} pageTitle={pageData?.title} pageDescription={pageData?.description} />;
   }
 
   // ── Industries ────────────────────────────────────────────────────────────────
@@ -291,7 +300,7 @@ export default async function DynamicPage({ params }: PageProps) {
       getIndustryPageData(),
       getIndustriesList(),
     ]);
-    return <IndustriesClient pageData={pageData} industriesList={industries} />;
+    renderedComponent = <IndustriesClient pageData={pageData} industriesList={industries} />;
   }
 
   // ── Blogs ────────────────────────────────────────────────────────────────────
@@ -299,7 +308,7 @@ export default async function DynamicPage({ params }: PageProps) {
     const [wpBlogs, wpPageData] = await Promise.all([getBlogs(), getBlogPageData()]);
     const pageTitle = wpPageData?.title || "Insights &|Perspectives.";
     const pageDescription = wpPageData?.description || "Stay ahead of the curve with the latest trends, expert analyses, and technological innovations curated by our global team.";
-    return (
+    renderedComponent = (
       <Suspense>
         <BlogsClient blogs={wpBlogs} pageTitle={pageTitle} pageDescription={pageDescription} bgImageUrl={wpPageData?.bgImageUrl} />
       </Suspense>
@@ -309,7 +318,7 @@ export default async function DynamicPage({ params }: PageProps) {
   // ── Events ───────────────────────────────────────────────────────────────────
   if (activeTemplate === "events" || activeTemplate === "event") {
     const [wpEvents, wpPageData] = await Promise.all([getEvents(), getEventPageData()]);
-    return (
+    renderedComponent = (
       <EventsClient
         events={wpEvents}
         pageTitle={wpPageData?.title}
@@ -324,19 +333,19 @@ export default async function DynamicPage({ params }: PageProps) {
     const [wpCaseStudies, wpPageData] = await Promise.all([getCaseStudies(), getCaseStudyPageData()]);
     const pageTitle = wpPageData?.title || "Success |Stories.";
     const pageDescription = wpPageData?.description || "Discover how we've helped leading organizations transform their businesses with innovative technology solutions.";
-    return <CaseStudiesClient caseStudies={wpCaseStudies} pageTitle={pageTitle} pageDescription={pageDescription} bgImageUrl={wpPageData?.bgImageUrl} />;
+    renderedComponent = <CaseStudiesClient caseStudies={wpCaseStudies} pageTitle={pageTitle} pageDescription={pageDescription} bgImageUrl={wpPageData?.bgImageUrl} />;
   }
 
   // ── News ─────────────────────────────────────────────────────────────────────
   if (activeTemplate === "news") {
     const [wpNews, wpPageData] = await Promise.all([getNewsItems(), getNewsPageData()]);
-    return <NewsClient newsItems={wpNews} {...(wpPageData ?? {})} />;
+    renderedComponent = <NewsClient newsItems={wpNews} {...(wpPageData ?? {})} />;
   }
 
   // ── Press Release ─────────────────────────────────────────────────────────────
   if (activeTemplate === "press-release" || activeTemplate === "press release") {
     const [wpReleases, wpPageData] = await Promise.all([getPressReleases(), getPressReleasePageData()]);
-    return <PressReleaseClient releases={wpReleases} {...(wpPageData ?? {})} />;
+    renderedComponent = <PressReleaseClient releases={wpReleases} {...(wpPageData ?? {})} />;
   }
 
   // ── Hutech Documents ──────────────────────────────────────────────────────────
@@ -351,28 +360,40 @@ export default async function DynamicPage({ params }: PageProps) {
       ctaBtnText: "REQUEST ACCESS",
       ctaBtnUrl: "/contact",
     };
-    return <HutechDocumentsClient documents={documents || []} pageData={pageData || fallbackPageData} />;
+    renderedComponent = <HutechDocumentsClient documents={documents || []} pageData={pageData || fallbackPageData} />;
   }
 
   // ── Products ──────────────────────────────────────────────────────────────────
   if (activeTemplate === "products" || activeTemplate === "product") {
-    return <ProductsClient />;
+    renderedComponent = <ProductsClient />;
   }
 
   // ── Insights ─────────────────────────────────────────────────────────────────
   if (activeTemplate === "insights" || activeTemplate === "insight") {
-    return <InsightsClient />;
+    renderedComponent = <InsightsClient />;
   }
 
   // ── Sitemap ──────────────────────────────────────────────────────────────────
   if (activeTemplate === "sitemap" || page.slug === "sitemap" || slug.includes("sitemap")) {
     const sitemapSections = await getSitemapData(uri);
-    return <PageClient page={page} sitemapSections={sitemapSections} />;
+    renderedComponent = <PageClient page={page} sitemapSections={sitemapSections} />;
   }
 
   // ── Fallback: only render if page has actual text/legal content ───────────────
   if (page.content && page.content.replace(/<[^>]+>/g, "").trim().length > 0) {
-    return <PageClient page={page} />;
+    renderedComponent = <PageClient page={page} />;
+  }
+
+
+
+
+  if (renderedComponent) {
+    return (
+      <>
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schemaJsonData) }} />
+        {renderedComponent}
+      </>
+    );
   }
 
   // If page has no matching template and no content exists, trigger 404

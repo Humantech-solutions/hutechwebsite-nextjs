@@ -7,6 +7,7 @@ import "./styles/App.css";
 import { User, Building, Settings, Briefcase, BarChart, Trophy, Laptop, Phone } from "lucide-react";
 import gifOverrides, { GifOverridesMap, GifOverride } from "./gif-overrides";
 import lottie from "lottie-web";
+import { submitContactForm } from "@/lib/api";
 
 // Special loader animation for images & GIFs (user-provided JSON)
 const MEDIA_LOADER_JSON =
@@ -102,6 +103,7 @@ interface Message {
   kind?: "contact_form";
   lastQuestion?: string;
   hideActions?: boolean;
+  showContactForm?: boolean;
 }
 
 interface BotResponse {
@@ -166,6 +168,17 @@ function App() {
       setTimeout(scrollToBottom, 100);
     }
   }, [messages, currentPage]);
+
+  // Synchronize HusQy online / unavailable status with header widget
+  useEffect(() => {
+    const lastBotMessage = [...messages].reverse().find((m) => !m.isUser);
+    const isUnavailable = Boolean(lastBotMessage?.showContactForm);
+    if (typeof window !== "undefined") {
+      window.dispatchEvent(
+        new CustomEvent("husqy-status", { detail: isUnavailable ? "unavailable" : "online" })
+      );
+    }
+  }, [messages]);
 
   // Close menu when clicking outside
   useEffect(() => {
@@ -416,7 +429,13 @@ function App() {
   // Helper function to preprocess text responses for better rendering
   const preprocessTextResponse = (text: string): string => {
     // Handle common formatting patterns
-    let processed = text;
+    let processed = text || "";
+
+    // Strip SVG text artifacts & markdown image metadata pollution
+    processed = processed.replace(/\*\*svg\*\*/gi, "");
+    processed = processed.replace(/\[svg\]/gi, "");
+    processed = processed.replace(/<svg[\s\S]*?<\/svg>/gi, "");
+    processed = processed.replace(/!\[[^\]]*\]\((?!https?:\/\/)[^)]+\)/gi, "");
 
     // Convert **bold** to proper markdown
     processed = processed.replace(/\*\*(.*?)\*\*/g, "**$1**");
@@ -495,10 +514,9 @@ function App() {
   const sendMessage = async (query?: string) => {
     const messageText = query || inputValue.trim();
     if (!messageText) return;
-    if (sendingRef.current) return; // prevent multiple concurrent requests
+    if (sendingRef.current) return;
     sendingRef.current = true;
 
-    // Switch to chat page immediately
     setCurrentPage("chat");
 
     const userMessage: Message = {
@@ -512,167 +530,178 @@ function App() {
     setInputValue("");
     setIsLoading(true);
 
-    let attemptNotes: string[] | undefined;
+    // Stable session ID persisted in localStorage
+    let sessionId =
+      typeof window !== "undefined" ? localStorage.getItem("__chat_session_id") : null;
+    if (!sessionId && typeof window !== "undefined") {
+      sessionId = "session_" + Math.random().toString(36).substring(2, 11) + "_" + Date.now();
+      localStorage.setItem("__chat_session_id", sessionId);
+    }
+
+    const envUrl = (process.env.NEXT_PUBLIC_CHATBOT_API_URL || "").trim();
+    const cleanHost = (envUrl || "http://localhost:3001")
+      .replace(/\/+$/, "")
+      .replace(/\/query\/?$/, "");
+    const queryApiUrl = `${cleanHost}/query`;
+    const streamUrl = `${queryApiUrl}/stream?query=${encodeURIComponent(messageText)}&session_id=${encodeURIComponent(sessionId || "")}`;
+
+    const botMsgId = Date.now() + 1;
+    let botMsgCreated = false;
+    let streamingText = "";
+    let streamSucceeded = false;
+
+    const ensureBotMsgCreated = () => {
+      if (!botMsgCreated) {
+        botMsgCreated = true;
+        setIsLoading(false);
+        setMessages((prev) => [
+          ...prev,
+          { id: botMsgId, text: "", isUser: false, timestamp: new Date() } as Message,
+        ]);
+      }
+    };
+
     try {
-      // Determine API endpoint; support NEXT_PUBLIC_ env vars, local backend on port 3001, and production URL
-      const envCandidates = [
-        process.env.NEXT_PUBLIC_CHATBOT_API_URL,
-        process.env.NEXT_PUBLIC_API_ENDPOINT,
-        process.env.REACT_APP_API_ENDPOINT,
-        (process.env as any).REACT_APP_APIENDPOINT,
-        (process.env as any).REACT_APP_ENDPOINT,
-      ]
-        .map((s: any) => (s || "").toString().trim())
-        .filter(Boolean);
-
-      const protocol = typeof window !== "undefined" ? window.location.protocol : "http:";
-      const hostname = typeof window !== "undefined" ? window.location.hostname : "localhost";
-
-      // Dynamic endpoint matching current host IP/domain on port 3001 (e.g., http://192.168.0.15:3001/query)
-      const dynamicLocalBackend = `${protocol}//${hostname}:3001/query`;
-
-      const allCandidates = [
-        ...envCandidates,
-        dynamicLocalBackend,
-        "https://apis.hutechbot.hutechsolutions.in/query",
-      ];
-
-      const candidates: string[] = Array.from(new Set(allCandidates)).filter(Boolean);
-
-      let finalResponse: Response | null = null;
-      let lastResponse: Response | null = null;
-      attemptNotes = [] as string[];
-      for (const url of candidates) {
-        try {
-          const res = await fetch(url, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              query: messageText,
-              history: messages.slice(-6).map((m) => ({ isUser: m.isUser, text: m.text })),
-            }),
-          });
-          lastResponse = res;
-          attemptNotes.push(`${url} -> ${res.status}`);
-          if (res.ok) {
-            finalResponse = res;
-            break;
-          }
-          // If 404, try next candidate; otherwise keep last and break
-          if (res.status !== 404) {
-            break;
-          }
-        } catch (e: any) {
-          attemptNotes.push(`${url} -> network error`);
-          // Try next candidate on network errors
-          continue;
-        }
-      }
-
-      const response = finalResponse || lastResponse!;
-      const contentType = response.headers.get("content-type") || "";
-      let rawText = "";
-      try {
-        rawText = await response.clone().text();
-      } catch (e1) {
-        try {
-          rawText = await response.text();
-        } catch (e2) {
-          console.warn("Response body read failed:", e1, e2);
-          rawText = "";
-        }
-      }
-
-      if (!response.ok) {
-        const snippet = rawText?.slice(0, 300) || "";
-        const reason = snippet ? `HTTP ${response.status}: ${snippet}` : `HTTP ${response.status}`;
-        throw new Error(reason);
-      }
-
-      let botResponse: BotResponse;
-      if (contentType.includes("application/json")) {
-        try {
-          const jsonData = JSON.parse(rawText);
-          botResponse = parseJsonResponse(jsonData);
-        } catch (e) {
-          console.warn("JSON parse failed, using text renderer:", e);
-          botResponse = parseTextResponse(rawText);
-        }
-      } else {
-        botResponse = parseTextResponse(rawText);
-      }
-
-      const botMessage: Message = {
-        id: Date.now() + 1,
-        text: botResponse.answer || "Sorry, I couldn't process your request.",
-        isUser: false,
-        timestamp: new Date(),
-        response: botResponse,
-        query: messageText, // Store the user's question
-      };
-
-      setMessages((prev) => [...prev, botMessage]);
-    } catch (error) {
-      console.error("Error sending message:", error);
-
-      // Provide helpful error message based on error type
-      let errorText = "Sorry, I encountered an error while processing your request.";
-      let debugInfo = "";
-      let kind: ErrorKind = "unknown_error";
-      const isOffline = typeof navigator !== "undefined" ? navigator.onLine === false : false;
-
-      if (isOffline) {
-        errorText = "You're offline. Please check your internet and try again.";
-        debugInfo = "Offline";
-        kind = "offline";
-      } else if (error instanceof TypeError && error.message === "Failed to fetch") {
-        errorText = "Unable to reach the server. Please try again shortly.";
-        debugInfo = "Network connection failed";
-        kind = "network_failed";
-      } else if (error instanceof SyntaxError) {
-        errorText = "I received something I couldn't read. Please try again.";
-        debugInfo = "JSON parsing error";
-        kind = "json_parse_error";
-      } else if (error instanceof Error) {
-        const msg = error.message || "";
-        if (/HTTP\s*404/i.test(msg)) {
-          errorText =
-            "I couldn't find the service. Please try again later. For more information you can contact us mobile +91 88674 87771 and email sales@hutechsolutions.com. We typically respond within one business day.";
-          kind = "http_404";
-        } else if (/HTTP\s*5\d{2}/i.test(msg)) {
-          errorText = "The service is having a moment. Please try again soon.";
-          kind = "http_5xx";
-        } else {
-          errorText = "Something went wrong. Please try again.";
-          kind = "unknown_error";
-        }
-        debugInfo = msg;
-      }
-
-      // Unified support message for backend errors (non-offline)
-      if (kind !== "offline") {
-        errorText =
-          "Sorry, I was unable to find what you were looking for. Please contact our team for your query at: Phone: +91 88674 87771 Email: sales@hutechsolutions.com . We will get back to you in 1 business day.";
-      }
-
-      // Log detailed error information for debugging
-      console.warn("Chat error details:", {
-        error: error,
-        message: messageText,
-        timestamp: new Date().toISOString(),
-        debugInfo: debugInfo,
-        attempts: typeof attemptNotes !== "undefined" ? attemptNotes : undefined,
+      const res = await fetch(streamUrl, {
+        method: "GET",
+        headers: { Accept: "text/event-stream", "x-session-id": sessionId || "" },
       });
 
-      const errorMessage: Message = {
-        id: Date.now() + 1,
-        text: errorText,
-        isUser: false,
-        timestamp: new Date(),
-        query: messageText,
-        errorKind: kind,
-      };
-      setMessages((prev) => [...prev, errorMessage]);
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+
+      const reader = res.body?.getReader();
+      if (!reader) throw new Error("No readable stream");
+
+      const decoder = new TextDecoder();
+      let buffer = "";
+
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+
+        buffer += decoder.decode(value, { stream: true });
+        const lines = buffer.split("\n");
+        buffer = lines.pop() || "";
+
+        for (const line of lines) {
+          if (!line.startsWith("data: ")) continue;
+          const jsonStr = line.slice(6).trim();
+          if (!jsonStr) continue;
+          try {
+            const event = JSON.parse(jsonStr);
+            if (event.type === "start") {
+              // Wait for first token before creating answer card
+            } else if (event.type === "token" && event.content) {
+              streamingText += event.content;
+              const rendered = preprocessTextResponse(streamingText);
+              ensureBotMsgCreated();
+              setMessages((prev) =>
+                prev.map((m) => (m.id === botMsgId ? { ...m, text: rendered } : m))
+              );
+            } else if (event.type === "done") {
+              const finalText = event.answer || streamingText;
+              ensureBotMsgCreated();
+              const botResponse: BotResponse = validateBotResponse({
+                answer: finalText,
+                related_content: [],
+                recommendations: event.recommendations,
+                file_links: event.file_links,
+              });
+              setMessages((prev) =>
+                prev.map((m) =>
+                  m.id === botMsgId
+                    ? {
+                        ...m,
+                        text: preprocessTextResponse(finalText),
+                        response: botResponse,
+                        query: messageText,
+                      }
+                    : m
+                )
+              );
+              streamSucceeded = true;
+            } else if (event.type === "error") {
+              throw new Error(event.message || "Streaming error");
+            }
+          } catch (_) {
+            /* ignore malformed SSE lines */
+          }
+        }
+      }
+
+      if (!streamSucceeded && streamingText) {
+        ensureBotMsgCreated();
+        setMessages((prev) =>
+          prev.map((m) =>
+            m.id === botMsgId
+              ? { ...m, text: preprocessTextResponse(streamingText), query: messageText }
+              : m
+          )
+        );
+        streamSucceeded = true;
+      }
+
+      if (!streamSucceeded && !streamingText) {
+        throw new Error("No response received from stream");
+      }
+    } catch (streamErr: any) {
+      console.warn("Streaming failed, falling back to POST:", streamErr?.message);
+      try {
+        const res = await fetch(queryApiUrl, {
+          method: "POST",
+          headers: { "Content-Type": "application/json", "x-session-id": sessionId || "" },
+          body: JSON.stringify({ query: messageText, session_id: sessionId || "" }),
+        });
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const rawText = await res.text();
+        const contentType = res.headers.get("content-type") || "";
+        let botResponse: BotResponse;
+        if (contentType.includes("application/json")) {
+          try {
+            botResponse = parseJsonResponse(JSON.parse(rawText));
+          } catch {
+            botResponse = parseTextResponse(rawText);
+          }
+        } else {
+          botResponse = parseTextResponse(rawText);
+        }
+
+        if (!botResponse?.answer?.trim()) {
+          throw new Error("Empty response received from API");
+        }
+
+        ensureBotMsgCreated();
+        setMessages((prev) =>
+          prev.map((m) =>
+            m.id === botMsgId
+              ? {
+                  ...m,
+                  text: preprocessTextResponse(botResponse.answer),
+                  response: botResponse,
+                  query: messageText,
+                }
+              : m
+          )
+        );
+      } catch (fallbackErr: any) {
+        const errorText =
+          "I am currently unavailable to answer your query right now. Please fill out the form below and our team will reach out to you directly.";
+        ensureBotMsgCreated();
+        setMessages((prev) =>
+          prev.map((m) =>
+            m.id === botMsgId
+              ? {
+                  ...m,
+                  text: errorText,
+                  errorKind: "network_failed" as ErrorKind,
+                  query: messageText,
+                  showContactForm: true,
+                }
+              : m
+          )
+        );
+        console.error("Chatbot API response unavailable, showing contact form:", fallbackErr);
+      }
     } finally {
       setIsLoading(false);
       sendingRef.current = false;
@@ -747,27 +776,26 @@ function App() {
             </div>
           </div>
         ) : (
-          messages
-            .filter((m) => m.id !== 1)
-            .map((message) => (
-              <div key={message.id}>
-                {message.isUser ? (
-                  <UserMessage text={message.text} />
-                ) : (
-                  <BotMessage message={message} onSuggestionClick={handleSuggestionClick} />
-                )}
+          <>
+            {messages
+              .filter((m) => m.id !== 1)
+              .map((message) => (
+                <div key={message.id}>
+                  {message.isUser ? (
+                    <UserMessage text={message.text} />
+                  ) : (
+                    <BotMessage message={message} onSuggestionClick={handleSuggestionClick} />
+                  )}
+                </div>
+              ))}
+            {isLoading && (
+              <div className="my-2 flex w-full items-start justify-start px-2">
+                <div className="px-4 py-2">
+                  <LoadingAnimation className="chat-loader-inline" direction="right" />
+                </div>
               </div>
-            ))
-        )}
-
-        {isLoading && (
-          <div className="flex items-start justify-center">
-            <div className="w-full max-w-3xl">
-              <div className="px-4 py-2">
-                <LoadingAnimation className="chat-loader-inline" direction="right" />
-              </div>
-            </div>
-          </div>
+            )}
+          </>
         )}
       </div>
 
@@ -812,31 +840,23 @@ function App() {
 
               <button
                 type="submit"
-                className={`chat-send-button${isLoading ? "searching" : ""}`}
-                disabled={isLoading}
+                className={`chat-send-button ${isLoading ? "cursor-not-allowed opacity-50" : ""}`}
+                disabled={isLoading || !inputValue.trim()}
               >
-                {isLoading ? (
-                  <div className="searching-animation" aria-label="Loading">
-                    <span className="dot"></span>
-                    <span className="dot"></span>
-                    <span className="dot"></span>
-                  </div>
-                ) : (
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    strokeWidth="2"
-                    stroke="currentColor"
-                    className="h-5 w-5"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M6 12L3.269 3.126A59.768 59.768 0 0121.485 12 59.77 59.77 0 013.27 20.876L5.999 12zm0 0h7.5"
-                    />
-                  </svg>
-                )}
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  strokeWidth="2"
+                  stroke="currentColor"
+                  className="h-5 w-5"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M6 12L3.269 3.126A59.768 59.768 0 0121.485 12 59.77 59.77 0 013.27 20.876L5.999 12zm0 0h7.5"
+                  />
+                </svg>
               </button>
 
               {showMenu && (
@@ -1739,6 +1759,213 @@ const MessageActions: React.FC<{
   );
 };
 
+interface ChatbotContactFormProps {
+  query?: string;
+}
+
+const ChatbotContactForm: React.FC<ChatbotContactFormProps> = ({ query = "" }) => {
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [description, setDescription] = useState(query || "");
+  const [status, setStatus] = useState<"idle" | "submitting" | "success" | "error">("idle");
+  const [errorMessage, setErrorMessage] = useState("");
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!name.trim() || !email.trim() || !description.trim()) {
+      setErrorMessage("Please fill in all required fields (Name, Email Id, and Description).");
+      setStatus("error");
+      return;
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email.trim())) {
+      setErrorMessage("Please enter a valid email address.");
+      setStatus("error");
+      return;
+    }
+
+    setStatus("submitting");
+    setErrorMessage("");
+
+    try {
+      await submitContactForm({
+        name: name.trim(),
+        email: email.trim(),
+        phone: "N/A",
+        subject: `Chatbot Inquiry from ${name.trim()}`,
+        message: description.trim(),
+        category: "Chatbot",
+        gtmEventName: "chatbot_contact_submit",
+      });
+      setStatus("success");
+    } catch (err: any) {
+      console.error("Chatbot contact submit failed:", err);
+      setStatus("error");
+      setErrorMessage(
+        err?.message || "Failed to submit request. Please try again or reach us at sales@hutechsolutions.com"
+      );
+    }
+  };
+
+  if (status === "success") {
+    return (
+      <div className="mt-4 overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-md">
+        <div className="flex items-center justify-between border-b border-white/10 bg-[#001A3D] px-4 py-3 text-white">
+          <div className="flex items-center gap-2">
+            <span className="flex h-6 w-6 items-center justify-center rounded-full bg-[#F99D1C] text-[#001A3D]">
+              <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7" />
+              </svg>
+            </span>
+            <span className="text-xs font-bold tracking-wider text-white uppercase">
+              Inquiry Received
+            </span>
+          </div>
+          <span className="rounded-full bg-white/10 px-2.5 py-0.5 text-[10px] font-semibold text-[#F99D1C]">
+            Delivered
+          </span>
+        </div>
+        <div className="space-y-1.5 p-4 text-xs leading-relaxed text-gray-700">
+          <p>
+            Thank you, <strong className="font-semibold text-[#001A3D]">{name}</strong>! Your inquiry has been routed to our enterprise team.
+          </p>
+          <p className="text-[11px] text-gray-500">
+            A representative will get back to you at <strong className="font-semibold text-[#001A3D]">{email}</strong> within 1 business day.
+          </p>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <form
+      onSubmit={handleSubmit}
+      className="mt-4 overflow-hidden rounded-2xl border border-gray-200/90 bg-white shadow-md transition-all duration-200"
+    >
+      {/* Brand Header Banner */}
+      <div className="border-b border-gray-100 bg-[#001A3D] px-4 py-3 text-white">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <span className="block h-[2px] w-4 shrink-0 bg-[#F99D1C]" />
+            <span className="text-[11px] font-bold tracking-wider text-[#F99D1C] uppercase">
+              Reach Out to Us
+            </span>
+          </div>
+          <div className="flex items-center gap-1.5 text-[10px] font-medium text-gray-300">
+            <span className="inline-block h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
+            <span>Fast Response</span>
+          </div>
+        </div>
+        <p className="mt-1 text-[11px] text-gray-300">
+          Our team is available to assist you. Please fill in your details below.
+        </p>
+      </div>
+
+      <div className="space-y-3.5 p-4">
+        {/* Full Name */}
+        <div className="space-y-1">
+          <label className="block text-[11px] font-bold uppercase tracking-wider text-[#001A3D]">
+            Full Name <span className="text-[#F99D1C]">*</span>
+          </label>
+          <input
+            type="text"
+            required
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            placeholder="John Doe"
+            disabled={status === "submitting"}
+            className="w-full rounded-lg border border-gray-200 bg-gray-50/70 px-3.5 py-2.5 text-xs font-medium text-[#001A3D] placeholder-gray-400 transition-all duration-200 hover:border-gray-300 focus:border-[#F99D1C] focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#F99D1C]/20 disabled:cursor-not-allowed disabled:opacity-60"
+          />
+        </div>
+
+        {/* Email Id */}
+        <div className="space-y-1">
+          <label className="block text-[11px] font-bold uppercase tracking-wider text-[#001A3D]">
+            Email Address <span className="text-[#F99D1C]">*</span>
+          </label>
+          <input
+            type="email"
+            required
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            placeholder="john.doe@company.com"
+            disabled={status === "submitting"}
+            className="w-full rounded-lg border border-gray-200 bg-gray-50/70 px-3.5 py-2.5 text-xs font-medium text-[#001A3D] placeholder-gray-400 transition-all duration-200 hover:border-gray-300 focus:border-[#F99D1C] focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#F99D1C]/20 disabled:cursor-not-allowed disabled:opacity-60"
+          />
+        </div>
+
+        {/* Description */}
+        <div className="space-y-1">
+          <label className="block text-[11px] font-bold uppercase tracking-wider text-[#001A3D]">
+            Description / Requirements <span className="text-[#F99D1C]">*</span>
+          </label>
+          <textarea
+            required
+            rows={3}
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+            placeholder="Tell us what you're looking for or describe your inquiry..."
+            disabled={status === "submitting"}
+            className="w-full resize-none rounded-lg border border-gray-200 bg-gray-50/70 px-3.5 py-2.5 text-xs font-medium text-[#001A3D] placeholder-gray-400 transition-all duration-200 hover:border-gray-300 focus:border-[#F99D1C] focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#F99D1C]/20 disabled:cursor-not-allowed disabled:opacity-60"
+          />
+        </div>
+
+        {/* Error Alert */}
+        {status === "error" && errorMessage && (
+          <div className="flex items-start gap-2 rounded-lg border border-red-200 bg-red-50 p-2.5 text-[11px] font-medium text-red-700">
+            <svg
+              className="mt-0.5 h-4 w-4 shrink-0 text-red-500"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+              />
+            </svg>
+            <span>{errorMessage}</span>
+          </div>
+        )}
+
+        {/* Submit CTA - Hutech Brand Style (#F99D1C -> #001A3D hover) */}
+        <button
+          type="submit"
+          disabled={status === "submitting"}
+          className="flex w-full items-center justify-center gap-2 rounded-lg bg-[#F99D1C] px-5 py-3 text-xs font-bold uppercase tracking-wider text-[#001A3D] shadow-sm transition-all duration-300 hover:bg-[#001A3D] hover:text-white active:scale-[0.99] disabled:cursor-not-allowed disabled:opacity-50"
+        >
+          {status === "submitting" ? (
+            <>
+              <span className="inline-block h-3.5 w-3.5 animate-spin rounded-full border-2 border-[#001A3D] border-t-transparent" />
+              <span>Sending Inquiry...</span>
+            </>
+          ) : (
+            <>
+              <span>Submit Inquiry</span>
+              <svg
+                className="h-3.5 w-3.5 transition-transform duration-200 group-hover:translate-x-0.5"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2.5"
+                  d="M14 5l7 7m0 0l-7 7m7-7H3"
+                />
+              </svg>
+            </>
+          )}
+        </button>
+      </div>
+    </form>
+  );
+};
+
 const BotMessage: React.FC<{
   message: Message;
   onSuggestionClick: (suggestion: string) => void;
@@ -1832,102 +2059,111 @@ const BotMessage: React.FC<{
     });
   }, [message.text]);
 
+  if (!message.text) {
+    return (
+      <div className="my-2 flex w-full items-start justify-start px-2">
+        <div className="px-4 py-2">
+          <LoadingAnimation className="chat-loader-inline" direction="right" />
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="my-2 flex w-full items-start justify-start px-2" onClick={handleImageClick}>
       <div
         className={`w-full max-w-[95%] rounded-2xl border border-gray-100 bg-[#f8fafc] p-4 shadow-sm ${answerImages.length > 0 ? "has-carousel" : ""}`}
       >
-        {/* Related Content Card Carousel */}
-        {response?.related_content && response.related_content.length > 0 && (
-          <RelatedContentCarousel items={response.related_content} />
+        {/* Main Answer */}
+        {(() => {
+          let fullHtml = safeRenderMarkdown(
+            renderIcons(renderTables(message.text, response?.tables || []))
+          );
+          // Strip lists that only contain images (prevents leading bullet dots)
+          const listOfImgs =
+            /<(ul|ol)[^>]*>(?:\s*<li[^>]*>\s*(?:<img[^>]*>\s*)+<\/li>)+\s*<\/\1>/gi;
+          fullHtml = fullHtml.replace(listOfImgs, "");
+          // Remove horizontal rules and separator-only paragraphs when images are present
+          if (answerImages.length > 0) {
+            fullHtml = fullHtml.replace(/<hr[^>]*>/gi, "");
+            fullHtml = fullHtml.replace(/<p[^>]*>(?:\s|&nbsp;|[-–—•·*])+<\/p>/gi, "");
+          }
+          const firstMatch = /<img[^>]*>/i.exec(fullHtml);
+          let splitIndex = firstMatch ? firstMatch.index || 0 : -1;
+          if (splitIndex >= 0) {
+            const ulIdx = fullHtml.lastIndexOf("<ul", splitIndex);
+            const olIdx = fullHtml.lastIndexOf("<ol", splitIndex);
+            const liIdx = fullHtml.lastIndexOf("<li", splitIndex);
+            const bestIdx = Math.max(ulIdx, olIdx, liIdx);
+            if (bestIdx !== -1) splitIndex = bestIdx;
+          }
+          let beforeHtml = splitIndex >= 0 ? fullHtml.slice(0, splitIndex) : fullHtml;
+          beforeHtml = beforeHtml.replace(/<(ul|ol|li)[^>]*>$/i, "");
+          let afterHtml = splitIndex >= 0 ? fullHtml.slice(splitIndex) : null;
+          if (afterHtml !== null) {
+            afterHtml = afterHtml.replace(/<img[^>]*>/gi, "");
+            afterHtml = afterHtml.replace(/<li[^>]*>(?:\s|&nbsp;|<br\s*\/?\>)*<\/li>/gi, "");
+            afterHtml = afterHtml.replace(
+              /<(ul|ol)[^>]*>\s*(?:\s*<li[^>]*>\s*<\/li>)+\s*<\/\1>/gi,
+              ""
+            );
+            afterHtml = afterHtml.replace(/<(ul|ol)[^>]*>\s*<\/\1>/gi, "");
+            afterHtml = afterHtml.replace(/<hr[^>]*>/gi, "");
+            afterHtml = afterHtml.replace(/<p[^>]*>(?:\s|&nbsp;|[-–—•·*])+<\/p>/gi, "");
+          }
+          return (
+            <div className="prose text-gray-800">
+              <>
+                <div
+                  ref={answerRef}
+                  className="answer-html"
+                  dangerouslySetInnerHTML={{ __html: beforeHtml }}
+                />
+                {answerImages.length > 0 && !message.errorKind && (
+                  <AnswerImagesCarousel images={answerImages} />
+                )}
+                {afterHtml !== null && afterHtml.trim() && (
+                  <div className="answer-html" dangerouslySetInnerHTML={{ __html: afterHtml }} />
+                )}
+              </>
+              {/* Error GIF based on error kind (only when not showing contact form) */}
+              {message.errorKind && !message.showContactForm && (
+                <div className="answer-gif-wrapper mb-4 px-4">
+                  <div style={{ position: "relative", display: "inline-block" }}>
+                    <img
+                      src={ERROR_GIFS[message.errorKind] || ERROR_GIFS.unknown_error}
+                      alt={message.errorKind.replace(/_/g, " ")}
+                      className="answer-gif rounded-lg"
+                      onError={(e) => {
+                        const fallback =
+                          "data:image/gif;base64,R0lGODlhAQABAPAAAP///wAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==";
+                        const el = e.currentTarget as HTMLImageElement;
+                        if (el.src !== fallback) el.src = fallback;
+                      }}
+                    />
+                  </div>
+                </div>
+              )}
+              {/* Context GIF only when not an error */}
+              {message.id !== 1 && !message.errorKind && message.text && (
+                <AnswerGifSmart
+                  query={message.query}
+                  answer={message.text}
+                  related={response?.related_content}
+                  hasInlineImage={hasInlineImage}
+                />
+              )}
+            </div>
+          );
+        })()}
+
+        {/* Contact Form when API is unavailable */}
+        {message.showContactForm && (
+          <ChatbotContactForm query={message.query} />
         )}
 
-        {/* Main Answer */}
-        {message.text &&
-          (() => {
-            let fullHtml = safeRenderMarkdown(
-              renderIcons(renderTables(message.text, response?.tables || []))
-            );
-            // Strip lists that only contain images (prevents leading bullet dots)
-            const listOfImgs =
-              /<(ul|ol)[^>]*>(?:\s*<li[^>]*>\s*(?:<img[^>]*>\s*)+<\/li>)+\s*<\/\1>/gi;
-            fullHtml = fullHtml.replace(listOfImgs, "");
-            // Remove horizontal rules and separator-only paragraphs when images are present
-            if (answerImages.length > 0) {
-              fullHtml = fullHtml.replace(/<hr[^>]*>/gi, "");
-              fullHtml = fullHtml.replace(/<p[^>]*>(?:\s|&nbsp;|[-–—•·*])+<\/p>/gi, "");
-            }
-            const firstMatch = /<img[^>]*>/i.exec(fullHtml);
-            let splitIndex = firstMatch ? firstMatch.index || 0 : -1;
-            if (splitIndex >= 0) {
-              const ulIdx = fullHtml.lastIndexOf("<ul", splitIndex);
-              const olIdx = fullHtml.lastIndexOf("<ol", splitIndex);
-              const liIdx = fullHtml.lastIndexOf("<li", splitIndex);
-              const bestIdx = Math.max(ulIdx, olIdx, liIdx);
-              if (bestIdx !== -1) splitIndex = bestIdx;
-            }
-            let beforeHtml = splitIndex >= 0 ? fullHtml.slice(0, splitIndex) : fullHtml;
-            beforeHtml = beforeHtml.replace(/<(ul|ol|li)[^>]*>$/i, "");
-            let afterHtml = splitIndex >= 0 ? fullHtml.slice(splitIndex) : null;
-            if (afterHtml !== null) {
-              afterHtml = afterHtml.replace(/<img[^>]*>/gi, "");
-              afterHtml = afterHtml.replace(/<li[^>]*>(?:\s|&nbsp;|<br\s*\/?\>)*<\/li>/gi, "");
-              afterHtml = afterHtml.replace(
-                /<(ul|ol)[^>]*>\s*(?:\s*<li[^>]*>\s*<\/li>)+\s*<\/\1>/gi,
-                ""
-              );
-              afterHtml = afterHtml.replace(/<(ul|ol)[^>]*>\s*<\/\1>/gi, "");
-              afterHtml = afterHtml.replace(/<hr[^>]*>/gi, "");
-              afterHtml = afterHtml.replace(/<p[^>]*>(?:\s|&nbsp;|[-–—•·*])+<\/p>/gi, "");
-            }
-            return (
-              <div className="prose text-gray-800">
-                <>
-                  <div
-                    ref={answerRef}
-                    className="answer-html"
-                    dangerouslySetInnerHTML={{ __html: beforeHtml }}
-                  />
-                  {answerImages.length > 0 && !message.errorKind && (
-                    <AnswerImagesCarousel images={answerImages} />
-                  )}
-                  {afterHtml !== null && afterHtml.trim() && (
-                    <div className="answer-html" dangerouslySetInnerHTML={{ __html: afterHtml }} />
-                  )}
-                </>
-                {/* Error GIF based on error kind */}
-                {message.errorKind && (
-                  <div className="answer-gif-wrapper mb-4 px-4">
-                    <div style={{ position: "relative", display: "inline-block" }}>
-                      <img
-                        src={ERROR_GIFS[message.errorKind] || ERROR_GIFS.unknown_error}
-                        alt={message.errorKind.replace(/_/g, " ")}
-                        className="answer-gif rounded-lg"
-                        onError={(e) => {
-                          const fallback =
-                            "data:image/gif;base64,R0lGODlhAQABAPAAAP///wAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==";
-                          const el = e.currentTarget as HTMLImageElement;
-                          if (el.src !== fallback) el.src = fallback;
-                        }}
-                      />
-                    </div>
-                  </div>
-                )}
-                {/* Context GIF only when not an error */}
-                {message.id !== 1 && !message.errorKind && (
-                  <AnswerGifSmart
-                    query={message.query}
-                    answer={message.text}
-                    related={response?.related_content}
-                    hasInlineImage={hasInlineImage}
-                  />
-                )}
-              </div>
-            );
-          })()}
-
-        {/* Action Buttons - Hide for welcome message */}
-        {message.text && message.id !== 1 && !message.errorKind && !message.hideActions && (
+        {/* Action Buttons - Hide for welcome message and contact form */}
+        {message.text && message.id !== 1 && !message.errorKind && !message.showContactForm && !message.hideActions && (
           <MessageActions message={message} />
         )}
 
@@ -2305,6 +2541,17 @@ const AnswerGifSmart: React.FC<{
       /(service|services|ai|artificial intelligence|machine learning|ml|devops|cloud|kubernetes|sre|hr|human resources|recruit|hiring|staffing|consulting|ecommerce|analytics|data|software|app|development|website|web|mobile|it|security|network|industry|industries|sector|sectors|domain|domains)/i.test(
         intentText || text
       );
+
+    const isExplicitGifRequested = /\b(gif|animation|sticker|meme|animated image|show gif)\b/i.test(
+      intentText
+    );
+
+    if (!isExplicitGifRequested) {
+      setGif(null);
+      return () => {
+        cancelled = true;
+      };
+    }
 
     type Cat = "location" | "services" | "success" | "general";
     const category: Cat = isSuccess
@@ -3135,26 +3382,45 @@ const AnswerGifSmart: React.FC<{
 };
 
 const FileLinksSection: React.FC<{ files: FileLink[] }> = ({ files }) => {
+  const safeFiles = files.filter(
+    (f) =>
+      f.url &&
+      (f.url.startsWith("http://") || f.url.startsWith("https://") || f.url.startsWith("/"))
+  );
+  if (safeFiles.length === 0) return null;
   return (
-    <div className="mt-6">
-      <h5 className="mb-2 px-4 font-semibold text-gray-800">Files</h5>
-      {files.map((file, index) => (
+    <div className="mt-4 border-t border-gray-100 pt-3">
+      <h5 className="mb-2 px-1 text-xs font-semibold uppercase tracking-wider text-gray-500">
+        📄 PDF Document Links
+      </h5>
+      {safeFiles.map((file, index) => (
         <a
           key={index}
           href={file.url}
           target="_blank"
           rel="noopener noreferrer"
-          className="my-1 flex items-center gap-2 rounded-lg p-3 transition-colors duration-200 hover:bg-gray-100"
+          className="shadow-xs my-1 flex items-center justify-between rounded-lg border border-gray-200 bg-white p-3 transition-all duration-200 hover:border-red-300 hover:bg-red-50/30"
         >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            className="h-5 w-5 text-gray-500"
-            viewBox="0 0 20 20"
-            fill="currentColor"
-          >
-            <path d="M4 4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V8a2 2 0 00-2-2h-5L9 4H4z" />
-          </svg>
-          <span className="text-sm font-medium text-gray-700">{file.title}</span>
+          <div className="flex items-center gap-2 overflow-hidden">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-5 w-5 shrink-0 text-red-500"
+              viewBox="0 0 20 20"
+              fill="currentColor"
+            >
+              <path
+                fillRule="evenodd"
+                d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4zm2 6a1 1 0 011-1h6a1 1 0 110 2H7a1 1 0 01-1-1zm1 3a1 1 0 100 2h6a1 1 0 100-2H7z"
+                clipRule="evenodd"
+              />
+            </svg>
+            <span className="truncate text-sm font-medium text-gray-800">
+              {file.title || "Company Brochure / Document PDF"}
+            </span>
+          </div>
+          <span className="shrink-0 rounded bg-red-100 px-2.5 py-1 text-xs font-semibold text-red-700 transition-colors hover:bg-red-200">
+            Open PDF
+          </span>
         </a>
       ))}
     </div>
