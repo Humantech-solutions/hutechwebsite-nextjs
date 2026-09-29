@@ -5,7 +5,7 @@
 
 const API_BASE_URL =
   process.env.NEXT_PUBLIC_HUTECH_API_BASE_URL?.replace(/\/+$/, "") ||
-  "http://localhost:8001" // Production: "https://apis.admin.hutechsolutions.in";
+  "https://apis.admin.hutechsolutions.in"; // Production: "http://localhost:8001";
 
 const SITE_BASE_URL =
   process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/+$/, "") || "https://hutechsolutions.ai";
@@ -250,11 +250,11 @@ export async function submitDocumentRequest(payload: DocumentRequestPayload): Pr
     }
 
     const isSuccess = await parseSubmitResponse(response);
-    
+
     if (isSuccess && typeof window !== "undefined") {
       (window as any).dataLayer = (window as any).dataLayer || [];
       (window as any).dataLayer.push({
-        event: 'document_request_submit'
+        event: "document_request_submit",
       });
     }
 
@@ -294,11 +294,11 @@ export async function submitCareerForm(payload: CareerFormPayload): Promise<bool
     }
 
     const isSuccess = await parseSubmitResponse(response);
-    
+
     if (isSuccess && typeof window !== "undefined") {
       (window as any).dataLayer = (window as any).dataLayer || [];
       (window as any).dataLayer.push({
-        event: 'career_form_submit'
+        event: "career_form_submit",
       });
     }
 
@@ -472,21 +472,23 @@ function mapRecruitProJob(raw: RecruitProJob) {
     requirementsTitle: "Requirements",
     requirements: reqBullets,
     superpowersTitle: "Your Superpowers",
-    superpowers: superpowersBullets.length > 0
-      ? superpowersBullets
-      : raw.experience
-        ? [`${raw.experience} of relevant experience`]
-        : [],
+    superpowers:
+      superpowersBullets.length > 0
+        ? superpowersBullets
+        : raw.experience
+          ? [`${raw.experience} of relevant experience`]
+          : [],
     benefitsTitle: "Benefits",
-    benefits: benefitsBullets.length > 0
-      ? benefitsBullets
-      : [
-          "Health Insurance",
-          "Provident Fund + Performance Bonus",
-          "Maternity + Paternity Leave",
-          "Flexible work environment",
-          ctcRange ? `CTC Range: ${ctcRange}` : "Competitive compensation",
-        ].filter(Boolean),
+    benefits:
+      benefitsBullets.length > 0
+        ? benefitsBullets
+        : [
+            "Health Insurance",
+            "Provident Fund + Performance Bonus",
+            "Maternity + Paternity Leave",
+            "Flexible work environment",
+            ctcRange ? `CTC Range: ${ctcRange}` : "Competitive compensation",
+          ].filter(Boolean),
     hiringTimelineTitle: "Hiring Timeline",
     hiringTimelineText:
       "Our typical hiring process takes 7–14 business days from the first interview to offer letter.",
@@ -510,7 +512,6 @@ export async function getRecruitProJobs() {
 
     const res = await fetch(url, {
       headers: {
-
         "Content-Type": "application/json",
       },
       next: { revalidate: 0 },
