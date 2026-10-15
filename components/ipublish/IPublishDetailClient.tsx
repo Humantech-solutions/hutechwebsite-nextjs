@@ -7,6 +7,7 @@ import { IPublishPageData, getIPublishImageUrl, normalizeIPublishHtml } from "@/
 import { getIPublishPatternStyle, extractPatternFromBody } from "@/lib/ipublish-pattern";
 import { Linkedin, Twitter, Facebook, Share2, Calendar, Check } from "lucide-react";
 import { BlogCTAModal } from "@/components/BlogCTAModal";
+import { FAQAccordion } from "@/components/FAQAccordion";
 
 export interface RelatedBlogItem {
   id?: string;
@@ -699,6 +700,18 @@ export function IPublishDetailClient({
                         dangerouslySetInnerHTML={{ __html: contentPart2 }}
                       />
                     ) : null}
+
+                    {/* FAQ Section */}
+                    {content.faq_enabled !== false && content.faqs && content.faqs.length > 0 && (
+                      <div className="mt-12 space-y-6">
+                        <div>
+                          <h3 className="text-2xl font-bold text-[#172033]">
+                            Frequently Asked Questions
+                          </h3>
+                        </div>
+                        <FAQAccordion faqs={content.faqs} />
+                      </div>
+                    )}
 
                     {/* ========================================================================= */}
                     {/* 4. ARTICLE-BOTTOM IMAGE / CTA SECTION (MATCHING article-bottom.png) */}
