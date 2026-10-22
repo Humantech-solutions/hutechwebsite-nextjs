@@ -1,5 +1,7 @@
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
+
+export const revalidate = 0;
 import {
   getPageByUri,
   getAllPageUris,
@@ -380,7 +382,7 @@ export default async function DynamicPage({ params }: PageProps) {
   }
 
   // ── Fallback: only render if page has actual text/legal content ───────────────
-  if (page.content && page.content.replace(/<[^>]+>/g, "").trim().length > 0) {
+  if (!renderedComponent && page.content && page.content.replace(/<[^>]+>/g, "").trim().length > 0) {
     renderedComponent = <PageClient page={page} />;
   }
 
