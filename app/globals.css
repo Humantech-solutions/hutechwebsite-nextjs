@@ -405,3 +405,8 @@ input, textarea{
 .slick-slider:not(.slick-initialized) .slick-slide {
   display: none !important;
 }
+
+/* iPublish banner title container query root */
+.banner-title-container {
+  container-type: inline-size;
+}
