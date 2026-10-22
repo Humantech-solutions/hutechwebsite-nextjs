@@ -2,7 +2,7 @@
 
 import { useMemo } from "react";
 import { WpBlog } from "@/lib/wordpress";
-import { getIPublishPatternStyle } from "@/lib/ipublish-pattern";
+import { getIPublishPatternStyle, bannerTitleSpacing } from "@/lib/ipublish-pattern";
 
 interface IPublishCardBannerProps {
   blog: WpBlog;
@@ -23,6 +23,7 @@ export function IPublishCardBanner({ blog }: IPublishCardBannerProps) {
       return {
         backgroundImage: meta.customPatternStyle.backgroundImage,
         backgroundSize: meta.customPatternStyle.backgroundSize,
+        backgroundPosition: meta.customPatternStyle.backgroundPosition,
         opacity:
           meta.customPatternStyle.opacity ??
           (meta.patternOpacity !== undefined ? meta.patternOpacity / 100 : 0.2),
@@ -43,6 +44,15 @@ export function IPublishCardBanner({ blog }: IPublishCardBannerProps) {
     meta?.patternColor,
     meta?.patternOpacity,
   ]);
+
+  // Dynamic Title Spacing matching iPublish
+  const titleSpacing = useMemo(() => {
+    return bannerTitleSpacing({
+      featured_title_padding: meta?.titlePadding ?? 24,
+      title_margin_x: meta?.titleMarginX ?? 0,
+      title_margin_y: meta?.titleMarginY ?? 0,
+    });
+  }, [meta?.titlePadding, meta?.titleMarginX, meta?.titleMarginY]);
 
   // Dynamic Title Positioning
   const positionClass = useMemo(() => {
@@ -86,8 +96,9 @@ export function IPublishCardBanner({ blog }: IPublishCardBannerProps) {
 
   return (
     <div
-      className="relative h-full w-full overflow-hidden transition-transform duration-700 group-hover:scale-105"
+      className="banner-title-container relative h-full w-full overflow-hidden transition-transform duration-700 group-hover:scale-105"
       style={{
+        containerType: "inline-size",
         background: `linear-gradient(${gradientDirection}, ${gradientFrom}, ${gradientTo})`,
       }}
     >
@@ -98,6 +109,7 @@ export function IPublishCardBanner({ blog }: IPublishCardBannerProps) {
           style={{
             backgroundImage: patternStyle.backgroundImage,
             backgroundSize: patternStyle.backgroundSize,
+            backgroundPosition: patternStyle.backgroundPosition,
             opacity: patternStyle.opacity,
             zIndex: 0,
           }}
@@ -131,7 +143,8 @@ export function IPublishCardBanner({ blog }: IPublishCardBannerProps) {
 
       {/* Dynamic Title Overlay Container */}
       <div
-        className={`pointer-events-none relative z-10 flex h-full w-full p-6 ${positionClass}`}
+        className={`pointer-events-none relative z-10 flex h-full w-full ${positionClass}`}
+        style={titleSpacing}
       >
         <h4
           className={`banner-title max-w-full font-bold drop-shadow-md ${
@@ -145,7 +158,7 @@ export function IPublishCardBanner({ blog }: IPublishCardBannerProps) {
             fontFamily: `var(--font-${titleFont}), ${meta?.titleFont || "inherit"}, Georgia, serif`,
             fontWeight: titleWeight,
             fontStyle: titleItalic ? "italic" : "normal",
-            fontSize: `clamp(1rem, ${(1.25 * titleScale) / 100}rem, 1.45rem)`,
+            fontSize: `clamp(0.85rem, ${(1.15 * titleScale) / 100}rem, 1.4rem)`,
             lineHeight: titleLineHeight,
             color: isGradientTitle ? "transparent" : titleColor,
             backgroundImage: isGradientTitle

@@ -293,7 +293,12 @@ export async function getIPublishContentDetailsById(
       featured_image_height: data.featured_image_height,
       featured_image_overlay: data.featured_image_overlay,
       featured_title_position: data.featured_title_position,
-      featured_title_padding: data.featured_title_padding,
+      featured_title_padding:
+        typeof data.featured_title_padding === "number"
+          ? data.featured_title_padding
+          : data.featured_title_padding
+          ? Number(data.featured_title_padding)
+          : undefined,
       content_width: data.content_width,
       banner_gradient_from: data.banner_gradient_from,
       banner_gradient_to: data.banner_gradient_to,
@@ -310,6 +315,7 @@ export async function getIPublishContentDetailsById(
       title_weight: data.title_weight,
       title_italic: data.title_italic,
       banner_pattern: data.banner_pattern,
+      raw_banner_pattern: data.raw_banner_pattern ?? data.banner_pattern,
       banner_pattern_color: data.banner_pattern_color,
       banner_pattern_opacity: data.banner_pattern_opacity,
       title_line_height: data.title_line_height,
@@ -392,16 +398,34 @@ export async function getIPublishPageBySlug(
     let faqs = extractFaqsFromIPublishData(data);
     let faq_enabled = (data as any).faq_enabled ?? (data as any).seo_metadata?.faq_enabled ?? (faqs.length > 0);
 
-    // If no faqs found on the public page response, check if authenticated content API has them
-    if (faqs.length === 0) {
+    // If faqs, padding or raw_banner_pattern are missing on public response, check authenticated content API
+    if (
+      faqs.length === 0 ||
+      (data as any).featured_title_padding === undefined ||
+      (data as any).raw_banner_pattern === undefined
+    ) {
       try {
         const publishedContent = await getIPublishPublishedContent();
         const matchedItem = publishedContent?.find((item) => item.slug === slug);
         if (matchedItem?.id) {
           const detail = await getIPublishContentDetailsById(matchedItem.id);
-          if (detail?.faqs && detail.faqs.length > 0) {
-            faqs = detail.faqs;
-            faq_enabled = detail.faq_enabled ?? true;
+          if (detail) {
+            if (faqs.length === 0 && detail.faqs && detail.faqs.length > 0) {
+              faqs = detail.faqs;
+              faq_enabled = detail.faq_enabled ?? true;
+            }
+            if (
+              (data as any).featured_title_padding === undefined &&
+              detail.featured_title_padding !== undefined
+            ) {
+              (data as any).featured_title_padding = detail.featured_title_padding;
+            }
+            if (
+              (data as any).raw_banner_pattern === undefined &&
+              detail.raw_banner_pattern !== undefined
+            ) {
+              (data as any).raw_banner_pattern = detail.raw_banner_pattern;
+            }
           }
         }
       } catch {
@@ -409,8 +433,22 @@ export async function getIPublishPageBySlug(
       }
     }
 
+    const rawPattern =
+      (data as any).raw_banner_pattern !== undefined
+        ? (data as any).raw_banner_pattern
+        : data.banner_pattern;
+
+    const padding =
+      typeof (data as any).featured_title_padding === "number"
+        ? (data as any).featured_title_padding
+        : (data as any).featured_title_padding
+        ? Number((data as any).featured_title_padding)
+        : undefined;
+
     return {
       ...data,
+      raw_banner_pattern: rawPattern,
+      featured_title_padding: padding,
       featured_image_url: getIPublishImageUrl(data.featured_image_url) || null,
       body: normalizeIPublishHtml(data.body),
       current_body: normalizeIPublishHtml(data.current_body),
@@ -464,7 +502,7 @@ export async function getIPublishAllBlogs(
         );
       });
 
-      // Fetch details for each item to get full data including author_name
+      // Fetch details for each item to get full data including author_name, pattern, and padding
       const detailedPages = await Promise.all(
         filteredContent.map(async (item) => {
           let detail = await getIPublishPageBySlug(item.slug, orgSlug);
@@ -472,11 +510,22 @@ export async function getIPublishAllBlogs(
             detail = await getIPublishContentDetailsById(item.id);
           }
           if (detail) {
-            return { ...item, ...detail };
+            return {
+              ...item,
+              ...detail,
+              raw_banner_pattern:
+                detail.raw_banner_pattern ?? item.raw_banner_pattern ?? item.banner_pattern,
+              banner_pattern: detail.banner_pattern || item.banner_pattern,
+              featured_title_padding:
+                detail.featured_title_padding ?? item.featured_title_padding,
+              title_margin_x: detail.title_margin_x ?? item.title_margin_x,
+              title_margin_y: detail.title_margin_y ?? item.title_margin_y,
+            };
           }
           // Never drop a published blog just because detail endpoint had a transient failure:
           return {
             ...item,
+            raw_banner_pattern: item.raw_banner_pattern ?? item.banner_pattern,
             body: item.body || "",
             current_body: item.current_body || "",
             slug: item.slug,
