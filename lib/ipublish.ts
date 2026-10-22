@@ -79,6 +79,11 @@ const IPUBLISH_BASE_URL =
   process.env.NEXT_PUBLIC_IPUBLISH_API_URL || "https://apis.ipublish.hutechsolutions.ai";
 const DEFAULT_ORG_SLUG = process.env.NEXT_PUBLIC_IPUBLISH_ORG_SLUG || "hutech-solutions";
 const IPUBLISH_STATIC_TOKEN = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI3NzUwYmFlYy1lOTllLTRkYzAtOTM5Yy1hYTVjMWQ1MGFhNWYiLCJvcmdfaWQiOiI0ZjdlYmE4YS05OGZjLTQyODEtODJjZi1jYmM4YzIwZmY0NWUifQ.nkv7ZboCMX2BzwTt_r1F2t_IGAiFi1bcwpexyPBDxfQ";
+// const IPUBLISH_BASE_URL =
+//   process.env.NEXT_PUBLIC_IPUBLISH_API_URL || "http://localhost:8004";
+// const DEFAULT_ORG_SLUG = process.env.NEXT_PUBLIC_IPUBLISH_ORG_SLUG || "hutech-solutions";
+// const IPUBLISH_STATIC_TOKEN = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI3NzUwYmFlYy1lOTllLTRkYzAtOTM5Yy1hYTVjMWQ1MGFhNWYiLCJvcmdfaWQiOiI0ZjdlYmE4YS05OGZjLTQyODEtODJjZi1jYmM4YzIwZmY0NWUifQ.nkv7ZboCMX2BzwTt_r1F2t_IGAiFi1bcwpexyPBDxfQ";
+
 
 /**
  * Normalize image URL from iPublish API to absolute URL.
@@ -126,15 +131,15 @@ export function normalizeIPublishHtml(html?: string | null): string {
 export async function isIPublishBlogSlugAllowed(slug: string): Promise<boolean> {
   const publishedContent = await getIPublishPublishedContent();
   if (!publishedContent) return true; // Fallback: allow all if authenticated API is down
-  
+
   const item = publishedContent.find(c => c.slug === slug);
   if (!item) return false; // Not found in published list at all
-  
+
   if (!Array.isArray(item.destinations) || item.destinations.length === 0) {
     return false;
   }
-  
-  return item.destinations.some(d => 
+
+  return item.destinations.some(d =>
     d.domain && (d.domain.toLowerCase().includes('.ai') || d.domain.toLowerCase().includes('hutechsolutions.ai'))
   );
 }
@@ -152,12 +157,12 @@ export async function getIPublishPublishedContent(): Promise<PublicContentItem[]
       },
       cache: "no-store",
     });
-    
+
     if (!res.ok) {
       console.warn("[iPublish] Failed to fetch /content/published:", res.status);
       return null;
     }
-    
+
     const data = await res.json();
     return Array.isArray(data) ? data : null;
   } catch (error) {
@@ -447,18 +452,18 @@ export async function getIPublishAllBlogs(
 ): Promise<IPublishPageData[]> {
   try {
     const publishedContent = await getIPublishPublishedContent();
-    
+
     if (publishedContent) {
       // Use authenticated endpoint for strict domain filtering
       const filteredContent = publishedContent.filter(item => {
         if (!Array.isArray(item.destinations) || item.destinations.length === 0) {
           return false;
         }
-        return item.destinations.some(d => 
+        return item.destinations.some(d =>
           d.domain && (d.domain.toLowerCase().includes('.ai') || d.domain.toLowerCase().includes('hutechsolutions.ai'))
         );
       });
-      
+
       // Fetch details for each item to get full data including author_name
       const detailedPages = await Promise.all(
         filteredContent.map(async (item) => {
@@ -479,7 +484,7 @@ export async function getIPublishAllBlogs(
           } as IPublishPageData;
         })
       );
-      
+
       return detailedPages.filter((item) => item !== null) as IPublishPageData[];
     } else {
       // Fallback to unauthenticated endpoint if authenticated one fails
