@@ -1,0 +1,2926 @@
+[
+    {
+        "key": "group_product_page_fields",
+        "title": "Product Page Fields (Modern PDP)",
+        "fields": [
+            {
+                "key": "field_tab_prod_hero_section_2p0zi4",
+                "label": "Hero Section",
+                "name": "",
+                "type": "tab",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "placement": "top",
+                "endpoint": 0
+            },
+            {
+                "key": "field_prod_hero_badge_fezo5e",
+                "label": "Hero Badge",
+                "name": "hero_badge",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "THE INTELLIGENT WORK PLATFORM"
+            },
+            {
+                "key": "field_prod_hero_title_line_1_rfrjlb",
+                "label": "Hero Title Line 1",
+                "name": "hero_title_line_1",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "Make complex"
+            },
+            {
+                "key": "field_prod_hero_title_line_2_d37yl5",
+                "label": "Hero Title Line 2",
+                "name": "hero_title_line_2",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "work feel"
+            },
+            {
+                "key": "field_prod_hero_title_italic_poei22",
+                "label": "Hero Title Italic Accent",
+                "name": "hero_title_italic",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "effortless."
+            },
+            {
+                "key": "field_prod_hero_description_7j5sjc",
+                "label": "Hero Description",
+                "name": "hero_description",
+                "type": "textarea",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "LumaCore connects your people, data, and workflows in one adaptive platform—so your organization can move with clarity and speed."
+            },
+            {
+                "key": "field_prod_hero_primary_cta_text_oq7jvo",
+                "label": "Primary CTA Text",
+                "name": "hero_primary_cta_text",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "Explore LumaCore"
+            },
+            {
+                "key": "field_prod_hero_primary_cta_url_xfmxa7",
+                "label": "Primary CTA URL",
+                "name": "hero_primary_cta_url",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "/contact"
+            },
+            {
+                "key": "field_prod_hero_secondary_cta_text_m1mc14",
+                "label": "Secondary CTA Text",
+                "name": "hero_secondary_cta_text",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "See how it works"
+            },
+            {
+                "key": "field_prod_hero_rating_score_fssr13",
+                "label": "Rating Score",
+                "name": "hero_rating_score",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "4.9/5"
+            },
+            {
+                "key": "field_prod_hero_rating_text_b42cpq",
+                "label": "Rating Text",
+                "name": "hero_rating_text",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "from 2,000+ modern teams"
+            },
+            {
+                "key": "field_prod_dashboard_velocity_lfuc5k",
+                "label": "Dashboard Velocity Stat",
+                "name": "dashboard_velocity",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "94.8%"
+            },
+            {
+                "key": "field_prod_dashboard_velocity_delta_24oqnx",
+                "label": "Dashboard Velocity Delta",
+                "name": "dashboard_velocity_delta",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "+12.4%"
+            },
+            {
+                "key": "field_prod_dashboard_active_tasks_yhrt7l",
+                "label": "Dashboard Active Tasks",
+                "name": "dashboard_active_tasks",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "1,284"
+            },
+            {
+                "key": "field_prod_dashboard_active_tasks_delta_oqp2mf",
+                "label": "Dashboard Active Tasks Delta",
+                "name": "dashboard_active_tasks_delta",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "+8.1%"
+            },
+            {
+                "key": "field_prod_dashboard_time_saved_336odu",
+                "label": "Dashboard Time Saved Chip",
+                "name": "dashboard_time_saved",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "Time saved this week: 128 hours"
+            },
+            {
+                "key": "field_prod_dashboard_task_title_bgg82o",
+                "label": "Dashboard Task Title",
+                "name": "dashboard_task_title",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "Automated lead scoring"
+            },
+            {
+                "key": "field_prod_dashboard_task_subtitle_5zvr1o",
+                "label": "Dashboard Task Subtitle",
+                "name": "dashboard_task_subtitle",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "Qualify inbound leads"
+            },
+            {
+                "key": "field_tab_prod_product_overview_gfkrc3",
+                "label": "Product Overview",
+                "name": "",
+                "type": "tab",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "placement": "top",
+                "endpoint": 0
+            },
+            {
+                "key": "field_prod_overview_tag_m1ejw6",
+                "label": "Overview Section Tag",
+                "name": "overview_tag",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "PRODUCT / 01"
+            },
+            {
+                "key": "field_prod_overview_title_b2j9ha",
+                "label": "Overview Section Title",
+                "name": "overview_title",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "PRODUCT OVERVIEW"
+            },
+            {
+                "key": "field_prod_overview_headline_1_bay0y0",
+                "label": "Overview Headline Line 1",
+                "name": "overview_headline_1",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "One platform."
+            },
+            {
+                "key": "field_prod_overview_headline_italic_91zks3",
+                "label": "Overview Headline Italic",
+                "name": "overview_headline_italic",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "Every possibility."
+            },
+            {
+                "key": "field_prod_overview_description_mae3e1",
+                "label": "Overview Description",
+                "name": "overview_description",
+                "type": "textarea",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "LumaCore is the intelligent operating layer for modern organizations. It replaces fragmented processes with connected, measurable workflows that keep everyone moving in the same direction."
+            },
+            {
+                "key": "field_prod_overview_stat_1_val_fq6g50",
+                "label": "Overview Stat 1 Value",
+                "name": "overview_stat_1_val",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "3.2×"
+            },
+            {
+                "key": "field_prod_overview_stat_1_label_ua4vwv",
+                "label": "Overview Stat 1 Label",
+                "name": "overview_stat_1_label",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "FASTER DELIVERY"
+            },
+            {
+                "key": "field_prod_overview_stat_2_val_tfvzjv",
+                "label": "Overview Stat 2 Value",
+                "name": "overview_stat_2_val",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "42%"
+            },
+            {
+                "key": "field_prod_overview_stat_2_label_vdyvod",
+                "label": "Overview Stat 2 Label",
+                "name": "overview_stat_2_label",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "LESS BUSYWORK"
+            },
+            {
+                "key": "field_tab_prod_key_features_s88i7s",
+                "label": "Key Features",
+                "name": "",
+                "type": "tab",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "placement": "top",
+                "endpoint": 0
+            },
+            {
+                "key": "field_prod_features_tag_r7xer7",
+                "label": "Features Section Tag",
+                "name": "features_tag",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "CAPABILITY / 02"
+            },
+            {
+                "key": "field_prod_features_title_1gpgn9",
+                "label": "Features Section Title",
+                "name": "features_title",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "KEY FEATURES"
+            },
+            {
+                "key": "field_prod_features_headline_prefix_sls9v7",
+                "label": "Features Headline Prefix",
+                "name": "features_headline_prefix",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "Built for the way"
+            },
+            {
+                "key": "field_prod_features_headline_italic_1qzhff",
+                "label": "Features Headline Italic",
+                "name": "features_headline_italic",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "great teams work."
+            },
+            {
+                "key": "field_prod_features_description_0rveoz",
+                "label": "Features Description",
+                "name": "features_description",
+                "type": "textarea",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "Powerful enough for your most complex processes. Simple enough for everyone to use."
+            },
+            {
+                "key": "field_prod_feature_1_num_sqq28m",
+                "label": "Feature Card 1 Number",
+                "name": "feature_1_num",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "25",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "01"
+            },
+            {
+                "key": "field_prod_feature_1_title_9msfmf",
+                "label": "Feature Card 1 Title",
+                "name": "feature_1_title",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "25",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_prod_feature_1_desc_hegr41",
+                "label": "Feature Card 1 Description",
+                "name": "feature_1_desc",
+                "type": "textarea",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_prod_feature_2_num_ur3iut",
+                "label": "Feature Card 2 Number",
+                "name": "feature_2_num",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "25",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "02"
+            },
+            {
+                "key": "field_prod_feature_2_title_k3wil5",
+                "label": "Feature Card 2 Title",
+                "name": "feature_2_title",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "25",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_prod_feature_2_desc_2v7gie",
+                "label": "Feature Card 2 Description",
+                "name": "feature_2_desc",
+                "type": "textarea",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_prod_feature_3_num_nxmzip",
+                "label": "Feature Card 3 Number",
+                "name": "feature_3_num",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "25",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "03"
+            },
+            {
+                "key": "field_prod_feature_3_title_btaa8g",
+                "label": "Feature Card 3 Title",
+                "name": "feature_3_title",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "25",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_prod_feature_3_desc_oic6eg",
+                "label": "Feature Card 3 Description",
+                "name": "feature_3_desc",
+                "type": "textarea",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_prod_feature_4_num_9xgrgq",
+                "label": "Feature Card 4 Number",
+                "name": "feature_4_num",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "25",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "04"
+            },
+            {
+                "key": "field_prod_feature_4_title_dlvndk",
+                "label": "Feature Card 4 Title",
+                "name": "feature_4_title",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "25",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_prod_feature_4_desc_g03ike",
+                "label": "Feature Card 4 Description",
+                "name": "feature_4_desc",
+                "type": "textarea",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_tab_prod_benefits_&_value_0thf43",
+                "label": "Benefits & Value",
+                "name": "",
+                "type": "tab",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "placement": "top",
+                "endpoint": 0
+            },
+            {
+                "key": "field_prod_benefits_tag_d69whs",
+                "label": "Benefits Section Tag",
+                "name": "benefits_tag",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "IMPACT / 03"
+            },
+            {
+                "key": "field_prod_benefits_title_giuica",
+                "label": "Benefits Section Title",
+                "name": "benefits_title",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "BENEFITS & BUSINESS VALUE"
+            },
+            {
+                "key": "field_prod_benefits_headline_1_1dmy6l",
+                "label": "Benefits Headline Line 1",
+                "name": "benefits_headline_1",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "Less friction."
+            },
+            {
+                "key": "field_prod_benefits_headline_italic_x1hhf7",
+                "label": "Benefits Headline Italic",
+                "name": "benefits_headline_italic",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "More momentum."
+            },
+            {
+                "key": "field_prod_benefits_description_nepe9d",
+                "label": "Benefits Description",
+                "name": "benefits_description",
+                "type": "textarea",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "Transform day-to-day work into measurable, compounding business advantage."
+            },
+            {
+                "key": "field_prod_benefits_donut_stat_a0nlsf",
+                "label": "Donut Chart Stat",
+                "name": "benefits_donut_stat",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "67%"
+            },
+            {
+                "key": "field_prod_benefits_donut_label_mdzjms",
+                "label": "Donut Chart Label",
+                "name": "benefits_donut_label",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "FEWER DECISIONS"
+            },
+            {
+                "key": "field_prod_bento_1_title_bmn11n",
+                "label": "Bento Card 1 Title",
+                "name": "bento_1_title",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "Move at market speed"
+            },
+            {
+                "key": "field_prod_bento_1_desc_k6satc",
+                "label": "Bento Card 1 Description",
+                "name": "bento_1_desc",
+                "type": "textarea",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_prod_bento_2_title_zlp54b",
+                "label": "Bento Card 2 Title",
+                "name": "bento_2_title",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "Do more with every hour"
+            },
+            {
+                "key": "field_prod_bento_2_desc_nna0pi",
+                "label": "Bento Card 2 Description",
+                "name": "bento_2_desc",
+                "type": "textarea",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_prod_bento_2_stat_n93h71",
+                "label": "Bento Card 2 Stat Value",
+                "name": "bento_2_stat",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "12.5k"
+            },
+            {
+                "key": "field_prod_bento_2_stat_label_1cdhii",
+                "label": "Bento Card 2 Stat Label",
+                "name": "bento_2_stat_label",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "HOURS RECLAIMED / YR"
+            },
+            {
+                "key": "field_prod_bento_3_title_7jw1ck",
+                "label": "Bento Card 3 Title",
+                "name": "bento_3_title",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "Scale without the drag"
+            },
+            {
+                "key": "field_prod_bento_3_desc_iftooi",
+                "label": "Bento Card 3 Description",
+                "name": "bento_3_desc",
+                "type": "textarea",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_tab_prod_how_it_works_xgvw32",
+                "label": "How It Works",
+                "name": "",
+                "type": "tab",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "placement": "top",
+                "endpoint": 0
+            },
+            {
+                "key": "field_prod_workflow_tag_fhbo9b",
+                "label": "Workflow Section Tag",
+                "name": "workflow_tag",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "WORKFLOW / 04"
+            },
+            {
+                "key": "field_prod_workflow_title_bbh92e",
+                "label": "Workflow Section Title",
+                "name": "workflow_title",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "HOW IT WORKS"
+            },
+            {
+                "key": "field_prod_workflow_headline_prefix_0fjo4p",
+                "label": "Workflow Headline Prefix",
+                "name": "workflow_headline_prefix",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "From scattered to"
+            },
+            {
+                "key": "field_prod_workflow_headline_italic_q9h27i",
+                "label": "Workflow Headline Italic",
+                "name": "workflow_headline_italic",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "streamlined."
+            },
+            {
+                "key": "field_prod_workflow_description_jrq4e2",
+                "label": "Workflow Description",
+                "name": "workflow_description",
+                "type": "textarea",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "Connect your systems, design your flow, and let LumaCore keep work moving."
+            },
+            {
+                "key": "field_prod_step_1_num_97nnhh",
+                "label": "Workflow Step 1 Number",
+                "name": "step_1_num",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "25",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "01"
+            },
+            {
+                "key": "field_prod_step_1_title_k2kw2h",
+                "label": "Workflow Step 1 Title",
+                "name": "step_1_title",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "25",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_prod_step_1_desc_9lfyga",
+                "label": "Workflow Step 1 Description",
+                "name": "step_1_desc",
+                "type": "textarea",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_prod_step_2_num_jlfqep",
+                "label": "Workflow Step 2 Number",
+                "name": "step_2_num",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "25",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "02"
+            },
+            {
+                "key": "field_prod_step_2_title_ogidcd",
+                "label": "Workflow Step 2 Title",
+                "name": "step_2_title",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "25",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_prod_step_2_desc_ylczy0",
+                "label": "Workflow Step 2 Description",
+                "name": "step_2_desc",
+                "type": "textarea",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_prod_step_3_num_kdz1fc",
+                "label": "Workflow Step 3 Number",
+                "name": "step_3_num",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "25",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "03"
+            },
+            {
+                "key": "field_prod_step_3_title_xrbcz7",
+                "label": "Workflow Step 3 Title",
+                "name": "step_3_title",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "25",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_prod_step_3_desc_974q1s",
+                "label": "Workflow Step 3 Description",
+                "name": "step_3_desc",
+                "type": "textarea",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_tab_prod_use_cases_b5zt07",
+                "label": "Use Cases",
+                "name": "",
+                "type": "tab",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "placement": "top",
+                "endpoint": 0
+            },
+            {
+                "key": "field_prod_use_cases_tag_u2pee5",
+                "label": "Use Cases Section Tag",
+                "name": "use_cases_tag",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "SOLUTIONS / 05"
+            },
+            {
+                "key": "field_prod_use_cases_title_h35acs",
+                "label": "Use Cases Section Title",
+                "name": "use_cases_title",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "USE CASES"
+            },
+            {
+                "key": "field_prod_use_cases_headline_prefix_pure52",
+                "label": "Use Cases Headline Prefix",
+                "name": "use_cases_headline_prefix",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "Whatever the work,"
+            },
+            {
+                "key": "field_prod_use_cases_headline_italic_x2bvro",
+                "label": "Use Cases Headline Italic",
+                "name": "use_cases_headline_italic",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "make it flow."
+            },
+            {
+                "key": "field_prod_usecase_1_num_jhzf9z",
+                "label": "Use Case 1 Number",
+                "name": "usecase_1_num",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "25",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "01"
+            },
+            {
+                "key": "field_prod_usecase_1_title_sny7yq",
+                "label": "Use Case 1 Title",
+                "name": "usecase_1_title",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "25",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_prod_usecase_1_desc_2w9v35",
+                "label": "Use Case 1 Description",
+                "name": "usecase_1_desc",
+                "type": "textarea",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_prod_usecase_1_pills_nbfkpu",
+                "label": "Use Case 1 Pills (comma separated)",
+                "name": "usecase_1_pills",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_prod_usecase_2_num_2n0glz",
+                "label": "Use Case 2 Number",
+                "name": "usecase_2_num",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "25",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "02"
+            },
+            {
+                "key": "field_prod_usecase_2_title_7wukom",
+                "label": "Use Case 2 Title",
+                "name": "usecase_2_title",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "25",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_prod_usecase_2_desc_pk3ov4",
+                "label": "Use Case 2 Description",
+                "name": "usecase_2_desc",
+                "type": "textarea",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_prod_usecase_2_pills_16v65u",
+                "label": "Use Case 2 Pills (comma separated)",
+                "name": "usecase_2_pills",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_prod_usecase_3_num_ejwiz4",
+                "label": "Use Case 3 Number",
+                "name": "usecase_3_num",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "25",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "03"
+            },
+            {
+                "key": "field_prod_usecase_3_title_sqaade",
+                "label": "Use Case 3 Title",
+                "name": "usecase_3_title",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "25",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_prod_usecase_3_desc_3el6qb",
+                "label": "Use Case 3 Description",
+                "name": "usecase_3_desc",
+                "type": "textarea",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_prod_usecase_3_pills_8xuon7",
+                "label": "Use Case 3 Pills (comma separated)",
+                "name": "usecase_3_pills",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_tab_prod_industries_we_serve_pi7ihi",
+                "label": "Industries We Serve",
+                "name": "",
+                "type": "tab",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "placement": "top",
+                "endpoint": 0
+            },
+            {
+                "key": "field_prod_industries_tag_inunvj",
+                "label": "Industries Section Tag",
+                "name": "industries_tag",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "EXPERTISE / 06"
+            },
+            {
+                "key": "field_prod_industries_title_j5q14s",
+                "label": "Industries Section Title",
+                "name": "industries_title",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "INDUSTRIES WE SERVE"
+            },
+            {
+                "key": "field_prod_industries_headline_prefix_l97snr",
+                "label": "Industries Headline Prefix",
+                "name": "industries_headline_prefix",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "Built for your\nreal-world"
+            },
+            {
+                "key": "field_prod_industries_headline_italic_eddz6b",
+                "label": "Industries Headline Italic",
+                "name": "industries_headline_italic",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "complexity."
+            },
+            {
+                "key": "field_prod_industries_description_ua18yq",
+                "label": "Industries Description",
+                "name": "industries_description",
+                "type": "textarea",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "Flexible foundations, tailored patterns, and controls for the way your industry works."
+            },
+            {
+                "key": "field_prod_ind_1_num_owbxsk",
+                "label": "Industry 1 Number",
+                "name": "ind_1_num",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "25",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "01"
+            },
+            {
+                "key": "field_prod_ind_1_name_9r8w1z",
+                "label": "Industry 1 Name",
+                "name": "ind_1_name",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "25",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_prod_ind_1_tagline_9rsnd9",
+                "label": "Industry 1 Tagline",
+                "name": "ind_1_tagline",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_prod_ind_2_num_shoy1j",
+                "label": "Industry 2 Number",
+                "name": "ind_2_num",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "25",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "02"
+            },
+            {
+                "key": "field_prod_ind_2_name_5802c9",
+                "label": "Industry 2 Name",
+                "name": "ind_2_name",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "25",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_prod_ind_2_tagline_3dce5z",
+                "label": "Industry 2 Tagline",
+                "name": "ind_2_tagline",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_prod_ind_3_num_ut3qzp",
+                "label": "Industry 3 Number",
+                "name": "ind_3_num",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "25",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "03"
+            },
+            {
+                "key": "field_prod_ind_3_name_xrkbvf",
+                "label": "Industry 3 Name",
+                "name": "ind_3_name",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "25",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_prod_ind_3_tagline_kabb9m",
+                "label": "Industry 3 Tagline",
+                "name": "ind_3_tagline",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_prod_ind_4_num_jfx19t",
+                "label": "Industry 4 Number",
+                "name": "ind_4_num",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "25",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "04"
+            },
+            {
+                "key": "field_prod_ind_4_name_wqqq6v",
+                "label": "Industry 4 Name",
+                "name": "ind_4_name",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "25",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_prod_ind_4_tagline_x92wx2",
+                "label": "Industry 4 Tagline",
+                "name": "ind_4_tagline",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_prod_ind_5_num_zbu9vv",
+                "label": "Industry 5 Number",
+                "name": "ind_5_num",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "25",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "05"
+            },
+            {
+                "key": "field_prod_ind_5_name_g1k442",
+                "label": "Industry 5 Name",
+                "name": "ind_5_name",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "25",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_prod_ind_5_tagline_1l35cj",
+                "label": "Industry 5 Tagline",
+                "name": "ind_5_tagline",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_tab_prod_technical_specs_cjwuec",
+                "label": "Technical Specs",
+                "name": "",
+                "type": "tab",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "placement": "top",
+                "endpoint": 0
+            },
+            {
+                "key": "field_prod_specs_tag_xqd3m9",
+                "label": "Specs Section Tag",
+                "name": "specs_tag",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "DETAILS / 07"
+            },
+            {
+                "key": "field_prod_specs_title_g10fsg",
+                "label": "Specs Section Title",
+                "name": "specs_title",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "TECHNICAL SPECIFICATIONS"
+            },
+            {
+                "key": "field_prod_specs_headline_prefix_tprek6",
+                "label": "Specs Headline Prefix",
+                "name": "specs_headline_prefix",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "Engineered for"
+            },
+            {
+                "key": "field_prod_specs_headline_italic_s0xy2v",
+                "label": "Specs Headline Italic",
+                "name": "specs_headline_italic",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "enterprise scale."
+            },
+            {
+                "key": "field_prod_spec_1_num_w8a5t0",
+                "label": "Spec 1 Number",
+                "name": "spec_1_num",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "20",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "01"
+            },
+            {
+                "key": "field_prod_spec_1_category_zaad6n",
+                "label": "Spec 1 Category",
+                "name": "spec_1_category",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "30",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_prod_spec_1_details_gvndwe",
+                "label": "Spec 1 Details",
+                "name": "spec_1_details",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "30",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_prod_spec_1_metric_8q60dh",
+                "label": "Spec 1 Metric",
+                "name": "spec_1_metric",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "20",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_prod_spec_2_num_lbcrml",
+                "label": "Spec 2 Number",
+                "name": "spec_2_num",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "20",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "02"
+            },
+            {
+                "key": "field_prod_spec_2_category_i0ox8s",
+                "label": "Spec 2 Category",
+                "name": "spec_2_category",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "30",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_prod_spec_2_details_j6115q",
+                "label": "Spec 2 Details",
+                "name": "spec_2_details",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "30",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_prod_spec_2_metric_zfehok",
+                "label": "Spec 2 Metric",
+                "name": "spec_2_metric",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "20",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_prod_spec_3_num_jzn6bc",
+                "label": "Spec 3 Number",
+                "name": "spec_3_num",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "20",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "03"
+            },
+            {
+                "key": "field_prod_spec_3_category_w1tsxr",
+                "label": "Spec 3 Category",
+                "name": "spec_3_category",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "30",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_prod_spec_3_details_wncdxs",
+                "label": "Spec 3 Details",
+                "name": "spec_3_details",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "30",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_prod_spec_3_metric_wl8kc8",
+                "label": "Spec 3 Metric",
+                "name": "spec_3_metric",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "20",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_prod_spec_4_num_5saypq",
+                "label": "Spec 4 Number",
+                "name": "spec_4_num",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "20",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "04"
+            },
+            {
+                "key": "field_prod_spec_4_category_kgqgkw",
+                "label": "Spec 4 Category",
+                "name": "spec_4_category",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "30",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_prod_spec_4_details_yx11hh",
+                "label": "Spec 4 Details",
+                "name": "spec_4_details",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "30",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_prod_spec_4_metric_qjkmyd",
+                "label": "Spec 4 Metric",
+                "name": "spec_4_metric",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "20",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_prod_spec_5_num_9yp5pz",
+                "label": "Spec 5 Number",
+                "name": "spec_5_num",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "20",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "05"
+            },
+            {
+                "key": "field_prod_spec_5_category_m9iooj",
+                "label": "Spec 5 Category",
+                "name": "spec_5_category",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "30",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_prod_spec_5_details_u4he8b",
+                "label": "Spec 5 Details",
+                "name": "spec_5_details",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "30",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_prod_spec_5_metric_cedtwl",
+                "label": "Spec 5 Metric",
+                "name": "spec_5_metric",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "20",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_tab_prod_integrations_f7tfqj",
+                "label": "Integrations",
+                "name": "",
+                "type": "tab",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "placement": "top",
+                "endpoint": 0
+            },
+            {
+                "key": "field_prod_integrations_tag_gef1a3",
+                "label": "Integrations Section Tag",
+                "name": "integrations_tag",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "ECOSYSTEM / 08"
+            },
+            {
+                "key": "field_prod_integrations_title_xbmf43",
+                "label": "Integrations Section Title",
+                "name": "integrations_title",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "INTEGRATIONS & COMPATIBILITY"
+            },
+            {
+                "key": "field_prod_integrations_headline_prefix_ontlsq",
+                "label": "Integrations Headline Prefix",
+                "name": "integrations_headline_prefix",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "Plays well with"
+            },
+            {
+                "key": "field_prod_integrations_headline_italic_qsds2a",
+                "label": "Integrations Headline Italic",
+                "name": "integrations_headline_italic",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "everything."
+            },
+            {
+                "key": "field_prod_integrations_description_f77krr",
+                "label": "Integrations Description",
+                "name": "integrations_description",
+                "type": "textarea",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "Connect LumaCore to the tools your teams love. Sync data, trigger actions, and build a truly connected stack."
+            },
+            {
+                "key": "field_prod_integrations_button_text_nagnhx",
+                "label": "Integrations Button Text",
+                "name": "integrations_button_text",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "View all integrations →"
+            },
+            {
+                "key": "field_prod_integrations_button_url_jaqa5n",
+                "label": "Integrations Button URL",
+                "name": "integrations_button_url",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "/contact"
+            },
+            {
+                "key": "field_tab_prod_security_&_compliance_1fr8hf",
+                "label": "Security & Compliance",
+                "name": "",
+                "type": "tab",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "placement": "top",
+                "endpoint": 0
+            },
+            {
+                "key": "field_prod_security_tag_a6lu1d",
+                "label": "Security Section Tag",
+                "name": "security_tag",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "TRUST / 09"
+            },
+            {
+                "key": "field_prod_security_title_5uxeei",
+                "label": "Security Section Title",
+                "name": "security_title",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "SECURITY & COMPLIANCE"
+            },
+            {
+                "key": "field_prod_security_headline_prefix_fl8sec",
+                "label": "Security Headline Prefix",
+                "name": "security_headline_prefix",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "Your trust is"
+            },
+            {
+                "key": "field_prod_security_headline_italic_2of7ly",
+                "label": "Security Headline Italic",
+                "name": "security_headline_italic",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "our architecture."
+            },
+            {
+                "key": "field_prod_security_description_g79osj",
+                "label": "Security Description",
+                "name": "security_description",
+                "type": "textarea",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "Security isn't a feature we add. It's the foundation we build on—from infrastructure to every interaction."
+            },
+            {
+                "key": "field_prod_sec_pillar_1_num_6r7wds",
+                "label": "Security Pillar 1 Number",
+                "name": "sec_pillar_1_num",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "25",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "01"
+            },
+            {
+                "key": "field_prod_sec_pillar_1_title_loapyb",
+                "label": "Security Pillar 1 Title",
+                "name": "sec_pillar_1_title",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "25",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_prod_sec_pillar_1_desc_o683u1",
+                "label": "Security Pillar 1 Description",
+                "name": "sec_pillar_1_desc",
+                "type": "textarea",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_prod_sec_pillar_2_num_op638w",
+                "label": "Security Pillar 2 Number",
+                "name": "sec_pillar_2_num",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "25",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "02"
+            },
+            {
+                "key": "field_prod_sec_pillar_2_title_wt8l8g",
+                "label": "Security Pillar 2 Title",
+                "name": "sec_pillar_2_title",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "25",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_prod_sec_pillar_2_desc_79u7fg",
+                "label": "Security Pillar 2 Description",
+                "name": "sec_pillar_2_desc",
+                "type": "textarea",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_prod_sec_pillar_3_num_1l46g9",
+                "label": "Security Pillar 3 Number",
+                "name": "sec_pillar_3_num",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "25",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "03"
+            },
+            {
+                "key": "field_prod_sec_pillar_3_title_99rx6m",
+                "label": "Security Pillar 3 Title",
+                "name": "sec_pillar_3_title",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "25",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_prod_sec_pillar_3_desc_d66k56",
+                "label": "Security Pillar 3 Description",
+                "name": "sec_pillar_3_desc",
+                "type": "textarea",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_prod_security_badges_van4sp",
+                "label": "Security Badges (comma separated)",
+                "name": "security_badges",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "SOC 2 TYPE II, ISO 27001, GDPR COMPLIANT, HIPAA READY"
+            },
+            {
+                "key": "field_tab_prod_faqs_jreypi",
+                "label": "FAQs",
+                "name": "",
+                "type": "tab",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "placement": "top",
+                "endpoint": 0
+            },
+            {
+                "key": "field_prod_faqs_tag_m0in7g",
+                "label": "FAQs Section Tag",
+                "name": "faqs_tag",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "SUPPORT / 10"
+            },
+            {
+                "key": "field_prod_faqs_title_dgrl24",
+                "label": "FAQs Section Title",
+                "name": "faqs_title",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "FREQUENTLY ASKED QUESTIONS (FAQS)"
+            },
+            {
+                "key": "field_prod_faqs_headline_prefix_bhsirl",
+                "label": "FAQs Headline Prefix",
+                "name": "faqs_headline_prefix",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "Good questions."
+            },
+            {
+                "key": "field_prod_faqs_headline_italic_pb53zn",
+                "label": "FAQs Headline Italic",
+                "name": "faqs_headline_italic",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "Clear answers."
+            },
+            {
+                "key": "field_prod_faqs_description_s3gfwk",
+                "label": "FAQs Description",
+                "name": "faqs_description",
+                "type": "textarea",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "Still curious? Our product specialists are here to help."
+            },
+            {
+                "key": "field_prod_faqs_contact_text_94zqje",
+                "label": "FAQs Contact Text",
+                "name": "faqs_contact_text",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "Talk to an expert"
+            },
+            {
+                "key": "field_prod_faqs_contact_url_s3yza0",
+                "label": "FAQs Contact URL",
+                "name": "faqs_contact_url",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "/contact"
+            },
+            {
+                "key": "field_prod_faq_1_num_5e7om2",
+                "label": "FAQ 1 Number",
+                "name": "faq_1_num",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "25",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "01"
+            },
+            {
+                "key": "field_prod_faq_1_question_ajalcx",
+                "label": "FAQ 1 Question",
+                "name": "faq_1_question",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "75",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_prod_faq_1_answer_e01cks",
+                "label": "FAQ 1 Answer",
+                "name": "faq_1_answer",
+                "type": "textarea",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_prod_faq_2_num_zuya6t",
+                "label": "FAQ 2 Number",
+                "name": "faq_2_num",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "25",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "02"
+            },
+            {
+                "key": "field_prod_faq_2_question_52viuw",
+                "label": "FAQ 2 Question",
+                "name": "faq_2_question",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "75",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_prod_faq_2_answer_bhz6mp",
+                "label": "FAQ 2 Answer",
+                "name": "faq_2_answer",
+                "type": "textarea",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_prod_faq_3_num_jid82i",
+                "label": "FAQ 3 Number",
+                "name": "faq_3_num",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "25",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "03"
+            },
+            {
+                "key": "field_prod_faq_3_question_lfazho",
+                "label": "FAQ 3 Question",
+                "name": "faq_3_question",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "75",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_prod_faq_3_answer_freovg",
+                "label": "FAQ 3 Answer",
+                "name": "faq_3_answer",
+                "type": "textarea",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_prod_faq_4_num_h045nq",
+                "label": "FAQ 4 Number",
+                "name": "faq_4_num",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "25",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "04"
+            },
+            {
+                "key": "field_prod_faq_4_question_sze4pm",
+                "label": "FAQ 4 Question",
+                "name": "faq_4_question",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "75",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_prod_faq_4_answer_iozudj",
+                "label": "FAQ 4 Answer",
+                "name": "faq_4_answer",
+                "type": "textarea",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": ""
+            },
+            {
+                "key": "field_tab_prod_cta_banner_7pr3p2",
+                "label": "CTA Banner",
+                "name": "",
+                "type": "tab",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "placement": "top",
+                "endpoint": 0
+            },
+            {
+                "key": "field_prod_cta_tag_jg5gvj",
+                "label": "CTA Tag",
+                "name": "cta_tag",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "READY WHEN YOU ARE"
+            },
+            {
+                "key": "field_prod_cta_line_1_7epwz8",
+                "label": "CTA Line 1",
+                "name": "cta_line_1",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "Turn your best ideas"
+            },
+            {
+                "key": "field_prod_cta_line_2_b992jz",
+                "label": "CTA Line 2",
+                "name": "cta_line_2",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "into"
+            },
+            {
+                "key": "field_prod_cta_italic_xnmue1",
+                "label": "CTA Italic Accent",
+                "name": "cta_italic",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "real momentum."
+            },
+            {
+                "key": "field_prod_cta_description_i1d01e",
+                "label": "CTA Description",
+                "name": "cta_description",
+                "type": "textarea",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "See how LumaCore can transform the way your organization works."
+            },
+            {
+                "key": "field_prod_cta_button_text_8p82ih",
+                "label": "CTA Button Text",
+                "name": "cta_button_text",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "Book your personalized demo"
+            },
+            {
+                "key": "field_prod_cta_button_url_cu2xf1",
+                "label": "CTA Button URL",
+                "name": "cta_button_url",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "/contact"
+            }
+        ],
+        "location": [
+            [
+                {
+                    "param": "post_type",
+                    "operator": "==",
+                    "value": "product"
+                }
+            ],
+            [
+                {
+                    "param": "page_template",
+                    "operator": "==",
+                    "value": "template-product.php"
+                }
+            ]
+        ],
+        "menu_order": 0,
+        "position": "normal",
+        "style": "default",
+        "label_placement": "top",
+        "instruction_placement": "label",
+        "hide_on_screen": "",
+        "active": true,
+        "description": "All editable fields for the Modern Product Description Page template (compatible with ACF Free and Pro).",
+        "show_in_graphql": 1,
+        "graphql_field_name": "productPageFields"
+    }
+]

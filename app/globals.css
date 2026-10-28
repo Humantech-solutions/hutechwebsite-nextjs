@@ -11,6 +11,14 @@
 
 :root {
   --font-size: 16px;
+  --font-family-sans: 'Manrope', system-ui, -apple-system, sans-serif;
+  --font-family-display: 'Manrope', system-ui, -apple-system, sans-serif;
+  --text-2xl: 1.5rem;
+  --text-xl: 1.25rem;
+  --text-lg: 1.125rem;
+  --text-base: 1rem;
+  --text-sm: 0.875rem;
+  --text-xs: 0.75rem;
   --background: #ffffff;
   --foreground: oklch(0.145 0 0);
   --card: #ffffff;
