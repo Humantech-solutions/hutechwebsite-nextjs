@@ -95,6 +95,7 @@ function FAQItem({ question, answer }: { question: string; answer: string }) {
 
 export default function ServiceDetailClient({ service, blogs = [] }: { service: any, blogs?: any[] }) {
   const [isContactSubmitting, setIsContactSubmitting] = useState(false);
+  const [formStatus, setFormStatus] = useState<{ type: "success" | "error" | null; message: string }>({ type: null, message: "" });
   
   const heroTitleText = service.heroTitle || service.title || "";
 

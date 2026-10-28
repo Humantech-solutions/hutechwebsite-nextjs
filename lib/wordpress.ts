@@ -1047,6 +1047,7 @@ export type WpBlog = {
     customPatternStyle?: {
       backgroundImage: string;
       backgroundSize?: string;
+      backgroundPosition?: string;
       opacity?: number;
     };
     overlayColor?: string;

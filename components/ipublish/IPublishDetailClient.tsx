@@ -4,9 +4,14 @@ import { useMemo, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { IPublishPageData, getIPublishImageUrl, normalizeIPublishHtml } from "@/lib/ipublish";
-import { getIPublishPatternStyle, extractPatternFromBody } from "@/lib/ipublish-pattern";
+import {
+  getIPublishPatternStyle,
+  extractPatternFromBody,
+  bannerTitleSpacing,
+} from "@/lib/ipublish-pattern";
 import { Linkedin, Twitter, Facebook, Share2, Calendar, Check } from "lucide-react";
 import { BlogCTAModal } from "@/components/BlogCTAModal";
+import { FAQAccordion } from "@/components/FAQAccordion";
 
 export interface RelatedBlogItem {
   id?: string;
@@ -190,7 +195,15 @@ export function IPublishDetailClient({
   const titleLineHeight = content.title_line_height ? content.title_line_height / 100 : 1.15;
   const titleMarginX = content.title_margin_x || 0;
   const titleMarginY = content.title_margin_y || 0;
-  const titlePadding = content.featured_title_padding ?? 32;
+  const titlePadding = content.featured_title_padding ?? 24;
+
+  const titleSpacing = useMemo(() => {
+    return bannerTitleSpacing({
+      featured_title_padding: titlePadding,
+      title_margin_x: titleMarginX,
+      title_margin_y: titleMarginY,
+    });
+  }, [titlePadding, titleMarginX, titleMarginY]);
 
   // Title Position Mapping
   const positionClass = useMemo(() => {
@@ -263,7 +276,7 @@ export function IPublishDetailClient({
   const featuredImageUrl = getIPublishImageUrl(content.featured_image_url);
   const bannerMinHeight = content.featured_image_height
     ? `clamp(150px, 26vw, ${content.featured_image_height}px)`
-    : "clamp(150px, 26vw, 260px)";
+    : "clamp(150px, 26vw, 350px)";
 
   // Dynamic Date & Read Time
   const dateFormatted = useMemo(() => {
@@ -316,6 +329,7 @@ export function IPublishDetailClient({
         <div
           className="banner-title-container relative flex overflow-hidden"
           style={{
+            containerType: "inline-size",
             minHeight: bannerMinHeight,
             marginBottom: "30px",
             background: `linear-gradient(${gradientDirection}, ${gradientFrom}, ${gradientTo})`,
@@ -328,6 +342,7 @@ export function IPublishDetailClient({
               style={{
                 backgroundImage: patternStyle.backgroundImage,
                 backgroundSize: patternStyle.backgroundSize,
+                backgroundPosition: patternStyle.backgroundPosition,
                 opacity: patternStyle.opacity,
                 zIndex: 0,
               }}
@@ -378,12 +393,7 @@ export function IPublishDetailClient({
                             ? "items-end justify-end"
                             : "items-center justify-center"
             }`}
-            style={{
-              paddingLeft: `calc(clamp(12px, 2.667cqw, ${titlePadding}px) + clamp(0px, 1.667cqw, ${titleMarginX}px))`,
-              paddingRight: `calc(clamp(12px, 2.667cqw, ${titlePadding}px) + clamp(0px, 1.667cqw, ${titleMarginX}px))`,
-              paddingTop: `calc(clamp(12px, 2.667cqw, ${titlePadding}px) + ${titleMarginY}px)`,
-              paddingBottom: `calc(clamp(12px, 2.667cqw, ${titlePadding}px) + ${titleMarginY}px)`,
-            }}
+            style={titleSpacing}
           >
             <div
               className={`flex flex-col ${
@@ -699,6 +709,18 @@ export function IPublishDetailClient({
                         dangerouslySetInnerHTML={{ __html: contentPart2 }}
                       />
                     ) : null}
+
+                    {/* FAQ Section */}
+                    {content.faq_enabled !== false && content.faqs && content.faqs.length > 0 && (
+                      <div className="mt-12 space-y-6">
+                        <div>
+                          <h3 className="text-2xl font-bold text-[#172033]">
+                            Frequently Asked Questions
+                          </h3>
+                        </div>
+                        <FAQAccordion faqs={content.faqs} />
+                      </div>
+                    )}
 
                     {/* ========================================================================= */}
                     {/* 4. ARTICLE-BOTTOM IMAGE / CTA SECTION (MATCHING article-bottom.png) */}

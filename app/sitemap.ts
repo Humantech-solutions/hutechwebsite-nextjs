@@ -2,6 +2,7 @@ import type { MetadataRoute } from "next";
 import { siteConfig } from "@/config/site";
 import { getSitemapData, getCareers } from "@/lib/wordpress";
 import { getRecruitProJobs } from "@/lib/api";
+import { getIPublishAllBlogs } from "@/lib/ipublish";
 
 // Enable dynamic rendering so new CMS pages and posts appear automatically without rebuilding
 export const dynamic = "force-dynamic";
@@ -17,10 +18,11 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const now = new Date();
 
   // Dynamically load all sections from the existing CMS sitemap generator (pages, services, industries, blogs, case studies, events, docs, legal)
-  const [sitemapSections, wpJobs, recruitProJobs] = await Promise.all([
+  const [sitemapSections, wpJobs, recruitProJobs, ipublishBlogs] = await Promise.all([
     getSitemapData().catch(() => []),
     getCareers().catch(() => []),
     getRecruitProJobs().catch(() => []),
+    getIPublishAllBlogs().catch(() => []),
   ]);
 
   // Extract all page and post paths generated automatically by getSitemapData()
@@ -33,6 +35,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ...wpJobs.filter((j) => j.id && j.id !== "careers").map((j) => `/careers/${j.id}/`),
     ...recruitProJobs.filter((j) => j.id && j.id !== "careers").map((j) => `/careers/${j.id}/`),
   ];
+
+  // Extract ipublish blog paths
+  const ipublishPaths = ipublishBlogs.map((b) => `/resources/blogs/ipublish/${b.slug || b.id}/`);
 
   // Primary hubs
   const baseHubs = [
@@ -65,6 +70,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ...baseHubs,
     ...sitemapPaths,
     ...jobPaths,
+    ...ipublishPaths,
   ]
     .filter((path) => path && path !== "#" && !path.startsWith("http"))
     .map((path) => {
