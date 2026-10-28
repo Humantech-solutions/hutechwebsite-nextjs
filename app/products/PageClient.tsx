@@ -40,132 +40,23 @@ import { ImageWithFallback } from "@/components/figma/ImageWithFallback";
 
 const CATEGORIES = [
   "All Products",
-  "Gen AI Products",
-  "AI productivity tools",
-  "DevOps & SRE Automation",
-  "LMS",
-  "ERP & Office Productivity",
-  "Logistics and Delivery",
+  "The Intelligent Work Platform",
 ];
 
 const PRODUCTS_DATA = [
   {
-    id: "sentinelcore",
-    title: "SentinelCore AI",
-    category: "Gen AI Products",
+    id: "product-1",
+    title: "LumaCore",
+    category: "The Intelligent Work Platform",
     description:
-      "Generative AI-driven security platform providing proactive threat hunting and automated incident response.",
-    icon: <Shield className="h-6 w-6" />,
-    image:
-      "https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&q=80&w=800",
-    color: "#F99D1C",
-  },
-  {
-    id: "visionsense",
-    title: "VisionSense Analytics",
-    category: "Gen AI Products",
-    description:
-      "Industrial computer vision for real-time quality inspection and safety monitoring using generative models.",
-    icon: <Eye className="h-6 w-6" />,
-    image:
-      "https://images.unsplash.com/photo-1485827404703-89b55fcc595e?auto=format&fit=crop&q=80&w=800",
-    color: "#0171c1",
-  },
-  {
-    id: "automation-forge",
-    title: "Automation Forge",
-    category: "AI productivity tools",
-    description: "Low-code platform for building complex RPA workflows with cognitive AI.",
+      "LumaCore connects your people, data, and workflows in one adaptive platform—so your organization can move with clarity and speed.",
     icon: <Sparkles className="h-6 w-6" />,
     image:
-      "https://images.unsplash.com/photo-1531297484001-80022131f5a1?auto=format&fit=crop&q=80&w=800",
-    color: "#0171c1",
-  },
-  {
-    id: "hutech-assist",
-    title: "Hutech Assist",
-    category: "AI productivity tools",
-    description:
-      "Enterprise-wide AI assistant for technical documentation and knowledge management.",
-    icon: <FileText className="h-6 w-6" />,
-    image:
-      "https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&q=80&w=800",
-    color: "#F99D1C",
-  },
-  {
-    id: "cloudorbit",
-    title: "CloudOrbit SRE",
-    category: "DevOps & SRE Automation",
-    description: "Automated reliability engineering platform for complex multi-cloud deployments.",
-    icon: <Zap className="h-6 w-6" />,
-    image:
-      "https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&q=80&w=800",
-    color: "#F99D1C",
-  },
-  {
-    id: "skynode-edge",
-    title: "SkyNode Edge",
-    category: "DevOps & SRE Automation",
-    description:
-      "Distributed infrastructure for low-latency edge computing and local data processing.",
-    icon: <HardDrive className="h-6 w-6" />,
-    image:
-      "https://images.unsplash.com/photo-1544197150-b99a580bb7a8?auto=format&fit=crop&q=80&w=800",
-    color: "#0171c1",
-  },
-  {
-    id: "edu-nexus",
-    title: "EduNexus LMS",
-    category: "LMS",
-    description:
-      "Comprehensive learning management system for enterprise training and skill certification.",
-    icon: <GraduationCap className="h-6 w-6" />,
-    image:
-      "https://images.unsplash.com/photo-1501504905252-473c47e087f8?auto=format&fit=crop&q=80&w=800",
-    color: "#F99D1C",
-  },
-  {
-    id: "erp-nexus",
-    title: "ERP Nexus",
-    category: "ERP & Office Productivity",
-    description: "Seamless integration layer for SAP, Oracle, and modern cloud applications.",
-    icon: <ExternalLink className="h-6 w-6" />,
-    image:
-      "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&q=80&w=800",
-    color: "#0171c1",
-  },
-  {
-    id: "office-flow",
-    title: "OfficeFlow",
-    category: "ERP & Office Productivity",
-    description:
-      "Unified productivity suite for team collaboration and document workflow automation.",
-    icon: <Briefcase className="h-6 w-6" />,
-    image:
-      "https://images.unsplash.com/photo-1497215728101-856f4ea42174?auto=format&fit=crop&q=80&w=800",
-    color: "#F99D1C",
-  },
-  {
-    id: "supplychain-sentry",
-    title: "SupplyChain Sentry",
-    category: "Logistics and Delivery",
-    description: "Real-time logistics optimization and risk management for global supply chains.",
-    icon: <Truck className="h-6 w-6" />,
-    image:
-      "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&q=80&w=800",
-    color: "#0171c1",
-  },
-  {
-    id: "hutrac-gps",
-    title: "HuTrac GPS",
-    category: "Logistics and Delivery",
-    description: "Advanced fleet tracking and route optimization for last-mile delivery services.",
-    icon: <Activity className="h-6 w-6" />,
-    image:
-      "https://images.unsplash.com/photo-1519003722824-194d4455a60c?auto=format&fit=crop&q=80&w=800",
-    color: "#F99D1C",
+      "https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&q=80&w=800",
+    color: "#BEF264",
   },
 ];
+
 
 function ProductsContent() {
   const searchParams = useSearchParams();
