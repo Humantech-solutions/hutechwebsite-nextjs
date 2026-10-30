@@ -50,6 +50,9 @@ export interface IPublishPageData {
   org?: string;
   id?: string;
   current_body?: string;
+  status?: string;
+  seo_metadata?: Record<string, any>;
+  destination_ids?: string[];
   destinations?: {
     name?: string;
     domain?: string;
@@ -335,7 +338,10 @@ export async function getIPublishContentDetailsById(
       canonical_url: data.seo_metadata?.canonical_url,
       slug: data.seo_metadata?.slug || data.slug,
       id: data.id,
+      status: data.status,
       author_name: data.author_name,
+      seo_metadata: data.seo_metadata,
+      destination_ids: data.destination_ids,
       faqs,
       faq_enabled: data.seo_metadata?.faq_enabled ?? data.faq_enabled ?? (faqs.length > 0),
     };
@@ -571,10 +577,66 @@ export async function getIPublishContentById(idOrSlug: string): Promise<IPublish
 
   // Try direct content API fetch by ID
   const directDetail = await getIPublishContentDetailsById(idOrSlug);
-  if (directDetail) return directDetail;
-
   // Search in all published content if not direct match
   const allBlogs = await getIPublishAllBlogs();
   const matched = allBlogs.find((b) => b.slug === idOrSlug || b.id === idOrSlug);
   return matched || null;
 }
+
+/**
+ * Fetches all content records from iPublish with their real lifecycle status (published, unpublished, draft).
+ * Used for bidirectional synchronization and reconciliation with WordPress.
+ */
+export async function getAllIPublishContentWithStatus(): Promise<IPublishPageData[]> {
+  try {
+    const res = await fetch(`${IPUBLISH_BASE_URL}/api/v1/content?limit=100`, {
+      headers: {
+        Authorization: `Bearer ${IPUBLISH_STATIC_TOKEN}`,
+        "Content-Type": "application/json",
+      },
+      cache: "no-store",
+    });
+
+    if (!res.ok) {
+      console.warn("[iPublish] Failed to fetch /api/v1/content:", res.status);
+      return [];
+    }
+
+    const data = await res.json();
+    const items = Array.isArray(data) ? data : data.items || [];
+
+    const detailedList = await Promise.all(
+      items.map(async (item: any) => {
+        let detail = await getIPublishContentDetailsById(item.id);
+        const resolvedSlug =
+          detail?.slug ||
+          detail?.seo_metadata?.slug ||
+          item.slug ||
+          item.seo_metadata?.slug;
+
+        if (detail) {
+          return {
+            ...detail,
+            status: item.status || detail.status || "published",
+            slug: resolvedSlug,
+          };
+        }
+
+        return {
+          id: item.id,
+          title: item.title,
+          status: item.status || "published",
+          slug: resolvedSlug,
+          subcategory: item.subcategory,
+          author_name: item.author_name,
+        } as IPublishPageData;
+      })
+    );
+
+    return detailedList.filter((item) => Boolean(item.slug || item.id));
+  } catch (error) {
+    console.error("[iPublish] Error in getAllIPublishContentWithStatus:", error);
+    return [];
+  }
+}
+

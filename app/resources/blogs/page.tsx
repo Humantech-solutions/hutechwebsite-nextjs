@@ -2,6 +2,7 @@ import { Suspense } from "react";
 import BlogsClient from "./BlogsClient";
 import { getBlogs, getBlogPageData } from "@/lib/wordpress";
 import { getIPublishAllBlogs, getIPublishImageUrl } from "@/lib/ipublish";
+import { autoSyncMissingIPublishPosts } from "@/lib/wordpress-sync";
 import { extractPatternFromBody } from "@/lib/ipublish-pattern";
 import { constructMetadata } from "@/lib/seo";
 
@@ -20,6 +21,9 @@ export default async function BlogsPage() {
     getBlogPageData(),
     getIPublishAllBlogs(),
   ]);
+
+  // Non-blocking auto-sync in the background so newly published iPublish blogs are automatically stored in WordPress
+  void autoSyncMissingIPublishPosts(ipublishData);
 
   const ipublishBlogs = ipublishData.map((item) => {
     const rawDate = item.updated_at || item.published_at || item.created_at;
@@ -83,7 +87,17 @@ export default async function BlogsPage() {
     };
   });
 
-  const allBlogs = [...ipublishBlogs, ...wpBlogs];
+  // Deduplicate by slug so synced WordPress posts and iPublish posts never duplicate on frontend
+  const seenSlugs = new Set<string>();
+  const allBlogs: (typeof ipublishBlogs[0] | (typeof wpBlogs)[0])[] = [];
+
+  for (const blog of [...ipublishBlogs, ...wpBlogs]) {
+    const slugKey = blog.slug || blog.id;
+    if (slugKey && !seenSlugs.has(slugKey)) {
+      seenSlugs.add(slugKey);
+      allBlogs.push(blog);
+    }
+  }
 
   // Page title/description: WP ACF if available, else defaults
   const pageTitle = wpPageData?.title || "Insights &|Perspectives.";

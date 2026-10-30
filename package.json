@@ -8,7 +8,8 @@
     "build": "next build --webpack",
     "start": "next start -p ${PORT:-3000}",
     "lint": "next lint",
-    "format": "prettier --write ."
+    "format": "prettier --write .",
+    "sync:ipublish": "npx tsx scripts/sync_ipublish_to_wp.ts"
   },
   "dependencies": {
     "@emotion/react": "^11.14.0",
