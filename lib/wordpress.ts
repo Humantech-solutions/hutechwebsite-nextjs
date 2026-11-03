@@ -167,18 +167,34 @@ function imgUrl(field: any): string | undefined {
 // ─── Homepage Query ──────────────────────────────────────────────────────────
 
 export type ChromeMenuItem = {
+  id?: number;
+  parentId?: number;
   label: string;
   path: string;
+  description?: string;
+  exploreText?: string;
   children?: ChromeMenuItem[];
+};
+
+export type DropdownItem = {
+  name: string;
+  path: string;
+  description?: string;
+  exploreText?: string;
+  icon?: string;
+};
+
+export type DropdownSection = {
+  title: string;
+  path?: string;
+  description?: string;
+  items: DropdownItem[];
 };
 
 export type HeaderNavItem = {
   label: string;
   path: string;
-  dropdown?: {
-    title: string;
-    items: { name: string; path: string }[];
-  }[];
+  dropdown?: DropdownSection[];
 };
 
 export type TopNavChromeData = {
@@ -260,56 +276,121 @@ export type SiteChromeData = {
   footer: FooterChromeData;
 };
 
-function applyParentSlug(parentPath: string | undefined, childPath: string | undefined): string {
-  const p = parentPath || "#";
-  let c = childPath || "#";
-  if (c === "#" || c.startsWith("http") || p === "#" || p === "/") return c;
+export function normalizeMenuPath(rawPath: string | undefined): string {
+  if (!rawPath || rawPath === "#" || rawPath === "") return "#";
+  if (
+    rawPath.startsWith("http://") ||
+    rawPath.startsWith("https://") ||
+    rawPath.startsWith("mailto:") ||
+    rawPath.startsWith("tel:")
+  ) {
+    if (WORDPRESS_BASE_URL && rawPath.startsWith(WORDPRESS_BASE_URL)) {
+      rawPath = rawPath.slice(WORDPRESS_BASE_URL.length);
+    } else {
+      return rawPath;
+    }
+  }
 
-  // Remove the default CPT slugs if they exist so we can cleanly append to the parent
-  // WordPress sometimes prefixes CPT slugs with /blog/ — handle both patterns
-  c = c.replace(
+  let p = rawPath.trim();
+  p = p.replace(
     /^\/(blog\/)?(hutech_service|case_study|hutech_event|hutech_news|hutech_career|hutech_press_release|hutech_document)\//,
     "/"
   );
 
-  const cleanP = p.replace(/\/$/, "");
-  if (!c.startsWith(cleanP + "/") && c !== cleanP) {
-    const cleanC = c.startsWith("/") ? c : `/${c}`;
-    c = `${cleanP}${cleanC}`;
+  // Normalize slashes
+  if (!p.startsWith("/")) p = `/${p}`;
+  if (p.length > 1 && p.endsWith("/")) p = p.slice(0, -1);
+
+  // Map known routes
+  if (p === "/home") return "/";
+  if (p === "/services" || p.startsWith("/services/")) return p;
+  if (p === "/events") return "/resources/events";
+  if (p === "/case-studies") return "/resources/case-studies";
+  if (p === "/blogs") return "/resources/blogs";
+  if (p === "/hutech-documents") return "/resources/hutech-documents";
+  if (p === "/leadership") return "/company/leadership";
+  if (p === "/vision-mission-values") return "/company/vision-mission-values";
+  if (p === "/partnership") return "/company/partnership";
+  if (p === "/life-at-hutech") return "/company/life-at-hutech";
+  if (p === "/awards") return "/company/awards";
+  if (p === "/press-release") return "/company/press-release";
+  if (p === "/news") return "/company/news";
+
+  return p;
+}
+
+function applyParentSlug(parentPath: string | undefined, childPath: string | undefined): string {
+  const normChild = normalizeMenuPath(childPath);
+  if (normChild === "#" || normChild.startsWith("http") || normChild === "/") return normChild;
+
+  const topSections = ["/services", "/resources", "/company", "/about", "/careers", "/contact", "/industries", "/products"];
+  if (topSections.some((s) => normChild === s || normChild.startsWith(`${s}/`))) {
+    return normChild;
   }
-  return c;
+
+  const p = parentPath || "#";
+  if (p === "#" || p === "/" || p.includes("what-we-do")) return normChild;
+
+  const cleanP = p.replace(/\/$/, "");
+  if (!normChild.startsWith(cleanP + "/") && normChild !== cleanP) {
+    return `${cleanP}${normChild}`;
+  }
+  return normChild;
 }
 
 function flattenMenuItems(
   items?: ChromeMenuItem[],
   parentPath?: string
-): { name: string; path: string }[] {
+): DropdownItem[] {
   return (items || []).map((item) => ({
     name: item.label,
-    path: parentPath ? applyParentSlug(parentPath, item.path) : item.path || "#",
+    path: parentPath ? applyParentSlug(parentPath, item.path) : normalizeMenuPath(item.path),
+    description: (item as any).description,
+    exploreText: (item as any).exploreText,
   }));
 }
 
 function transformPrimaryMenu(items?: ChromeMenuItem[]): HeaderNavItem[] {
   return (items || []).map((item) => {
-    // Infer a parent path if the top-level item uses '#' or '/'
+    const isServicesOrWhatWeDo =
+      item.label.toLowerCase().includes("service") ||
+      item.label.toLowerCase().includes("what we do");
+
     const parentPath =
       item.path && item.path !== "#" && item.path !== "/"
-        ? item.path
+        ? normalizeMenuPath(item.path)
+        : isServicesOrWhatWeDo
+        ? "/services"
         : `/${item.label.toLowerCase().replace(/[^a-z0-9]+/g, "-")}`;
 
     const dropdown = item.children?.length
-      ? item.children.map((section) => ({
-          title: section.label,
-          items: section.children?.length
-            ? flattenMenuItems(section.children, parentPath)
-            : [{ name: section.label, path: applyParentSlug(parentPath, section.path) }],
-        }))
+      ? item.children.map((section, sectionIdx) => {
+          const sectionPath = normalizeMenuPath(section.path);
+          return {
+            title: section.label,
+            path: sectionPath === "#" && isServicesOrWhatWeDo && sectionIdx === 0 ? "/services" : sectionPath,
+            description: (section as any).description,
+            items: section.children?.length
+              ? flattenMenuItems(section.children, isServicesOrWhatWeDo ? undefined : parentPath)
+              : [
+                  {
+                    name: section.label,
+                    path: sectionPath === "#" && isServicesOrWhatWeDo && sectionIdx === 0
+                      ? "/services"
+                      : sectionPath !== "#"
+                      ? sectionPath
+                      : applyParentSlug(parentPath, section.path),
+                    description: (section as any).description,
+                    exploreText: (section as any).exploreText,
+                  },
+                ],
+          };
+        })
       : undefined;
 
     return {
       label: item.label,
-      path: item.path || "#",
+      path: isServicesOrWhatWeDo ? "/services" : (item.path ? normalizeMenuPath(item.path) : "#"),
       dropdown,
     };
   });
