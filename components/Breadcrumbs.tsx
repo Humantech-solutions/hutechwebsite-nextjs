@@ -47,6 +47,13 @@ export function Breadcrumbs({ variant = "light" }: BreadcrumbsProps) {
     "logistics-supply-chain": "Logistics & Supply Chain",
     manufacturing: "Manufacturing",
     "retail-consumer": "Retail & Consumer",
+    "legacy-application-modernization": "Legacy Application Modernization",
+    "legacy-java-application-modernization": "Java Modernization",
+    "legacy-dotnet-application-modernization": ".NET Modernization",
+    "legacy-php-application-modernization": "PHP Modernization",
+    "legacy-ruby-on-rails-application-modernization": "Ruby on Rails Modernization",
+    "legacy-cobol-application-modernization": "COBOL Modernization",
+    "legacy-python-application-modernization": "Python Modernization",
   };
 
   const isLight = variant === "light";
