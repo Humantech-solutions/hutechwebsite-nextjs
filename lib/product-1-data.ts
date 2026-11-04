@@ -3,6 +3,7 @@ import { ModernProductData } from "@/components/products/ModernProductTemplate";
 export const PRODUCT_1_DATA: ModernProductData = {
   hero: {
     badge: "THE INTELLIGENT WORK PLATFORM",
+    title: "Make complex\nwork feel |effortless.",
     titleLine1: "Make complex",
     titleLine2: "work feel",
     titleItalic: "effortless.",
@@ -26,6 +27,7 @@ export const PRODUCT_1_DATA: ModernProductData = {
   overview: {
     sectionTag: "PRODUCT / 01",
     sectionTitle: "PRODUCT OVERVIEW",
+    headline: "One platform.\n|Every possibility.",
     headlineLine1: "One platform.",
     headlineItalic: "Every possibility.",
     description:
@@ -38,6 +40,7 @@ export const PRODUCT_1_DATA: ModernProductData = {
   features: {
     sectionTag: "CAPABILITY / 02",
     sectionTitle: "KEY FEATURES",
+    headline: "Built for the way |great teams work.",
     headlinePrefix: "Built for the way",
     headlineItalic: "great teams work.",
     description: "Powerful enough for your most complex processes. Simple enough for everyone to use.",
@@ -88,6 +91,7 @@ export const PRODUCT_1_DATA: ModernProductData = {
   howItWorks: {
     sectionTag: "WORKFLOW / 04",
     sectionTitle: "HOW IT WORKS",
+    headline: "From signals to action in\n|three steps.",
     headlinePrefix: "From scattered to",
     headlineItalic: "streamlined.",
     description: "Connect your systems, design your flow, and let LumaCore keep work moving.",
@@ -115,6 +119,7 @@ export const PRODUCT_1_DATA: ModernProductData = {
   useCases: {
     sectionTag: "SOLUTIONS / 05",
     sectionTitle: "USE CASES",
+    headline: "Built for the workflows that\n|drive your business.",
     headlinePrefix: "Whatever the work,",
     headlineItalic: "make it flow.",
     cards: [
@@ -185,6 +190,7 @@ export const PRODUCT_1_DATA: ModernProductData = {
   technicalSpecs: {
     sectionTag: "DETAILS / 07",
     sectionTitle: "TECHNICAL SPECIFICATIONS",
+    headline: "Enterprise-grade architecture\n|at every layer.",
     headlinePrefix: "Engineered for",
     headlineItalic: "enterprise scale.",
     specs: [
@@ -223,6 +229,7 @@ export const PRODUCT_1_DATA: ModernProductData = {
   integrations: {
     sectionTag: "ECOSYSTEM / 08",
     sectionTitle: "INTEGRATIONS & COMPATIBILITY",
+    headline: "Plays well with\n|everything.",
     headlinePrefix: "Plays well with",
     headlineItalic: "everything.",
     description:
@@ -233,6 +240,7 @@ export const PRODUCT_1_DATA: ModernProductData = {
   security: {
     sectionTag: "TRUST / 09",
     sectionTitle: "SECURITY & COMPLIANCE",
+    headline: "Security that never slows\n|you down.",
     headlinePrefix: "Your trust is",
     headlineItalic: "our architecture.",
     description:

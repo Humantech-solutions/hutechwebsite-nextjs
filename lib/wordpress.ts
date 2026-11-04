@@ -1,3 +1,5 @@
+import type { ModernProductData } from "@/components/products/ModernProductTemplate";
+import { PRODUCT_1_DATA } from "@/lib/product-1-data";
 import { CaseStudy } from "@/lib/data/case-studies";
 import { getIPublishAllBlogs } from "@/lib/ipublish";
 // WordPress GraphQL API integration for Hutech Solutions
@@ -5016,4 +5018,300 @@ export async function getSitemapData(
     console.warn("[WP] getSitemapData failed:", err);
     return [];
   }
+}
+
+export function transformProductNode(node: any, defaultData?: ModernProductData): ModernProductData {
+  const f = node.productFields || node.acf || {};
+  const base = defaultData || PRODUCT_1_DATA;
+
+  const parsePills = (pillsStr?: string, defaultPills: string[] = []): string[] => {
+    if (!pillsStr || typeof pillsStr !== "string" || !pillsStr.trim()) return defaultPills;
+    return pillsStr.split(/[,;\n]+/).map((s) => s.trim()).filter(Boolean);
+  };
+
+  const getMediaUrl = (field: any): string | undefined => {
+    if (!field) return undefined;
+    if (typeof field === "string") return field;
+    if (field.node?.sourceUrl) return field.node.sourceUrl;
+    if (field.url) return field.url;
+    return undefined;
+  };
+
+  return {
+    hero: {
+      badge: f.heroBadge || base.hero.badge,
+      title: f.heroTitle || f.heroHeadline || base.hero.title,
+      titleLine1: f.heroTitleLine1 || base.hero.titleLine1,
+      titleLine2: f.heroTitleLine2 || base.hero.titleLine2,
+      titleItalic: f.heroTitleItalic || base.hero.titleItalic,
+      description: f.heroDescription || base.hero.description,
+      primaryCtaText: f.heroBtn1Text || base.hero.primaryCtaText,
+      primaryCtaUrl: f.heroBtn1Url || base.hero.primaryCtaUrl,
+      secondaryCtaText: f.heroBtn2Text || base.hero.secondaryCtaText,
+      demoVideoUrl: f.heroDemoVideoUrl || base.hero.demoVideoUrl,
+      demoVideoEmbed: f.heroDemoVideoEmbed || base.hero.demoVideoEmbed,
+      image: getMediaUrl(f.heroImage) || base.hero.image,
+      ratingScore: f.heroRatingScore || base.hero.ratingScore,
+      ratingText: f.heroRatingText || base.hero.ratingText,
+      dashboard: {
+        velocity: f.heroDashVelocity || base.hero.dashboard?.velocity || "94.8%",
+        velocityDelta: f.heroDashVelocityDelta || base.hero.dashboard?.velocityDelta || "+12.4%",
+        activeTasks: f.heroDashActiveTasks || base.hero.dashboard?.activeTasks || "1,284",
+        activeTasksDelta: f.heroDashActiveTasksDelta || base.hero.dashboard?.activeTasksDelta || "+8.1%",
+        timeSavedWeekly: f.heroDashTimeSavedWeekly || base.hero.dashboard?.timeSavedWeekly || "Time saved this week: 128 hours",
+        activeTaskTitle: f.heroDashActiveTaskTitle || base.hero.dashboard?.activeTaskTitle || "Automated lead scoring",
+        activeTaskSubtitle: f.heroDashActiveTaskSubtitle || base.hero.dashboard?.activeTaskSubtitle || "Qualify inbound leads",
+      },
+    },
+    overview: {
+      sectionTag: f.overviewSectionTag || base.overview.sectionTag,
+      sectionTitle: f.overviewSectionTitle || base.overview.sectionTitle,
+      headline: f.overviewHeadline || f.overviewTitle || base.overview.headline,
+      headlineLine1: f.overviewHeadlineLine1 || base.overview.headlineLine1,
+      headlineItalic: f.overviewHeadlineItalic || base.overview.headlineItalic,
+      description: f.overviewDescription || base.overview.description,
+      stat1Value: f.overviewStat1Value || base.overview.stat1Value,
+      stat1Label: f.overviewStat1Label || base.overview.stat1Label,
+      stat2Value: f.overviewStat2Value || base.overview.stat2Value,
+      stat2Label: f.overviewStat2Label || base.overview.stat2Label,
+      image: getMediaUrl(f.overviewImage) || base.overview.image,
+    },
+    features: {
+      sectionTag: f.featuresSectionTag || base.features.sectionTag,
+      sectionTitle: f.featuresSectionTitle || base.features.sectionTitle,
+      headline: f.featuresHeadline || f.featuresTitle || base.features.headline,
+      headlinePrefix: f.featuresHeadlinePrefix || base.features.headlinePrefix,
+      headlineItalic: f.featuresHeadlineItalic || base.features.headlineItalic,
+      description: f.featuresDescription || base.features.description,
+      cards: [1, 2, 3, 4].map((num, i) => {
+        const fallback = base.features.cards[i] || {
+          number: `0${num}`,
+          title: `Feature ${num}`,
+          description: "",
+          iconType: "concentric" as const,
+        };
+        return {
+          number: f[`feature${num}Number`] || fallback.number,
+          title: f[`feature${num}Title`] || fallback.title,
+          description: f[`feature${num}Description`] || fallback.description,
+          iconType: (f[`feature${num}IconType`] as any) || fallback.iconType || "concentric",
+          iconImage: getMediaUrl(f[`feature${num}IconImage`]) || fallback.iconImage,
+        };
+      }),
+    },
+    benefits: {
+      sectionTag: f.benefitsSectionTag || base.benefits.sectionTag,
+      sectionTitle: f.benefitsSectionTitle || base.benefits.sectionTitle,
+      headline: f.benefitsHeadline || f.benefitsTitle || base.benefits.headline,
+      headlineLine1: f.benefitsHeadlineLine1 || base.benefits.headlineLine1,
+      headlineItalic: f.benefitsHeadlineItalic || base.benefits.headlineItalic,
+      description: f.benefitsDescription || base.benefits.description,
+      donutStat: f.benefitsDonutStat || base.benefits.donutStat,
+      donutLabel: f.benefitsDonutLabel || base.benefits.donutLabel,
+      card1Title: f.benefitsCard1Title || base.benefits.card1Title,
+      card1Description: f.benefitsCard1Description || base.benefits.card1Description,
+      card2Title: f.benefitsCard2Title || base.benefits.card2Title,
+      card2Description: f.benefitsCard2Description || base.benefits.card2Description,
+      card2Stat: f.benefitsCard2Stat || base.benefits.card2Stat,
+      card2StatLabel: f.benefitsCard2StatLabel || base.benefits.card2StatLabel,
+      card3Title: f.benefitsCard3Title || base.benefits.card3Title,
+      card3Description: f.benefitsCard3Description || base.benefits.card3Description,
+    },
+    howItWorks: {
+      sectionTag: f.howSectionTag || base.howItWorks.sectionTag,
+      sectionTitle: f.howSectionTitle || base.howItWorks.sectionTitle,
+      headline: f.howHeadline || f.howItWorksHeadline || base.howItWorks.headline,
+      headlinePrefix: f.howHeadlinePrefix || base.howItWorks.headlinePrefix,
+      headlineItalic: f.howHeadlineItalic || base.howItWorks.headlineItalic,
+      description: f.howDescription || base.howItWorks.description,
+      steps: [1, 2, 3].map((num, i) => {
+        const fallback = base.howItWorks.steps[i] || {
+          number: `0${num}`,
+          title: `Step ${num}`,
+          description: "",
+          activeStep: num as 1 | 2 | 3,
+        };
+        return {
+          number: f[`howStep${num}Number`] || fallback.number,
+          title: f[`howStep${num}Title`] || fallback.title,
+          description: f[`howStep${num}Description`] || fallback.description,
+          activeStep: (num as 1 | 2 | 3),
+        };
+      }),
+    },
+    useCases: {
+      sectionTag: f.useCasesSectionTag || base.useCases.sectionTag,
+      sectionTitle: f.useCasesSectionTitle || base.useCases.sectionTitle,
+      headline: f.useCasesHeadline || f.useCasesTitle || base.useCases.headline,
+      headlinePrefix: f.useCasesHeadlinePrefix || base.useCases.headlinePrefix,
+      headlineItalic: f.useCasesHeadlineItalic || base.useCases.headlineItalic,
+      cards: [1, 2, 3].map((num, i) => {
+        const fallback = base.useCases.cards[i] || {
+          number: `0${num}`,
+          title: `Use Case ${num}`,
+          description: "",
+          pills: [],
+        };
+        return {
+          number: f[`useCase${num}Number`] || fallback.number,
+          title: f[`useCase${num}Title`] || fallback.title,
+          description: f[`useCase${num}Description`] || fallback.description,
+          pills: parsePills(f[`useCase${num}Pills`], fallback.pills),
+        };
+      }),
+    },
+    industries: {
+      sectionTag: f.industriesSectionTag || base.industries.sectionTag,
+      sectionTitle: f.industriesSectionTitle || base.industries.sectionTitle,
+      headline: f.industriesHeadline || f.industriesTitle || base.industries.headline,
+      headlinePrefix: f.industriesHeadlinePrefix || base.industries.headlinePrefix,
+      headlineItalic: f.industriesHeadlineItalic || base.industries.headlineItalic,
+      description: f.industriesDescription || base.industries.description,
+      items: [1, 2, 3, 4, 5].map((num, i) => {
+        const fallback = base.industries.items[i] || {
+          number: `0${num}`,
+          name: `Industry ${num}`,
+          tagline: "",
+          description: "",
+        };
+        return {
+          number: f[`industry${num}Number`] || fallback.number,
+          name: f[`industry${num}Name`] || fallback.name,
+          tagline: f[`industry${num}Tagline`] || fallback.tagline,
+          description: f[`industry${num}Description`] || fallback.description,
+        };
+      }),
+    },
+    technicalSpecs: {
+      sectionTag: f.specsSectionTag || base.technicalSpecs.sectionTag,
+      sectionTitle: f.specsSectionTitle || base.technicalSpecs.sectionTitle,
+      headline: f.specsHeadline || f.technicalSpecsHeadline || base.technicalSpecs.headline,
+      headlinePrefix: f.specsHeadlinePrefix || base.technicalSpecs.headlinePrefix,
+      headlineItalic: f.specsHeadlineItalic || base.technicalSpecs.headlineItalic,
+      specs: [1, 2, 3, 4, 5].map((num, i) => {
+        const fallback = base.technicalSpecs.specs[i] || {
+          number: `0${num}`,
+          category: `Category ${num}`,
+          details: "",
+          metric: "",
+        };
+        return {
+          number: f[`spec${num}Number`] || fallback.number,
+          category: f[`spec${num}Category`] || fallback.category,
+          details: f[`spec${num}Details`] || fallback.details,
+          metric: f[`spec${num}Metric`] || fallback.metric,
+        };
+      }),
+    },
+    integrations: {
+      sectionTag: f.integrationsSectionTag || base.integrations.sectionTag,
+      sectionTitle: f.integrationsSectionTitle || base.integrations.sectionTitle,
+      headline: f.integrationsHeadline || f.integrationsTitle || base.integrations.headline,
+      headlinePrefix: f.integrationsHeadlinePrefix || base.integrations.headlinePrefix,
+      headlineItalic: f.integrationsHeadlineItalic || base.integrations.headlineItalic,
+      description: f.integrationsDescription || base.integrations.description,
+      buttonText: f.integrationsButtonText || base.integrations.buttonText,
+      buttonUrl: f.integrationsButtonUrl || base.integrations.buttonUrl,
+      videoUrl: f.integrationsVideoUrl || base.integrations.videoUrl,
+      videoPoster: getMediaUrl(f.integrationsVideoPoster) || base.integrations.videoPoster,
+      videoTitle: f.integrationsVideoTitle || base.integrations.videoTitle,
+      videoSubtitle: f.integrationsVideoSubtitle || base.integrations.videoSubtitle,
+      videoEmbed: f.integrationsVideoEmbed || base.integrations.videoEmbed,
+    },
+    security: {
+      sectionTag: f.securitySectionTag || base.security.sectionTag,
+      sectionTitle: f.securitySectionTitle || base.security.sectionTitle,
+      headline: f.securityHeadline || f.securityTitle || base.security.headline,
+      headlinePrefix: f.securityHeadlinePrefix || base.security.headlinePrefix,
+      headlineItalic: f.securityHeadlineItalic || base.security.headlineItalic,
+      description: f.securityDescription || base.security.description,
+      pillars: [1, 2, 3].map((num, i) => {
+        const fallback = base.security.pillars[i] || {
+          number: `0${num}`,
+          title: `Pillar ${num}`,
+          description: "",
+        };
+        return {
+          number: f[`securityPillar${num}Number`] || fallback.number,
+          title: f[`securityPillar${num}Title`] || fallback.title,
+          description: f[`securityPillar${num}Description`] || fallback.description,
+        };
+      }),
+      badges: parsePills(f.securityBadges, base.security.badges),
+    },
+    faqs: {
+      sectionTag: f.faqsSectionTag || base.faqs.sectionTag,
+      sectionTitle: f.faqsSectionTitle || base.faqs.sectionTitle,
+      headline: f.faqsHeadline || f.faqsTitle || base.faqs.headline,
+      headlinePrefix: f.faqsHeadlinePrefix || base.faqs.headlinePrefix,
+      headlineItalic: f.faqsHeadlineItalic || base.faqs.headlineItalic,
+      description: f.faqsDescription || base.faqs.description,
+      contactText: f.faqsContactText || base.faqs.contactText,
+      contactUrl: f.faqsContactUrl || base.faqs.contactUrl,
+      items: [1, 2, 3, 4, 5, 6]
+        .map((num, i) => {
+          const q = f[`faq${num}Question`];
+          const a = f[`faq${num}Answer`];
+          if (q || a) {
+            return {
+              number: `0${num}`,
+              question: q || "",
+              answer: a || "",
+            };
+          }
+          return base.faqs.items[i] || null;
+        })
+        .filter(Boolean) as any,
+    },
+    ctaBanner: {
+      tag: f.ctaTag || base.ctaBanner.tag,
+      headline: f.ctaHeadline || f.ctaTitle || base.ctaBanner.headline,
+      headlineLine1: f.ctaHeadlineLine1 || base.ctaBanner.headlineLine1,
+      headlineLine2: f.ctaHeadlineLine2 || base.ctaBanner.headlineLine2,
+      headlineItalic: f.ctaHeadlineItalic || base.ctaBanner.headlineItalic,
+      description: f.ctaDescription || base.ctaBanner.description,
+      buttonText: f.ctaBtnText || base.ctaBanner.buttonText,
+      buttonUrl: f.ctaBtnUrl || base.ctaBanner.buttonUrl,
+      bgImage: getMediaUrl(f.ctaBgImage) || base.ctaBanner.bgImage,
+    },
+  };
+}
+
+export async function getProductBySlug(slug: string): Promise<ModernProductData | null> {
+  const normSlug = (slug || "").toLowerCase().trim();
+  const endpoint = process.env.NEXT_PUBLIC_WORDPRESS_API_URL || "http://localhost/hutech-website/graphql";
+  const restBase = endpoint.replace('/graphql', '');
+
+  // 1. Try REST API for hutech_product CPT
+  try {
+    const res = await fetch(`${restBase}/wp-json/wp/v2/hutech_product?slug=${normSlug}&_embed`, {
+      next: { revalidate: 60 }
+    });
+    if (res.ok) {
+      const items = await res.json();
+      if (Array.isArray(items) && items.length > 0) {
+        return transformProductNode(items[0], PRODUCT_1_DATA);
+      }
+    }
+  } catch (err) {}
+
+  // 2. Try REST API for standard pages (e.g. /products/product-1)
+  try {
+    const res = await fetch(`${restBase}/wp-json/wp/v2/pages?slug=${normSlug}&_embed`, {
+      next: { revalidate: 60 }
+    });
+    if (res.ok) {
+      const items = await res.json();
+      if (Array.isArray(items) && items.length > 0 && (items[0].acf || items[0].productFields)) {
+        return transformProductNode(items[0], PRODUCT_1_DATA);
+      }
+    }
+  } catch (err) {}
+
+  // Fallback to local default data for product-1
+  if (normSlug === "product-1" || normSlug === "lumacore") {
+    return PRODUCT_1_DATA;
+  }
+
+  return null;
 }

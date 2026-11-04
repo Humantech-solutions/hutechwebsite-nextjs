@@ -80,9 +80,13 @@ export const renderTitle = (
 
 export const formatQuotesToBold = (text: string) => {
   if (!text) return text;
-  const parts = text.split(/(["“'‘].*?["”'’])/g);
+  const parts = text.split(/(["“'‘].*?["”'’]|\*[^*\n]+?\*)/g);
   return parts.map((part, i) => {
-    if (i % 2 === 1) {
+    if (part.startsWith('*') && part.endsWith('*') && part.length > 2) {
+      const content = part.slice(1, -1);
+      return <span key={i} className="font-serif italic font-normal">{content}</span>;
+    }
+    if (i % 2 === 1 && (part.startsWith('"') || part.startsWith('“') || part.startsWith("'") || part.startsWith('‘'))) {
       // Remove quotes and wrap in bold
       const content = part.slice(1, -1);
       return <span key={i} className="font-bold">{content}</span>;
