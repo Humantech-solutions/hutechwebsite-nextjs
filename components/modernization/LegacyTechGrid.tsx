@@ -4,10 +4,11 @@ import { useState } from "react";
 import Link from "next/link";
 import { ArrowRight, Sparkles, CheckCircle2 } from "lucide-react";
 import { LEGACY_TECHNOLOGY_PAGES } from "@/lib/data/legacy-modernization";
+import { renderTitle } from "@/lib/utils";
 import { getTechVectorLogo } from "@/components/modernization/TechLogos";
 
-export function LegacyTechGrid() {
-  const technologies = Object.values(LEGACY_TECHNOLOGY_PAGES);
+export function LegacyTechGrid({ data, tagline, heading, description }: { data?: any[]; tagline?: string; heading?: string; description?: string }) {
+  const technologies = data || Object.values(LEGACY_TECHNOLOGY_PAGES);
   const [selectedTech, setSelectedTech] = useState(0);
 
   const activeTech = technologies[selectedTech];
@@ -20,14 +21,19 @@ export function LegacyTechGrid() {
           <div className="mb-4 flex items-center justify-center gap-3">
             <span className="h-[2px] w-8 bg-[#F99D1C]" />
             <span className="text-xs font-bold tracking-[0.25em] text-[#F99D1C] uppercase">
-              TECHNOLOGY-SPECIFIC MODERNIZATION
+              {tagline || "TECHNOLOGY-SPECIFIC MODERNIZATION"}
             </span>
           </div>
           <h2 className="display-font text-3xl font-bold tracking-tight text-[#001A3D] sm:text-4xl lg:text-5xl">
-            Specialized Modernization Across Major Legacy Technologies
+            {renderTitle(
+              heading || "Specialized Modernization Across |Major Legacy Technologies",
+              "text-[#001A3D]",
+              "text-[#0171c1]",
+              "text-[#F99D1C]"
+            )}
           </h2>
           <p className="mt-4 text-base text-gray-500 sm:text-lg">
-            Hutech provides dedicated modernization frameworks, automated code intelligence, and specialized engineering for the industry&apos;s most common legacy technology platforms.
+            {description || "Hutech provides dedicated modernization frameworks, automated code intelligence, and specialized engineering for the industry's most common legacy technology platforms."}
           </p>
         </div>
 
@@ -103,7 +109,7 @@ export function LegacyTechGrid() {
                       Legacy Runtimes & Frameworks:
                     </span>
                     <div className="mt-3 flex flex-wrap gap-1.5">
-                      {activeTech.legacyStack.slice(0, 4).map((stk, i) => (
+                      {(activeTech.legacyStack || []).slice(0, 4).map((stk: string, i: number) => (
                         <span
                           key={i}
                           className="rounded bg-gray-100 px-2 py-1 text-xs font-medium text-gray-700"
@@ -120,7 +126,7 @@ export function LegacyTechGrid() {
                       Target Cloud Architecture:
                     </span>
                     <div className="mt-3 flex flex-wrap gap-1.5">
-                      {activeTech.targetStack.slice(0, 4).map((stk, i) => (
+                      {(activeTech.targetStack || []).slice(0, 4).map((stk: string, i: number) => (
                         <span
                           key={i}
                           className="rounded bg-white border border-blue-200/60 px-2 py-1 text-xs font-medium text-[#001A3D]"

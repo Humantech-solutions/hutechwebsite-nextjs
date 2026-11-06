@@ -10,9 +10,10 @@ import {
   ArrowDown,
 } from "lucide-react";
 import { MASTER_PAGE_DATA } from "@/lib/data/legacy-modernization";
+import { renderTitle } from "@/lib/utils";
 
-export function AgenticPlatformSection() {
-  const { platform } = MASTER_PAGE_DATA;
+export function AgenticPlatformSection({ data }: { data?: any }) {
+  const platform = data || MASTER_PAGE_DATA.platform;
 
   return (
     <section id="agentic-platform" className="scroll-mt-16 bg-[#F8FAFC] py-20 lg:py-28">
@@ -28,7 +29,12 @@ export function AgenticPlatformSection() {
             </div>
 
             <h2 className="display-font text-3xl font-bold tracking-tight text-[#001A3D] sm:text-4xl lg:text-5xl">
-              {platform.title}
+              {renderTitle(
+                platform.title || "Accelerate Legacy Modernization with Hutech’s |Agentic Development Platform",
+                "text-[#001A3D]",
+                "text-[#0171c1]",
+                "text-[#F99D1C]"
+              )}
             </h2>
 
             <p className="mt-6 text-base leading-relaxed text-gray-600 sm:text-lg">
@@ -36,7 +42,7 @@ export function AgenticPlatformSection() {
             </p>
 
             <ul className="mt-8 space-y-4">
-              {platform.features.map((feat, idx) => (
+              {platform.features.map((feat: any, idx: number) => (
                 <li key={idx} className="flex items-start gap-3.5">
                   <div className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-blue-50 text-[#0171c1]">
                     <CheckCircle2 className="h-4 w-4" />
@@ -161,7 +167,7 @@ export function AgenticPlatformSection() {
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-100 text-gray-600">
-                {platform.comparisonTable.map((row, i) => (
+                {platform.comparisonTable.map((row: any, i: number) => (
                   <tr key={i} className="hover:bg-gray-50/50 transition-colors">
                     <td className="px-6 py-4 font-bold text-[#001A3D]">
                       {row.dimension}

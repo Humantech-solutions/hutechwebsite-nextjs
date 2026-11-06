@@ -2,12 +2,16 @@
 
 import Link from "next/link";
 import { ArrowRight, Mail } from "lucide-react";
+import { renderTitle } from "@/lib/utils";
 
 export function ModernizationCTA({
+  data,
   buttonText = "Schedule an Architecture Assessment",
 }: {
+  data?: any;
   buttonText?: string;
 }) {
+  const cta = data || {};
   return (
     <section id="contact" className="scroll-mt-16 bg-white py-16 lg:py-24">
       <div className="mx-auto max-w-[1280px] px-6 lg:px-12">
@@ -27,11 +31,16 @@ export function ModernizationCTA({
             </div>
 
             <h2 className="display-font text-3xl font-bold tracking-tight text-white sm:text-4xl lg:text-5xl">
-              Ready to Give Your Legacy Applications a Future?
+              {renderTitle(
+                cta.heading || "Ready to Give Your Legacy Applications |a Future?",
+                "text-white",
+                "text-[#F99D1C]",
+                "text-[#0171c1]"
+              )}
             </h2>
 
             <p className="mt-4 text-base leading-relaxed text-gray-200 sm:text-lg">
-              Connect with Hutech’s enterprise software architects to explore an AI-powered modernization roadmap tailored to your business, infrastructure, and technology landscape.
+              {cta.description || "Connect with Hutech’s enterprise software architects to explore an AI-powered modernization roadmap tailored to your business, infrastructure, and technology landscape."}
             </p>
 
             <div className="mt-8 flex flex-wrap items-center justify-center gap-4">

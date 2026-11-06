@@ -1,6 +1,7 @@
 import { constructMetadata } from "@/lib/seo";
 import MasterPageClient from "./MasterPageClient";
 import { MASTER_PAGE_DATA } from "@/lib/data/legacy-modernization";
+import { getService2PageData } from "@/lib/wordpress";
 
 export const metadata = constructMetadata({
   title: MASTER_PAGE_DATA.meta.title,
@@ -31,7 +32,8 @@ export const metadata = constructMetadata({
 
 export const revalidate = 0;
 
-export default function LegacyApplicationModernizationPage() {
+export default async function LegacyApplicationModernizationPage() {
+  const service2Data = await getService2PageData("/services/legacy-application-modernization/", "legacy-application-modernization");
   const serviceSchema = {
     "@context": "https://schema.org",
     "@type": "Service",
@@ -146,7 +148,7 @@ export default function LegacyApplicationModernizationPage() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
       />
-      <MasterPageClient />
+      <MasterPageClient data={service2Data} />
     </>
   );
 }

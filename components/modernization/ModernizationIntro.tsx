@@ -1,9 +1,10 @@
 import Link from "next/link";
 import { CheckCircle2, ArrowRight } from "lucide-react";
 import { MASTER_PAGE_DATA } from "@/lib/data/legacy-modernization";
+import { renderTitle } from "@/lib/utils";
 
-export function ModernizationIntro() {
-  const { intro } = MASTER_PAGE_DATA;
+export function ModernizationIntro({ data }: { data?: any }) {
+  const intro = data || MASTER_PAGE_DATA.intro;
 
   return (
     <section className="bg-white py-20 lg:py-28">
@@ -19,7 +20,12 @@ export function ModernizationIntro() {
             </div>
 
             <h2 className="display-font text-3xl font-bold tracking-tight text-[#001A3D] sm:text-4xl lg:text-5xl">
-              What Is Legacy Application Modernization?
+              {renderTitle(
+                intro.heading || "What Is Legacy |Application Modernization?",
+                "text-[#001A3D]",
+                "text-[#0171c1]",
+                "text-[#F99D1C]"
+              )}
             </h2>
 
             <div className="space-y-4 text-base leading-relaxed text-gray-600 sm:text-lg">
@@ -45,7 +51,12 @@ export function ModernizationIntro() {
                 OUR ENGINEERING APPROACH
               </span>
               <h3 className="display-font text-xl font-bold text-[#001A3D] sm:text-2xl">
-                {intro.approachTitle}
+                {renderTitle(
+                  intro.approachTitle || "Hutech’s Approach to |AI-Driven Legacy Modernization",
+                  "text-[#001A3D]",
+                  "text-[#0171c1]",
+                  "text-[#F99D1C]"
+                )}
               </h3>
               <p className="text-sm text-gray-500">
                 {intro.approachDescription}
@@ -53,7 +64,7 @@ export function ModernizationIntro() {
             </div>
 
             <ul className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-              {intro.points.map((point, idx) => (
+              {intro.points.map((point: string, idx: number) => (
                 <li
                   key={idx}
                   className="flex items-start gap-3 rounded-xl border border-gray-100 bg-white p-3.5 text-xs text-gray-700 shadow-xs"

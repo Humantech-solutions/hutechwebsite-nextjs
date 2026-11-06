@@ -1,3 +1,4 @@
+import { MASTER_PAGE_DATA } from "@/lib/data/legacy-modernization";
 import type { ModernProductData } from "@/components/products/ModernProductTemplate";
 import { PRODUCT_1_DATA } from "@/lib/product-1-data";
 import { CaseStudy } from "@/lib/data/case-studies";
@@ -5277,36 +5278,76 @@ export function transformProductNode(node: any, defaultData?: ModernProductData)
   };
 }
 
+
+export async function getPostTemplateBySlug(slug: string, uri?: string): Promise<{
+  template: string;
+  postType: string;
+  rawItem: any;
+}> {
+  const normSlug = (slug || (uri || "").split("/").filter(Boolean).pop() || "").toLowerCase().trim();
+  if (!normSlug) return { template: "", postType: "", rawItem: null };
+
+  const endpoint = process.env.NEXT_PUBLIC_WORDPRESS_API_URL || "http://localhost/hutech-website/graphql";
+  const restBase = endpoint.replace('/graphql', '');
+
+  const postTypes = [
+    "pages",
+    "hutech_service",
+    "hutech_product",
+    "hutech_industry",
+    "case_study",
+    "posts",
+    "hutech_event",
+    "hutech_news"
+  ];
+
+  for (const pt of postTypes) {
+    try {
+      const res = await fetch(`${restBase}/wp-json/wp/v2/${pt}?slug=${normSlug}&_embed`, {
+        next: { revalidate: 60 }
+      });
+      if (res.ok) {
+        const items = await res.json();
+        if (Array.isArray(items) && items.length > 0) {
+          const item = items[0];
+          let tpl = (
+            item.pageRoutingSettings?.nextjsTemplate ||
+            item.acf?.template ||
+            item.template ||
+            ""
+          ).toString().toLowerCase().trim();
+          if (Array.isArray(tpl)) tpl = tpl[0] || "";
+          return { template: tpl, postType: pt, rawItem: item };
+        }
+      }
+    } catch (e) {}
+  }
+
+  return { template: "", postType: "", rawItem: null };
+}
+
 export async function getProductBySlug(slug: string): Promise<ModernProductData | null> {
   const normSlug = (slug || "").toLowerCase().trim();
   const endpoint = process.env.NEXT_PUBLIC_WORDPRESS_API_URL || "http://localhost/hutech-website/graphql";
   const restBase = endpoint.replace('/graphql', '');
 
-  // 1. Try REST API for hutech_product CPT
-  try {
-    const res = await fetch(`${restBase}/wp-json/wp/v2/hutech_product?slug=${normSlug}&_embed`, {
-      next: { revalidate: 60 }
-    });
-    if (res.ok) {
-      const items = await res.json();
-      if (Array.isArray(items) && items.length > 0) {
-        return transformProductNode(items[0], PRODUCT_1_DATA);
+  const postTypes = ["hutech_product", "pages", "hutech_service", "hutech_industry", "posts"];
+  for (const pt of postTypes) {
+    try {
+      const res = await fetch(`${restBase}/wp-json/wp/v2/${pt}?slug=${normSlug}&_embed`, {
+        next: { revalidate: 60 }
+      });
+      if (res.ok) {
+        const items = await res.json();
+        if (Array.isArray(items) && items.length > 0) {
+          const item = items[0];
+          if (item.acf || item.productFields) {
+            return transformProductNode(item, PRODUCT_1_DATA);
+          }
+        }
       }
-    }
-  } catch (err) {}
-
-  // 2. Try REST API for standard pages (e.g. /products/product-1)
-  try {
-    const res = await fetch(`${restBase}/wp-json/wp/v2/pages?slug=${normSlug}&_embed`, {
-      next: { revalidate: 60 }
-    });
-    if (res.ok) {
-      const items = await res.json();
-      if (Array.isArray(items) && items.length > 0 && (items[0].acf || items[0].productFields)) {
-        return transformProductNode(items[0], PRODUCT_1_DATA);
-      }
-    }
-  } catch (err) {}
+    } catch (err) {}
+  }
 
   // Fallback to local default data for product-1
   if (normSlug === "product-1" || normSlug === "lumacore") {
@@ -5314,4 +5355,221 @@ export async function getProductBySlug(slug: string): Promise<ModernProductData 
   }
 
   return null;
+}
+
+export function transformService2Node(node: any, defaultData = MASTER_PAGE_DATA): any {
+  const f = node.service2Fields || node.acf || {};
+  const base = defaultData;
+
+  const parseLines = (str?: string, defaultLines: string[] = []): string[] => {
+    if (!str || typeof str !== "string" || !str.trim()) return defaultLines;
+    return str.split(/\r?\n+/).map((s) => s.trim()).filter(Boolean);
+  };
+
+  return {
+    meta: {
+      title: node.title?.rendered || node.title || base.meta.title,
+      description: f.s2HeroDescription || base.meta.description,
+      url: node.uri || base.meta.url,
+    },
+    hero: {
+      eyebrow: f.s2HeroEyebrow || base.hero.eyebrow,
+      tagline: f.s2HeroTagline || base.hero.tagline,
+      headline: f.s2HeroHeadline || `${base.hero.headlineStart} |${base.hero.headlineGrad}`,
+      headlineStart: base.hero.headlineStart,
+      headlineGrad: base.hero.headlineGrad,
+      description: f.s2HeroDescription || base.hero.description,
+      cta1Text: f.s2HeroCta1Text || "Start Modernization Journey",
+      cta1Url: f.s2HeroCta1Url || "/contact",
+      cta2Text: f.s2HeroCta2Text || "Explore Legacy Stacks",
+      cta2Url: f.s2HeroCta2Url || "#technology-stacks",
+      cta3Text: f.s2HeroCta3Text || "Discover Agentic AI",
+      cta3Url: f.s2HeroCta3Url || "#agentic-platform",
+      checks: parseLines(f.s2HeroChecks, base.hero.checks),
+      stats: [1, 2, 3, 4].map((num, i) => {
+        const fallback = base.hero.stats[i] || { strong: "", span: "" };
+        return {
+          strong: f[`s2HeroStat${num}Strong`] || fallback.strong,
+          span: f[`s2HeroStat${num}Span`] || fallback.span,
+        };
+      }),
+      orbitCenterBadge: f.s2HeroOrbitCenterBadge || "AGENTIC AI",
+      orbitCenterSubtitle: f.s2HeroOrbitCenterSubtitle || "Platform Orchestrator",
+      pills: [1, 2, 3, 4].map((num) => ({
+        title: f[`s2HeroPill${num}Title`] || "",
+        subtitle: f[`s2HeroPill${num}Subtitle`] || "",
+      })),
+    },
+    intro: {
+      tagline: f.s2IntroTagline || base.intro.tagline,
+      heading: f.s2IntroHeading || base.intro.heading,
+      description1: f.s2IntroDescription1 || base.intro.description1,
+      description2: f.s2IntroDescription2 || base.intro.description2,
+      ctaText: f.s2IntroCtaText || "Request an Application Assessment",
+      ctaUrl: f.s2IntroCtaUrl || "/contact",
+      approachBadge: f.s2IntroApproachBadge || "OUR ENGINEERING APPROACH",
+      approachTitle: f.s2IntroApproachTitle || base.intro.approachTitle,
+      approachDescription: f.s2IntroApproachDescription || base.intro.approachDescription,
+      points: parseLines(f.s2IntroPoints, base.intro.points),
+      outcome: f.s2IntroOutcome || base.intro.outcome,
+    },
+    challengesTagline: f.s2ChallengesTagline || "WHY MODERNIZE",
+    challengesHeading: f.s2ChallengesHeading || "Is Your Legacy Technology |Holding Back Business Innovation?",
+    challengesDescription: f.s2ChallengesDescription || "Legacy applications often remain essential to enterprise operations. However, outdated architectures, aging technology stacks, and increasing maintenance costs can limit an organization’s ability to innovate, scale, and secure digital workflows.",
+    challenges: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((num, i) => {
+      const fallback = base.challenges[i] || { challenge: "", impact: "", icon: "Cpu" };
+      return {
+        challenge: f[`challenge${num}Title`] || fallback.challenge,
+        impact: f[`challenge${num}Impact`] || fallback.impact,
+        icon: f[`challenge${num}Icon`] || fallback.icon,
+      };
+    }),
+    techGridTagline: f.s2TechGridTagline || "TECHNOLOGY-SPECIFIC MODERNIZATION",
+    techGridHeading: f.s2TechGridHeading || "Specialized Modernization Across |Major Legacy Technologies",
+    techGridDescription: f.s2TechGridDescription || "Hutech provides dedicated modernization frameworks, automated code intelligence, and specialized engineering for the industry's most common legacy technology platforms.",
+    capabilitiesTagline: f.s2CapabilitiesTagline || "CORE CAPABILITIES",
+    capabilitiesHeading: f.s2CapabilitiesHeading || "End-to-End Legacy Application |Modernization Services",
+    capabilitiesDescription: f.s2CapabilitiesDescription || "Hutech provides comprehensive application modernization services designed to help enterprises assess, transform, migrate, and optimize legacy software systems combining modern engineering practices with AI-assisted development and intelligent automation.",
+    capabilities: [1, 2, 3, 4, 5, 6].map((num, i) => {
+      const fallback = base.capabilities[i] || {
+        number: `0${num}`,
+        title: "",
+        subtitle: "",
+        description: "",
+        icon: "Search",
+        features: [],
+        businessValue: "",
+      };
+      return {
+        number: f[`cap${num}Number`] || fallback.number,
+        title: f[`cap${num}Title`] || fallback.title,
+        subtitle: f[`cap${num}Subtitle`] || fallback.subtitle,
+        description: f[`cap${num}Description`] || fallback.description,
+        icon: f[`cap${num}Icon`] || fallback.icon,
+        features: parseLines(f[`cap${num}Features`], fallback.features),
+        businessValue: f[`cap${num}BusinessValue`] || fallback.businessValue,
+      };
+    }),
+    platform: {
+      tagline: f.s2PlatformTagline || base.platform.tagline,
+      title: f.s2PlatformTitle || base.platform.title,
+      description: f.s2PlatformDescription || base.platform.description,
+      features: [1, 2, 3, 4, 5, 6].map((num, i) => {
+        const fallback = base.platform.features[i] || { title: "", description: "" };
+        return {
+          title: f[`platformFeat${num}Title`] || fallback.title,
+          description: f[`platformFeat${num}Desc`] || fallback.description,
+        };
+      }),
+      comparisonTable: [1, 2, 3, 4, 5, 6, 7].map((num, i) => {
+        const fallback = base.platform.comparisonTable[i] || { dimension: "", traditional: "", agentic: "" };
+        return {
+          dimension: f[`comparison${num}Dimension`] || fallback.dimension,
+          traditional: f[`comparison${num}Traditional`] || fallback.traditional,
+          agentic: f[`comparison${num}Agentic`] || fallback.agentic,
+        };
+      }),
+    },
+    methodologyTagline: f.s2MethodologyTagline || "OUR METHODOLOGY",
+    methodologyHeading: f.s2MethodologyHeading || "How Hutech Modernizes |Legacy Applications Using AI",
+    methodologyDescription: f.s2MethodologyDescription || "Hutech follows a structured modernization methodology combining enterprise architecture expertise, AI-assisted engineering, and modern software development practices.",
+    methodology: [1, 2, 3, 4, 5].map((num, i) => ({
+      num: f[`step${num}Number`] || `0${num}`,
+      title: f[`step${num}Title`] || "",
+      subtitle: f[`step${num}Subtitle`] || "",
+      desc: f[`step${num}Desc`] || "",
+      outcome: f[`step${num}Outcome`] || "",
+    })),
+    strategiesTagline: f.s2StrategiesTagline || "STRATEGY FRAMEWORK",
+    strategiesHeading: f.s2StrategiesHeading || "Gartner's 7 Rs: Choosing the |Right Modernization Strategy",
+    strategiesDescription: f.s2StrategiesDescription || "Selecting the right application modernization strategy depends on technical architecture, application complexity, business criticality, modernization goals, and organizational timelines.",
+    strategies: [1, 2, 3, 4, 5, 6, 7].map((num, i) => {
+      const fallback = base.strategies[i] || { strategy: "", action: "", description: "", idealScenario: "" };
+      return {
+        strategy: f[`strat${num}Name`] || fallback.strategy,
+        action: f[`strat${num}Action`] || fallback.action,
+        description: f[`strat${num}Desc`] || fallback.description,
+        idealScenario: f[`strat${num}IdealScenario`] || fallback.idealScenario,
+      };
+    }),
+    benefitsTagline: f.s2BenefitsTagline || "BUSINESS OUTCOMES",
+    benefitsHeading: f.s2BenefitsHeading || "Business Benefits of AI-Powered |Legacy Modernization",
+    benefitsDescription: f.s2BenefitsDescription || "Modernizing legacy applications is more than a technology upgrade. It is an opportunity to improve business agility, optimize IT operational expenses, and create a solid foundation for digital innovation.",
+    businessBenefits: [1, 2, 3, 4, 5, 6, 7, 8].map((num, i) => {
+      const fallback = base.businessBenefits[i] || { title: "", description: "", icon: "Zap" };
+      return {
+        title: f[`benefit${num}Title`] || fallback.title,
+        description: f[`benefit${num}Desc`] || fallback.description,
+        icon: f[`benefit${num}Icon`] || fallback.icon,
+      };
+    }),
+    industriesTagline: f.s2IndustriesTagline || "CROSS-INDUSTRY EXPERTISE",
+    industriesHeading: f.s2IndustriesHeading || "Legacy Application Modernization |Across Industries",
+    industriesDescription: f.s2IndustriesDescription || "Every industry operates with specific regulatory constraints, legacy architectures, and business priorities. Hutech delivers tailored modernization strategies across key industry domains.",
+    industries: [1, 2, 3, 4, 5, 6].map((num, i) => {
+      const fallback = base.industries[i] || { name: "", description: "" };
+      return {
+        name: f[`ind${num}Name`] || fallback.name,
+        description: f[`ind${num}Desc`] || fallback.description,
+      };
+    }),
+    whyTagline: f.s2WhyTagline || "WHY HUTECH SOLUTIONS",
+    whyHeading: f.s2WhyHeading || "Why Choose Hutech for |Legacy Application Modernization?",
+    whyDescription: f.s2WhyDescription || "Hutech combines deep enterprise software engineering experience with AI-assisted software intelligence and our proprietary Agentic Development Platform.",
+    whyChooseHutech: [1, 2, 3, 4, 5, 6, 7].map((num, i) => {
+      const fallback = base.whyChooseHutech[i] || { num: `0${num}`, title: "", description: "" };
+      return {
+        num: f[`why${num}Num`] || fallback.num,
+        title: f[`why${num}Title`] || fallback.title,
+        description: f[`why${num}Desc`] || fallback.description,
+      };
+    }),
+    faqsHeading: f.s2FaqsHeading || "Frequently Asked |Questions",
+    faqs: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
+      .map((num, i) => {
+        const q = f[`faq${num}Question`];
+        const a = f[`faq${num}Answer`];
+        if (q || a) {
+          return { question: q || "", answer: a || "" };
+        }
+        return base.faqs[i] || null;
+      })
+      .filter(Boolean),
+    cta: {
+      tagline: f.s2CtaTagline || "LET'S BUILD WHAT'S NEXT",
+      heading: f.s2CtaHeading || "Ready to Give Your Legacy Applications |a Future?",
+      description: f.s2CtaDescription || "Connect with Hutech’s enterprise software architects to explore an AI-powered modernization roadmap tailored to your business, infrastructure, and technology landscape.",
+      primaryButtonText: f.s2CtaButtonText || "Schedule an Architecture Assessment",
+      primaryButtonUrl: f.s2CtaButtonUrl || "/contact",
+      secondaryButtonText: f.s2CtaSecondaryText || "Email Our Team Directly",
+      secondaryButtonUrl: f.s2CtaSecondaryUrl || "mailto:contact@hutechsolutions.ai?subject=Legacy%20Application%20Modernization%20Consultation",
+    },
+  };
+}
+
+export async function getService2PageData(uri: string, slug?: string): Promise<any> {
+  const normSlug = (slug || (uri || "").split("/").filter(Boolean).pop() || "legacy-application-modernization").toLowerCase().trim();
+  const endpoint = process.env.NEXT_PUBLIC_WORDPRESS_API_URL || "http://localhost/hutech-website/graphql";
+  const restBase = endpoint.replace('/graphql', '');
+
+  const postTypes = ["hutech_service", "pages", "hutech_product", "hutech_industry", "posts"];
+  for (const pt of postTypes) {
+    try {
+      const res = await fetch(`${restBase}/wp-json/wp/v2/${pt}?slug=${normSlug}&_embed`, {
+        next: { revalidate: 60 }
+      });
+      if (res.ok) {
+        const items = await res.json();
+        if (Array.isArray(items) && items.length > 0) {
+          const item = items[0];
+          if (item.service2Fields || item.acf) {
+            return transformService2Node(item, MASTER_PAGE_DATA);
+          }
+        }
+      }
+    } catch (err) {}
+  }
+
+  // Fallback to MASTER_PAGE_DATA
+  return MASTER_PAGE_DATA;
 }

@@ -32,8 +32,17 @@ import {
   getHutechDocuments,
   getDocumentPageData,
   getSitemapData,
+  getServiceBySlug,
+  getBlogsByCategory,
+  getService2PageData,
+  getProductBySlug,
+  getPostTemplateBySlug,
 } from "@/lib/wordpress";
 import { Suspense } from "react";
+import ServiceDetailClient from "@/app/services/[slug]/ServiceDetailClient";
+import MasterPageClient from "@/app/services/legacy-application-modernization/MasterPageClient";
+import { ModernProductTemplate } from "@/components/products/ModernProductTemplate";
+import { PRODUCT_1_DATA } from "@/lib/product-1-data";
 import PageClient from "./PageClient";
 import AboutClient from "@/app/about/AboutClient";
 import PartnershipClient from "@/app/company/partnership/PartnershipClient";
@@ -164,7 +173,22 @@ export default async function DynamicPage({ params }: PageProps) {
   }
 
   const uri = "/" + slug.join("/") + "/";
-  const page = await getPageByUri(uri);
+  const lastSlug = slug[slug.length - 1];
+  let page = await getPageByUri(uri);
+  const postLookup = await getPostTemplateBySlug(lastSlug, uri);
+
+  if (!page && postLookup.rawItem) {
+    const raw = postLookup.rawItem;
+    page = {
+      title: raw.title?.rendered || raw.title || lastSlug,
+      content: raw.content?.rendered || raw.content || "",
+      date: raw.date || "",
+      slug: raw.slug || lastSlug,
+      uri: uri,
+      templateName: "Default",
+      pageRoutingSettings: { nextjsTemplate: postLookup.template },
+    };
+  }
 
   if (!page) {
     notFound();
@@ -174,7 +198,7 @@ export default async function DynamicPage({ params }: PageProps) {
   // 1. ACF Page Routing Settings (nextjsTemplate field) — preferred
   // 2. WordPress native page template name — fallback
   const templateName = page.templateName || "Default";
-  let acfTemplate = page.pageRoutingSettings?.nextjsTemplate;
+  let acfTemplate = postLookup.template || page.pageRoutingSettings?.nextjsTemplate;
   if (Array.isArray(acfTemplate)) acfTemplate = acfTemplate[0];
   const activeTemplate = (acfTemplate || templateName).toLowerCase().trim();
 
@@ -287,13 +311,32 @@ export default async function DynamicPage({ params }: PageProps) {
     renderedComponent = <CareersClient pageData={pageData || fallbackCareerPageData} jobs={jobs} />;
   }
 
-  // ── Services ──────────────────────────────────────────────────────────────────
-  if (activeTemplate === "services" || activeTemplate === "service") {
+  // ── Services (Hub) ────────────────────────────────────────────────────────────
+  if (activeTemplate === "services" || activeTemplate === "services-hub") {
     const [pageData, categories] = await Promise.all([
       getServicePageData(),
       getServiceCategoriesWithServices(),
     ]);
     renderedComponent = <ServicesClient pageData={pageData} serviceCategories={categories} pageTitle={pageData?.title} pageDescription={pageData?.description} />;
+  }
+
+  // ── Service-1 (Detail) ────────────────────────────────────────────────────────
+  if (activeTemplate === "service-1") {
+    const serviceSlug = slug[slug.length - 1];
+    const service = (await getServiceBySlug(serviceSlug)) || {
+      id: serviceSlug,
+      slug: serviceSlug,
+      title: serviceSlug,
+    };
+    const categoryName = (service as any).blogCategorySlug || (service as any).blogCategory || "General";
+    const blogs = await getBlogsByCategory(categoryName);
+    renderedComponent = <ServiceDetailClient service={service} blogs={blogs} />;
+  }
+
+  // ── Service-2 (Legacy Application Modernization) ──────────────────────────────
+  if (activeTemplate === "service-2") {
+    const service2Data = await getService2PageData(uri, slug[slug.length - 1]);
+    renderedComponent = <MasterPageClient data={service2Data} />;
   }
 
   // ── Industries ────────────────────────────────────────────────────────────────
@@ -365,9 +408,16 @@ export default async function DynamicPage({ params }: PageProps) {
     renderedComponent = <HutechDocumentsClient documents={documents || []} pageData={pageData || fallbackPageData} />;
   }
 
-  // ── Products ──────────────────────────────────────────────────────────────────
-  if (activeTemplate === "products" || activeTemplate === "product") {
+  // ── Products (Hub) ────────────────────────────────────────────────────────────
+  if (activeTemplate === "products" || activeTemplate === "products-hub") {
     renderedComponent = <ProductsClient />;
+  }
+
+  // ── Product (Detail) ──────────────────────────────────────────────────────────
+  if (activeTemplate === "product" || activeTemplate === "product-detail") {
+    const productSlug = slug[slug.length - 1];
+    const data = await getProductBySlug(productSlug);
+    renderedComponent = <ModernProductTemplate data={data || PRODUCT_1_DATA} />;
   }
 
   // ── Insights ─────────────────────────────────────────────────────────────────

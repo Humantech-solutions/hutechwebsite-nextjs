@@ -14,6 +14,7 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { MASTER_PAGE_DATA } from "@/lib/data/legacy-modernization";
+import { renderTitle } from "@/lib/utils";
 
 const CAP_ICONS: Record<string, React.ElementType> = {
   Search,
@@ -24,8 +25,8 @@ const CAP_ICONS: Record<string, React.ElementType> = {
   ShieldCheck,
 };
 
-export function ModernizationCapabilities() {
-  const { capabilities } = MASTER_PAGE_DATA;
+export function ModernizationCapabilities({ data, tagline, heading, description }: { data?: any[]; tagline?: string; heading?: string; description?: string }) {
+  const capabilities = data || MASTER_PAGE_DATA.capabilities;
   const [activeIdx, setActiveIdx] = useState(0);
 
   const activeCap = capabilities[activeIdx];
@@ -39,14 +40,19 @@ export function ModernizationCapabilities() {
           <div className="mb-4 flex items-center justify-center gap-3">
             <span className="h-[2px] w-8 bg-[#F99D1C]" />
             <span className="text-xs font-bold tracking-[0.25em] text-[#F99D1C] uppercase">
-              CORE CAPABILITIES
+              {tagline || "CORE CAPABILITIES"}
             </span>
           </div>
           <h2 className="display-font text-3xl font-bold tracking-tight text-[#001A3D] sm:text-4xl lg:text-5xl">
-            End-to-End Legacy Application Modernization Services
+            {renderTitle(
+              heading || "End-to-End Legacy Application |Modernization Services",
+              "text-[#001A3D]",
+              "text-[#0171c1]",
+              "text-[#F99D1C]"
+            )}
           </h2>
           <p className="mt-4 text-base text-gray-500 sm:text-lg">
-            Hutech provides comprehensive application modernization services designed to help enterprises assess, transform, migrate, and optimize legacy software systems combining modern engineering practices with AI-assisted development and intelligent automation.
+            {description || "Hutech provides comprehensive application modernization services designed to help enterprises assess, transform, migrate, and optimize legacy software systems combining modern engineering practices with AI-assisted development and intelligent automation."}
           </p>
         </div>
 
@@ -152,7 +158,7 @@ export function ModernizationCapabilities() {
                     Core Technical Deliverables:
                   </span>
                   <div className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2">
-                    {activeCap.features.map((feat, i) => (
+                    {activeCap.features.map((feat: string, i: number) => (
                       <div
                         key={i}
                         className="flex items-start gap-2.5 rounded-lg border border-gray-100 bg-[#F8FAFC] p-3 text-xs text-gray-700"

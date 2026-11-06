@@ -12,9 +12,10 @@ import {
   ChevronDown,
 } from "lucide-react";
 import { MASTER_PAGE_DATA } from "@/lib/data/legacy-modernization";
+import { renderTitle } from "@/lib/utils";
 
-export function ModernizationHero() {
-  const { hero } = MASTER_PAGE_DATA;
+export function ModernizationHero({ data }: { data?: any }) {
+  const hero = data || MASTER_PAGE_DATA.hero;
 
   return (
     <section className="relative overflow-hidden bg-[#001A3D] py-16 text-white md:py-24 lg:py-28">
@@ -44,8 +45,12 @@ export function ModernizationHero() {
             </div>
 
             <h1 className="display-font text-3xl font-bold leading-[1.1] tracking-tight text-white sm:text-5xl lg:text-[56px]">
-              {hero.headlineStart}{" "}
-              <span className="text-[#0171c1]">{hero.headlineGrad}</span>
+              {renderTitle(
+                hero.headline || `${hero.headlineStart || "Modernize legacy."} |${hero.headlineGrad || "Accelerate what's next."}`,
+                "text-white",
+                "text-[#0171c1]",
+                "text-[#F99D1C]"
+              )}
             </h1>
 
             <p className="mt-6 max-w-2xl text-base leading-relaxed text-gray-300 sm:text-lg">
@@ -81,7 +86,7 @@ export function ModernizationHero() {
 
             {/* Trust Checks - Balanced 2x2 Grid */}
             <div className="mt-8 grid grid-cols-1 gap-2.5 sm:grid-cols-2 sm:gap-x-6 sm:gap-y-3">
-              {hero.checks.map((chk, i) => (
+              {hero.checks.map((chk: string, i: number) => (
                 <div key={i} className="flex items-center gap-2.5 text-xs font-medium text-gray-300">
                   <div className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-[#0171c1]/20 text-[#0171c1]">
                     <CheckCircle2 className="h-3.5 w-3.5" />
@@ -160,7 +165,7 @@ export function ModernizationHero() {
         {/* 4-Item Stats Banner - Modern, Proportional & Theme-Aligned */}
         <div className="mx-auto mt-12 max-w-5xl rounded-2xl border border-white/10 bg-gradient-to-r from-white/[0.05] via-white/[0.02] to-white/[0.05] p-1.5 backdrop-blur-md shadow-2xl">
           <div className="grid grid-cols-2 divide-y divide-white/10 sm:grid-cols-4 sm:divide-x sm:divide-y-0">
-            {hero.stats.map((st, i) => (
+            {hero.stats.map((st: any, i: number) => (
               <div
                 key={i}
                 className="px-6 py-4 text-center sm:text-left transition-colors duration-200 hover:bg-white/[0.02]"

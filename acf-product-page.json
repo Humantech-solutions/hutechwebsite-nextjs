@@ -4373,6 +4373,20 @@
                     "operator": "==",
                     "value": "page"
                 }
+            ],
+            [
+                {
+                    "param": "post_type",
+                    "operator": "==",
+                    "value": "hutech_service"
+                }
+            ],
+            [
+                {
+                    "param": "post_type",
+                    "operator": "==",
+                    "value": "hutech_industry"
+                }
             ]
         ],
         "menu_order": 0,

@@ -8,11 +8,12 @@ import {
   Rocket,
 } from "lucide-react";
 import { MASTER_PAGE_DATA } from "@/lib/data/legacy-modernization";
+import { renderTitle } from "@/lib/utils";
 
 const STEP_ICONS = [Search, Compass, Code2, ShieldCheck, Rocket];
 
-export function MethodologyAndStrategies() {
-  const { strategies } = MASTER_PAGE_DATA;
+export function MethodologyAndStrategies({ data, strategies: customStrategies, methodologyHeading, strategiesHeading }: { data?: any; strategies?: any[]; methodologyHeading?: string; strategiesHeading?: string }) {
+  const strategies = customStrategies || MASTER_PAGE_DATA.strategies;
 
   const steps = [
     {
@@ -64,7 +65,12 @@ export function MethodologyAndStrategies() {
             </span>
           </div>
           <h2 className="display-font text-3xl font-bold tracking-tight text-[#001A3D] sm:text-4xl lg:text-5xl">
-            How Hutech Modernizes Legacy Applications Using AI
+            {renderTitle(
+              methodologyHeading || "How Hutech Modernizes |Legacy Applications Using AI",
+              "text-[#001A3D]",
+              "text-[#0171c1]",
+              "text-[#F99D1C]"
+            )}
           </h2>
           <p className="mt-4 text-base text-gray-500 sm:text-lg">
             Hutech follows a structured modernization methodology combining enterprise architecture expertise, AI-assisted engineering, and modern software development practices.

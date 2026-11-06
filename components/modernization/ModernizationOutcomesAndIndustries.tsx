@@ -22,6 +22,7 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { MASTER_PAGE_DATA } from "@/lib/data/legacy-modernization";
+import { renderTitle } from "@/lib/utils";
 
 const BENEFIT_ICONS: Record<string, React.ElementType> = {
   Zap,
@@ -43,8 +44,10 @@ const INDUSTRY_ICONS: Record<string, React.ElementType> = {
   "Enterprise Technology & SaaS": Building2,
 };
 
-export function ModernizationOutcomesAndIndustries() {
-  const { businessBenefits, industries, whyChooseHutech } = MASTER_PAGE_DATA;
+export function ModernizationOutcomesAndIndustries({ benefits, industries: customInd, whyChoose, benefitsHeading, industriesHeading, whyHeading }: { benefits?: any[]; industries?: any[]; whyChoose?: any[]; benefitsHeading?: string; industriesHeading?: string; whyHeading?: string }) {
+  const businessBenefits = benefits || MASTER_PAGE_DATA.businessBenefits;
+  const industries = customInd || MASTER_PAGE_DATA.industries;
+  const whyChooseHutech = whyChoose || MASTER_PAGE_DATA.whyChooseHutech;
   const [selectedIndustry, setSelectedIndustry] = useState(0);
 
   const activeInd = industries[selectedIndustry];
@@ -64,7 +67,12 @@ export function ModernizationOutcomesAndIndustries() {
               </span>
             </div>
             <h2 className="display-font text-3xl font-bold tracking-tight text-white sm:text-4xl lg:text-5xl">
-              Business Benefits of AI-Powered Legacy Modernization
+              {renderTitle(
+                benefitsHeading || "Business Benefits of AI-Powered |Legacy Modernization",
+                "text-white",
+                "text-[#0171c1]",
+                "text-[#F99D1C]"
+              )}
             </h2>
             <p className="mt-4 text-base text-gray-300 sm:text-lg">
               Modernizing legacy applications is more than a technology upgrade. It is an opportunity to improve business agility, optimize IT operational expenses, and create a solid foundation for digital innovation.

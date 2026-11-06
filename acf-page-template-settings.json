@@ -1,0 +1,157 @@
+[
+    {
+        "key": "group_6a689ecf79699",
+        "title": "Page Template Settings",
+        "fields": [
+            {
+                "key": "field_6a689ed2d555b",
+                "label": "Template",
+                "name": "template",
+                "aria_label": "",
+                "type": "select",
+                "instructions": "Choose which Next.js page template will render this page.",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "choices": {
+                    "default": "Default",
+                    "home": "Home",
+                    "about": "About",
+                    "partnership": "Partnership",
+                    "life-at-hutech": "Life At Hutech",
+                    "leadership": "Leadership",
+                    "awards": "Awards",
+                    "vmv": "Vision Mission Values",
+                    "graduates": "Graduates",
+                    "contact": "Contact",
+                    "careers": "Careers",
+                    "services": "Services Hub",
+                    "service-1": "Service-1",
+                    "service-2": "Service-2",
+                    "product": "Product Page",
+                    "industries": "Industries",
+                    "blogs": "Blogs",
+                    "events": "Events",
+                    "case-studies": "Case Studies",
+                    "news": "News",
+                    "press-release": "Press Release",
+                    "hutech-documents": "Hutech Documents",
+                    "products": "Products Hub"
+                },
+                "default_value": false,
+                "return_format": "value",
+                "multiple": 0,
+                "allow_null": 0,
+                "allow_in_bindings": 0,
+                "ui": 0,
+                "show_in_graphql": 1,
+                "graphql_description": "",
+                "graphql_field_name": "nextjsTemplate",
+                "graphql_non_null": 0,
+                "ajax": 0,
+                "placeholder": "",
+                "create_options": 0,
+                "save_options": 0
+            }
+        ],
+        "location": [
+            [
+                {
+                    "param": "post_type",
+                    "operator": "==",
+                    "value": "page"
+                }
+            ],
+            [
+                {
+                    "param": "post_type",
+                    "operator": "==",
+                    "value": "hutech_service"
+                }
+            ],
+            [
+                {
+                    "param": "post_type",
+                    "operator": "==",
+                    "value": "hutech_product"
+                }
+            ],
+            [
+                {
+                    "param": "post_type",
+                    "operator": "==",
+                    "value": "post"
+                }
+            ],
+            [
+                {
+                    "param": "post_type",
+                    "operator": "==",
+                    "value": "hutech_industry"
+                }
+            ],
+            [
+                {
+                    "param": "post_type",
+                    "operator": "==",
+                    "value": "case_study"
+                }
+            ],
+            [
+                {
+                    "param": "post_type",
+                    "operator": "==",
+                    "value": "hutech_event"
+                }
+            ],
+            [
+                {
+                    "param": "post_type",
+                    "operator": "==",
+                    "value": "hutech_news"
+                }
+            ],
+            [
+                {
+                    "param": "post_type",
+                    "operator": "==",
+                    "value": "hutech_career"
+                }
+            ],
+            [
+                {
+                    "param": "post_type",
+                    "operator": "==",
+                    "value": "hutech_press_release"
+                }
+            ],
+            [
+                {
+                    "param": "post_type",
+                    "operator": "==",
+                    "value": "hutech_document"
+                }
+            ]
+        ],
+        "menu_order": 0,
+        "position": "normal",
+        "style": "default",
+        "label_placement": "top",
+        "instruction_placement": "label",
+        "hide_on_screen": "",
+        "active": true,
+        "description": "Assigns headless Next.js template routing to Pages and Services.",
+        "show_in_rest": 1,
+        "display_title": "",
+        "allow_ai_access": false,
+        "ai_description": "",
+        "show_in_graphql": 1,
+        "graphql_field_name": "pageRoutingSettings",
+        "map_graphql_types_from_location_rules": 0,
+        "graphql_types": ""
+    }
+]

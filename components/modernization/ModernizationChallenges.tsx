@@ -17,6 +17,7 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { MASTER_PAGE_DATA } from "@/lib/data/legacy-modernization";
+import { renderTitle } from "@/lib/utils";
 
 const ICON_MAP: Record<string, React.ElementType> = {
   Cpu,
@@ -39,8 +40,8 @@ const CATEGORIES = [
   { id: "security", label: "Security & Risk" },
 ];
 
-export function ModernizationChallenges() {
-  const { challenges } = MASTER_PAGE_DATA;
+export function ModernizationChallenges({ data, tagline, heading, description }: { data?: any[]; tagline?: string; heading?: string; description?: string }) {
+  const challenges = data || MASTER_PAGE_DATA.challenges;
   const [activeCategory, setActiveCategory] = useState("all");
 
   const filteredChallenges = challenges.filter((c, idx) => {
@@ -59,14 +60,19 @@ export function ModernizationChallenges() {
           <div className="mb-4 flex items-center justify-center gap-3">
             <span className="h-[2px] w-8 bg-[#F99D1C]" />
             <span className="text-xs font-bold tracking-[0.25em] text-[#F99D1C] uppercase">
-              WHY MODERNIZE
+              {tagline || "WHY MODERNIZE"}
             </span>
           </div>
           <h2 className="display-font text-3xl font-bold tracking-tight text-[#001A3D] sm:text-4xl lg:text-5xl">
-            Is Your Legacy Technology Holding Back Business Innovation?
+            {renderTitle(
+              heading || "Is Your Legacy Technology |Holding Back Business Innovation?",
+              "text-[#001A3D]",
+              "text-[#0171c1]",
+              "text-[#F99D1C]"
+            )}
           </h2>
           <p className="mt-4 text-base text-gray-500 sm:text-lg">
-            Legacy applications often remain essential to enterprise operations. However, outdated architectures, aging technology stacks, and increasing maintenance costs can limit an organization’s ability to innovate, scale, and secure digital workflows.
+            {description || "Legacy applications often remain essential to enterprise operations. However, outdated architectures, aging technology stacks, and increasing maintenance costs can limit an organization’s ability to innovate, scale, and secure digital workflows."}
           </p>
         </div>
 
