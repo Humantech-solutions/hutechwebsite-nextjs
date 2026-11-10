@@ -1,5 +1,9 @@
-import { getServiceBySlug, getBlogsByCategory, getIndustriesList } from "@/lib/wordpress";
+import { getServiceBySlug, getBlogsByCategory, getIndustriesList, getPostTemplateBySlug, getService2PageData, getProductBySlug } from "@/lib/wordpress";
 import IndustryDetailClient from "./IndustryDetailClient";
+import ServiceDetailClient from "@/app/services/[slug]/ServiceDetailClient";
+import MasterPageClient from "@/app/services/legacy-application-modernization/MasterPageClient";
+import { ModernProductTemplate } from "@/components/products/ModernProductTemplate";
+import { PRODUCT_1_DATA } from "@/lib/product-1-data";
 import { constructMetadata, getWebPageSchema } from "@/lib/seo";
 
 export const revalidate = 0;
@@ -32,6 +36,36 @@ function titleFromSlug(slug: string) {
 
 export default async function IndustryPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
+
+  // 1. Check template choice across all post types
+  const postLookup = await getPostTemplateBySlug(slug, `/industries/${slug}/`);
+  const activeTemplate = (postLookup.template || "industry").toLowerCase().trim();
+
+  // 2. If Service-2 is selected
+  if (activeTemplate === "service-2") {
+    const service2Data = await getService2PageData(`/industries/${slug}/`, slug);
+    return <MasterPageClient data={service2Data} />;
+  }
+
+  // 3. If Service-1 is selected
+  if (activeTemplate === "service-1") {
+    const service = (await getServiceBySlug(slug)) || {
+      id: slug,
+      slug,
+      title: titleFromSlug(slug),
+    };
+    const categoryName = service.blogCategorySlug || service.blogCategory || "Industry";
+    const blogs = await getBlogsByCategory(categoryName);
+    return <ServiceDetailClient service={service} blogs={blogs} />;
+  }
+
+  // 4. If Product Page is selected
+  if (activeTemplate === "product") {
+    const productData = await getProductBySlug(slug);
+    return <ModernProductTemplate data={productData || PRODUCT_1_DATA} />;
+  }
+
+  // 5. Default to Industry Detail
   const service =
     (await getServiceBySlug(slug)) || {
       id: slug,
@@ -39,7 +73,6 @@ export default async function IndustryPage({ params }: { params: Promise<{ slug:
       title: titleFromSlug(slug),
     };
 
-  // Fetch blogs based on the category specified in ACF or domain default
   const categoryName = service.blogCategorySlug || service.blogCategory || "Industry";
   const blogs = await getBlogsByCategory(categoryName);
 

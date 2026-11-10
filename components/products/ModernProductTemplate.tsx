@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import { Breadcrumbs } from "@/components/Breadcrumbs";
+import { renderTitle } from "@/lib/utils";
 import { DownloadFormModal } from "@/components/DownloadFormModal";
 import {
   ArrowRight,
@@ -12,18 +13,24 @@ import {
   Minus,
   Shield,
   Activity,
+  X,
 } from "lucide-react";
 
 export interface ModernProductData {
   hero: {
     badge: string;
-    titleLine1: string;
-    titleLine2: string;
-    titleItalic: string;
+    title?: string;
+    titleLine1?: string;
+    titleLine2?: string;
+    titleItalic?: string;
     description: string;
     primaryCtaText: string;
     primaryCtaUrl: string;
     secondaryCtaText: string;
+    secondaryCtaUrl?: string;
+    demoVideoUrl?: string;
+    demoVideoEmbed?: string;
+    image?: string;
     ratingScore: string;
     ratingText: string;
     dashboard: {
@@ -39,32 +46,37 @@ export interface ModernProductData {
   overview: {
     sectionTag: string;
     sectionTitle: string;
-    headlineLine1: string;
-    headlineItalic: string;
+    headline?: string;
+    headlineLine1?: string;
+    headlineItalic?: string;
     description: string;
     stat1Value: string;
     stat1Label: string;
     stat2Value: string;
     stat2Label: string;
+    image?: string;
   };
   features: {
     sectionTag: string;
     sectionTitle: string;
-    headlinePrefix: string;
-    headlineItalic: string;
+    headline?: string;
+    headlinePrefix?: string;
+    headlineItalic?: string;
     description: string;
     cards: Array<{
       number: string;
       title: string;
       description: string;
       iconType: "concentric" | "diamond" | "square" | "rings";
+      iconImage?: string;
     }>;
   };
   benefits: {
     sectionTag: string;
     sectionTitle: string;
-    headlineLine1: string;
-    headlineItalic: string;
+    headline?: string;
+    headlineLine1?: string;
+    headlineItalic?: string;
     description: string;
     donutStat: string;
     donutLabel: string;
@@ -80,8 +92,9 @@ export interface ModernProductData {
   howItWorks: {
     sectionTag: string;
     sectionTitle: string;
-    headlinePrefix: string;
-    headlineItalic: string;
+    headline?: string;
+    headlinePrefix?: string;
+    headlineItalic?: string;
     description: string;
     steps: Array<{
       number: string;
@@ -93,8 +106,9 @@ export interface ModernProductData {
   useCases: {
     sectionTag: string;
     sectionTitle: string;
-    headlinePrefix: string;
-    headlineItalic: string;
+    headline?: string;
+    headlinePrefix?: string;
+    headlineItalic?: string;
     cards: Array<{
       number: string;
       title: string;
@@ -105,8 +119,9 @@ export interface ModernProductData {
   industries: {
     sectionTag: string;
     sectionTitle: string;
-    headlinePrefix: string;
-    headlineItalic: string;
+    headline?: string;
+    headlinePrefix?: string;
+    headlineItalic?: string;
     description: string;
     items: Array<{
       number: string;
@@ -118,8 +133,9 @@ export interface ModernProductData {
   technicalSpecs: {
     sectionTag: string;
     sectionTitle: string;
-    headlinePrefix: string;
-    headlineItalic: string;
+    headline?: string;
+    headlinePrefix?: string;
+    headlineItalic?: string;
     specs: Array<{
       number: string;
       category: string;
@@ -130,17 +146,24 @@ export interface ModernProductData {
   integrations: {
     sectionTag: string;
     sectionTitle: string;
-    headlinePrefix: string;
-    headlineItalic: string;
+    headline?: string;
+    headlinePrefix?: string;
+    headlineItalic?: string;
     description: string;
     buttonText: string;
     buttonUrl: string;
+    videoUrl?: string;
+    videoPoster?: string;
+    videoEmbed?: string;
+    videoTitle?: string;
+    videoSubtitle?: string;
   };
   security: {
     sectionTag: string;
     sectionTitle: string;
-    headlinePrefix: string;
-    headlineItalic: string;
+    headline?: string;
+    headlinePrefix?: string;
+    headlineItalic?: string;
     description: string;
     pillars: Array<{
       number: string;
@@ -152,8 +175,9 @@ export interface ModernProductData {
   faqs: {
     sectionTag: string;
     sectionTitle: string;
-    headlinePrefix: string;
-    headlineItalic: string;
+    headline?: string;
+    headlinePrefix?: string;
+    headlineItalic?: string;
     description: string;
     contactText: string;
     contactUrl: string;
@@ -165,12 +189,14 @@ export interface ModernProductData {
   };
   ctaBanner: {
     tag: string;
-    headlineLine1: string;
-    headlineLine2: string;
-    headlineItalic: string;
+    headline?: string;
+    headlineLine1?: string;
+    headlineLine2?: string;
+    headlineItalic?: string;
     description: string;
     buttonText: string;
     buttonUrl: string;
+    bgImage?: string;
   };
 }
 
@@ -187,10 +213,34 @@ const FALLBACK_INDUSTRY_DETAILS: Record<string, string> = {
     "Maintain ultra-responsive checkout experiences during peak traffic surges, sync real-time omnichannel inventory, and personalize customer journeys.",
 };
 
+
+function getEmbedUrl(url: string): { type: "youtube" | "vimeo" | "mp4" | "iframe"; embedUrl: string } {
+  if (!url) return { type: "youtube", embedUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ" };
+  const trimmed = url.trim();
+  if (trimmed.includes("youtube.com") || trimmed.includes("youtu.be")) {
+    const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+    const match = trimmed.match(regExp);
+    const id = match && match[2].length === 11 ? match[2] : "";
+    return { type: "youtube", embedUrl: id ? `https://www.youtube.com/embed/${id}?autoplay=1&rel=0` : trimmed };
+  }
+  if (trimmed.includes("vimeo.com")) {
+    const regExp = /vimeo\.com\/(?:channels\/(?:\w+\/)?|groups\/([^\/]*)\/videos\/|album\/(\d+)\/video\/|)(\d+)(?:$|\/|\?)/;
+    const match = trimmed.match(regExp);
+    const id = match && match[3] ? match[3] : "";
+    return { type: "vimeo", embedUrl: id ? `https://player.vimeo.com/video/${id}?autoplay=1` : trimmed };
+  }
+  if (trimmed.match(/\.(mp4|webm|ogg)($|\?)/i)) {
+    return { type: "mp4", embedUrl: trimmed };
+  }
+  return { type: "iframe", embedUrl: trimmed };
+}
+
 export function ModernProductTemplate({ data }: { data: ModernProductData }) {
   const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(0);
   const [hoveredIndustryIndex, setHoveredIndustryIndex] = useState<number | null>(null);
   const [isDownloadModalOpen, setIsDownloadModalOpen] = useState(false);
+  const [isDemoVideoModalOpen, setIsDemoVideoModalOpen] = useState(false);
+  const [integrationsVideoPlaying, setIntegrationsVideoPlaying] = useState(false);
 
   const scrollToSection = (id: string) => {
     const el = document.getElementById(id);
@@ -243,11 +293,12 @@ export function ModernProductTemplate({ data }: { data: ModernProductData }) {
 
               {/* Headline */}
               <h1 className="display-font text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-semibold leading-[1.1] tracking-tight text-white">
-                {data.hero.titleLine1} <br />
-                {data.hero.titleLine2}{" "}
-                <span className="italic font-normal text-transparent bg-clip-text bg-gradient-to-r from-[#0171c1] via-[#38bdf8] to-[#0171c1]">
-                  {data.hero.titleItalic}
-                </span>
+                {renderTitle(
+                  data.hero.title || (data.hero.titleLine1 ? `${data.hero.titleLine1}\n${data.hero.titleLine2 ? data.hero.titleLine2 + ' ' : ''}|${data.hero.titleItalic || ''}` : 'The platform for modern\nenterprise teams |moving at velocity.'),
+                  "text-white",
+                  "text-[#0171c1] italic font-normal",
+                  "text-[#F99D1C]"
+                )}
               </h1>
 
               {/* Subtitle / Lead Description */}
@@ -266,21 +317,39 @@ export function ModernProductTemplate({ data }: { data: ModernProductData }) {
                 </Link>
 
                 <button
-                  onClick={() => scrollToSection("how-it-works")}
-                  className="group flex-1 sm:flex-none inline-flex items-center justify-center gap-1.5 sm:gap-3 rounded-sm border border-white/20 bg-white/5 px-2 sm:px-8 py-3.5 sm:py-4 text-[10px] sm:text-xs font-bold tracking-tight sm:tracking-wider text-white uppercase backdrop-blur-sm transition-all duration-300 hover:bg-white/10 hover:border-white whitespace-nowrap text-center"
+                  type="button"
+                  onClick={() => setIsDemoVideoModalOpen(true)}
+                  className="group flex-1 sm:flex-none inline-flex items-center justify-center gap-1.5 sm:gap-3 rounded-sm border border-white/20 bg-white/5 px-2 sm:px-8 py-3.5 sm:py-4 text-[10px] sm:text-xs font-bold tracking-tight sm:tracking-wider text-white uppercase backdrop-blur-sm transition-all duration-300 hover:bg-white/10 hover:border-white whitespace-nowrap text-center cursor-pointer"
                 >
-                  <span className="flex h-4 w-4 sm:h-5 sm:w-5 shrink-0 items-center justify-center rounded-full bg-[#0171c1] text-white transition-colors">
+                  <span className="flex h-4 w-4 sm:h-5 sm:w-5 shrink-0 items-center justify-center rounded-full bg-[#0171c1] text-white transition-colors group-hover:bg-[#F99D1C]">
                     <Play size={7} className="fill-current ml-0.5" />
                   </span>
-                  <span>{data.hero.secondaryCtaText}</span>
+                  <span>{data.hero.secondaryCtaText || "See how it works"}</span>
                 </button>
               </div>
 
 
             </div>
 
-            {/* Hero Right Dashboard Preview in Frosted Glass Palette */}
+            {/* Hero Right Image or Dashboard Preview */}
             <div className="lg:col-span-6 relative">
+              {data.hero?.image ? (
+                <div className="relative mx-auto max-w-[540px] rounded-2xl border border-white/15 bg-white/[0.08] p-3 sm:p-4 shadow-2xl shadow-black/50 backdrop-blur-xl">
+                  {data.hero.dashboard?.timeSavedWeekly && (
+                    <div className="absolute -top-3.5 -right-2 sm:-right-4 z-20 rounded-full border border-white/15 bg-[#001A3D]/90 px-4 py-1.5 shadow-lg backdrop-blur-md flex items-center gap-2 text-[11px] font-bold text-white">
+                      <span className="text-[#F99D1C]">⚡</span>
+                      {data.hero.dashboard.timeSavedWeekly}
+                    </div>
+                  )}
+                  <div className="relative aspect-video sm:aspect-[4/3] w-full overflow-hidden rounded-xl bg-black/40">
+                    <img
+                      src={data.hero.image}
+                      alt={data.hero.titleLine1 || "Product Preview"}
+                      className="h-full w-full object-cover object-center"
+                    />
+                  </div>
+                </div>
+              ) : (
               <div className="relative mx-auto max-w-[540px] rounded-2xl border border-white/15 bg-white/[0.08] p-7 shadow-2xl shadow-black/50 backdrop-blur-xl text-white">
 
                 {/* Floating Pill Top Right */}
@@ -371,6 +440,7 @@ export function ModernProductTemplate({ data }: { data: ModernProductData }) {
                 </div>
 
               </div>
+              )}
             </div>
 
           </div>
@@ -395,10 +465,12 @@ export function ModernProductTemplate({ data }: { data: ModernProductData }) {
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-start">
             <div className="lg:col-span-6 space-y-4">
               <h2 className="display-font text-3xl sm:text-4xl md:text-5xl font-semibold leading-tight text-[#001A3D]">
-                {data.overview.headlineLine1} <br />
-                <span className="italic font-normal text-[#0171c1]">
-                  {data.overview.headlineItalic}
-                </span>
+                {renderTitle(
+                  data.overview.headline || (data.overview.headlineLine1 ? `${data.overview.headlineLine1}\n|${data.overview.headlineItalic || ''}` : 'Unified operations for the\n|AI-native enterprise.'),
+                  "text-[#001A3D]",
+                  "text-[#0171c1] italic font-normal",
+                  "text-[#F99D1C]"
+                )}
               </h2>
               <div className="h-1 w-20 bg-[#0171c1]"></div>
             </div>
@@ -455,10 +527,12 @@ export function ModernProductTemplate({ data }: { data: ModernProductData }) {
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-end mb-14">
             <div className="lg:col-span-7">
               <h2 className="display-font text-3xl sm:text-4xl md:text-5xl font-semibold leading-tight text-white">
-                {data.features.headlinePrefix}{" "}
-                <span className="italic font-normal text-white/90">
-                  {data.features.headlineItalic}
-                </span>
+                {renderTitle(
+                  data.features.headline || (data.features.headlinePrefix ? `${data.features.headlinePrefix} |${data.features.headlineItalic || ''}` : 'Everything you need to orchestrate |autonomous work.'),
+                  "text-white",
+                  "text-white/90 italic font-normal",
+                  "text-[#F99D1C]"
+                )}
               </h2>
             </div>
             <div className="lg:col-span-5">
@@ -573,10 +647,12 @@ export function ModernProductTemplate({ data }: { data: ModernProductData }) {
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-end mb-16">
             <div className="lg:col-span-7">
               <h2 className="display-font text-3xl sm:text-4xl md:text-5xl font-semibold leading-tight text-[#001A3D]">
-                {data.benefits.headlineLine1} <br />
-                <span className="italic font-normal text-[#0171c1]">
-                  {data.benefits.headlineItalic}
-                </span>
+                {renderTitle(
+                  data.benefits.headline || (data.benefits.headlineLine1 ? `${data.benefits.headlineLine1}\n|${data.benefits.headlineItalic || ''}` : 'Measurable impact from\n|day one.'),
+                  "text-[#001A3D]",
+                  "text-[#0171c1] italic font-normal",
+                  "text-[#F99D1C]"
+                )}
               </h2>
             </div>
             <div className="lg:col-span-5">
@@ -702,10 +778,12 @@ export function ModernProductTemplate({ data }: { data: ModernProductData }) {
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-end mb-16">
             <div className="lg:col-span-7">
               <h2 className="display-font text-3xl sm:text-4xl md:text-5xl font-semibold leading-tight text-[#001A3D]">
-                {data.howItWorks.headlinePrefix} <br />
-                <span className="italic font-normal text-[#0171c1]">
-                  {data.howItWorks.headlineItalic}
-                </span>
+                {renderTitle(
+                  data.howItWorks.headline || (data.howItWorks.headlinePrefix ? `${data.howItWorks.headlinePrefix}\n|${data.howItWorks.headlineItalic || ''}` : 'From signals to action in\n|three steps.'),
+                  "text-[#001A3D]",
+                  "text-[#0171c1] italic font-normal",
+                  "text-[#F99D1C]"
+                )}
               </h2>
             </div>
             <div className="lg:col-span-5">
@@ -765,10 +843,12 @@ export function ModernProductTemplate({ data }: { data: ModernProductData }) {
 
           <div className="mb-16">
             <h2 className="display-font text-3xl sm:text-4xl md:text-5xl font-semibold leading-tight text-white">
-              {data.useCases.headlinePrefix} <br />
-              <span className="italic font-normal text-[#F99D1C]">
-                {data.useCases.headlineItalic}
-              </span>
+              {renderTitle(
+                data.useCases.headline || (data.useCases.headlinePrefix ? `${data.useCases.headlinePrefix}\n|${data.useCases.headlineItalic || ''}` : 'Built for the workflows that\n|drive your business.'),
+                "text-white",
+                "text-[#F99D1C] italic font-normal",
+                "text-[#0171c1]"
+              )}
             </h2>
           </div>
 
@@ -836,10 +916,12 @@ export function ModernProductTemplate({ data }: { data: ModernProductData }) {
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-start">
             <div className="lg:col-span-5 space-y-4">
               <h2 className="display-font text-3xl sm:text-4xl md:text-5xl font-semibold leading-tight text-[#001A3D]">
-                {data.industries.headlinePrefix} <br />
-                <span className="italic font-normal text-[#0171c1]">
-                  {data.industries.headlineItalic}
-                </span>
+                {renderTitle(
+                  data.industries.headline || (data.industries.headlinePrefix ? `${data.industries.headlinePrefix}\n|${data.industries.headlineItalic || ''}` : 'Engineered for your industry\'s\n|toughest demands.'),
+                  "text-[#001A3D]",
+                  "text-[#0171c1] italic font-normal",
+                  "text-[#F99D1C]"
+                )}
               </h2>
               <div className="h-1 w-20 bg-[#0171c1]"></div>
             </div>
@@ -948,10 +1030,12 @@ export function ModernProductTemplate({ data }: { data: ModernProductData }) {
 
           <div className="mb-14">
             <h2 className="display-font text-3xl sm:text-4xl md:text-5xl font-semibold leading-tight text-[#001A3D]">
-              {data.technicalSpecs.headlinePrefix} <br />
-              <span className="italic font-normal text-[#0171c1]">
-                {data.technicalSpecs.headlineItalic}
-              </span>
+              {renderTitle(
+                data.technicalSpecs.headline || (data.technicalSpecs.headlinePrefix ? `${data.technicalSpecs.headlinePrefix}\n|${data.technicalSpecs.headlineItalic || ''}` : 'Enterprise-grade architecture\n|at every layer.'),
+                "text-[#001A3D]",
+                "text-[#0171c1] italic font-normal",
+                "text-[#F99D1C]"
+              )}
             </h2>
             <div className="h-1 w-20 bg-[#0171c1] mt-4"></div>
           </div>
@@ -997,10 +1081,12 @@ export function ModernProductTemplate({ data }: { data: ModernProductData }) {
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
             <div className="lg:col-span-6 space-y-6">
               <h2 className="display-font text-3xl sm:text-4xl md:text-5xl font-semibold leading-tight text-white">
-                {data.integrations.headlinePrefix} <br />
-                <span className="italic font-normal text-[#F99D1C]">
-                  {data.integrations.headlineItalic}
-                </span>
+                {renderTitle(
+                  data.integrations.headline || (data.integrations.headlinePrefix ? `${data.integrations.headlinePrefix}\n|${data.integrations.headlineItalic || ''}` : 'Plays well with\n|everything.'),
+                  "text-white",
+                  "text-[#F99D1C] font-serif italic font-normal",
+                  "text-[#0171c1]"
+                )}
               </h2>
 
               <p className="text-base text-gray-300 font-normal leading-relaxed max-w-lg">
@@ -1017,38 +1103,70 @@ export function ModernProductTemplate({ data }: { data: ModernProductData }) {
               </div>
             </div>
 
-            {/* 3x3 Grid of Glass Icons in Hutech Navy */}
+            {/* Right Side Video Player (Img 1 Section) */}
             <div className="lg:col-span-6 flex justify-center">
-              <div className="grid grid-cols-3 gap-4 max-w-[340px] w-full">
-                <div className="h-24 w-24 rounded-2xl border border-white/10 bg-white/[0.04] backdrop-blur-sm flex items-center justify-center text-white text-xl font-bold shadow-md hover:border-[#0171c1]/60 hover:bg-white/[0.08] hover:scale-105 transition-all duration-300">
-                  S
-                </div>
-                <div className="h-24 w-24 rounded-2xl border border-white/10 bg-white/[0.04] backdrop-blur-sm flex items-center justify-center text-white text-xl font-bold shadow-md hover:border-[#0171c1]/60 hover:bg-white/[0.08] hover:scale-105 transition-all duration-300">
-                  ▲
-                </div>
-                <div className="h-24 w-24 rounded-2xl border border-white/10 bg-white/[0.04] backdrop-blur-sm flex items-center justify-center text-white text-xl font-bold shadow-md hover:border-[#0171c1]/60 hover:bg-white/[0.08] hover:scale-105 transition-all duration-300">
-                  G
-                </div>
+              <div className="relative mx-auto max-w-[540px] w-full rounded-2xl border border-white/15 bg-white/[0.05] p-3 sm:p-4 shadow-2xl shadow-black/50 backdrop-blur-xl group">
+                <div className="absolute -inset-1 rounded-2xl bg-gradient-to-r from-[#0171c1]/30 to-[#F99D1C]/20 blur-xl opacity-60 group-hover:opacity-100 transition-opacity pointer-events-none" />
 
-                <div className="h-24 w-24 rounded-2xl border border-white/10 bg-white/[0.04] backdrop-blur-sm flex items-center justify-center text-white text-xl font-bold shadow-md hover:border-[#0171c1]/60 hover:bg-white/[0.08] hover:scale-105 transition-all duration-300">
-                  ◇
-                </div>
-                {/* Center Highlighted Hutech Brand Logo */}
-                <div className="h-24 w-24 rounded-2xl bg-[#0171c1] text-white flex items-center justify-center shadow-xl shadow-[#0171c1]/40 font-black text-2xl hover:scale-105 transition-all duration-300">
-                  ॥
-                </div>
-                <div className="h-24 w-24 rounded-2xl border border-white/10 bg-white/[0.04] backdrop-blur-sm flex items-center justify-center text-white text-xl font-bold shadow-md hover:border-[#0171c1]/60 hover:bg-white/[0.08] hover:scale-105 transition-all duration-300">
-                  🛡️
-                </div>
+                <div className="relative aspect-video w-full overflow-hidden rounded-xl bg-[#00132B] border border-white/10 flex items-center justify-center">
+                  {integrationsVideoPlaying ? (
+                    (() => {
+                      const videoInfo = getEmbedUrl(data.integrations?.videoUrl || "https://www.youtube.com/embed/dQw4w9WgXcQ");
+                      return videoInfo.type === "mp4" ? (
+                        <video
+                          src={videoInfo.embedUrl}
+                          controls
+                          autoPlay
+                          className="w-full h-full object-cover"
+                        />
+                      ) : (
+                        <iframe
+                          src={videoInfo.embedUrl}
+                          title="Integrations Video"
+                          className="w-full h-full border-0"
+                          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                          allowFullScreen
+                        />
+                      );
+                    })()
+                  ) : (
+                    <div
+                      onClick={() => setIntegrationsVideoPlaying(true)}
+                      className="relative w-full h-full cursor-pointer flex items-center justify-center group/vid"
+                    >
+                      {data.integrations?.videoPoster ? (
+                        <img
+                          src={data.integrations.videoPoster}
+                          alt="Integrations Preview"
+                          className="absolute inset-0 w-full h-full object-cover"
+                        />
+                      ) : (
+                        <div className="absolute inset-0 bg-gradient-to-br from-[#00132B] via-[#002B5B] to-[#001A3D] flex items-center justify-center">
+                          <div className="grid grid-cols-3 gap-3 p-6 opacity-25 w-full h-full">
+                            {["S", "▲", "G", "◇", "॥", "🛡️", "Z", "A", "F"].map((ic, i) => (
+                              <div key={i} className="flex items-center justify-center rounded-xl border border-white/20 text-white font-bold text-lg bg-white/5">
+                                {ic}
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+                      <div className="absolute inset-0 bg-black/40 group-hover/vid:bg-black/20 transition-colors" />
 
-                <div className="h-24 w-24 rounded-2xl border border-white/10 bg-white/[0.04] backdrop-blur-sm flex items-center justify-center text-white text-xl font-bold shadow-md hover:border-[#0171c1]/60 hover:bg-white/[0.08] hover:scale-105 transition-all duration-300">
-                  Z
-                </div>
-                <div className="h-24 w-24 rounded-2xl border border-white/10 bg-white/[0.04] backdrop-blur-sm flex items-center justify-center text-white text-xl font-bold shadow-md hover:border-[#0171c1]/60 hover:bg-white/[0.08] hover:scale-105 transition-all duration-300">
-                  A
-                </div>
-                <div className="h-24 w-24 rounded-2xl border border-white/10 bg-white/[0.04] backdrop-blur-sm flex items-center justify-center text-white text-xl font-bold shadow-md hover:border-[#0171c1]/60 hover:bg-white/[0.08] hover:scale-105 transition-all duration-300">
-                  F
+                      {/* Pulsing Play Button */}
+                      <div className="relative z-10 flex flex-col items-center gap-3">
+                        <div className="flex h-16 w-16 sm:h-20 sm:w-20 items-center justify-center rounded-full bg-[#0171c1] text-white shadow-2xl shadow-[#0171c1]/60 transition-transform duration-300 group-hover/vid:scale-110 group-hover/vid:bg-[#F99D1C]">
+                          <Play size={24} className="fill-current ml-1" />
+                        </div>
+                        <span className="text-xs sm:text-sm font-bold tracking-wider uppercase text-white drop-shadow-md text-center px-4">
+                          {data.integrations?.videoTitle || "Watch Integrations Demo"}
+                        </span>
+                        <span className="text-[11px] text-gray-300">
+                          {data.integrations?.videoSubtitle || "Click to play video"}
+                        </span>
+                      </div>
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
@@ -1074,10 +1192,12 @@ export function ModernProductTemplate({ data }: { data: ModernProductData }) {
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-end mb-16">
             <div className="lg:col-span-7">
               <h2 className="display-font text-3xl sm:text-4xl md:text-5xl font-semibold leading-tight text-[#001A3D]">
-                {data.security.headlinePrefix} <br />
-                <span className="italic font-normal text-[#0171c1]">
-                  {data.security.headlineItalic}
-                </span>
+                {renderTitle(
+                  data.security.headline || (data.security.headlinePrefix ? `${data.security.headlinePrefix}\n|${data.security.headlineItalic || ''}` : 'Security that never slows\n|you down.'),
+                  "text-[#001A3D]",
+                  "text-[#0171c1] italic font-normal",
+                  "text-[#F99D1C]"
+                )}
               </h2>
             </div>
             <div className="lg:col-span-5">
@@ -1170,10 +1290,12 @@ export function ModernProductTemplate({ data }: { data: ModernProductData }) {
             {/* Left FAQ Intro */}
             <div className="lg:col-span-5 space-y-6">
               <h2 className="display-font text-3xl sm:text-4xl md:text-5xl font-semibold leading-tight text-[#001A3D]">
-                {data.faqs.headlinePrefix} <br />
-                <span className="italic font-normal text-[#0171c1]">
-                  {data.faqs.headlineItalic}
-                </span>
+                {renderTitle(
+                  data.faqs.headline || (data.faqs.headlinePrefix ? `${data.faqs.headlinePrefix}\n|${data.faqs.headlineItalic || ''}` : 'Frequently asked\n|questions.'),
+                  "text-[#001A3D]",
+                  "text-[#0171c1] italic font-normal",
+                  "text-[#F99D1C]"
+                )}
               </h2>
               <div className="h-1 w-20 bg-[#0171c1]"></div>
 
@@ -1252,11 +1374,12 @@ export function ModernProductTemplate({ data }: { data: ModernProductData }) {
               </div>
 
               <h2 className="display-font text-3xl sm:text-4xl lg:text-5xl font-semibold tracking-tight text-white leading-tight">
-                {data.ctaBanner.headlineLine1} <br />
-                {data.ctaBanner.headlineLine2}{" "}
-                <span className="italic font-normal text-[#F99D1C]">
-                  {data.ctaBanner.headlineItalic}
-                </span>
+                {renderTitle(
+                  data.ctaBanner.headline || (data.ctaBanner.headlineLine1 ? `${data.ctaBanner.headlineLine1}\n${data.ctaBanner.headlineLine2 ? data.ctaBanner.headlineLine2 + ' ' : ''}|${data.ctaBanner.headlineItalic || ''}` : 'Ready to transform how\n|your enterprise works?'),
+                  "text-white",
+                  "text-[#F99D1C] italic font-normal",
+                  "text-[#0171c1]"
+                )}
               </h2>
 
               <p className="text-base text-gray-300 font-normal leading-relaxed">
@@ -1290,6 +1413,49 @@ export function ModernProductTemplate({ data }: { data: ModernProductData }) {
       </section>
 
       {/* Download Modal for document actions */}
+      
+      {/* Demo Video Modal for Hero Button 2 */}
+      {isDemoVideoModalOpen && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4 backdrop-blur-md transition-opacity"
+          onClick={() => setIsDemoVideoModalOpen(false)}
+        >
+          <div
+            className="relative w-full max-w-4xl overflow-hidden rounded-2xl border border-white/20 bg-[#00132B] p-2 sm:p-3 shadow-2xl"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button
+              onClick={() => setIsDemoVideoModalOpen(false)}
+              className="absolute top-4 right-4 z-20 flex h-9 w-9 items-center justify-center rounded-full bg-black/70 text-white hover:bg-[#F99D1C] transition-colors"
+              aria-label="Close modal"
+            >
+              <X size={18} />
+            </button>
+            <div className="relative aspect-video w-full overflow-hidden rounded-xl bg-black">
+              {(() => {
+                const videoInfo = getEmbedUrl(data.hero?.demoVideoUrl || "https://www.youtube.com/embed/dQw4w9WgXcQ");
+                return videoInfo.type === "mp4" ? (
+                  <video
+                    src={videoInfo.embedUrl}
+                    controls
+                    autoPlay
+                    className="w-full h-full object-cover"
+                  />
+                ) : (
+                  <iframe
+                    src={videoInfo.embedUrl}
+                    title="Product Demo Video"
+                    className="w-full h-full border-0"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowFullScreen
+                  />
+                );
+              })()}
+            </div>
+          </div>
+        </div>
+      )}
+
       <DownloadFormModal
         isOpen={isDownloadModalOpen}
         onClose={() => setIsDownloadModalOpen(false)}

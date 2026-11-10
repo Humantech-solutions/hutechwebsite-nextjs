@@ -3,14 +3,63 @@
 import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { Search, Globe, Menu, X, ChevronDown, MoveRight, Phone, Mail, Linkedin, Facebook, Instagram, Youtube, Twitter } from "lucide-react";
+import {
+  Search,
+  Globe,
+  Menu,
+  X,
+  ChevronDown,
+  MoveRight,
+  Phone,
+  Mail,
+  Linkedin,
+  Facebook,
+  Instagram,
+  Youtube,
+  Twitter,
+  ArrowRight,
+} from "lucide-react";
 import { motion as Motion, AnimatePresence, useScroll, useTransform } from "framer-motion";
 import { ImageWithFallback } from "./figma/ImageWithFallback";
 import Image from "next/image";
-import type { HeaderChromeData, TopNavChromeData } from "@/lib/wordpress";
-const logoImg = "/assets/c57ecabe59306129194824425137d2ccde6918ce.png";
+import type { HeaderChromeData, TopNavChromeData, HeaderNavItem, DropdownItem } from "@/lib/wordpress";
 
-const NAV_ITEMS = [
+const logoImg = "/assets/c57ecabe59306129194824425137d2ccde6918ce.png";
+const BRAND_BLUE = "#0171c1";
+
+export const DEFAULT_SERVICES_CARDS: DropdownItem[] = [
+  {
+    name: "Intelligent Engineering",
+    path: "/services",
+    description: "Build intelligence into your products, applications and operations.",
+  },
+  {
+    name: "Digital Product Acceleration",
+    path: "/services",
+    description: "Build, modernize and evolve digital products faster.",
+  },
+];
+
+export const DEFAULT_CAPABILITIES: DropdownItem[] = [
+  { name: "AI & Agentic Engineering", path: "/services/ai-ml" },
+  { name: "Data & Analytics", path: "/services/data-engineering" },
+  { name: "Product & Platform Engineering", path: "/services/cloud-transformation" },
+  { name: "Application Engineering", path: "/services/application-development-maintenance" },
+  { name: "Modernization & Cloud", path: "/services/legacy-application-modernization" },
+  { name: "Experience Engineering", path: "/services/ecommerce" },
+  { name: "Quality Engineering", path: "/services/devops" },
+  { name: "Engineering Automation", path: "/services/ai-consulting" },
+];
+
+export const DEFAULT_TOOLKIT: DropdownItem[] = [
+  { name: "Cutlass Loom", path: "/services" },
+  { name: "Cutlass Forge", path: "/services" },
+  { name: "Cutlass TestGlide", path: "/services" },
+  { name: "Cutlass Shield", path: "/services" },
+  { name: "Cutlass Synops", path: "/services" },
+];
+
+const NAV_ITEMS: HeaderNavItem[] = [
   {
     label: "Company",
     path: "/about",
@@ -40,38 +89,19 @@ const NAV_ITEMS = [
     path: "/services",
     dropdown: [
       {
-        title: "Cloud, Data and AI",
-        items: [
-          { name: "AI/ML Solutions", path: "/services/ai-ml" },
-          { name: "Cloud Transformation", path: "/services/cloud-transformation" },
-          { name: "SRE & DevOps Services", path: "/services/devops" },
-          { name: "Data Engineering", path: "/services/data-engineering" },
-          {
-            name: "Data Visualization and Reporting",
-            path: "/services/data-visualization-reporting",
-          },
-        ],
+        title: "Services",
+        path: "/services",
+        items: DEFAULT_SERVICES_CARDS,
       },
       {
-        title: "Application Engineering",
-        items: [
-          { name: "Banking & Financial Services", path: "/services/fintech" },
-          { name: "Ecommerce Development", path: "/services/ecommerce" },
-          { name: "Enterprise Digital Solutions", path: "/services/erp" },
-          {
-            name: "Development and Maintenance",
-            path: "/services/application-development-maintenance",
-          },
-        ],
+        title: "Capabilities",
+        path: "/services",
+        items: DEFAULT_CAPABILITIES,
       },
       {
-        title: "Specialized Services",
-        items: [
-          { name: "Consulting Service", path: "/services/consulting" },
-          { name: "AI Consulting & Prompt Engineering", path: "/services/ai-consulting" },
-          { name: "Cybersecurity", path: "/services/cybersecurity" },
-          { name: "IOT (Internet of Things)", path: "/services/iot" },
-        ],
+        title: "Agentic Toolkit",
+        path: "/services",
+        items: DEFAULT_TOOLKIT,
       },
     ],
   },
@@ -112,13 +142,70 @@ const NAV_ITEMS = [
   { label: "Contact Us", path: "/contact" },
 ];
 
-const BRAND_BLUE = "#0171c1";
-
-const DEFAULT_MEGA_BOTTOM_LINKS = [
+const DEFAULT_MEGA_BOTTOM_LINKS: { name: string; path: string; icon?: string; iconUrl?: string }[] = [
   { name: "Case Studies", path: "/resources/case-studies" },
   { name: "Hutech Documents", path: "/resources/hutech-documents" },
   { name: "Life at Hutech", path: "/careers" },
 ];
+
+
+
+
+
+function getServiceCardDescription(name: string, desc?: string): string {
+  if (desc && desc.trim()) return desc;
+  const n = (name || "").toLowerCase();
+  if (n.includes("event")) return "Join our upcoming tech summits, webinars and community gatherings.";
+  if (n.includes("case") || n.includes("stud")) return "Explore enterprise success stories and transformative engineering solutions.";
+  if (n.includes("intel") || n.includes("ai")) return "Build intelligence into your products, applications and operations.";
+  if (n.includes("product") || n.includes("accel")) return "Build, modernize and evolve digital products faster.";
+  if (n.includes("cloud")) return "Scalable, resilient cloud migration and infrastructure modernization.";
+  if (n.includes("data")) return "Actionable analytics, real-time pipelines and robust data platforms.";
+  if (n.includes("lead")) return "Meet the visionary leaders steering our technology and innovation.";
+  if (n.includes("blog")) return "Latest insights, tech trends and in-depth engineering articles.";
+  return "Accelerating digital transformation and scaling engineering excellence.";
+}
+
+function resolveDropdownLink(path?: string, parentSection?: "services" | "industries"): string {
+  if (!path || path === "#" || path === "/" || path.startsWith("http") || path.startsWith("mailto:") || path.startsWith("tel:")) {
+    return path || "#";
+  }
+
+  let clean = path.trim();
+  if (!clean.startsWith("/")) clean = `/${clean}`;
+
+  // Fix any duplicate chained parent prefixes
+  clean = clean
+    .replace(/^\/industries\/services\//i, "/industries/")
+    .replace(/^\/services\/industries\//i, "/services/")
+    .replace(/^\/(?:blog\/)?(?:hutech_service|service)\//i, "/services/")
+    .replace(/^\/(?:blog\/)?(?:hutech_industry|industry|industries)\//i, "/industries/");
+
+  // Ensure parent route prefix for items under services or industries that lack a parent page
+  if (parentSection === "industries") {
+    clean = clean
+      .replace(/^\/services\//i, "/industries/")
+      .replace(/^\/industries\/services\//i, "/industries/");
+    if (!clean.startsWith("/industries")) {
+      const slug = clean.replace(/^\//, "");
+      clean = `/industries/${slug}`;
+    }
+    return clean;
+  }
+
+  if (parentSection === "services") {
+    clean = clean
+      .replace(/^\/industries\//i, "/services/")
+      .replace(/^\/services\/industries\//i, "/services/");
+    if (!clean.startsWith("/services")) {
+      const slug = clean.replace(/^\//, "");
+      clean = `/services/${slug}`;
+    }
+    return clean;
+  }
+
+  return clean;
+}
 
 export default function Navbar({ data }: { data?: HeaderChromeData }) {
   const [activeDropdown, setActiveDropdown] = useState<number | null>(null);
@@ -134,7 +221,7 @@ export default function Navbar({ data }: { data?: HeaderChromeData }) {
   const navBackground = "rgba(255, 255, 255, 1)";
   const navBlur = "blur(0px)";
   const textColorValue = "rgba(0, 26, 61, 1)";
-  const navItems = data?.navItems?.length ? data.navItems : NAV_ITEMS;
+  const navItems: HeaderNavItem[] = data?.navItems?.length ? data.navItems : NAV_ITEMS;
   const logoSrc = data?.logoUrl || logoImg;
   const logoAlt = data?.logoAlt || "Hutech Solutions Logo";
   const megaCard = {
@@ -157,6 +244,7 @@ export default function Navbar({ data }: { data?: HeaderChromeData }) {
     left: data?.mobileFooter?.left || "Hutech Solutions © 2026",
     right: data?.mobileFooter?.right || "Global Engineering",
   };
+
   const renderMegaTitle = (title: string) => {
     if (title.includes("|")) {
       return title.split("|").map((part, index) =>
@@ -185,6 +273,7 @@ export default function Navbar({ data }: { data?: HeaderChromeData }) {
   const topNav = data?.topNav;
   const topNavBg = topNav?.backgroundColor || "#00142D";
   const topNavTextColor = topNav?.textColor || "#ffffff";
+  const topNavHoverColor = topNav?.textHoverColor || topNav?.hoverColor || "#0171c1";
 
   const phones = (
     topNav?.phones && topNav.phones.length > 0
@@ -238,12 +327,10 @@ export default function Navbar({ data }: { data?: HeaderChromeData }) {
   // Disable height animation when mobile menu is open
   const navHeight = useTransform(scrollY, [0, 50], ["80px", "64px"]);
   const logoScale = useTransform(scrollY, [0, 50], [1, 0.85]);
-  const megaMenuTop = useTransform(scrollY, [0, 38, 50], ["118px", "67.8px", "64px"]);
 
   useEffect(() => {
     if (mobileMenuOpen) {
       document.body.style.overflow = "hidden";
-      // Ensure dropdowns are closed when opening mobile menu if they were open in desktop
       setActiveDropdown(null);
     } else {
       document.body.style.overflow = "auto";
@@ -280,9 +367,18 @@ export default function Navbar({ data }: { data?: HeaderChromeData }) {
     <>
       <header className="sticky top-[-40px] md:top-[-38px] left-0 z-50 w-full flex flex-col pointer-events-none">
         <div
-          style={{ backgroundColor: topNavBg, color: topNavTextColor }}
+          style={{
+            backgroundColor: topNavBg,
+            color: topNavTextColor,
+            ["--top-nav-hover" as any]: topNavHoverColor,
+          }}
           className="pointer-events-auto w-full h-[40px] md:h-[38px] text-[10px] sm:text-xs md:text-sm font-medium transition-colors"
         >
+          <style>{`
+            .top-nav-link:hover {
+              color: var(--top-nav-hover, #0171c1) !important;
+            }
+          `}</style>
           <div className="mx-auto flex h-full w-full max-w-[1280px] items-center justify-end px-6 lg:px-20">
             <div className="flex items-center space-x-2 sm:space-x-3 md:space-x-4">
               {/* Dynamic Phone Numbers */}
@@ -291,7 +387,7 @@ export default function Navbar({ data }: { data?: HeaderChromeData }) {
                   {idx > 0 && <div className="h-3 md:h-4 w-[1px] bg-current opacity-20" />}
                   <a
                     href={`tel:${(phone.url || phone.text || "").replace(/[^0-9+]/g, "")}`}
-                    className="flex items-center space-x-1 sm:space-x-1.5 md:space-x-2 opacity-90 transition-all hover:opacity-100 hover:text-[#0171c1]"
+                    className="top-nav-link flex items-center space-x-1 sm:space-x-1.5 md:space-x-2 opacity-90 transition-all hover:opacity-100 hover:text-[var(--top-nav-hover,#0171c1)]"
                   >
                     <Phone className="h-3 w-3 sm:h-3.5 sm:w-3.5 md:h-4 md:w-4 shrink-0" />
                     <span className="whitespace-nowrap">{phone.text}</span>
@@ -307,7 +403,7 @@ export default function Navbar({ data }: { data?: HeaderChromeData }) {
                   )}
                   <a
                     href={`mailto:${email.url || email.text}`}
-                    className="flex items-center space-x-1 sm:space-x-1.5 md:space-x-2 opacity-90 transition-all hover:opacity-100 hover:text-[#0171c1]"
+                    className="top-nav-link flex items-center space-x-1 sm:space-x-1.5 md:space-x-2 opacity-90 transition-all hover:opacity-100 hover:text-[var(--top-nav-hover,#0171c1)]"
                   >
                     <Mail className="h-3 w-3 sm:h-3.5 sm:w-3.5 md:h-4 md:w-4 shrink-0" />
                     <span className="whitespace-nowrap">{email.text}</span>
@@ -329,7 +425,7 @@ export default function Navbar({ data }: { data?: HeaderChromeData }) {
                         target="_blank"
                         rel="noopener noreferrer"
                         aria-label={getSocialAriaLabel(social as any)}
-                        className="flex items-center opacity-85 transition-all hover:opacity-100 hover:text-[#0171c1]"
+                        className="top-nav-link flex items-center opacity-85 transition-all hover:opacity-100 hover:text-[var(--top-nav-hover,#0171c1)]"
                       >
                         {renderSocialIcon(social)}
                       </a>
@@ -355,189 +451,421 @@ export default function Navbar({ data }: { data?: HeaderChromeData }) {
             }`}
             ref={dropdownRef}
           >
-        <div className="mx-auto h-full max-w-[1280px] px-6 lg:px-20">
-          <div className="flex h-full items-center justify-between">
-            <div className="flex items-center">
-              <Link href="/" className="flex items-center" onClick={() => setActiveDropdown(null)} aria-label="Hutech Solutions Home">
-                <Motion.div style={{ scale: logoScale }}>
-                  <div className="h-16 py-2 md:h-20">
-                    <Image
-                      src={logoSrc}
-                      alt={logoAlt}
-                      width={200}
-                      height={60}
-                      sizes="(max-width: 768px) 175px, 200px"
-                      priority
-                      className="h-full w-auto object-contain"
-                    />
-                  </div>
-                </Motion.div>
-              </Link>
-            </div>
+            <div className="mx-auto h-full max-w-[1280px] px-6 lg:px-20">
+              <div className="flex h-full items-center justify-between">
+                <div className="flex items-center">
+                  <Link href="/" className="flex items-center" onClick={() => setActiveDropdown(null)} aria-label="Hutech Solutions Home">
+                    <Motion.div style={{ scale: logoScale }}>
+                      <div className="h-16 py-2 md:h-20">
+                        <Image
+                          src={logoSrc}
+                          alt={logoAlt}
+                          width={200}
+                          height={60}
+                          sizes="(max-width: 768px) 175px, 200px"
+                          priority
+                          className="h-full w-auto object-contain"
+                        />
+                      </div>
+                    </Motion.div>
+                  </Link>
+                </div>
 
-            {/* Desktop Menu */}
-            <div className="hidden items-center space-x-1 lg:flex">
-              {navItems.map((item, idx) => {
-                const isMega = item.label === "Company" || item.label === "Services";
-                const isSmall =
-                  item.label === "Industries" ||
-                  item.label === "Resources";
+                {/* Desktop Menu */}
+                <div className="hidden items-center space-x-1 lg:flex">
+                  {navItems.map((item, idx) => {
+                    const isCompanyMega = item.label.toLowerCase() === "company";
+                    const isServicesMega =
+                      item.label.toLowerCase().includes("service") ||
+                      item.label.toLowerCase().includes("what we do");
+                    const isMega = isCompanyMega || isServicesMega;
+                    const isSmall =
+                      !isMega &&
+                      (item.label === "Industries" ||
+                        item.label === "Resources" ||
+                        (Boolean(item.dropdown) && item.dropdown?.length === 1));
 
-                return (
-                  <div
-                    key={item.label}
-                    className={`group px-3 ${isSmall ? "relative" : ""}`}
-                    onMouseEnter={() => setActiveDropdown(idx)}
-                    onMouseLeave={() => setActiveDropdown(null)}
-                  >
-                    {item.dropdown ? (
-                      <>
-                        <button
-                          onClick={() => toggleDropdown(idx)}
-                          aria-expanded={activeDropdown === idx}
-                          aria-haspopup="true"
-                          className="flex items-center py-2 text-[14px] font-semibold tracking-wide text-[#001A3D] transition-colors duration-300 hover:text-[#0171c1]"
-                          style={{ color: activeDropdown === idx ? BRAND_BLUE : undefined }}
-                        >
-                          {item.label}
-                          <ChevronDown
-                            className={`ml-1.5 h-3.5 w-3.5 transition-transform duration-300 ${activeDropdown === idx ? "rotate-180" : ""}`}
-                          />
-                        </button>
+                    // Parse sections for Services mega menu
+                    const servicesSection = item.dropdown?.[0];
+                    const col1Title = (servicesSection?.title || "Services").toUpperCase();
+                    const serviceCards: DropdownItem[] =
+                      servicesSection?.items && servicesSection.items.length > 0 && servicesSection.items[0].name !== "Services"
+                        ? servicesSection.items
+                        : servicesSection?.items && servicesSection.items.length > 1
+                        ? servicesSection.items
+                        : DEFAULT_SERVICES_CARDS;
 
-                        {/* Small Dropdown */}
-                        {isSmall && (
-                          <AnimatePresence>
-                            {activeDropdown === idx && (
-                              <Motion.div
-                                initial={{ opacity: 0, y: 10 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                exit={{ opacity: 0, y: 10 }}
-                                className="absolute top-full left-0 mt-0 w-64 rounded-sm border border-gray-100 bg-white py-4 shadow-2xl"
-                              >
-                                {item.dropdown.map((section) => (
-                                  <div key={section.title} className="space-y-1">
-                                    {section.items.map((subItem) => (
-                                      <Link
-                                        key={subItem.name}
-                                        href={subItem.path}
-                                        className="group/sub block flex items-center px-6 py-2.5 text-[13px] font-semibold text-gray-500 transition-all hover:bg-gray-50 hover:text-[#0171c1]"
-                                        onClick={() => setActiveDropdown(null)}
-                                      >
-                                        <span className="mr-0 h-[1.5px] w-0 bg-[#0171c1] transition-all group-hover/sub:mr-2 group-hover/sub:w-3"></span>
-                                        {subItem.name}
-                                      </Link>
-                                    ))}
-                                  </div>
-                                ))}
-                              </Motion.div>
-                            )}
-                          </AnimatePresence>
-                        )}
+                    const capabilitiesSection = item.dropdown?.[1];
+                    const col2Title = (capabilitiesSection?.title || "About").toUpperCase();
+                    const capabilitiesItems: DropdownItem[] =
+                      capabilitiesSection?.items && capabilitiesSection.items.length > 0
+                        ? capabilitiesSection.items
+                        : DEFAULT_CAPABILITIES;
 
-                        {/* Mega Dropdown - Now as child to fix hover bridge issue */}
-                        {isMega && (
-                          <AnimatePresence>
-                            {activeDropdown === idx && (
-                                <Motion.div
-                                  initial={{ opacity: 0, y: -5 }}
-                                  animate={{ opacity: 1, y: 0 }}
-                                  exit={{ opacity: 0, y: -5 }}
-                                  className="absolute left-0 top-full z-50 w-full overflow-hidden border-t border-gray-100 bg-white shadow-2xl"
-                                >
-                                <div className="mx-auto max-w-[1280px] px-6 py-12 lg:px-20">
-                                  <div className="grid grid-cols-12 gap-12">
-                                    <div className="col-span-3">
-                                      <div className="group relative overflow-hidden rounded-lg bg-[#001A3D] p-8 text-white">
-                                        <div className="absolute top-0 right-0 -mt-16 -mr-16 h-32 w-32 rounded-full bg-[#0171c1]/10 transition-transform duration-700 group-hover:scale-150"></div>
-                                        <h3 className="relative z-10 mb-4 text-base leading-tight font-normal">
-                                          {renderMegaTitle(megaCard.title)}
-                                        </h3>
-                                        <p className="relative z-10 mb-6 text-sm text-gray-400">
-                                          {megaCard.text}
-                                        </p>
-                                        <Link
-                                          href={megaCard.buttonUrl}
-                                          className="group relative z-10 inline-flex items-center text-sm font-semibold tracking-wide text-[#0171c1]"
-                                        >
-                                          {megaCard.buttonText}
-                                          <MoveRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
-                                        </Link>
+                    const toolkitSection = item.dropdown?.[2];
+                    const col3Title = (toolkitSection?.title || "Careers").toUpperCase();
+                    const toolkitItems: DropdownItem[] =
+                      toolkitSection?.items && toolkitSection.items.length > 0
+                        ? toolkitSection.items
+                        : DEFAULT_TOOLKIT;
+
+                    return (
+                      <div
+                        key={item.label}
+                        className={`group px-3 ${isSmall ? "relative" : ""}`}
+                        onMouseEnter={() => setActiveDropdown(idx)}
+                        onMouseLeave={() => setActiveDropdown(null)}
+                      >
+                        {item.dropdown ? (
+                          <>
+                            <button
+                              onClick={() => toggleDropdown(idx)}
+                              aria-expanded={activeDropdown === idx}
+                              aria-haspopup="true"
+                              className="flex items-center py-2 text-[14px] font-semibold tracking-wide text-[#001A3D] transition-colors duration-300 hover:text-[#0171c1]"
+                              style={{ color: activeDropdown === idx ? BRAND_BLUE : undefined }}
+                            >
+                              {item.label}
+                              <ChevronDown
+                                className={`ml-1.5 h-3.5 w-3.5 transition-transform duration-300 ${activeDropdown === idx ? "rotate-180" : ""}`}
+                              />
+                            </button>
+
+                            {/* Small Dropdown */}
+                            {isSmall && (
+                              <AnimatePresence>
+                                {activeDropdown === idx && (
+                                  <Motion.div
+                                    initial={{ opacity: 0, y: 10 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    exit={{ opacity: 0, y: 10 }}
+                                    className="absolute top-full left-0 mt-0 w-64 rounded-sm border border-gray-100 bg-white py-4 shadow-2xl"
+                                  >
+                                    {item.dropdown.map((section) => (
+                                      <div key={section.title} className="space-y-1">
+                                        {section.items.map((subItem) => (
+                                          <Link
+                                            key={subItem.name}
+                                            href={resolveDropdownLink(
+                                              subItem.path,
+                                              item.label.toLowerCase().includes("industr")
+                                                ? "industries"
+                                                : item.label.toLowerCase().includes("service") || item.label.toLowerCase().includes("what we do")
+                                                ? "services"
+                                                : undefined
+                                            )}
+                                            className="group/item flex items-center px-6 py-2.5 text-[13px] font-semibold text-gray-500 transition-all hover:bg-gray-50 hover:text-[#0171c1]"
+                                            onClick={() => setActiveDropdown(null)}
+                                          >
+                                            {subItem.icon ? (
+                                              <div className="mr-2.5 flex h-4 w-4 shrink-0 items-center justify-center transition-transform duration-200 group-hover/item:scale-110">
+                                                <img src={subItem.icon} alt="" className="h-4 w-4 object-contain" />
+                                              </div>
+                                            ) : (
+                                              <span className="mr-0 h-[1.5px] w-0 bg-[#0171c1] transition-all duration-200 group-hover/item:mr-2 group-hover/item:w-3"></span>
+                                            )}
+                                            {subItem.name}
+                                          </Link>
+                                        ))}
                                       </div>
-                                    </div>
+                                    ))}
+                                  </Motion.div>
+                                )}
+                              </AnimatePresence>
+                            )}
 
-                                    <div className={`col-span-9 grid gap-8 ${item.dropdown?.length === 2 ? 'grid-cols-2' : 'grid-cols-3'}`}>
-                                      {item.dropdown?.map((section) => (
-                                        <div key={section.title} className="space-y-6">
-                                          <h4 className="border-b border-gray-100 pb-3 text-[13px] font-semibold text-[#001A3D]">
-                                            {section.title}
-                                          </h4>
-                                          <div className="flex flex-col space-y-4">
-                                            {section.items.map((subItem) => (
+                            {/* Services Mega Dropdown (Original Light Theme + 3-Column UI Layout) */}
+                            {isServicesMega && (
+                              <AnimatePresence>
+                                {activeDropdown === idx && (
+                                  <Motion.div
+                                    initial={{ opacity: 0, y: -5 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    exit={{ opacity: 0, y: -5 }}
+                                    transition={{ duration: 0.2 }}
+                                    className="absolute left-0 top-full z-50 w-full overflow-hidden border-t border-gray-100 bg-white shadow-2xl"
+                                  >
+                                    <div className="mx-auto max-w-[1280px] px-6 py-10 lg:px-20">
+                                      <div className="grid grid-cols-12 gap-8 lg:gap-10">
+                                        {/* Column 1: Services */}
+                                        <div className="col-span-12 lg:col-span-4 space-y-4">
+                                          <div className="border-b border-gray-100 pb-3 flex items-center justify-between">
+                                            <Link
+                                              href={servicesSection?.path || "/services"}
+                                              onClick={() => setActiveDropdown(null)}
+                                              className="text-[13px] font-semibold tracking-wider text-[#001A3D] uppercase hover:text-[#0171c1] transition-colors"
+                                            >
+                                              {col1Title}
+                                            </Link>
+                                          </div>
+
+                                          <div className="space-y-4">
+                                            {serviceCards.map((serviceCard, cardIdx) => (
                                               <Link
-                                                key={subItem.name}
-                                                href={subItem.path}
-                                                className="group/item flex items-center text-sm font-medium text-gray-500 transition-all hover:text-[#0171c1]"
+                                                key={`${serviceCard.name}-${cardIdx}`}
+                                                href={resolveDropdownLink(serviceCard.path || "/services", "services")}
                                                 onClick={() => setActiveDropdown(null)}
+                                                className={`group/card block rounded-xl p-5 transition-all duration-300 ${
+                                                  cardIdx === 0
+                                                    ? "bg-[#001A3D] text-white shadow-lg hover:shadow-xl hover:bg-[#00224f]"
+                                                    : "bg-gray-50 border border-gray-100 hover:border-[#0171c1]/40 hover:bg-blue-50/40"
+                                                }`}
                                               >
-                                                <span className="mr-0 h-[1.5px] w-0 bg-[#0171c1] transition-all group-hover/item:mr-2 group-hover/item:w-3"></span>
-                                                {subItem.name}
+                                                <div className="flex items-start justify-between gap-3 mb-2">
+                                                  <div className="flex items-center gap-2.5">
+                                                    {serviceCard.icon && (
+                                                      <div className="flex h-5 w-5 shrink-0 items-center justify-center transition-transform duration-200 group-hover/card:scale-110">
+                                                        <img src={serviceCard.icon} alt="" className="h-5 w-5 object-contain" />
+                                                      </div>
+                                                    )}
+                                                    <h3
+                                                      className={`text-base font-semibold transition-colors ${
+                                                        cardIdx === 0
+                                                          ? "text-white group-hover/card:text-blue-200"
+                                                          : "text-[#001A3D] group-hover/card:text-[#0171c1]"
+                                                      }`}
+                                                    >
+                                                      {serviceCard.name}
+                                                    </h3>
+                                                  </div>
+                                                  <div
+                                                    className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-full transition-all ${
+                                                      cardIdx === 0
+                                                        ? "border border-white/20 bg-white/10 text-white group-hover/card:bg-[#0171c1] group-hover/card:border-[#0171c1]"
+                                                        : "border border-gray-200 bg-white text-[#001A3D] group-hover/card:border-[#0171c1] group-hover/card:bg-[#0171c1] group-hover/card:text-white"
+                                                    }`}
+                                                  >
+                                                    <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover/card:translate-x-0.5" />
+                                                  </div>
+                                                </div>
+                                                <p
+                                                  className={`text-xs leading-relaxed mb-4 line-clamp-2 ${
+                                                    cardIdx === 0 ? "text-gray-300" : "text-gray-500"
+                                                  }`}
+                                                >
+                                                  {getServiceCardDescription(serviceCard.name, serviceCard.description)}
+                                                </p>
+                                                <div
+                                                  className={`inline-flex items-center text-xs font-semibold transition-colors ${
+                                                    cardIdx === 0
+                                                      ? "text-[#0171c1] group-hover/card:text-blue-300"
+                                                      : "text-[#0171c1] group-hover/card:text-[#001A3D]"
+                                                  }`}
+                                                >
+                                                  {serviceCard.exploreText && serviceCard.exploreText.trim()
+                                                    ? serviceCard.exploreText
+                                                    : serviceCard.name.toLowerCase().includes("service")
+                                                    ? "Explore service"
+                                                    : `Explore ${serviceCard.name}`}
+                                                  <MoveRight className="ml-1.5 h-3.5 w-3.5 transition-transform group-hover/card:translate-x-1" />
+                                                </div>
                                               </Link>
                                             ))}
                                           </div>
                                         </div>
-                                      ))}
-                                    </div>
-                                  </div>
-                                </div>
-                                {/* Bottom bar of mega menu */}
-                                <div className="border-t border-gray-100 bg-gray-50 py-4">
-                                  <div className="mx-auto flex max-w-[1280px] items-center justify-between px-6 text-xs font-semibold tracking-wide text-gray-500 lg:px-20">
-                                    <div className="flex space-x-8">
-                                      {megaBottomLinks.map((link) => (
-                                        <Link
-                                          key={`${link.name}-${link.path}`}
-                                          href={link.path}
-                                          className="hover:text-[#001A3D]"
-                                        >
-                                          {link.name}
-                                        </Link>
-                                      ))}
-                                    </div>
-                                    <div className="text-[#0171c1]">{megaBottomTagline}</div>
-                                  </div>
-                                </div>
-                              </Motion.div>
-                            )}
-                          </AnimatePresence>
-                        )}
-                      </>
-                    ) : (
-                      <Link
-                        href={item.path}
-                        className="block py-2 text-[14px] font-semibold tracking-wide text-[#001A3D] transition-colors duration-300 hover:text-[#0171c1]"
-                      >
-                        {item.label}
-                      </Link>
-                    )}
-                  </div>
-                );
-              })}
-            </div>
 
-            {/* Mobile menu button */}
-            <div className="flex items-center lg:hidden">
-              <button
-                onClick={() => setMobileMenuOpen(true)}
-                className="p-2 text-[#001A3D] transition-colors hover:text-[#0171c1] focus:outline-none"
-                aria-label="Open menu"
-                aria-expanded={false}
-              >
-                <Menu size={28} />
-              </button>
+                                        {/* Column 2: Capabilities */}
+                                        <div className="col-span-12 lg:col-span-4 lg:border-l lg:border-gray-100 lg:pl-10 space-y-4">
+                                          <div className="border-b border-gray-100 pb-3">
+                                            <h4 className="text-[13px] font-semibold tracking-wider text-[#001A3D] uppercase">
+                                              {col2Title}
+                                            </h4>
+                                          </div>
+                                          <div className="flex flex-col space-y-1">
+                                            {capabilitiesItems.map((capItem) => (
+                                              <Link
+                                                key={capItem.name}
+                                                href={resolveDropdownLink(capItem.path, "services")}
+                                                onClick={() => setActiveDropdown(null)}
+                                                className="group/item flex items-center rounded-lg px-3 py-2 text-sm font-medium text-gray-600 transition-all hover:bg-gray-50 hover:text-[#0171c1]"
+                                              >
+                                                {capItem.icon ? (
+                                                  <div className="mr-2.5 flex h-4 w-4 shrink-0 items-center justify-center transition-transform duration-200 group-hover/item:scale-110">
+                                                    <img src={capItem.icon} alt="" className="h-4 w-4 object-contain" />
+                                                  </div>
+                                                ) : (
+                                                  <span className="mr-0 h-[1.5px] w-0 bg-[#0171c1] transition-all duration-200 group-hover/item:mr-2 group-hover/item:w-3"></span>
+                                                )}
+                                                <span className="transition-colors">{capItem.name}</span>
+                                              </Link>
+                                            ))}
+                                          </div>
+                                        </div>
+
+                                        {/* Column 3: Agentic Toolkit */}
+                                        <div className="col-span-12 lg:col-span-4 lg:border-l lg:border-gray-100 lg:pl-10 space-y-4">
+                                          <div className="border-b border-gray-100 pb-3">
+                                            <h4 className="text-[13px] font-semibold tracking-wider text-[#001A3D] uppercase">
+                                              {col3Title}
+                                            </h4>
+                                          </div>
+                                          <div className="flex flex-col space-y-1">
+                                            {toolkitItems.map((toolItem) => (
+                                              <Link
+                                                key={toolItem.name}
+                                                href={toolItem.path}
+                                                onClick={() => setActiveDropdown(null)}
+                                                className="group/item flex items-center rounded-lg px-3 py-2 text-sm font-medium text-gray-600 transition-all hover:bg-gray-50 hover:text-[#0171c1]"
+                                              >
+                                                {toolItem.icon ? (
+                                                  <div className="mr-2.5 flex h-4 w-4 shrink-0 items-center justify-center transition-transform duration-200 group-hover/item:scale-110">
+                                                    <img src={toolItem.icon} alt="" className="h-4 w-4 object-contain" />
+                                                  </div>
+                                                ) : (
+                                                  <span className="mr-0 h-[1.5px] w-0 bg-[#0171c1] transition-all duration-200 group-hover/item:mr-2 group-hover/item:w-3"></span>
+                                                )}
+                                                <span className="transition-colors">{toolItem.name}</span>
+                                              </Link>
+                                            ))}
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </div>
+
+                                    {/* Bottom bar of mega menu */}
+                                    <div className="border-t border-gray-100 bg-gray-50 py-4">
+                                      <div className="mx-auto flex max-w-[1280px] items-center justify-between px-6 text-xs font-semibold tracking-wide text-gray-500 lg:px-20">
+                                        <div className="flex space-x-8">
+                                          {megaBottomLinks.map((link) => (
+                                            <Link
+                                              key={`${link.name}-${link.path}`}
+                                              href={link.path}
+                                              className="group/link hover:text-[#001A3D] transition-colors inline-flex items-center gap-1.5"
+                                              onClick={() => setActiveDropdown(null)}
+                                            >
+                                              {link.icon && (
+                                                <div className="flex h-3.5 w-3.5 shrink-0 items-center justify-center transition-transform duration-200 group-hover/link:scale-110">
+                                                  <img src={link.icon} alt="" className="h-3.5 w-3.5 object-contain" />
+                                                </div>
+                                              )}
+                                              {link.name}
+                                            </Link>
+                                          ))}
+                                        </div>
+                                        <div className="text-[#0171c1]">{megaBottomTagline}</div>
+                                      </div>
+                                    </div>
+                                  </Motion.div>
+                                )}
+                              </AnimatePresence>
+                            )}
+
+                            {/* Company Mega Dropdown */}
+                            {isCompanyMega && (
+                              <AnimatePresence>
+                                {activeDropdown === idx && (
+                                  <Motion.div
+                                    initial={{ opacity: 0, y: -5 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    exit={{ opacity: 0, y: -5 }}
+                                    className="absolute left-0 top-full z-50 w-full overflow-hidden border-t border-gray-100 bg-white shadow-2xl"
+                                  >
+                                    <div className="mx-auto max-w-[1280px] px-6 py-12 lg:px-20">
+                                      <div className="grid grid-cols-12 gap-12">
+                                        <div className="col-span-3">
+                                          <div className="group relative overflow-hidden rounded-lg bg-[#001A3D] p-8 text-white">
+                                            <div className="absolute top-0 right-0 -mt-16 -mr-16 h-32 w-32 rounded-full bg-[#0171c1]/10 transition-transform duration-700 group-hover:scale-150"></div>
+                                            <h3 className="relative z-10 mb-4 text-base leading-tight font-normal">
+                                              {renderMegaTitle(megaCard.title)}
+                                            </h3>
+                                            <p className="relative z-10 mb-6 text-sm text-gray-400">
+                                              {megaCard.text}
+                                            </p>
+                                            <Link
+                                              href={megaCard.buttonUrl}
+                                              className="group relative z-10 inline-flex items-center text-sm font-semibold tracking-wide text-[#0171c1]"
+                                              onClick={() => setActiveDropdown(null)}
+                                            >
+                                              {megaCard.buttonText}
+                                              <MoveRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
+                                            </Link>
+                                          </div>
+                                        </div>
+
+                                        <div className={`col-span-9 grid gap-8 ${item.dropdown?.length === 2 ? "grid-cols-2" : "grid-cols-3"}`}>
+                                          {item.dropdown?.map((section) => (
+                                            <div key={section.title} className="space-y-6">
+                                              <h4 className="border-b border-gray-100 pb-3 text-[13px] font-semibold text-[#001A3D]">
+                                                {section.title}
+                                              </h4>
+                                              <div className="flex flex-col space-y-4">
+                                                {section.items.map((subItem) => (
+                                                  <Link
+                                                    key={subItem.name}
+                                                    href={subItem.path}
+                                                    className="group/item flex items-center text-sm font-medium text-gray-500 transition-all hover:text-[#0171c1]"
+                                                    onClick={() => setActiveDropdown(null)}
+                                                  >
+                                                    {subItem.icon ? (
+                                                      <div className="mr-2.5 flex h-4 w-4 shrink-0 items-center justify-center transition-transform duration-200 group-hover/item:scale-110">
+                                                        <img src={subItem.icon} alt="" className="h-4 w-4 object-contain" />
+                                                      </div>
+                                                    ) : (
+                                                      <span className="mr-0 h-[1.5px] w-0 bg-[#0171c1] transition-all duration-200 group-hover/item:mr-2 group-hover/item:w-3"></span>
+                                                    )}
+                                                    {subItem.name}
+                                                  </Link>
+                                                ))}
+                                              </div>
+                                            </div>
+                                          ))}
+                                        </div>
+                                      </div>
+                                    </div>
+                                    {/* Bottom bar of mega menu */}
+                                    <div className="border-t border-gray-100 bg-gray-50 py-4">
+                                      <div className="mx-auto flex max-w-[1280px] items-center justify-between px-6 text-xs font-semibold tracking-wide text-gray-500 lg:px-20">
+                                        <div className="flex space-x-8">
+                                          {megaBottomLinks.map((link) => (
+                                            <Link
+                                              key={`${link.name}-${link.path}`}
+                                              href={link.path}
+                                              className="group/link hover:text-[#001A3D] transition-colors inline-flex items-center gap-1.5"
+                                              onClick={() => setActiveDropdown(null)}
+                                            >
+                                              {link.icon && (
+                                                <div className="flex h-3.5 w-3.5 shrink-0 items-center justify-center transition-transform duration-200 group-hover/link:scale-110">
+                                                  <img src={link.icon} alt="" className="h-3.5 w-3.5 object-contain" />
+                                                </div>
+                                              )}
+                                              {link.name}
+                                            </Link>
+                                          ))}
+                                        </div>
+                                        <div className="text-[#0171c1]">{megaBottomTagline}</div>
+                                      </div>
+                                    </div>
+                                  </Motion.div>
+                                )}
+                              </AnimatePresence>
+                            )}
+                          </>
+                        ) : (
+                          <Link
+                            href={item.path}
+                            className="block py-2 text-[14px] font-semibold tracking-wide text-[#001A3D] transition-colors duration-300 hover:text-[#0171c1]"
+                          >
+                            {item.label}
+                          </Link>
+                        )}
+                      </div>
+                    );
+                  })}
+                </div>
+
+                {/* Mobile menu button */}
+                <div className="flex items-center lg:hidden">
+                  <button
+                    onClick={() => setMobileMenuOpen(true)}
+                    className="p-2 text-[#001A3D] transition-colors hover:text-[#0171c1] focus:outline-none"
+                    aria-label="Open menu"
+                    aria-expanded={false}
+                  >
+                    <Menu size={28} />
+                  </button>
+                </div>
+              </div>
             </div>
-          </div>
-        </div>
           </Motion.nav>
         </div>
       </header>
@@ -583,88 +911,219 @@ export default function Navbar({ data }: { data?: HeaderChromeData }) {
             </div>
 
             <div className="flex-1 space-y-6 overflow-y-auto px-6 py-10">
-              {navItems.map((item, idx) => (
-                <Motion.div
-                  key={item.label}
-                  initial={{ opacity: 0, x: 20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: 0.05 + idx * 0.05 }}
-                  className="border-b border-white/5 pb-4 last:border-0"
-                >
-                  {item.dropdown ? (
-                    <div className="space-y-6">
-                      <button
-                        onClick={() =>
-                          setMobileExpandedItem(mobileExpandedItem === idx ? null : idx)
-                        }
-                        className="group flex w-full items-center justify-between text-2xl font-semibold tracking-tight text-white"
-                      >
-                        <span className={mobileExpandedItem === idx ? "text-[#F99D1C]" : ""}>
-                          {item.label}
-                        </span>
-                        <ChevronDown
-                          className={`h-6 w-6 text-[#F99D1C] transition-transform duration-500 ${
-                            mobileExpandedItem === idx ? "rotate-180" : ""
-                          }`}
-                        />
-                      </button>
-                      <AnimatePresence>
-                        {mobileExpandedItem === idx && (
-                          <Motion.div
-                            initial={{ height: 0, opacity: 0 }}
-                            animate={{ height: "auto", opacity: 1 }}
-                            exit={{ height: 0, opacity: 0 }}
-                            transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
-                            className="overflow-hidden"
-                          >
-                            {(() => {
-                              const isSmallDropdown =
-                                item.label === "Industries" || item.label === "Resources";
-                              return (
-                                <div className="space-y-8 pt-4">
-                                  {item.dropdown.map((section) => (
-                                    <div
-                                      key={section.title}
-                                      className="border-l border-[#F99D1C]/20 pl-4"
-                                    >
-                                      {!isSmallDropdown && (
-                                        <h4 className="mb-4 text-sm font-semibold text-[#F99D1C] opacity-80">
-                                          {section.title}
-                                        </h4>
-                                      )}
-                                      <div className={`grid ${isSmallDropdown ? "gap-[18px]" : "gap-4"}`}>
-                                        {section.items.map((subItem) => (
-                                          <Link
-                                            key={subItem.name}
-                                            href={subItem.path}
-                                            className="group flex items-center text-base font-semibold text-gray-300 transition-colors hover:text-white"
-                                            onClick={() => setMobileMenuOpen(false)}
-                                          >
-                                            <div className="mr-3 h-1.5 w-1.5 rounded-full bg-[#F99D1C] opacity-0 transition-opacity group-hover:opacity-100"></div>
-                                            {subItem.name}
-                                          </Link>
-                                        ))}
-                                      </div>
+              {navItems.map((item, idx) => {
+                const isServicesMega =
+                  item.label.toLowerCase().includes("service") ||
+                  item.label.toLowerCase().includes("what we do");
+
+                // Parse sections for Services mobile menu
+                const servicesSection = item.dropdown?.[0];
+                const col1Title = (servicesSection?.title || "Services").toUpperCase();
+                const serviceCards: DropdownItem[] =
+                  servicesSection?.items && servicesSection.items.length > 0 && servicesSection.items[0].name !== "Services"
+                    ? servicesSection.items
+                    : servicesSection?.items && servicesSection.items.length > 1
+                    ? servicesSection.items
+                    : DEFAULT_SERVICES_CARDS;
+
+                const capabilitiesSection = item.dropdown?.[1];
+                const col2Title = (capabilitiesSection?.title || "About").toUpperCase();
+                const capabilitiesItems: DropdownItem[] =
+                  capabilitiesSection?.items && capabilitiesSection.items.length > 0
+                    ? capabilitiesSection.items
+                    : DEFAULT_CAPABILITIES;
+
+                const toolkitSection = item.dropdown?.[2];
+                const col3Title = (toolkitSection?.title || "Careers").toUpperCase();
+                const toolkitItems: DropdownItem[] =
+                  toolkitSection?.items && toolkitSection.items.length > 0
+                    ? toolkitSection.items
+                    : DEFAULT_TOOLKIT;
+
+                return (
+                  <Motion.div
+                    key={item.label}
+                    initial={{ opacity: 0, x: 20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: 0.05 + idx * 0.05 }}
+                    className="border-b border-white/5 pb-4 last:border-0"
+                  >
+                    {item.dropdown ? (
+                      <div className="space-y-6">
+                        <button
+                          onClick={() =>
+                            setMobileExpandedItem(mobileExpandedItem === idx ? null : idx)
+                          }
+                          className="group flex w-full items-center justify-between text-2xl font-semibold tracking-tight text-white"
+                        >
+                          <span className={mobileExpandedItem === idx ? "text-[#F99D1C]" : ""}>
+                            {item.label}
+                          </span>
+                          <ChevronDown
+                            className={`h-6 w-6 text-[#F99D1C] transition-transform duration-500 ${
+                              mobileExpandedItem === idx ? "rotate-180" : ""
+                            }`}
+                          />
+                        </button>
+                        <AnimatePresence>
+                          {mobileExpandedItem === idx && (
+                            <Motion.div
+                              initial={{ height: 0, opacity: 0 }}
+                              animate={{ height: "auto", opacity: 1 }}
+                              exit={{ height: 0, opacity: 0 }}
+                              transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+                              className="overflow-hidden"
+                            >
+                              {isServicesMega ? (
+                                <div className="space-y-6 pt-4">
+                                  {/* Services Section */}
+                                  <div className="border-l border-sky-400/30 pl-4">
+                                    <h4 className="mb-3 text-xs font-bold uppercase tracking-wider text-sky-400">
+                                      {col1Title}
+                                    </h4>
+                                    <div className="grid gap-3">
+                                      {serviceCards.map((serviceCard, cardIdx) => (
+                                        <Link
+                                          key={`mob-service-${cardIdx}`}
+                                          href={resolveDropdownLink(serviceCard.path || "/services", "services")}
+                                          onClick={() => setMobileMenuOpen(false)}
+                                          className="group block rounded-lg bg-white/5 p-3.5 transition-colors hover:bg-white/10"
+                                        >
+                                          <div className="flex items-center justify-between text-base font-bold text-white">
+                                            <div className="flex items-center gap-2.5">
+                                              {serviceCard.icon && (
+                                                <div className="flex h-5 w-5 shrink-0 items-center justify-center transition-transform duration-200 group-hover:scale-110">
+                                                  <img src={serviceCard.icon} alt="" className="h-5 w-5 object-contain" />
+                                                </div>
+                                              )}
+                                              <span>{serviceCard.name}</span>
+                                            </div>
+                                            <ArrowRight className="h-4 w-4 text-sky-400 transition-transform group-hover:translate-x-1" />
+                                          </div>
+                                          <p className="mt-1 text-xs text-slate-300">
+                                            {getServiceCardDescription(serviceCard.name, serviceCard.description)}
+                                          </p>
+                                        </Link>
+                                      ))}
                                     </div>
-                                  ))}
+                                  </div>
+
+                                  {/* Capabilities Section */}
+                                  <div className="border-l border-sky-400/30 pl-4">
+                                    <h4 className="mb-3 text-xs font-bold uppercase tracking-wider text-sky-400">
+                                      {col2Title}
+                                    </h4>
+                                    <div className="grid gap-2.5">
+                                      {capabilitiesItems.map((capItem) => (
+                                        <Link
+                                          key={`mob-cap-${capItem.name}`}
+                                          href={resolveDropdownLink(capItem.path, "services")}
+                                          onClick={() => setMobileMenuOpen(false)}
+                                          className="group flex items-center text-sm font-medium text-slate-200 transition-colors hover:text-white"
+                                        >
+                                          {capItem.icon ? (
+                                            <div className="mr-3 flex h-4 w-4 shrink-0 items-center justify-center text-sky-400 transition-transform duration-200 group-hover:scale-110">
+                                              <img src={capItem.icon} alt="" className="h-4 w-4 object-contain" />
+                                            </div>
+                                          ) : (
+                                            <div className="mr-3 h-1.5 w-1.5 rounded-full bg-sky-400 opacity-0 transition-opacity group-hover:opacity-100"></div>
+                                          )}
+                                          <span>{capItem.name}</span>
+                                        </Link>
+                                      ))}
+                                    </div>
+                                  </div>
+
+                                  {/* Agentic Toolkit Section */}
+                                  <div className="border-l border-sky-400/30 pl-4">
+                                    <h4 className="mb-3 text-xs font-bold uppercase tracking-wider text-sky-400">
+                                      {col3Title}
+                                    </h4>
+                                    <div className="grid gap-2.5">
+                                      {toolkitItems.map((toolItem) => (
+                                        <Link
+                                          key={`mob-tool-${toolItem.name}`}
+                                          href={toolItem.path}
+                                          onClick={() => setMobileMenuOpen(false)}
+                                          className="group flex items-center text-sm font-medium text-slate-200 transition-colors hover:text-white"
+                                        >
+                                          {toolItem.icon ? (
+                                            <div className="mr-3 flex h-4 w-4 shrink-0 items-center justify-center text-sky-400 transition-transform duration-200 group-hover:scale-110">
+                                              <img src={toolItem.icon} alt="" className="h-4 w-4 object-contain" />
+                                            </div>
+                                          ) : (
+                                            <div className="mr-3 h-1.5 w-1.5 rounded-full bg-sky-400 opacity-0 transition-opacity group-hover:opacity-100"></div>
+                                          )}
+                                          <span>{toolItem.name}</span>
+                                        </Link>
+                                      ))}
+                                    </div>
+                                  </div>
                                 </div>
-                              );
-                            })()}
-                          </Motion.div>
-                        )}
-                      </AnimatePresence>
-                    </div>
-                  ) : (
-                    <Link
-                      href={item.path}
-                      className="block text-2xl font-semibold tracking-tight text-white transition-colors hover:text-[#F99D1C]"
-                      onClick={() => setMobileMenuOpen(false)}
-                    >
-                      {item.label}
-                    </Link>
-                  )}
-                </Motion.div>
-              ))}
+                              ) : (
+                                (() => {
+                                  const isSmallDropdown =
+                                    item.label === "Industries" || item.label === "Resources";
+                                  return (
+                                    <div className="space-y-8 pt-4">
+                                      {item.dropdown.map((section) => (
+                                        <div
+                                          key={section.title}
+                                          className="border-l border-[#F99D1C]/20 pl-4"
+                                        >
+                                          {!isSmallDropdown && (
+                                            <h4 className="mb-4 text-sm font-semibold text-[#F99D1C] opacity-80">
+                                              {section.title}
+                                            </h4>
+                                          )}
+                                          <div className={`grid ${isSmallDropdown ? "gap-[18px]" : "gap-4"}`}>
+                                            {section.items.map((subItem) => (
+                                              <Link
+                                                key={subItem.name}
+                                                href={resolveDropdownLink(
+                                                  subItem.path,
+                                                  item.label.toLowerCase().includes("industr")
+                                                    ? "industries"
+                                                    : item.label.toLowerCase().includes("service") || item.label.toLowerCase().includes("what we do")
+                                                    ? "services"
+                                                    : undefined
+                                                )}
+                                                className="group flex items-center text-base font-semibold text-gray-300 transition-colors hover:text-white"
+                                                onClick={() => setMobileMenuOpen(false)}
+                                              >
+                                                {subItem.icon ? (
+                                                  <div className="mr-3 flex h-4 w-4 shrink-0 items-center justify-center transition-transform duration-200 group-hover:scale-110">
+                                                    <img src={subItem.icon} alt="" className="h-4 w-4 object-contain" />
+                                                  </div>
+                                                ) : (
+                                                  <div className="mr-3 h-1.5 w-1.5 rounded-full bg-[#F99D1C] opacity-0 transition-opacity group-hover:opacity-100"></div>
+                                                )}
+                                                {subItem.name}
+                                              </Link>
+                                            ))}
+                                          </div>
+                                        </div>
+                                      ))}
+                                    </div>
+                                  );
+                                })()
+                              )}
+                            </Motion.div>
+                          )}
+                        </AnimatePresence>
+                      </div>
+                    ) : (
+                      <Link
+                        href={item.path}
+                        className="block text-2xl font-semibold tracking-tight text-white transition-colors hover:text-[#F99D1C]"
+                        onClick={() => setMobileMenuOpen(false)}
+                      >
+                        {item.label}
+                      </Link>
+                    )}
+                  </Motion.div>
+                );
+              })}
             </div>
 
             <div className="space-y-4 bg-[#00142D] p-8">

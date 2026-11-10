@@ -1,5 +1,8 @@
-import { getServiceBySlug, getBlogsByCategory, getServicesList } from "@/lib/wordpress";
+import { getServiceBySlug, getBlogsByCategory, getServicesList, getService2PageData, getProductBySlug, getPostTemplateBySlug } from "@/lib/wordpress";
 import ServiceDetailClient from "./ServiceDetailClient";
+import MasterPageClient from "@/app/services/legacy-application-modernization/MasterPageClient";
+import { ModernProductTemplate } from "@/components/products/ModernProductTemplate";
+import { PRODUCT_1_DATA } from "@/lib/product-1-data";
 import { constructMetadata, getWebPageSchema } from "@/lib/seo";
 
 export const revalidate = 0;
@@ -38,16 +41,41 @@ export default async function ServicePage({ params }: { params: Promise<{ slug: 
       title: titleFromSlug(slug),
     };
 
-  // Fetch blogs based on the category specified in ACF
-  const categoryName = service.blogCategorySlug || service.blogCategory || "General";
-  const blogs = await getBlogsByCategory(categoryName);
-
   const schemaJsonData = getWebPageSchema({
     title: (service as any)?.heroTitle || (service as any)?.title || titleFromSlug(slug),
     description: (service as any)?.heroDescription || `Explore ${(service as any)?.title || titleFromSlug(slug)} services from Hutech Solutions.`,
     path: `/services/${slug}/`,
     image: (service as any)?.heroBgImage
   });
+
+  const postLookup = await getPostTemplateBySlug(slug, `/services/${slug}/`);
+  const tpl = (
+    postLookup.template ||
+    (service as any)?.pageRoutingSettings?.nextjsTemplate ||
+    (service as any)?.template ||
+    (slug === "legacy-application-modernization" ? "service-2" : "service-1")
+  ).toLowerCase().trim();
+
+  // 1. Service-2 Template
+  if (tpl === "service-2") {
+    const service2Data = await getService2PageData(`/services/${slug}/`, slug);
+    return (
+      <>
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schemaJsonData) }} />
+        <MasterPageClient data={service2Data} />
+      </>
+    );
+  }
+
+  // 2. Product Page Template
+  if (tpl === "product") {
+    const productData = await getProductBySlug(slug);
+    return <ModernProductTemplate data={productData || PRODUCT_1_DATA} />;
+  }
+
+  // 3. Default to Service-1 (standard service detail)
+  const categoryName = service.blogCategorySlug || service.blogCategory || "General";
+  const blogs = await getBlogsByCategory(categoryName);
 
   return (
     <>

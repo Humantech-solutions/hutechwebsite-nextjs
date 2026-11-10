@@ -1,3 +1,6 @@
+import { MASTER_PAGE_DATA } from "@/lib/data/legacy-modernization";
+import type { ModernProductData } from "@/components/products/ModernProductTemplate";
+import { PRODUCT_1_DATA } from "@/lib/product-1-data";
 import { CaseStudy } from "@/lib/data/case-studies";
 import { getIPublishAllBlogs } from "@/lib/ipublish";
 // WordPress GraphQL API integration for Hutech Solutions
@@ -167,23 +170,50 @@ function imgUrl(field: any): string | undefined {
 // ─── Homepage Query ──────────────────────────────────────────────────────────
 
 export type ChromeMenuItem = {
+  id?: number;
+  parentId?: number;
   label: string;
   path: string;
+  object?: string;
+  type?: string;
+  category?: string;
+  parentSection?: string;
+  description?: string;
+  exploreText?: string;
+  icon?: string;
+  iconUrl?: string;
   children?: ChromeMenuItem[];
+};
+
+export type DropdownItem = {
+  name: string;
+  path: string;
+  description?: string;
+  exploreText?: string;
+  icon?: string;
+  iconUrl?: string;
+};
+
+export type DropdownSection = {
+  title: string;
+  path?: string;
+  description?: string;
+  icon?: string;
+  iconUrl?: string;
+  items: DropdownItem[];
 };
 
 export type HeaderNavItem = {
   label: string;
   path: string;
-  dropdown?: {
-    title: string;
-    items: { name: string; path: string }[];
-  }[];
+  dropdown?: DropdownSection[];
 };
 
 export type TopNavChromeData = {
   backgroundColor?: string;
   textColor?: string;
+  textHoverColor?: string;
+  hoverColor?: string;
   phones?: { text?: string; url?: string }[];
   emails?: { text?: string; url?: string }[];
   socials?: { id?: number; icon?: string; url?: string }[];
@@ -200,7 +230,7 @@ export type HeaderChromeData = {
     buttonText?: string;
     buttonUrl?: string;
   };
-  megaBottomLinks?: { name: string; path: string }[];
+  megaBottomLinks?: { name: string; path: string; icon?: string; iconUrl?: string }[];
   megaBottomTagline?: string;
   mobileCta?: { label?: string; url?: string };
   mobileFooter?: { left?: string; right?: string };
@@ -217,12 +247,12 @@ export type FooterChromeData = {
     about?: string;
   };
   menus?: {
-    services?: { name: string; path: string }[];
-    industries?: { name: string; path: string }[];
-    resources?: { name: string; path: string }[];
-    company?: { name: string; path: string }[];
-    caseStudies?: { name: string; path: string }[];
-    legal?: { name: string; path: string }[];
+    services?: { name: string; path: string; icon?: string; iconUrl?: string }[];
+    industries?: { name: string; path: string; icon?: string; iconUrl?: string }[];
+    resources?: { name: string; path: string; icon?: string; iconUrl?: string }[];
+    company?: { name: string; path: string; icon?: string; iconUrl?: string }[];
+    caseStudies?: { name: string; path: string; icon?: string; iconUrl?: string }[];
+    legal?: { name: string; path: string; icon?: string; iconUrl?: string }[];
   };
   offices?: {
     title?: string;
@@ -260,56 +290,238 @@ export type SiteChromeData = {
   footer: FooterChromeData;
 };
 
-function applyParentSlug(parentPath: string | undefined, childPath: string | undefined): string {
-  const p = parentPath || "#";
-  let c = childPath || "#";
-  if (c === "#" || c.startsWith("http") || p === "#" || p === "/") return c;
+export function normalizeMenuPath(rawPath: string | undefined): string {
+  if (!rawPath || rawPath === "#" || rawPath === "") return "#";
+  if (
+    rawPath.startsWith("http://") ||
+    rawPath.startsWith("https://") ||
+    rawPath.startsWith("mailto:") ||
+    rawPath.startsWith("tel:")
+  ) {
+    if (WORDPRESS_BASE_URL && rawPath.startsWith(WORDPRESS_BASE_URL)) {
+      rawPath = rawPath.slice(WORDPRESS_BASE_URL.length);
+    } else {
+      return rawPath;
+    }
+  }
 
-  // Remove the default CPT slugs if they exist so we can cleanly append to the parent
-  // WordPress sometimes prefixes CPT slugs with /blog/ — handle both patterns
-  c = c.replace(
-    /^\/(blog\/)?(hutech_service|case_study|hutech_event|hutech_news|hutech_career|hutech_press_release|hutech_document)\//,
-    "/"
-  );
+  let p = rawPath.trim();
+
+  // Strip duplicate parent path chaining (e.g. /industries/services/... or /services/industries/...)
+  p = p
+    .replace(/^\/industries\/services\//i, "/industries/")
+    .replace(/^\/services\/industries\//i, "/services/");
+
+  // Rewrite WP CPT slugs to Next.js routes
+  p = p
+    .replace(/^\/(?:blog\/)?(?:hutech_service|service)\//i, "/services/")
+    .replace(/^\/(?:blog\/)?(?:hutech_industry|industry|industries)\//i, "/industries/")
+    .replace(/^\/(?:blog\/)?(?:case_study|case-study|case-studies)\//i, "/resources/case-studies/")
+    .replace(/^\/(?:blog\/)?(?:hutech_event|event|events)\//i, "/resources/events/")
+    .replace(/^\/(?:blog\/)?(?:hutech_news|news)\//i, "/company/news/")
+    .replace(/^\/(?:blog\/)?(?:hutech_career|career|careers)\//i, "/careers/")
+    .replace(/^\/(?:blog\/)?(?:hutech_press_release|press_release|press-release)\//i, "/company/press-release/")
+    .replace(/^\/(?:blog\/)?(?:hutech_document|hutech-document|hutech-documents|documents)\//i, "/resources/hutech-documents/");
+
+  // Normalize slashes
+  if (!p.startsWith("/")) p = `/${p}`;
+  if (p.length > 1 && p.endsWith("/")) p = p.slice(0, -1);
+
+  // Clean again after slashes normalized
+  p = p
+    .replace(/^\/industries\/services\//i, "/industries/")
+    .replace(/^\/services\/industries\//i, "/services/");
+
+  // Map known routes
+  if (p === "/home") return "/";
+  if (p === "/services" || p.startsWith("/services/")) return p;
+  if (p === "/industries" || p.startsWith("/industries/")) return p;
+  if (p === "/events" || p.startsWith("/events/")) return p.replace(/^\/events/, "/resources/events");
+  if (p === "/case-studies" || p.startsWith("/case-studies/")) return p.replace(/^\/case-studies/, "/resources/case-studies");
+  if (p === "/blogs" || p.startsWith("/blogs/")) return p.replace(/^\/blogs/, "/resources/blogs");
+  if (p === "/hutech-documents" || p.startsWith("/hutech-documents/")) return p.replace(/^\/hutech-documents/, "/resources/hutech-documents");
+  if (p === "/leadership") return "/company/leadership";
+  if (p === "/vision-mission-values") return "/company/vision-mission-values";
+  if (p === "/partnership") return "/company/partnership";
+  if (p === "/life-at-hutech") return "/company/life-at-hutech";
+  if (p === "/awards") return "/company/awards";
+  if (p === "/press-release" || p.startsWith("/press-release/")) return p.replace(/^\/press-release/, "/company/press-release");
+  if (p === "/news" || p.startsWith("/news/")) return p.replace(/^\/news/, "/company/news");
+
+  return p;
+}
+
+function applyParentSlug(parentPath: string | undefined, childPath: string | undefined): string {
+  let normChild = normalizeMenuPath(childPath);
+  if (normChild === "#" || normChild.startsWith("http") || normChild === "/") return normChild;
+
+  // Clean any cross-section prefixes if inside a specific parent section
+  if (parentPath === "/industries") {
+    normChild = normChild
+      .replace(/^\/services\//i, "/industries/")
+      .replace(/^\/industries\/services\//i, "/industries/");
+  } else if (parentPath === "/services") {
+    normChild = normChild
+      .replace(/^\/industries\//i, "/services/")
+      .replace(/^\/services\/industries\//i, "/services/");
+  }
+
+  const topSections = ["/services", "/resources", "/company", "/about", "/careers", "/contact", "/industries", "/products"];
+  if (topSections.some((s) => normChild === s || normChild.startsWith(`${s}/`))) {
+    return normChild;
+  }
+
+  const p = parentPath || "#";
+  if (p === "#" || p === "/") return normChild;
 
   const cleanP = p.replace(/\/$/, "");
-  if (!c.startsWith(cleanP + "/") && c !== cleanP) {
-    const cleanC = c.startsWith("/") ? c : `/${c}`;
-    c = `${cleanP}${cleanC}`;
+  if (!normChild.startsWith(cleanP + "/") && normChild !== cleanP) {
+    return `${cleanP}${normChild.startsWith("/") ? normChild : `/${normChild}`}`;
   }
-  return c;
+  return normChild;
 }
 
 function flattenMenuItems(
   items?: ChromeMenuItem[],
   parentPath?: string
-): { name: string; path: string }[] {
-  return (items || []).map((item) => ({
-    name: item.label,
-    path: parentPath ? applyParentSlug(parentPath, item.path) : item.path || "#",
-  }));
+): DropdownItem[] {
+  return (items || []).map((item) => {
+    let effectiveParent = parentPath;
+    const obj = item.object || "";
+    const cat = (item.category || item.parentSection || "").toLowerCase();
+
+    // Determine parent route dynamically:
+    if (cat === "industries" || cat === "industry" || cat.includes("industr")) {
+      effectiveParent = "/industries";
+    } else if (parentPath === "/industries" || parentPath?.startsWith("/industries")) {
+      effectiveParent = "/industries";
+    } else if (cat === "services" || cat === "service" || cat.includes("service")) {
+      effectiveParent = "/services";
+    } else if (parentPath === "/services" || parentPath?.startsWith("/services")) {
+      effectiveParent = "/services";
+    } else if (obj === "industry" || obj === "industries" || obj === "hutech_industry") {
+      effectiveParent = "/industries";
+    } else if (obj === "service" || obj === "hutech_service") {
+      if (!effectiveParent) {
+        effectiveParent = "/services";
+      }
+    }
+
+    let finalPath = effectiveParent ? applyParentSlug(effectiveParent, item.path) : normalizeMenuPath(item.path);
+
+    // Prevent cross-prefix pollution
+    if (effectiveParent === "/industries") {
+      finalPath = finalPath
+        .replace(/^\/industries\/services\//i, "/industries/")
+        .replace(/^\/services\//i, "/industries/");
+    } else if (effectiveParent === "/services") {
+      finalPath = finalPath
+        .replace(/^\/services\/industries\//i, "/services/")
+        .replace(/^\/industries\//i, "/services/");
+    }
+
+    return {
+      name: item.label,
+      path: finalPath,
+      description: item.description,
+      exploreText: item.exploreText,
+      icon: item.icon || item.iconUrl || "",
+      iconUrl: item.iconUrl || item.icon || "",
+    };
+  });
 }
 
 function transformPrimaryMenu(items?: ChromeMenuItem[]): HeaderNavItem[] {
   return (items || []).map((item) => {
-    // Infer a parent path if the top-level item uses '#' or '/'
-    const parentPath =
-      item.path && item.path !== "#" && item.path !== "/"
-        ? item.path
-        : `/${item.label.toLowerCase().replace(/[^a-z0-9]+/g, "-")}`;
+    const isServicesOrWhatWeDo =
+      item.label.toLowerCase().includes("service") ||
+      item.label.toLowerCase().includes("what we do");
+
+    const isIndustries =
+      item.label.toLowerCase().includes("industry") ||
+      item.label.toLowerCase().includes("industries");
+
+    const parentPath = isServicesOrWhatWeDo
+      ? "/services"
+      : isIndustries
+      ? "/industries"
+      : item.path && item.path !== "#" && item.path !== "/"
+      ? normalizeMenuPath(item.path)
+      : `/${item.label.toLowerCase().replace(/[^a-z0-9]+/g, "-")}`;
 
     const dropdown = item.children?.length
-      ? item.children.map((section) => ({
-          title: section.label,
-          items: section.children?.length
-            ? flattenMenuItems(section.children, parentPath)
-            : [{ name: section.label, path: applyParentSlug(parentPath, section.path) }],
-        }))
+      ? item.children.map((section, sectionIdx) => {
+          const sectionPath = normalizeMenuPath(section.path);
+          const isSectionServices =
+            isServicesOrWhatWeDo &&
+            (sectionIdx === 0 || section.label.toLowerCase().includes("service"));
+
+          const isSectionIndustries =
+            isIndustries || section.label.toLowerCase().includes("industr");
+
+          const effectiveParent = isSectionIndustries
+            ? "/industries"
+            : isSectionServices
+            ? "/services"
+            : parentPath;
+
+          const resolveItemPath = (rawPath?: string) => {
+            const norm = normalizeMenuPath(rawPath);
+            if (norm === "#" || norm === "/" || norm.startsWith("http")) return norm;
+            let result = applyParentSlug(effectiveParent, norm);
+            if (effectiveParent === "/industries") {
+              result = result
+                .replace(/^\/industries\/services\//i, "/industries/")
+                .replace(/^\/services\//i, "/industries/");
+            } else if (effectiveParent === "/services") {
+              result = result
+                .replace(/^\/services\/industries\//i, "/services/")
+                .replace(/^\/industries\//i, "/services/");
+            }
+            return result;
+          };
+
+          return {
+            title: section.label,
+            path:
+              sectionPath === "#" && isServicesOrWhatWeDo && sectionIdx === 0
+                ? "/services"
+                : sectionPath === "#" && isSectionIndustries
+                ? "/industries"
+                : resolveItemPath(section.path),
+            description: (section as any).description,
+            icon: (section as any).icon || (section as any).iconUrl || "",
+            iconUrl: (section as any).iconUrl || (section as any).icon || "",
+            items: section.children?.length
+              ? flattenMenuItems(section.children, effectiveParent)
+              : [
+                  {
+                    name: section.label,
+                    path:
+                      sectionPath === "#" && isServicesOrWhatWeDo && sectionIdx === 0
+                        ? "/services"
+                        : sectionPath === "#" && isSectionIndustries
+                        ? "/industries"
+                        : resolveItemPath(section.path),
+                    description: (section as any).description,
+                    exploreText: (section as any).exploreText,
+                    icon: (section as any).icon || (section as any).iconUrl || "",
+                    iconUrl: (section as any).iconUrl || (section as any).icon || "",
+                  },
+                ],
+          };
+        })
       : undefined;
 
     return {
       label: item.label,
-      path: item.path || "#",
+      path: isServicesOrWhatWeDo
+        ? "/services"
+        : isIndustries
+        ? "/industries"
+        : item.path
+        ? normalizeMenuPath(item.path)
+        : "#",
       dropdown,
     };
   });
@@ -4935,4 +5147,557 @@ export async function getSitemapData(
     console.warn("[WP] getSitemapData failed:", err);
     return [];
   }
+}
+
+export function transformProductNode(node: any, defaultData?: ModernProductData): ModernProductData {
+  const f = node.productFields || node.acf || {};
+  const base = defaultData || PRODUCT_1_DATA;
+
+  const parsePills = (pillsStr?: string, defaultPills: string[] = []): string[] => {
+    if (!pillsStr || typeof pillsStr !== "string" || !pillsStr.trim()) return defaultPills;
+    return pillsStr.split(/[,;\n]+/).map((s) => s.trim()).filter(Boolean);
+  };
+
+  const getMediaUrl = (field: any): string | undefined => {
+    if (!field) return undefined;
+    if (typeof field === "string") return field;
+    if (field.node?.sourceUrl) return field.node.sourceUrl;
+    if (field.url) return field.url;
+    return undefined;
+  };
+
+  return {
+    hero: {
+      badge: f.heroBadge || base.hero.badge,
+      title: f.heroTitle || f.heroHeadline || base.hero.title,
+      titleLine1: f.heroTitleLine1 || base.hero.titleLine1,
+      titleLine2: f.heroTitleLine2 || base.hero.titleLine2,
+      titleItalic: f.heroTitleItalic || base.hero.titleItalic,
+      description: f.heroDescription || base.hero.description,
+      primaryCtaText: f.heroBtn1Text || base.hero.primaryCtaText,
+      primaryCtaUrl: f.heroBtn1Url || base.hero.primaryCtaUrl,
+      secondaryCtaText: f.heroBtn2Text || base.hero.secondaryCtaText,
+      demoVideoUrl: f.heroDemoVideoUrl || base.hero.demoVideoUrl,
+      demoVideoEmbed: f.heroDemoVideoEmbed || base.hero.demoVideoEmbed,
+      image: getMediaUrl(f.heroImage) || base.hero.image,
+      ratingScore: f.heroRatingScore || base.hero.ratingScore,
+      ratingText: f.heroRatingText || base.hero.ratingText,
+      dashboard: {
+        velocity: f.heroDashVelocity || base.hero.dashboard?.velocity || "94.8%",
+        velocityDelta: f.heroDashVelocityDelta || base.hero.dashboard?.velocityDelta || "+12.4%",
+        activeTasks: f.heroDashActiveTasks || base.hero.dashboard?.activeTasks || "1,284",
+        activeTasksDelta: f.heroDashActiveTasksDelta || base.hero.dashboard?.activeTasksDelta || "+8.1%",
+        timeSavedWeekly: f.heroDashTimeSavedWeekly || base.hero.dashboard?.timeSavedWeekly || "Time saved this week: 128 hours",
+        activeTaskTitle: f.heroDashActiveTaskTitle || base.hero.dashboard?.activeTaskTitle || "Automated lead scoring",
+        activeTaskSubtitle: f.heroDashActiveTaskSubtitle || base.hero.dashboard?.activeTaskSubtitle || "Qualify inbound leads",
+      },
+    },
+    overview: {
+      sectionTag: f.overviewSectionTag || base.overview.sectionTag,
+      sectionTitle: f.overviewSectionTitle || base.overview.sectionTitle,
+      headline: f.overviewHeadline || f.overviewTitle || base.overview.headline,
+      headlineLine1: f.overviewHeadlineLine1 || base.overview.headlineLine1,
+      headlineItalic: f.overviewHeadlineItalic || base.overview.headlineItalic,
+      description: f.overviewDescription || base.overview.description,
+      stat1Value: f.overviewStat1Value || base.overview.stat1Value,
+      stat1Label: f.overviewStat1Label || base.overview.stat1Label,
+      stat2Value: f.overviewStat2Value || base.overview.stat2Value,
+      stat2Label: f.overviewStat2Label || base.overview.stat2Label,
+      image: getMediaUrl(f.overviewImage) || base.overview.image,
+    },
+    features: {
+      sectionTag: f.featuresSectionTag || base.features.sectionTag,
+      sectionTitle: f.featuresSectionTitle || base.features.sectionTitle,
+      headline: f.featuresHeadline || f.featuresTitle || base.features.headline,
+      headlinePrefix: f.featuresHeadlinePrefix || base.features.headlinePrefix,
+      headlineItalic: f.featuresHeadlineItalic || base.features.headlineItalic,
+      description: f.featuresDescription || base.features.description,
+      cards: [1, 2, 3, 4].map((num, i) => {
+        const fallback = base.features.cards[i] || {
+          number: `0${num}`,
+          title: `Feature ${num}`,
+          description: "",
+          iconType: "concentric" as const,
+        };
+        return {
+          number: f[`feature${num}Number`] || fallback.number,
+          title: f[`feature${num}Title`] || fallback.title,
+          description: f[`feature${num}Description`] || fallback.description,
+          iconType: (f[`feature${num}IconType`] as any) || fallback.iconType || "concentric",
+          iconImage: getMediaUrl(f[`feature${num}IconImage`]) || fallback.iconImage,
+        };
+      }),
+    },
+    benefits: {
+      sectionTag: f.benefitsSectionTag || base.benefits.sectionTag,
+      sectionTitle: f.benefitsSectionTitle || base.benefits.sectionTitle,
+      headline: f.benefitsHeadline || f.benefitsTitle || base.benefits.headline,
+      headlineLine1: f.benefitsHeadlineLine1 || base.benefits.headlineLine1,
+      headlineItalic: f.benefitsHeadlineItalic || base.benefits.headlineItalic,
+      description: f.benefitsDescription || base.benefits.description,
+      donutStat: f.benefitsDonutStat || base.benefits.donutStat,
+      donutLabel: f.benefitsDonutLabel || base.benefits.donutLabel,
+      card1Title: f.benefitsCard1Title || base.benefits.card1Title,
+      card1Description: f.benefitsCard1Description || base.benefits.card1Description,
+      card2Title: f.benefitsCard2Title || base.benefits.card2Title,
+      card2Description: f.benefitsCard2Description || base.benefits.card2Description,
+      card2Stat: f.benefitsCard2Stat || base.benefits.card2Stat,
+      card2StatLabel: f.benefitsCard2StatLabel || base.benefits.card2StatLabel,
+      card3Title: f.benefitsCard3Title || base.benefits.card3Title,
+      card3Description: f.benefitsCard3Description || base.benefits.card3Description,
+    },
+    howItWorks: {
+      sectionTag: f.howSectionTag || base.howItWorks.sectionTag,
+      sectionTitle: f.howSectionTitle || base.howItWorks.sectionTitle,
+      headline: f.howHeadline || f.howItWorksHeadline || base.howItWorks.headline,
+      headlinePrefix: f.howHeadlinePrefix || base.howItWorks.headlinePrefix,
+      headlineItalic: f.howHeadlineItalic || base.howItWorks.headlineItalic,
+      description: f.howDescription || base.howItWorks.description,
+      steps: [1, 2, 3].map((num, i) => {
+        const fallback = base.howItWorks.steps[i] || {
+          number: `0${num}`,
+          title: `Step ${num}`,
+          description: "",
+          activeStep: num as 1 | 2 | 3,
+        };
+        return {
+          number: f[`howStep${num}Number`] || fallback.number,
+          title: f[`howStep${num}Title`] || fallback.title,
+          description: f[`howStep${num}Description`] || fallback.description,
+          activeStep: (num as 1 | 2 | 3),
+        };
+      }),
+    },
+    useCases: {
+      sectionTag: f.useCasesSectionTag || base.useCases.sectionTag,
+      sectionTitle: f.useCasesSectionTitle || base.useCases.sectionTitle,
+      headline: f.useCasesHeadline || f.useCasesTitle || base.useCases.headline,
+      headlinePrefix: f.useCasesHeadlinePrefix || base.useCases.headlinePrefix,
+      headlineItalic: f.useCasesHeadlineItalic || base.useCases.headlineItalic,
+      cards: [1, 2, 3].map((num, i) => {
+        const fallback = base.useCases.cards[i] || {
+          number: `0${num}`,
+          title: `Use Case ${num}`,
+          description: "",
+          pills: [],
+        };
+        return {
+          number: f[`useCase${num}Number`] || fallback.number,
+          title: f[`useCase${num}Title`] || fallback.title,
+          description: f[`useCase${num}Description`] || fallback.description,
+          pills: parsePills(f[`useCase${num}Pills`], fallback.pills),
+        };
+      }),
+    },
+    industries: {
+      sectionTag: f.industriesSectionTag || base.industries.sectionTag,
+      sectionTitle: f.industriesSectionTitle || base.industries.sectionTitle,
+      headline: f.industriesHeadline || f.industriesTitle || base.industries.headline,
+      headlinePrefix: f.industriesHeadlinePrefix || base.industries.headlinePrefix,
+      headlineItalic: f.industriesHeadlineItalic || base.industries.headlineItalic,
+      description: f.industriesDescription || base.industries.description,
+      items: [1, 2, 3, 4, 5].map((num, i) => {
+        const fallback = base.industries.items[i] || {
+          number: `0${num}`,
+          name: `Industry ${num}`,
+          tagline: "",
+          description: "",
+        };
+        return {
+          number: f[`industry${num}Number`] || fallback.number,
+          name: f[`industry${num}Name`] || fallback.name,
+          tagline: f[`industry${num}Tagline`] || fallback.tagline,
+          description: f[`industry${num}Description`] || fallback.description,
+        };
+      }),
+    },
+    technicalSpecs: {
+      sectionTag: f.specsSectionTag || base.technicalSpecs.sectionTag,
+      sectionTitle: f.specsSectionTitle || base.technicalSpecs.sectionTitle,
+      headline: f.specsHeadline || f.technicalSpecsHeadline || base.technicalSpecs.headline,
+      headlinePrefix: f.specsHeadlinePrefix || base.technicalSpecs.headlinePrefix,
+      headlineItalic: f.specsHeadlineItalic || base.technicalSpecs.headlineItalic,
+      specs: [1, 2, 3, 4, 5].map((num, i) => {
+        const fallback = base.technicalSpecs.specs[i] || {
+          number: `0${num}`,
+          category: `Category ${num}`,
+          details: "",
+          metric: "",
+        };
+        return {
+          number: f[`spec${num}Number`] || fallback.number,
+          category: f[`spec${num}Category`] || fallback.category,
+          details: f[`spec${num}Details`] || fallback.details,
+          metric: f[`spec${num}Metric`] || fallback.metric,
+        };
+      }),
+    },
+    integrations: {
+      sectionTag: f.integrationsSectionTag || base.integrations.sectionTag,
+      sectionTitle: f.integrationsSectionTitle || base.integrations.sectionTitle,
+      headline: f.integrationsHeadline || f.integrationsTitle || base.integrations.headline,
+      headlinePrefix: f.integrationsHeadlinePrefix || base.integrations.headlinePrefix,
+      headlineItalic: f.integrationsHeadlineItalic || base.integrations.headlineItalic,
+      description: f.integrationsDescription || base.integrations.description,
+      buttonText: f.integrationsButtonText || base.integrations.buttonText,
+      buttonUrl: f.integrationsButtonUrl || base.integrations.buttonUrl,
+      videoUrl: f.integrationsVideoUrl || base.integrations.videoUrl,
+      videoPoster: getMediaUrl(f.integrationsVideoPoster) || base.integrations.videoPoster,
+      videoTitle: f.integrationsVideoTitle || base.integrations.videoTitle,
+      videoSubtitle: f.integrationsVideoSubtitle || base.integrations.videoSubtitle,
+      videoEmbed: f.integrationsVideoEmbed || base.integrations.videoEmbed,
+    },
+    security: {
+      sectionTag: f.securitySectionTag || base.security.sectionTag,
+      sectionTitle: f.securitySectionTitle || base.security.sectionTitle,
+      headline: f.securityHeadline || f.securityTitle || base.security.headline,
+      headlinePrefix: f.securityHeadlinePrefix || base.security.headlinePrefix,
+      headlineItalic: f.securityHeadlineItalic || base.security.headlineItalic,
+      description: f.securityDescription || base.security.description,
+      pillars: [1, 2, 3].map((num, i) => {
+        const fallback = base.security.pillars[i] || {
+          number: `0${num}`,
+          title: `Pillar ${num}`,
+          description: "",
+        };
+        return {
+          number: f[`securityPillar${num}Number`] || fallback.number,
+          title: f[`securityPillar${num}Title`] || fallback.title,
+          description: f[`securityPillar${num}Description`] || fallback.description,
+        };
+      }),
+      badges: parsePills(f.securityBadges, base.security.badges),
+    },
+    faqs: {
+      sectionTag: f.faqsSectionTag || base.faqs.sectionTag,
+      sectionTitle: f.faqsSectionTitle || base.faqs.sectionTitle,
+      headline: f.faqsHeadline || f.faqsTitle || base.faqs.headline,
+      headlinePrefix: f.faqsHeadlinePrefix || base.faqs.headlinePrefix,
+      headlineItalic: f.faqsHeadlineItalic || base.faqs.headlineItalic,
+      description: f.faqsDescription || base.faqs.description,
+      contactText: f.faqsContactText || base.faqs.contactText,
+      contactUrl: f.faqsContactUrl || base.faqs.contactUrl,
+      items: [1, 2, 3, 4, 5, 6]
+        .map((num, i) => {
+          const q = f[`faq${num}Question`];
+          const a = f[`faq${num}Answer`];
+          if (q || a) {
+            return {
+              number: `0${num}`,
+              question: q || "",
+              answer: a || "",
+            };
+          }
+          return base.faqs.items[i] || null;
+        })
+        .filter(Boolean) as any,
+    },
+    ctaBanner: {
+      tag: f.ctaTag || base.ctaBanner.tag,
+      headline: f.ctaHeadline || f.ctaTitle || base.ctaBanner.headline,
+      headlineLine1: f.ctaHeadlineLine1 || base.ctaBanner.headlineLine1,
+      headlineLine2: f.ctaHeadlineLine2 || base.ctaBanner.headlineLine2,
+      headlineItalic: f.ctaHeadlineItalic || base.ctaBanner.headlineItalic,
+      description: f.ctaDescription || base.ctaBanner.description,
+      buttonText: f.ctaBtnText || base.ctaBanner.buttonText,
+      buttonUrl: f.ctaBtnUrl || base.ctaBanner.buttonUrl,
+      bgImage: getMediaUrl(f.ctaBgImage) || base.ctaBanner.bgImage,
+    },
+  };
+}
+
+
+export async function getPostTemplateBySlug(slug: string, uri?: string): Promise<{
+  template: string;
+  postType: string;
+  rawItem: any;
+}> {
+  const normSlug = (slug || (uri || "").split("/").filter(Boolean).pop() || "").toLowerCase().trim();
+  if (!normSlug) return { template: "", postType: "", rawItem: null };
+
+  const endpoint = process.env.NEXT_PUBLIC_WORDPRESS_API_URL || "http://localhost/hutech-website/graphql";
+  const restBase = endpoint.replace('/graphql', '');
+
+  const postTypes = [
+    "pages",
+    "hutech_service",
+    "hutech_product",
+    "hutech_industry",
+    "case_study",
+    "posts",
+    "hutech_event",
+    "hutech_news"
+  ];
+
+  for (const pt of postTypes) {
+    try {
+      const res = await fetch(`${restBase}/wp-json/wp/v2/${pt}?slug=${normSlug}&_embed`, {
+        next: { revalidate: 60 }
+      });
+      if (res.ok) {
+        const items = await res.json();
+        if (Array.isArray(items) && items.length > 0) {
+          const item = items[0];
+          let tpl = (
+            item.pageRoutingSettings?.nextjsTemplate ||
+            item.acf?.template ||
+            item.template ||
+            ""
+          ).toString().toLowerCase().trim();
+          if (Array.isArray(tpl)) tpl = tpl[0] || "";
+          return { template: tpl, postType: pt, rawItem: item };
+        }
+      }
+    } catch (e) {}
+  }
+
+  return { template: "", postType: "", rawItem: null };
+}
+
+export async function getProductBySlug(slug: string): Promise<ModernProductData | null> {
+  const normSlug = (slug || "").toLowerCase().trim();
+  const endpoint = process.env.NEXT_PUBLIC_WORDPRESS_API_URL || "http://localhost/hutech-website/graphql";
+  const restBase = endpoint.replace('/graphql', '');
+
+  const postTypes = ["hutech_product", "pages", "hutech_service", "hutech_industry", "posts"];
+  for (const pt of postTypes) {
+    try {
+      const res = await fetch(`${restBase}/wp-json/wp/v2/${pt}?slug=${normSlug}&_embed`, {
+        next: { revalidate: 60 }
+      });
+      if (res.ok) {
+        const items = await res.json();
+        if (Array.isArray(items) && items.length > 0) {
+          const item = items[0];
+          if (item.acf || item.productFields) {
+            return transformProductNode(item, PRODUCT_1_DATA);
+          }
+        }
+      }
+    } catch (err) {}
+  }
+
+  // Fallback to local default data for product-1
+  if (normSlug === "product-1" || normSlug === "lumacore") {
+    return PRODUCT_1_DATA;
+  }
+
+  return null;
+}
+
+export function transformService2Node(node: any, defaultData = MASTER_PAGE_DATA): any {
+  const f = node.service2Fields || node.acf || {};
+  const base = defaultData;
+
+  const parseLines = (str?: string, defaultLines: string[] = []): string[] => {
+    if (!str || typeof str !== "string" || !str.trim()) return defaultLines;
+    return str.split(/\r?\n+/).map((s) => s.trim()).filter(Boolean);
+  };
+
+  return {
+    meta: {
+      title: node.title?.rendered || node.title || base.meta.title,
+      description: f.s2HeroDescription || base.meta.description,
+      url: node.uri || base.meta.url,
+    },
+    hero: {
+      eyebrow: f.s2HeroEyebrow || base.hero.eyebrow,
+      tagline: f.s2HeroTagline || base.hero.tagline,
+      headline: f.s2HeroHeadline || `${base.hero.headlineStart} |${base.hero.headlineGrad}`,
+      headlineStart: base.hero.headlineStart,
+      headlineGrad: base.hero.headlineGrad,
+      description: f.s2HeroDescription || base.hero.description,
+      cta1Text: f.s2HeroCta1Text || "Start Modernization Journey",
+      cta1Url: f.s2HeroCta1Url || "/contact",
+      cta2Text: f.s2HeroCta2Text || "Explore Legacy Stacks",
+      cta2Url: f.s2HeroCta2Url || "#technology-stacks",
+      cta3Text: f.s2HeroCta3Text || "Discover Agentic AI",
+      cta3Url: f.s2HeroCta3Url || "#agentic-platform",
+      checks: parseLines(f.s2HeroChecks, base.hero.checks),
+      stats: [1, 2, 3, 4].map((num, i) => {
+        const fallback = base.hero.stats[i] || { strong: "", span: "" };
+        return {
+          strong: f[`s2HeroStat${num}Strong`] || fallback.strong,
+          span: f[`s2HeroStat${num}Span`] || fallback.span,
+        };
+      }),
+      orbitCenterBadge: f.s2HeroOrbitCenterBadge || "AGENTIC AI",
+      orbitCenterSubtitle: f.s2HeroOrbitCenterSubtitle || "Platform Orchestrator",
+      pills: [1, 2, 3, 4].map((num) => ({
+        title: f[`s2HeroPill${num}Title`] || "",
+        subtitle: f[`s2HeroPill${num}Subtitle`] || "",
+      })),
+    },
+    intro: {
+      tagline: f.s2IntroTagline || base.intro.tagline,
+      heading: f.s2IntroHeading || base.intro.heading,
+      description1: f.s2IntroDescription1 || base.intro.description1,
+      description2: f.s2IntroDescription2 || base.intro.description2,
+      ctaText: f.s2IntroCtaText || "Request an Application Assessment",
+      ctaUrl: f.s2IntroCtaUrl || "/contact",
+      approachBadge: f.s2IntroApproachBadge || "OUR ENGINEERING APPROACH",
+      approachTitle: f.s2IntroApproachTitle || base.intro.approachTitle,
+      approachDescription: f.s2IntroApproachDescription || base.intro.approachDescription,
+      points: parseLines(f.s2IntroPoints, base.intro.points),
+      outcome: f.s2IntroOutcome || base.intro.outcome,
+    },
+    challengesTagline: f.s2ChallengesTagline || "WHY MODERNIZE",
+    challengesHeading: f.s2ChallengesHeading || "Is Your Legacy Technology |Holding Back Business Innovation?",
+    challengesDescription: f.s2ChallengesDescription || "Legacy applications often remain essential to enterprise operations. However, outdated architectures, aging technology stacks, and increasing maintenance costs can limit an organization’s ability to innovate, scale, and secure digital workflows.",
+    challenges: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((num, i) => {
+      const fallback = base.challenges[i] || { challenge: "", impact: "", icon: "Cpu" };
+      return {
+        challenge: f[`challenge${num}Title`] || fallback.challenge,
+        impact: f[`challenge${num}Impact`] || fallback.impact,
+        icon: f[`challenge${num}Icon`] || fallback.icon,
+      };
+    }),
+    techGridTagline: f.s2TechGridTagline || "TECHNOLOGY-SPECIFIC MODERNIZATION",
+    techGridHeading: f.s2TechGridHeading || "Specialized Modernization Across |Major Legacy Technologies",
+    techGridDescription: f.s2TechGridDescription || "Hutech provides dedicated modernization frameworks, automated code intelligence, and specialized engineering for the industry's most common legacy technology platforms.",
+    capabilitiesTagline: f.s2CapabilitiesTagline || "CORE CAPABILITIES",
+    capabilitiesHeading: f.s2CapabilitiesHeading || "End-to-End Legacy Application |Modernization Services",
+    capabilitiesDescription: f.s2CapabilitiesDescription || "Hutech provides comprehensive application modernization services designed to help enterprises assess, transform, migrate, and optimize legacy software systems combining modern engineering practices with AI-assisted development and intelligent automation.",
+    capabilities: [1, 2, 3, 4, 5, 6].map((num, i) => {
+      const fallback = base.capabilities[i] || {
+        number: `0${num}`,
+        title: "",
+        subtitle: "",
+        description: "",
+        icon: "Search",
+        features: [],
+        businessValue: "",
+      };
+      return {
+        number: f[`cap${num}Number`] || fallback.number,
+        title: f[`cap${num}Title`] || fallback.title,
+        subtitle: f[`cap${num}Subtitle`] || fallback.subtitle,
+        description: f[`cap${num}Description`] || fallback.description,
+        icon: f[`cap${num}Icon`] || fallback.icon,
+        features: parseLines(f[`cap${num}Features`], fallback.features),
+        businessValue: f[`cap${num}BusinessValue`] || fallback.businessValue,
+      };
+    }),
+    platform: {
+      tagline: f.s2PlatformTagline || base.platform.tagline,
+      title: f.s2PlatformTitle || base.platform.title,
+      description: f.s2PlatformDescription || base.platform.description,
+      features: [1, 2, 3, 4, 5, 6].map((num, i) => {
+        const fallback = base.platform.features[i] || { title: "", description: "" };
+        return {
+          title: f[`platformFeat${num}Title`] || fallback.title,
+          description: f[`platformFeat${num}Desc`] || fallback.description,
+        };
+      }),
+      comparisonTable: [1, 2, 3, 4, 5, 6, 7].map((num, i) => {
+        const fallback = base.platform.comparisonTable[i] || { dimension: "", traditional: "", agentic: "" };
+        return {
+          dimension: f[`comparison${num}Dimension`] || fallback.dimension,
+          traditional: f[`comparison${num}Traditional`] || fallback.traditional,
+          agentic: f[`comparison${num}Agentic`] || fallback.agentic,
+        };
+      }),
+    },
+    methodologyTagline: f.s2MethodologyTagline || "OUR METHODOLOGY",
+    methodologyHeading: f.s2MethodologyHeading || "How Hutech Modernizes |Legacy Applications Using AI",
+    methodologyDescription: f.s2MethodologyDescription || "Hutech follows a structured modernization methodology combining enterprise architecture expertise, AI-assisted engineering, and modern software development practices.",
+    methodology: [1, 2, 3, 4, 5].map((num, i) => ({
+      num: f[`step${num}Number`] || `0${num}`,
+      title: f[`step${num}Title`] || "",
+      subtitle: f[`step${num}Subtitle`] || "",
+      desc: f[`step${num}Desc`] || "",
+      outcome: f[`step${num}Outcome`] || "",
+    })),
+    strategiesTagline: f.s2StrategiesTagline || "STRATEGY FRAMEWORK",
+    strategiesHeading: f.s2StrategiesHeading || "Gartner's 7 Rs: Choosing the |Right Modernization Strategy",
+    strategiesDescription: f.s2StrategiesDescription || "Selecting the right application modernization strategy depends on technical architecture, application complexity, business criticality, modernization goals, and organizational timelines.",
+    strategies: [1, 2, 3, 4, 5, 6, 7].map((num, i) => {
+      const fallback = base.strategies[i] || { strategy: "", action: "", description: "", idealScenario: "" };
+      return {
+        strategy: f[`strat${num}Name`] || fallback.strategy,
+        action: f[`strat${num}Action`] || fallback.action,
+        description: f[`strat${num}Desc`] || fallback.description,
+        idealScenario: f[`strat${num}IdealScenario`] || fallback.idealScenario,
+      };
+    }),
+    benefitsTagline: f.s2BenefitsTagline || "BUSINESS OUTCOMES",
+    benefitsHeading: f.s2BenefitsHeading || "Business Benefits of AI-Powered |Legacy Modernization",
+    benefitsDescription: f.s2BenefitsDescription || "Modernizing legacy applications is more than a technology upgrade. It is an opportunity to improve business agility, optimize IT operational expenses, and create a solid foundation for digital innovation.",
+    businessBenefits: [1, 2, 3, 4, 5, 6, 7, 8].map((num, i) => {
+      const fallback = base.businessBenefits[i] || { title: "", description: "", icon: "Zap" };
+      return {
+        title: f[`benefit${num}Title`] || fallback.title,
+        description: f[`benefit${num}Desc`] || fallback.description,
+        icon: f[`benefit${num}Icon`] || fallback.icon,
+      };
+    }),
+    industriesTagline: f.s2IndustriesTagline || "CROSS-INDUSTRY EXPERTISE",
+    industriesHeading: f.s2IndustriesHeading || "Legacy Application Modernization |Across Industries",
+    industriesDescription: f.s2IndustriesDescription || "Every industry operates with specific regulatory constraints, legacy architectures, and business priorities. Hutech delivers tailored modernization strategies across key industry domains.",
+    industries: [1, 2, 3, 4, 5, 6].map((num, i) => {
+      const fallback = base.industries[i] || { name: "", description: "" };
+      return {
+        name: f[`ind${num}Name`] || fallback.name,
+        description: f[`ind${num}Desc`] || fallback.description,
+      };
+    }),
+    whyTagline: f.s2WhyTagline || "WHY HUTECH SOLUTIONS",
+    whyHeading: f.s2WhyHeading || "Why Choose Hutech for |Legacy Application Modernization?",
+    whyDescription: f.s2WhyDescription || "Hutech combines deep enterprise software engineering experience with AI-assisted software intelligence and our proprietary Agentic Development Platform.",
+    whyChooseHutech: [1, 2, 3, 4, 5, 6, 7].map((num, i) => {
+      const fallback = base.whyChooseHutech[i] || { num: `0${num}`, title: "", description: "" };
+      return {
+        num: f[`why${num}Num`] || fallback.num,
+        title: f[`why${num}Title`] || fallback.title,
+        description: f[`why${num}Desc`] || fallback.description,
+      };
+    }),
+    faqsHeading: f.s2FaqsHeading || "Frequently Asked |Questions",
+    faqs: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
+      .map((num, i) => {
+        const q = f[`faq${num}Question`];
+        const a = f[`faq${num}Answer`];
+        if (q || a) {
+          return { question: q || "", answer: a || "" };
+        }
+        return base.faqs[i] || null;
+      })
+      .filter(Boolean),
+    cta: {
+      tagline: f.s2CtaTagline || "LET'S BUILD WHAT'S NEXT",
+      heading: f.s2CtaHeading || "Ready to Give Your Legacy Applications |a Future?",
+      description: f.s2CtaDescription || "Connect with Hutech’s enterprise software architects to explore an AI-powered modernization roadmap tailored to your business, infrastructure, and technology landscape.",
+      primaryButtonText: f.s2CtaButtonText || "Schedule an Architecture Assessment",
+      primaryButtonUrl: f.s2CtaButtonUrl || "/contact",
+      secondaryButtonText: f.s2CtaSecondaryText || "Email Our Team Directly",
+      secondaryButtonUrl: f.s2CtaSecondaryUrl || "mailto:contact@hutechsolutions.ai?subject=Legacy%20Application%20Modernization%20Consultation",
+    },
+  };
+}
+
+export async function getService2PageData(uri: string, slug?: string): Promise<any> {
+  const normSlug = (slug || (uri || "").split("/").filter(Boolean).pop() || "legacy-application-modernization").toLowerCase().trim();
+  const endpoint = process.env.NEXT_PUBLIC_WORDPRESS_API_URL || "http://localhost/hutech-website/graphql";
+  const restBase = endpoint.replace('/graphql', '');
+
+  const postTypes = ["hutech_service", "pages", "hutech_product", "hutech_industry", "posts"];
+  for (const pt of postTypes) {
+    try {
+      const res = await fetch(`${restBase}/wp-json/wp/v2/${pt}?slug=${normSlug}&_embed`, {
+        next: { revalidate: 60 }
+      });
+      if (res.ok) {
+        const items = await res.json();
+        if (Array.isArray(items) && items.length > 0) {
+          const item = items[0];
+          if (item.service2Fields || item.acf) {
+            return transformService2Node(item, MASTER_PAGE_DATA);
+          }
+        }
+      }
+    } catch (err) {}
+  }
+
+  // Fallback to MASTER_PAGE_DATA
+  return MASTER_PAGE_DATA;
 }
