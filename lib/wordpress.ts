@@ -176,6 +176,8 @@ export type ChromeMenuItem = {
   path: string;
   description?: string;
   exploreText?: string;
+  icon?: string;
+  iconUrl?: string;
   children?: ChromeMenuItem[];
 };
 
@@ -185,12 +187,15 @@ export type DropdownItem = {
   description?: string;
   exploreText?: string;
   icon?: string;
+  iconUrl?: string;
 };
 
 export type DropdownSection = {
   title: string;
   path?: string;
   description?: string;
+  icon?: string;
+  iconUrl?: string;
   items: DropdownItem[];
 };
 
@@ -203,6 +208,8 @@ export type HeaderNavItem = {
 export type TopNavChromeData = {
   backgroundColor?: string;
   textColor?: string;
+  textHoverColor?: string;
+  hoverColor?: string;
   phones?: { text?: string; url?: string }[];
   emails?: { text?: string; url?: string }[];
   socials?: { id?: number; icon?: string; url?: string }[];
@@ -219,7 +226,7 @@ export type HeaderChromeData = {
     buttonText?: string;
     buttonUrl?: string;
   };
-  megaBottomLinks?: { name: string; path: string }[];
+  megaBottomLinks?: { name: string; path: string; icon?: string; iconUrl?: string }[];
   megaBottomTagline?: string;
   mobileCta?: { label?: string; url?: string };
   mobileFooter?: { left?: string; right?: string };
@@ -236,12 +243,12 @@ export type FooterChromeData = {
     about?: string;
   };
   menus?: {
-    services?: { name: string; path: string }[];
-    industries?: { name: string; path: string }[];
-    resources?: { name: string; path: string }[];
-    company?: { name: string; path: string }[];
-    caseStudies?: { name: string; path: string }[];
-    legal?: { name: string; path: string }[];
+    services?: { name: string; path: string; icon?: string; iconUrl?: string }[];
+    industries?: { name: string; path: string; icon?: string; iconUrl?: string }[];
+    resources?: { name: string; path: string; icon?: string; iconUrl?: string }[];
+    company?: { name: string; path: string; icon?: string; iconUrl?: string }[];
+    caseStudies?: { name: string; path: string; icon?: string; iconUrl?: string }[];
+    legal?: { name: string; path: string; icon?: string; iconUrl?: string }[];
   };
   offices?: {
     title?: string;
@@ -350,6 +357,8 @@ function flattenMenuItems(
     path: parentPath ? applyParentSlug(parentPath, item.path) : normalizeMenuPath(item.path),
     description: (item as any).description,
     exploreText: (item as any).exploreText,
+    icon: (item as any).icon || (item as any).iconUrl || "",
+    iconUrl: (item as any).iconUrl || (item as any).icon || "",
   }));
 }
 
@@ -373,6 +382,8 @@ function transformPrimaryMenu(items?: ChromeMenuItem[]): HeaderNavItem[] {
             title: section.label,
             path: sectionPath === "#" && isServicesOrWhatWeDo && sectionIdx === 0 ? "/services" : sectionPath,
             description: (section as any).description,
+            icon: (section as any).icon || (section as any).iconUrl || "",
+            iconUrl: (section as any).iconUrl || (section as any).icon || "",
             items: section.children?.length
               ? flattenMenuItems(section.children, isServicesOrWhatWeDo ? undefined : parentPath)
               : [
@@ -385,6 +396,8 @@ function transformPrimaryMenu(items?: ChromeMenuItem[]): HeaderNavItem[] {
                       : applyParentSlug(parentPath, section.path),
                     description: (section as any).description,
                     exploreText: (section as any).exploreText,
+                    icon: (section as any).icon || (section as any).iconUrl || "",
+                    iconUrl: (section as any).iconUrl || (section as any).icon || "",
                   },
                 ],
           };

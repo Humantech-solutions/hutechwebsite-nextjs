@@ -18,7 +18,7 @@ import cmmiLogo from "../public/assets/cmmi_logo.png";
 import isoLogo from "../public/assets/iso_logo.png";
 import type { FooterChromeData } from "@/lib/wordpress";
 
-type FooterLink = { name: string; path: string };
+type FooterLink = { name: string; path: string; icon?: string; iconUrl?: string };
 type TrustBadge = { src: string; alt: string; href?: string };
 
 const DEFAULT_FOOTER_MENUS = {
@@ -133,9 +133,12 @@ function FooterList({ title, links }: { title: string; links: FooterLink[] }) {
           <li key={`${item.name}-${item.path}`}>
             <Link
               href={item.path || "#"}
-              className="text-sm text-gray-400 hover:text-[#F99D1C] transition-colors"
+              className="inline-flex items-center gap-2 text-sm text-gray-400 hover:text-[#F99D1C] transition-colors"
             >
-              {item.name}
+              {item.icon && (
+                <img src={item.icon} alt="" className="h-3.5 w-3.5 shrink-0 object-contain" />
+              )}
+              <span>{item.name}</span>
             </Link>
           </li>
         ))}
@@ -170,9 +173,12 @@ function FooterAccordion({ title, links }: { title: string; links: FooterLink[] 
             <li key={`${item.name}-${item.path}`}>
               <Link
                 href={item.path || "#"}
-                className="block text-sm text-gray-400 hover:text-[#F99D1C] transition-colors min-h-[44px] flex items-center"
+                className="text-sm text-gray-400 hover:text-[#F99D1C] transition-colors min-h-[44px] flex items-center gap-2"
               >
-                {item.name}
+                {item.icon && (
+                  <img src={item.icon} alt="" className="h-3.5 w-3.5 shrink-0 object-contain" />
+                )}
+                <span>{item.name}</span>
               </Link>
             </li>
           ))}

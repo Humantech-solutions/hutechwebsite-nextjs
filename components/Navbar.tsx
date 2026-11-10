@@ -18,37 +18,16 @@ import {
   Youtube,
   Twitter,
   ArrowRight,
-  Sparkles,
-  Database,
-  Box,
-  Code2,
-  Cloud,
-  Users,
-  ShieldCheck,
-  SunMedium,
-  LayoutGrid,
-  Hexagon,
-  FileText,
-  Shield,
-  Triangle,
-  Calendar,
-  Newspaper,
-  Compass,
-  FileCode,
-  PhoneCall,
-  Handshake,
-  Home,
-  Layers,
 } from "lucide-react";
 import { motion as Motion, AnimatePresence, useScroll, useTransform } from "framer-motion";
 import { ImageWithFallback } from "./figma/ImageWithFallback";
 import Image from "next/image";
-import type { HeaderChromeData, TopNavChromeData, HeaderNavItem } from "@/lib/wordpress";
+import type { HeaderChromeData, TopNavChromeData, HeaderNavItem, DropdownItem } from "@/lib/wordpress";
 
 const logoImg = "/assets/c57ecabe59306129194824425137d2ccde6918ce.png";
 const BRAND_BLUE = "#0171c1";
 
-export const DEFAULT_SERVICES_CARDS = [
+export const DEFAULT_SERVICES_CARDS: DropdownItem[] = [
   {
     name: "Intelligent Engineering",
     path: "/services",
@@ -61,7 +40,7 @@ export const DEFAULT_SERVICES_CARDS = [
   },
 ];
 
-export const DEFAULT_CAPABILITIES = [
+export const DEFAULT_CAPABILITIES: DropdownItem[] = [
   { name: "AI & Agentic Engineering", path: "/services/ai-ml" },
   { name: "Data & Analytics", path: "/services/data-engineering" },
   { name: "Product & Platform Engineering", path: "/services/cloud-transformation" },
@@ -72,7 +51,7 @@ export const DEFAULT_CAPABILITIES = [
   { name: "Engineering Automation", path: "/services/ai-consulting" },
 ];
 
-export const DEFAULT_TOOLKIT = [
+export const DEFAULT_TOOLKIT: DropdownItem[] = [
   { name: "Cutlass Loom", path: "/services" },
   { name: "Cutlass Forge", path: "/services" },
   { name: "Cutlass TestGlide", path: "/services" },
@@ -163,96 +142,13 @@ const NAV_ITEMS: HeaderNavItem[] = [
   { label: "Contact Us", path: "/contact" },
 ];
 
-const DEFAULT_MEGA_BOTTOM_LINKS = [
+const DEFAULT_MEGA_BOTTOM_LINKS: { name: string; path: string; icon?: string; iconUrl?: string }[] = [
   { name: "Case Studies", path: "/resources/case-studies" },
   { name: "Hutech Documents", path: "/resources/hutech-documents" },
   { name: "Life at Hutech", path: "/careers" },
 ];
 
-function getMenuIcon(label: string, category: "capabilities" | "toolkit" | "general"): React.ReactNode {
-  const l = (label || "").toLowerCase();
 
-  // Toolkit category: distinctive geometric icons
-  if (category === "toolkit") {
-    if (l.includes("loom") || l.includes("grid")) {
-      return <LayoutGrid className="h-3.5 w-3.5" />;
-    }
-    if (l.includes("forge") || l.includes("build")) {
-      return <Hexagon className="h-3.5 w-3.5" />;
-    }
-    if (l.includes("test") || l.includes("glide") || l.includes("doc")) {
-      return <FileText className="h-3.5 w-3.5" />;
-    }
-    if (l.includes("shield") || l.includes("protect")) {
-      return <Shield className="h-3.5 w-3.5" />;
-    }
-    if (l.includes("synop") || l.includes("delta") || l.includes("tri")) {
-      return <Triangle className="h-3.5 w-3.5" />;
-    }
-    if (l.includes("contact") || l.includes("call")) {
-      return <PhoneCall className="h-3.5 w-3.5" />;
-    }
-    if (l.includes("partner")) {
-      return <Handshake className="h-3.5 w-3.5" />;
-    }
-    if (l.includes("home")) {
-      return <Home className="h-3.5 w-3.5" />;
-    }
-    return <Box className="h-3.5 w-3.5" />;
-  }
-
-  // Capabilities & general items
-  if (l.includes("ai") || l.includes("agent") || l.includes("intel")) {
-    return <Sparkles className="h-4 w-4 text-[#0171c1]" />;
-  }
-  if (l.includes("data") || l.includes("analyt") || l.includes("bi") || l.includes("insight")) {
-    return <Database className="h-4 w-4 text-[#0171c1]" />;
-  }
-  if (l.includes("product") || l.includes("platform") || l.includes("packag")) {
-    return <Box className="h-4 w-4 text-[#0171c1]" />;
-  }
-  if (l.includes("app") || l.includes("code") || l.includes("dev") || l.includes("soft")) {
-    return <Code2 className="h-4 w-4 text-[#0171c1]" />;
-  }
-  if (l.includes("cloud") || l.includes("modern") || l.includes("infra")) {
-    return <Cloud className="h-4 w-4 text-[#0171c1]" />;
-  }
-  if (l.includes("exper") || l.includes("user") || l.includes("team") || l.includes("leader") || l.includes("people")) {
-    return <Users className="h-4 w-4 text-[#0171c1]" />;
-  }
-  if (l.includes("qual") || l.includes("test") || l.includes("shield") || l.includes("sec") || l.includes("trust")) {
-    return <ShieldCheck className="h-4 w-4 text-[#0171c1]" />;
-  }
-  if (l.includes("auto") || l.includes("bot") || l.includes("speed") || l.includes("sun")) {
-    return <SunMedium className="h-4 w-4 text-[#0171c1]" />;
-  }
-  if (l.includes("event") || l.includes("cal")) {
-    return <Calendar className="h-4 w-4 text-[#0171c1]" />;
-  }
-  if (l.includes("case") || l.includes("stud")) {
-    return <FileText className="h-4 w-4 text-[#0171c1]" />;
-  }
-  if (l.includes("blog") || l.includes("news") || l.includes("post") || l.includes("press")) {
-    return <Newspaper className="h-4 w-4 text-[#0171c1]" />;
-  }
-  if (l.includes("vis") || l.includes("val") || l.includes("miss")) {
-    return <Compass className="h-4 w-4 text-[#0171c1]" />;
-  }
-  if (l.includes("doc")) {
-    return <FileCode className="h-4 w-4 text-[#0171c1]" />;
-  }
-  if (l.includes("contact") || l.includes("call")) {
-    return <PhoneCall className="h-4 w-4 text-[#0171c1]" />;
-  }
-  if (l.includes("partner")) {
-    return <Handshake className="h-4 w-4 text-[#0171c1]" />;
-  }
-  if (l.includes("home")) {
-    return <Home className="h-4 w-4 text-[#0171c1]" />;
-  }
-
-  return <Layers className="h-4 w-4 text-[#0171c1]" />;
-}
 
 
 
@@ -336,6 +232,7 @@ export default function Navbar({ data }: { data?: HeaderChromeData }) {
   const topNav = data?.topNav;
   const topNavBg = topNav?.backgroundColor || "#00142D";
   const topNavTextColor = topNav?.textColor || "#ffffff";
+  const topNavHoverColor = topNav?.textHoverColor || topNav?.hoverColor || "#0171c1";
 
   const phones = (
     topNav?.phones && topNav.phones.length > 0
@@ -429,9 +326,18 @@ export default function Navbar({ data }: { data?: HeaderChromeData }) {
     <>
       <header className="sticky top-[-40px] md:top-[-38px] left-0 z-50 w-full flex flex-col pointer-events-none">
         <div
-          style={{ backgroundColor: topNavBg, color: topNavTextColor }}
+          style={{
+            backgroundColor: topNavBg,
+            color: topNavTextColor,
+            ["--top-nav-hover" as any]: topNavHoverColor,
+          }}
           className="pointer-events-auto w-full h-[40px] md:h-[38px] text-[10px] sm:text-xs md:text-sm font-medium transition-colors"
         >
+          <style>{`
+            .top-nav-link:hover {
+              color: var(--top-nav-hover, #0171c1) !important;
+            }
+          `}</style>
           <div className="mx-auto flex h-full w-full max-w-[1280px] items-center justify-end px-6 lg:px-20">
             <div className="flex items-center space-x-2 sm:space-x-3 md:space-x-4">
               {/* Dynamic Phone Numbers */}
@@ -440,7 +346,7 @@ export default function Navbar({ data }: { data?: HeaderChromeData }) {
                   {idx > 0 && <div className="h-3 md:h-4 w-[1px] bg-current opacity-20" />}
                   <a
                     href={`tel:${(phone.url || phone.text || "").replace(/[^0-9+]/g, "")}`}
-                    className="flex items-center space-x-1 sm:space-x-1.5 md:space-x-2 opacity-90 transition-all hover:opacity-100 hover:text-[#0171c1]"
+                    className="top-nav-link flex items-center space-x-1 sm:space-x-1.5 md:space-x-2 opacity-90 transition-all hover:opacity-100 hover:text-[var(--top-nav-hover,#0171c1)]"
                   >
                     <Phone className="h-3 w-3 sm:h-3.5 sm:w-3.5 md:h-4 md:w-4 shrink-0" />
                     <span className="whitespace-nowrap">{phone.text}</span>
@@ -456,7 +362,7 @@ export default function Navbar({ data }: { data?: HeaderChromeData }) {
                   )}
                   <a
                     href={`mailto:${email.url || email.text}`}
-                    className="flex items-center space-x-1 sm:space-x-1.5 md:space-x-2 opacity-90 transition-all hover:opacity-100 hover:text-[#0171c1]"
+                    className="top-nav-link flex items-center space-x-1 sm:space-x-1.5 md:space-x-2 opacity-90 transition-all hover:opacity-100 hover:text-[var(--top-nav-hover,#0171c1)]"
                   >
                     <Mail className="h-3 w-3 sm:h-3.5 sm:w-3.5 md:h-4 md:w-4 shrink-0" />
                     <span className="whitespace-nowrap">{email.text}</span>
@@ -478,7 +384,7 @@ export default function Navbar({ data }: { data?: HeaderChromeData }) {
                         target="_blank"
                         rel="noopener noreferrer"
                         aria-label={getSocialAriaLabel(social as any)}
-                        className="flex items-center opacity-85 transition-all hover:opacity-100 hover:text-[#0171c1]"
+                        className="top-nav-link flex items-center opacity-85 transition-all hover:opacity-100 hover:text-[var(--top-nav-hover,#0171c1)]"
                       >
                         {renderSocialIcon(social)}
                       </a>
@@ -541,7 +447,7 @@ export default function Navbar({ data }: { data?: HeaderChromeData }) {
                     // Parse sections for Services mega menu
                     const servicesSection = item.dropdown?.[0];
                     const col1Title = (servicesSection?.title || "Services").toUpperCase();
-                    const serviceCards: { name: string; path: string; description?: string; exploreText?: string }[] =
+                    const serviceCards: DropdownItem[] =
                       servicesSection?.items && servicesSection.items.length > 0 && servicesSection.items[0].name !== "Services"
                         ? servicesSection.items
                         : servicesSection?.items && servicesSection.items.length > 1
@@ -550,14 +456,14 @@ export default function Navbar({ data }: { data?: HeaderChromeData }) {
 
                     const capabilitiesSection = item.dropdown?.[1];
                     const col2Title = (capabilitiesSection?.title || "About").toUpperCase();
-                    const capabilitiesItems =
+                    const capabilitiesItems: DropdownItem[] =
                       capabilitiesSection?.items && capabilitiesSection.items.length > 0
                         ? capabilitiesSection.items
                         : DEFAULT_CAPABILITIES;
 
                     const toolkitSection = item.dropdown?.[2];
                     const col3Title = (toolkitSection?.title || "Careers").toUpperCase();
-                    const toolkitItems =
+                    const toolkitItems: DropdownItem[] =
                       toolkitSection?.items && toolkitSection.items.length > 0
                         ? toolkitSection.items
                         : DEFAULT_TOOLKIT;
@@ -600,10 +506,16 @@ export default function Navbar({ data }: { data?: HeaderChromeData }) {
                                           <Link
                                             key={subItem.name}
                                             href={subItem.path}
-                                            className="group/sub flex items-center px-6 py-2.5 text-[13px] font-semibold text-gray-500 transition-all hover:bg-gray-50 hover:text-[#0171c1]"
+                                            className="group/item flex items-center px-6 py-2.5 text-[13px] font-semibold text-gray-500 transition-all hover:bg-gray-50 hover:text-[#0171c1]"
                                             onClick={() => setActiveDropdown(null)}
                                           >
-                                            <span className="mr-0 h-[1.5px] w-0 bg-[#0171c1] transition-all group-hover/sub:mr-2 group-hover/sub:w-3"></span>
+                                            {subItem.icon ? (
+                                              <div className="mr-2.5 flex h-4 w-4 shrink-0 items-center justify-center transition-transform duration-200 group-hover/item:scale-110">
+                                                <img src={subItem.icon} alt="" className="h-4 w-4 object-contain" />
+                                              </div>
+                                            ) : (
+                                              <span className="mr-0 h-[1.5px] w-0 bg-[#0171c1] transition-all duration-200 group-hover/item:mr-2 group-hover/item:w-3"></span>
+                                            )}
                                             {subItem.name}
                                           </Link>
                                         ))}
@@ -652,15 +564,22 @@ export default function Navbar({ data }: { data?: HeaderChromeData }) {
                                                 }`}
                                               >
                                                 <div className="flex items-start justify-between gap-3 mb-2">
-                                                  <h3
-                                                    className={`text-base font-semibold transition-colors ${
-                                                      cardIdx === 0
-                                                        ? "text-white group-hover/card:text-blue-200"
-                                                        : "text-[#001A3D] group-hover/card:text-[#0171c1]"
-                                                    }`}
-                                                  >
-                                                    {serviceCard.name}
-                                                  </h3>
+                                                  <div className="flex items-center gap-2.5">
+                                                    {serviceCard.icon && (
+                                                      <div className="flex h-5 w-5 shrink-0 items-center justify-center transition-transform duration-200 group-hover/card:scale-110">
+                                                        <img src={serviceCard.icon} alt="" className="h-5 w-5 object-contain" />
+                                                      </div>
+                                                    )}
+                                                    <h3
+                                                      className={`text-base font-semibold transition-colors ${
+                                                        cardIdx === 0
+                                                          ? "text-white group-hover/card:text-blue-200"
+                                                          : "text-[#001A3D] group-hover/card:text-[#0171c1]"
+                                                      }`}
+                                                    >
+                                                      {serviceCard.name}
+                                                    </h3>
+                                                  </div>
                                                   <div
                                                     className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-full transition-all ${
                                                       cardIdx === 0
@@ -710,11 +629,15 @@ export default function Navbar({ data }: { data?: HeaderChromeData }) {
                                                 key={capItem.name}
                                                 href={capItem.path}
                                                 onClick={() => setActiveDropdown(null)}
-                                                className="group/item flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-gray-600 transition-all hover:bg-gray-50 hover:text-[#0171c1]"
+                                                className="group/item flex items-center rounded-lg px-3 py-2 text-sm font-medium text-gray-600 transition-all hover:bg-gray-50 hover:text-[#0171c1]"
                                               >
-                                                <div className="flex h-5 w-5 shrink-0 items-center justify-center text-[#0171c1] transition-transform group-hover/item:scale-110">
-                                                  {getMenuIcon(capItem.name, "capabilities")}
-                                                </div>
+                                                {capItem.icon ? (
+                                                  <div className="mr-2.5 flex h-4 w-4 shrink-0 items-center justify-center transition-transform duration-200 group-hover/item:scale-110">
+                                                    <img src={capItem.icon} alt="" className="h-4 w-4 object-contain" />
+                                                  </div>
+                                                ) : (
+                                                  <span className="mr-0 h-[1.5px] w-0 bg-[#0171c1] transition-all duration-200 group-hover/item:mr-2 group-hover/item:w-3"></span>
+                                                )}
                                                 <span className="transition-colors">{capItem.name}</span>
                                               </Link>
                                             ))}
@@ -734,11 +657,15 @@ export default function Navbar({ data }: { data?: HeaderChromeData }) {
                                                 key={toolItem.name}
                                                 href={toolItem.path}
                                                 onClick={() => setActiveDropdown(null)}
-                                                className="group/item flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-gray-600 transition-all hover:bg-gray-50 hover:text-[#0171c1]"
+                                                className="group/item flex items-center rounded-lg px-3 py-2 text-sm font-medium text-gray-600 transition-all hover:bg-gray-50 hover:text-[#0171c1]"
                                               >
-                                                <div className="flex h-6 w-6 shrink-0 items-center justify-center rounded-md bg-blue-50 border border-blue-100 text-[#0171c1] transition-all group-hover/item:bg-[#0171c1] group-hover/item:text-white group-hover/item:border-[#0171c1]">
-                                                  {getMenuIcon(toolItem.name, "toolkit")}
-                                                </div>
+                                                {toolItem.icon ? (
+                                                  <div className="mr-2.5 flex h-4 w-4 shrink-0 items-center justify-center transition-transform duration-200 group-hover/item:scale-110">
+                                                    <img src={toolItem.icon} alt="" className="h-4 w-4 object-contain" />
+                                                  </div>
+                                                ) : (
+                                                  <span className="mr-0 h-[1.5px] w-0 bg-[#0171c1] transition-all duration-200 group-hover/item:mr-2 group-hover/item:w-3"></span>
+                                                )}
                                                 <span className="transition-colors">{toolItem.name}</span>
                                               </Link>
                                             ))}
@@ -755,9 +682,14 @@ export default function Navbar({ data }: { data?: HeaderChromeData }) {
                                             <Link
                                               key={`${link.name}-${link.path}`}
                                               href={link.path}
-                                              className="hover:text-[#001A3D] transition-colors"
+                                              className="group/link hover:text-[#001A3D] transition-colors inline-flex items-center gap-1.5"
                                               onClick={() => setActiveDropdown(null)}
                                             >
+                                              {link.icon && (
+                                                <div className="flex h-3.5 w-3.5 shrink-0 items-center justify-center transition-transform duration-200 group-hover/link:scale-110">
+                                                  <img src={link.icon} alt="" className="h-3.5 w-3.5 object-contain" />
+                                                </div>
+                                              )}
                                               {link.name}
                                             </Link>
                                           ))}
@@ -816,7 +748,13 @@ export default function Navbar({ data }: { data?: HeaderChromeData }) {
                                                     className="group/item flex items-center text-sm font-medium text-gray-500 transition-all hover:text-[#0171c1]"
                                                     onClick={() => setActiveDropdown(null)}
                                                   >
-                                                    <span className="mr-0 h-[1.5px] w-0 bg-[#0171c1] transition-all group-hover/item:mr-2 group-hover/item:w-3"></span>
+                                                    {subItem.icon ? (
+                                                      <div className="mr-2.5 flex h-4 w-4 shrink-0 items-center justify-center transition-transform duration-200 group-hover/item:scale-110">
+                                                        <img src={subItem.icon} alt="" className="h-4 w-4 object-contain" />
+                                                      </div>
+                                                    ) : (
+                                                      <span className="mr-0 h-[1.5px] w-0 bg-[#0171c1] transition-all duration-200 group-hover/item:mr-2 group-hover/item:w-3"></span>
+                                                    )}
                                                     {subItem.name}
                                                   </Link>
                                                 ))}
@@ -834,9 +772,14 @@ export default function Navbar({ data }: { data?: HeaderChromeData }) {
                                             <Link
                                               key={`${link.name}-${link.path}`}
                                               href={link.path}
-                                              className="hover:text-[#001A3D]"
+                                              className="group/link hover:text-[#001A3D] transition-colors inline-flex items-center gap-1.5"
                                               onClick={() => setActiveDropdown(null)}
                                             >
+                                              {link.icon && (
+                                                <div className="flex h-3.5 w-3.5 shrink-0 items-center justify-center transition-transform duration-200 group-hover/link:scale-110">
+                                                  <img src={link.icon} alt="" className="h-3.5 w-3.5 object-contain" />
+                                                </div>
+                                              )}
                                               {link.name}
                                             </Link>
                                           ))}
@@ -928,7 +871,7 @@ export default function Navbar({ data }: { data?: HeaderChromeData }) {
                 // Parse sections for Services mobile menu
                 const servicesSection = item.dropdown?.[0];
                 const col1Title = (servicesSection?.title || "Services").toUpperCase();
-                const serviceCards: { name: string; path: string; description?: string }[] =
+                const serviceCards: DropdownItem[] =
                   servicesSection?.items && servicesSection.items.length > 0 && servicesSection.items[0].name !== "Services"
                     ? servicesSection.items
                     : servicesSection?.items && servicesSection.items.length > 1
@@ -937,14 +880,14 @@ export default function Navbar({ data }: { data?: HeaderChromeData }) {
 
                 const capabilitiesSection = item.dropdown?.[1];
                 const col2Title = (capabilitiesSection?.title || "About").toUpperCase();
-                const capabilitiesItems =
+                const capabilitiesItems: DropdownItem[] =
                   capabilitiesSection?.items && capabilitiesSection.items.length > 0
                     ? capabilitiesSection.items
                     : DEFAULT_CAPABILITIES;
 
                 const toolkitSection = item.dropdown?.[2];
                 const col3Title = (toolkitSection?.title || "Careers").toUpperCase();
-                const toolkitItems =
+                const toolkitItems: DropdownItem[] =
                   toolkitSection?.items && toolkitSection.items.length > 0
                     ? toolkitSection.items
                     : DEFAULT_TOOLKIT;
@@ -999,8 +942,15 @@ export default function Navbar({ data }: { data?: HeaderChromeData }) {
                                           className="group block rounded-lg bg-white/5 p-3.5 transition-colors hover:bg-white/10"
                                         >
                                           <div className="flex items-center justify-between text-base font-bold text-white">
-                                            <span>{serviceCard.name}</span>
-                                            <ArrowRight className="h-4 w-4 text-sky-400" />
+                                            <div className="flex items-center gap-2.5">
+                                              {serviceCard.icon && (
+                                                <div className="flex h-5 w-5 shrink-0 items-center justify-center transition-transform duration-200 group-hover:scale-110">
+                                                  <img src={serviceCard.icon} alt="" className="h-5 w-5 object-contain" />
+                                                </div>
+                                              )}
+                                              <span>{serviceCard.name}</span>
+                                            </div>
+                                            <ArrowRight className="h-4 w-4 text-sky-400 transition-transform group-hover:translate-x-1" />
                                           </div>
                                           <p className="mt-1 text-xs text-slate-300">
                                             {getServiceCardDescription(serviceCard.name, serviceCard.description)}
@@ -1021,11 +971,15 @@ export default function Navbar({ data }: { data?: HeaderChromeData }) {
                                           key={`mob-cap-${capItem.name}`}
                                           href={capItem.path}
                                           onClick={() => setMobileMenuOpen(false)}
-                                          className="flex items-center gap-3 text-sm font-medium text-slate-200 hover:text-white"
+                                          className="group flex items-center text-sm font-medium text-slate-200 transition-colors hover:text-white"
                                         >
-                                          <div className="flex h-5 w-5 shrink-0 items-center justify-center text-sky-400">
-                                            {getMenuIcon(capItem.name, "capabilities")}
-                                          </div>
+                                          {capItem.icon ? (
+                                            <div className="mr-3 flex h-4 w-4 shrink-0 items-center justify-center text-sky-400 transition-transform duration-200 group-hover:scale-110">
+                                              <img src={capItem.icon} alt="" className="h-4 w-4 object-contain" />
+                                            </div>
+                                          ) : (
+                                            <div className="mr-3 h-1.5 w-1.5 rounded-full bg-sky-400 opacity-0 transition-opacity group-hover:opacity-100"></div>
+                                          )}
                                           <span>{capItem.name}</span>
                                         </Link>
                                       ))}
@@ -1043,11 +997,15 @@ export default function Navbar({ data }: { data?: HeaderChromeData }) {
                                           key={`mob-tool-${toolItem.name}`}
                                           href={toolItem.path}
                                           onClick={() => setMobileMenuOpen(false)}
-                                          className="flex items-center gap-3 text-sm font-medium text-slate-200 hover:text-white"
+                                          className="group flex items-center text-sm font-medium text-slate-200 transition-colors hover:text-white"
                                         >
-                                          <div className="flex h-6 w-6 shrink-0 items-center justify-center rounded bg-white/5 border border-white/10 text-sky-400">
-                                            {getMenuIcon(toolItem.name, "toolkit")}
-                                          </div>
+                                          {toolItem.icon ? (
+                                            <div className="mr-3 flex h-4 w-4 shrink-0 items-center justify-center text-sky-400 transition-transform duration-200 group-hover:scale-110">
+                                              <img src={toolItem.icon} alt="" className="h-4 w-4 object-contain" />
+                                            </div>
+                                          ) : (
+                                            <div className="mr-3 h-1.5 w-1.5 rounded-full bg-sky-400 opacity-0 transition-opacity group-hover:opacity-100"></div>
+                                          )}
                                           <span>{toolItem.name}</span>
                                         </Link>
                                       ))}
@@ -1078,7 +1036,13 @@ export default function Navbar({ data }: { data?: HeaderChromeData }) {
                                                 className="group flex items-center text-base font-semibold text-gray-300 transition-colors hover:text-white"
                                                 onClick={() => setMobileMenuOpen(false)}
                                               >
-                                                <div className="mr-3 h-1.5 w-1.5 rounded-full bg-[#F99D1C] opacity-0 transition-opacity group-hover:opacity-100"></div>
+                                                {subItem.icon ? (
+                                                  <div className="mr-3 flex h-4 w-4 shrink-0 items-center justify-center transition-transform duration-200 group-hover:scale-110">
+                                                    <img src={subItem.icon} alt="" className="h-4 w-4 object-contain" />
+                                                  </div>
+                                                ) : (
+                                                  <div className="mr-3 h-1.5 w-1.5 rounded-full bg-[#F99D1C] opacity-0 transition-opacity group-hover:opacity-100"></div>
+                                                )}
                                                 {subItem.name}
                                               </Link>
                                             ))}
