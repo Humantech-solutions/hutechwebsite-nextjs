@@ -56,7 +56,7 @@ export function ModernizationOutcomesAndIndustries({ benefits, industries: custo
   return (
     <>
       {/* 1. Business Benefits Section - Executive Metric Dashboard (Replaces 8 Box Cards) */}
-      <section className="bg-[#001A3D] py-20 text-white lg:py-28">
+      <section className="bg-[#001A3D] py-12 text-white lg:py-16">
         <div className="mx-auto max-w-[1280px] px-6 lg:px-12">
           {/* Header */}
           <div className="mx-auto max-w-3xl text-center">
@@ -66,7 +66,7 @@ export function ModernizationOutcomesAndIndustries({ benefits, industries: custo
                 BUSINESS OUTCOMES
               </span>
             </div>
-            <h2 className="display-font text-3xl font-bold tracking-tight text-white sm:text-4xl lg:text-5xl">
+            <h2 className="display-font text-3xl font-bold leading-tight sm:leading-tight lg:leading-tight tracking-tight text-white sm:text-4xl lg:text-5xl">
               {renderTitle(
                 benefitsHeading || "Business Benefits of AI-Powered |Legacy Modernization",
                 "text-white",
@@ -123,7 +123,7 @@ export function ModernizationOutcomesAndIndustries({ benefits, industries: custo
       </section>
 
       {/* 2. Industries Section - Interactive Domain Navigator (Replaces 6 Generic Cards) */}
-      <section className="bg-white py-20 lg:py-28">
+      <section className="bg-white py-10 lg:py-14">
         <div className="mx-auto max-w-[1280px] px-6 lg:px-12">
           {/* Header */}
           <div className="mx-auto max-w-3xl text-center">
@@ -133,7 +133,7 @@ export function ModernizationOutcomesAndIndustries({ benefits, industries: custo
                 ENTERPRISE DOMAINS
               </span>
             </div>
-            <h2 className="display-font text-3xl font-bold tracking-tight text-[#001A3D] sm:text-4xl lg:text-5xl">
+            <h2 className="display-font text-3xl font-bold leading-tight sm:leading-tight lg:leading-tight tracking-tight text-[#001A3D] sm:text-4xl lg:text-5xl">
               Legacy Application Modernization for Enterprise Industries
             </h2>
             <p className="mt-4 text-base text-gray-500 sm:text-lg">
@@ -142,7 +142,7 @@ export function ModernizationOutcomesAndIndustries({ benefits, industries: custo
           </div>
 
           {/* Interactive Industry Showcase Console */}
-          <div className="mt-14 lg:mt-20">
+          <div className="mt-10 lg:mt-12">
             {/* Horizontal Industry Tab Strip */}
             <div className="flex flex-wrap items-center justify-center gap-2 pb-6 border-b border-gray-100">
               {industries.map((ind, idx) => {
@@ -174,7 +174,7 @@ export function ModernizationOutcomesAndIndustries({ benefits, industries: custo
                     <ActiveIndIcon className="h-5 w-5" />
                     <span>Domain Focus · Industry {selectedIndustry + 1} of {industries.length}</span>
                   </div>
-                  <h3 className="display-font mt-3 text-2xl font-bold text-[#001A3D] sm:text-3xl">
+                  <h3 className="display-font mt-3 text-2xl font-bold leading-tight text-[#001A3D] sm:text-3xl">
                     {activeInd.name} Modernization
                   </h3>
                   <p className="mt-4 text-sm leading-relaxed text-gray-600 sm:text-base">
@@ -219,7 +219,7 @@ export function ModernizationOutcomesAndIndustries({ benefits, industries: custo
       </section>
 
       {/* 3. Why Choose Hutech - Split Credo & Numbered Sequence (Replaces 6 Generic Cards) */}
-      <section className="bg-[#F8FAFC] py-20 lg:py-28 border-t border-gray-100">
+      <section className="bg-[#F8FAFC] py-10 lg:py-14 border-t border-gray-100">
         <div className="mx-auto max-w-[1280px] px-6 lg:px-12">
           <div className="grid grid-cols-1 items-start gap-12 lg:grid-cols-[1fr_1.5fr] lg:gap-16">
             {/* Left Column: Authority Anchor */}
@@ -230,7 +230,7 @@ export function ModernizationOutcomesAndIndustries({ benefits, industries: custo
                   WHY HUTECH
                 </span>
               </div>
-              <h2 className="display-font text-3xl font-bold tracking-tight text-[#001A3D] sm:text-4xl lg:text-5xl">
+              <h2 className="display-font text-3xl font-bold leading-tight sm:leading-tight lg:leading-tight tracking-tight text-[#001A3D] sm:text-4xl lg:text-5xl">
                 Engineering Excellence Meets Agentic AI Speed
               </h2>
               <p className="mt-4 text-base leading-relaxed text-gray-500">

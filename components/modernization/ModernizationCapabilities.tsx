@@ -33,7 +33,7 @@ export function ModernizationCapabilities({ data, tagline, heading, description 
   const ActiveIcon = CAP_ICONS[activeCap.icon] || Code2;
 
   return (
-    <section id="services" className="scroll-mt-16 bg-[#F8FAFC] py-20 lg:py-28">
+    <section id="services" className="scroll-mt-16 bg-[#F8FAFC] py-10 lg:py-14">
       <div className="mx-auto max-w-[1280px] px-6 lg:px-12">
         {/* Section Header */}
         <div className="mx-auto max-w-3xl text-center">
@@ -43,7 +43,7 @@ export function ModernizationCapabilities({ data, tagline, heading, description 
               {tagline || "CORE CAPABILITIES"}
             </span>
           </div>
-          <h2 className="display-font text-3xl font-bold tracking-tight text-[#001A3D] sm:text-4xl lg:text-5xl">
+          <h2 className="display-font text-3xl font-bold leading-tight sm:leading-tight lg:leading-tight tracking-tight text-[#001A3D] sm:text-4xl lg:text-5xl">
             {renderTitle(
               heading || "End-to-End Legacy Application |Modernization Services",
               "text-[#001A3D]",
@@ -57,7 +57,7 @@ export function ModernizationCapabilities({ data, tagline, heading, description 
         </div>
 
         {/* Interactive Capability Console (Replaces 6 Static Box Cards) */}
-        <div className="mt-14 overflow-hidden rounded-2xl border border-gray-200/80 bg-white shadow-xl lg:mt-20">
+        <div className="mt-10 overflow-hidden rounded-2xl border border-gray-200/80 bg-white shadow-xl lg:mt-12">
           <div className="grid grid-cols-1 lg:grid-cols-[1.1fr_1.9fr]">
             {/* Left Column: Interactive Capability Selector List */}
             <div className="border-b border-gray-100 bg-[#F8FAFC] lg:border-r lg:border-b-0">
@@ -140,7 +140,7 @@ export function ModernizationCapabilities({ data, tagline, heading, description 
                           {activeCap.subtitle}
                         </span>
                       </div>
-                      <h3 className="display-font mt-1 text-2xl font-bold text-[#001A3D] sm:text-3xl">
+                      <h3 className="display-font mt-1 text-2xl font-bold leading-tight text-[#001A3D] sm:text-3xl">
                         {activeCap.title}
                       </h3>
                     </div>

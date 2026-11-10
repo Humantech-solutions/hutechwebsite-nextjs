@@ -53,7 +53,7 @@ export function ModernizationChallenges({ data, tagline, heading, description }:
   });
 
   return (
-    <section className="bg-white py-20 lg:py-28">
+    <section className="bg-white py-10 lg:py-14">
       <div className="mx-auto max-w-[1280px] px-6 lg:px-12">
         {/* Section Heading */}
         <div className="mx-auto max-w-3xl text-center">
@@ -63,7 +63,7 @@ export function ModernizationChallenges({ data, tagline, heading, description }:
               {tagline || "WHY MODERNIZE"}
             </span>
           </div>
-          <h2 className="display-font text-3xl font-bold tracking-tight text-[#001A3D] sm:text-4xl lg:text-5xl">
+          <h2 className="display-font text-3xl font-bold leading-tight sm:leading-tight lg:leading-tight tracking-tight text-[#001A3D] sm:text-4xl lg:text-5xl">
             {renderTitle(
               heading || "Is Your Legacy Technology |Holding Back Business Innovation?",
               "text-[#001A3D]",
@@ -77,7 +77,7 @@ export function ModernizationChallenges({ data, tagline, heading, description }:
         </div>
 
         {/* Diagnostic Matrix - Interactive List Layout (No Repetitive Cards) */}
-        <div className="mt-14 lg:mt-20">
+        <div className="mt-10 lg:mt-12">
           {/* Category Filter Pills */}
           <div className="flex flex-wrap items-center justify-center gap-2 pb-8 border-b border-gray-100">
             {CATEGORIES.map((cat) => (

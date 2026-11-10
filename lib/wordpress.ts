@@ -174,6 +174,10 @@ export type ChromeMenuItem = {
   parentId?: number;
   label: string;
   path: string;
+  object?: string;
+  type?: string;
+  category?: string;
+  parentSection?: string;
   description?: string;
   exploreText?: string;
   icon?: string;
@@ -302,36 +306,65 @@ export function normalizeMenuPath(rawPath: string | undefined): string {
   }
 
   let p = rawPath.trim();
-  p = p.replace(
-    /^\/(blog\/)?(hutech_service|case_study|hutech_event|hutech_news|hutech_career|hutech_press_release|hutech_document)\//,
-    "/"
-  );
+
+  // Strip duplicate parent path chaining (e.g. /industries/services/... or /services/industries/...)
+  p = p
+    .replace(/^\/industries\/services\//i, "/industries/")
+    .replace(/^\/services\/industries\//i, "/services/");
+
+  // Rewrite WP CPT slugs to Next.js routes
+  p = p
+    .replace(/^\/(?:blog\/)?(?:hutech_service|service)\//i, "/services/")
+    .replace(/^\/(?:blog\/)?(?:hutech_industry|industry|industries)\//i, "/industries/")
+    .replace(/^\/(?:blog\/)?(?:case_study|case-study|case-studies)\//i, "/resources/case-studies/")
+    .replace(/^\/(?:blog\/)?(?:hutech_event|event|events)\//i, "/resources/events/")
+    .replace(/^\/(?:blog\/)?(?:hutech_news|news)\//i, "/company/news/")
+    .replace(/^\/(?:blog\/)?(?:hutech_career|career|careers)\//i, "/careers/")
+    .replace(/^\/(?:blog\/)?(?:hutech_press_release|press_release|press-release)\//i, "/company/press-release/")
+    .replace(/^\/(?:blog\/)?(?:hutech_document|hutech-document|hutech-documents|documents)\//i, "/resources/hutech-documents/");
 
   // Normalize slashes
   if (!p.startsWith("/")) p = `/${p}`;
   if (p.length > 1 && p.endsWith("/")) p = p.slice(0, -1);
 
+  // Clean again after slashes normalized
+  p = p
+    .replace(/^\/industries\/services\//i, "/industries/")
+    .replace(/^\/services\/industries\//i, "/services/");
+
   // Map known routes
   if (p === "/home") return "/";
   if (p === "/services" || p.startsWith("/services/")) return p;
-  if (p === "/events") return "/resources/events";
-  if (p === "/case-studies") return "/resources/case-studies";
-  if (p === "/blogs") return "/resources/blogs";
-  if (p === "/hutech-documents") return "/resources/hutech-documents";
+  if (p === "/industries" || p.startsWith("/industries/")) return p;
+  if (p === "/events" || p.startsWith("/events/")) return p.replace(/^\/events/, "/resources/events");
+  if (p === "/case-studies" || p.startsWith("/case-studies/")) return p.replace(/^\/case-studies/, "/resources/case-studies");
+  if (p === "/blogs" || p.startsWith("/blogs/")) return p.replace(/^\/blogs/, "/resources/blogs");
+  if (p === "/hutech-documents" || p.startsWith("/hutech-documents/")) return p.replace(/^\/hutech-documents/, "/resources/hutech-documents");
   if (p === "/leadership") return "/company/leadership";
   if (p === "/vision-mission-values") return "/company/vision-mission-values";
   if (p === "/partnership") return "/company/partnership";
   if (p === "/life-at-hutech") return "/company/life-at-hutech";
   if (p === "/awards") return "/company/awards";
-  if (p === "/press-release") return "/company/press-release";
-  if (p === "/news") return "/company/news";
+  if (p === "/press-release" || p.startsWith("/press-release/")) return p.replace(/^\/press-release/, "/company/press-release");
+  if (p === "/news" || p.startsWith("/news/")) return p.replace(/^\/news/, "/company/news");
 
   return p;
 }
 
 function applyParentSlug(parentPath: string | undefined, childPath: string | undefined): string {
-  const normChild = normalizeMenuPath(childPath);
+  let normChild = normalizeMenuPath(childPath);
   if (normChild === "#" || normChild.startsWith("http") || normChild === "/") return normChild;
+
+  // Clean any cross-section prefixes if inside a specific parent section
+  if (parentPath === "/industries") {
+    normChild = normChild
+      .replace(/^\/services\//i, "/industries/")
+      .replace(/^\/industries\/services\//i, "/industries/");
+  } else if (parentPath === "/services") {
+    normChild = normChild
+      .replace(/^\/industries\//i, "/services/")
+      .replace(/^\/services\/industries\//i, "/services/");
+  }
 
   const topSections = ["/services", "/resources", "/company", "/about", "/careers", "/contact", "/industries", "/products"];
   if (topSections.some((s) => normChild === s || normChild.startsWith(`${s}/`))) {
@@ -339,11 +372,11 @@ function applyParentSlug(parentPath: string | undefined, childPath: string | und
   }
 
   const p = parentPath || "#";
-  if (p === "#" || p === "/" || p.includes("what-we-do")) return normChild;
+  if (p === "#" || p === "/") return normChild;
 
   const cleanP = p.replace(/\/$/, "");
   if (!normChild.startsWith(cleanP + "/") && normChild !== cleanP) {
-    return `${cleanP}${normChild}`;
+    return `${cleanP}${normChild.startsWith("/") ? normChild : `/${normChild}`}`;
   }
   return normChild;
 }
@@ -352,14 +385,50 @@ function flattenMenuItems(
   items?: ChromeMenuItem[],
   parentPath?: string
 ): DropdownItem[] {
-  return (items || []).map((item) => ({
-    name: item.label,
-    path: parentPath ? applyParentSlug(parentPath, item.path) : normalizeMenuPath(item.path),
-    description: (item as any).description,
-    exploreText: (item as any).exploreText,
-    icon: (item as any).icon || (item as any).iconUrl || "",
-    iconUrl: (item as any).iconUrl || (item as any).icon || "",
-  }));
+  return (items || []).map((item) => {
+    let effectiveParent = parentPath;
+    const obj = item.object || "";
+    const cat = (item.category || item.parentSection || "").toLowerCase();
+
+    // Determine parent route dynamically:
+    if (cat === "industries" || cat === "industry" || cat.includes("industr")) {
+      effectiveParent = "/industries";
+    } else if (parentPath === "/industries" || parentPath?.startsWith("/industries")) {
+      effectiveParent = "/industries";
+    } else if (cat === "services" || cat === "service" || cat.includes("service")) {
+      effectiveParent = "/services";
+    } else if (parentPath === "/services" || parentPath?.startsWith("/services")) {
+      effectiveParent = "/services";
+    } else if (obj === "industry" || obj === "industries" || obj === "hutech_industry") {
+      effectiveParent = "/industries";
+    } else if (obj === "service" || obj === "hutech_service") {
+      if (!effectiveParent) {
+        effectiveParent = "/services";
+      }
+    }
+
+    let finalPath = effectiveParent ? applyParentSlug(effectiveParent, item.path) : normalizeMenuPath(item.path);
+
+    // Prevent cross-prefix pollution
+    if (effectiveParent === "/industries") {
+      finalPath = finalPath
+        .replace(/^\/industries\/services\//i, "/industries/")
+        .replace(/^\/services\//i, "/industries/");
+    } else if (effectiveParent === "/services") {
+      finalPath = finalPath
+        .replace(/^\/services\/industries\//i, "/services/")
+        .replace(/^\/industries\//i, "/services/");
+    }
+
+    return {
+      name: item.label,
+      path: finalPath,
+      description: item.description,
+      exploreText: item.exploreText,
+      icon: item.icon || item.iconUrl || "",
+      iconUrl: item.iconUrl || item.icon || "",
+    };
+  });
 }
 
 function transformPrimaryMenu(items?: ChromeMenuItem[]): HeaderNavItem[] {
@@ -368,32 +437,72 @@ function transformPrimaryMenu(items?: ChromeMenuItem[]): HeaderNavItem[] {
       item.label.toLowerCase().includes("service") ||
       item.label.toLowerCase().includes("what we do");
 
-    const parentPath =
-      item.path && item.path !== "#" && item.path !== "/"
-        ? normalizeMenuPath(item.path)
-        : isServicesOrWhatWeDo
-        ? "/services"
-        : `/${item.label.toLowerCase().replace(/[^a-z0-9]+/g, "-")}`;
+    const isIndustries =
+      item.label.toLowerCase().includes("industry") ||
+      item.label.toLowerCase().includes("industries");
+
+    const parentPath = isServicesOrWhatWeDo
+      ? "/services"
+      : isIndustries
+      ? "/industries"
+      : item.path && item.path !== "#" && item.path !== "/"
+      ? normalizeMenuPath(item.path)
+      : `/${item.label.toLowerCase().replace(/[^a-z0-9]+/g, "-")}`;
 
     const dropdown = item.children?.length
       ? item.children.map((section, sectionIdx) => {
           const sectionPath = normalizeMenuPath(section.path);
+          const isSectionServices =
+            isServicesOrWhatWeDo &&
+            (sectionIdx === 0 || section.label.toLowerCase().includes("service"));
+
+          const isSectionIndustries =
+            isIndustries || section.label.toLowerCase().includes("industr");
+
+          const effectiveParent = isSectionIndustries
+            ? "/industries"
+            : isSectionServices
+            ? "/services"
+            : parentPath;
+
+          const resolveItemPath = (rawPath?: string) => {
+            const norm = normalizeMenuPath(rawPath);
+            if (norm === "#" || norm === "/" || norm.startsWith("http")) return norm;
+            let result = applyParentSlug(effectiveParent, norm);
+            if (effectiveParent === "/industries") {
+              result = result
+                .replace(/^\/industries\/services\//i, "/industries/")
+                .replace(/^\/services\//i, "/industries/");
+            } else if (effectiveParent === "/services") {
+              result = result
+                .replace(/^\/services\/industries\//i, "/services/")
+                .replace(/^\/industries\//i, "/services/");
+            }
+            return result;
+          };
+
           return {
             title: section.label,
-            path: sectionPath === "#" && isServicesOrWhatWeDo && sectionIdx === 0 ? "/services" : sectionPath,
+            path:
+              sectionPath === "#" && isServicesOrWhatWeDo && sectionIdx === 0
+                ? "/services"
+                : sectionPath === "#" && isSectionIndustries
+                ? "/industries"
+                : resolveItemPath(section.path),
             description: (section as any).description,
             icon: (section as any).icon || (section as any).iconUrl || "",
             iconUrl: (section as any).iconUrl || (section as any).icon || "",
             items: section.children?.length
-              ? flattenMenuItems(section.children, isServicesOrWhatWeDo ? undefined : parentPath)
+              ? flattenMenuItems(section.children, effectiveParent)
               : [
                   {
                     name: section.label,
-                    path: sectionPath === "#" && isServicesOrWhatWeDo && sectionIdx === 0
-                      ? "/services"
-                      : sectionPath !== "#"
-                      ? sectionPath
-                      : applyParentSlug(parentPath, section.path),
+                    path:
+                      sectionPath === "#" && isServicesOrWhatWeDo && sectionIdx === 0
+                        ? "/services"
+                        : sectionPath === "#" && isSectionIndustries
+                        ? "/industries"
+                        : resolveItemPath(section.path),
                     description: (section as any).description,
                     exploreText: (section as any).exploreText,
                     icon: (section as any).icon || (section as any).iconUrl || "",
@@ -406,7 +515,13 @@ function transformPrimaryMenu(items?: ChromeMenuItem[]): HeaderNavItem[] {
 
     return {
       label: item.label,
-      path: isServicesOrWhatWeDo ? "/services" : (item.path ? normalizeMenuPath(item.path) : "#"),
+      path: isServicesOrWhatWeDo
+        ? "/services"
+        : isIndustries
+        ? "/industries"
+        : item.path
+        ? normalizeMenuPath(item.path)
+        : "#",
       dropdown,
     };
   });

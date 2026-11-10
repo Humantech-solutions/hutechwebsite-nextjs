@@ -13,7 +13,7 @@ export function ModernizationCTA({
 }) {
   const cta = data || {};
   return (
-    <section id="contact" className="scroll-mt-16 bg-white py-16 lg:py-24">
+    <section id="contact" className="scroll-mt-16 bg-white py-10 lg:py-14">
       <div className="mx-auto max-w-[1280px] px-6 lg:px-12">
         <div className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-[#001A3D] via-[#00285a] to-[#0171c1] p-10 text-center text-white shadow-2xl sm:p-14 lg:p-16">
           {/* Background radial highlight */}
@@ -30,7 +30,7 @@ export function ModernizationCTA({
               </span>
             </div>
 
-            <h2 className="display-font text-3xl font-bold tracking-tight text-white sm:text-4xl lg:text-5xl">
+            <h2 className="display-font text-3xl font-bold leading-tight sm:leading-tight lg:leading-tight tracking-tight text-white sm:text-4xl lg:text-5xl">
               {renderTitle(
                 cta.heading || "Ready to Give Your Legacy Applications |a Future?",
                 "text-white",

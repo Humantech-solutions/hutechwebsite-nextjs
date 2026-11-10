@@ -54,7 +54,7 @@ export function MethodologyAndStrategies({ data, strategies: customStrategies, m
   ];
 
   return (
-    <section id="approach" className="scroll-mt-16 bg-white py-20 lg:py-28">
+    <section id="approach" className="scroll-mt-16 bg-white py-10 lg:py-14">
       <div className="mx-auto max-w-[1280px] px-6 lg:px-12">
         {/* Section Header */}
         <div className="mx-auto max-w-3xl text-center">
@@ -64,7 +64,7 @@ export function MethodologyAndStrategies({ data, strategies: customStrategies, m
               OUR METHODOLOGY
             </span>
           </div>
-          <h2 className="display-font text-3xl font-bold tracking-tight text-[#001A3D] sm:text-4xl lg:text-5xl">
+          <h2 className="display-font text-3xl font-bold leading-tight sm:leading-tight lg:leading-tight tracking-tight text-[#001A3D] sm:text-4xl lg:text-5xl">
             {renderTitle(
               methodologyHeading || "How Hutech Modernizes |Legacy Applications Using AI",
               "text-[#001A3D]",
@@ -78,7 +78,7 @@ export function MethodologyAndStrategies({ data, strategies: customStrategies, m
         </div>
 
         {/* Connected Milestone Pipeline (Replaces 5 Generic Cards) */}
-        <div className="mt-16 lg:mt-20">
+        <div className="mt-10 lg:mt-12">
           {/* Desktop Connected Horizontal Pipeline Track */}
           <div className="relative hidden lg:block">
             {/* Horizontal Line connecting nodes */}
@@ -163,7 +163,7 @@ export function MethodologyAndStrategies({ data, strategies: customStrategies, m
         </div>
 
         {/* The 7 Rs Strategies Section */}
-        <div className="mt-24 lg:mt-32">
+        <div className="mt-12 lg:mt-16">
           <div className="mx-auto max-w-3xl text-center">
             <div className="mb-4 flex items-center justify-center gap-3">
               <span className="h-[2px] w-8 bg-[#F99D1C]" />
@@ -171,7 +171,7 @@ export function MethodologyAndStrategies({ data, strategies: customStrategies, m
                 THE 7 RS FRAMEWORK
               </span>
             </div>
-            <h3 className="display-font text-2xl font-bold text-[#001A3D] sm:text-4xl">
+            <h3 className="display-font text-2xl font-bold leading-tight sm:leading-tight text-[#001A3D] sm:text-4xl">
               Choose the Right Legacy Modernization Strategy
             </h3>
             <p className="mt-3 text-base text-gray-500">

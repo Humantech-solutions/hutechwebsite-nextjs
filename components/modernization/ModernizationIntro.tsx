@@ -7,7 +7,7 @@ export function ModernizationIntro({ data }: { data?: any }) {
   const intro = data || MASTER_PAGE_DATA.intro;
 
   return (
-    <section className="bg-white py-20 lg:py-28">
+    <section className="bg-white py-10 lg:py-14">
       <div className="mx-auto max-w-[1280px] px-6 lg:px-12">
         <div className="grid grid-cols-1 items-start gap-12 lg:grid-cols-2 lg:gap-16">
           {/* Left Column: What Is Legacy Modernization */}
@@ -19,7 +19,7 @@ export function ModernizationIntro({ data }: { data?: any }) {
               </span>
             </div>
 
-            <h2 className="display-font text-3xl font-bold tracking-tight text-[#001A3D] sm:text-4xl lg:text-5xl">
+            <h2 className="display-font text-3xl font-bold leading-tight sm:leading-tight lg:leading-tight tracking-tight text-[#001A3D] sm:text-4xl lg:text-5xl">
               {renderTitle(
                 intro.heading || "What Is Legacy |Application Modernization?",
                 "text-[#001A3D]",
@@ -50,7 +50,7 @@ export function ModernizationIntro({ data }: { data?: any }) {
               <span className="inline-block rounded-md bg-blue-50 px-3 py-1 text-xs font-bold uppercase tracking-wider text-[#0171c1]">
                 OUR ENGINEERING APPROACH
               </span>
-              <h3 className="display-font text-xl font-bold text-[#001A3D] sm:text-2xl">
+              <h3 className="display-font text-xl font-bold leading-tight text-[#001A3D] sm:text-2xl">
                 {renderTitle(
                   intro.approachTitle || "Hutech’s Approach to |AI-Driven Legacy Modernization",
                   "text-[#001A3D]",

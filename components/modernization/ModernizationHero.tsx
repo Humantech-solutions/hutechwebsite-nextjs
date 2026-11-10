@@ -44,7 +44,7 @@ export function ModernizationHero({ data }: { data?: any }) {
               </span>
             </div>
 
-            <h1 className="display-font text-3xl font-bold leading-[1.1] tracking-tight text-white sm:text-5xl lg:text-[56px]">
+            <h1 className="display-font text-3xl font-bold leading-tight sm:leading-tight lg:leading-[1.15] tracking-tight text-white sm:text-5xl lg:text-[56px]">
               {renderTitle(
                 hero.headline || `${hero.headlineStart || "Modernize legacy."} |${hero.headlineGrad || "Accelerate what's next."}`,
                 "text-white",

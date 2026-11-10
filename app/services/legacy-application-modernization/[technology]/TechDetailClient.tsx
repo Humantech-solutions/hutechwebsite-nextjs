@@ -59,7 +59,7 @@ export default function TechDetailClient({ tech }: { tech: LegacyTechDetail }) {
             </div>
 
             {/* Inner Page Title - Theme Proportions */}
-            <h1 className="display-font mb-6 text-3xl font-semibold leading-[1.15] tracking-tight text-white sm:text-4xl md:text-5xl">
+            <h1 className="display-font mb-6 text-3xl font-semibold leading-[1.15] sm:leading-[1.15] md:leading-[1.15] tracking-tight text-white sm:text-4xl md:text-5xl">
               {renderTitle(
                 tech.name,
                 "text-white",
@@ -100,7 +100,7 @@ export default function TechDetailClient({ tech }: { tech: LegacyTechDetail }) {
             {/* Left Column: Heading, Context & Aligned Stats */}
             <div className="space-y-8">
               <div className="space-y-4">
-                <h2 className="display-font text-3xl font-semibold leading-tight text-[#001A3D] md:text-4xl">
+                <h2 className="display-font text-3xl font-semibold leading-tight md:leading-tight text-[#001A3D] md:text-4xl">
                   {renderTitle(
                     `Transforming Legacy ${tech.shortName} into Cloud-Native Agility`,
                     "text-[#001A3D]",
@@ -215,7 +215,7 @@ export default function TechDetailClient({ tech }: { tech: LegacyTechDetail }) {
                 ARCHITECTURAL CHALLENGES
               </span>
             </div>
-            <h2 className="display-font text-3xl font-semibold text-[#001A3D] md:text-5xl">
+            <h2 className="display-font text-3xl font-semibold leading-tight md:leading-tight text-[#001A3D] md:text-5xl">
               {renderTitle(
                 `Why Staying on Legacy ${tech.shortName} Threatens Growth`,
                 "text-[#001A3D]",
@@ -285,7 +285,7 @@ export default function TechDetailClient({ tech }: { tech: LegacyTechDetail }) {
                 ARCHITECTURAL TRANSFORMATION
               </span>
             </div>
-            <h2 className="display-font text-3xl font-semibold text-[#001A3D] md:text-5xl">
+            <h2 className="display-font text-3xl font-semibold leading-tight md:leading-tight text-[#001A3D] md:text-5xl">
               {renderTitle(
                 "Legacy Monolith vs. Cloud-Native Target",
                 "text-[#001A3D]",
@@ -401,7 +401,7 @@ export default function TechDetailClient({ tech }: { tech: LegacyTechDetail }) {
                 MIGRATION BLUEPRINT
               </span>
             </div>
-            <h2 className="display-font text-3xl font-semibold text-[#001A3D] md:text-5xl">
+            <h2 className="display-font text-3xl font-semibold leading-tight md:leading-tight text-[#001A3D] md:text-5xl">
               {renderTitle(
                 `5-Phase ${tech.shortName} Modernization Playbook`,
                 "text-[#001A3D]",
@@ -475,7 +475,7 @@ export default function TechDetailClient({ tech }: { tech: LegacyTechDetail }) {
                 MEASURABLE ENTERPRISE OUTCOMES
               </span>
             </div>
-            <h2 className="display-font text-3xl font-semibold text-white md:text-5xl">
+            <h2 className="display-font text-3xl font-semibold leading-tight md:leading-tight text-white md:text-5xl">
               {renderTitle(
                 `Concrete ROI from Modernizing ${tech.shortName}`,
                 "text-white",

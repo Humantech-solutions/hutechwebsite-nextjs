@@ -14,7 +14,7 @@ export function LegacyTechGrid({ data, tagline, heading, description }: { data?:
   const activeTech = technologies[selectedTech];
 
   return (
-    <section id="technology-stacks" className="scroll-mt-16 bg-white py-20 lg:py-28">
+    <section id="technology-stacks" className="scroll-mt-16 bg-white py-10 lg:py-14">
       <div className="mx-auto max-w-[1280px] px-6 lg:px-12">
         {/* Section Header */}
         <div className="mx-auto max-w-3xl text-center">
@@ -24,7 +24,7 @@ export function LegacyTechGrid({ data, tagline, heading, description }: { data?:
               {tagline || "TECHNOLOGY-SPECIFIC MODERNIZATION"}
             </span>
           </div>
-          <h2 className="display-font text-3xl font-bold tracking-tight text-[#001A3D] sm:text-4xl lg:text-5xl">
+          <h2 className="display-font text-3xl font-bold leading-tight sm:leading-tight lg:leading-tight tracking-tight text-[#001A3D] sm:text-4xl lg:text-5xl">
             {renderTitle(
               heading || "Specialized Modernization Across |Major Legacy Technologies",
               "text-[#001A3D]",
@@ -38,7 +38,7 @@ export function LegacyTechGrid({ data, tagline, heading, description }: { data?:
         </div>
 
         {/* Interactive Technology Console (Replaces 6 Generic Box Cards) */}
-        <div className="mt-14 lg:mt-20">
+        <div className="mt-10 lg:mt-12">
           {/* Horizontal Technology Tab Selector Strip with Authentic SVGs */}
           <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-6 pb-6 border-b border-gray-100">
             {technologies.map((tech, idx) => {
@@ -91,7 +91,7 @@ export function LegacyTechGrid({ data, tagline, heading, description }: { data?:
                     <span className="text-[10px] font-bold uppercase tracking-widest text-[#0171c1]">
                       {activeTech.badge}
                     </span>
-                    <h3 className="display-font text-2xl font-bold text-[#001A3D] sm:text-3xl">
+                    <h3 className="display-font text-2xl font-bold leading-tight text-[#001A3D] sm:text-3xl">
                       {activeTech.name}
                     </h3>
                   </div>

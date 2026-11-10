@@ -57,10 +57,10 @@ function FAQItem({ question, answer }: { question: string; answer: string }) {
 
 export function ModernizationFaq({ items, heading }: { items: FAQItemType[]; heading?: string }) {
   return (
-    <section id="faq" className="scroll-mt-16 bg-white py-24">
+    <section id="faq" className="scroll-mt-16 bg-white py-10 lg:py-14">
       <div className="mx-auto max-w-[1280px] px-6 lg:px-20">
-        <div className="mb-20 space-y-6 text-center">
-          <h2 className="display-font text-3xl font-semibold tracking-tight text-[#001A3D] md:text-5xl">
+        <div className="mb-10 space-y-4 text-center">
+          <h2 className="display-font text-3xl font-semibold leading-tight sm:leading-tight md:leading-tight tracking-tight text-[#001A3D] md:text-5xl">
             {renderTitle(
               heading || "Frequently Asked |Questions",
               "text-[#001A3D]",

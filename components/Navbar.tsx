@@ -166,6 +166,47 @@ function getServiceCardDescription(name: string, desc?: string): string {
   return "Accelerating digital transformation and scaling engineering excellence.";
 }
 
+function resolveDropdownLink(path?: string, parentSection?: "services" | "industries"): string {
+  if (!path || path === "#" || path === "/" || path.startsWith("http") || path.startsWith("mailto:") || path.startsWith("tel:")) {
+    return path || "#";
+  }
+
+  let clean = path.trim();
+  if (!clean.startsWith("/")) clean = `/${clean}`;
+
+  // Fix any duplicate chained parent prefixes
+  clean = clean
+    .replace(/^\/industries\/services\//i, "/industries/")
+    .replace(/^\/services\/industries\//i, "/services/")
+    .replace(/^\/(?:blog\/)?(?:hutech_service|service)\//i, "/services/")
+    .replace(/^\/(?:blog\/)?(?:hutech_industry|industry|industries)\//i, "/industries/");
+
+  // Ensure parent route prefix for items under services or industries that lack a parent page
+  if (parentSection === "industries") {
+    clean = clean
+      .replace(/^\/services\//i, "/industries/")
+      .replace(/^\/industries\/services\//i, "/industries/");
+    if (!clean.startsWith("/industries")) {
+      const slug = clean.replace(/^\//, "");
+      clean = `/industries/${slug}`;
+    }
+    return clean;
+  }
+
+  if (parentSection === "services") {
+    clean = clean
+      .replace(/^\/industries\//i, "/services/")
+      .replace(/^\/services\/industries\//i, "/services/");
+    if (!clean.startsWith("/services")) {
+      const slug = clean.replace(/^\//, "");
+      clean = `/services/${slug}`;
+    }
+    return clean;
+  }
+
+  return clean;
+}
+
 export default function Navbar({ data }: { data?: HeaderChromeData }) {
   const [activeDropdown, setActiveDropdown] = useState<number | null>(null);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -505,7 +546,14 @@ export default function Navbar({ data }: { data?: HeaderChromeData }) {
                                         {section.items.map((subItem) => (
                                           <Link
                                             key={subItem.name}
-                                            href={subItem.path}
+                                            href={resolveDropdownLink(
+                                              subItem.path,
+                                              item.label.toLowerCase().includes("industr")
+                                                ? "industries"
+                                                : item.label.toLowerCase().includes("service") || item.label.toLowerCase().includes("what we do")
+                                                ? "services"
+                                                : undefined
+                                            )}
                                             className="group/item flex items-center px-6 py-2.5 text-[13px] font-semibold text-gray-500 transition-all hover:bg-gray-50 hover:text-[#0171c1]"
                                             onClick={() => setActiveDropdown(null)}
                                           >
@@ -555,7 +603,7 @@ export default function Navbar({ data }: { data?: HeaderChromeData }) {
                                             {serviceCards.map((serviceCard, cardIdx) => (
                                               <Link
                                                 key={`${serviceCard.name}-${cardIdx}`}
-                                                href={serviceCard.path || "/services"}
+                                                href={resolveDropdownLink(serviceCard.path || "/services", "services")}
                                                 onClick={() => setActiveDropdown(null)}
                                                 className={`group/card block rounded-xl p-5 transition-all duration-300 ${
                                                   cardIdx === 0
@@ -627,7 +675,7 @@ export default function Navbar({ data }: { data?: HeaderChromeData }) {
                                             {capabilitiesItems.map((capItem) => (
                                               <Link
                                                 key={capItem.name}
-                                                href={capItem.path}
+                                                href={resolveDropdownLink(capItem.path, "services")}
                                                 onClick={() => setActiveDropdown(null)}
                                                 className="group/item flex items-center rounded-lg px-3 py-2 text-sm font-medium text-gray-600 transition-all hover:bg-gray-50 hover:text-[#0171c1]"
                                               >
@@ -937,7 +985,7 @@ export default function Navbar({ data }: { data?: HeaderChromeData }) {
                                       {serviceCards.map((serviceCard, cardIdx) => (
                                         <Link
                                           key={`mob-service-${cardIdx}`}
-                                          href={serviceCard.path || "/services"}
+                                          href={resolveDropdownLink(serviceCard.path || "/services", "services")}
                                           onClick={() => setMobileMenuOpen(false)}
                                           className="group block rounded-lg bg-white/5 p-3.5 transition-colors hover:bg-white/10"
                                         >
@@ -969,7 +1017,7 @@ export default function Navbar({ data }: { data?: HeaderChromeData }) {
                                       {capabilitiesItems.map((capItem) => (
                                         <Link
                                           key={`mob-cap-${capItem.name}`}
-                                          href={capItem.path}
+                                          href={resolveDropdownLink(capItem.path, "services")}
                                           onClick={() => setMobileMenuOpen(false)}
                                           className="group flex items-center text-sm font-medium text-slate-200 transition-colors hover:text-white"
                                         >
@@ -1032,7 +1080,14 @@ export default function Navbar({ data }: { data?: HeaderChromeData }) {
                                             {section.items.map((subItem) => (
                                               <Link
                                                 key={subItem.name}
-                                                href={subItem.path}
+                                                href={resolveDropdownLink(
+                                                  subItem.path,
+                                                  item.label.toLowerCase().includes("industr")
+                                                    ? "industries"
+                                                    : item.label.toLowerCase().includes("service") || item.label.toLowerCase().includes("what we do")
+                                                    ? "services"
+                                                    : undefined
+                                                )}
                                                 className="group flex items-center text-base font-semibold text-gray-300 transition-colors hover:text-white"
                                                 onClick={() => setMobileMenuOpen(false)}
                                               >
