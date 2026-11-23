@@ -56,7 +56,7 @@ export function ModernizationOutcomesAndIndustries({ benefits, industries: custo
   return (
     <>
       {/* 1. Business Benefits Section - Executive Metric Dashboard (Replaces 8 Box Cards) */}
-      <section className="bg-[#001A3D] py-12 text-white lg:py-16">
+      <section className="bg-[#001A3D] py-8 text-white lg:py-10">
         <div className="mx-auto max-w-[1280px] px-6 lg:px-12">
           {/* Header */}
           <div className="mx-auto max-w-3xl text-center">
@@ -123,7 +123,7 @@ export function ModernizationOutcomesAndIndustries({ benefits, industries: custo
       </section>
 
       {/* 2. Industries Section - Interactive Domain Navigator (Replaces 6 Generic Cards) */}
-      <section className="bg-white py-10 lg:py-14">
+      <section className="bg-white py-6 lg:py-8">
         <div className="mx-auto max-w-[1280px] px-6 lg:px-12">
           {/* Header */}
           <div className="mx-auto max-w-3xl text-center">
@@ -219,7 +219,7 @@ export function ModernizationOutcomesAndIndustries({ benefits, industries: custo
       </section>
 
       {/* 3. Why Choose Hutech - Split Credo & Numbered Sequence (Replaces 6 Generic Cards) */}
-      <section className="bg-[#F8FAFC] py-10 lg:py-14 border-t border-gray-100">
+      <section className="bg-[#F8FAFC] py-6 lg:py-8 border-t border-gray-100">
         <div className="mx-auto max-w-[1280px] px-6 lg:px-12">
           <div className="grid grid-cols-1 items-start gap-12 lg:grid-cols-[1fr_1.5fr] lg:gap-16">
             {/* Left Column: Authority Anchor */}

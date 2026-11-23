@@ -45,7 +45,7 @@ interface HomePageClientProps {
 
 // Asset paths
 const samAltmanImg = "/assets/22febdba9948fa49e4211b0c440830215a31d096.png";
-const heroImg = "/assets/310f3ecce35af7049868ea8c5fbb79881cc4acde.webp";
+const heroImg = "/assets/310f3ecce35af7049868ea8c5fbb79881cc4acde.png";
 const linePattern = "/assets/c70f0c069be641e3c4679e15a1f46e98bd813e34.png";
 const kotakLogo = "/assets/7864b46c9929cf2e5a24585f95cf2482dc8190ba.png";
 const serkoLogo = "/assets/adf5bc4ee0b9144881c1a1c79a3c359ab494a4ae.png";

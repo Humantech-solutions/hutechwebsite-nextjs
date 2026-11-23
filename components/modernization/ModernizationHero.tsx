@@ -18,7 +18,7 @@ export function ModernizationHero({ data }: { data?: any }) {
   const hero = data || MASTER_PAGE_DATA.hero;
 
   return (
-    <section className="relative overflow-hidden bg-[#001A3D] py-16 text-white md:py-24 lg:py-28">
+    <section className="relative overflow-hidden bg-[#001A3D] py-12 text-white md:py-16 lg:py-20">
       {/* Background radial ambient lighting */}
       <div
         className="pointer-events-none absolute -right-36 -top-24 h-[650px] w-[750px] rounded-full opacity-40 blur-3xl"

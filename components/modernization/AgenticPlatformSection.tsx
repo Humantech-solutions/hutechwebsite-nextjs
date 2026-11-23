@@ -16,7 +16,7 @@ export function AgenticPlatformSection({ data }: { data?: any }) {
   const platform = data || MASTER_PAGE_DATA.platform;
 
   return (
-    <section id="agentic-platform" className="scroll-mt-16 bg-[#F8FAFC] py-10 lg:py-14">
+    <section id="agentic-platform" className="scroll-mt-16 bg-[#F8FAFC] py-6 lg:py-8">
       <div className="mx-auto max-w-[1280px] px-6 lg:px-12">
         <div className="grid grid-cols-1 items-center gap-12 lg:grid-cols-2 lg:gap-16">
           {/* Left Column: Value Proposition */}

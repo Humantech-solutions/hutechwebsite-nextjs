@@ -1,6 +1,8 @@
 import { MASTER_PAGE_DATA } from "@/lib/data/legacy-modernization";
 import type { ModernProductData } from "@/components/products/ModernProductTemplate";
 import { PRODUCT_1_DATA } from "@/lib/product-1-data";
+import { DEFAULT_PRODUCTS, getDefaultProduct, toProductAdapter, type ProductItem } from "@/lib/product-catalog";
+import { mapProductToModernData } from "@/lib/product-adapter";
 import { CaseStudy } from "@/lib/data/case-studies";
 import { getIPublishAllBlogs } from "@/lib/ipublish";
 // WordPress GraphQL API integration for Hutech Solutions
@@ -135,11 +137,12 @@ export async function fetchGraphQL(query: string, variables = {}) {
     clearTimeout(timeout);
 
     if (!res.ok) {
-      console.warn(`[WP] HTTP ${res.status}: ${res.statusText}`);
+      const queryPreview = query.trim().split("\n")[0].trim().slice(0, 80);
+      console.warn(`[WP] HTTP ${res.status}: ${res.statusText} [${queryPreview}]`);
       try {
         const text = await res.text();
         console.warn(`[WP] Error Body: ${text}`);
-      } catch (e) {}
+      } catch (e) { }
       return { data: null, errors: [{ message: `HTTP ${res.status}` }] };
     }
 
@@ -444,73 +447,73 @@ function transformPrimaryMenu(items?: ChromeMenuItem[]): HeaderNavItem[] {
     const parentPath = isServicesOrWhatWeDo
       ? "/services"
       : isIndustries
-      ? "/industries"
-      : item.path && item.path !== "#" && item.path !== "/"
-      ? normalizeMenuPath(item.path)
-      : `/${item.label.toLowerCase().replace(/[^a-z0-9]+/g, "-")}`;
+        ? "/industries"
+        : item.path && item.path !== "#" && item.path !== "/"
+          ? normalizeMenuPath(item.path)
+          : `/${item.label.toLowerCase().replace(/[^a-z0-9]+/g, "-")}`;
 
     const dropdown = item.children?.length
       ? item.children.map((section, sectionIdx) => {
-          const sectionPath = normalizeMenuPath(section.path);
-          const isSectionServices =
-            isServicesOrWhatWeDo &&
-            (sectionIdx === 0 || section.label.toLowerCase().includes("service"));
+        const sectionPath = normalizeMenuPath(section.path);
+        const isSectionServices =
+          isServicesOrWhatWeDo &&
+          (sectionIdx === 0 || section.label.toLowerCase().includes("service"));
 
-          const isSectionIndustries =
-            isIndustries || section.label.toLowerCase().includes("industr");
+        const isSectionIndustries =
+          isIndustries || section.label.toLowerCase().includes("industr");
 
-          const effectiveParent = isSectionIndustries
-            ? "/industries"
-            : isSectionServices
+        const effectiveParent = isSectionIndustries
+          ? "/industries"
+          : isSectionServices
             ? "/services"
             : parentPath;
 
-          const resolveItemPath = (rawPath?: string) => {
-            const norm = normalizeMenuPath(rawPath);
-            if (norm === "#" || norm === "/" || norm.startsWith("http")) return norm;
-            let result = applyParentSlug(effectiveParent, norm);
-            if (effectiveParent === "/industries") {
-              result = result
-                .replace(/^\/industries\/services\//i, "/industries/")
-                .replace(/^\/services\//i, "/industries/");
-            } else if (effectiveParent === "/services") {
-              result = result
-                .replace(/^\/services\/industries\//i, "/services/")
-                .replace(/^\/industries\//i, "/services/");
-            }
-            return result;
-          };
+        const resolveItemPath = (rawPath?: string) => {
+          const norm = normalizeMenuPath(rawPath);
+          if (norm === "#" || norm === "/" || norm.startsWith("http")) return norm;
+          let result = applyParentSlug(effectiveParent, norm);
+          if (effectiveParent === "/industries") {
+            result = result
+              .replace(/^\/industries\/services\//i, "/industries/")
+              .replace(/^\/services\//i, "/industries/");
+          } else if (effectiveParent === "/services") {
+            result = result
+              .replace(/^\/services\/industries\//i, "/services/")
+              .replace(/^\/industries\//i, "/services/");
+          }
+          return result;
+        };
 
-          return {
-            title: section.label,
-            path:
-              sectionPath === "#" && isServicesOrWhatWeDo && sectionIdx === 0
-                ? "/services"
-                : sectionPath === "#" && isSectionIndustries
+        return {
+          title: section.label,
+          path:
+            sectionPath === "#" && isServicesOrWhatWeDo && sectionIdx === 0
+              ? "/services"
+              : sectionPath === "#" && isSectionIndustries
                 ? "/industries"
                 : resolveItemPath(section.path),
-            description: (section as any).description,
-            icon: (section as any).icon || (section as any).iconUrl || "",
-            iconUrl: (section as any).iconUrl || (section as any).icon || "",
-            items: section.children?.length
-              ? flattenMenuItems(section.children, effectiveParent)
-              : [
-                  {
-                    name: section.label,
-                    path:
-                      sectionPath === "#" && isServicesOrWhatWeDo && sectionIdx === 0
-                        ? "/services"
-                        : sectionPath === "#" && isSectionIndustries
-                        ? "/industries"
-                        : resolveItemPath(section.path),
-                    description: (section as any).description,
-                    exploreText: (section as any).exploreText,
-                    icon: (section as any).icon || (section as any).iconUrl || "",
-                    iconUrl: (section as any).iconUrl || (section as any).icon || "",
-                  },
-                ],
-          };
-        })
+          description: (section as any).description,
+          icon: (section as any).icon || (section as any).iconUrl || "",
+          iconUrl: (section as any).iconUrl || (section as any).icon || "",
+          items: section.children?.length
+            ? flattenMenuItems(section.children, effectiveParent)
+            : [
+              {
+                name: section.label,
+                path:
+                  sectionPath === "#" && isServicesOrWhatWeDo && sectionIdx === 0
+                    ? "/services"
+                    : sectionPath === "#" && isSectionIndustries
+                      ? "/industries"
+                      : resolveItemPath(section.path),
+                description: (section as any).description,
+                exploreText: (section as any).exploreText,
+                icon: (section as any).icon || (section as any).iconUrl || "",
+                iconUrl: (section as any).iconUrl || (section as any).icon || "",
+              },
+            ],
+        };
+      })
       : undefined;
 
     return {
@@ -518,10 +521,10 @@ function transformPrimaryMenu(items?: ChromeMenuItem[]): HeaderNavItem[] {
       path: isServicesOrWhatWeDo
         ? "/services"
         : isIndustries
-        ? "/industries"
-        : item.path
-        ? normalizeMenuPath(item.path)
-        : "#",
+          ? "/industries"
+          : item.path
+            ? normalizeMenuPath(item.path)
+            : "#",
       dropdown,
     };
   });
@@ -1174,7 +1177,13 @@ const BLOGS_BY_CATEGORY_FOR_HOME_QUERY = `
 export async function getHomePage(uri: string = "/"): Promise<HomepageData | null> {
   try {
     const queryUri = uri === "/" ? "home" : uri;
-    const raw = await fetchGraphQL(HOMEPAGE_QUERY, { uri: queryUri });
+    let raw = await fetchGraphQL(HOMEPAGE_QUERY, { uri: queryUri });
+    if (!raw?.data?.pageBy && uri === "/") {
+      raw = await fetchGraphQL(HOMEPAGE_QUERY, { uri: "/" });
+    }
+    if (!raw?.data?.pageBy && uri === "/") {
+      raw = await fetchGraphQL(HOMEPAGE_QUERY, { uri: "/home/" });
+    }
     if (raw?.errors || !raw?.data?.pageBy) {
       console.warn("[WP] Could not fetch homepage data. Using static fallback.");
       return null;
@@ -5448,7 +5457,7 @@ export async function getPostTemplateBySlug(slug: string, uri?: string): Promise
           return { template: tpl, postType: pt, rawItem: item };
         }
       }
-    } catch (e) {}
+    } catch (e) { }
   }
 
   return { template: "", postType: "", rawItem: null };
@@ -5474,7 +5483,7 @@ export async function getProductBySlug(slug: string): Promise<ModernProductData 
           }
         }
       }
-    } catch (err) {}
+    } catch (err) { }
   }
 
   // Fallback to local default data for product-1
@@ -5482,7 +5491,947 @@ export async function getProductBySlug(slug: string): Promise<ModernProductData 
     return PRODUCT_1_DATA;
   }
 
+  // Check default product catalog
+  const defaultProd = getDefaultProduct(normSlug);
+  if (defaultProd) {
+    return mapProductToModernData(toProductAdapter(defaultProd), defaultProd.id);
+  }
+
   return null;
+}
+
+export interface ProductPageData {
+  // Hero
+  label?: string;
+  heroBgImage?: string;
+  title?: string;
+  description?: string;
+  trustCheckmarks?: string[];
+  heroFormBadge?: string;
+  heroFormTitle?: string;
+  heroFormSubtitle?: string;
+  heroFormBtnText?: string;
+  heroFormNote?: string;
+
+  // Spotlight (derived dynamically from selected product post)
+  showSpotlight?: boolean;
+  spotlightEyebrow?: string;
+  spotlightBadge?: string;
+  flagshipProduct?: any;
+  flagshipProductId?: number | string;
+  flagshipSlug?: string;
+  flagshipTitle?: string;
+  spotlightSlug?: string;
+  spotlightCtaText?: string;
+  spotlightSlides?: Array<{
+    id?: string;
+    label: string;
+    tag: string;
+    title: string;
+    description: string;
+    metric: string;
+    path: string;
+    image: string;
+  }>;
+
+  // Catalog Settings
+  catalogEyebrow?: string;
+  catalogTitle?: string;
+  catalogSearchPlaceholder?: string;
+  catalogLoadMoreBtnText?: string;
+  catalogNoResultsTitle?: string;
+  catalogNoResultsDescription?: string;
+  catalogResetBtnText?: string;
+
+  // Category and posts count settings (matching Blog page pattern)
+  category?: string;
+  categorySlug?: string;
+  postsCount?: number;
+  productsCount?: number;
+
+  // Architecture Pillars
+  pillarsEyebrow?: string;
+  pillarsTitle?: string;
+  pillarsDescription?: string;
+  pillars?: Array<{
+    title: string;
+    description: string;
+    icon?: string;
+  }>;
+
+  // CTA Banner
+  ctaTag?: string;
+  ctaBgImage?: string;
+  ctaTitle?: string;
+  ctaDescription?: string;
+  ctaBtnText?: string;
+  ctaBtnLink?: string;
+}
+
+export async function getProductPageData(uri?: string): Promise<ProductPageData | null> {
+  const fallbackData: ProductPageData = {
+    label: "Enterprise Software Platforms",
+    heroBgImage: "",
+    title: "Platforms Built to |Accelerate Enterprise.",
+    description:
+      "Engineered for resilience, scalability, and mission-critical performance across modern enterprise workloads.",
+    trustCheckmarks: [
+      "VPC & Sovereign Deployment",
+      "100% Zero Vendor Lock-In",
+      "Sub-Second Event Latency",
+      "SOC 2 Type II & ISO 27001 Certified",
+    ],
+    heroFormBadge: "REQUEST DEMO",
+    heroFormTitle: "Experience Our Platforms",
+    heroFormSubtitle: "Connect with our enterprise solution architects for a live interactive demo.",
+    heroFormBtnText: "Request Platform Demo",
+    heroFormNote: "🔒 Enterprise confidentiality guaranteed. No spam.",
+    showSpotlight: true,
+    spotlightEyebrow: "Flagship Platform Spotlight",
+    spotlightBadge: "Enterprise Ready • v4.2",
+    flagshipSlug: "",
+    spotlightSlug: "",
+    spotlightCtaText: "Explore Platform",
+    catalogEyebrow: "Available Solutions",
+    catalogTitle: "Enterprise Product Catalog",
+    catalogSearchPlaceholder: "Search platforms by name, capability, or stack...",
+    postsCount: 6,
+    productsCount: 6,
+    category: "",
+    categorySlug: "",
+    catalogLoadMoreBtnText: "Load More",
+    catalogNoResultsTitle: "No matching software platforms found",
+    catalogNoResultsDescription: "Try searching with different keywords or clearing your active filters.",
+    catalogResetBtnText: "Reset Filters",
+    pillarsEyebrow: "Enterprise Standards",
+    pillarsTitle: "Architected for Mission-Critical |Enterprise Environments.",
+    pillarsDescription:
+      "Every Hutech software product is built according to defense-in-depth principles, guaranteeing zero vendor lock-in, open APIs, and continuous regulatory adherence.",
+    pillars: [
+      {
+        title: "VPC & Sovereign Deployment",
+        description:
+          "Deploy entirely in your private cloud (AWS VPC, GCP VPC, Azure VNet) or on-premise Kubernetes clusters with 100% data residency.",
+        icon: "server",
+      },
+      {
+        title: "Sub-Second Event Latency",
+        description:
+          "Engineered on high-throughput event buses and distributed workers to guarantee real-time orchestration under peak global loads.",
+        icon: "zap",
+      },
+      {
+        title: "Zero Vendor Lock-In",
+        description:
+          "Built with open OpenAPI standards, exportable state definitions, and cloud-agnostic containers so you always maintain complete ownership.",
+        icon: "globe",
+      },
+      {
+        title: "Continuous Compliance",
+        description:
+          "Audited continuously against SOC 2 Type II, ISO 27001, HIPAA, and GDPR frameworks with automated policy-as-code enforcement.",
+        icon: "lock",
+      },
+    ],
+    ctaTag: "Ready When You Are",
+    ctaBgImage: "",
+    ctaTitle: "Turn your best ideas\ninto |real momentum.",
+    ctaDescription: "See how our proprietary platforms can transform the way your organization works.",
+    ctaBtnText: "Book Your Personalized Demo",
+    ctaBtnLink: "/contact",
+  };
+
+  const resolveMediaMap = async (rawNode: any, restBase: string): Promise<Map<number, string>> => {
+    const mediaMap = new Map<number, string>();
+    if (!rawNode) return mediaMap;
+
+    const candidates = [
+      rawNode.heroBgImage ?? rawNode.hero_bg_image,
+      rawNode.ctaBgImage ?? rawNode.cta_bg_image,
+      rawNode.pillar1Icon ?? rawNode.pillar1_icon,
+      rawNode.pillar2Icon ?? rawNode.pillar2_icon,
+      rawNode.pillar3Icon ?? rawNode.pillar3_icon,
+      rawNode.pillar4Icon ?? rawNode.pillar4_icon,
+      rawNode.slide1Image ?? rawNode.slide1_image,
+      rawNode.slide2Image ?? rawNode.slide2_image,
+      rawNode.slide3Image ?? rawNode.slide3_image,
+      rawNode.slide4Image ?? rawNode.slide4_image,
+    ];
+
+    const idsToFetch: number[] = [];
+    for (const c of candidates) {
+      if (typeof c === "number" && c > 0) {
+        idsToFetch.push(c);
+      } else if (typeof c === "string" && /^\d+$/.test(c.trim())) {
+        idsToFetch.push(parseInt(c.trim(), 10));
+      } else if (typeof c === "object" && c && (c.id || c.ID)) {
+        const id = c.id || c.ID;
+        if (typeof id === "number" && id > 0) idsToFetch.push(id);
+      }
+    }
+
+    const uniqueIds = Array.from(new Set(idsToFetch));
+    if (uniqueIds.length > 0) {
+      await Promise.all(
+        uniqueIds.map(async (id) => {
+          try {
+            const res = await fetch(`${restBase}/wp-json/wp/v2/media/${id}`, {
+              ...(process.env.NODE_ENV === "development" ? { cache: "no-store" } : { next: { revalidate: 3600 } }),
+            });
+            if (res.ok) {
+              const m = await res.json();
+              const url = m.source_url || m.guid?.rendered || "";
+              if (url) mediaMap.set(id, url);
+            }
+          } catch {}
+        })
+      );
+    }
+    return mediaMap;
+  };
+
+  const mapFields = (node: any, mediaMap?: Map<number, string>): ProductPageData => {
+    const getImg = (val: any, fallback: string) => {
+      if (!val) return fallback;
+      if (typeof val === "number" && mediaMap?.has(val)) return mediaMap.get(val)!;
+      if (typeof val === "string") {
+        if (/^\d+$/.test(val.trim())) {
+          const num = parseInt(val.trim(), 10);
+          if (mediaMap?.has(num)) return mediaMap.get(num)!;
+        }
+        return val;
+      }
+      if (typeof val === "object" && val) {
+        const id = val.id || val.ID;
+        if (typeof id === "number" && mediaMap?.has(id)) return mediaMap.get(id)!;
+        return val.source_url || val.sourceUrl || val.mediaItemUrl || val.url || val.guid?.rendered || fallback;
+      }
+      return fallback;
+    };
+
+    const getIconImg = (val: any) => {
+      if (!val) return "";
+      if (typeof val === "number" && mediaMap?.has(val)) return mediaMap.get(val)!;
+      if (typeof val === "string") {
+        if (/^\d+$/.test(val.trim())) {
+          const num = parseInt(val.trim(), 10);
+          if (mediaMap?.has(num)) return mediaMap.get(num)!;
+        }
+        return val;
+      }
+      if (typeof val === "object" && val) {
+        const id = val.id || val.ID;
+        if (typeof id === "number" && mediaMap?.has(id)) return mediaMap.get(id)!;
+        return val.source_url || val.sourceUrl || val.mediaItemUrl || val.url || val.guid?.rendered || "";
+      }
+      return "";
+    };
+    const slides = [
+      (node.slide1Title || node.slide1_title) && {
+        id: "slide1",
+        label: node.slide1Label || node.slide1_label || "Command Center",
+        tag: node.slide1Tag || node.slide1_tag || "Workflow Orchestration",
+        title: node.slide1Title || node.slide1_title || "Autonomous Workflow Orchestration",
+        description: node.slide1Description || node.slide1_description || "",
+        metric: node.slide1Metric || node.slide1_metric || "3.2x Faster Delivery",
+        path: node.slide1Path || node.slide1_path || "lumacore.platform/workflows",
+        image: getImg(node.slide1Image || node.slide1_image, "https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&q=80&w=1400"),
+      },
+      (node.slide2Title || node.slide2_title) && {
+        id: "slide2",
+        label: node.slide2Label || node.slide2_label || "Telemetry Graph",
+        tag: node.slide2Tag || node.slide2_tag || "Operational Intelligence",
+        title: node.slide2Title || node.slide2_title || "Real-Time Context & Knowledge Graph",
+        description: node.slide2Description || node.slide2_description || "",
+        metric: node.slide2Metric || node.slide2_metric || "< 90s MTTR Response",
+        path: node.slide2Path || node.slide2_path || "lumacore.platform/telemetry",
+        image: getImg(node.slide2Image || node.slide2_image, "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&q=80&w=1400"),
+      },
+      (node.slide3Title || node.slide3_title) && {
+        id: "slide3",
+        label: node.slide3Label || node.slide3_label || "Governance Engine",
+        tag: node.slide3Tag || node.slide3_tag || "Continuous Compliance",
+        title: node.slide3Title || node.slide3_title || "Policy-Driven Governance Guardrails",
+        description: node.slide3Description || node.slide3_description || "",
+        metric: node.slide3Metric || node.slide3_metric || "100% Policy Adherence",
+        path: node.slide3Path || node.slide3_path || "lumacore.platform/governance",
+        image: getImg(node.slide3Image || node.slide3_image, "https://images.unsplash.com/photo-1504639725590-34d0984388bd?auto=format&fit=crop&q=80&w=1400"),
+      },
+      (node.slide4Title || node.slide4_title) && {
+        id: "slide4",
+        label: node.slide4Label || node.slide4_label || "Private VPC Mesh",
+        tag: node.slide4Tag || node.slide4_tag || "Edge Topology",
+        title: node.slide4Title || node.slide4_title || "Sovereign Private Cloud Deployment",
+        description: node.slide4Description || node.slide4_description || "",
+        metric: node.slide4Metric || node.slide4_metric || "99.99% Availability SLA",
+        path: node.slide4Path || node.slide4_path || "lumacore.platform/vpc-mesh",
+        image: getImg(node.slide4Image || node.slide4_image, "https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&q=80&w=1400"),
+      },
+    ].filter(Boolean) as any[];
+
+    const pillars = [
+      (node.pillar1Title || node.pillar1_title) && {
+        title: node.pillar1Title || node.pillar1_title,
+        description: node.pillar1Description || node.pillar1_description || "",
+        icon: getIconImg(node.pillar1Icon || node.pillar1_icon) || "server",
+      },
+      (node.pillar2Title || node.pillar2_title) && {
+        title: node.pillar2Title || node.pillar2_title,
+        description: node.pillar2Description || node.pillar2_description || "",
+        icon: getIconImg(node.pillar2Icon || node.pillar2_icon) || "zap",
+      },
+      (node.pillar3Title || node.pillar3_title) && {
+        title: node.pillar3Title || node.pillar3_title,
+        description: node.pillar3Description || node.pillar3_description || "",
+        icon: getIconImg(node.pillar3Icon || node.pillar3_icon) || "globe",
+      },
+      (node.pillar4Title || node.pillar4_title) && {
+        title: node.pillar4Title || node.pillar4_title,
+        description: node.pillar4Description || node.pillar4_description || "",
+        icon: getIconImg(node.pillar4Icon || node.pillar4_icon) || "lock",
+      },
+    ].filter(Boolean) as any[];
+
+    const trustCheckmarks = [
+      node.trustCheckmark1 || node.trust_checkmark_1 || node.trustCheckmark_1,
+      node.trustCheckmark2 || node.trust_checkmark_2 || node.trustCheckmark_2,
+      node.trustCheckmark3 || node.trust_checkmark_3 || node.trustCheckmark_3,
+      node.trustCheckmark4 || node.trust_checkmark_4 || node.trustCheckmark_4,
+    ].filter(Boolean);
+
+    let parsedCategory = "";
+    let parsedCategorySlug = "";
+    if (node.category) {
+      if (typeof node.category === "string") {
+        parsedCategory = node.category;
+        parsedCategorySlug = node.category.toLowerCase().replace(/[^a-z0-9]+/g, "-");
+      } else if (node.category.nodes && Array.isArray(node.category.nodes) && node.category.nodes.length > 0) {
+        parsedCategory = node.category.nodes[0].name || "";
+        parsedCategorySlug = node.category.nodes[0].slug || "";
+      } else if (Array.isArray(node.category) && node.category.length > 0) {
+        if (typeof node.category[0] === "string") {
+          parsedCategory = node.category[0];
+          parsedCategorySlug = node.category[0].toLowerCase().replace(/[^a-z0-9]+/g, "-");
+        } else if (typeof node.category[0] === "object") {
+          parsedCategory = node.category[0].name || "";
+          parsedCategorySlug = node.category[0].slug || "";
+        }
+      } else if (typeof node.category === "object") {
+        parsedCategory = node.category.name || "";
+        parsedCategorySlug = node.category.slug || "";
+      }
+    }
+
+    if (!parsedCategorySlug && (node.productCategory || node.product_category)) {
+      const pc = node.productCategory || node.product_category;
+      if (typeof pc === "string") {
+        parsedCategory = pc;
+        parsedCategorySlug = pc.toLowerCase().replace(/[^a-z0-9]+/g, "-");
+      } else if (pc.nodes && pc.nodes[0]) {
+        parsedCategory = pc.nodes[0].name || "";
+        parsedCategorySlug = pc.nodes[0].slug || "";
+      }
+    }
+
+    const countRaw =
+      node.postsCount ??
+      node.posts_count ??
+      node.productsCount ??
+      node.products_count ??
+      node.catalogInitialCount ??
+      node.catalog_initial_count;
+    const parsedCount = countRaw ? parseInt(String(countRaw), 10) : (fallbackData.postsCount || 6);
+
+    let flagshipSlug = "";
+    let flagshipProductId: string | number | undefined;
+    let flagshipTitle = "";
+
+    const rawFp = node.flagshipProduct ?? node.flagship_product;
+    const fp = Array.isArray(rawFp) ? rawFp[0] : rawFp;
+
+    if (fp) {
+      if (typeof fp === "string") {
+        if (/^\d+$/.test(fp.trim())) {
+          flagshipProductId = parseInt(fp.trim(), 10);
+        } else {
+          flagshipSlug = fp.trim();
+        }
+      } else if (typeof fp === "number") {
+        flagshipProductId = fp;
+      } else if (typeof fp === "object") {
+        flagshipSlug = fp.slug || fp.post_name || "";
+        flagshipTitle = fp.title?.rendered || fp.title || fp.post_title || "";
+        flagshipProductId = fp.databaseId || fp.ID || fp.id;
+      }
+    }
+
+    if (!flagshipSlug && (node.spotlightSlug || node.spotlight_slug)) {
+      flagshipSlug = node.spotlightSlug || node.spotlight_slug;
+    }
+
+    return {
+      label: node.heroLabel || node.hero_label || fallbackData.label,
+      heroBgImage: getImg(node.heroBgImage || node.hero_bg_image, ""),
+      title: node.heroTitle || node.hero_title || fallbackData.title,
+      description: node.heroDescription || node.hero_description || fallbackData.description,
+      trustCheckmarks: trustCheckmarks.length > 0 ? trustCheckmarks : fallbackData.trustCheckmarks,
+      heroFormBadge: node.heroFormBadge || node.hero_form_badge || fallbackData.heroFormBadge,
+      heroFormTitle: node.heroFormTitle || node.hero_form_title || fallbackData.heroFormTitle,
+      heroFormSubtitle: node.heroFormSubtitle || node.hero_form_subtitle || fallbackData.heroFormSubtitle,
+      heroFormBtnText: node.heroFormBtnText || node.hero_form_btn_text || fallbackData.heroFormBtnText,
+      heroFormNote: node.heroFormNote || node.hero_form_note || fallbackData.heroFormNote,
+      showSpotlight:
+        node.showSpotlight !== undefined || node.show_spotlight !== undefined
+          ? Boolean(node.showSpotlight ?? node.show_spotlight)
+          : fallbackData.showSpotlight,
+      spotlightEyebrow: node.spotlightEyebrow || node.spotlight_eyebrow || fallbackData.spotlightEyebrow,
+      spotlightBadge: node.spotlightBadge || node.spotlight_badge || fallbackData.spotlightBadge,
+      flagshipProduct: fp,
+      flagshipProductId,
+      flagshipTitle,
+      flagshipSlug: flagshipSlug || "",
+      spotlightSlug: flagshipSlug || "",
+      spotlightCtaText: node.spotlightCtaText || node.spotlight_cta_text || fallbackData.spotlightCtaText,
+      spotlightSlides: slides.length > 0 ? slides : fallbackData.spotlightSlides,
+      catalogEyebrow: node.catalogEyebrow || node.catalog_eyebrow || fallbackData.catalogEyebrow,
+      catalogTitle: node.catalogTitle || node.catalog_title || fallbackData.catalogTitle,
+      catalogSearchPlaceholder:
+        node.catalogSearchPlaceholder || node.catalog_search_placeholder || fallbackData.catalogSearchPlaceholder,
+      postsCount: parsedCount,
+      productsCount: parsedCount,
+      category: parsedCategory || fallbackData.category,
+      categorySlug: parsedCategorySlug || fallbackData.categorySlug,
+      catalogLoadMoreBtnText:
+        node.catalogLoadMoreBtnText || node.catalog_load_more_btn_text || fallbackData.catalogLoadMoreBtnText,
+      catalogNoResultsTitle:
+        node.catalogNoResultsTitle || node.catalog_no_results_title || fallbackData.catalogNoResultsTitle,
+      catalogNoResultsDescription:
+        node.catalogNoResultsDescription ||
+        node.catalog_no_results_description ||
+        fallbackData.catalogNoResultsDescription,
+      catalogResetBtnText:
+        node.catalogResetBtnText || node.catalog_reset_btn_text || fallbackData.catalogResetBtnText,
+      pillarsEyebrow: node.pillarsEyebrow || node.pillars_eyebrow || fallbackData.pillarsEyebrow,
+      pillarsTitle: node.pillarsTitle || node.pillars_title || fallbackData.pillarsTitle,
+      pillarsDescription: node.pillarsDescription || node.pillars_description || fallbackData.pillarsDescription,
+      pillars: pillars.length > 0 ? pillars : fallbackData.pillars,
+      ctaTag: node.ctaTag || node.cta_tag || fallbackData.ctaTag,
+      ctaBgImage: getImg(node.ctaBgImage || node.cta_bg_image, ""),
+      ctaTitle: node.ctaTitle || node.cta_title || fallbackData.ctaTitle,
+      ctaDescription: node.ctaDescription || node.cta_description || fallbackData.ctaDescription,
+      ctaBtnText: node.ctaBtnText || node.cta_btn_text || fallbackData.ctaBtnText,
+      ctaBtnLink: node.ctaBtnLink || node.cta_btn_link || fallbackData.ctaBtnLink,
+    };
+  };
+
+  const enrichData = async (mapped: ProductPageData, restBase: string): Promise<ProductPageData> => {
+    // If flagshipProductId is present but flagshipSlug or flagshipTitle is missing, resolve it from REST API
+    if (mapped.flagshipProductId && (!mapped.flagshipSlug || !mapped.flagshipTitle)) {
+      try {
+        const pts = ["hutech_product", "product", "pages", "posts"];
+        for (const pt of pts) {
+          const r = await fetch(`${restBase}/wp-json/wp/v2/${pt}/${mapped.flagshipProductId}`, {
+            ...(process.env.NODE_ENV === "development" ? { cache: "no-store" } : { next: { revalidate: 60 } }),
+          });
+          if (r.ok) {
+            const it = await r.json();
+            if (it) {
+              if (it.slug && !mapped.flagshipSlug) {
+                mapped.flagshipSlug = it.slug;
+                mapped.spotlightSlug = it.slug;
+              }
+              if ((it.title?.rendered || it.title) && !mapped.flagshipTitle) {
+                mapped.flagshipTitle = it.title?.rendered || it.title || "";
+              }
+              break;
+            }
+          }
+        }
+      } catch {
+        // ignore resolution error
+      }
+    }
+
+    // Ensure any numeric media IDs in heroBgImage, ctaBgImage, pillars are resolved to media URLs
+    const mediaIds = new Set<number>();
+    if (mapped.heroBgImage && /^\d+$/.test(mapped.heroBgImage.trim())) {
+      mediaIds.add(parseInt(mapped.heroBgImage.trim(), 10));
+    }
+    if (mapped.ctaBgImage && /^\d+$/.test(mapped.ctaBgImage.trim())) {
+      mediaIds.add(parseInt(mapped.ctaBgImage.trim(), 10));
+    }
+    for (const p of mapped.pillars || []) {
+      if (p.icon && /^\d+$/.test(p.icon.trim())) {
+        mediaIds.add(parseInt(p.icon.trim(), 10));
+      }
+    }
+
+    if (mediaIds.size > 0) {
+      await Promise.all(
+        Array.from(mediaIds).map(async (id) => {
+          try {
+            const res = await fetch(`${restBase}/wp-json/wp/v2/media/${id}`, {
+              ...(process.env.NODE_ENV === "development" ? { cache: "no-store" } : { next: { revalidate: 3600 } }),
+            });
+            if (res.ok) {
+              const m = await res.json();
+              const url = m.source_url || m.guid?.rendered || "";
+              if (url) {
+                if (mapped.heroBgImage === String(id)) mapped.heroBgImage = url;
+                if (mapped.ctaBgImage === String(id)) mapped.ctaBgImage = url;
+                for (const p of mapped.pillars || []) {
+                  if (p.icon === String(id)) p.icon = url;
+                }
+              }
+            }
+          } catch {}
+        })
+      );
+    }
+
+    return mapped;
+  };
+
+  // 1. Try GraphQL Query
+  try {
+    const fieldsSubquery = `
+      heroLabel
+      heroBgImage
+      heroTitle
+      heroDescription
+      trustCheckmark1
+      trustCheckmark2
+      trustCheckmark3
+      trustCheckmark4
+      heroFormBadge
+      heroFormTitle
+      heroFormSubtitle
+      heroFormBtnText
+      heroFormNote
+      showSpotlight
+      spotlightEyebrow
+      spotlightBadge
+      spotlightCtaText
+      postsCount
+      catalogEyebrow
+      catalogTitle
+      catalogSearchPlaceholder
+      catalogLoadMoreBtnText
+      catalogNoResultsTitle
+      catalogNoResultsDescription
+      catalogResetBtnText
+      pillarsEyebrow
+      pillarsTitle
+      pillarsDescription
+      pillar1Title
+      pillar1Description
+      pillar1Icon
+      pillar2Title
+      pillar2Description
+      pillar2Icon
+      pillar3Title
+      pillar3Description
+      pillar3Icon
+      pillar4Title
+      pillar4Description
+      pillar4Icon
+      ctaTag
+      ctaBgImage
+      ctaTitle
+      ctaDescription
+      ctaBtnText
+      ctaBtnLink
+    `;
+
+    const raw = await fetchGraphQL(`
+      query GetProductListPageData {
+        productsPage: pageBy(uri: "/products/") {
+          title
+          excerpt
+          productListFields {
+            ${fieldsSubquery}
+          }
+          productPageSettings {
+            pageTitle
+            pageDescription
+            pageLabel
+            ctaTitle
+            ctaBtnText
+            ctaBtnLink
+          }
+        }
+        productsPageSlug: pageBy(uri: "products") {
+          title
+          excerpt
+          productListFields {
+            ${fieldsSubquery}
+          }
+          productPageSettings {
+            pageTitle
+            pageDescription
+            pageLabel
+            ctaTitle
+            ctaBtnText
+            ctaBtnLink
+          }
+        }
+        pages(where: { name: "products" }) {
+          nodes {
+            title
+            excerpt
+            productListFields {
+              ${fieldsSubquery}
+            }
+            productPageSettings {
+              pageTitle
+              pageDescription
+              pageLabel
+              ctaTitle
+              ctaBtnText
+              ctaBtnLink
+            }
+          }
+        }
+      }
+    `);
+
+    const pageNode =
+      (raw as any)?.data?.productsPage ||
+      (raw as any)?.data?.productsPageSlug ||
+      (raw as any)?.data?.pages?.nodes?.[0];
+    const node = pageNode?.productListFields;
+    const legacy = pageNode?.productPageSettings;
+
+    if (node && Object.keys(node).some((k) => node[k] !== null && node[k] !== undefined && node[k] !== "")) {
+      const endpoint = process.env.NEXT_PUBLIC_WORDPRESS_API_URL || "http://localhost/hutech-website/graphql";
+      const restBase = endpoint.replace(/\/graphql\/?$/i, "");
+      const mediaMap = await resolveMediaMap(node, restBase);
+      const mapped = mapFields(node, mediaMap);
+      // If flagshipProduct wasn't in GraphQL response, check REST for acf.flagshipProduct
+      if (!mapped.flagshipProductId && !mapped.flagshipSlug) {
+        try {
+          const res = await fetch(`${restBase}/wp-json/wp/v2/pages?slug=products&_embed`, {
+            ...(process.env.NODE_ENV === "development" ? { cache: "no-store" } : { next: { revalidate: 60 } }),
+          });
+          if (res.ok) {
+            const items = await res.json();
+            if (Array.isArray(items) && items.length > 0) {
+              const p = items[0];
+              const acf = p.productListFields || p.acf || {};
+              const fp = acf.flagshipProduct ?? acf.flagship_product;
+              if (fp) {
+                if (typeof fp === "object") {
+                  mapped.flagshipSlug = fp.slug || fp.post_name || mapped.flagshipSlug;
+                  mapped.flagshipTitle = fp.title?.rendered || fp.title || fp.post_title || mapped.flagshipTitle;
+                  mapped.flagshipProductId = fp.databaseId || fp.ID || fp.id;
+                  mapped.flagshipProduct = fp;
+                } else if (typeof fp === "number" || /^\d+$/.test(String(fp).trim())) {
+                  mapped.flagshipProductId = parseInt(String(fp).trim(), 10);
+                } else if (typeof fp === "string") {
+                  mapped.flagshipSlug = fp.trim();
+                }
+              }
+            }
+          }
+        } catch {}
+      }
+      return await enrichData(mapped, restBase);
+    }
+
+    if (legacy && (legacy.pageTitle || legacy.pageDescription)) {
+      return {
+        ...fallbackData,
+        label: legacy.pageLabel || fallbackData.label,
+        title: legacy.pageTitle || fallbackData.title,
+        description: legacy.pageDescription || fallbackData.description,
+        ctaTitle: legacy.ctaTitle || fallbackData.ctaTitle,
+        ctaBtnText: legacy.ctaBtnText || fallbackData.ctaBtnText,
+        ctaBtnLink: legacy.ctaBtnLink || fallbackData.ctaBtnLink,
+      };
+    }
+  } catch (err) {
+    console.warn("[WP] GraphQL getProductPageData error, falling back to REST:", err);
+  }
+
+  // 2. Resilient REST API Fallback
+  try {
+    const endpoint = process.env.NEXT_PUBLIC_WORDPRESS_API_URL || "http://localhost/hutech-website/graphql";
+    const restBase = endpoint.replace(/\/graphql\/?$/i, "");
+    const res = await fetch(`${restBase}/wp-json/wp/v2/pages?slug=products&_embed`, {
+      ...(process.env.NODE_ENV === "development" ? { cache: "no-store" } : { next: { revalidate: 60 } }),
+    });
+
+    if (res.ok) {
+      const items = await res.json();
+      if (Array.isArray(items) && items.length > 0) {
+        const p = items[0];
+        const fields = p.productListFields || p.acf || {};
+        if (Object.keys(fields).length > 0) {
+          const mediaMap = await resolveMediaMap(fields, restBase);
+          const mapped = mapFields(fields, mediaMap);
+          return await enrichData(mapped, restBase);
+        }
+      }
+    }
+  } catch (restErr) {
+    console.warn("[WP] REST getProductPageData error:", restErr);
+  }
+
+  return fallbackData;
+}
+
+export async function getProductsList(options?: {
+  categorySlug?: string;
+  categoryName?: string;
+  limit?: number;
+}): Promise<ProductItem[]> {
+  const normCatSlug = (options?.categorySlug || "").toLowerCase().trim();
+  const normCatName = (options?.categoryName || "").toLowerCase().trim();
+  const limit = options?.limit && options.limit > 0 ? options.limit : 100;
+
+  let wpProducts: ProductItem[] = [];
+
+  // 1. Try WPGraphQL query for hutechProducts CPT
+  try {
+    const raw = await fetchGraphQL(`
+      query GetHutechProductsCatalog($first: Int!) {
+        hutechProducts(first: $first) {
+          nodes {
+            id
+            databaseId
+            slug
+            title
+            excerpt
+            featuredImage {
+              node {
+                sourceUrl
+              }
+            }
+            productCategories {
+              nodes {
+                name
+                slug
+              }
+            }
+            productTags {
+              nodes {
+                name
+                slug
+              }
+            }
+            productPageFields {
+              heroBadge
+              heroTitle
+              heroDescription
+              heroImage {
+                node {
+                  sourceUrl
+                }
+              }
+              iconName
+              accentColor
+              version
+              featured
+              category
+              dashboardVelocity
+              dashboardVelocityLabel
+              dashboardActiveTasks
+              dashboardActiveTasksLabel
+              feature1Title
+              feature2Title
+              feature3Title
+              feature4Title
+              securityBadges
+              ctaText
+            }
+          }
+        }
+      }
+    `, { first: limit });
+
+    const nodes = (raw as any)?.data?.hutechProducts?.nodes;
+    if (Array.isArray(nodes) && nodes.length > 0) {
+      wpProducts = nodes.map((node: any) => {
+        const f = node.productPageFields || node.acf || {};
+        const featuredImg = node.featuredImage?.node?.sourceUrl || imgUrl(f.heroImage) || "";
+        const terms = node.productCategories?.nodes || [];
+        const categoryName = terms.length > 0 ? terms[0].name : (f.category || "Enterprise Platform");
+        const categorySlug = terms.length > 0 ? terms[0].slug : "";
+
+        // Extract metrics dynamically from product inner page
+        const stat1Val = f.dashboardVelocity || f.heroDashVelocity || f.overviewStat1Value || "99.9%";
+        const stat1Label = f.dashboardVelocityLabel || f.heroDashVelocityLabel || f.overviewStat1Label || "Availability";
+        const stat2Val = f.dashboardActiveTasks || f.heroDashActiveTasks || f.overviewStat2Value || "100k+";
+        const stat2Label = f.dashboardActiveTasksLabel || f.heroDashActiveTasksLabel || f.overviewStat2Label || "Active Ops";
+
+        const capabilities = [
+          f.feature1Title,
+          f.feature2Title,
+          f.feature3Title,
+          f.feature4Title,
+        ].filter(Boolean);
+
+        let complianceList: string[] = ["SOC 2 Type II", "ISO 27001"];
+        if (f.securityBadges) {
+          const rawBadges = f.securityBadges;
+          if (typeof rawBadges === "string") {
+            complianceList = rawBadges.split(",").map((s: string) => s.trim()).filter(Boolean);
+          } else if (Array.isArray(rawBadges)) {
+            complianceList = rawBadges;
+          }
+        }
+
+        return {
+          id: node.slug || String(node.databaseId || node.id),
+          databaseId: node.databaseId ? String(node.databaseId) : undefined,
+          wpId: node.databaseId ? String(node.databaseId) : undefined,
+          slug: node.slug || String(node.id),
+          title: node.title || "Platform",
+          category: categoryName,
+          categorySlug,
+          tagline: f.heroBadge || f.overviewSectionTag || "Enterprise Platform",
+          description: stripHtml(node.excerpt || f.heroDescription || "Proprietary enterprise platform."),
+          badge: f.heroBadge || "Enterprise",
+          version: f.version || "v1.0",
+          featured: Boolean(f.featured || node.slug === "lumacore"),
+          image: featuredImg || "https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&q=80&w=1200",
+          iconName: (f.iconName || "sparkles") as any,
+          accentColor: f.accentColor || "#0171c1",
+          stats: [
+            { value: stat1Val, label: stat1Label },
+            { value: stat2Val, label: stat2Label },
+          ],
+          capabilities: capabilities.length > 0 ? capabilities : [
+            "Automated Workflow Engine",
+            "Real-Time Telemetry",
+            "Zero Trust Governance",
+            "Cloud-Native Scalability",
+          ],
+          compliance: complianceList,
+          ctaText: f.ctaText || `Explore ${node.title || "Platform"}`,
+        };
+      });
+    }
+  } catch (err) {
+    // GraphQL fallback to REST
+  }
+
+  // 2. If GraphQL didn't return items, query WP REST API
+  if (wpProducts.length === 0) {
+    const endpoint = process.env.NEXT_PUBLIC_WORDPRESS_API_URL || "http://localhost/hutech-website/graphql";
+    const restBase = endpoint.replace(/\/graphql\/?$/i, '');
+    const postTypes = ["hutech_product", "product"];
+
+    for (const pt of postTypes) {
+      try {
+        const res = await fetch(`${restBase}/wp-json/wp/v2/${pt}?_embed&per_page=${limit}`, {
+          ...(process.env.NODE_ENV === "development" ? { cache: "no-store" } : { next: { revalidate: 60 } }),
+        });
+        if (res.ok) {
+          const items = await res.json();
+          if (Array.isArray(items) && items.length > 0) {
+            wpProducts = items.map((item: any) => {
+              const f = item.productFields || item.productPageFields || item.acf || {};
+              const featuredImg = item._embedded?.['wp:featuredmedia']?.[0]?.source_url || '';
+              const terms = item._embedded?.['wp:term']?.[0] || [];
+              const categoryName = terms.length > 0 ? terms[0].name : (f.category || "Enterprise Platform");
+              const categorySlug = terms.length > 0 ? terms[0].slug : "";
+
+              // Extract metrics dynamically from product inner page
+              const stat1Val = f.dashboardVelocity || f.dashboard_velocity || f.heroDashVelocity || f.hero_dash_velocity || f.overviewStat1Value || f.overview_stat_1_val || "99.9%";
+              const stat1Label = f.dashboardVelocityLabel || f.overviewStat1Label || f.overview_stat_1_label || "Availability";
+              const stat2Val = f.dashboardActiveTasks || f.dashboard_active_tasks || f.heroDashActiveTasks || f.hero_dash_active_tasks || f.overviewStat2Value || f.overview_stat_2_val || "100k+";
+              const stat2Label = f.dashboardActiveTasksLabel || f.overviewStat2Label || f.overview_stat_2_label || "Active Ops";
+
+              // Extract capabilities from inner page features
+              const capabilities = [
+                f.feature1Title || f.feature_1_title,
+                f.feature2Title || f.feature_2_title,
+                f.feature3Title || f.feature_3_title,
+                f.feature4Title || f.feature_4_title,
+              ].filter(Boolean);
+
+              // Extract security / compliance from inner page
+              let complianceList: string[] = ["SOC 2 Type II", "ISO 27001"];
+              if (f.securityBadges || f.security_badges) {
+                const rawBadges = f.securityBadges || f.security_badges;
+                if (typeof rawBadges === "string") {
+                  complianceList = rawBadges.split(",").map((s: string) => s.trim()).filter(Boolean);
+                } else if (Array.isArray(rawBadges)) {
+                  complianceList = rawBadges;
+                }
+              }
+
+              return {
+                id: item.slug || String(item.id),
+                databaseId: String(item.id),
+                wpId: String(item.id),
+                slug: item.slug || String(item.id),
+                title: item.title?.rendered || item.title || "Platform",
+                category: categoryName,
+                categorySlug,
+                tagline: f.heroBadge || f.hero_badge || f.overviewSectionTag || f.overview_tag || "Enterprise Platform",
+                description: item.excerpt?.rendered?.replace(/<[^>]+>/g, '').trim() || f.heroDescription || f.hero_description || "Proprietary enterprise platform.",
+                badge: f.heroBadge || f.hero_badge || "Enterprise",
+                version: f.version || "v1.0",
+                featured: Boolean(f.featured || f.is_featured || item.slug === "lumacore"),
+                image: featuredImg || f.heroImage || f.hero_image || "https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&q=80&w=1200",
+                iconName: (f.iconName || f.icon_name || "sparkles") as any,
+                accentColor: f.accentColor || f.accent_color || "#0171c1",
+                stats: [
+                  { value: stat1Val, label: stat1Label },
+                  { value: stat2Val, label: stat2Label },
+                ],
+                capabilities: capabilities.length > 0 ? capabilities : [
+                  "Automated Workflow Engine",
+                  "Real-Time Telemetry",
+                  "Zero Trust Governance",
+                  "Cloud-Native Scalability",
+                ],
+                compliance: complianceList,
+                ctaText: f.ctaText || f.heroPrimaryCtaText || f.hero_primary_cta_text || `Explore ${item.title?.rendered || item.title || "Platform"}`,
+              };
+            });
+            break;
+          }
+        }
+      } catch (err) { }
+    }
+  }
+
+  // Merge with default products so local demo platforms exist if WP has none
+  let finalProducts: ProductItem[] = [];
+  if (wpProducts.length > 0) {
+    const slugsInWp = new Set(wpProducts.map((p) => p.slug.toLowerCase()));
+    const remainingDefaults = DEFAULT_PRODUCTS.filter((p) => !slugsInWp.has(p.slug.toLowerCase()));
+    finalProducts = [...wpProducts, ...remainingDefaults];
+  } else {
+    finalProducts = DEFAULT_PRODUCTS;
+  }
+
+  // 3. Filter by category if category filter is requested from ACF
+  if (normCatSlug || normCatName) {
+    const filtered = finalProducts.filter((p: any) => {
+      const pCat = (p.category || "").toLowerCase();
+      const pCatSlug = (p.categorySlug || "").toLowerCase();
+      if (normCatSlug && (pCatSlug === normCatSlug || pCat.includes(normCatSlug))) {
+        return true;
+      }
+      if (normCatName && (pCat === normCatName || pCat.includes(normCatName))) {
+        return true;
+      }
+      return false;
+    });
+    if (filtered.length > 0) {
+      finalProducts = filtered;
+    }
+  }
+
+  if (limit && limit > 0 && finalProducts.length > limit) {
+    finalProducts = finalProducts.slice(0, limit);
+  }
+
+  return finalProducts;
 }
 
 export function transformService2Node(node: any, defaultData = MASTER_PAGE_DATA): any {
@@ -5695,7 +6644,7 @@ export async function getService2PageData(uri: string, slug?: string): Promise<a
           }
         }
       }
-    } catch (err) {}
+    } catch (err) { }
   }
 
   // Fallback to MASTER_PAGE_DATA

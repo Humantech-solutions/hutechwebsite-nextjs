@@ -54,7 +54,7 @@ export function MethodologyAndStrategies({ data, strategies: customStrategies, m
   ];
 
   return (
-    <section id="approach" className="scroll-mt-16 bg-white py-10 lg:py-14">
+    <section id="approach" className="scroll-mt-16 bg-white py-6 lg:py-8">
       <div className="mx-auto max-w-[1280px] px-6 lg:px-12">
         {/* Section Header */}
         <div className="mx-auto max-w-3xl text-center">

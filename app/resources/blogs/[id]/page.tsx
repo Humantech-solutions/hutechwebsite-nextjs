@@ -3,6 +3,7 @@ import { getBlogBySlug, getBlogs } from "@/lib/wordpress";
 import { BLOG_DATA } from "@/lib/data/blogs";
 import { notFound } from "next/navigation";
 import { constructMetadata, getArticleSchema } from "@/lib/seo";
+import { siteConfig } from "@/config/site";
 import {
   getIPublishPageBySlug,
   getIPublishPages,
@@ -59,10 +60,9 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
       ipublishContent.excerpt ||
       "";
     const imageUrl = getIPublishImageUrl(ipublishContent.featured_image_url);
-    const baseCanonical =
-      ipublishContent.canonical_url ||
-      `https://ipublish.hutechsolutions.ai/insights/${ipublishContent.org || "hutech-solutions"}/${ipublishContent.slug || id}`;
-    const canonical = baseCanonical.endsWith("/") ? baseCanonical : `${baseCanonical}/`;
+    const blogSlug = ipublishContent.slug || id;
+    const siteUrl = (siteConfig.url || "https://hutechsolutions.ai").replace(/\/$/, "");
+    const canonical = `${siteUrl}/resources/blogs/ipublish/${blogSlug}/`;
 
     const keywordsList = [
       ipublishContent.focus_keyword,
@@ -70,6 +70,7 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
     ].filter(Boolean) as string[];
 
     return {
+      metadataBase: new URL(siteUrl),
       title: {
         absolute: title,
       },
@@ -82,6 +83,8 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
         title: ipublishContent.og_title || title,
         description: ipublishContent.og_description || description,
         url: canonical,
+        siteName: siteConfig.name,
+        locale: "en_US",
         images: imageUrl ? [{ url: imageUrl }] : [],
         type: "article",
         publishedTime:
@@ -182,12 +185,38 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
     (await getIPublishPageBySlug(id)) || (await getIPublishContentById(id));
   if (ipublishContent) {
     const imageUrl = getIPublishImageUrl(ipublishContent.featured_image_url);
-    const schemaJsonData = ipublishContent.schema_json
-      ? {
-        ...ipublishContent.schema_json,
-        ...(imageUrl && !ipublishContent.schema_json.image ? { image: imageUrl } : {}),
-      }
-      : {
+    const blogSlug = ipublishContent.slug || id;
+    const siteUrl = (siteConfig.url || "https://hutechsolutions.ai").replace(/\/$/, "");
+    const articleCanonical = `${siteUrl}/resources/blogs/ipublish/${blogSlug}/`;
+
+    let schemaJsonData: any;
+    if (ipublishContent.schema_json) {
+      const rawSchema =
+        typeof ipublishContent.schema_json === "string"
+          ? (() => {
+              try {
+                return JSON.parse(ipublishContent.schema_json);
+              } catch {
+                return null;
+              }
+            })()
+          : ipublishContent.schema_json;
+
+      schemaJsonData = rawSchema
+        ? {
+            ...rawSchema,
+            url: articleCanonical,
+            mainEntityOfPage: {
+              "@type": "WebPage",
+              "@id": articleCanonical,
+            },
+            ...(imageUrl && !rawSchema.image ? { image: imageUrl } : {}),
+          }
+        : null;
+    }
+
+    if (!schemaJsonData) {
+      schemaJsonData = {
         "@context": "https://schema.org",
         "@type": "BlogPosting",
         headline: ipublishContent.seo_title || ipublishContent.title,
@@ -201,6 +230,24 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
           ipublishContent.updated_at ||
           ipublishContent.published_at ||
           ipublishContent.created_at,
+        datePublished:
+          ipublishContent.published_at ||
+          ipublishContent.created_at ||
+          ipublishContent.updated_at,
+        mainEntityOfPage: {
+          "@type": "WebPage",
+          "@id": articleCanonical,
+        },
+        url: articleCanonical,
+        author: {
+          "@type": "Person",
+          name: ipublishContent.author_name || "Hutech Team",
+        },
+        publisher: {
+          "@type": "Organization",
+          name: siteConfig.name,
+          url: siteConfig.url,
+        },
         keywords: [
           ipublishContent.focus_keyword,
           ...(ipublishContent.secondary_keywords || []),
@@ -208,6 +255,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
           .filter(Boolean)
           .join(", "),
       };
+    }
 
     const normalizedContent = {
       ...ipublishContent,

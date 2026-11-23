@@ -1,5 +1,6 @@
 import { notFound } from "next/navigation";
 import { Metadata } from "next";
+import { siteConfig } from "@/config/site";
 import {
   getIPublishPageBySlug,
   getIPublishPages,
@@ -40,11 +41,10 @@ export async function generateMetadata({
     content.meta_description || content.og_description || content.excerpt || "";
   const imageUrl = getIPublishImageUrl(content.featured_image_url);
 
-  // Canonical URL with trailing slash matching iPublish convention
-  const baseCanonical =
-    content.canonical_url ||
-    `https://ipublish.hutechsolutions.ai/insights/${content.org || "hutech-solutions"}/${content.slug || id}`;
-  const canonical = baseCanonical.endsWith("/") ? baseCanonical : `${baseCanonical}/`;
+  // Self-referencing canonical URL matching the sitemap URL on the main site domain
+  const blogSlug = content.slug || id;
+  const siteUrl = (siteConfig.url || "https://hutechsolutions.ai").replace(/\/$/, "");
+  const canonical = `${siteUrl}/resources/blogs/ipublish/${blogSlug}/`;
 
   const keywordsList = [
     content.focus_keyword,
@@ -52,6 +52,7 @@ export async function generateMetadata({
   ].filter(Boolean) as string[];
 
   return {
+    metadataBase: new URL(siteUrl),
     title: {
       absolute: title,
     },
@@ -64,6 +65,8 @@ export async function generateMetadata({
       title: content.og_title || title,
       description: content.og_description || description,
       url: canonical,
+      siteName: siteConfig.name,
+      locale: "en_US",
       images: imageUrl ? [{ url: imageUrl }] : [],
       type: "article",
       publishedTime: content.updated_at || content.published_at || content.created_at,
@@ -98,28 +101,71 @@ export default async function IPublishPage({
 
   const imageUrl = getIPublishImageUrl(content.featured_image_url);
 
-  // Normalize Schema JSON-LD
-  const schemaJsonData = content.schema_json
-    ? {
-        ...content.schema_json,
-        ...(imageUrl && !content.schema_json.image ? { image: imageUrl } : {}),
-      }
-    : {
-        "@context": "https://schema.org",
-        "@type": "BlogPosting",
-        headline: content.seo_title || content.title,
-        description:
-          content.meta_description || content.og_description || content.excerpt || "",
-        image: imageUrl,
-        dateModified:
-          content.updated_at || content.published_at || content.created_at,
-        keywords: [
-          content.focus_keyword,
-          ...(content.secondary_keywords || []),
-        ]
-          .filter(Boolean)
-          .join(", "),
-      };
+  const blogSlug = content.slug || resolvedParams.id;
+  const siteUrl = (siteConfig.url || "https://hutechsolutions.ai").replace(/\/$/, "");
+  const articleCanonical = `${siteUrl}/resources/blogs/ipublish/${blogSlug}/`;
+
+  // Normalize Schema JSON-LD with correct self-referencing canonical URL
+  let schemaJsonData: any;
+  if (content.schema_json) {
+    const rawSchema =
+      typeof content.schema_json === "string"
+        ? (() => {
+            try {
+              return JSON.parse(content.schema_json);
+            } catch {
+              return null;
+            }
+          })()
+        : content.schema_json;
+
+    schemaJsonData = rawSchema
+      ? {
+          ...rawSchema,
+          url: articleCanonical,
+          mainEntityOfPage: {
+            "@type": "WebPage",
+            "@id": articleCanonical,
+          },
+          ...(imageUrl && !rawSchema.image ? { image: imageUrl } : {}),
+        }
+      : null;
+  }
+
+  if (!schemaJsonData) {
+    schemaJsonData = {
+      "@context": "https://schema.org",
+      "@type": "BlogPosting",
+      headline: content.seo_title || content.title,
+      description:
+        content.meta_description || content.og_description || content.excerpt || "",
+      image: imageUrl,
+      dateModified:
+        content.updated_at || content.published_at || content.created_at,
+      datePublished:
+        content.published_at || content.created_at || content.updated_at,
+      mainEntityOfPage: {
+        "@type": "WebPage",
+        "@id": articleCanonical,
+      },
+      url: articleCanonical,
+      author: {
+        "@type": "Person",
+        name: content.author_name || "Hutech Team",
+      },
+      publisher: {
+        "@type": "Organization",
+        name: siteConfig.name,
+        url: siteConfig.url,
+      },
+      keywords: [
+        content.focus_keyword,
+        ...(content.secondary_keywords || []),
+      ]
+        .filter(Boolean)
+        .join(", "),
+    };
+  }
 
     const normalizedContent = {
       ...content,

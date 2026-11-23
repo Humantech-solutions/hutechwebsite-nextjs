@@ -7,7 +7,7 @@ export function ModernizationIntro({ data }: { data?: any }) {
   const intro = data || MASTER_PAGE_DATA.intro;
 
   return (
-    <section className="bg-white py-10 lg:py-14">
+    <section className="bg-white py-6 lg:py-8">
       <div className="mx-auto max-w-[1280px] px-6 lg:px-12">
         <div className="grid grid-cols-1 items-start gap-12 lg:grid-cols-2 lg:gap-16">
           {/* Left Column: What Is Legacy Modernization */}

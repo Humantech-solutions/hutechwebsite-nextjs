@@ -94,7 +94,7 @@ export default function TechDetailClient({ tech }: { tech: LegacyTechDetail }) {
       </section>
 
       {/* Intro & Key Metrics Section - Executive Ledger */}
-      <section className="bg-white py-20 lg:py-24">
+      <section className="bg-white py-10 lg:py-14">
         <div className="mx-auto max-w-[1280px] px-6 lg:px-20">
           <div className="grid grid-cols-1 items-center gap-16 lg:grid-cols-2">
             {/* Left Column: Heading, Context & Aligned Stats */}
@@ -206,7 +206,7 @@ export default function TechDetailClient({ tech }: { tech: LegacyTechDetail }) {
       </section>
 
       {/* Architectural Bottlenecks & Pain Points - Structured Risk Ledger (Replaces 4 Cards) */}
-      <section className="bg-gray-50 py-20 lg:py-24 border-t border-gray-100">
+      <section className="bg-gray-50 py-10 lg:py-14 border-t border-gray-100">
         <div className="mx-auto max-w-[1280px] px-6 lg:px-20">
           <div className="mb-16 space-y-4 text-center">
             <div className="mb-2 flex items-center justify-center gap-3">
@@ -275,7 +275,7 @@ export default function TechDetailClient({ tech }: { tech: LegacyTechDetail }) {
       {/* Architecture Comparison: Unified Dual-Pane Blueprint (Replaces 2 Separate Cards) */}
       <section
         id="architecture-blueprint"
-        className="scroll-mt-16 bg-white py-20 lg:py-24 border-t border-gray-100"
+        className="scroll-mt-16 bg-white py-10 lg:py-14 border-t border-gray-100"
       >
         <div className="mx-auto max-w-[1280px] px-6 lg:px-20">
           <div className="mb-16 space-y-4 text-center">
@@ -391,7 +391,7 @@ export default function TechDetailClient({ tech }: { tech: LegacyTechDetail }) {
       {/* Transformation Playbook - Connected Vertical Engineering Timeline (Replaces 5 Cards) */}
       <section
         id="transformation-playbook"
-        className="scroll-mt-16 bg-gray-50 py-20 lg:py-24 border-t border-gray-100"
+        className="scroll-mt-16 bg-gray-50 py-10 lg:py-14 border-t border-gray-100"
       >
         <div className="mx-auto max-w-[1280px] px-6 lg:px-20">
           <div className="mb-16 space-y-4 text-center">
@@ -466,7 +466,7 @@ export default function TechDetailClient({ tech }: { tech: LegacyTechDetail }) {
       </section>
 
       {/* Business Benefits & Measurable ROI - Executive Metric Wall (Replaces 4 Cards) */}
-      <section className="bg-[#001A3D] py-20 text-white lg:py-24 overflow-hidden">
+      <section className="bg-[#001A3D] py-10 text-white lg:py-14 overflow-hidden">
         <div className="mx-auto max-w-[1280px] px-6 lg:px-20">
           <div className="mb-16 space-y-4 text-center">
             <div className="mb-2 flex items-center justify-center gap-3">
@@ -524,7 +524,7 @@ export default function TechDetailClient({ tech }: { tech: LegacyTechDetail }) {
       <ModernizationFaq items={tech.faqs} />
 
       {/* Cross Navigation: Horizontal Tech Stack Ribbon (Replaces 5 Cards) */}
-      <section className="border-t border-gray-100 bg-gray-50 py-20 lg:py-24">
+      <section className="border-t border-gray-100 bg-gray-50 py-10 lg:py-14">
         <div className="mx-auto max-w-[1280px] px-6 lg:px-20">
           <div className="flex flex-col items-start justify-between gap-4 md:flex-row md:items-end">
             <div>

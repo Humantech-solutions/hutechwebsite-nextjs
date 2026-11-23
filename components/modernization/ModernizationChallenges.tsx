@@ -53,7 +53,7 @@ export function ModernizationChallenges({ data, tagline, heading, description }:
   });
 
   return (
-    <section className="bg-white py-10 lg:py-14">
+    <section className="bg-white py-6 lg:py-8">
       <div className="mx-auto max-w-[1280px] px-6 lg:px-12">
         {/* Section Heading */}
         <div className="mx-auto max-w-3xl text-center">

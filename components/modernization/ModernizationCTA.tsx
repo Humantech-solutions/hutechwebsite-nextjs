@@ -13,7 +13,7 @@ export function ModernizationCTA({
 }) {
   const cta = data || {};
   return (
-    <section id="contact" className="scroll-mt-16 bg-white py-10 lg:py-14">
+    <section id="contact" className="scroll-mt-16 bg-white py-6 lg:py-8">
       <div className="mx-auto max-w-[1280px] px-6 lg:px-12">
         <div className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-[#001A3D] via-[#00285a] to-[#0171c1] p-10 text-center text-white shadow-2xl sm:p-14 lg:p-16">
           {/* Background radial highlight */}

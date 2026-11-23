@@ -33,7 +33,7 @@ export function ModernizationCapabilities({ data, tagline, heading, description 
   const ActiveIcon = CAP_ICONS[activeCap.icon] || Code2;
 
   return (
-    <section id="services" className="scroll-mt-16 bg-[#F8FAFC] py-10 lg:py-14">
+    <section id="services" className="scroll-mt-16 bg-[#F8FAFC] py-6 lg:py-8">
       <div className="mx-auto max-w-[1280px] px-6 lg:px-12">
         {/* Section Header */}
         <div className="mx-auto max-w-3xl text-center">

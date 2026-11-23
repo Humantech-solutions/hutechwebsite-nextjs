@@ -135,15 +135,22 @@ export async function isIPublishBlogSlugAllowed(slug: string): Promise<boolean> 
   const publishedContent = await getIPublishPublishedContent();
   if (!publishedContent) return true; // Fallback: allow all if authenticated API is down
 
-  const item = publishedContent.find(c => c.slug === slug);
+  const targetSlug = slug.toLowerCase().trim();
+  const item = publishedContent.find(
+    (c) => (c.slug && c.slug.toLowerCase().trim() === targetSlug) || c.id === slug
+  );
   if (!item) return false; // Not found in published list at all
 
   if (!Array.isArray(item.destinations) || item.destinations.length === 0) {
     return false;
   }
 
-  return item.destinations.some(d =>
-    d.domain && (d.domain.toLowerCase().includes('.ai') || d.domain.toLowerCase().includes('hutechsolutions.ai'))
+  return item.destinations.some(
+    (d) =>
+      d.domain &&
+      (d.domain.toLowerCase().includes(".ai") ||
+        d.domain.toLowerCase().includes("hutechsolutions") ||
+        d.domain.toLowerCase().includes("hutech"))
   );
 }
 

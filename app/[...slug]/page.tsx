@@ -37,6 +37,8 @@ import {
   getService2PageData,
   getProductBySlug,
   getPostTemplateBySlug,
+  getProductPageData,
+  getProductsList,
 } from "@/lib/wordpress";
 import { Suspense } from "react";
 import ServiceDetailClient from "@/app/services/[slug]/ServiceDetailClient";
@@ -408,9 +410,22 @@ export default async function DynamicPage({ params }: PageProps) {
     renderedComponent = <HutechDocumentsClient documents={documents || []} pageData={pageData || fallbackPageData} />;
   }
 
-  // ── Products (Hub) ────────────────────────────────────────────────────────────
-  if (activeTemplate === "products" || activeTemplate === "products-hub") {
-    renderedComponent = <ProductsClient />;
+  // ── Products (Hub / List) ────────────────────────────────────────────────────
+  if (
+    activeTemplate === "products" ||
+    activeTemplate === "products-hub" ||
+    activeTemplate === "product-list" ||
+    activeTemplate === "products-list" ||
+    activeTemplate === "template - product list" ||
+    activeTemplate === "product list" ||
+    page.slug === "products" ||
+    page.slug === "product-list"
+  ) {
+    const [pageData, products] = await Promise.all([
+      getProductPageData(uri),
+      getProductsList(),
+    ]);
+    renderedComponent = <ProductsClient pageData={pageData} products={products} />;
   }
 
   // ── Product (Detail) ──────────────────────────────────────────────────────────
